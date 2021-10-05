@@ -4,7 +4,19 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2019.
 #
 msgid ""
-msgstr "Project-Id-Version: SecureDrop 0.14.0~rc1\nReport-Msgid-Bugs-To: securedrop@freedom.press\nPO-Revision-Date: 2021-06-18 15:44+0000\nLast-Translator: Honza Cibulka <honza@datastory.cz>\nLanguage-Team: Czech <https://weblate.securedrop.org/projects/securedrop/securedrop/cs/>\nLanguage: cs\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\nX-Generator: Weblate 4.6\nGenerated-By: Babel 2.5.1\n"
+msgstr ""
+"Project-Id-Version: SecureDrop 0.14.0~rc1\n"
+"Report-Msgid-Bugs-To: securedrop@freedom.press\n"
+"PO-Revision-Date: 2021-06-18 15:44+0000\n"
+"Last-Translator: Honza Cibulka <honza@datastory.cz>\n"
+"Language-Team: Czech <https://weblate.securedrop.org/projects/securedrop/securedrop/cs/>\n"
+"Language: cs\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+"X-Generator: Weblate 4.6\n"
+"Generated-By: Babel 2.5.1\n"
 
 msgid "Name too long"
 msgstr "Uživatelské jméno je příliš dlouhé."
@@ -134,8 +146,8 @@ msgstr "Nahrávat lze jen obrázky ve formátu PNG."
 msgid "An unexpected error occurred! Please inform your admin."
 msgstr "Došlo k nečekané chybě. Informujte prosím administrátora."
 
-msgid "Your reply has been stored."
-msgstr "Vaše odpověď byla uložena."
+msgid "The source will receive your reply next time they log in."
+msgstr ""
 
 msgid "You must select one or more items for download"
 msgstr "Musíte vybrat jednu či více položek ke stažení"
@@ -209,11 +221,17 @@ msgstr "Zavřít"
 msgid "Cancel"
 msgstr "Zrušit"
 
-msgid "starred icon"
-msgstr "ikonka hvězdy"
+msgid "Un-star {designation}"
+msgstr ""
 
-msgid "unstarred icon"
-msgstr "ikona bez hvězdičky"
+msgid "{designation} is starred"
+msgstr ""
+
+msgid "Star {designation}"
+msgstr ""
+
+msgid "{designation} is not starred"
+msgstr ""
 
 msgid "1 doc"
 msgid_plural "{num} docs"
@@ -227,8 +245,8 @@ msgstr[0] "1 zpráva"
 msgstr[1] "{num} zprávy"
 msgstr[2] "{num} zpráv"
 
-msgid "download icon"
-msgstr "ikonka stahování"
+msgid "Download"
+msgstr "Stáhnout"
 
 msgid "1 unread"
 msgid_plural "{num} unread"
@@ -332,20 +350,27 @@ msgstr "Poslední přihlášení"
 msgid "Edit user {username}"
 msgstr "Upravit uživatele „{username}“"
 
-msgid "edit user icon"
-msgstr "ikonka editace uživatele"
-
-msgid "trash icon disabled"
+#, fuzzy
+#| msgid "trash icon disabled"
+msgid "User deletion disabled"
 msgstr "ikonka vypnutého odpadkového koše"
 
 msgid "Delete user {username}"
 msgstr "Smazat uživatele „{username}“"
 
-msgid "trash icon"
-msgstr "ikonka odpadkového koše"
-
 msgid "never"
 msgstr "nikdy"
+
+msgid "Delete Confirmation"
+msgstr "Potvrdit smazání"
+
+#, fuzzy
+#| msgid "Are you sure you want to delete the user {username}?"
+msgid "Are you sure you want to delete this user?"
+msgstr "Opravdu chcete smazat uživatele „{username}“?"
+
+msgid "DELETE"
+msgstr "SMAZAT"
 
 msgid "No users to display"
 msgstr "Žádní uživatelé k zobrazení"
@@ -413,47 +438,23 @@ msgstr "Stáhnout vybrané"
 msgid "Delete Selected"
 msgstr "Smazat vybrané"
 
-msgid "Reply"
-msgstr "Odpověď"
-
-msgid "reply icon"
-msgstr "ikona odpovědi"
+msgid "Unread"
+msgstr "Nepřečteno"
 
 msgid "Read"
 msgstr "Přečteno"
 
-msgid "check icon"
-msgstr "ikonka fajfky"
-
-msgid "Unread"
-msgstr "Nepřečteno"
-
-msgid "closed envelope icon"
-msgstr "ikona zavřené obálky"
-
-msgid "open envelope icon"
-msgstr "ikonka otevřené obálky"
-
 msgid "Uploaded Document"
 msgstr "Nahraný dokument"
 
-msgid "files icon"
-msgstr "ikonka souborů"
+msgid "Reply"
+msgstr "Odpověď"
 
 msgid "Message"
 msgstr "Zpráva"
 
-msgid "messages icon"
-msgstr "ikonka zpráv"
-
-msgid "Delete Confirmation"
-msgstr "Potvrdit smazání"
-
 msgid "Are you sure you want to delete the selected submissions?"
 msgstr "Opravdu chcete smazat vybraná podání?"
-
-msgid "DELETE"
-msgstr "SMAZAT"
 
 msgid "No submissions to display."
 msgstr "Žádná podání k zobrazení."
@@ -593,11 +594,21 @@ msgstr "Obnovit dvojfaktorovou autentizaci pro bezpečnostní klíče (např. Yu
 msgid "RESET SECURITY KEY CREDENTIALS"
 msgstr "RESETOVAT PŘIHLAŠOVACÍ ÚDAJE BEZPEČNOSTNÍHO KLÍČE"
 
+#, fuzzy
+#| msgid "Verification code"
+msgid "Notification"
+msgstr "Ověřovací kód"
+
+#, fuzzy
+#| msgid "Success!"
+msgid "Success"
+msgstr "Úspěch!"
+
+msgid "Error"
+msgstr ""
+
 msgid "Download Unread"
 msgstr "Stáhnout nepřečtené"
-
-msgid "Download"
-msgstr "Stáhnout"
 
 msgid "Star"
 msgstr "Označit"
@@ -619,9 +630,6 @@ msgstr "Vybrat nepřečtené"
 
 msgid "Select None"
 msgstr "Zrušit výběr"
-
-msgid "Are you sure you want to delete the user {username}?"
-msgstr "Opravdu chcete smazat uživatele „{username}“?"
 
 msgid "Are you sure you want to reset two-factor authentication for {username}?"
 msgstr "Opravdu chcete obnovut dvoufaktorovu autentizaci pro uživatele „{username}“?"
@@ -658,6 +666,9 @@ msgstr "Neplatný vstup."
 
 msgid "Write a message."
 msgstr "Napsat zprávu."
+
+msgid "Select a file to upload."
+msgstr ""
 
 msgid "Message text too long."
 msgstr "Zpráva je příliš dlouhá."
@@ -701,9 +712,6 @@ msgstr "Promiňte, toto krycí jméno nikdo nepoužívá."
 msgid "Protecting Journalists and Sources"
 msgstr "Chráníme novináře a jejich zdroje"
 
-msgid "SecureDrop Home"
-msgstr "Domovská stránka SecureDrop"
-
 msgid "We're sorry, our SecureDrop is currently offline."
 msgstr "Omlouváme se, náš SecureDrop je aktuálně offline."
 
@@ -746,8 +754,23 @@ msgstr "Zapište si prosím toto krycí jméno a uchovávejte ho na bezpečném 
 msgid "This codename is what you will use in future visits to receive messages from our team in response to what you submit on the next screen."
 msgstr "Toto krycí jméno budete v budoucnu využívat pro komunikaci s naším týmem na základě toho, co pošlete na příští obrazovce."
 
+#, fuzzy
+#| msgid "Enter Codename"
+msgid "Codename"
+msgstr "Zadat krycí jméno"
+
+#, fuzzy
+#| msgid "Enter Codename"
+msgid "Refresh codename"
+msgstr "Zadat krycí jméno"
+
+#, fuzzy
+#| msgid ""
+#| "Because we do not track users of our <strong>SecureDrop</strong>\n"
+#| " service, in future visits, using this codename will be the only way we have to communicate with you should we have\n"
+#| " questions or are interested in additional information. Unlike passwords, there is no way to retrieve a lost codename."
 msgid ""
-"Because we do not track users of our <strong>SecureDrop</strong>\n"
+"Because we do not track users of our <b>SecureDrop</b>\n"
 " service, in future visits, using this codename will be the only way we have to communicate with you should we have\n"
 " questions or are interested in additional information. Unlike passwords, there is no way to retrieve a lost codename."
 msgstr ""
@@ -755,16 +778,48 @@ msgstr ""
 " pro Vaše příští návštěvy bude použití tohoto krycího jména jedinou možností, jak s Vámi můžeme komunikovat,\n"
 " budete-li se chtít na něco zeptat. Na rozdíl od hesla neexistuje způsob, jak zapomenuté krycí jméno získat zpět."
 
+msgid "Submit Documents"
+msgstr ""
+
 msgid "SUBMIT DOCUMENTS"
 msgstr "ODESLAT DOKUMENTY"
 
-msgid "Your Tor Browser's <a id=\"disable-js\" href=\"\"><strong>Security Level</strong></a> is too low. Use the <img src=\"{icon}\" alt=\"shield icon\"> &nbsp;button in your browser’s toolbar to change it."
+#, fuzzy
+#| msgid "Your Tor Browser's <a id=\"disable-js\" href=\"\"><strong>Security Level</strong></a> is too low. Use the <img src=\"{icon}\" alt=\"shield icon\"> &nbsp;button in your browser’s toolbar to change it."
+msgid "Your Tor Browser's <a id=\"disable-js\" href=\"\"><b>Security Level</b></a> is too low. Use the <img src=\"{icon}\" alt=\"&quot;Security Level&quot;\"> button in your browser’s toolbar to change it."
 msgstr "<a id=\"disable-js\" href=\"\"><strong>Úroveň zabezpečení</strong></a> vašeho prohlížeče Tor je příliš nízká. Pro jeho změnu použijte tlačítko&nbsp;<img src=\"{icon}\" alt=\"shield icon\"> na liště prohlížeče."
 
-msgid "<strong>It is recommended to use Tor Browser to access SecureDrop:</strong> <a id=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
+msgid "How to change your security level"
+msgstr ""
+
+#, fuzzy
+#| msgid "Click the <img src=\"{icon}\" alt=\"shield icon\"> in the toolbar above"
+msgid "Click the <img src=\"{icon}\" alt=\"&quot;Security Level&quot; button\"> in the toolbar above"
+msgstr "Klepněte na <img src=\"{icon}\" alt=\"ikona štítu\"> v panelu nástrojů výše"
+
+#, fuzzy
+#| msgid "Select <strong>Advanced Security Settings</strong>"
+msgid "Select <b>Advanced Security Settings</b>"
+msgstr "Vyberte <strong>Rozšířené bezpečnostní nastavení</strong>"
+
+#, fuzzy
+#| msgid "Select <strong>Safest</strong>"
+msgid "Select <b>Safest</b>"
+msgstr "Zvolte <strong>Nejbezpečnější</strong>"
+
+#, fuzzy
+#| msgid "<a href=\"/\">Refresh this page</a>, and you're done!"
+msgid "<a href=\"/\" aria-label=\"Follow these instructions, then refresh this page\">Refresh this page</a>, and you're done!"
+msgstr "<a href=\"/\">Obnovte tuto stránku</a> a máte hotovo!"
+
+#, fuzzy
+#| msgid "<strong>It is recommended to use Tor Browser to access SecureDrop:</strong> <a id=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
+msgid "<strong>It is recommended to use Tor Browser to access SecureDrop:</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
 msgstr "<strong>SecureDrop doporučujeme používat v prohlížeči Tor:</strong> <a id=\"recommend-tor\" href=\"{tor_browser_url}\">Zjistěte, jak Tor nainstalovat</a> nebo ignorujte tuto zprávu a pokračujte."
 
-msgid "<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop version.</strong> <a id=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
+#, fuzzy
+#| msgid "<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop version.</strong> <a id=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
+msgid "<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop version.</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
 msgstr "<strong>SecureDrop doporučujeme používat ve verzi prohlížeče Tor pro počítač, protože Orfox neposkytuje stejnou úroveň bezpečnosti a anonymity jako verze pro počítač.</strong> <a id=\"recommend-tor\" href=\"{tor_browser_url}\">Zjistěte, jak ji nainstalovat</a>."
 
 msgid "First submission"
@@ -772,6 +827,9 @@ msgstr "První podání"
 
 msgid "First time submitting to our SecureDrop? Start here."
 msgstr "Podáváte na náš SecureDrop prvně? Začněte zde."
+
+msgid "Get Started"
+msgstr ""
 
 msgid "GET STARTED"
 msgstr "ZAČÍT"
@@ -782,17 +840,18 @@ msgstr "Vracím se"
 msgid "Already have a codename? Check for replies or submit something new."
 msgstr "Už máte krycí jméno? Zkontrolujte odpovědi anebo pošlete něco nového."
 
-msgid "Click the <img src=\"{icon}\" alt=\"shield icon\"> in the toolbar above"
-msgstr "Klepněte na <img src=\"{icon}\" alt=\"ikona štítu\"> v panelu nástrojů výše"
+#, fuzzy
+#| msgid "Log Out"
+msgid "Log In"
+msgstr "Odhlásit se"
 
-msgid "Select <strong>Advanced Security Settings</strong>"
-msgstr "Vyberte <strong>Rozšířené bezpečnostní nastavení</strong>"
+#, fuzzy
+#| msgid "Select None"
+msgid "Selected language"
+msgstr "Zrušit výběr"
 
-msgid "Select <strong>Safest</strong>"
-msgstr "Zvolte <strong>Nejbezpečnější</strong>"
-
-msgid "<a href=\"/\">Refresh this page</a>, and you're done!"
-msgstr "<a href=\"/\">Obnovte tuto stránku</a> a máte hotovo!"
+msgid "Choose language"
+msgstr ""
 
 msgid "Enter Codename"
 msgstr "Zadat krycí jméno"
@@ -800,23 +859,22 @@ msgstr "Zadat krycí jméno"
 msgid "Enter your codename"
 msgstr "Zadejte své krycí jméno"
 
+msgid "Continue"
+msgstr ""
+
 msgid "CANCEL"
 msgstr "ZRUŠIT"
 
 msgid "One more thing..."
 msgstr "Ještě jedna věc..."
 
-msgid "Click the <img src={icon} alt=\"broom icon\" width=\"16\" height=\"16\">&nbsp;<strong>New Identity</strong> button in your Tor Browser's toolbar. This will clear your Tor Browser activity data on this device."
+#, fuzzy
+#| msgid "Click the <img src={icon} alt=\"broom icon\" width=\"16\" height=\"16\">&nbsp;<strong>New Identity</strong> button in your Tor Browser's toolbar. This will clear your Tor Browser activity data on this device."
+msgid "Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar. This will clear your Tor Browser activity data on this device."
 msgstr "Klepněte na <img src={icon} alt=\"ikona koštěte\" width=\"16\" height=\"16\">&nbsp;<strong>Nová identita</strong> na liště svého prohlížeče Tor. Smažete tím data o aktivitě prohlížeče Tor na tomto zařízení."
 
 msgid "Remember, your codename is:"
 msgstr "Pamatujte, vaše krycí jméno je:"
-
-msgid "Show"
-msgstr "Zobrazit"
-
-msgid "Hide"
-msgstr "Skrýt"
 
 msgid "Submit Files or Messages"
 msgstr "Nahrání souborů nebo zpráv"
@@ -839,13 +897,26 @@ msgstr "<a href=\"{url}\" class=\"text-link\">Více informací</a>."
 msgid "Maximum upload size: 500 MB"
 msgstr "Maximální velikost uploadu: 500 MB"
 
+msgid "Submit"
+msgstr ""
+
 msgid "Read Replies"
 msgstr "Přečtěte si odpovědi"
 
 msgid "You have received a reply. To protect your identity in the unlikely event someone learns your codename, please delete all replies when you're done with them. This also lets us know that you are aware of our reply. You can respond by submitting new files and messages above."
 msgstr "Obdržel/a jste odpověď. Pro případ, že by se někdo dozvěděl vaše krycí jméno (jakkoliv je to nepravděpodobné), smažte prosím všechny odpovědi jakmile je nebudete potřebovat. Díky tomu také budeme vědět, že jste si naši odpověď přečetl/a. Odpovědět můžete odesláním nových souborů a zpráv výše."
 
+#, fuzzy
+#| msgid "Delete this reply?"
+msgid "Delete this reply"
+msgstr "Smazat tuto odpověď?"
+
 msgid "Delete this reply?"
+msgstr "Smazat tuto odpověď?"
+
+#, fuzzy
+#| msgid "Delete this reply?"
+msgid "Delete All Replies"
 msgstr "Smazat tuto odpověď?"
 
 msgid "DELETE ALL REPLIES"
@@ -860,8 +931,10 @@ msgstr "ANO, SMAZAT VŠECHNY ODPOVĚDI"
 msgid "NO, NOT YET"
 msgstr "NE, JEŠTĚ NE"
 
-msgid "— No Messages —"
-msgstr "— Žádné zprávy —"
+#, fuzzy
+#| msgid "Message"
+msgid "No Messages"
+msgstr "Zpráva"
 
 msgid "Page not found"
 msgstr "Stránka nenalezena"
@@ -872,7 +945,9 @@ msgstr "Promiňte, váš požadavek jsme nenašli."
 msgid "Important"
 msgstr "Důležité"
 
-msgid "You were logged out due to inactivity. Click the <img src={icon} alt=\"broom icon\" width=\"16\" height=\"16\">&nbsp;<strong>New Identity</strong> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
+#, fuzzy
+#| msgid "You were logged out due to inactivity. Click the <img src={icon} alt=\"broom icon\" width=\"16\" height=\"16\">&nbsp;<strong>New Identity</strong> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
+msgid "You were logged out due to inactivity. Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
 msgstr "Z důvodu neaktivity jste byli odhlášeni. Než budete pokračovat, klepněte na <img src={icon} alt=\"ikona koštěte\" width=\"16\" height=\"16\">&nbsp;<strong>Nová identita</strong> na liště svého prohlížeče Tor. Smažete tím data o aktivitě Toru na tomto zařízení."
 
 msgid "Why is there a warning about Tor2Web?"
@@ -899,7 +974,9 @@ msgstr "Pro posílání informací přes SecureDrop <strong>důrazně doporučuj
 msgid "Copy and paste the following address into your browser and follow the instructions to download and install Tor Browser:"
 msgstr "Zkopírujte a vložte následující adresu do svého prohlížeče a následujte instrukce pro stažení a instalaci prohlížeče Tor:"
 
-msgid "If there is a chance that downloading Tor Browser raises suspicion and your mail provider is less likely to be monitored, you can send a mail to <pre>gettor@torproject.org</pre> and a bot will answer with instructions."
+#, fuzzy
+#| msgid "If there is a chance that downloading Tor Browser raises suspicion and your mail provider is less likely to be monitored, you can send a mail to <pre>gettor@torproject.org</pre> and a bot will answer with instructions."
+msgid "If there is a chance that downloading Tor Browser raises suspicion and your mail provider is less likely to be monitored, you can send a mail to <kbd>gettor@torproject.org</kbd> and a bot will answer with instructions."
 msgstr "Pokud existuje možnost, že stažení prohlížeče Tor vzbudí podezření, ale vaše e-mailová schránka nejspíše monitorovaná není, pošlete e-mail na <pre>gettor@torproject.org</pre> a dostanete automatickou odpověď s instrukcemi."
 
 msgid "Why download the team's public key?"
@@ -941,6 +1018,54 @@ msgstr "<strong>Důležité:</strong> Chcete-li zůstat v anonymitě, <strong>ne
 
 msgid "Back to submission page"
 msgstr "Zpátky na stránku podání"
+
+#~ msgid "Your reply has been stored."
+#~ msgstr "Vaše odpověď byla uložena."
+
+#~ msgid "starred icon"
+#~ msgstr "ikonka hvězdy"
+
+#~ msgid "unstarred icon"
+#~ msgstr "ikona bez hvězdičky"
+
+#~ msgid "download icon"
+#~ msgstr "ikonka stahování"
+
+#~ msgid "edit user icon"
+#~ msgstr "ikonka editace uživatele"
+
+#~ msgid "trash icon"
+#~ msgstr "ikonka odpadkového koše"
+
+#~ msgid "reply icon"
+#~ msgstr "ikona odpovědi"
+
+#~ msgid "check icon"
+#~ msgstr "ikonka fajfky"
+
+#~ msgid "closed envelope icon"
+#~ msgstr "ikona zavřené obálky"
+
+#~ msgid "open envelope icon"
+#~ msgstr "ikonka otevřené obálky"
+
+#~ msgid "files icon"
+#~ msgstr "ikonka souborů"
+
+#~ msgid "messages icon"
+#~ msgstr "ikonka zpráv"
+
+#~ msgid "SecureDrop Home"
+#~ msgstr "Domovská stránka SecureDrop"
+
+#~ msgid "Show"
+#~ msgstr "Zobrazit"
+
+#~ msgid "Hide"
+#~ msgstr "Skrýt"
+
+#~ msgid "— No Messages —"
+#~ msgstr "— Žádné zprávy —"
 
 #~ msgid "You've flagged this source for reply."
 #~ msgstr "Označili jste tento zdroj na odpověď."

@@ -4,7 +4,19 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2019.
 #
 msgid ""
-msgstr "Report-Msgid-Bugs-To: securedrop@freedom.press\nPO-Revision-Date: 2021-06-20 17:44+0000\nLast-Translator: Oktavia <oktaviahrund@gmail.com>\nLanguage-Team: Icelandic <https://weblate.securedrop.org/projects/securedrop/securedrop/is/>\nLanguage: is\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=2; plural=n % 10 != 1 || n % 100 == 11;\nX-Generator: Weblate 4.6\nproject-Id-Version: SecureDrop 0.12.0~rc1\nGenerated-By: Babel 2.5.1\n"
+msgstr ""
+"Project-Id-Version: SecureDrop 0.12.0~rc1\n"
+"Report-Msgid-Bugs-To: securedrop@freedom.press\n"
+"PO-Revision-Date: 2021-06-20 17:44+0000\n"
+"Last-Translator: Oktavia <oktaviahrund@gmail.com>\n"
+"Language-Team: Icelandic <https://weblate.securedrop.org/projects/securedrop/securedrop/is/>\n"
+"Language: is\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n % 10 != 1 || n % 100 == 11;\n"
+"X-Generator: Weblate 4.6\n"
+"Generated-By: Babel 2.5.1\n"
 
 msgid "Name too long"
 msgstr "Nafnið er of langt"
@@ -130,8 +142,8 @@ msgstr "Þú getur einungis hlaðið upp PNG-myndskrár."
 msgid "An unexpected error occurred! Please inform your admin."
 msgstr "Óvæn villa kom upp! Hafðu samband við kerfisstjórann þinn."
 
-msgid "Your reply has been stored."
-msgstr "Svarið þitt hefur verið vistað."
+msgid "The source will receive your reply next time they log in."
+msgstr ""
 
 msgid "You must select one or more items for download"
 msgstr "Þú verður að velja eitt eða fleiri atriði til niðurhals"
@@ -202,11 +214,17 @@ msgstr "Loka"
 msgid "Cancel"
 msgstr "Hætta við"
 
-msgid "starred icon"
-msgstr "stjörnumerkt tákn"
+msgid "Un-star {designation}"
+msgstr ""
 
-msgid "unstarred icon"
-msgstr "óstjörnumerkt tákn"
+msgid "{designation} is starred"
+msgstr ""
+
+msgid "Star {designation}"
+msgstr ""
+
+msgid "{designation} is not starred"
+msgstr ""
 
 msgid "1 doc"
 msgid_plural "{num} docs"
@@ -218,8 +236,8 @@ msgid_plural "{num} messages"
 msgstr[0] "1 skilaboð"
 msgstr[1] "{num} skilaboð"
 
-msgid "download icon"
-msgstr "táknmynd fyrir niðurhal"
+msgid "Download"
+msgstr "Sækja"
 
 msgid "1 unread"
 msgid_plural "{num} unread"
@@ -322,20 +340,27 @@ msgstr "Síðasta innskráning"
 msgid "Edit user {username}"
 msgstr "Breyta notandanum {username}"
 
-msgid "edit user icon"
-msgstr "breyta táknmynd notanda"
-
-msgid "trash icon disabled"
+#, fuzzy
+#| msgid "trash icon disabled"
+msgid "User deletion disabled"
 msgstr "tákn fyrir rusl óvirkt"
 
 msgid "Delete user {username}"
 msgstr "Eyða notandanum {username}"
 
-msgid "trash icon"
-msgstr "tákn fyrir rusl"
-
 msgid "never"
 msgstr "aldrei"
+
+msgid "Delete Confirmation"
+msgstr "Staðfesting eyðingu"
+
+#, fuzzy
+#| msgid "Are you sure you want to delete the user {username}?"
+msgid "Are you sure you want to delete this user?"
+msgstr "Ertu viss um að þú viljir eyða notandanum {username}?"
+
+msgid "DELETE"
+msgstr "EYÐA"
 
 msgid "No users to display"
 msgstr "Engir notendur til að birta"
@@ -403,47 +428,23 @@ msgstr "Sækja valið"
 msgid "Delete Selected"
 msgstr "Eyða völdu"
 
-msgid "Reply"
-msgstr "Svara"
-
-msgid "reply icon"
-msgstr "tákn fyrir svar"
+msgid "Unread"
+msgstr "Ólesið"
 
 msgid "Read"
 msgstr "Lesa"
 
-msgid "check icon"
-msgstr "tákn fyrir virkni/val"
-
-msgid "Unread"
-msgstr "Ólesið"
-
-msgid "closed envelope icon"
-msgstr "tákn fyrir lokað umslag"
-
-msgid "open envelope icon"
-msgstr "tákn fyrir opið umslag"
-
 msgid "Uploaded Document"
 msgstr "Innsent skjal"
 
-msgid "files icon"
-msgstr "tákn fyrir skrár"
+msgid "Reply"
+msgstr "Svara"
 
 msgid "Message"
 msgstr "Skilaboð"
 
-msgid "messages icon"
-msgstr "tákn fyrir skilaboð"
-
-msgid "Delete Confirmation"
-msgstr "Staðfesting eyðingu"
-
 msgid "Are you sure you want to delete the selected submissions?"
 msgstr "Ertu viss um að þú viljir eyða völdu innsendingum?"
-
-msgid "DELETE"
-msgstr "EYÐA"
 
 msgid "No submissions to display."
 msgstr "Engar innsendingar til að birta."
@@ -582,11 +583,21 @@ msgstr "Endurstilla tvíþátta auðkenningu fyrir öryggislykla, eins og t.d. Y
 msgid "RESET SECURITY KEY CREDENTIALS"
 msgstr "ENDURSTILLA AUÐKENNI ÖRYGGISLYKILS"
 
+#, fuzzy
+#| msgid "Verification code"
+msgid "Notification"
+msgstr "Sannvottunarkóði"
+
+#, fuzzy
+#| msgid "Success!"
+msgid "Success"
+msgstr "Tókst!"
+
+msgid "Error"
+msgstr ""
+
 msgid "Download Unread"
 msgstr "Niðurhal ólesið"
-
-msgid "Download"
-msgstr "Sækja"
 
 msgid "Star"
 msgstr "Stjörnumerkja"
@@ -608,9 +619,6 @@ msgstr "Velja ólesið"
 
 msgid "Select None"
 msgstr "Velja ekkert"
-
-msgid "Are you sure you want to delete the user {username}?"
-msgstr "Ertu viss um að þú viljir eyða notandanum {username}?"
 
 msgid "Are you sure you want to reset two-factor authentication for {username}?"
 msgstr "Ertu viss um að þú viljir endurstilla tvíþátta auðkenninguna fyrir {username}?"
@@ -647,6 +655,9 @@ msgstr "Ógilt ílag."
 
 msgid "Write a message."
 msgstr "Skrifaðu skilaboð."
+
+msgid "Select a file to upload."
+msgstr ""
 
 msgid "Message text too long."
 msgstr "Texti skilaboðanna er of langur."
@@ -690,9 +701,6 @@ msgstr "Því miður, þetta er ekki þekkt kóðanafn."
 msgid "Protecting Journalists and Sources"
 msgstr "Verndum frétta- og heimildarmenn"
 
-msgid "SecureDrop Home"
-msgstr "Forsíða SecureDrop"
-
 msgid "We're sorry, our SecureDrop is currently offline."
 msgstr "Því miður, SecureDrop-netþjónninn okkar er ótengdur þessa stundina."
 
@@ -735,8 +743,23 @@ msgstr "Þú skalt endilega skrifa þetta kóðanafn niður og geyma það á ö
 msgid "This codename is what you will use in future visits to receive messages from our team in response to what you submit on the next screen."
 msgstr "Þetta kóðanafn er það sem þú munt framvegis nota við heimsóknir á vefsvæðið þegar þú athugar með svör og skilaboð frá teyminu okkar, varðandi það sem þú sendir inn á næsta skjá."
 
+#, fuzzy
+#| msgid "Enter Codename"
+msgid "Codename"
+msgstr "Settu inn kóðanafn"
+
+#, fuzzy
+#| msgid "Enter Codename"
+msgid "Refresh codename"
+msgstr "Settu inn kóðanafn"
+
+#, fuzzy
+#| msgid ""
+#| "Because we do not track users of our <strong>SecureDrop</strong>\n"
+#| " service, in future visits, using this codename will be the only way we have to communicate with you should we have\n"
+#| " questions or are interested in additional information. Unlike passwords, there is no way to retrieve a lost codename."
 msgid ""
-"Because we do not track users of our <strong>SecureDrop</strong>\n"
+"Because we do not track users of our <b>SecureDrop</b>\n"
 " service, in future visits, using this codename will be the only way we have to communicate with you should we have\n"
 " questions or are interested in additional information. Unlike passwords, there is no way to retrieve a lost codename."
 msgstr ""
@@ -744,16 +767,48 @@ msgstr ""
 "ef við skyldum vera með spurningar eða höfum áhuga á viðbótarupplýsingum. \n"
 "Ólíkt lykilorðum, þá er engin leið til að endurheimta kóðanafn."
 
+msgid "Submit Documents"
+msgstr ""
+
 msgid "SUBMIT DOCUMENTS"
 msgstr "SENDA INN SKJÖL"
 
-msgid "Your Tor Browser's <a id=\"disable-js\" href=\"\"><strong>Security Level</strong></a> is too low. Use the <img src=\"{icon}\" alt=\"shield icon\"> &nbsp;button in your browser’s toolbar to change it."
+#, fuzzy
+#| msgid "Your Tor Browser's <a id=\"disable-js\" href=\"\"><strong>Security Level</strong></a> is too low. Use the <img src=\"{icon}\" alt=\"shield icon\"> &nbsp;button in your browser’s toolbar to change it."
+msgid "Your Tor Browser's <a id=\"disable-js\" href=\"\"><b>Security Level</b></a> is too low. Use the <img src=\"{icon}\" alt=\"&quot;Security Level&quot;\"> button in your browser’s toolbar to change it."
 msgstr "<a id=\"disable-js\" href=\"\"><strong>Öryggisstillingar</strong></a> Tor-vafrans þíns eru of vægt stilltar. Notaðu <img src=\"{icon}\" alt=\"shield icon\"> &nbsp;hnappinn í verkfærastiku vafrans þíns til að breyta þeim."
 
-msgid "<strong>It is recommended to use Tor Browser to access SecureDrop:</strong> <a id=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
+msgid "How to change your security level"
+msgstr ""
+
+#, fuzzy
+#| msgid "Click the <img src=\"{icon}\" alt=\"shield icon\"> in the toolbar above"
+msgid "Click the <img src=\"{icon}\" alt=\"&quot;Security Level&quot; button\"> in the toolbar above"
+msgstr "Smelltu á <img src=\"{icon}\" alt=\"shield icon\"> í verkfærastikunni hér fyrir ofan"
+
+#, fuzzy
+#| msgid "Select <strong>Advanced Security Settings</strong>"
+msgid "Select <b>Advanced Security Settings</b>"
+msgstr "Veldu <strong>Ítarlegar öryggisstillingar</strong>"
+
+#, fuzzy
+#| msgid "Select <strong>Safest</strong>"
+msgid "Select <b>Safest</b>"
+msgstr "Veldu <strong>Öruggast</strong>"
+
+#, fuzzy
+#| msgid "<a href=\"/\">Refresh this page</a>, and you're done!"
+msgid "<a href=\"/\" aria-label=\"Follow these instructions, then refresh this page\">Refresh this page</a>, and you're done!"
+msgstr "<a href=\"/\">Endurlestu þessa síðu</a>, og þetta er komið!"
+
+#, fuzzy
+#| msgid "<strong>It is recommended to use Tor Browser to access SecureDrop:</strong> <a id=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
+msgid "<strong>It is recommended to use Tor Browser to access SecureDrop:</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
 msgstr "<strong>Mælt er með því að nota Tor-vafrann til að fá aðkomu að SecureDrop:</strong> <a id=\"recommend-tor\" href=\"{tor_browser_url}\">Sjáðu hvernig á að setja upp Tor-vafrann</a>, eða hunsaðu þessa aðvörun til að halda áfram."
 
-msgid "<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop version.</strong> <a id=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
+#, fuzzy
+#| msgid "<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop version.</strong> <a id=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
+msgid "<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop version.</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
 msgstr "<strong>Mælt er með því að nota skjáborðsútgáfu Tor-vafrans til aðgangs að SecureDrop, þar sem Orfox gefur ekki sama stig öryggis og nafnleyndar eins og skjáborðsútgáfurnar.</strong> <a id=\"recommend-tor\" href=\"{tor_browser_url}\">Sjáðu hvernig á að setja upp Tor-vafrann</a>, eða hunsaðu þessa aðvörun til að halda áfram."
 
 msgid "First submission"
@@ -761,6 +816,9 @@ msgstr "Fyrsta innsending"
 
 msgid "First time submitting to our SecureDrop? Start here."
 msgstr "Er þetta í fyrsta skipti sem þú sendir eitthvað inn á SecureDrop-tilvikið okkar? Byrjaðu þá hér."
+
+msgid "Get Started"
+msgstr ""
 
 msgid "GET STARTED"
 msgstr "BYRJA HÉR"
@@ -771,17 +829,18 @@ msgstr "Endurkomu heimsókn"
 msgid "Already have a codename? Check for replies or submit something new."
 msgstr "Ertu þegar með kóðanafn? Skoðaðu  svör eða sendu inn eitthvað nýtt."
 
-msgid "Click the <img src=\"{icon}\" alt=\"shield icon\"> in the toolbar above"
-msgstr "Smelltu á <img src=\"{icon}\" alt=\"shield icon\"> í verkfærastikunni hér fyrir ofan"
+#, fuzzy
+#| msgid "Log Out"
+msgid "Log In"
+msgstr "Skrá út"
 
-msgid "Select <strong>Advanced Security Settings</strong>"
-msgstr "Veldu <strong>Ítarlegar öryggisstillingar</strong>"
+#, fuzzy
+#| msgid "Select None"
+msgid "Selected language"
+msgstr "Velja ekkert"
 
-msgid "Select <strong>Safest</strong>"
-msgstr "Veldu <strong>Öruggast</strong>"
-
-msgid "<a href=\"/\">Refresh this page</a>, and you're done!"
-msgstr "<a href=\"/\">Endurlestu þessa síðu</a>, og þetta er komið!"
+msgid "Choose language"
+msgstr ""
 
 msgid "Enter Codename"
 msgstr "Settu inn kóðanafn"
@@ -789,23 +848,22 @@ msgstr "Settu inn kóðanafn"
 msgid "Enter your codename"
 msgstr "Settu inn kóðanafnið þitt"
 
+msgid "Continue"
+msgstr ""
+
 msgid "CANCEL"
 msgstr "HÆTTA VIÐ"
 
 msgid "One more thing..."
 msgstr "Eitt í viðbót..."
 
-msgid "Click the <img src={icon} alt=\"broom icon\" width=\"16\" height=\"16\">&nbsp;<strong>New Identity</strong> button in your Tor Browser's toolbar. This will clear your Tor Browser activity data on this device."
+#, fuzzy
+#| msgid "Click the <img src={icon} alt=\"broom icon\" width=\"16\" height=\"16\">&nbsp;<strong>New Identity</strong> button in your Tor Browser's toolbar. This will clear your Tor Browser activity data on this device."
+msgid "Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar. This will clear your Tor Browser activity data on this device."
 msgstr "Smelltu á hnappinn <img src={icon} alt=\"broom icon\" width=\"16\" height=\"16\">&nbsp;<strong>Nýtt auðkenni</strong> í verkfærastiku Tor-vafrans. Það mun hreinsa út allar fyrri aðgerðir Tor-vafrans á þessu tæki."
 
 msgid "Remember, your codename is:"
 msgstr "Mundu, kóðanafnið þitt er:"
-
-msgid "Show"
-msgstr "Sýna"
-
-msgid "Hide"
-msgstr "Fela"
 
 msgid "Submit Files or Messages"
 msgstr "Senda inn skrár eða skilaboð"
@@ -828,13 +886,26 @@ msgstr "<a href=\"{url}\" class=\"text-link\">Kanna nánar</a>."
 msgid "Maximum upload size: 500 MB"
 msgstr "Hámarksstærð innsendingar: 500 MB"
 
+msgid "Submit"
+msgstr ""
+
 msgid "Read Replies"
 msgstr "Lesa svör"
 
 msgid "You have received a reply. To protect your identity in the unlikely event someone learns your codename, please delete all replies when you're done with them. This also lets us know that you are aware of our reply. You can respond by submitting new files and messages above."
 msgstr "Þú hefur fengið svar. Til að vernda persónuauðkenni þitt, fari svo ólíklega að einhver komist að kóðanafninu þínu, skaltu endilega eyða öllum svörum eftir að þú hefur lokið þér af með upplýsingarnar í þeim. Það gefur okkur líka til kynna að þú hafir lesið svörin frá okkur. Þú getur svo svarað með því að senda inn nýjar skrár og skilaboð hér fyrir ofan."
 
+#, fuzzy
+#| msgid "Delete this reply?"
+msgid "Delete this reply"
+msgstr "Eyða þessu svari?"
+
 msgid "Delete this reply?"
+msgstr "Eyða þessu svari?"
+
+#, fuzzy
+#| msgid "Delete this reply?"
+msgid "Delete All Replies"
 msgstr "Eyða þessu svari?"
 
 msgid "DELETE ALL REPLIES"
@@ -849,8 +920,10 @@ msgstr "JÁ, EYÐA ÖLLUM SVÖRUM"
 msgid "NO, NOT YET"
 msgstr "NEI, EKKI STRAX"
 
-msgid "— No Messages —"
-msgstr "— Engin skilaboð —"
+#, fuzzy
+#| msgid "Message"
+msgid "No Messages"
+msgstr "Skilaboð"
 
 msgid "Page not found"
 msgstr "Síða fannst ekki"
@@ -861,7 +934,9 @@ msgstr "Því miður, við gátum ekki fundið það sem þú baðst um."
 msgid "Important"
 msgstr "Mikilvægt"
 
-msgid "You were logged out due to inactivity. Click the <img src={icon} alt=\"broom icon\" width=\"16\" height=\"16\">&nbsp;<strong>New Identity</strong> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
+#, fuzzy
+#| msgid "You were logged out due to inactivity. Click the <img src={icon} alt=\"broom icon\" width=\"16\" height=\"16\">&nbsp;<strong>New Identity</strong> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
+msgid "You were logged out due to inactivity. Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
 msgstr "Þú varst skráð/ur út vegna ónógrar virkni. Smelltu á hnappinn <img src={icon} alt=\"broom icon\" width=\"16\" height=\"16\">&nbsp;<strong>Nýtt auðkenni</strong> í verkfærastiku Tor-vafrans. Það mun hreinsa út allar fyrri aðgerðir Tor-vafrans á þessu tæki."
 
 msgid "Why is there a warning about Tor2Web?"
@@ -888,7 +963,9 @@ msgstr "Ef þú ætlar að senda upplýsingar inn á SecureDrop, þá <strong>m�
 msgid "Copy and paste the following address into your browser and follow the instructions to download and install Tor Browser:"
 msgstr "Afritaðu og límdu eftirfarandi slóð inn í vafrann þinn og fylgdu svo leiðbeiningunum um hvernig eigi að sækja og setja upp Tor-vafrann:"
 
-msgid "If there is a chance that downloading Tor Browser raises suspicion and your mail provider is less likely to be monitored, you can send a mail to <pre>gettor@torproject.org</pre> and a bot will answer with instructions."
+#, fuzzy
+#| msgid "If there is a chance that downloading Tor Browser raises suspicion and your mail provider is less likely to be monitored, you can send a mail to <pre>gettor@torproject.org</pre> and a bot will answer with instructions."
+msgid "If there is a chance that downloading Tor Browser raises suspicion and your mail provider is less likely to be monitored, you can send a mail to <kbd>gettor@torproject.org</kbd> and a bot will answer with instructions."
 msgstr "Ef líkur eru á að það að sækja sér Tor-vafrann valdi grunsemdum og ef minni líkur eru á að fylgst sé með tölvupóstþjónustu, þá geturðu sent tölvupóst á <pre>gettor@torproject.org</pre> og róbót síðan mun svara með viðeigandi leiðbeiningum."
 
 msgid "Why download the team's public key?"
@@ -930,6 +1007,54 @@ msgstr "<strong>Mikilvægt:</strong> Ef þú óskar áframhaldandi nafnleyndar, 
 
 msgid "Back to submission page"
 msgstr "Til baka á innsendingasíðuna"
+
+#~ msgid "Your reply has been stored."
+#~ msgstr "Svarið þitt hefur verið vistað."
+
+#~ msgid "starred icon"
+#~ msgstr "stjörnumerkt tákn"
+
+#~ msgid "unstarred icon"
+#~ msgstr "óstjörnumerkt tákn"
+
+#~ msgid "download icon"
+#~ msgstr "táknmynd fyrir niðurhal"
+
+#~ msgid "edit user icon"
+#~ msgstr "breyta táknmynd notanda"
+
+#~ msgid "trash icon"
+#~ msgstr "tákn fyrir rusl"
+
+#~ msgid "reply icon"
+#~ msgstr "tákn fyrir svar"
+
+#~ msgid "check icon"
+#~ msgstr "tákn fyrir virkni/val"
+
+#~ msgid "closed envelope icon"
+#~ msgstr "tákn fyrir lokað umslag"
+
+#~ msgid "open envelope icon"
+#~ msgstr "tákn fyrir opið umslag"
+
+#~ msgid "files icon"
+#~ msgstr "tákn fyrir skrár"
+
+#~ msgid "messages icon"
+#~ msgstr "tákn fyrir skilaboð"
+
+#~ msgid "SecureDrop Home"
+#~ msgstr "Forsíða SecureDrop"
+
+#~ msgid "Show"
+#~ msgstr "Sýna"
+
+#~ msgid "Hide"
+#~ msgstr "Fela"
+
+#~ msgid "— No Messages —"
+#~ msgstr "— Engin skilaboð —"
 
 #~ msgid "You've flagged this source for reply."
 #~ msgstr "Þú hefur merkt við að þú ætlir að svara þessum heimildarmanni."

@@ -4,7 +4,19 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
 #
 msgid ""
-msgstr "Project-Id-Version: SecureDrop 0.5-rc4\nReport-Msgid-Bugs-To: securedrop@freedom.press\nPO-Revision-Date: 2021-06-21 10:44+0000\nLast-Translator: Jonas Waga <jonas.waga@schibsted.com>\nLanguage-Team: Swedish <https://weblate.securedrop.org/projects/securedrop/securedrop/sv/>\nLanguage: sv\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=2; plural=n != 1;\nX-Generator: Weblate 4.6\nGenerated-By: Babel 2.4.0\n"
+msgstr ""
+"Project-Id-Version: SecureDrop 0.5-rc4\n"
+"Report-Msgid-Bugs-To: securedrop@freedom.press\n"
+"PO-Revision-Date: 2021-06-21 10:44+0000\n"
+"Last-Translator: Jonas Waga <jonas.waga@schibsted.com>\n"
+"Language-Team: Swedish <https://weblate.securedrop.org/projects/securedrop/securedrop/sv/>\n"
+"Language: sv\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.6\n"
+"Generated-By: Babel 2.4.0\n"
 
 msgid "Name too long"
 msgstr "Namnet är för långt"
@@ -130,8 +142,8 @@ msgstr "Du kan endast ladda upp PNG-bildfiler."
 msgid "An unexpected error occurred! Please inform your admin."
 msgstr "Ett oväntat fel uppstod! Informera din administratör."
 
-msgid "Your reply has been stored."
-msgstr "Ditt svar har sparats."
+msgid "The source will receive your reply next time they log in."
+msgstr ""
 
 msgid "You must select one or more items for download"
 msgstr "Du måste välja ett eller flera meddelanden för nedladdning"
@@ -202,11 +214,17 @@ msgstr "Stäng"
 msgid "Cancel"
 msgstr "Avbryt"
 
-msgid "starred icon"
-msgstr "Stjärnmärkt"
+msgid "Un-star {designation}"
+msgstr ""
 
-msgid "unstarred icon"
-msgstr "Ta bort stjärnmärkning"
+msgid "{designation} is starred"
+msgstr ""
+
+msgid "Star {designation}"
+msgstr ""
+
+msgid "{designation} is not starred"
+msgstr ""
 
 msgid "1 doc"
 msgid_plural "{num} docs"
@@ -218,7 +236,7 @@ msgid_plural "{num} messages"
 msgstr[0] "1 meddelande"
 msgstr[1] "{num} meddelanden"
 
-msgid "download icon"
+msgid "Download"
 msgstr "Ladda ned"
 
 msgid "1 unread"
@@ -322,20 +340,27 @@ msgstr "Senaste inloggning"
 msgid "Edit user {username}"
 msgstr "Redigera användare {username}"
 
-msgid "edit user icon"
-msgstr "Redigera"
-
-msgid "trash icon disabled"
+#, fuzzy
+#| msgid "trash icon disabled"
+msgid "User deletion disabled"
 msgstr "Radera"
 
 msgid "Delete user {username}"
 msgstr "Ta bort {username}"
 
-msgid "trash icon"
-msgstr "Radera"
-
 msgid "never"
 msgstr "aldrig"
+
+msgid "Delete Confirmation"
+msgstr "Verifiera radering"
+
+#, fuzzy
+#| msgid "Are you sure you want to delete the user {username}?"
+msgid "Are you sure you want to delete this user?"
+msgstr "Är du säker på att du vill ta bort användaren {username}?"
+
+msgid "DELETE"
+msgstr "TA BORT"
 
 msgid "No users to display"
 msgstr "Inga användare att visa"
@@ -403,47 +428,23 @@ msgstr "Ladda ned markerade"
 msgid "Delete Selected"
 msgstr "Radera markerade"
 
-msgid "Reply"
-msgstr "Svar"
-
-msgid "reply icon"
-msgstr "Svar"
+msgid "Unread"
+msgstr "Olästa"
 
 msgid "Read"
 msgstr "Lästa"
 
-msgid "check icon"
-msgstr "Markera"
-
-msgid "Unread"
-msgstr "Olästa"
-
-msgid "closed envelope icon"
-msgstr "Oläst"
-
-msgid "open envelope icon"
-msgstr "Läst"
-
 msgid "Uploaded Document"
 msgstr "Uppladdat dokument"
 
-msgid "files icon"
-msgstr "Bilaga"
+msgid "Reply"
+msgstr "Svar"
 
 msgid "Message"
 msgstr "Meddelande"
 
-msgid "messages icon"
-msgstr "Meddelande"
-
-msgid "Delete Confirmation"
-msgstr "Verifiera radering"
-
 msgid "Are you sure you want to delete the selected submissions?"
 msgstr "Är du säker att du vill ta bort de markerade inlämningarna?"
-
-msgid "DELETE"
-msgstr "TA BORT"
 
 msgid "No submissions to display."
 msgstr "Inga inlämningar att visa."
@@ -582,11 +583,21 @@ msgstr "Nollställ tvåfaktorsautentisering för säkerhetsnyckler som t.ex Yubi
 msgid "RESET SECURITY KEY CREDENTIALS"
 msgstr "ÅTERSTÄLL SÄKERHETSNYCKELSUPPGIFTER"
 
+#, fuzzy
+#| msgid "Verification code"
+msgid "Notification"
+msgstr "Verifikationskod"
+
+#, fuzzy
+#| msgid "Success!"
+msgid "Success"
+msgstr "Det lyckades!"
+
+msgid "Error"
+msgstr ""
+
 msgid "Download Unread"
 msgstr "Ladda ned olästa"
-
-msgid "Download"
-msgstr "Ladda ned"
 
 msgid "Star"
 msgstr "Stjärnmärk"
@@ -608,9 +619,6 @@ msgstr "Markera olästa"
 
 msgid "Select None"
 msgstr "Markera inga"
-
-msgid "Are you sure you want to delete the user {username}?"
-msgstr "Är du säker på att du vill ta bort användaren {username}?"
 
 msgid "Are you sure you want to reset two-factor authentication for {username}?"
 msgstr "Är du säker att du vill återställa tvåfaktorsautentiseringen för {username}?"
@@ -647,6 +655,9 @@ msgstr "Ogiltigt innehåll."
 
 msgid "Write a message."
 msgstr "Skriv ett meddelande."
+
+msgid "Select a file to upload."
+msgstr ""
 
 msgid "Message text too long."
 msgstr "Meddelandet är för långt."
@@ -690,9 +701,6 @@ msgstr "Tyvärr, detta kodnamn är okänt."
 msgid "Protecting Journalists and Sources"
 msgstr "Skyddar journalister och källor"
 
-msgid "SecureDrop Home"
-msgstr "SecureDrop Hem"
-
 msgid "We're sorry, our SecureDrop is currently offline."
 msgstr "Vi ber om ursäkt, men vår SecureDrop är för närvarande offline."
 
@@ -735,8 +743,23 @@ msgstr "Vänligen skriv ner detta kodnamn och spara det på en säker plats elle
 msgid "This codename is what you will use in future visits to receive messages from our team in response to what you submit on the next screen."
 msgstr "Detta kodnamn är det du kommer att använda vid framtida besök för att ta emot meddelanden från vårt team som svar på det du skickar in på nästa skärm."
 
+#, fuzzy
+#| msgid "Enter Codename"
+msgid "Codename"
+msgstr "Ange kodnamn"
+
+#, fuzzy
+#| msgid "Enter Codename"
+msgid "Refresh codename"
+msgstr "Ange kodnamn"
+
+#, fuzzy
+#| msgid ""
+#| "Because we do not track users of our <strong>SecureDrop</strong>\n"
+#| " service, in future visits, using this codename will be the only way we have to communicate with you should we have\n"
+#| " questions or are interested in additional information. Unlike passwords, there is no way to retrieve a lost codename."
 msgid ""
-"Because we do not track users of our <strong>SecureDrop</strong>\n"
+"Because we do not track users of our <b>SecureDrop</b>\n"
 " service, in future visits, using this codename will be the only way we have to communicate with you should we have\n"
 " questions or are interested in additional information. Unlike passwords, there is no way to retrieve a lost codename."
 msgstr ""
@@ -744,16 +767,48 @@ msgstr ""
 "vid framtida besök, kommer användningen av detta kodnamnet att vara det enda sättet vi har att kommunicera med dig ifall vi har\n"
 "frågor eller är intresserade av mer information. Till skillnad från lösenord, finns det inget sätt att återställa ett försvunnet kodnamn."
 
+msgid "Submit Documents"
+msgstr ""
+
 msgid "SUBMIT DOCUMENTS"
 msgstr "LÄMNA IN DOKUMENT"
 
-msgid "Your Tor Browser's <a id=\"disable-js\" href=\"\"><strong>Security Level</strong></a> is too low. Use the <img src=\"{icon}\" alt=\"shield icon\"> &nbsp;button in your browser’s toolbar to change it."
+#, fuzzy
+#| msgid "Your Tor Browser's <a id=\"disable-js\" href=\"\"><strong>Security Level</strong></a> is too low. Use the <img src=\"{icon}\" alt=\"shield icon\"> &nbsp;button in your browser’s toolbar to change it."
+msgid "Your Tor Browser's <a id=\"disable-js\" href=\"\"><b>Security Level</b></a> is too low. Use the <img src=\"{icon}\" alt=\"&quot;Security Level&quot;\"> button in your browser’s toolbar to change it."
 msgstr "Din Tor Browsers <a id=\"disable-js\" href=\"\"><strong>Säkerhetsnivå</strong></a> är ställd för låg. Använd <img src=\"{icon}\" alt=\"shield icon\"> &nbsp;-knappen i din Tor Browsers menyrad för att ändra det."
 
-msgid "<strong>It is recommended to use Tor Browser to access SecureDrop:</strong> <a id=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
+msgid "How to change your security level"
+msgstr ""
+
+#, fuzzy
+#| msgid "Click the <img src=\"{icon}\" alt=\"shield icon\"> in the toolbar above"
+msgid "Click the <img src=\"{icon}\" alt=\"&quot;Security Level&quot; button\"> in the toolbar above"
+msgstr "Klicka på <img src=\"{icon}\" alt=\"shield icon\"> i menyraden ovan"
+
+#, fuzzy
+#| msgid "Select <strong>Advanced Security Settings</strong>"
+msgid "Select <b>Advanced Security Settings</b>"
+msgstr "Välj <strong>Avancerade säkerhetsinställningar</strong>"
+
+#, fuzzy
+#| msgid "Select <strong>Safest</strong>"
+msgid "Select <b>Safest</b>"
+msgstr "Välj <strong>Säkrast</strong>"
+
+#, fuzzy
+#| msgid "<a href=\"/\">Refresh this page</a>, and you're done!"
+msgid "<a href=\"/\" aria-label=\"Follow these instructions, then refresh this page\">Refresh this page</a>, and you're done!"
+msgstr "<a href=\"/\">Uppdatera sidan</a>, sedan är du klar!"
+
+#, fuzzy
+#| msgid "<strong>It is recommended to use Tor Browser to access SecureDrop:</strong> <a id=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
+msgid "<strong>It is recommended to use Tor Browser to access SecureDrop:</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
 msgstr "<strong>Det är rekommenderat att använda Tor Browser för att använda SecureDrop:</strong> <a id=\"recommend-tor\" href=\"{tor_browser_url}\"> Lär dig hur den installeras</a>, eller ignorera denna varning och fortsätt."
 
-msgid "<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop version.</strong> <a id=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
+#, fuzzy
+#| msgid "<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop version.</strong> <a id=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
+msgid "<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop version.</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
 msgstr "<strong> Det är rekommenderat att använda datorversionen av TorBrowser för att använda SecureDrop, då Orfox inte erbjuder samma nivå av säkerhet och anonymitet som datorversionen.</strong> <a id=\"recommend-tor\" href=\"{tor_browser_url}\"> Lär dig hur den installeras</a> eller ignorera denna varning och fortsätt."
 
 msgid "First submission"
@@ -761,6 +816,9 @@ msgstr "Första inlämning"
 
 msgid "First time submitting to our SecureDrop? Start here."
 msgstr "Är det här första gången du skickar in information till vår SecureDrop? Börja här."
+
+msgid "Get Started"
+msgstr ""
 
 msgid "GET STARTED"
 msgstr "BÖRJA HÄR"
@@ -771,17 +829,18 @@ msgstr "Återkommande besök"
 msgid "Already have a codename? Check for replies or submit something new."
 msgstr "Har du redan ett kodnamn? Kontrollera om du fått svar eller lämna in något nytt."
 
-msgid "Click the <img src=\"{icon}\" alt=\"shield icon\"> in the toolbar above"
-msgstr "Klicka på <img src=\"{icon}\" alt=\"shield icon\"> i menyraden ovan"
+#, fuzzy
+#| msgid "Log Out"
+msgid "Log In"
+msgstr "Logga ut"
 
-msgid "Select <strong>Advanced Security Settings</strong>"
-msgstr "Välj <strong>Avancerade säkerhetsinställningar</strong>"
+#, fuzzy
+#| msgid "Select None"
+msgid "Selected language"
+msgstr "Markera inga"
 
-msgid "Select <strong>Safest</strong>"
-msgstr "Välj <strong>Säkrast</strong>"
-
-msgid "<a href=\"/\">Refresh this page</a>, and you're done!"
-msgstr "<a href=\"/\">Uppdatera sidan</a>, sedan är du klar!"
+msgid "Choose language"
+msgstr ""
 
 msgid "Enter Codename"
 msgstr "Ange kodnamn"
@@ -789,23 +848,22 @@ msgstr "Ange kodnamn"
 msgid "Enter your codename"
 msgstr "Ange ditt kodnamn"
 
+msgid "Continue"
+msgstr ""
+
 msgid "CANCEL"
 msgstr "AVBRYT"
 
 msgid "One more thing..."
 msgstr "En sak till…"
 
-msgid "Click the <img src={icon} alt=\"broom icon\" width=\"16\" height=\"16\">&nbsp;<strong>New Identity</strong> button in your Tor Browser's toolbar. This will clear your Tor Browser activity data on this device."
+#, fuzzy
+#| msgid "Click the <img src={icon} alt=\"broom icon\" width=\"16\" height=\"16\">&nbsp;<strong>New Identity</strong> button in your Tor Browser's toolbar. This will clear your Tor Browser activity data on this device."
+msgid "Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar. This will clear your Tor Browser activity data on this device."
 msgstr "Klicka på knappen <img src={icon} alt=\"broom icon\" width=\"16\" height=\"16\">&nbsp;<strong>Ny identitet</strong> i din Tor Browsers verktygsfält. Detta kommer att rensa dina Tor Browsers aktiviteter på den här enheten."
 
 msgid "Remember, your codename is:"
 msgstr "Kom ihåg, ditt kodnamn är:"
-
-msgid "Show"
-msgstr "Visa"
-
-msgid "Hide"
-msgstr "Göm"
 
 msgid "Submit Files or Messages"
 msgstr "Skicka filer eller meddelanden"
@@ -828,13 +886,26 @@ msgstr "<a href=\"{url}\" class=\"text-link\">Fortsätt läsa</a>."
 msgid "Maximum upload size: 500 MB"
 msgstr "Maximal storlek för uppladdningar: 500 MB"
 
+msgid "Submit"
+msgstr ""
+
 msgid "Read Replies"
 msgstr "Läs svar"
 
 msgid "You have received a reply. To protect your identity in the unlikely event someone learns your codename, please delete all replies when you're done with them. This also lets us know that you are aware of our reply. You can respond by submitting new files and messages above."
 msgstr "Du har fått ett svar. För att skydda din identitet vid det osannolika tillfället någon kommer på ditt kodnamn, vänligen ta bort alla svar när du är klar med dem. Därmed får vi också bekräftat att du har sett vårt svar. Du kan svara genom att skicka in nya filer eller meddelanden ovan."
 
+#, fuzzy
+#| msgid "Delete this reply?"
+msgid "Delete this reply"
+msgstr "Ta bort detta svar?"
+
 msgid "Delete this reply?"
+msgstr "Ta bort detta svar?"
+
+#, fuzzy
+#| msgid "Delete this reply?"
+msgid "Delete All Replies"
 msgstr "Ta bort detta svar?"
 
 msgid "DELETE ALL REPLIES"
@@ -849,8 +920,10 @@ msgstr "JA, TA BORT ALLA SVAR"
 msgid "NO, NOT YET"
 msgstr "NEJ, INTE ÄN"
 
-msgid "— No Messages —"
-msgstr "— Inga medelanden —"
+#, fuzzy
+#| msgid "Message"
+msgid "No Messages"
+msgstr "Meddelande"
 
 msgid "Page not found"
 msgstr "Sidan kunde inte hittas"
@@ -861,7 +934,9 @@ msgstr "Förlåt, vi kunde inte hitta det du begärde."
 msgid "Important"
 msgstr "Viktigt"
 
-msgid "You were logged out due to inactivity. Click the <img src={icon} alt=\"broom icon\" width=\"16\" height=\"16\">&nbsp;<strong>New Identity</strong> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
+#, fuzzy
+#| msgid "You were logged out due to inactivity. Click the <img src={icon} alt=\"broom icon\" width=\"16\" height=\"16\">&nbsp;<strong>New Identity</strong> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
+msgid "You were logged out due to inactivity. Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
 msgstr "Du loggades ut på grund av inaktivitet. Klicka på knappen <img src={icon} alt=\"broom icon\" width=\"16\" height=\"16\">&nbsp;<strong>Ny identitet</strong> i ditt Tor Browser-verktygsfält innan du går vidare. Detta rensar dina Tor Browser-aktivitetsdata på den här enheten."
 
 msgid "Why is there a warning about Tor2Web?"
@@ -888,7 +963,9 @@ msgstr "Ifall du vill lämna in information via SecureDrop, <strong>rekommendera
 msgid "Copy and paste the following address into your browser and follow the instructions to download and install Tor Browser:"
 msgstr "Kopiera och klistra in följande adress i din webbläsare och följ instruktionerna om hur man laddar ner och installerar Tor Browser:"
 
-msgid "If there is a chance that downloading Tor Browser raises suspicion and your mail provider is less likely to be monitored, you can send a mail to <pre>gettor@torproject.org</pre> and a bot will answer with instructions."
+#, fuzzy
+#| msgid "If there is a chance that downloading Tor Browser raises suspicion and your mail provider is less likely to be monitored, you can send a mail to <pre>gettor@torproject.org</pre> and a bot will answer with instructions."
+msgid "If there is a chance that downloading Tor Browser raises suspicion and your mail provider is less likely to be monitored, you can send a mail to <kbd>gettor@torproject.org</kbd> and a bot will answer with instructions."
 msgstr "Om det finns risk att en nedladdning av Tor Browser höjer misstankar, och det är mindre risk att din e-postleverantör är övervakad, kan du skicka ett e-postmeddelande till <pre>gettor@torproject.org</pre> så kommer en bot svara med instruktioner."
 
 msgid "Why download the team's public key?"
@@ -930,6 +1007,54 @@ msgstr "<strong> Viktigt:</strong> Ifall du önskar att förbli anonym, <strong>
 
 msgid "Back to submission page"
 msgstr "Tillbaka till inlämningssidan"
+
+#~ msgid "Your reply has been stored."
+#~ msgstr "Ditt svar har sparats."
+
+#~ msgid "starred icon"
+#~ msgstr "Stjärnmärkt"
+
+#~ msgid "unstarred icon"
+#~ msgstr "Ta bort stjärnmärkning"
+
+#~ msgid "download icon"
+#~ msgstr "Ladda ned"
+
+#~ msgid "edit user icon"
+#~ msgstr "Redigera"
+
+#~ msgid "trash icon"
+#~ msgstr "Radera"
+
+#~ msgid "reply icon"
+#~ msgstr "Svar"
+
+#~ msgid "check icon"
+#~ msgstr "Markera"
+
+#~ msgid "closed envelope icon"
+#~ msgstr "Oläst"
+
+#~ msgid "open envelope icon"
+#~ msgstr "Läst"
+
+#~ msgid "files icon"
+#~ msgstr "Bilaga"
+
+#~ msgid "messages icon"
+#~ msgstr "Meddelande"
+
+#~ msgid "SecureDrop Home"
+#~ msgstr "SecureDrop Hem"
+
+#~ msgid "Show"
+#~ msgstr "Visa"
+
+#~ msgid "Hide"
+#~ msgstr "Göm"
+
+#~ msgid "— No Messages —"
+#~ msgstr "— Inga medelanden —"
 
 #~ msgid "You've flagged this source for reply."
 #~ msgstr "Du har flaggat den här källan för svar."
