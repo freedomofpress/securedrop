@@ -13,8 +13,9 @@
 #   6. Run `cd install_files/ansible-base`
 #   7. Run `ansible-playbook -vv --diff securedrop-qa.yml`
 #   8. `ssh app` # start interactive session
-#   9. On the Application Server, run `sudo cron-apt -i -s`
-#   10. Repeat steps 8 & 9 on the Monitor server
+#   9. On the Application Server, run `sudo unattended-upgrades -d`
+#   10. Reboot the server once the upgrade is complete
+#   11. Repeat steps 8-10 on the Monitor server
 
 - name: Configure prod host to accept Release Candidate packages.
   environment:
@@ -25,7 +26,6 @@
   vars:
     apt_files_to_modify:
       - /etc/apt/sources.list.d/apt_freedom_press.list
-      - /etc/apt/security.list
   tasks:
     - name: Add apt public key for release-candidate repo.
       apt_key:
