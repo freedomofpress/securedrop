@@ -357,7 +357,7 @@ workflows:
             branches:
               # Ignore needs to be here explicitely as only clause introduced in PR #6086 might be removed afterwards.
               ignore: /i18n-.*/
-              only: /release\/.*/
+              only: /(stg-|release\/).*/
           requires:
             - lint
       - translation-tests:
