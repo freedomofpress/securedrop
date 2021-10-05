@@ -50,10 +50,10 @@
   tags:
     - apt
 
-- name: Upgrade all packages
+- name: Ensure dist-upgrade before SecureDrop install
   apt:
-    name: "*"
-    state: latest
+    upgrade: dist
     update_cache: yes
   tags:
     - apt
+    - apt-upgrade
