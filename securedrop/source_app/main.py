@@ -201,7 +201,10 @@ def make_blueprint(config: SDConfig) -> Blueprint:
                     fh.stream))
 
         if first_submission:
-            flash_message = render_template('first_submission_flashed_message.html')
+            flash_message = render_template(
+                'first_submission_flashed_message.html',
+                new_user_codename=session.get('new_user_codename', None),
+            )
             flash(Markup(flash_message), "success")
 
         else:

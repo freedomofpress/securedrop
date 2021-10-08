@@ -1,8 +1,10 @@
 <section class="message">
   <h2>{{ gettext('Success!') }}</h2>
   <p>{{ gettext('Thank you for sending this information to us. Please check back later for replies.') }}
+    {% if new_user_codename %}
     <a href="#codename-hint">
       {{ gettext('Forgot your codename?') }}
     </a>
+    {% endif %}
   </p>
 </section>
