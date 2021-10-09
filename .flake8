@@ -2,7 +2,8 @@
 max-line-length = 100
 exclude =
     config.py,
-    admin/.venv,
+    admin/.venv*,
+    admin/.eggs,
     .venv*/,
     journalist_gui/journalist_gui/updaterUI.py,
     journalist_gui/journalist_gui/resources_rc.py,
