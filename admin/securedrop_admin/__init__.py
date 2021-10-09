@@ -776,7 +776,6 @@ def install_securedrop(args: argparse.Namespace) -> int:
     )
 
 
-@update_check_required("verify")
 def verify_install(args: argparse.Namespace) -> int:
     """Run configuration tests against SecureDrop servers"""
 
