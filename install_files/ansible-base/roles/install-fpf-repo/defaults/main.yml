@@ -20,7 +20,6 @@ install_local_packages: False
 # May be overridden in staging to install from a test/QA server,
 # the Release file for which will *not* be signed with the prod key.
 apt_repo_pubkey_files:
-  - fpf-signing-key.pub
   - fpf-signing-key-2021.pub
 
 # As of v2.0.0, only Focal is supported.
