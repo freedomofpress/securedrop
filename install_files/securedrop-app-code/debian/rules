@@ -31,7 +31,6 @@ override_dh_virtualenv:
 		--preinstall setuptools-scm==6.0.1 \
 		--extra-pip-arg "--verbose" \
 		--extra-pip-arg "--no-deps" \
-		--extra-pip-arg "--no-binary=:all:" \
 		--extra-pip-arg "--no-cache-dir"
 
 #
