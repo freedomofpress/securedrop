@@ -29,6 +29,9 @@
 - name: Copy translation-requirements.txt to prep directory
   command: cp "{{ securedrop_translation_pip_requirements }}" "{{ securedrop_app_code_prep_dir }}/translation-requirements.txt"
 
+- name: Copy translation-constraints.txt to prep directory
+  command: cp "{{ securedrop_translation_pip_constraints }}" "{{ securedrop_app_code_prep_dir }}/translation-constraints.txt"
+
 - name: Copy requirements.txt to prep directory
   command: cp "{{ securedrop_pip_requirements }}" "{{ securedrop_app_code_prep_dir }}/requirements.txt"
 

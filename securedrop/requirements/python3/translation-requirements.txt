@@ -4,18 +4,10 @@
 #
 #    pip-compile --allow-unsafe --generate-hashes --output-file=requirements/python3/translation-requirements.txt requirements/python3/translation-requirements.in
 #
-flit-core==3.3.0 \
-    --hash=sha256:9b247b3095cb3c43933a59a7433f92ddfdd7fc843e08ef0f4550d53a9cfbbef6 \
-    --hash=sha256:b1404accffd6504b5f24eeca9ec5d3c877f828d16825348ba81515fa084bd5f0
-    # via -r requirements/python3/translation-requirements.in
 setuptools-scm==6.0.1 \
     --hash=sha256:c3bd5f701c8def44a5c0bfe8d407bef3f80342217ef3492b951f3777bd2d915c \
     --hash=sha256:d1925a69cb07e9b29416a275b9fadb009a23c148ace905b2fb220649a6c18e92
     # via -r requirements/python3/translation-requirements.in
-toml==0.10.2 \
-    --hash=sha256:806143ae5bfb6a3c6e736a764057db0e6a0e05e338b5630894a5f779cabb4f9b \
-    --hash=sha256:b3bda1d108d5dd99f4a20d24d9c348e91c4db7ab1b749200bded2f839ccbe68f
-    # via flit-core
 
 # The following packages are considered to be unsafe in a requirements file:
 setuptools==56.0.0 \
