@@ -217,7 +217,7 @@ jobs:
 
   updater-gui-tests:
     docker:
-      - image: cimg/python:3.7
+      - image: cimg/python:3.8
     steps:
       - checkout
 
@@ -229,13 +229,15 @@ jobs:
           name: Install requirements
           command: |
             cd journalist_gui
-            pipenv install
+            python3 -m venv .venv/ && source .venv/bin/activate
+            pip install --require-hashes -r dev-requirements.txt
 
       - run:
           name: Run tests
           command: |
             cd journalist_gui
-            QT_QPA_PLATFORM=offscreen pipenv run python3 test_gui.py -v $2>/dev/null
+            python3 -m venv .venv/ && source .venv/bin/activate
+            QT_QPA_PLATFORM=offscreen python3 test_gui.py -v $2>/dev/null
 
   static-analysis-and-no-known-cves:
     machine:
