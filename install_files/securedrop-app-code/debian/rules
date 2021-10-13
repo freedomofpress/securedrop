@@ -32,8 +32,7 @@ override_dh_virtualenv:
 		--extra-pip-arg "--verbose" \
 		--extra-pip-arg "--no-deps" \
 		--extra-pip-arg "--no-binary=:all:" \
-		--extra-pip-arg "--no-cache-dir" \
-		--extra-pip-arg "-c /tmp/securedrop-pip-constraints.txt"  # FIXME: "/tmp"
+		--extra-pip-arg "--no-cache-dir"
 
 #
 # Have to override the automatic service handling since we have more

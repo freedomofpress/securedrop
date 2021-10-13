@@ -1,3 +1,5 @@
+-c constraints.txt
+
 Jinja2>=2.11.3
 beautifulsoup4
 blinker

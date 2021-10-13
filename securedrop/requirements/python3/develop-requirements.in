@@ -1,3 +1,5 @@
+-c constraints.txt
+
 Jinja2>=2.11.3
 ansible-lint>=4.2.0
 ansible>=2.9.23,<2.10.0

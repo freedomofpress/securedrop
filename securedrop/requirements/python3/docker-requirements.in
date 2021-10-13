@@ -1,3 +1,5 @@
+-c constraints.txt
+
 pip>=21.1
 setuptools>=56.0.0
 wheel
