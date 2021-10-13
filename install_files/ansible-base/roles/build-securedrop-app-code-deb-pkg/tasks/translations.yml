@@ -4,7 +4,7 @@
   shell: >
     set -e &&
     python3 -m venv /tmp/securedrop-app-code-i18n-ve &&
-    /tmp/securedrop-app-code-i18n-ve/bin/pip3 install 'pip>=21' &&
+    /tmp/securedrop-app-code-i18n-ve/bin/pip3 install --upgrade pip &&
     /tmp/securedrop-app-code-i18n-ve/bin/pip3 install --no-deps --no-binary :all: --require-hashes -r {{ securedrop_app_code_prep_dir }}/translation-requirements.txt &&
     /tmp/securedrop-app-code-i18n-ve/bin/pip3 install --no-deps --no-binary :all: --require-hashes -r {{ securedrop_app_code_prep_dir }}/requirements.txt
   environment:
