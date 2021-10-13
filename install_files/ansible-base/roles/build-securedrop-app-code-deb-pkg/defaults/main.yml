@@ -7,7 +7,7 @@ securedrop_app_code_prep_dir: "/tmp/{{ securedrop_app_code_deb }}-prep"
 securedrop_code_filtered: "{{ securedrop_app_code_prep_dir }}/var/www/securedrop"
 
 securedrop_translation_pip_requirements: "{{ securedrop_code_filtered }}/requirements/python3/translation-requirements.txt"
-securedrop_translation_pip_constraints: "{{ securedrop_code_filtered }}/requirements/python3/translation-constraints.txt"
+securedrop_pip_constraints: "{{ securedrop_code_filtered }}/requirements/python3/constraints.txt"
 securedrop_pip_requirements: "{{ securedrop_code_filtered }}/requirements/python3/securedrop-app-code-requirements.txt"
 
 # SecureDrop code installation directory
