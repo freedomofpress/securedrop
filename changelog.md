@@ -1,5 +1,14 @@
 # Changelog
 
+## 2.1.0~rc2
+
+### Development
+
+* Added upgrade of all packages early in install, for newest ca-certificates (#6120)
+* Updated package build to use latest pip (21.3) rather than system pip for virtualenvs (#6141)
+* Removed version check for "verify" command for securedrop-admin (#6134)
+* Updated QA playbook for Focal apt sources (#6123)
+
 ## 2.1.0~rc1
 
 ### Web applications
@@ -20,7 +29,7 @@
 * Added script to repair Tails updater for Tails versions below 4.19 (#6110)
 * Silenced low-priority fwupd-related OSSEC alerts (#6107)
 * Removed superfluous Tails configuration chance to enforce preservation of filenames on decompression in Nautilus (#6079)
-* Removed expired signing key from Securedrop keyring (#5979)
+* Removed expired signing key from Securedrop keyring (#5979, #6138)
 * Added option to restore from backup file manually transferred to server (#5909)
 * Dependency updates: requests 2.22.0 to 2.26.0; urllib3 1.25.10 to 1.26.6; Ansible 2.9.21 to 2.9.26 (#6046, #6109)
 
