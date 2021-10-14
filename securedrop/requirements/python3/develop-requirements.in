@@ -21,7 +21,7 @@ mypy>=0.761
 # http://docs.ansible.com/ansible/latest/playbooks_filters_ipaddr.html
 netaddr
 # Now also pin pip due to https://github.com/jazzband/pip-tools/issues/853
-pip>=21.1
+pip>=21.3
 pip-tools>=6.1.0
 psutil>=5.6.6
 pyenchant>=3.2.1
