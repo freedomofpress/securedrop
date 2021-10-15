@@ -44,6 +44,33 @@ class TestSourceInterface(
         self._source_proceeds_to_login()
         self._source_sees_no_codename()
 
+    def test_lookup_submit_notification_first_login(self):
+        """Test that on a first login, the submission notification includes the 'Please check back
+        later' and 'Forgot your codename?' messages. Also verify that those messages are not
+        present on a subsequent submission."""
+        self._source_visits_source_homepage()
+        self._source_chooses_to_submit_documents()
+        self._source_continues_to_submit_page()
+        self._source_submits_a_message(
+            verify_notification=True, first_submission=True, first_login=True
+        )
+        self._source_submits_a_message(verify_notification=True)
+
+    def test_lookup_submit_notification_2nd_login(self):
+        """Test that on a second login, the first submission notification includes the 'Please
+        check back later' message but not the 'Forgot your codename?' message since the codename
+        hint section is not present on a second login (Ref. issue #5101). Also verify that none of
+        those messages are present on a subsequent submission."""
+        self._source_visits_source_homepage()
+        self._source_chooses_to_submit_documents()
+        self._source_continues_to_submit_page()
+        self._source_logs_out()
+        self._source_visits_source_homepage()
+        self._source_chooses_to_login()
+        self._source_proceeds_to_login()
+        self._source_submits_a_message(verify_notification=True, first_submission=True)
+        self._source_submits_a_message(verify_notification=True)
+
 
 class TestDownloadKey(
         functional_test.FunctionalTest,

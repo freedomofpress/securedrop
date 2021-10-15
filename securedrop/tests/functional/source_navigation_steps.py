@@ -163,7 +163,9 @@ class SourceNavigationStepsMixin:
             # allow time for reply key to be generated
             time.sleep(self.timeout)
 
-    def _source_submits_a_message(self):
+    def _source_submits_a_message(
+        self, verify_notification=False, first_submission=False, first_login=False
+    ):
         self._source_enters_text_in_message_field()
         self._source_clicks_submit_button_on_submission_page()
 
@@ -171,6 +173,22 @@ class SourceNavigationStepsMixin:
             if not self.accept_languages:
                 notification = self.driver.find_element_by_css_selector(".success")
                 assert "Thank" in notification.text
+
+                if verify_notification:
+                    first_submission_text = (
+                        "Please check back later for replies." in notification.text
+                    )
+                    first_login_text = "Forgot your codename?" in notification.text
+
+                    if first_submission:
+                        assert first_submission_text
+
+                        if first_login:
+                            assert first_login_text
+                        else:
+                            assert not first_login_text
+                    else:
+                        assert not first_submission_text
 
         self.wait_for(message_submitted)
 
