@@ -4,7 +4,7 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2018.
 #
 msgid ""
-msgstr "Project-Id-Version: SecureDrop 0.6~rc2\nReport-Msgid-Bugs-To: securedrop@freedom.press\nPO-Revision-Date: 2021-06-22 16:44+0000\nLast-Translator: Kushal Das <kushaldas@gmail.com>\nLanguage-Team: Hindi <https://weblate.securedrop.org/projects/securedrop/securedrop/hi/>\nLanguage: hi\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=2; plural=n != 1;\nX-Generator: Weblate 4.6\nGenerated-By: Babel 2.5.1\n"
+msgstr "Project-Id-Version: SecureDrop 0.6~rc2\nReport-Msgid-Bugs-To: securedrop@freedom.press\nPO-Revision-Date: 2021-10-19 01:42+0000\nLast-Translator: Cory Francis Myers <cory@freedom.press>\nLanguage-Team: Hindi <https://weblate.securedrop.org/projects/securedrop/securedrop/hi/>\nLanguage: hi\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=2; plural=n != 1;\nX-Generator: Weblate 4.6\nGenerated-By: Babel 2.5.1\n"
 
 msgid "Name too long"
 msgstr "नाम बहुत लंबा है |"
@@ -582,6 +582,17 @@ msgstr "सुरक्षा कुंजी जैसे YubiKey के द्
 msgid "RESET SECURITY KEY CREDENTIALS"
 msgstr "सुरक्षा कुंजी क्रेडेंशियल्स रीसेट"
 
+#, fuzzy
+#| msgid "Verification code"
+msgid "Notification"
+msgstr "प्रमाणीकरण संख्या"
+
+msgid "Success"
+msgstr "सफल हुआ"
+
+msgid "Error"
+msgstr ""
+
 msgid "Download Unread"
 msgstr "न पढ़े मसाज डाउनलोड करें"
 
@@ -735,26 +746,50 @@ msgstr "कृपया यह संकेत नाम नीचे लिख�
 msgid "This codename is what you will use in future visits to receive messages from our team in response to what you submit on the next screen."
 msgstr "यह संकेत नाम आप अगली स्क्रीन पर सबमिट की गई प्रतिक्रिया के उत्तर में हमारे टीम से संदेश प्राप्त करने के लिए भविष्य में आने वाले दौरा में उपयोग करें।"
 
+#, fuzzy
+#| msgid "Enter Codename"
+msgid "Codename"
+msgstr "संकेत नाम दर्ज करें"
+
+#, fuzzy
+#| msgid "Enter Codename"
+msgid "Refresh codename"
+msgstr "संकेत नाम दर्ज करें"
+
 msgid ""
 "Because we do not track users of our <strong>SecureDrop</strong>\n"
 " service, in future visits, using this codename will be the only way we have to communicate with you should we have\n"
 " questions or are interested in additional information. Unlike passwords, there is no way to retrieve a lost codename."
-msgstr ""
-"क्योंकि हम हमारे उपयोगकर्ताओं को ट्रैक नहीं करते हैं <strong>SecureDrop</strong>\n"
-"सेवा, भविष्य के दौरे में, इस संकेत नाम का उपयोग करने का एकमात्र तरीका है कि हमारे साथ संवाद करना चाहिए था हमारे पास होना चाहिए प्रश्न या \n"
-"अतिरिक्त जानकारी में रुचि रखते हैं। पासवर्ड के विपरीत, खोई हुई कोडनाम को पुनः प्राप्त करने का कोई तरीका नहीं है।"
+msgstr "क्योंकि हम हमारे उपयोगकर्ताओं को ट्रैक नहीं करते हैं <b>SecureDrop</b>\nसेवा, भविष्य के दौरे में, इस संकेत नाम का उपयोग करने का एकमात्र तरीका है कि हमारे साथ संवाद करना चाहिए था हमारे पास होना चाहिए प्रश्न या \nअतिरिक्त जानकारी में रुचि रखते हैं। पासवर्ड के विपरीत, खोई हुई कोडनाम को पुनः प्राप्त करने का कोई तरीका नहीं है।"
 
 msgid "SUBMIT DOCUMENTS"
 msgstr "दस्तावेज़ जमा करें"
 
-msgid "Your Tor Browser's <a id=\"disable-js\" href=\"\"><strong>Security Level</strong></a> is too low. Use the <img src=\"{icon}\" alt=\"shield icon\"> &nbsp;button in your browser’s toolbar to change it."
-msgstr "आपके Tor ब्राउज़र का <a id=\"disable-js\" href=\"\"><strong>सुरक्षा स्तर</strong></a> बहुत कम है। ब्राउज़र टूलबार के <img src=\"{icon}\" alt=\"shield icon\"> &nbsp;बटन से इसे बदलें।"
+msgid "Your Tor Browser's <a id=\"disable-js\" href=\"\"><b>Security Level</b></a> is too low. Use the <img src=\"{icon}\" alt=\"&quot;Security Level&quot;\"> button in your browser’s toolbar to change it."
+msgstr "आपके Tor ब्राउज़र का <a id=\"disable-js\" href=\"\"><b>सुरक्षा स्तर</b></a> बहुत कम है। ब्राउज़र टूलबार के <img src=\"{icon}\" alt=\"&quot;सुरक्षा स्तर&quot;\"> &nbsp;बटन से इसे बदलें।"
 
-msgid "<strong>It is recommended to use Tor Browser to access SecureDrop:</strong> <a id=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
-msgstr "<strong>SecureDrop तक पहुंचने के लिए Tor ब्राउज़र का उपयोग करने की अनुशंसा की जाती है:</strong><a id=\"recommend-tor\" href=\"{tor_browser_url}\">इसे इस्तमाल करने के बारे में जानें</a>, या जारी रखने के लिए इस चेतावनी को अनदेखा करें|"
+msgid "How to change your security level"
+msgstr ""
 
-msgid "<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop version.</strong> <a id=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
-msgstr "<strong>यह अनुशंसा की जाती है कि आप SecureDrop तक पहुंचने के लिए Tor ब्राउजर के डेस्कटॉप संस्करण का उपयोग करें, क्योंकि Orfox समान स्तर की सुरक्षा और डेस्कटॉप संस्करण के जितना गुमनाम नहीं प्रदान करता है।</strong><a id=\"recommend-tor\" href=\"{tor_browser_url}\">इसे इंस्टॉल करने के बारे में जानें</a>, या जारी रखने के लिए इस चेतावनी को अनदेखा करें।"
+msgid "Click the <img src=\"{icon}\" alt=\"&quot;Security Level&quot; button\"> in the toolbar above"
+msgstr "ऊपर दिये गये टूलबार मे <img src=\"{icon}\" alt=\"&quot;सुरक्षा स्तर&quot;\"> &nbsp; पर क्लिक करें"
+
+msgid "Select <b>Advanced Security Settings</b>"
+msgstr "<b>उन्न्त सुरक्षा स्तर</b> चुनें"
+
+msgid "Select <b>Safest</b>"
+msgstr "<b>सबसे सुरक्षित</b> चुनें"
+
+#, fuzzy
+#| msgid "<a href=\"/\">Refresh this page</a>, and you're done!"
+msgid "<a href=\"/\" aria-label=\"Follow these instructions, then refresh this page\">Refresh this page</a>, and you're done!"
+msgstr "<a href=\"/\">पेज रीफ़्रेश करें</a> और कार्य पूर्न !"
+
+msgid "<strong>It is recommended to use Tor Browser to access SecureDrop:</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
+msgstr "<strong>SecureDrop तक पहुंचने के लिए Tor ब्राउज़र का उपयोग करने की अनुशंसा की जाती है:</strong><a class=\"recommend-tor\" href=\"{tor_browser_url}\">इसे इस्तमाल करने के बारे में जानें</a>, या जारी रखने के लिए इस चेतावनी को अनदेखा करें|"
+
+msgid "<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop version.</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
+msgstr "<strong>यह अनुशंसा की जाती है कि आप SecureDrop तक पहुंचने के लिए Tor ब्राउजर के डेस्कटॉप संस्करण का उपयोग करें, क्योंकि Orfox समान स्तर की सुरक्षा और डेस्कटॉप संस्करण के जितना गुमनाम नहीं प्रदान करता है।</strong><a class=\"recommend-tor\" href=\"{tor_browser_url}\">इसे इंस्टॉल करने के बारे में जानें</a>, या जारी रखने के लिए इस चेतावनी को अनदेखा करें।"
 
 msgid "First submission"
 msgstr "पहला सबमिशन"
@@ -795,8 +830,8 @@ msgstr "रद्द करें"
 msgid "One more thing..."
 msgstr "एक और चीज़..."
 
-msgid "Click the <img src={icon} alt=\"broom icon\" width=\"16\" height=\"16\">&nbsp;<strong>New Identity</strong> button in your Tor Browser's toolbar. This will clear your Tor Browser activity data on this device."
-msgstr "अपने Tor ब्राउज़र के टूलबार में <img src={icon} alt=\"broom icon\" width=\"16\" height=\"16\">&nbsp;<strong>नई पहचान </strong> बटन पर क्लिक करें. यह इस उपकरण पर आपके Tor ब्राउज़र गतिविधि डेटा को साफ़ कर देगा."
+msgid "Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar. This will clear your Tor Browser activity data on this device."
+msgstr "अपने Tor ब्राउज़र के टूलबार में <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>नई पहचान </b> बटन पर क्लिक करें. यह इस उपकरण पर आपके Tor ब्राउज़र गतिविधि डेटा को साफ़ कर देगा."
 
 msgid "Remember, your codename is:"
 msgstr "याद रखें, आपका संकेत नाम है:"
@@ -834,6 +869,9 @@ msgstr "उत्तर पढ़ें"
 msgid "You have received a reply. To protect your identity in the unlikely event someone learns your codename, please delete all replies when you're done with them. This also lets us know that you are aware of our reply. You can respond by submitting new files and messages above."
 msgstr "आपको एक उत्तर मिला है| किसी अनपेक्षित परिस्थिति में की आपका संकेत नाम किसी को पता चल जाये, कृपया पढ़े जा चुके उत्तरों तो मिटा दें| यह इस बात की भी पुष्टि कर देता है की आपको हमारा उत्तर मिल गया है| आप नई फाइलें और संदेश भी जमा कर सकते हैं|"
 
+msgid "Delete this reply"
+msgstr "यह उत्तर हटाएं"
+
 msgid "Delete this reply?"
 msgstr "यह उत्तर हटाएं?"
 
@@ -861,8 +899,8 @@ msgstr "क्षमा करें, हम आपके द्वारा अ
 msgid "Important"
 msgstr "जरूरी"
 
-msgid "You were logged out due to inactivity. Click the <img src={icon} alt=\"broom icon\" width=\"16\" height=\"16\">&nbsp;<strong>New Identity</strong> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
-msgstr "आप निष्क्रियता के कारण लॉग आउट हो गया. आगे बढ़ने से पहले अपने Tor ब्राउज़र के टूलबार में <img src={icon} alt=\"broom icon\" width=\"16\" height=\"16\">&nbsp;<strong> नई पहचान </strong> बटन पर क्लिक करें."
+msgid "You were logged out due to inactivity. Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
+msgstr "आप निष्क्रियता के कारण लॉग आउट हो गया. आगे बढ़ने से पहले अपने Tor ब्राउज़र के टूलबार में <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b> नई पहचान </b> बटन पर क्लिक करें."
 
 msgid "Why is there a warning about Tor2Web?"
 msgstr "Tor2Web के बारे में चेतावनी क्यों है?"
@@ -888,8 +926,8 @@ msgstr "यदि आप SecureDrop को जानकारी जमा क�
 msgid "Copy and paste the following address into your browser and follow the instructions to download and install Tor Browser:"
 msgstr "निम्न एड्रेस को अपने ब्राउज़र में कॉपी और पेस्ट करें और Tor ब्राउज़र को डाउनलोड और इंस्टॉल करने के लिए निर्देशों का पालन करें:"
 
-msgid "If there is a chance that downloading Tor Browser raises suspicion and your mail provider is less likely to be monitored, you can send a mail to <pre>gettor@torproject.org</pre> and a bot will answer with instructions."
-msgstr "यदि आशंका है कि Tor ब्राउज़र डाउनलोड करने से संदेह उठता है और आपके मेल प्रदाता पर नजर रखी जाने की संभावना कम है, तो आप एक मेल भेज सकते हैं इस पर <pre>gettor@torproject.org</pre> और एक बॉट निर्देशों के साथ जवाब देंगे|"
+msgid "If there is a chance that downloading Tor Browser raises suspicion and your mail provider is less likely to be monitored, you can send a mail to <kbd>gettor@torproject.org</kbd> and a bot will answer with instructions."
+msgstr "यदि आशंका है कि Tor ब्राउज़र डाउनलोड करने से संदेह उठता है और आपके मेल प्रदाता पर नजर रखी जाने की संभावना कम है, तो आप एक मेल भेज सकते हैं इस पर <kbd>gettor@torproject.org</kbd> और एक बॉट निर्देशों के साथ जवाब देंगे|"
 
 msgid "Why download the team's public key?"
 msgstr "टीम की सार्वजनिक कुंजी क्यों डाउनलोड करें?"

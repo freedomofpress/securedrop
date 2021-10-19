@@ -4,7 +4,7 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
 #
 msgid ""
-msgstr "Project-Id-Version: SecureDrop 0.3.12\nReport-Msgid-Bugs-To: securedrop@freedom.press\nPOT-Creation-Date: 2017-09-02 07:28+0000\nPO-Revision-Date: 2021-06-21 14:44+0000\nLast-Translator: Øyvind Bye Skille <oyvind@byeskille.net>\nLanguage-Team: Norwegian Bokmål <https://weblate.securedrop.org/projects/securedrop/securedrop/nb_NO/>\nLanguage: nb_NO\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=2; plural=n != 1;\nX-Generator: Weblate 4.6\nGenerated-By: Babel 2.4.0\n"
+msgstr "Project-Id-Version: SecureDrop 0.3.12\nReport-Msgid-Bugs-To: securedrop@freedom.press\nPOT-Creation-Date: 2017-09-02 07:28+0000\nPO-Revision-Date: 2021-10-19 01:42+0000\nLast-Translator: Øyvind Bye Skille <oyvind@byeskille.net>\nLanguage-Team: Norwegian Bokmål <https://weblate.securedrop.org/projects/securedrop/securedrop/nb_NO/>\nLanguage: nb_NO\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=2; plural=n != 1;\nX-Generator: Weblate 4.6\nGenerated-By: Babel 2.4.0\n"
 
 msgid "Name too long"
 msgstr "Navnet er for langt"
@@ -130,8 +130,8 @@ msgstr "Du kan kun laste opp PNG-bildefiler."
 msgid "An unexpected error occurred! Please inform your admin."
 msgstr "En uventet feil oppstod! Gi din administrator beskjed."
 
-msgid "Your reply has been stored."
-msgstr "Svaret ditt har blitt lagret."
+msgid "The source will receive your reply next time they log in."
+msgstr "Kilden vil få svaret ditt neste gang vedkommende logger inn."
 
 msgid "You must select one or more items for download"
 msgstr "Du må velge ett eller flere elementer for nedlasting"
@@ -202,11 +202,17 @@ msgstr "Lukk"
 msgid "Cancel"
 msgstr "Avbryt"
 
-msgid "starred icon"
-msgstr "Stjernemerket ikon"
+msgid "Un-star {designation}"
+msgstr "Fjern stjernemerking {designation}"
 
-msgid "unstarred icon"
-msgstr "Ikke avkrysset stjernemerke-ikon"
+msgid "{designation} is starred"
+msgstr "{designation} er stjernemerket"
+
+msgid "Star {designation}"
+msgstr "Stjernemerk {designation}"
+
+msgid "{designation} is not starred"
+msgstr "{designation} er ikke stjernemerket"
 
 msgid "1 doc"
 msgid_plural "{num} docs"
@@ -322,11 +328,8 @@ msgstr "Siste innlogging"
 msgid "Edit user {username}"
 msgstr "Rediger brukeren {username}"
 
-msgid "edit user icon"
-msgstr "rediger bruker-ikon"
-
-msgid "trash icon disabled"
-msgstr "deaktivert søppelbøtte-ikon"
+msgid "User deletion disabled"
+msgstr "Bruker-sletting deaktivert"
 
 msgid "Delete user {username}"
 msgstr "Slett brukeren {username}"
@@ -336,6 +339,15 @@ msgstr "søppelbøtte-ikon"
 
 msgid "never"
 msgstr "aldri"
+
+msgid "Delete Confirmation"
+msgstr "Bekreftelse av sletting"
+
+msgid "Are you sure you want to delete this user?"
+msgstr "Er du sikker på at du vil slette denne brukeren?"
+
+msgid "DELETE"
+msgstr "SLETT"
 
 msgid "No users to display"
 msgstr "Ingen brukere å vise"
@@ -582,6 +594,15 @@ msgstr "Tilbakestill tofaktoroppsett for sikkerhetsnøkler, som YubiKey"
 msgid "RESET SECURITY KEY CREDENTIALS"
 msgstr "Tilbakestill identitetsdetaljer fra sikkerhetsnøkkel"
 
+msgid "Notification"
+msgstr "Varsling"
+
+msgid "Success"
+msgstr "Suksess"
+
+msgid "Error"
+msgstr "Feil"
+
 msgid "Download Unread"
 msgstr "Last ned uleste"
 
@@ -647,6 +668,9 @@ msgstr "Ugyldig inndata."
 
 msgid "Write a message."
 msgstr "Skriv en melding."
+
+msgid "Select a file to upload."
+msgstr "Velg en fil for opplasting."
 
 msgid "Message text too long."
 msgstr "Meldingsteksten er for lang."
@@ -735,32 +759,56 @@ msgstr "Husk, eller skriv ned kodenavnet på et sikkert sted."
 msgid "This codename is what you will use in future visits to receive messages from our team in response to what you submit on the next screen."
 msgstr "Dette er kodenavnet du kan bruke i fremtiden for å fortsette kommunikasjonen med oss, f.eks. for å sjekke om vi har besvart det du sender inn i neste dialogvindu."
 
+msgid "Codename"
+msgstr "Kodenavn"
+
+msgid "Refresh codename"
+msgstr "Oppdater kodenavn"
+
 msgid ""
 "Because we do not track users of our <strong>SecureDrop</strong>\n"
 " service, in future visits, using this codename will be the only way we have to communicate with you should we have\n"
 " questions or are interested in additional information. Unlike passwords, there is no way to retrieve a lost codename."
-msgstr ""
-"Fordi vi ikke sporer brukerne på vår <strong>SecureDrop</strong>-tjeneste, \n"
-"er dette kodenavnet den eneste måten for senere kommunikasjon om vi har spørsmål eller vil vise interesse \n"
-"for mer informasjon. I motsetning til passord, er det umulig å finne tilbake til kodenavnet om du glemmer det."
+msgstr "Fordi vi ikke sporer brukerne på vår <b>SecureDrop</b>-tjeneste, \ner dette kodenavnet den eneste måten for senere kommunikasjon om vi har spørsmål eller vil vise interesse \nfor mer informasjon. I motsetning til passord, er det umulig å finne tilbake til kodenavnet om du glemmer det."
+
+msgid "Submit Documents"
+msgstr "Send inn dokumenter"
 
 msgid "SUBMIT DOCUMENTS"
 msgstr "SEND INN DOKUMENTER"
 
-msgid "Your Tor Browser's <a id=\"disable-js\" href=\"\"><strong>Security Level</strong></a> is too low. Use the <img src=\"{icon}\" alt=\"shield icon\"> &nbsp;button in your browser’s toolbar to change it."
-msgstr "<a id=\"disable-js\" href=\"\"><strong>Sikkerhetsinnstillingene</strong></a> i din Tor-nettleser er satt for lavt. Bruk <img src=\"{icon}\" alt=\"skjoldikon\"> &nbsp;knappen i nettleserens verktøylinje for å endre nivået."
+msgid "Your Tor Browser's <a id=\"disable-js\" href=\"\"><b>Security Level</b></a> is too low. Use the <img src=\"{icon}\" alt=\"&quot;Security Level&quot;\"> button in your browser’s toolbar to change it."
+msgstr "<a id=\"disable-js\" href=\"\"><b>Sikkerhetsinnstillingene</b></a> i din Tor-nettleser er satt for lavt. Bruk <img src=\"{icon}\" alt=\"&quot;Sikkerhetsnivå&quot;\"\">knappen i nettleserens verktøylinje for å endre nivået."
 
-msgid "<strong>It is recommended to use Tor Browser to access SecureDrop:</strong> <a id=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
-msgstr "<strong>Det anbefales å bruke Tor-nettleseren for å nå SecureDrop:</strong> <a id=\"recommend-tor\" href=\"{tor_browser_url}\">Lær hvordan du installerer den</a>, eller se bort fra denne advarselen for å fortsette uten."
+msgid "How to change your security level"
+msgstr "Hvordan endre sikkerhetsnivået"
 
-msgid "<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop version.</strong> <a id=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
-msgstr "<strong>Det anbefales å bruke Tor-nettleseren på en datamaskin for å nå SecureDrop, fordi Orfox ikke gir det samme nivået av sikkerhet og anonymitet:</strong> <a id=\"recommend-tor\" href=\"{tor_browser_url}\">Lær hvordan du installerer den</a>, eller se bort fra denne advarselen for å fortsette uten."
+msgid "Click the <img src=\"{icon}\" alt=\"&quot;Security Level&quot; button\"> in the toolbar above"
+msgstr "Klikk på <img src=\"{icon}\" alt=\"&quot;Sikkerhetsnivå&quot; button\"> i verktøylinjen ovenfor"
+
+msgid "Select <b>Advanced Security Settings</b>"
+msgstr "Velg <b>Avanserte sikkerhetsinnstillinger</b>"
+
+msgid "Select <b>Safest</b>"
+msgstr "Velg <b>Tryggest</b>"
+
+msgid "<a href=\"/\" aria-label=\"Follow these instructions, then refresh this page\">Refresh this page</a>, and you're done!"
+msgstr "<a href=\"/\" aria-label=\"Følg disse instruksjonene, deretter oppdater siden\">Last inn siden igjen</a>, og så er du ferdig."
+
+msgid "<strong>It is recommended to use Tor Browser to access SecureDrop:</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
+msgstr "<strong>Det anbefales å bruke Tor-nettleseren for å nå SecureDrop:</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Lær hvordan du installerer den</a>, eller se bort fra denne advarselen for å fortsette uten."
+
+msgid "<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop version.</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
+msgstr "<strong>Det anbefales å bruke Tor-nettleseren på en datamaskin for å nå SecureDrop, fordi Orfox ikke gir det samme nivået av sikkerhet og anonymitet:</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Lær hvordan du installerer den</a>, eller se bort fra denne advarselen for å fortsette uten."
 
 msgid "First submission"
 msgstr "Første innsendelse"
 
 msgid "First time submitting to our SecureDrop? Start here."
 msgstr "Førstegangsinnsendelse? Start her."
+
+msgid "Get Started"
+msgstr "Kom i gang"
 
 msgid "GET STARTED"
 msgstr "Kom i gang"
@@ -771,17 +819,14 @@ msgstr "Sendt inn før"
 msgid "Already have a codename? Check for replies or submit something new."
 msgstr "Har du allerede et kodenavn? Sjekk om du har fått svar, eller send inn ny informasjon."
 
-msgid "Click the <img src=\"{icon}\" alt=\"shield icon\"> in the toolbar above"
-msgstr "Klikk på <img src=\"{icon}\" alt=\"skjoldikon\"> i verktøylinjen ovenfor"
+msgid "Log In"
+msgstr "Logg inn"
 
-msgid "Select <strong>Advanced Security Settings</strong>"
-msgstr "Velg <strong>Avanserte sikkerhetsinnstillinger</strong>"
+msgid "Selected language"
+msgstr "Valgt språk"
 
-msgid "Select <strong>Safest</strong>"
-msgstr "Velg <strong>Tryggest</strong>"
-
-msgid "<a href=\"/\">Refresh this page</a>, and you're done!"
-msgstr "<a href=\"/\">Last inn siden igjen</a>, og du er ferdig."
+msgid "Choose language"
+msgstr "Velg språk"
 
 msgid "Enter Codename"
 msgstr "Skriv inn kodenavn"
@@ -789,14 +834,17 @@ msgstr "Skriv inn kodenavn"
 msgid "Enter your codename"
 msgstr "Skriv inn ditt kodenavn"
 
+msgid "Continue"
+msgstr "Fortsett"
+
 msgid "CANCEL"
 msgstr "AVBRYT"
 
 msgid "One more thing..."
 msgstr "Én ting til…"
 
-msgid "Click the <img src={icon} alt=\"broom icon\" width=\"16\" height=\"16\">&nbsp;<strong>New Identity</strong> button in your Tor Browser's toolbar. This will clear your Tor Browser activity data on this device."
-msgstr "Klikk på <img src={icon} alt=\"broom icon\" width=\"16\" height=\"16\">&nbsp;<strong>Ny identitet</strong>-knappen i Tor-nettleserens verktøylinje. Det vil slette loggføringen av din Tor-bruk på denne enheten."
+msgid "Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar. This will clear your Tor Browser activity data on this device."
+msgstr "Klikk på <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>Ny identitet</b>-knappen i Tor-nettleserens verktøylinje. Det vil slette loggføringen av din Tor-bruk på denne enheten."
 
 msgid "Remember, your codename is:"
 msgstr "Husk, kodenavnet ditt er:"
@@ -828,14 +876,23 @@ msgstr "<a href=\"{url}\" class=\"text-link\">Lær mer</a>."
 msgid "Maximum upload size: 500 MB"
 msgstr "Maksimal opplastningsstørrelse: 500MB"
 
+msgid "Submit"
+msgstr "Send inn"
+
 msgid "Read Replies"
 msgstr "Les svar"
 
 msgid "You have received a reply. To protect your identity in the unlikely event someone learns your codename, please delete all replies when you're done with them. This also lets us know that you are aware of our reply. You can respond by submitting new files and messages above."
 msgstr "Du har mottatt et svar. For å beskytte din egen identitet i tilfelle noen skulle få tak i kodenavnet ditt, slett alle svar når du har lest dem. Dette gjør også at vi enklere kan se at du har lest dem. Du kan fortsette kommunikasjonen ved å sende inn nye filer eller meldinger ovenfor."
 
+msgid "Delete this reply"
+msgstr "Slett dette svaret"
+
 msgid "Delete this reply?"
 msgstr "Slett dette svaret?"
+
+msgid "Delete All Replies"
+msgstr "Slett alle svar"
 
 msgid "DELETE ALL REPLIES"
 msgstr "SLETT ALLE SVAR"
@@ -849,8 +906,8 @@ msgstr "JA, SLETT ALLE SVAR"
 msgid "NO, NOT YET"
 msgstr "NEI, IKKE ENDA"
 
-msgid "— No Messages —"
-msgstr "— Ingen meldinger —"
+msgid "No Messages"
+msgstr "Ingen meldinger"
 
 msgid "Page not found"
 msgstr "Fant ikke siden"
@@ -861,8 +918,8 @@ msgstr "Beklager, men vi kunne ikke finne det du ba om."
 msgid "Important"
 msgstr "Viktig"
 
-msgid "You were logged out due to inactivity. Click the <img src={icon} alt=\"broom icon\" width=\"16\" height=\"16\">&nbsp;<strong>New Identity</strong> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
-msgstr "Du ble utlogget som følge av inaktivitet. Klikk på <img src={icon} alt=\"broom icon\" width=\"16\" height=\"16\">&nbsp;<strong>Ny identitiet</strong>-knappen i Tor-nettleserens verktøylinje før du fortsetter. Dette vil slette loggen over aktivitet i Tor-nettleseren på denne enheten."
+msgid "You were logged out due to inactivity. Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
+msgstr "Du ble utlogget som følge av inaktivitet. Klikk på <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>Ny identitiet</b>-knappen i Tor-nettleserens verktøylinje før du fortsetter. Dette vil slette loggen over aktivitet i Tor-nettleseren på denne enheten."
 
 msgid "Why is there a warning about Tor2Web?"
 msgstr "Hvorfor er det en advarsel om Tor2Web?"
@@ -888,8 +945,8 @@ msgstr "Om du vil sende inn informasjon via SecureDrop, anbefaler vi <strong>på
 msgid "Copy and paste the following address into your browser and follow the instructions to download and install Tor Browser:"
 msgstr "Kopier og lim inn følgende adresse i adressefeltet øverst i nettleservinduet, og følg anvisningene for å installere Tor:"
 
-msgid "If there is a chance that downloading Tor Browser raises suspicion and your mail provider is less likely to be monitored, you can send a mail to <pre>gettor@torproject.org</pre> and a bot will answer with instructions."
-msgstr "Hvis det er mulig at det å laste ned Tor-nettleseren hever mistanke, og at e-posttilbyderen din mindre sannsynlig er overvåket, du kan sende en e-post til <pre>gettor@otrproject.org</pre> og en robot vil svare med instruksjoner."
+msgid "If there is a chance that downloading Tor Browser raises suspicion and your mail provider is less likely to be monitored, you can send a mail to <kbd>gettor@torproject.org</kbd> and a bot will answer with instructions."
+msgstr "Hvis det er mulig at det å laste ned Tor-nettleseren hever mistanke, og at e-posttilbyderen din mindre sannsynlig er overvåket, du kan sende en e-post til <kbd>gettor@otrproject.org</kbd> og en robot vil svare med instruksjoner."
 
 msgid "Why download the team's public key?"
 msgstr "Hvorfor laste ned vår offentlige nøkkel?"

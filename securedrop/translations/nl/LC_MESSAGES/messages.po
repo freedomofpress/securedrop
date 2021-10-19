@@ -4,7 +4,7 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
 #
 msgid ""
-msgstr "Project-Id-Version: SecureDrop 0.3.12\nReport-Msgid-Bugs-To: securedrop@freedom.press\nPOT-Creation-Date: 2017-09-02 07:28+0000\nPO-Revision-Date: 2021-06-21 14:44+0000\nLast-Translator: erinm <erinm@riseup.net>\nLanguage-Team: Dutch <https://weblate.securedrop.org/projects/securedrop/securedrop/nl/>\nLanguage: nl\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=2; plural=n != 1;\nX-Generator: Weblate 4.6\nGenerated-By: Babel 2.4.0\n"
+msgstr "Project-Id-Version: SecureDrop 0.3.12\nReport-Msgid-Bugs-To: securedrop@freedom.press\nPOT-Creation-Date: 2017-09-02 07:28+0000\nPO-Revision-Date: 2021-10-19 01:42+0000\nLast-Translator: Cory Francis Myers <cory@freedom.press>\nLanguage-Team: Dutch <https://weblate.securedrop.org/projects/securedrop/securedrop/nl/>\nLanguage: nl\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=2; plural=n != 1;\nX-Generator: Weblate 4.6\nGenerated-By: Babel 2.4.0\n"
 
 msgid "Name too long"
 msgstr "Naam is te lang"
@@ -582,6 +582,17 @@ msgstr "Reset tweefactorauthenticatie voor beveiligingssleutels, zoals YubiKeys"
 msgid "RESET SECURITY KEY CREDENTIALS"
 msgstr "HERSTEL INSTELLINGEN VOOR BEVEILIGINGSSLEUTEL"
 
+#, fuzzy
+#| msgid "Verification code"
+msgid "Notification"
+msgstr "Verificatiecode"
+
+msgid "Success"
+msgstr "Gelukt"
+
+msgid "Error"
+msgstr ""
+
 msgid "Download Unread"
 msgstr "Ongelezen downloaden"
 
@@ -735,26 +746,50 @@ msgstr "Noteer deze codenaam en bewaar op een veilige plaats of leer hem uit het
 msgid "This codename is what you will use in future visits to receive messages from our team in response to what you submit on the next screen."
 msgstr "Dit is de codenaam die u gebruikt voor toekomstige bezoeken om berichten te ontvangen ons team in antwoord op wat u op het volgende scherm inzendt."
 
+#, fuzzy
+#| msgid "Enter Codename"
+msgid "Codename"
+msgstr "Codenaam invoeren"
+
+#, fuzzy
+#| msgid "Enter Codename"
+msgid "Refresh codename"
+msgstr "Codenaam invoeren"
+
 msgid ""
 "Because we do not track users of our <strong>SecureDrop</strong>\n"
 " service, in future visits, using this codename will be the only way we have to communicate with you should we have\n"
 " questions or are interested in additional information. Unlike passwords, there is no way to retrieve a lost codename."
-msgstr ""
-"Omdat we gebruikers van onze <strong>SecureDrop</strong>-service niet volgen,\n"
-" is het gebruik van deze codenaam de enige manier die we hebben om met u te communiceren mochten we vragen hebben of geïnteresseerd zijn in extra informatie. In tegenstelling tot wachtwoorden\n"
-" kunnen verloren codenamen niet teruggehaald worden."
+msgstr "Omdat we gebruikers van onze <b>SecureDrop</b>-service niet volgen,\n is het gebruik van deze codenaam de enige manier die we hebben om met u te communiceren mochten we vragen hebben of geïnteresseerd zijn in extra informatie. In tegenstelling tot wachtwoorden\n kunnen verloren codenamen niet teruggehaald worden."
 
 msgid "SUBMIT DOCUMENTS"
 msgstr "DOCUMENTEN INZENDEN"
 
-msgid "Your Tor Browser's <a id=\"disable-js\" href=\"\"><strong>Security Level</strong></a> is too low. Use the <img src=\"{icon}\" alt=\"shield icon\"> &nbsp;button in your browser’s toolbar to change it."
-msgstr "De <a id=\"disable-js\" href=\"\"><strong>veiligheidsinstellingen</strong></a> van uw Tor-browser zijn niet strikt genoeg. Gebruik de <img src=\"{icon}\" alt=\"shield icon\">-knop in de werkbalk van uw browser om dit te wijzigen."
+msgid "Your Tor Browser's <a id=\"disable-js\" href=\"\"><b>Security Level</b></a> is too low. Use the <img src=\"{icon}\" alt=\"&quot;Security Level&quot;\"> button in your browser’s toolbar to change it."
+msgstr "De <a id=\"disable-js\" href=\"\"><b>veiligheidsinstellingen</b></a> van uw Tor-browser zijn niet strikt genoeg. Gebruik de <img src=\"{icon}\" alt=\"&quot;beveiligingsniveau&quot;\">-knop in de werkbalk van uw browser om dit te wijzigen."
 
-msgid "<strong>It is recommended to use Tor Browser to access SecureDrop:</strong> <a id=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
-msgstr "<strong>Het wordt aangeraden om de Tor Browser te gebruiken om SecureDrop te bezoeken:</strong> <a id=\"recommend-tor\" href=\"{tor_browser_url}\">Lees hier informatie om deze te installeren</a> of negeer deze waarschuwing om door te gaan."
+msgid "How to change your security level"
+msgstr ""
 
-msgid "<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop version.</strong> <a id=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
-msgstr "<strong>Het wordt aangeraden om de desktop-versie van de Tor Browser te gebruiken om SecureDrop te bezoeken, want Orfox biedt niet hetzelfde veiligheids- en anonimiteitsniveau als de desktop-versie.</strong> <a id=\"recommend-tor\" href=\"{tor_browser_url}\">Leer hier hoe deze te installeren is</a> of negeer deze waarschuwing om door te gaan."
+msgid "Click the <img src=\"{icon}\" alt=\"&quot;Security Level&quot; button\"> in the toolbar above"
+msgstr "Klik op het <img src=\"{icon}\" alt=\"&quot;beveiligingsniveau&quot;\"> in de werkbalk hierboven"
+
+msgid "Select <b>Advanced Security Settings</b>"
+msgstr "Klik op <b>geavanceerde beveiligingsinstellingen</b>"
+
+msgid "Select <b>Safest</b>"
+msgstr "Selecteer <b>veiligst</b>"
+
+#, fuzzy
+#| msgid "<a href=\"/\">Refresh this page</a>, and you're done!"
+msgid "<a href=\"/\" aria-label=\"Follow these instructions, then refresh this page\">Refresh this page</a>, and you're done!"
+msgstr "<a href=\"/\">Ververs deze pagina</a> en je bent klaar!"
+
+msgid "<strong>It is recommended to use Tor Browser to access SecureDrop:</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
+msgstr "<strong>Het wordt aangeraden om de Tor Browser te gebruiken om SecureDrop te bezoeken:</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Lees hier informatie om deze te installeren</a> of negeer deze waarschuwing om door te gaan."
+
+msgid "<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop version.</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
+msgstr "<strong>Het wordt aangeraden om de desktop-versie van de Tor Browser te gebruiken om SecureDrop te bezoeken, want Orfox biedt niet hetzelfde veiligheids- en anonimiteitsniveau als de desktop-versie.</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Leer hier hoe deze te installeren is</a> of negeer deze waarschuwing om door te gaan."
 
 msgid "First submission"
 msgstr "Eerste inzending"
@@ -795,8 +830,8 @@ msgstr "ANNULEREN"
 msgid "One more thing..."
 msgstr "Nog één ding…"
 
-msgid "Click the <img src={icon} alt=\"broom icon\" width=\"16\" height=\"16\">&nbsp;<strong>New Identity</strong> button in your Tor Browser's toolbar. This will clear your Tor Browser activity data on this device."
-msgstr "Klik op de <img src={icon} alt=\"broom icon\" width=\"16\" height=\"16\">&nbsp;<strong>Nieuwe identiteit</strong>-knop in de werkbalk van uw Tor Browser. Hierdoor wordt uw Tor Browser geschiedenis van dit apparaat gewist."
+msgid "Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar. This will clear your Tor Browser activity data on this device."
+msgstr "Klik op de <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>Nieuwe identiteit</b>-knop in de werkbalk van uw Tor Browser. Hierdoor wordt uw Tor Browser geschiedenis van dit apparaat gewist."
 
 msgid "Remember, your codename is:"
 msgstr "Vergeet niet, uw codenaam is:"
@@ -834,6 +869,9 @@ msgstr "Reacties lezen"
 msgid "You have received a reply. To protect your identity in the unlikely event someone learns your codename, please delete all replies when you're done with them. This also lets us know that you are aware of our reply. You can respond by submitting new files and messages above."
 msgstr "U heeft een reactie ontvangen. Om uw identiteit te beschermen voor het onwaarschijnlijke geval dat iemand uw codenaam kent, adviseren wij om alle reacties te verwijderen zodra u er klaar mee bent. Hierdoor weten wij ook dat u onze reactie heeft gezien. U kunt reageren door hierboven nieuwe bestanden en berichten te versturen."
 
+msgid "Delete this reply"
+msgstr "Deze reactie verwijderen"
+
 msgid "Delete this reply?"
 msgstr "Deze reactie verwijderen?"
 
@@ -861,8 +899,8 @@ msgstr "Sorry, we kunnen niet vinden wat u zoekt."
 msgid "Important"
 msgstr "Belangrijk"
 
-msgid "You were logged out due to inactivity. Click the <img src={icon} alt=\"broom icon\" width=\"16\" height=\"16\">&nbsp;<strong>New Identity</strong> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
-msgstr "U bent uitgelogd vanwege inactiviteit. Klik op de <img src={icon} alt=\"broom icon\" width=\"16\" height=\"16\">&nbsp;<strong>Nieuwe identiteit</strong>-knop in de werkbalk van uw Tor Browser voordat u verder gaat. Hierdoor wordt uw Tor Browser geschiedenis van dit apparaat gewist."
+msgid "You were logged out due to inactivity. Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
+msgstr "U bent uitgelogd vanwege inactiviteit. Klik op de <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>Nieuwe identiteit</b>-knop in de werkbalk van uw Tor Browser voordat u verder gaat. Hierdoor wordt uw Tor Browser geschiedenis van dit apparaat gewist."
 
 msgid "Why is there a warning about Tor2Web?"
 msgstr "Waarom zie ik een waarschuwing over Tor2Web?"
@@ -888,8 +926,8 @@ msgstr "Indien u informatie wilt inzenden via SecureDrop adviseren wij <strong>t
 msgid "Copy and paste the following address into your browser and follow the instructions to download and install Tor Browser:"
 msgstr "Kopieer en plak het volgende adres in uw browser en volg de instructies om de Tor Browser te downloaden en te installeren:"
 
-msgid "If there is a chance that downloading Tor Browser raises suspicion and your mail provider is less likely to be monitored, you can send a mail to <pre>gettor@torproject.org</pre> and a bot will answer with instructions."
-msgstr "Als de kans bestaat dat het downloaden van de Tor Browser argwaan wekt en het minder waarschijnlijk is dat uw emailprovider in de gaten wordt gehouden, kan u een e-mail sturen naar <pre>gettor@torproject.org</pre> waarna een bot een email met instructies zals treun ."
+msgid "If there is a chance that downloading Tor Browser raises suspicion and your mail provider is less likely to be monitored, you can send a mail to <kbd>gettor@torproject.org</kbd> and a bot will answer with instructions."
+msgstr "Als de kans bestaat dat het downloaden van de Tor Browser argwaan wekt en het minder waarschijnlijk is dat uw emailprovider in de gaten wordt gehouden, kan u een e-mail sturen naar <kbd>gettor@torproject.org</kbd> waarna een bot een email met instructies zals treun ."
 
 msgid "Why download the team's public key?"
 msgstr "Waarom moet ik de publieke sleutel van het team downloaden?"
