@@ -4,19 +4,7 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
 #
 msgid ""
-msgstr ""
-"Project-Id-Version: SecureDrop 0.4.3\n"
-"Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2021-06-21 14:44+0000\n"
-"Last-Translator: erinm <erinm@riseup.net>\n"
-"Language-Team: Russian <https://weblate.securedrop.org/projects/securedrop/securedrop/ru/>\n"
-"Language: ru\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.6\n"
-"Generated-By: Babel 2.4.0\n"
+msgstr "Project-Id-Version: SecureDrop 0.4.3\nReport-Msgid-Bugs-To: securedrop@freedom.press\nPO-Revision-Date: 2021-10-19 01:42+0000\nLast-Translator: Cory Francis Myers <cory@freedom.press>\nLanguage-Team: Russian <https://weblate.securedrop.org/projects/securedrop/securedrop/ru/>\nLanguage: ru\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\nX-Generator: Weblate 4.6\nGenerated-By: Babel 2.4.0\n"
 
 msgid "Name too long"
 msgstr "Название слишком длинное"
@@ -599,10 +587,8 @@ msgstr "СБРОСИТЬ ДОСТУП ЭЛЕКТРОННОГО КЛЮЧА"
 msgid "Notification"
 msgstr "Код подтверждения"
 
-#, fuzzy
-#| msgid "Success!"
 msgid "Success"
-msgstr "Успех!"
+msgstr "Успех"
 
 msgid "Error"
 msgstr ""
@@ -764,19 +750,11 @@ msgstr "Введите кодовое имя"
 msgid "Refresh codename"
 msgstr "Введите кодовое имя"
 
-#, fuzzy
-#| msgid ""
-#| "Because we do not track users of our <strong>SecureDrop</strong>\n"
-#| " service, in future visits, using this codename will be the only way we have to communicate with you should we have\n"
-#| " questions or are interested in additional information. Unlike passwords, there is no way to retrieve a lost codename."
 msgid ""
 "Because we do not track users of our <b>SecureDrop</b>\n"
 " service, in future visits, using this codename will be the only way we have to communicate with you should we have\n"
 " questions or are interested in additional information. Unlike passwords, there is no way to retrieve a lost codename."
-msgstr ""
-"Потому что мы не отслеживаем пользователей нашего сервиса <strong>SecureDrop</strong>.\n"
-"При будущих посещениях используется кодовое имя - это единственный способ связаться с вами, если у нас появятся\n"
-"вопросы или заинтересованость в дополнительной информации. Кодовое имя в отличие от пароля восстановить невозможно."
+msgstr "Потому что мы не отслеживаем пользователей нашего сервиса <b>SecureDrop</b>.\nПри будущих посещениях используется кодовое имя - это единственный способ связаться с вами, если у нас появятся\nвопросы или заинтересованость в дополнительной информации. Кодовое имя в отличие от пароля восстановить невозможно."
 
 msgid "Submit Documents"
 msgstr ""
@@ -792,35 +770,25 @@ msgstr "Уровень безопасности <a id=\"disable-js\" href=\"\"><
 msgid "How to change your security level"
 msgstr ""
 
-#, fuzzy
-#| msgid "Click the <img src=\"{icon}\" alt=\"shield icon\"> in the toolbar above"
 msgid "Click the <img src=\"{icon}\" alt=\"&quot;Security Level&quot; button\"> in the toolbar above"
-msgstr "Нажмите <img src=\"{icon}\" alt=\"shield icon\"> на панели инструментов выше"
+msgstr "Нажмите <img src=\"{icon}\" alt=\"&quote;Уровень безопасности&quot;\"> на панели инструментов выше"
 
-#, fuzzy
-#| msgid "Select <strong>Advanced Security Settings</strong>"
 msgid "Select <b>Advanced Security Settings</b>"
-msgstr "Выберите <strong>Дополнительные настройки безопасности</strong>"
+msgstr "Выберите <b>Дополнительные настройки безопасности</b>"
 
-#, fuzzy
-#| msgid "Select <strong>Safest</strong>"
 msgid "Select <b>Safest</b>"
-msgstr "Выберите <strong>Самый безопасный</strong>"
+msgstr "Выберите <b>Самый безопасный</b>"
 
 #, fuzzy
 #| msgid "<a href=\"/\">Refresh this page</a>, and you're done!"
 msgid "<a href=\"/\" aria-label=\"Follow these instructions, then refresh this page\">Refresh this page</a>, and you're done!"
 msgstr "<a href=\"/\">Обновите эту страницу</a>, и готово!"
 
-#, fuzzy
-#| msgid "<strong>It is recommended to use Tor Browser to access SecureDrop:</strong> <a id=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
 msgid "<strong>It is recommended to use Tor Browser to access SecureDrop:</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
-msgstr "<strong>Рекомендуется использовать Tor Browser для доступа к SecureDrop:</strong> <a id=\"recommend-tor\" href=\"{tor_browser_url}\">Узнайте, как его установить</a>, или проигнорируйте для продолжения."
+msgstr "<strong>Рекомендуется использовать Tor Browser для доступа к SecureDrop:</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Узнайте, как его установить</a>, или проигнорируйте для продолжения."
 
-#, fuzzy
-#| msgid "<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop version.</strong> <a id=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
 msgid "<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop version.</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
-msgstr "<strong>Рекомендуется использовать настольную версию Tor Browser для доступа к SecureDrop, так как Orfox не обеспечивает необходимый уровень безопасности и анонимности в отличие от версии для компьютера.</strong> <a id=\"recommend-tor\" href=\"{tor_browser_url}\">Узнайте, как его установить</a>, или проигнорируйте для продолжения."
+msgstr "<strong>Рекомендуется использовать настольную версию Tor Browser для доступа к SecureDrop, так как Orfox не обеспечивает необходимый уровень безопасности и анонимности в отличие от версии для компьютера.</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Узнайте, как его установить</a>, или проигнорируйте для продолжения."
 
 msgid "First submission"
 msgstr "Первая отправка"
@@ -868,10 +836,8 @@ msgstr "ОТМЕНИТЬ"
 msgid "One more thing..."
 msgstr "И еще кое-что..."
 
-#, fuzzy
-#| msgid "Click the <img src={icon} alt=\"broom icon\" width=\"16\" height=\"16\">&nbsp;<strong>New Identity</strong> button in your Tor Browser's toolbar. This will clear your Tor Browser activity data on this device."
 msgid "Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar. This will clear your Tor Browser activity data on this device."
-msgstr "Нажмите кнопку <img src={icon} alt=\"broom icon\" width=\"16\" height=\"16\">&nbsp;<strong>Новая идентичность</strong> button в панели инструментов вашего браузера Tor. Это очистит данные об активности вашего браузера Tor на этом устройстве."
+msgstr "Нажмите кнопку <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>Новая идентичность</b> button в панели инструментов вашего браузера Tor. Это очистит данные об активности вашего браузера Tor на этом устройстве."
 
 msgid "Remember, your codename is:"
 msgstr "Запомните, что ваше кодовое имя:"
@@ -906,10 +872,8 @@ msgstr "Читать ответы"
 msgid "You have received a reply. To protect your identity in the unlikely event someone learns your codename, please delete all replies when you're done with them. This also lets us know that you are aware of our reply. You can respond by submitting new files and messages above."
 msgstr "У вас есть ответ. Чтобы защитить вашу личность в том маловероятном случае, когда кто-то узнает ваше кодовое имя, удалите все ответы, когда вы закончите с ними работу. Это также поможет нам понять, что вы видели ответ. Вы можете ответить, отправив новые файлы и сообщения выше."
 
-#, fuzzy
-#| msgid "Delete this reply?"
 msgid "Delete this reply"
-msgstr "Удалить этот ответ?"
+msgstr "Удалить этот ответ"
 
 msgid "Delete this reply?"
 msgstr "Удалить этот ответ?"
@@ -945,10 +909,8 @@ msgstr "К сожалению, мы не смогли найти то, что в
 msgid "Important"
 msgstr "Важно"
 
-#, fuzzy
-#| msgid "You were logged out due to inactivity. Click the <img src={icon} alt=\"broom icon\" width=\"16\" height=\"16\">&nbsp;<strong>New Identity</strong> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
 msgid "You were logged out due to inactivity. Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
-msgstr "Вы были деавторизованы из-за неактивности. Нажмите кнопку <img src={icon} alt=\"broom icon\" width=\"16\" height=\"16\">&nbsp;<strong>Новая идентичность</strong> в панели инструментов вашего браузера Tor перед тем, как продолжить. Это очистит данные об активности вашего браузера Tor на этом устройстве."
+msgstr "Вы были деавторизованы из-за неактивности. Нажмите кнопку <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>Новая идентичность</b> в панели инструментов вашего браузера Tor перед тем, как продолжить. Это очистит данные об активности вашего браузера Tor на этом устройстве."
 
 msgid "Why is there a warning about Tor2Web?"
 msgstr "Почему здесь предупреждение о Tor2Web?"
@@ -974,10 +936,8 @@ msgstr "Если вы хотите отправить информацию Secur
 msgid "Copy and paste the following address into your browser and follow the instructions to download and install Tor Browser:"
 msgstr "Скопируйте и вставьте следующий адрес в свой браузер и следуйте инструкциям по загрузке и установке Tor Browser:"
 
-#, fuzzy
-#| msgid "If there is a chance that downloading Tor Browser raises suspicion and your mail provider is less likely to be monitored, you can send a mail to <pre>gettor@torproject.org</pre> and a bot will answer with instructions."
 msgid "If there is a chance that downloading Tor Browser raises suspicion and your mail provider is less likely to be monitored, you can send a mail to <kbd>gettor@torproject.org</kbd> and a bot will answer with instructions."
-msgstr "Если есть вероятность, что загрузка Tor Browser вызовет подозрение, а ваш почтовый сервис может быть отслежен с меньшей вероятностью, вы можете отправить письмо на <pre>gettor@torproject.org</pre> и бот ответит вам инструкциями."
+msgstr "Если есть вероятность, что загрузка Tor Browser вызовет подозрение, а ваш почтовый сервис может быть отслежен с меньшей вероятностью, вы можете отправить письмо на <kbd>gettor@torproject.org</kbd> и бот ответит вам инструкциями."
 
 msgid "Why download the team's public key?"
 msgstr "Зачем загружать публичный ключ команды?"
