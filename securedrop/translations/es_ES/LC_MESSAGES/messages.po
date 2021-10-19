@@ -4,20 +4,7 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
 #
 msgid ""
-msgstr ""
-"Project-Id-Version: SecureDrop 0.3.12\n"
-"Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2021-06-14 13:44+0000\n"
-"Last-Translator: Zuhualime Akoochimoya <zakooch@protonmail.ch>\n"
-"Language-Team: Spanish <https://weblate.securedrop.org/projects/securedrop/securedrop/es/>\n"
-"Language: es_ES\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.6\n"
-"Generated-By: Babel 2.4.0\n"
+msgstr "Project-Id-Version: SecureDrop 0.3.12\nReport-Msgid-Bugs-To: securedrop@freedom.press\nPOT-Creation-Date: 2017-09-02 07:28+0000\nPO-Revision-Date: 2021-10-17 23:42+0000\nLast-Translator: Zuhualime Akoochimoya <zakooch@protonmail.ch>\nLanguage-Team: Spanish <https://weblate.securedrop.org/projects/securedrop/securedrop/es/>\nLanguage: es_ES\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=2; plural=n != 1;\nX-Generator: Weblate 4.6\nGenerated-By: Babel 2.4.0\n"
 
 msgid "Name too long"
 msgstr "Nombre demasiado largo"
@@ -144,7 +131,7 @@ msgid "An unexpected error occurred! Please inform your admin."
 msgstr "¡Ocurrió un error inesperado! Por favor informa a tu administrador."
 
 msgid "The source will receive your reply next time they log in."
-msgstr ""
+msgstr "La fuente recibirá tu respuesta la próxima vez que inicie sesión."
 
 msgid "You must select one or more items for download"
 msgstr "Debes seleccionar uno o más ítems para descargar"
@@ -216,16 +203,16 @@ msgid "Cancel"
 msgstr "Cancelar"
 
 msgid "Un-star {designation}"
-msgstr ""
+msgstr "Quitar estrella {designation}"
 
 msgid "{designation} is starred"
-msgstr ""
+msgstr "{designation} posee estrella"
 
 msgid "Star {designation}"
-msgstr ""
+msgstr "Dar estrella a {designation}"
 
 msgid "{designation} is not starred"
-msgstr ""
+msgstr "{designation} no posee estrella"
 
 msgid "1 doc"
 msgid_plural "{num} docs"
@@ -255,10 +242,10 @@ msgid "You will not be able to send them replies."
 msgstr "No podrás enviarle respuestas."
 
 msgid "All files and messages from that source will also be destroyed."
-msgstr "Todos los archivos y mensajes de esa fuente también serán destruídos."
+msgstr "Todos los archivos y mensajes de esa fuente también serán destruidos."
 
 msgid "Are you sure this is what you want?"
-msgstr "¿Estás seguro de que es lo que quieres?"
+msgstr "¿Estás seguro de que esto es lo quieres?"
 
 msgid "Yes, Delete Selected Source Accounts"
 msgstr "Sí, eliminar cuentas de fuentes seleccionadas"
@@ -341,10 +328,8 @@ msgstr "Último acceso"
 msgid "Edit user {username}"
 msgstr "Editar usuario {username}"
 
-#, fuzzy
-#| msgid "trash icon disabled"
 msgid "User deletion disabled"
-msgstr "ícono de papelera deshabilitada"
+msgstr "Borrado de usuario deshabilitado"
 
 msgid "Delete user {username}"
 msgstr "Eliminar usuario {username}"
@@ -355,13 +340,11 @@ msgstr "nunca"
 msgid "Delete Confirmation"
 msgstr "Confirmar la eliminación"
 
-#, fuzzy
-#| msgid "Are you sure you want to delete the user {username}?"
 msgid "Are you sure you want to delete this user?"
-msgstr "¿Estás seguro de que deseas eliminar el usuario {username}?"
+msgstr "¿Estás seguro de que deseas eliminar este usuario?"
 
 msgid "DELETE"
-msgstr "ELIMINAR"
+msgstr "BORRAR"
 
 msgid "No users to display"
 msgstr "No hay usuarios para mostrar"
@@ -584,18 +567,14 @@ msgstr "Restablecer autenticación de dos factores para llaves de seguridad como
 msgid "RESET SECURITY KEY CREDENTIALS"
 msgstr "RESTABLECER CREDENCIALES DE CLAVE DE SEGURIDAD"
 
-#, fuzzy
-#| msgid "Verification code"
 msgid "Notification"
-msgstr "Código de verificación"
+msgstr "Notificación"
 
-#, fuzzy
-#| msgid "Success!"
 msgid "Success"
-msgstr "¡Éxito!"
+msgstr "Éxito"
 
 msgid "Error"
-msgstr ""
+msgstr "Error"
 
 msgid "Download Unread"
 msgstr "Descargar No Leídos"
@@ -658,7 +637,7 @@ msgid "Write a message."
 msgstr "Escribe un mensaje."
 
 msgid "Select a file to upload."
-msgstr ""
+msgstr "Selecciona un archivo para subir."
 
 msgid "Message text too long."
 msgstr "Texto del mensaje demasiado largo."
@@ -744,73 +723,47 @@ msgstr "Por favor, escribe este nombre clave y guárdalo en un lugar seguro, o m
 msgid "This codename is what you will use in future visits to receive messages from our team in response to what you submit on the next screen."
 msgstr "Este nombre clave es el que usarás en futuras visitas para recibir mensajes de nuestro equipo en respuesta a lo que envíes en la siguiente pantalla."
 
-#, fuzzy
-#| msgid "Enter Codename"
 msgid "Codename"
-msgstr "Introduce Nombre Clave"
+msgstr "Nombre Clave"
 
-#, fuzzy
-#| msgid "Enter Codename"
 msgid "Refresh codename"
-msgstr "Introduce Nombre Clave"
+msgstr "Refrescar nombre clave"
 
-#, fuzzy
-#| msgid ""
-#| "Because we do not track users of our <strong>SecureDrop</strong>\n"
-#| " service, in future visits, using this codename will be the only way we have to communicate with you should we have\n"
-#| " questions or are interested in additional information. Unlike passwords, there is no way to retrieve a lost codename."
 msgid ""
 "Because we do not track users of our <b>SecureDrop</b>\n"
 " service, in future visits, using this codename will be the only way we have to communicate with you should we have\n"
 " questions or are interested in additional information. Unlike passwords, there is no way to retrieve a lost codename."
-msgstr ""
-"Debido a que no rastreamos a los usuarios de nuestro servicio <strong>SecureDrop</strong>,\n"
-"este nombre clave es la única manera que tenemos de comunicarnos contigo en futuras visitas, en caso que tuviéramos\n"
-"preguntas o estuviéramos interesados en información adicional. A diferencia de las contraseñas, no hay forma de recuperar un nombre clave perdido."
+msgstr "Debido a que no rastreamos a los usuarios de nuestro servicio <b>SecureDrop</b>,\nusar este nombre clave es la única manera que tenemos de comunicarnos contigo en futuras visitas, en caso que tuviéramos\npreguntas o estuviéramos interesados en información adicional. A diferencia de las contraseñas, no hay forma de recuperar un nombre clave perdido."
 
 msgid "Submit Documents"
-msgstr ""
+msgstr "Enviar Documentos"
 
 msgid "SUBMIT DOCUMENTS"
 msgstr "ENVIAR DOCUMENTOS"
 
-#, fuzzy
-#| msgid "Your Tor Browser's <a id=\"disable-js\" href=\"\"><strong>Security Level</strong></a> is too low. Use the <img src=\"{icon}\" alt=\"shield icon\"> &nbsp;button in your browser’s toolbar to change it."
 msgid "Your Tor Browser's <a id=\"disable-js\" href=\"\"><b>Security Level</b></a> is too low. Use the <img src=\"{icon}\" alt=\"&quot;Security Level&quot;\"> button in your browser’s toolbar to change it."
-msgstr "El <a id=\"disable-js\" href=\"\"><strong>Nivel de Seguridad</strong></a> de tu Navegador Tor está demasiado bajo. Usa el botón <img src=\"{icon}\" alt=\"shield icon\"> &nbsp;en la barra de herramientas de tu navegador para cambiarlo."
+msgstr "El <a id=\"disable-js\" href=\"\"><b>Nivel de Seguridad</b></a> de tu Navegador Tor está demasiado bajo. Usa el botón <img src=\"{icon}\" alt=\"&quot;Security Level&quot;\"> en la barra de herramientas de tu navegador para cambiarlo."
 
 msgid "How to change your security level"
-msgstr ""
+msgstr "Cómo cambiar tu nivel de seguridad"
 
-#, fuzzy
-#| msgid "Click the <img src=\"{icon}\" alt=\"shield icon\"> in the toolbar above"
 msgid "Click the <img src=\"{icon}\" alt=\"&quot;Security Level&quot; button\"> in the toolbar above"
-msgstr "Haz clic en el <img src=\"{icon}\" alt=\"ícon de escudo\">, arriba en la barra de herramientas"
+msgstr "Haz clic en el botón <img src=\"{icon}\" alt=\"&quot;Security Level&quot;\">, arriba en la barra de herramientas"
 
-#, fuzzy
-#| msgid "Select <strong>Advanced Security Settings</strong>"
 msgid "Select <b>Advanced Security Settings</b>"
-msgstr "Selecciona <strong>Configuración de seguridad avanzada</strong>"
+msgstr "Selecciona <b>Configuración de seguridad avanzada</b>"
 
-#, fuzzy
-#| msgid "Select <strong>Safest</strong>"
 msgid "Select <b>Safest</b>"
-msgstr "Selecciona <strong>El más seguro de todos</strong>"
+msgstr "Selecciona <b>El más seguro de todos</b>"
 
-#, fuzzy
-#| msgid "<a href=\"/\">Refresh this page</a>, and you're done!"
 msgid "<a href=\"/\" aria-label=\"Follow these instructions, then refresh this page\">Refresh this page</a>, and you're done!"
-msgstr "¡<a href=\"/\">Refresca esta página</a>, y está listo!"
+msgstr "¡<a href=\"/\" aria-label=\"Sigue estas instrucciones, luego refresca esta página\">Refresca esta página</a>, y está listo!"
 
-#, fuzzy
-#| msgid "<strong>It is recommended to use Tor Browser to access SecureDrop:</strong> <a id=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
 msgid "<strong>It is recommended to use Tor Browser to access SecureDrop:</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
-msgstr "<strong>Se recomienda que uses el Navegador Tor para acceder a SecureDrop:</strong><a id=\"recommend-tor\" href=\"{tor_browser_url}\">Aprende cómo instalarlo</a>, o ignora esta advertencia para continuar."
+msgstr "<strong>Se recomienda que uses el Navegador Tor para acceder a SecureDrop:</strong><a class=\"recommend-tor\" href=\"{tor_browser_url}\">Aprende cómo instalarlo</a>, o ignora esta advertencia para continuar."
 
-#, fuzzy
-#| msgid "<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop version.</strong> <a id=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
 msgid "<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop version.</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
-msgstr "<strong>Se recomienda que uses la versión de escritorio del Navegador Tor para acceder a SecureDrop, ya que Orfox no proporciona el mismo nivel de seguridad y anonimato.</strong><a id=\"recommend-tor\" href=\"{tor_browser_url}\"> Aprende cómo instalarlo</a>, o ignora esta advertencia para continuar."
+msgstr "<strong>Se recomienda que uses la versión de escritorio del Navegador Tor para acceder a SecureDrop, ya que Orfox no proporciona el mismo nivel de seguridad y anonimato.</strong><a class=\"recommend-tor\" href=\"{tor_browser_url}\"> Aprende cómo instalarlo</a>, o ignora esta advertencia para continuar."
 
 msgid "First submission"
 msgstr "Primer envío"
@@ -819,7 +772,7 @@ msgid "First time submitting to our SecureDrop? Start here."
 msgstr "¿Primera vez enviando a nuestro SecureDrop? Comienza aquí."
 
 msgid "Get Started"
-msgstr ""
+msgstr "Empezar"
 
 msgid "GET STARTED"
 msgstr "PRIMEROS PASOS"
@@ -830,18 +783,14 @@ msgstr "Nueva visita"
 msgid "Already have a codename? Check for replies or submit something new."
 msgstr "¿Ya tienes un nombre clave? Revisa si hay respuestas o envía algo nuevo."
 
-#, fuzzy
-#| msgid "Log Out"
 msgid "Log In"
-msgstr "Cerrar Sesión"
+msgstr "Iniciar Sesión"
 
-#, fuzzy
-#| msgid "Select None"
 msgid "Selected language"
-msgstr "Seleccionar Ninguno"
+msgstr "Idioma selecciondo"
 
 msgid "Choose language"
-msgstr ""
+msgstr "Elegir idioma"
 
 msgid "Enter Codename"
 msgstr "Introduce Nombre Clave"
@@ -850,7 +799,7 @@ msgid "Enter your codename"
 msgstr "Ingresa tu Nombre Clave"
 
 msgid "Continue"
-msgstr ""
+msgstr "Continuar"
 
 msgid "CANCEL"
 msgstr "CANCELAR"
@@ -858,10 +807,8 @@ msgstr "CANCELAR"
 msgid "One more thing..."
 msgstr "Una cosa más..."
 
-#, fuzzy
-#| msgid "Click the <img src={icon} alt=\"broom icon\" width=\"16\" height=\"16\">&nbsp;<strong>New Identity</strong> button in your Tor Browser's toolbar. This will clear your Tor Browser activity data on this device."
 msgid "Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar. This will clear your Tor Browser activity data on this device."
-msgstr "Haz clic en el botón <img src={icon} alt=\"ícono de escoba\" width=\"16\" height=\"16\">&nbsp;<strong>Nueva identidad</strong> en la barra de herramientas del Navegador Tor. Esto borrará los datos de actividad de tu Navegador Tor en este dispositivo."
+msgstr "Haz clic en el botón <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>Nueva identidad</b> en la barra de herramientas del Navegador Tor. Esto borrará los datos de actividad del Navegador Tor en este dispositivo."
 
 msgid "Remember, your codename is:"
 msgstr "Recuerda que tu nombre clave es:"
@@ -888,7 +835,7 @@ msgid "Maximum upload size: 500 MB"
 msgstr "Tamaño máximo de carga: 500 MB"
 
 msgid "Submit"
-msgstr ""
+msgstr "Enviar"
 
 msgid "Read Replies"
 msgstr "Leer Respuestas"
@@ -896,18 +843,14 @@ msgstr "Leer Respuestas"
 msgid "You have received a reply. To protect your identity in the unlikely event someone learns your codename, please delete all replies when you're done with them. This also lets us know that you are aware of our reply. You can respond by submitting new files and messages above."
 msgstr "Has recibido una respuesta. Para proteger tu identidad en el caso improbable de que alguien descubra tu nombre clave, por favor, borra todas las respuestas cuando hayas terminado con ellas. Esto también nos permite saber que has recibido nuestra respuesta. Puedes responder enviando nuevos archivos y mensajes arriba."
 
-#, fuzzy
-#| msgid "Delete this reply?"
 msgid "Delete this reply"
-msgstr "¿Deseas eliminar esta respuesta?"
+msgstr "Eliminar esta respuesta"
 
 msgid "Delete this reply?"
 msgstr "¿Deseas eliminar esta respuesta?"
 
-#, fuzzy
-#| msgid "Delete this reply?"
 msgid "Delete All Replies"
-msgstr "¿Deseas eliminar esta respuesta?"
+msgstr "Eliminar todas las respuestas"
 
 msgid "DELETE ALL REPLIES"
 msgstr "ELIMINAR TODAS LAS RESPUESTAS"
@@ -921,10 +864,8 @@ msgstr "SI, ELIMINAR TODAS LAS RESPUESTAS"
 msgid "NO, NOT YET"
 msgstr "NO, TODAVÍA NO"
 
-#, fuzzy
-#| msgid "Message"
 msgid "No Messages"
-msgstr "Mensaje"
+msgstr "No hay mensajes"
 
 msgid "Page not found"
 msgstr "Página no encontrada"
@@ -935,10 +876,8 @@ msgstr "Lo sentimos, no pudimos localizar lo que pediste."
 msgid "Important"
 msgstr "Importante"
 
-#, fuzzy
-#| msgid "You were logged out due to inactivity. Click the <img src={icon} alt=\"broom icon\" width=\"16\" height=\"16\">&nbsp;<strong>New Identity</strong> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
 msgid "You were logged out due to inactivity. Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
-msgstr "Tu sesión ha terminado debido a inactividad. Haz clic en el botón <img src={icon} alt=\"icon de escoba\" width=\"16\" height=\"16\">&nbsp;<strong>Nueva identidad</strong> en la barra de herramientas del Navegador Tor antes de proseguir. Esto borrará los datos de actividad de tu Navegador Tor en este dispositivo."
+msgstr "Tu sesión ha terminado debido a inactividad. Haz clic en el botón <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>Nueva identidad</b> en la barra de herramientas del Navegador Tor antes de proseguir. Esto borrará los datos de actividad del Navegador Tor en este dispositivo."
 
 msgid "Why is there a warning about Tor2Web?"
 msgstr "¿Por qué hay una advertencia acerca de Tor2Web?"
@@ -964,10 +903,8 @@ msgstr "Si quieres enviar información a SecureDrop, <strong>te recomendamos enc
 msgid "Copy and paste the following address into your browser and follow the instructions to download and install Tor Browser:"
 msgstr "Copia y pega la siguiente dirección en tu navegador y sigue las instrucciones para descargar e instalar el Navegador Tor:"
 
-#, fuzzy
-#| msgid "If there is a chance that downloading Tor Browser raises suspicion and your mail provider is less likely to be monitored, you can send a mail to <pre>gettor@torproject.org</pre> and a bot will answer with instructions."
 msgid "If there is a chance that downloading Tor Browser raises suspicion and your mail provider is less likely to be monitored, you can send a mail to <kbd>gettor@torproject.org</kbd> and a bot will answer with instructions."
-msgstr "Si existe la posibilidad de que levantes sospechas al descargar el Navegador Tor y es menos probable que tu proveedor de correo electrónico sea supervisado, puedes enviar un correo a <pre>gettor@torproject.org</pre> y un sistema automático responderá con instrucciones."
+msgstr "Si existe la posibilidad de que levantes sospechas al descargar el Navegador Tor y es menos probable que tu proveedor de correo electrónico sea supervisado, puedes enviar un correo a <kbd>gettor@torproject.org</kbd> y un sistema automático responderá con instrucciones."
 
 msgid "Why download the team's public key?"
 msgstr "¿Por qué descargar la llave pública del equipo?"
