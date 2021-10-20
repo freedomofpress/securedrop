@@ -1,8 +1,48 @@
 # Changelog
 
-## 2.1.0~rc1
+## 2.2.0~rc1
 
 
+## 2.1.0
+
+### Web applications
+
+* Updated HTML time tags to use valid datetime formatting (#6075)
+* Refactor web applications to consolidate source user creation and session management, and remove dependendencies on the system scrypt module in favour of equivalent functionality from the cryptography package (#5692, #5694, #5695)
+* Updated confirmation message for successful replies in the Journalist Interface (#6102)
+* Refactored Source Interface to improve accessibility, using semantic HTML and ARIA annotations (#5996, #6021, #6041, #6056, #6096)
+* Increased default length of 2FA secrets from 80 to 160 bits (#5958)
+* (Bugfix) Restricted length of source codenames stored in session to fit within standard session cookie (#6066)
+* (Bugfix) Added a uniqueness condition for the web applications’  InstanceConfig (#5974)
+* Removed the Javascript dependency for the user deletion confirmation modal dialog on the Journalist Interface (#5696)
+* Updated Source Interface to use TLSv1.3 only when HTTPS is enabled (#5988)
+* (Bugfix) Removed duplicate CSS class attribute from Source Interface index page (#6049)
+
+### Operations
+
+* Added script to repair Tails updater for Tails versions below 4.19 (#6110)
+* Silenced low-priority fwupd-related OSSEC alerts (#6107)
+* Removed superfluous Tails configuration chance to enforce preservation of filenames on decompression in Nautilus (#6079)
+* Removed expired signing key from Securedrop keyring (#5979, #6138)
+* Added option to restore from backup file manually transferred to server (#5909)
+* Added upgrade of all packages early in install, for newest ca-certificates (#6120)
+* Removed version check for "verify" command for securedrop-admin (#6134)
+* Dependency updates: requests 2.22.0 to 2.26.0; urllib3 1.25.10 to 1.26.6; Ansible 2.9.21 to 2.9.26 (#6046, #6109)
+
+### Development
+
+* (CI) Updated CircleCI configuration to use built-in branch filtering (#6086)
+* Updated packaging logic to no longer treat default logo image as a conffile (#6101)
+* (CI) Refactored test suite for increased parallelization (#6065, #6100, #6077)
+* (CI) Added job to validate the web applications’ HTML (#6072, #6105)
+* Improved the reliability of the staging provisioning playbook (#6088)
+* (CI) Restricted long running staging-test-with-rebase job to run on nightlies and release candidate builds only (#6063)
+* (CI) Updated updater-gui-tests job to use Python 3.7 (#6069)
+* (CI) Updated CircleCI configuration to skip translation tests when not required (#6029)
+* (CI) Updated CircleCI configuration to improve shellcheck filtering (#6028)
+* Development dependency updates: pynacl 1.1.2 to 1.4.0; pillow 8.3.1 to 8.3.2; coverage 4.4.2 to 5.5; cryptography 3.2.1 to 3.4.7 (#6027, #6094, #6092, #5975)
+* Updated package build to use latest pip (21.3) rather than system pip for virtualenvs (#6141)
+* Updated QA playbook for Focal apt sources (#6123)
 
 ## 2.0.2
 

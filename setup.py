@@ -4,7 +4,7 @@ long_description = "The SecureDrop whistleblower platform."
 
 setuptools.setup(
     name="securedrop-app-code",
-    version="2.1.0~rc1",
+    version="2.2.0~rc1",
     author="Freedom of the Press Foundation",
     author_email="securedrop@freedom.press",
     description="SecureDrop Server",
