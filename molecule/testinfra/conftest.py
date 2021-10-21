@@ -47,7 +47,9 @@ def securedrop_import_testinfra_vars(hostname, with_header=False):
                 hostvars[vars_key] = prodvars[prod_key]
 
         _prod_override('app_ip', 'app_ip')
+        _prod_override('app_hostname', 'app_hostname')
         _prod_override('mon_ip', 'monitor_ip')
+        _prod_override('monitor_hostname', 'monitor_hostname')
         _prod_override('sasl_domain', 'sasl_domain')
         _prod_override('sasl_username', 'sasl_username')
         _prod_override('sasl_password', 'sasl_password')
