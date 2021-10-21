@@ -1,7 +1,9 @@
 {% set svc_awk = "awk -F ':' '{print $1 \".onion\"}' svc-ssh.auth_private" %}
 
 {% for svc in ssh_v3_onion_lookup.results %}
-Host {{ svc.item }}
+{% set alias = svc.item %}
+{% set hostname = hostnames.get(alias) %}
+Host {{ [alias,hostname]|unique|join(' ') }}
   {% set svc_awk = "awk -F ':' '{print $1 \".onion\"}' "+svc.item+"-ssh.auth_private" -%}
   {% set direct_ip = hostvars[inventory_hostname][svc.item+'_ip'] -%}
   User {{ ssh_users }}
