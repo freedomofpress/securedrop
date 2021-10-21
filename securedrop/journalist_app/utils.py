@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import binascii
-import datetime
+from datetime import datetime, timezone
 import os
 from typing import Optional, List, Union, Any
 
@@ -233,7 +233,7 @@ def download(
         return redirect(on_error_redirect)
 
     attachment_filename = "{}--{}.zip".format(
-        zip_basename, datetime.datetime.utcnow().strftime("%Y-%m-%d--%H-%M-%S")
+        zip_basename, datetime.now(timezone.utc).strftime("%Y-%m-%d--%H-%M-%S")
     )
 
     mark_seen(submissions, g.user)
@@ -332,7 +332,7 @@ def col_delete(cols_selected: List[str]) -> werkzeug.Response:
     if len(cols_selected) < 1:
         flash(gettext("No collections selected for deletion."), "error")
     else:
-        now = datetime.datetime.utcnow()
+        now = datetime.now(timezone.utc)
         sources = Source.query.filter(Source.filesystem_id.in_(cols_selected))
         sources.update({Source.deleted_at: now}, synchronize_session="fetch")
         db.session.commit()

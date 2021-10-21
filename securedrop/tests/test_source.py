@@ -6,7 +6,7 @@ import subprocess
 import time
 import os
 import shutil
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from io import BytesIO, StringIO
 from pathlib import Path
 from unittest import mock
@@ -766,8 +766,8 @@ def test_source_session_expiration(source_app):
 
         # But we're now 6 hours later hence their session expired
         with mock.patch("source_app.session_manager.datetime") as mock_datetime:
-            six_hours_later = datetime.utcnow() + timedelta(hours=6)
-            mock_datetime.utcnow.return_value = six_hours_later
+            six_hours_later = datetime.now(timezone.utc) + timedelta(hours=6)
+            mock_datetime.now.return_value = six_hours_later
 
             # When they browse to an authenticated page
             resp = app.get(url_for('main.lookup'), follow_redirects=True)
@@ -785,8 +785,8 @@ def test_source_session_expiration_create(source_app):
 
         # But we're now 6 hours later hence they did not finish the account creation flow in time
         with mock.patch("source_app.main.datetime") as mock_datetime:
-            six_hours_later = datetime.utcnow() + timedelta(hours=6)
-            mock_datetime.utcnow.return_value = six_hours_later
+            six_hours_later = datetime.now(timezone.utc) + timedelta(hours=6)
+            mock_datetime.now.return_value = six_hours_later
 
             # When the user tries to complete the create flow
             resp = app.post(url_for('main.create'), follow_redirects=True)
@@ -805,7 +805,7 @@ def test_source_no_session_expiration_message_when_not_logged_in(source_app):
         # And their session expired
         with mock.patch("source_app.session_manager.datetime") as mock_datetime:
             six_hours_later = datetime.utcnow() + timedelta(hours=6)
-            mock_datetime.utcnow.return_value = six_hours_later
+            mock_datetime.now.return_value = six_hours_later
 
         # When they browse again the index page
         refreshed_resp = app.get(url_for('main.index'), follow_redirects=True)

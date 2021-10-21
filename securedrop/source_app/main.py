@@ -3,7 +3,7 @@ import os
 import io
 
 from base64 import urlsafe_b64encode
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import Union
 
 import werkzeug
@@ -56,7 +56,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
         codenames = session.get('codenames', {})
         codenames[tab_id] = codename
         session['codenames'] = fit_codenames_into_cookie(codenames)
-        session["codenames_expire"] = datetime.utcnow() + timedelta(
+        session["codenames_expire"] = datetime.now(timezone.utc) + timedelta(
             minutes=config.SESSION_EXPIRATION_MINUTES
         )
         return render_template('generate.html', codename=codename, tab_id=tab_id)
@@ -70,7 +70,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
         else:
             # Ensure the codenames have not expired
             date_codenames_expire = session.get("codenames_expire")
-            if not date_codenames_expire or datetime.utcnow() >= date_codenames_expire:
+            if not date_codenames_expire or datetime.now(timezone.utc) >= date_codenames_expire:
                 return clear_session_and_redirect_to_logged_out_page(flask_session=session)
 
             tab_id = request.form['tab_id']
@@ -235,7 +235,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
             new_submissions.append(submission)
 
         logged_in_source_in_db.pending = False
-        logged_in_source_in_db.last_updated = datetime.utcnow()
+        logged_in_source_in_db.last_updated = datetime.now(timezone.utc)
         db.session.commit()
 
         for sub in new_submissions:

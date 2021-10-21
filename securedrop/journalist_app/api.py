@@ -1,7 +1,7 @@
 import collections.abc
 import json
 
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import Tuple, Callable, Any, Set, Union
 
 import flask
@@ -116,7 +116,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
 
         try:
             journalist = Journalist.login(username, passphrase, one_time_code)
-            token_expiry = datetime.utcnow() + timedelta(
+            token_expiry = datetime.now(timezone.utc) + timedelta(
                 seconds=TOKEN_EXPIRATION_MINS * 60)
 
             response = jsonify({
@@ -128,7 +128,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
             })
 
             # Update access metadata
-            journalist.last_access = datetime.utcnow()
+            journalist.last_access = datetime.now(timezone.utc)
             db.session.add(journalist)
             db.session.commit()
 

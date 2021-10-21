@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 from flask import (Flask, session, redirect, url_for, flash, g, request,
@@ -117,7 +117,7 @@ def create_app(config: 'SDConfig') -> Flask:
     @app.before_request
     def setup_g() -> 'Optional[Response]':
         """Store commonly used values in Flask's special g object"""
-        if 'expires' in session and datetime.utcnow() >= session['expires']:
+        if 'expires' in session and datetime.now(timezone.utc) >= session['expires']:
             session.clear()
             flash(gettext('You have been logged out due to inactivity.'),
                   'error')
@@ -131,7 +131,7 @@ def create_app(config: 'SDConfig') -> Flask:
                 flash(gettext('You have been logged out due to password change'),
                       'error')
 
-        session['expires'] = datetime.utcnow() + \
+        session['expires'] = datetime.now(timezone.utc) + \
             timedelta(minutes=getattr(config,
                                       'SESSION_EXPIRATION_MINUTES',
                                       120))

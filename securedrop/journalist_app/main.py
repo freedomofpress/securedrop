@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Union
 
@@ -36,7 +36,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
                                                 request.form['token']))
 
                 # Update access metadata
-                user.last_access = datetime.utcnow()
+                user.last_access = datetime.now(timezone.utc)
                 db.session.add(user)
                 db.session.commit()
 
