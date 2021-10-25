@@ -36,6 +36,16 @@
     mode: "0600"
     owner: amnesia
     group: amnesia
+  vars:
+    # Make the configured hostnames easily available to the Jinja template.
+    # An explicit dictionary is necessary only because the unabbreviated key
+    # "monitor_hostname" prevents us from doing (e.g.) the following over the
+    # items in "ssh_v3_onion_lookup":
+    #
+    #     hostvars[inventory_hostname][svc.item+'_hostname']
+    hostnames:
+      app: "{{ app_hostname }}"
+      mon: "{{ monitor_hostname }}"
   with_items:
     - "{{ tails_config_securedrop_dotfiles }}/ssh_config"
     - "{{ tails_config_amnesia_home }}/.ssh/config"
