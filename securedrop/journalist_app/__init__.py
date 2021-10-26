@@ -138,17 +138,18 @@ def create_app(config: 'SDConfig') -> Flask:
 
         uid = session.get('uid', None)
         if uid:
-            g.user = Journalist.query.get(uid)
+            g.user = Journalist.query.get(uid)  # pylint: disable=assigning-non-slot
 
         i18n.set_locale(config)
 
         if app.instance_config.organization_name:
-            g.organization_name = app.instance_config.organization_name
+            g.organization_name = \
+                app.instance_config.organization_name  # pylint: disable=assigning-non-slot
         else:
-            g.organization_name = gettext('SecureDrop')
+            g.organization_name = gettext('SecureDrop')  # pylint: disable=assigning-non-slot
 
         try:
-            g.logo = get_logo_url(app)
+            g.logo = get_logo_url(app)  # pylint: disable=assigning-non-slot
         except FileNotFoundError:
             app.logger.error("Site logo not found.")
 
@@ -161,8 +162,8 @@ def create_app(config: 'SDConfig') -> Flask:
         if request.method == 'POST':
             filesystem_id = request.form.get('filesystem_id')
             if filesystem_id:
-                g.filesystem_id = filesystem_id
-                g.source = get_source(filesystem_id)
+                g.filesystem_id = filesystem_id  # pylint: disable=assigning-non-slot
+                g.source = get_source(filesystem_id)  # pylint: disable=assigning-non-slot
 
         return None
 

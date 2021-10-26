@@ -122,12 +122,13 @@ def create_app(config: SDConfig) -> Flask:
     @ignore_static
     def setup_g() -> Optional[werkzeug.Response]:
         if app.instance_config.organization_name:
-            g.organization_name = app.instance_config.organization_name
+            g.organization_name = \
+                app.instance_config.organization_name  # pylint: disable=assigning-non-slot
         else:
-            g.organization_name = gettext('SecureDrop')
+            g.organization_name = gettext('SecureDrop')  # pylint: disable=assigning-non-slot
 
         try:
-            g.logo = get_logo_url(app)
+            g.logo = get_logo_url(app)  # pylint: disable=assigning-non-slot
         except FileNotFoundError:
             app.logger.error("Site logo not found.")
 
