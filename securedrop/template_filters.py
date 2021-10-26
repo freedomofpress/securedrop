@@ -9,7 +9,7 @@ from jinja2.nodes import EvalContext
 
 
 def rel_datetime_format(
-    dt: datetime, fmt: str = 'MMM dd, yyyy hh:mm a',
+    dt: datetime, fmt: str = 'long',
     relative: bool = False
 ) -> str:
     """Template filter for readable formatting of datetime.datetime"""
