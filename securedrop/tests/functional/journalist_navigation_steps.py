@@ -122,7 +122,7 @@ class JournalistNavigationStepsMixin:
         assert self._is_on_journalist_homepage()
 
     def _journalist_visits_col(self):
-        self.wait_for(lambda: self.driver.find_element_by_id("cols"))
+        self.wait_for(lambda: self.driver.find_element_by_css_selector("table#collections"))
 
         self.safe_click_by_id("un-starred-source-link-1")
 
@@ -298,9 +298,9 @@ class JournalistNavigationStepsMixin:
                 flash_msg = self.driver.find_element_by_css_selector(".flash")
                 assert "The files and messages have been deleted" in flash_msg.text
             if not self.accept_languages:
-                count_div = self.driver.find_element_by_css_selector(".submission-count")
-                assert "0 docs" in count_div.text
-                assert "0 messages" in count_div.text
+                counts = self.driver.find_elements_by_css_selector(".submission-count")
+                assert "0 docs" in counts[0].text
+                assert "0 messages" in counts[1].text
 
         self.wait_for(one_source_no_files)
         time.sleep(5)
@@ -760,7 +760,7 @@ class JournalistNavigationStepsMixin:
 
         if not self.accept_languages:
             # There should be a "1 unread" span in the sole collection entry
-            unread_span = self.driver.find_element_by_css_selector("span.unread")
+            unread_span = self.driver.find_element_by_css_selector("tr.unread")
             assert "1 unread" in unread_span.text
 
     def _journalist_stars_and_unstars_single_message(self):
@@ -1217,7 +1217,7 @@ class JournalistNavigationStepsMixin:
         )
 
     def _journalist_clicks_source_unread(self):
-        self.driver.find_element_by_css_selector("span.unread a").click()
+        self.driver.find_element_by_css_selector("table#collections tr.source > td.unread a").click()
 
     def _journalist_selects_first_source_then_download_all(self):
         checkboxes = self.driver.find_elements_by_name("cols_selected")

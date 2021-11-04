@@ -68,11 +68,11 @@ def test_submit_message(journalist_app, source_app, test_journo):
 
         # The source should have a "download unread" link that
         # says "1 unread"
-        col = soup.select('ul#cols > li')[0]
-        unread_span = col.select('span.unread a')[0]
+        col = soup.select('table#collections tr.source')[0]
+        unread_span = col.select('td.unread a')[0]
         assert "1 unread" in unread_span.get_text()
 
-        col_url = soup.select('ul#cols > li a')[0]['href']
+        col_url = soup.select('table#collections th.designation a')[0]['href']
         resp = app.get(col_url)
         assert resp.status_code == 200
         text = resp.data.decode('utf-8')
@@ -170,11 +170,11 @@ def test_submit_file(journalist_app, source_app, test_journo):
 
         # The source should have a "download unread" link that says
         # "1 unread"
-        col = soup.select('ul#cols > li')[0]
-        unread_span = col.select('span.unread a')[0]
+        col = soup.select('table#collections tr.source')[0]
+        unread_span = col.select('td.unread a')[0]
         assert "1 unread" in unread_span.get_text()
 
-        col_url = soup.select('ul#cols > li a')[0]['href']
+        col_url = soup.select('table#collections th.designation a')[0]['href']
         resp = app.get(col_url)
         assert resp.status_code == 200
         text = resp.data.decode('utf-8')
@@ -273,7 +273,7 @@ def _helper_test_reply(journalist_app, source_app, config, test_journo,
         text = resp.data.decode('utf-8')
         assert "Sources" in text
         soup = BeautifulSoup(resp.data, 'html.parser')
-        col_url = soup.select('ul#cols > li a')[0]['href']
+        col_url = soup.select('table#collections tr.source > th.designation a')[0]['href']
 
         resp = app.get(col_url)
         assert resp.status_code == 200
@@ -458,7 +458,7 @@ def test_delete_collection(mocker, source_app, journalist_app, test_journo):
         resp = app.get('/')
         # navigate to the collection page
         soup = BeautifulSoup(resp.data.decode('utf-8'), 'html.parser')
-        first_col_url = soup.select('ul#cols > li a')[0]['href']
+        first_col_url = soup.select('table#collections tr.source > th.designation a')[0]['href']
         resp = app.get(first_col_url)
         assert resp.status_code == 200
 
@@ -561,7 +561,7 @@ def test_filenames(source_app, journalist_app, test_journo):
         _login_user(app, test_journo)
         resp = app.get('/')
         soup = BeautifulSoup(resp.data.decode('utf-8'), 'html.parser')
-        first_col_url = soup.select('ul#cols > li a')[0]['href']
+        first_col_url = soup.select('table#collections tr.source > th.designation a')[0]['href']
         resp = app.get(first_col_url)
         assert resp.status_code == 200
 
@@ -588,7 +588,7 @@ def test_filenames_delete(journalist_app, source_app, test_journo):
         _login_user(app, test_journo)
         resp = app.get('/')
         soup = BeautifulSoup(resp.data.decode('utf-8'), 'html.parser')
-        first_col_url = soup.select('ul#cols > li a')[0]['href']
+        first_col_url = soup.select('table#collections tr.source > th.designation a')[0]['href']
         resp = app.get(first_col_url)
         assert resp.status_code == 200
         soup = BeautifulSoup(resp.data.decode('utf-8'), 'html.parser')

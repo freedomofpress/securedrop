@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block body %}
 <div id="content" class="journalist-view-all">
-  <h1 class="headline">{{ gettext('All Sources') }}</h1>
+  <h1 id="all-sources-heading" class="headline">{{ gettext('All Sources') }}</h1>
   {% if unstarred or starred %}
     <div id="filter-container"></div>
     <form id="process-collections" action="{{ url_for('col.process') }}" method="post">
@@ -54,28 +54,38 @@
 
     </div>
 
+      <table id="collections" aria-labelledby="all-sources-heading">
+        <thead hidden aria-hidden="false">
+          <tr>
+          <th scope="col">{{ gettext('Date') }}</th>
+          <th scope="col">{{ gettext('Designation') }}</th>
+          <th scope="col">{{ gettext('Documents') }}</th>
+          <th scope="col">{{ gettext('Messages') }}</th>
+          <th scope="col">{{ gettext('Unread') }}</th>
+          </tr>
+        </thead>
       {% if starred %}
-        <ul id="cols" class="plain starred">
+        <tbody class="cols plain starred">
           {% for source in starred %}
             {% with %}
               {% set loop_index = loop.index %}
               {% include '_source_row.html' %}
             {% endwith %}
           {% endfor %}
-        </ul>
+        </tbody>
       {% endif %}
 
       {% if unstarred %}
-        <ul id="cols" class="plain unstarred">
+        <tbody class="cols plain unstarred">
           {% for source in unstarred %}
             {% with %}
               {% set loop_index = loop.index %}
               {% include '_source_row.html' %}
             {% endwith %}
           {% endfor %}
-        </ul>
+        </tbody>
       {% endif %}
-
+      </table>
     </form>
   {% else %}
     <p>{{ gettext('No documents have been submitted!') }}</p>

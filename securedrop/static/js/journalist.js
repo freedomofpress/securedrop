@@ -3,6 +3,9 @@
  * confusing users, this function dynamically adds elements that require JS.
  */
 
+const SOURCE_COLLECTION_SELECTOR_PREFIX = "table#collections";
+const SOURCE_ROW_SELECTOR_PREFIX = SOURCE_COLLECTION_SELECTOR_PREFIX + " tr"
+
 function closest(element, selector) {
   let parent = element.parentNode;
   let closest = null;
@@ -23,7 +26,7 @@ function hide(selector) {
   });
 }
 
-function show(selector, displayStyle = "block") {
+function show(selector, displayStyle = "revert") {
   let nodelist = document.querySelectorAll(selector);
   Array.prototype.forEach.call(nodelist, function(element) {
     element.style.display = displayStyle;
@@ -86,11 +89,11 @@ String.prototype.supplant = function (o) {
 
 function filter_codenames(value) {
   if(value == ""){
-    show('ul#cols li');
+    show(SOURCE_ROW_SELECTOR_PREFIX);
   } else {
-    hide('ul#cols li');
+    hide(SOURCE_ROW_SELECTOR_PREFIX);
     show(
-      'ul#cols li[data-source-designation*="' + value.replace(/"/g, "").toLowerCase() + '"]'
+      SOURCE_ROW_SELECTOR_PREFIX + '[data-source-designation*="' + value.replace(/"/g, "").toLowerCase() + '"]'
     );
   }
 }
@@ -111,7 +114,7 @@ ready(function() {
   if (selectAll) {
     selectAll.style.cursor = "pointer";
     selectAll.addEventListener("click", function() {
-      let checkboxes = document.querySelectorAll(".panel li:not(.hidden) input[type=checkbox]");
+      let checkboxes = document.querySelectorAll(SOURCE_ROW_SELECTOR_PREFIX + ":not(.hidden) input[type=checkbox]");
       for (let i = 0; i < checkboxes.length; i++) {
         checkboxes[i].checked = true;
       }
@@ -122,7 +125,7 @@ ready(function() {
   if (selectNone) {
     selectNone.style.cursor = "pointer";
     selectNone.addEventListener("click", function() {
-      let checkboxes = document.querySelectorAll(".panel li:not(.hidden) input[type=checkbox]");
+      let checkboxes = document.querySelectorAll(SOURCE_ROW_SELECTOR_PREFIX + ":not(.hidden) input[type=checkbox]");
       for (let i = 0; i < checkboxes.length; i++) {
         checkboxes[i].checked = false;
       }
@@ -209,11 +212,11 @@ ready(function() {
               deleteMenuCTA.style.display = "none"
           }
           if (deleteMenuNoSelect) {
-              deleteMenuNoSelect.style.display = "block"
+              deleteMenuNoSelect.style.display = "revert"
           }
       } else {
           if (deleteMenuCTA) {
-              deleteMenuCTA.style.display = "block"
+              deleteMenuCTA.style.display = "revert"
           }
           if (deleteMenuNoSelect) {
               deleteMenuNoSelect.style.display = "none"
