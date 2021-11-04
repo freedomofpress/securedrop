@@ -37,6 +37,8 @@ function enhance_ui() {
   if (filterContainer) {
     filterContainer.innerHTML = '<input id="filter" type="text" placeholder="' +
       get_string("filter-by-codename-placeholder-string") +
+      '" aria-label="' +
+      get_string("filter-by-codename-placeholder-string") +
       '" autofocus >';
   }
 

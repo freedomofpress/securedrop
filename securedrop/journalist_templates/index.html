@@ -1,27 +1,35 @@
 {% extends "base.html" %}
 {% block body %}
 <div id="content" class="journalist-view-all">
-  <h1><span class="headline">{{ gettext('All Sources') }}</span></h1>
+  <h1 class="headline">{{ gettext('All Sources') }}</h1>
   {% if unstarred or starred %}
     <div id="filter-container"></div>
     <form id="process-collections" action="{{ url_for('col.process') }}" method="post">
       <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
-      <p>
+      <div>
         <div id="index-select-container"></div>
         <button type="submit" name="action" value="download-unread" class="small">
+          {# FIXME:
           <img src="{{ url_for('static', filename='icons/download.png') }}" class="icon" width="11" height="13" alt="">
+          #}
           {{ gettext('Download Unread') }}
         </button>
         <button type="submit" name="action" value="download-all" class="small">
+          {# FIXME:
           <img src="{{ url_for('static', filename='icons/download.png') }}" class="icon" width="11" height="13" alt="">
+          #}
           {{ gettext('Download') }}
         </button>
         <button type="submit" name="action" value="star" class="small">
+          {# FIXME:
           <img src="{{ url_for('static', filename='icons/star.png') }}" class="icon" width="15" height="14" alt="">
+          #}
           {{ gettext('Star') }}
         </button>
         <button type="submit" name="action" value="un-star" class="small">
+          {# FIXME:
           <img src="{{ url_for('static', filename='icons/unstar.png') }}" class="icon" width="15" height="14" alt="">
+          #}
           {{ gettext('Un-star') }}
         </button>
         <div class="delete-menu-button"><a href="#delete-sources-modal" id="delete-collections-link">
@@ -44,7 +52,7 @@
       {% endwith %}
       </div>
 
-      </p>
+    </div>
 
       {% if starred %}
         <ul id="cols" class="plain starred">

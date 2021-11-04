@@ -93,7 +93,7 @@ class JournalistNavigationStepsMixin:
             self._try_login_user(username, password, token)
             # Successful login should redirect to the index
             self.wait_for(
-                lambda: self.driver.find_element_by_id("logout"), timeout=self.timeout * 2
+                lambda: self.driver.find_element_by_id("link-logout"), timeout=self.timeout * 2
             )
             if self.driver.current_url != self.journalist_location + "/":
                 new_token = str(otp.now())
