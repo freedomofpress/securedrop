@@ -126,7 +126,7 @@ class JournalistNavigationStepsMixin:
 
         self.safe_click_by_id("un-starred-source-link-1")
 
-        self.wait_for(lambda: self.driver.find_element_by_css_selector("ul#submissions"))
+        self.wait_for(lambda: self.driver.find_element_by_css_selector("table#submissions"))
 
     def _journalist_selects_first_doc(self):
         self.safe_click_by_css_selector('input[type="checkbox"][name="doc_names_selected"]')
@@ -197,7 +197,7 @@ class JournalistNavigationStepsMixin:
         self.wait_for(lambda: self.driver.find_element_by_id(displayed_id))
 
     def _journalist_clicks_delete_selected_link(self):
-        self.safe_click_by_css_selector("a#delete-selected-link > button.danger")
+        self.safe_click_by_css_selector("a#delete-selected-link")
         self.wait_for(lambda: self.driver.find_element_by_id("delete-selected-confirmation-modal"))
 
     def _journalist_clicks_delete_collections_link(self):
@@ -808,7 +808,7 @@ class JournalistNavigationStepsMixin:
     def _journalist_downloads_message(self):
         self._journalist_selects_the_first_source()
 
-        self.wait_for(lambda: self.driver.find_element_by_css_selector("ul#submissions"))
+        self.wait_for(lambda: self.driver.find_element_by_css_selector("table#submissions"))
 
         submissions = self.driver.find_elements_by_css_selector("#submissions a")
         assert 1 == len(submissions)
@@ -840,7 +840,7 @@ class JournalistNavigationStepsMixin:
     def _journalist_downloads_message_missing_file(self):
         self._journalist_selects_the_first_source()
 
-        self.wait_for(lambda: self.driver.find_element_by_css_selector("ul#submissions"))
+        self.wait_for(lambda: self.driver.find_element_by_css_selector("table#submissions"))
 
         submissions = self.driver.find_elements_by_css_selector("#submissions a")
         assert 1 == len(submissions)
@@ -1068,7 +1068,7 @@ class JournalistNavigationStepsMixin:
 
     def _journalist_delete_all_confirmation(self):
         self.safe_click_all_by_css_selector("[name=doc_names_selected]")
-        self.safe_click_by_css_selector("a#delete-selected-link > button.danger")
+        self.safe_click_by_css_selector("a#delete-selected-link")
 
     def _journalist_delete_one(self):
         self.safe_click_by_css_selector("[name=doc_names_selected]")
@@ -1217,7 +1217,9 @@ class JournalistNavigationStepsMixin:
         )
 
     def _journalist_clicks_source_unread(self):
-        self.driver.find_element_by_css_selector("table#collections tr.source > td.unread a").click()
+        self.driver.find_element_by_css_selector(
+            "table#collections tr.source > td.unread a"
+            ).click()
 
     def _journalist_selects_first_source_then_download_all(self):
         checkboxes = self.driver.find_elements_by_name("cols_selected")

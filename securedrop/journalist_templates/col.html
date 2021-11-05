@@ -19,7 +19,10 @@
       <p>
         <div id="select-container"></div>
         <button type="submit" name="action" value="download" class="small">
-          <img src="{{ url_for('static', filename='icons/download.png') }}" class="icon" width="11" height="13" alt=""> {{ gettext('Download Selected') }}
+          {# FIXME:
+          <img src="{{ url_for('static', filename='icons/download.png') }}" class="icon" width="11" height="13" alt="">
+          #}
+          {{ gettext('Download Selected') }}
         </button>
         <a href="#delete-selected-confirmation-modal" id="delete-selected-link">
           <button type="button" class="small danger">
@@ -28,29 +31,50 @@
         </a>
       </p>
 
-      <ul id="submissions" class="plain submissions">
+      <table id="submissions" class="plain submissions">
+        <thead hidden aria-hidden="false">
+          <tr>
+          <th scope="col">{{ gettext('Filename') }}</th>
+          <th scope="col">{{ gettext('Size') }}</th>
+          <th scope="col">{{ gettext('Type') }}</th>
+          </tr>
+        </thead>
         {% for doc in source.collection %}
-          <li class="submission {% if not doc.seen and not doc.filename.endswith('reply.gpg') %}unread{% endif %}" aria-labelledby="doc-link-{{ loop.index }} status-icon-{{ loop.index }} type-icon-{{ loop.index }}">
+          <tr class="submission {% if not doc.seen and not doc.filename.endswith('reply.gpg') %}unread{% endif %}">
+            <th scope="row" class="filename">
+            <label>
             {% if doc.filename.endswith('reply.gpg') %}
               {% if not doc.deleted_by_source %}
-                <input type="checkbox" name="doc_names_selected" value="{{ doc.filename }}" class="doc-check" aria-labelledby="doc-link-{{ loop.index }}">
+                <input type="checkbox" id="doc-cb-{{ loop.index }}" name="doc_names_selected" value="{{ doc.filename }}" class="doc-check">
+                {# FIXME:
                 <img id="status-icon-{{ loop.index }}" src="{{ url_for('static', filename='icons/reply.png') }}" class="icon" width="16" height="16" alt="{{ gettext('Unread') }}" title="{{ gettext('Unread') }}">
+                #}
               {% else %}
-                <input type="checkbox" name="doc_names_selected" value="{{ doc.filename }}" class="doc-check" aria-labelledby="doc-link-{{ loop.index }}">
+                <input type="checkbox" id="doc-cb-{{ loop.index }}" name="doc_names_selected" value="{{ doc.filename }}" class="doc-check">
+                {# FIXME:
                 <img id="status-icon-{{ loop.index }}" src="{{ url_for('static', filename='icons/check.png') }}" class="icon" width="16" height="12" alt="{{ gettext('Read') }}" title="{{ gettext('Read') }}">
+                #}
               {% endif %}
             {% elif not doc.seen %}
-              <input type="checkbox" name="doc_names_selected" value="{{ doc.filename }}" class="doc-check unread-cb" aria-labelledby="doc-link-{{ loop.index }}">
+              <input type="checkbox" id="doc-cb-{{ loop.index }}" name="doc_names_selected" value="{{ doc.filename }}" class="doc-check unread-cb">
+              {# FIXME:
               <img id="status-icon-{{ loop.index }}" src="{{ url_for('static', filename='icons/envelope-closed.png') }}" class="icon" width="16" height="15" alt="{{ gettext('Unread') }}" title="{{ gettext('Unread') }}">
+              #}
             {% else %}
-              <input type="checkbox" name="doc_names_selected" value="{{ doc.filename }}" class="doc-check" aria-labelledby="doc-link-{{ loop.index }}">
+              <input type="checkbox" id="doc-cb-{{ loop.index }}" name="doc_names_selected" value="{{ doc.filename }}" class="doc-check">
+              {# FIXME:
               <img id="status-icon-{{ loop.index }}" src="{{ url_for('static', filename='icons/envelope-open.png') }}" class="icon" width="16" height="15" alt="{{ gettext('Read') }}" title="{{ gettext('Read') }}">
+              #}
             {% endif %}
-            <a id="doc-link-{{ loop.index }}" class="file {% if not doc.seen and not doc.filename.endswith('reply.gpg') %}unread{% else %}read{% endif %}" href="{{ url_for('col.download_single_file', filesystem_id=filesystem_id, fn=doc.filename) }}">
-              <span class="filename">{{ doc.filename }}</span>
-            </a>
-            <span class="info"><span title="{{ doc.size }} bytes">{{ doc.size|filesizeformat() }}</span></span>
+            <a id="doc-link-{{ loop.index }}" class="file {% if not doc.seen and not doc.filename.endswith('reply.gpg') %}unread{% else %}read{% endif %}" href="{{ url_for('col.download_single_file', filesystem_id=filesystem_id, fn=doc.filename) }}">{{ doc.filename }}</a>
+            </label>
+            </th>
+            <td class="info" title="{{ doc.size }} bytes">
+              {{ doc.size|filesizeformat() }}
+            </td>
 
+            <td>
+            {# FIXME: td[class]
             {% if doc.filename.endswith('-doc.gz.gpg') %}
               <img id="type-icon-{{ loop.index }}" src="{{ url_for('static', filename='icons/files.png') }}" class="pull-right" width="14" height="16" alt="{{ gettext('Uploaded Document') }}" title="{{ gettext('Uploaded Document') }}">
             {% elif doc.filename.endswith('-reply.gpg') %}
@@ -58,9 +82,11 @@
             {% else %}
               <img id="type-icon-{{ loop.index }}" src="{{ url_for('static', filename='icons/messages.png') }}" class="pull-right" width="15" height="13" alt="{{ gettext('Message') }}" title="{{ gettext('Message') }}">
             {% endif %}
-          </li>
+            #}
+            </td>
+            </tr>
         {% endfor %}
-      </ul>
+      </table>
 
       <!-- Confirmation modal for selected documents -->
       {% with %}
