@@ -1209,7 +1209,7 @@ class JournalistNavigationStepsMixin:
             )
 
         if self.accept_languages is None:
-            assert notification.text == error_msg
+            assert notification.text in error_msg
 
     def _journalist_is_on_collection_page(self):
         return self.wait_for(

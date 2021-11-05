@@ -2,7 +2,9 @@
 {% if messages %}
   {% for category, message in messages %}
     {% if category not in ["banner-warning","logo-success","logo-error","submission-preferences-success","submission-preferences-error","org-name-success","org-name-error", "testalert-success", "testalert-error", "testalert-notification"] %}
-      <div class="flash {{ category }}">
+      {% set category_status = category.split('-')|last %}
+      <section class="flash {{ category_status }}" role="alert">
+        {# FIXME:
         {% if category == "notification" %}
         <img src="{{ url_for('static', filename='i/flash-notification.png') }}" alt="{{ gettext('Notification') }}" height="35" width="15">
         {% elif category == "success" %}
@@ -10,8 +12,9 @@
         {% elif category == "error" %}
         <img src="{{ url_for('static', filename='i/flash-error.png') }}" alt="{{ gettext('Error') }}" height="30" width="9">
         {% endif %}
+        #}
         {{ message }}
-      </div>
+      </section>
     {% endif %}
   {% endfor %}
 {% endif %}

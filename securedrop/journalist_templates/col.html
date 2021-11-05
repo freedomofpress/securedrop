@@ -13,10 +13,12 @@
     </ul>
   </nav>
 
+  <h1 class="visually-hidden">{{ source.journalist_designation }}</h1>
+
   {% if source.collection %}
     <p>{{ gettext('All messages, files, and replies from sources are stored as encrypted files for security. To read them, you will need to decrypt them on your Secure Viewing Station.') }}</p>
     <form action="/bulk" method="post">
-      <p>
+      <div>
         <div id="select-container"></div>
         <button type="submit" name="action" value="download" class="small">
           {# FIXME:
@@ -29,7 +31,7 @@
             {{ gettext('Delete Selected') }}
           </button>
         </a>
-      </p>
+      </div>
 
       <table id="submissions" class="plain submissions">
         <thead hidden aria-hidden="false">
@@ -108,26 +110,32 @@
 
     </form>
   {% else %}
-    <p><br>{{ gettext('No submissions to display.') }}</p>
+    <p>{{ gettext('No submissions to display.') }}</p>
   {% endif %}
 
+  {# FIXME:
   <hr class="cut-out">
   <hr class="no-line">
-  <h3>{{ gettext('Reply') }}</h3>
+  #}
+  <h2>{{ gettext('Reply') }}</h2>
   {% if source.has_key %}
     <p>{{ gettext('You can write a secure reply to the person who submitted these messages and/or files:') }}</p>
     <form action="{{ url_for('main.reply') }}" method="post" autocomplete="off">
       <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
       <input type="hidden" name="filesystem_id" value="{{ filesystem_id }}">
-      {{ form.message(id="reply-text-field", rows='10', class="journalist-reply__input") }}
+      {{ form.message(id="reply-text-field", rows='10', class="journalist-reply__input", placeholder=gettext('Write a reply.'), **{'aria-label': gettext('Write a reply.')}) }}
+      {# FIXME:
       <hr class="no-line">
-      <button id="reply-button" class="button pull-right" type="submit">{{ gettext('SUBMIT') }}</button>
+      #}
+      <button id="reply-button" class="button pull-right" type="submit" aria-label="{{ gettext('Submit') }}">{{ gettext('SUBMIT') }}</button>
     </form>
   {% else %}
     <p class="notification">{{ gettext("This source has no encryption key.") }}</p>
     <p>{{ gettext("An encryption key will be generated for the source the next time they log in, after which you will be able to reply to the source here.") }}</p>
   {% endif %}
+  {# FIXME:
   <hr class="no-line">
+  #}
   <form id="delete-collection" action="{{ url_for('col.delete_single', filesystem_id=filesystem_id) }}" method="post">
     <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
     <input type="hidden" name="filesystem_id" value="{{ filesystem_id }}">
