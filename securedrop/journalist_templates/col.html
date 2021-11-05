@@ -2,11 +2,16 @@
 {% block body %}
 <div id="content" class="journalist-view-single">
 
-  <p class="breadcrumbs">
-    <a href="/">{{ gettext('All Sources') }}</a>
-    <img src="{{ url_for('static', filename='icons/chevron-right.png') }}" class="icon" width="9" height="14" alt="">
-    <strong>{{ source.journalist_designation }}</strong>
-  </p>
+  <nav>
+    <h2 id="breadcrumbs-heading" class="visually-hidden">{{ gettext('You are here:') }}</h2>
+    <ul class="breadcrumbs">
+      <li><a href="/">{{ gettext('All Sources') }}</a></li>
+      {# FIXME:
+      <img src="{{ url_for('static', filename='icons/chevron-right.png') }}" class="icon" width="9" height="14" alt="">
+      #}
+      <li>{{ source.journalist_designation }}</li>
+    </ul>
+  </nav>
 
   {% if source.collection %}
     <p>{{ gettext('All messages, files, and replies from sources are stored as encrypted files for security. To read them, you will need to decrypt them on your Secure Viewing Station.') }}</p>
