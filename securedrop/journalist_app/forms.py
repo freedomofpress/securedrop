@@ -93,9 +93,13 @@ class NewUserForm(FlaskForm):
     username = StringField('username', validators=[
         InputRequired(message=gettext('This field is required.')),
         minimum_length_validation, check_invalid_usernames
-    ])
-    first_name = StringField('first_name', validators=[name_length_validation, Optional()])
-    last_name = StringField('last_name', validators=[name_length_validation, Optional()])
+        ],
+        render_kw={'aria-describedby': 'username-notes'},
+    )
+    first_name = StringField('first_name', validators=[name_length_validation, Optional()],
+                             render_kw={'aria-describedby': 'name-notes'})
+    last_name = StringField('last_name', validators=[name_length_validation, Optional()],
+                            render_kw={'aria-describedby': 'name-notes'})
     password = HiddenField('password')
     is_admin = BooleanField('is_admin')
     is_hotp = BooleanField('is_hotp')
