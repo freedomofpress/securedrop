@@ -128,7 +128,7 @@
   <input name="uid" type="hidden" value="{{ user.id }}">
   {% endif %}
   <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
-  <button id="button-reset-two-factor-{{ type }}" tooltip="{{ tooltip_text }}" type="submit" class="pull-right" aria-label="{{ button_aria_label }}">
+  <button id="button-reset-two-factor-{{ type }}" data-tooltip="{{ tooltip_text }}" type="submit" class="pull-right" aria-label="{{ button_aria_label }}">
     {# FIXME:
     <img src="{{ url_for('static', filename='icons/sync.png') }}" class="icon" width="15" height="15" alt="">
     #}
