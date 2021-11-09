@@ -2,7 +2,8 @@
 {% block body %}
 <h1>{{ gettext('Admin Interface') }}</h1>
 
-<section aria-labelledby="add-user">
+<section aria-labelledby="add-user-heading">
+<h2 id="add-user-heading" class="visually-hidden">Add User</h2>
 <form action="{{ url_for('admin.add_user') }}">
   <button type="submit" id="add-user" aria-label="{{ gettext('Add User') }}">
     {# FIXME:
@@ -32,13 +33,11 @@
       <tr class="user">
         <th scope="row">{{ user.username }}</th>
         <td>
-          <a href="/admin/edit/{{ user.id }}" class="plain" data-username="{{ user.username }}">
-            <i title="{{ gettext('Edit user {username}').format(username=user.username) }}">
+          <a href="/admin/edit/{{ user.id }}" class="plain" data-username="{{ user.username }}" aria-label="{{ gettext('Edit user {username}').format(username=user.username) }}">
               {{ gettext('Edit') }}
               {# FIXME:
-              <img src="{{ url_for('static', filename='icons/edit-user.png') }}" class="icon" width="18" height="16" alt="{{ gettext('Edit user {username}').format(username=user.username) }}">
+              <img src="{{ url_for('static', filename='icons/edit-user.png') }}" class="icon" width="18" height="16">
               #}
-            </i>
           </a>
         </td>
 	{% if user.id == g.user.id %}
@@ -50,24 +49,20 @@
         </td>
 	{% else %}
         <td>
-          <a href="?user_id={{ user.id }}#delete-user-confirmation-modal">
-            <button type="button" class="plain delete-user" data-username="{{ user.username}}">
-              <i title="{{ gettext('Delete user {username}').format(username=user.username) }}">
+          <a href="?user_id={{ user.id }}#delete-user-confirmation-modal" class="plain delete-user" data-username="{{ user.username}}" aria-label="{{ gettext('Delete user {username}').format(username=user.username) }}">
                 {{ gettext('Delete') }}
                 {# FIXME:
-                <img src="{{ url_for('static', filename='icons/trash.png') }}" class="off-hover" width="14" height="16" alt="{{ gettext('Delete user {username}').format(username=user.username) }}">
-                <img src="{{ url_for('static', filename='icons/trash-hover-red.png') }}" class="on-hover" width="14" height="16" alt="{{ gettext('Delete user {username}').format(username=user.username) }}">
+                <img src="{{ url_for('static', filename='icons/trash.png') }}" class="off-hover" width="14" height="16">
+                <img src="{{ url_for('static', filename='icons/trash-hover-red.png') }}" class="on-hover" width="14" height="16">
                 #}
-              </i>
-            </button>
           </a>
         </td>
 	{% endif %}
-        <td><time class="date" title="{{ user.created_on }}" aria-label="{{ user.created_on|rel_datetime_format(relative=True) }}">{{ user.created_on|rel_datetime_format(relative=True) }}</time></td>
+        <td class="date" aria-label="{{ user.created_on|rel_datetime_format(relative=True) }}"><time datetime="{{ user.created_on|html_datetime_format }}" title="{{ user.created_on }}">{{ user.created_on|rel_datetime_format(relative=True) }}</time></td>
         {% if user.last_access %}
-          <td><time class="date" title="{{ user.last_access }}" aria-label="{{ user.last_access|rel_datetime_format(relative=True) }}">{{ user.last_access|rel_datetime_format(relative=True) }}</time></td>
+          <td class="date" aria-label="{{ user.last_access|rel_datetime_format(relative=True) }}"><time datetime="{{ user.last_access|html_datetime_format }}" title="{{ user.last_access }}">{{ user.last_access|rel_datetime_format(relative=True) }}</time></td>
         {% else %}
-          <td><time class="date">{{ gettext('never') }}</time></td>
+          <td class="date">{{ gettext('never') }}</td>
         {% endif %}
       </tr>
     {% endfor %}
@@ -95,7 +90,8 @@
 {% endif %}
 </section>
 
-<section aria-labelledby="update-instance-config">
+<section aria-labelledby="update-instance-config-heading">
+<h2 id="update-instance-config-heading" class="visually-hidden">Update Instance Config</h2>
 <a href="{{ url_for('admin.manage_config') }}" class="btn" id="update-instance-config" aria-label="{{ gettext('Instance Config') }}">
   {# FIXME:
   <img src="{{ url_for('static', filename='icons/pencil-alt.png') }}" class="icon" width="15" height="15" alt="">
