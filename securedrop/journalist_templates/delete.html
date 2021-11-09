@@ -20,5 +20,5 @@
   <button type="submit" name="action" value="delete" id="confirm-delete" aria-label="{{ gettext('Permanently Delete Files') }}">{{ gettext('PERMANENTLY DELETE FILES') }}</button></p>
 </form>
 
-<nav class="back"><a href="/col/{{ filesystem_id }}">{{ gettext('Return to the list of documents for {source_name}…').format(source_name=source.journalist_designation) }}</a></nav>
+<nav class="back" aria-labelledby="back-link"><a id="back-link" href="/col/{{ filesystem_id }}">{{ gettext('Return to the list of documents for {source_name}…').format(source_name=source.journalist_designation) }}</a></nav>
 {% endblock %}

@@ -17,7 +17,7 @@
   <body>
 
     {% if g.user %}
-    <nav>
+    <nav aria-label="{{ gettext('Navigation') }}">
       {{ gettext('Logged on as') }} <a href="{{ url_for('account.edit') }}" id="link-edit-account">{{ g.user.username }}</a> |
       {% if g.user and g.user.is_admin %}
       <a href="{{ url_for('admin.index') }}" id="link-admin-index">{{ gettext('Admin') }}</a> |

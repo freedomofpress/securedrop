@@ -1,10 +1,10 @@
 {% extends "base.html" %}
 {% block body %}
-<nav class="back">
+<nav class="back" aria-labelledby="back-link">
   {# FIXME:
   <img src="{{ url_for('static', filename='icons/chevron-left.png') }}" class="icon" width="9" height="14" alt="">
   #}
-  <a href="/admin">{{ gettext('Back to admin interface') }}</a>
+  <a id="back-link" href="/admin">{{ gettext('Back to admin interface') }}</a>
 </nav>
 
 <h1>{{ gettext('Instance Configuration') }}</h1>

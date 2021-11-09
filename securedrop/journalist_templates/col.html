@@ -26,10 +26,8 @@
           #}
           {{ gettext('Download Selected') }}
         </button>
-        <a href="#delete-selected-confirmation-modal" id="delete-selected-link">
-          <button type="button" class="small danger">
+        <a href="#delete-selected-confirmation-modal" id="delete-selected-link" class="small danger">
             {{ gettext('Delete Selected') }}
-          </button>
         </a>
       </div>
 
@@ -141,10 +139,8 @@
     <input type="hidden" name="filesystem_id" value="{{ filesystem_id }}">
     <input type="hidden" name="col_name" value="{{ source.journalist_designation }}">
     <div class="center highlight">
-      <a href="#delete-collection-confirmation-modal" id="delete-collection-link">
-        <button type="button" class="danger">
+      <a href="#delete-collection-confirmation-modal" id="delete-collection-link" class="danger">
           {{ gettext('Delete Source Account') }}
-        </button>
       </a>
     </div>
 
@@ -155,11 +151,11 @@
                             "modal_header": gettext('Are you sure?'),
                             "modal_body": gettext('<p>
 Deleting the account for <b>{source}</b> will:
+</p>
 <ul>
 <li>prevent them from logging in with their codename again
 <li>prevent your organization from sending replies
 </ul>
-</p>
 <p>
 All files, messages, and replies will also be deleted when their account is deleted.
 </p>'.format(source=source.journalist_designation)),

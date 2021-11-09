@@ -4,11 +4,11 @@
 {% if user %}
   {# Only admins may edit usernames and admin status #}
   <h1>{{ gettext('Edit user "{user}"').format(user=user.username) }}</h1>
-  <nav class="back">
+  <nav aria-labelledby="back-link" class="back">
     {# FIXME:
     <img src="{{ url_for('static', filename='icons/chevron-left.png') }}" class="icon" width="9" height="14" alt="">
     #}
-    <a href="/admin">{{ gettext('Back to admin interface') }}</a>
+    <a id="back-link" href="/admin">{{ gettext('Back to admin interface') }}</a>
   </nav>
   <section aria-labeledby="change-heading">
   <h2 id="change-heading">{{ gettext('Change Name and Admin Status') }}</h2>
