@@ -9,8 +9,6 @@
 
     <link rel="icon" type="image/png" href="/static/i/favicon.png">
 
-    {% include 'js-strings.html' %}
-
     {% assets filters="jsmin", output="gen/journalist.js", "js/journalist.js" %}
       <script src="{{ ASSET_URL }}"></script>
     {% endassets %}
@@ -56,5 +54,6 @@
       </footer>
       {% endblock %}
     </div>
+    {% include 'js-strings.html' %}
   </body>
 </html>
