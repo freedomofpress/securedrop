@@ -32,8 +32,8 @@
           #}
           {{ gettext('Un-star') }}
         </button>
-        <div class="delete-menu-button"><a href="#delete-sources-modal" id="delete-collections-link">
-          <button type="button" id="btn-delete-sources" class="small danger"> {{ gettext('Delete') }} </button> </a>
+        <div class="delete-menu-button"><a href="#delete-sources-modal" id="delete-collections-link" class="small danger">
+          {{ gettext('Delete') }} </a>
       <!-- Delete confirmation modal -->
       {% with %}
         {% set modal_data = {

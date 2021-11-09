@@ -1,7 +1,7 @@
 {% set docs = source.documents_messages_count()['documents'] %}
 {% set msgs = source.documents_messages_count()['messages'] %}
 <tr class="source {% if source.num_unread != 0 %}unread{% else %}read{% endif %}" data-source-designation="{{ source.journalist_designation|lower }}">
-  <td><time class="date" title="{{ source.last_updated|rel_datetime_format }}" datetime="{{ source.last_updated|html_datetime_format }}" aria-label="{{ source.last_updated|rel_datetime_format(relative=True) }}">{{ source.last_updated|rel_datetime_format(relative=True) }}</time></td>
+  <td aria-label="{{ source.last_updated|rel_datetime_format(relative=True) }}"><time class="date" title="{{ source.last_updated|rel_datetime_format }}" datetime="{{ source.last_updated|html_datetime_format }}">{{ source.last_updated|rel_datetime_format(relative=True) }}</time></td>
   <th class="designation" scope="row">
     {% if source.star.starred %}
       <button class="button-star starred" type="submit" formaction="{{ url_for('col.remove_star', filesystem_id=source.filesystem_id) }}" aria-label="{{ gettext('Un-star {designation}').format(designation=source.journalist_designation) }}">
