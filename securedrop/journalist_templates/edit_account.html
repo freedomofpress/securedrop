@@ -38,7 +38,7 @@
   <section aria-labelledby="change-heading">
   <h2 id="change-heading">{{ gettext('Change Name') }}</h2>
   {% set change_name_url = url_for('account.change_name') %}
-  <form action="{{ change_name_url }}" method="post" id="change-name">
+  <form action="{{ change_name_url }}" method="post" id="change-name-form">
     <div>
       <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
       <label for="first_name">{{ gettext('First name') }}</label>
@@ -46,9 +46,9 @@
       <input name="first_name" id="first_name" value = "{{ first_name }}">
       <label for="last_name">{{ gettext('Last name') }}</label>
       {% set last_name = g.user.last_name or '' %}
-      <input name="last_name" id="last_name" value = "{{ last_name }}"">
+      <input name="last_name" id="last_name" value = "{{ last_name }}">
     </div>
-    <button type="submit" id="change-name" aria-label="{{ gettext('Update') }}">{{ gettext('UPDATE') }}</button>
+    <button type="submit" id="change-name-button" aria-label="{{ gettext('Update') }}">{{ gettext('UPDATE') }}</button>
   </form>
   </section>
 {% endif %}
