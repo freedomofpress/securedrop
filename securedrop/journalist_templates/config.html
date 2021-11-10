@@ -36,6 +36,7 @@
 
 <form method="post" enctype="multipart/form-data">
   <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
+  <label for="logo-upload">{{ gettext('Logo image:') }}</label>
   {{ logo_form.logo(id="logo-upload", **{'aria-controls': 'current-logo', 'aria-describedby': 'size-instructions'}) }}
   <p id="size-instructions">
     {{ gettext('Recommended size: 500px * 450px') }}
