@@ -30,7 +30,7 @@ RUN curl -s https://openpgpkey.torproject.org/.well-known/openpgpkey/torproject.
 
 # Install Tor Browser
 # Fetch latest TBB version (obtained from https://github.com/micahflee/torbrowser-launcher/blob/develop/torbrowser_launcher/common.py#L198) and install Tor Browser
-RUN TBB_VERSION=$(curl -s https://aus1.torproject.org/torbrowser/update_3/release/Linux_x86_64-gcc3/x/en-US | grep -oP '\d+\.\d+\.\d+' | head -1) && \
+RUN TBB_VERSION=$(curl -s https://aus1.torproject.org/torbrowser/update_3/release/Linux_x86_64-gcc3/x/en-US | grep -oP 'appVersion="\d+\.\d+\.*\d*"' | grep -oP '\d+\.\d+\.*\d*') && \
     wget https://www.torproject.org/dist/torbrowser/${TBB_VERSION}/tor-browser-linux64-${TBB_VERSION}_en-US.tar.xz && \
     wget https://www.torproject.org/dist/torbrowser/${TBB_VERSION}/tor-browser-linux64-${TBB_VERSION}_en-US.tar.xz.asc && \
     gpg2 --verify tor-browser-linux64-${TBB_VERSION}_en-US.tar.xz.asc 2>&1 | grep "Primary key fingerprint:" | sed -e 's/Primary key fingerprint: //' -e 's/ //g' | tail -1 | grep -qE "${TOR_RELEASE_KEY_FINGERPRINT}" && \
