@@ -33,7 +33,7 @@
       <tr class="user">
         <th scope="row">{{ user.username }}</th>
         <td>
-          <a href="/admin/edit/{{ user.id }}" class="plain" data-username="{{ user.username }}" aria-label="{{ gettext('Edit user {username}').format(username=user.username) }}">
+          <a href="/admin/edit/{{ user.id }}" class="plain edit-user" data-username="{{ user.username }}" aria-label="{{ gettext('Edit user {username}').format(username=user.username) }}">
               {{ gettext('Edit') }}
               {# FIXME:
               <img src="{{ url_for('static', filename='icons/edit-user.png') }}" class="icon" width="18" height="16">
