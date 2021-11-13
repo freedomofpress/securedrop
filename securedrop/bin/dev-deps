@@ -55,6 +55,36 @@ function run_sass() {
     sass --stop-on-error sass:static/css --style compressed "$@"
 }
 
+function maybe_use_tor() {
+    if  [[ -n "${USE_TOR}" ]]; then
+        echo "Setting up Tor..."
+        # append torrc lines for SI and JI
+        sudo -u debian-tor mkdir -p /var/lib/tor/services
+        echo "HiddenServiceDir /var/lib/tor/services/source/" | sudo tee -a /etc/tor/torrc
+        echo "HiddenServicePort 80 127.0.0.1:8080" | sudo tee -a /etc/tor/torrc
+        echo "HiddenServiceDir /var/lib/tor/services/journalist/" | sudo tee -a /etc/tor/torrc
+        echo "HiddenServicePort 80 127.0.0.1:8081" | sudo tee -a /etc/tor/torrc
+        # start Tor to create service directories
+        sudo service tor start
+        # create x25519 keypair and journalist client auth file
+        openssl genpkey -algorithm x25519 -out /tmp/k1.prv.pem
+        grep -v " PRIVATE KEY" < /tmp/k1.prv.pem | base64pem -d | tail --bytes=32 | base32 | sed 's/=//g' > /tmp/k1.prv.key
+        openssl pkey -in /tmp/k1.prv.pem -pubout | grep -v " PUBLIC KEY" | base64pem -d | tail --bytes=32 | base32 | sed 's/=//g' > /tmp/k1.pub.key
+        echo "descriptor:x25519:$(cat /tmp/k1.pub.key)" | sudo -u debian-tor tee /var/lib/tor/services/journalist/authorized_clients/client.auth
+        # kill and restart Tor to pick up authorized_clients change
+        # (restart a little flaky hence the kill)
+        sudo kill "$(cat /run/tor/tor.pid)"; sudo service tor restart
+        # print out the addresses and the JI client auth key
+        echo
+        echo  ##############################################################################
+        echo "Tor configuration complete! details as follows:"
+        echo "Source Interface:     http://$(sudo -u debian-tor cat /var/lib/tor/services/source/hostname)"
+        echo "Journalist Interface: http://$(sudo -u debian-tor cat /var/lib/tor/services/journalist/hostname)"
+        echo "Journalist Auth Key:  $(sudo -u debian-tor cat /tmp/k1.prv.key)"
+        echo  ##############################################################################
+    fi
+}
+
 function reset_demo() {
     # Set up GPG keys directory structure.
     sudo mkdir -p /var/lib/securedrop/{store,keys,tmp}

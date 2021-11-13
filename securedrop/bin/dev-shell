@@ -10,6 +10,7 @@ export PATH="/opt/venvs/securedrop-app-code/bin:$PATH"
 
 TOPLEVEL=$(git rev-parse --show-toplevel)
 BASE_OS="${BASE_OS:-focal}"
+USE_TOR="${USE_TOR:-}"
 
 ## Get an integer offset for exposed ports, to support multiple containers
 get_port_offset() {
@@ -80,6 +81,7 @@ function docker_run() {
            -p "127.0.0.1:${SD_HOSTPORT_VNC}:5909" \
            -p "127.0.0.1:${SD_HOSTPORT_SI}:8080" \
            -p "127.0.0.1:${SD_HOSTPORT_JI}:8081" \
+           -e USE_TOR=$USE_TOR \
            -e NUM_JOURNALISTS \
            -e NUM_SOURCES \
            -e LOADDATA_ARGS \

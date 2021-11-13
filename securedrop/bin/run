@@ -13,6 +13,7 @@ urandom
 run_sass --watch &
 maybe_create_config_py
 reset_demo
+maybe_use_tor
 
 # run the batch processing services normally managed by systemd
 /opt/venvs/securedrop-app-code/bin/rqworker &
