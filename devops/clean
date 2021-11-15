@@ -29,10 +29,11 @@ function remove_unwanted_files() {
     fi
 
     # Remove any Onion URL info from previous instances.
-    rm -vf install_files/ansible-base/app-source-ths \
-        install_files/ansible-base/app-ssh-aths \
-        install_files/ansible-base/app-journalist-aths \
-        install_files/ansible-base/mon-ssh-aths \
+    rm -vf install_files/ansible-base/app-journalist.auth_private \
+        install_files/ansible-base/app-sourcev3-ths \
+        install_files/ansible-base/app-ssh.auth_private \
+        install_files/ansible-base/mon-ssh.auth_private \
+        install_files/ansible-base/tor_v3_keys.json \
         build/*.deb
 
     # Remove extraneous copies of the git repos, pulled in

@@ -14,13 +14,6 @@ local_deb_packages:
   - "ossec-agent-3.6.0+{{ securedrop_target_distribution }}-amd64.deb"
 
 # Configuring the tor onion services
-tor_instances:
-  - "{{ {'service': 'ssh', 'filename': 'app-ssh-aths'} if enable_ssh_over_tor else [] }}"
-  - service: source
-    filename: app-source-ths
-  - service: journalist
-    filename: app-journalist-aths
-
 tor_instances_v3:
   - "{{ {'service': 'sshv3', 'filename': 'app-ssh.auth_private'} if enable_ssh_over_tor else [] }}"
   - service: sourcev3
