@@ -11,7 +11,7 @@ TOR_PACKAGES = [
     {"name": "tor-geoipdb", "arch": "all"},
 ]
 # The '{}' will be replaced with platform, e.g. Focal
-TOR_VERSION_TEMPLATE = "0.4.5.10-1~{}+1"
+TOR_VERSION_TEMPLATE = "0.4.6.8-1~{}+1"
 
 
 def test_tor_apt_repo(host):
