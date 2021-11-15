@@ -41,7 +41,7 @@ COPY aptpreferences.conf /etc/apt/preferences.d/ubuntu-groovy
 
 RUN apt-get update && apt-get install -y dh-virtualenv
 
-ENV RUST_VERSION 1.52.1
+ENV RUST_VERSION 1.56.1
 
 # Install Rust for building cryptography
 RUN TMPDIR=`mktemp -d` && cd ${TMPDIR} \
