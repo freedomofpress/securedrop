@@ -18,7 +18,7 @@ RUN apt-get update && apt-get install -y paxctl && \
                        # cached along with everything else too.
                        default-jdk \
                        libasound2 libdbus-glib-1-2 libgtk2.0-0 libfontconfig1 libxrender1 \
-                       libcairo-gobject2 libgtk-3-0 libstartup-notification0 tor
+                       libcairo-gobject2 libgtk-3-0 libstartup-notification0 tor basez
 
 RUN gem install sass -v 3.4.23
 
