@@ -1,5 +1,6 @@
 import werkzeug
 
+import source_user
 from ..test_journalist import VALID_PASSWORD
 from . import source_navigation_steps, journalist_navigation_steps
 from . import functional_test
@@ -11,14 +12,17 @@ class TestSourceInterfaceDesignationCollision(
         source_navigation_steps.SourceNavigationStepsMixin):
 
     def start_source_server(self, source_port):
-        self.source_app.crypto_util.adjectives = \
-            self.source_app.crypto_util.adjectives[:1]
-        self.source_app.crypto_util.nouns = self.source_app.crypto_util.nouns[:1]
+        # Generator that always returns the same journalist designation
+        source_user._default_designation_generator = source_user._DesignationGenerator(
+            nouns=["accent"],
+            adjectives=["tonic"],
+        )
+
         config.SESSION_EXPIRATION_MINUTES = self.session_expiration / 60.0
 
         self.source_app.run(port=source_port, debug=True, use_reloader=False, threaded=True)
 
-    def test_display_id_designation_collisions(self):
+    def test_journalist_designation_collisions(self):
         self._source_visits_source_homepage()
         self._source_chooses_to_submit_documents()
         self._source_continues_to_submit_page()

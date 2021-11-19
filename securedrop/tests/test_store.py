@@ -223,7 +223,6 @@ def test_add_checksum_for_file(config, db_model):
         source_user = create_source_user(
             db_session=db.session,
             source_passphrase=PassphraseGenerator.get_default().generate_passphrase(),
-            source_app_crypto_util=app.crypto_util,
             source_app_storage=app.storage,
         )
         source = source_user.get_db_record()
@@ -271,7 +270,6 @@ def test_async_add_checksum_for_file(config, db_model):
         source_user = create_source_user(
             db_session=db.session,
             source_passphrase=PassphraseGenerator.get_default().generate_passphrase(),
-            source_app_crypto_util=app.crypto_util,
             source_app_storage=app.storage,
         )
         source = source_user.get_db_record()

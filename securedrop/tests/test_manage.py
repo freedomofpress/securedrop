@@ -227,7 +227,6 @@ def test_were_there_submissions_today(source_app, config):
         source_user = create_source_user(
             db_session=db.session,
             source_passphrase=PassphraseGenerator.get_default().generate_passphrase(),
-            source_app_crypto_util=source_app.crypto_util,
             source_app_storage=source_app.storage,
         )
         source = source_user.get_db_record()

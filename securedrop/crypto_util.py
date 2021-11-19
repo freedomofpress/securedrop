@@ -5,9 +5,7 @@ from typing import Optional
 
 import pretty_bad_protocol as gnupg
 import os
-import io
 import re
-from random import SystemRandom
 
 from datetime import date
 from flask import current_app
@@ -19,8 +17,6 @@ from typing import Dict
 
 import rm
 
-from models import Source
-
 
 # monkey patch to work with Focal gnupg.
 # https://github.com/isislovecruft/python-gnupg/issues/250
@@ -30,15 +26,6 @@ gnupg._parsers.Verify.TRUST_LEVELS["DECRYPTION_COMPLIANCE_MODE"] = 23
 
 # to fix GPG error #78 on production
 os.environ['USERNAME'] = 'www-data'
-
-# SystemRandom sources from the system rand (e.g. urandom, CryptGenRandom, etc)
-# It supplies a CSPRNG but with an interface that supports methods like choice
-random = SystemRandom()
-
-# safe characters for every possible word in the wordlist includes capital
-# letters because codename hashes are base32-encoded with capital letters
-DICEWARE_SAFE_CHARS = (' !#%$&)(+*-1032547698;:=?@acbedgfihkjmlonqpsrutwvyxzA'
-                       'BCDEFGHIJKLMNOPQRSTUVWXYZ')
 
 
 def monkey_patch_delete_handle_status(
@@ -84,8 +71,6 @@ class CryptoUtil:
 
     def __init__(self,
                  securedrop_root: str,
-                 nouns_file: str,
-                 adjectives_file: str,
                  gpg_key_dir: str) -> None:
         self.__securedrop_root = securedrop_root
 
@@ -109,12 +94,6 @@ class CryptoUtil:
         else:
             self.gpg = gpg_binary
 
-        with io.open(nouns_file) as f:
-            self.nouns = f.read().splitlines()
-
-        with io.open(adjectives_file) as f:
-            self.adjectives = f.read().splitlines()
-
         self.redis = Redis(decode_responses=True)
 
     # Make sure these pass before the app can run
@@ -122,23 +101,6 @@ class CryptoUtil:
         # crash if we don't have a way to securely remove files
         if not rm.check_secure_delete_capability():
             raise AssertionError("Secure file deletion is not possible.")
-
-    def display_id(self) -> str:
-        """Generate random journalist_designation until we get an unused one"""
-
-        tries = 0
-
-        while tries < 50:
-            new_designation = ' '.join([random.choice(self.adjectives),
-                                        random.choice(self.nouns)])
-
-            collisions = Source.query.filter(Source.journalist_designation == new_designation)
-            if collisions.count() == 0:
-                return new_designation
-
-            tries += 1
-
-        raise ValueError("Could not generate unique journalist designation for new source")
 
     def genkeypair(self, source_user: SourceUser) -> gnupg._parsers.GenKey:
         """Generate a GPG key through batch file key generation.

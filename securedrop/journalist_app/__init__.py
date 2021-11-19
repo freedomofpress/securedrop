@@ -80,8 +80,6 @@ def create_app(config: 'SDConfig') -> Flask:
     # breaks code analysis tools) for code that uses current_app.storage; it should be refactored
     app.crypto_util = CryptoUtil(
         securedrop_root=config.SECUREDROP_ROOT,
-        nouns_file=config.NOUNS,
-        adjectives_file=config.ADJECTIVES,
         gpg_key_dir=config.GPG_KEY_DIR,
     )
 

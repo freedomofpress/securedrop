@@ -2,10 +2,11 @@ from unittest import mock
 
 import pytest
 
+import source_user
 from db import db
 from passphrases import PassphraseGenerator
 
-from source_user import InvalidPassphraseError
+from source_user import InvalidPassphraseError, _DesignationGenerator
 from source_user import SourceDesignationCollisionError
 from source_user import SourcePassphraseCollisionError
 from source_user import _SourceScryptManager
@@ -26,7 +27,6 @@ class TestSourceUser:
         source_user = create_source_user(
             db_session=db.session,
             source_passphrase=passphrase,
-            source_app_crypto_util=source_app.crypto_util,
             source_app_storage=source_app.storage,
         )
         assert source_user
@@ -38,7 +38,6 @@ class TestSourceUser:
         create_source_user(
             db_session=db.session,
             source_passphrase=passphrase,
-            source_app_crypto_util=source_app.crypto_util,
             source_app_storage=source_app.storage,
         )
 
@@ -47,27 +46,29 @@ class TestSourceUser:
             create_source_user(
                 db_session=db.session,
                 source_passphrase=passphrase,
-                source_app_crypto_util=source_app.crypto_util,
                 source_app_storage=source_app.storage,
             )
 
     def test_create_source_user_designation_collision(self, source_app):
         # Given a source in the DB
-        create_source_user(
+        existing_source = create_source_user(
             db_session=db.session,
             source_passphrase=PassphraseGenerator.get_default().generate_passphrase(),
-            source_app_crypto_util=source_app.crypto_util,
             source_app_storage=source_app.storage,
         )
+        existing_designation = existing_source.get_db_record().journalist_designation
 
         # And the next generated journalist designation will be identical to this source's
-        with mock.patch.object(source_app.crypto_util, "display_id", side_effect=ValueError):
+        with mock.patch.object(
+            source_user._DesignationGenerator,
+            "generate_journalist_designation",
+            return_value=existing_designation
+        ):
             # When trying to create another source, it fails, because the designation is the same
             with pytest.raises(SourceDesignationCollisionError):
                 create_source_user(
                     db_session=db.session,
                     source_passphrase=PassphraseGenerator.get_default().generate_passphrase(),
-                    source_app_crypto_util=source_app.crypto_util,
                     source_app_storage=source_app.storage,
                 )
 
@@ -77,7 +78,6 @@ class TestSourceUser:
         source_user = create_source_user(
             db_session=db.session,
             source_passphrase=passphrase,
-            source_app_crypto_util=source_app.crypto_util,
             source_app_storage=source_app.storage,
         )
 
@@ -95,7 +95,6 @@ class TestSourceUser:
         create_source_user(
             db_session=db.session,
             source_passphrase=PassphraseGenerator.get_default().generate_passphrase(),
-            source_app_crypto_util=source_app.crypto_util,
             source_app_storage=source_app.storage,
         )
 
@@ -131,3 +130,45 @@ class TestSourceScryptManager:
     def test_get_default(self):
         scrypt_mgr = _SourceScryptManager.get_default()
         assert scrypt_mgr
+
+
+class TestDesignationGenerator:
+
+    def test(self):
+        # Given a designation generator
+        nouns = ["ability", "accent", "academia"]
+        adjectives = ["tonic", "trivial", "tropical"]
+        generator = _DesignationGenerator(nouns=nouns, adjectives=adjectives)
+
+        # When using it to generate a journalist designation
+        designation = generator.generate_journalist_designation()
+
+        # It succeeds
+        assert designation
+
+        # And the designation is correctly formatted
+        designation_words = designation.split()
+        assert len(designation_words) == 2
+        assert designation_words[0] in adjectives
+        assert designation_words[1] in nouns
+
+    def test_nouns_list_is_not_empty(self):
+        with pytest.raises(ValueError):
+            _DesignationGenerator(nouns=[], adjectives=["hello"])
+
+    def test_adjectives_list_is_not_empty(self):
+        with pytest.raises(ValueError):
+            _DesignationGenerator(nouns=["hello"], adjectives=[])
+
+    def test_nouns_list_does_not_contain_empty_strings(self):
+        with pytest.raises(ValueError):
+            _DesignationGenerator(nouns=["hello", ""], adjectives=["hello"])
+
+    def test_adjectives_list_does_not_contain_empty_strings(self):
+        with pytest.raises(ValueError):
+            _DesignationGenerator(nouns=["hello"], adjectives=["hello", ""])
+
+    def test_get_default(self):
+        designation_generator = _DesignationGenerator.get_default()
+        assert designation_generator
+        assert designation_generator.generate_journalist_designation()

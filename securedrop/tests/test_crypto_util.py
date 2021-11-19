@@ -6,23 +6,15 @@ import io
 import os
 import pytest
 
-from flask import url_for, session
-
 from passphrases import PassphraseGenerator
 
 from source_user import create_source_user
 
 
 os.environ['SECUREDROP_ENV'] = 'test'  # noqa
-import crypto_util
 
 from crypto_util import CryptoUtil, CryptoException
 from db import db
-
-
-def test_word_list_does_not_contain_empty_strings(journalist_app):
-    assert '' not in journalist_app.crypto_util.nouns
-    assert '' not in journalist_app.crypto_util.adjectives
 
 
 def test_encrypt_success(source_app, config, test_source):
@@ -124,36 +116,12 @@ def test_basic_encrypt_then_decrypt_multiple_recipients(source_app,
         assert plaintext == message
 
 
-def test_display_id(source_app):
-    id = source_app.crypto_util.display_id()
-    id_words = id.split()
-
-    assert len(id_words) == 2
-    assert id_words[0] in source_app.crypto_util.adjectives
-    assert id_words[1] in source_app.crypto_util.nouns
-
-
-def test_display_id_designation_collisions(source_app):
-    with source_app.test_client() as app:
-        app.get(url_for('main.generate'))
-        source_app.crypto_util.adjectives = source_app.crypto_util.adjectives[:1]
-        source_app.crypto_util.nouns = source_app.crypto_util.nouns[:1]
-        tab_id = next(iter(session['codenames'].keys()))
-        app.post(url_for('main.create'), data={'tab_id': tab_id}, follow_redirects=True)
-
-        with pytest.raises(ValueError) as err:
-            source_app.crypto_util.display_id()
-
-        assert 'Could not generate unique journalist designation for new source' in str(err)
-
-
 def test_genkeypair(source_app):
     with source_app.app_context():
         source_user = create_source_user(
             db_session=db.session,
             source_passphrase=PassphraseGenerator.get_default().generate_passphrase(),
             source_app_storage=source_app.storage,
-            source_app_crypto_util=source_app.crypto_util,
         )
         source_app.crypto_util.genkeypair(source_user)
 
@@ -186,7 +154,6 @@ def test_reply_keypair_creation_and_expiration_dates(source_app):
             db_session=db.session,
             source_passphrase=PassphraseGenerator.get_default().generate_passphrase(),
             source_app_storage=source_app.storage,
-            source_app_crypto_util=source_app.crypto_util,
         )
         source_app.crypto_util.genkeypair(source_user)
 
@@ -275,16 +242,10 @@ def test_get_pubkey(source_app, test_source):
     assert pubkey is None
 
 
-@given(
-    name=text(alphabet=crypto_util.DICEWARE_SAFE_CHARS),
-    secret=text(alphabet=crypto_util.DICEWARE_SAFE_CHARS),
-    message=text()
-)
+@given(message=text())
 def test_encrypt_then_decrypt_gives_same_result(
         source_app,
         test_source,
-        name,
-        secret,
         message
 ):
     """Test that encrypting, then decrypting a string gives the original string.
