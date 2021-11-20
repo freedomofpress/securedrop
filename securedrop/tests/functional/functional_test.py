@@ -15,6 +15,7 @@ from os.path import dirname
 from os.path import expanduser
 from os.path import join
 from os.path import realpath
+from pathlib import Path
 
 import mock
 import pyotp
@@ -40,6 +41,7 @@ from db import db
 from models import Journalist
 from sdconfig import config
 from source_user import _SourceScryptManager
+from tests.conftest import setup_gpg
 
 os.environ["SECUREDROP_ENV"] = "test"
 
@@ -224,9 +226,9 @@ class FunctionalTest(object):
                 self.__context = self.journalist_app.app_context()
                 self.__context.push()
 
-                env.create_directories()
+                env.create_directories(config)
                 db.create_all()
-                self.gpg = env.init_gpg()
+                setup_gpg(Path(config.GPG_KEY_DIR))
 
                 # Add our test user
                 try:
@@ -284,8 +286,12 @@ class FunctionalTest(object):
                 except Exception as e:
                     logging.error("Error stopping source app: %s", e)
 
-                env.teardown()
-                self.__context.pop()
+                env.teardown(config)
+                try:
+                    self.__context.pop()
+                except AttributeError:
+                    # Happens if the setup code failed before attaching __context to self
+                    pass
 
     def wait_for_source_key(self, source_name):
         filesystem_id = _SourceScryptManager.get_default().derive_source_filesystem_id(

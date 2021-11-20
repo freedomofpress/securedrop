@@ -94,6 +94,7 @@ function reset_demo() {
 
     # Create gpg-agent.conf
     echo allow-loopback-pinentry > /var/lib/securedrop/keys/gpg-agent.conf
+    echo 'default-cache-ttl 0' >> /var/lib/securedrop/keys/gpg-agent.conf
 
     # Kill gpg-agent(s) if they exist so it picks up the new config on restart.
     pkill -f gpg-agent || true

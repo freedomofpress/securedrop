@@ -4,13 +4,14 @@ import configparser
 from pathlib import Path
 from tempfile import TemporaryDirectory
 
-from typing import Any, Generator
+from typing import Any, Generator, Tuple
 
 from unittest import mock
 
 import pretty_bad_protocol as gnupg
 import logging
 
+from _pytest.tmpdir import TempPathFactory
 from flask import Flask
 from hypothesis import settings
 import os
@@ -109,33 +110,47 @@ def insecure_scrypt() -> Generator[None, None, None]:
         yield
 
 
+def setup_gpg(gpg_dir: Path) -> str:
+    # GPG 2.1+ requires gpg-agent, see #4013
+    gpg_agent_config = gpg_dir / "gpg-agent.conf"
+    gpg_agent_config.write_text("allow-loopback-pinentry\ndefault-cache-ttl 0")
+
+    # Import the journalist public key in GPG
+    # WARNING: don't import the journalist secret key; it will make the decryption tests unreliable
+    gpg = gnupg.GPG("gpg2", homedir=str(gpg_dir))
+    journalist_public_key_path = Path(__file__).parent / "files" / "test_journalist_key.pub"
+    journalist_public_key = journalist_public_key_path.read_text()
+    journalist_key_fingerprint = gpg.import_keys(journalist_public_key).fingerprints[0]
+
+    # TODO(AD): Don't import the journalist secret key; will be removed in my next PR
+    journalist_secret_key_path = Path(__file__).parent / "files" / "test_journalist_key.sec"
+    journalist_secret_key = journalist_secret_key_path.read_text()
+    gpg.import_keys(journalist_secret_key)
+
+    return journalist_key_fingerprint
+
+
 @pytest.fixture(scope="session")
-def gpg_key_dir() -> Generator[Path, None, None]:
-    """Set up the journalist test key in GPG and the parent folder.
+def setup_journalist_key_and_gpg_folder(
+    tmp_path_factory: TempPathFactory
+) -> Generator[Tuple[str, Path], None, None]:
+    """Set up the journalist test key and the key folder.
 
     This fixture takes about 2s to complete hence we use the "session" scope to only run it once.
     """
-    with TemporaryDirectory() as tmp_gpg_dir_name:
-        tmp_gpg_dir = Path(tmp_gpg_dir_name)
-
-        # GPG 2.1+ requires gpg-agent, see #4013
-        gpg_agent_config = tmp_gpg_dir / "gpg-agent.conf"
-        gpg_agent_config.write_text("allow-loopback-pinentry")
-
-        # Import the test key in GPG
-        gpg = gnupg.GPG("gpg2", homedir=str(tmp_gpg_dir))
-        test_keys_dir = Path(__file__).parent / "files"
-        for ext in ["sec", "pub"]:
-            key_file = test_keys_dir / "test_journalist_key.{}".format(ext)
-            gpg.import_keys(key_file.read_text())
-
-        yield tmp_gpg_dir
+    tmp_gpg_dir = tmp_path_factory.mktemp("gpg_dir")
+    journalist_key_fingerprint = setup_gpg(tmp_gpg_dir)
+    yield journalist_key_fingerprint, tmp_gpg_dir
 
 
-@pytest.fixture(scope='function')
-def config(gpg_key_dir: Path) -> Generator[SDConfig, None, None]:
+@pytest.fixture(scope="function")
+def config(
+    setup_journalist_key_and_gpg_folder: Tuple[str, Path]
+) -> Generator[SDConfig, None, None]:
     config = SDConfig()
+    journalist_key_fingerprint, gpg_key_dir = setup_journalist_key_and_gpg_folder
     config.GPG_KEY_DIR = str(gpg_key_dir)
+    config.JOURNALIST_KEY = journalist_key_fingerprint
 
     # Setup the filesystem for the application
     with TemporaryDirectory() as data_dir_name:
