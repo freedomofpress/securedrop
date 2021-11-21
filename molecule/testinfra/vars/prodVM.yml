@@ -3,8 +3,7 @@
 wanted_apache_headers:
   X-XSS-Protection: "1; mode=block"
   X-Content-Type-Options: nosniff
-  X-Download-Options: noopen
-  Content-Security-Policy: "default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; frame-ancestors 'none';"
+  Content-Security-Policy: "default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self';"
 
 securedrop_venv: /opt/venvs/securedrop-app-code
 securedrop_venv_bin: "/opt/venvs/securedrop-app-code/bin"
