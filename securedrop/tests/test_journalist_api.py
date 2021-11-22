@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import json
-import os
 import random
 
 from flask import url_for
@@ -18,8 +17,6 @@ from models import (
     RevokedToken,
 )
 
-
-os.environ['SECUREDROP_ENV'] = 'test'  # noqa
 from .utils.api_helper import get_api_headers
 
 random.seed('◔ ⌣ ◔')

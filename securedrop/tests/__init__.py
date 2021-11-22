@@ -2,6 +2,11 @@
 from os.path import abspath, dirname, join, realpath
 import pytest
 import sys
+import os
+
+# WARNING: This variable must be set before any import of the securedrop code/app
+# or most tests will fail
+os.environ["SECUREDROP_ENV"] = "test"
 
 # The tests directory should be adjacent to the securedrop directory. By adding
 # the securedrop directory to sys.path here, all test modules are able to

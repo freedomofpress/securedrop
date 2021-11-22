@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import os
 import pytest
 import time
 
@@ -8,7 +7,6 @@ from datetime import datetime, timedelta
 from flask import url_for
 from pyotp import TOTP
 
-os.environ['SECUREDROP_ENV'] = 'test'  # noqa
 from models import Journalist, BadTokenException
 from .utils import login_user
 from .utils.instrument import InstrumentedApp
