@@ -6,6 +6,8 @@ wanted_apache_headers:
   X-Download-Options: noopen
   Content-Security-Policy: "default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self';"
   Cross-Origin-Opener-Policy: "same-origin"
+  Cross-Origin-Embedder-Policy: "same-origin"
+  Cross-Origin-Resource-Policy: "same-site"
 
 
 securedrop_venv: /opt/venvs/securedrop-app-code
