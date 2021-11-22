@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+from encryption import EncryptionManager, GpgKeyNotFoundError
 from sdconfig import config
 
 from journalist_app import create_app
@@ -11,12 +11,14 @@ app = create_app(config)
 
 @asynchronous
 def prime_keycache() -> None:
-    """
-    Preloads CryptoUtil.keycache.
-    """
+    """Pre-load the source public keys into Redis."""
     with app.app_context():
+        encryption_mgr = EncryptionManager.get_default()
         for source in Source.query.filter_by(pending=False, deleted_at=None).all():
-            app.crypto_util.get_pubkey(source.filesystem_id)
+            try:
+                encryption_mgr.get_source_public_key(source.filesystem_id)
+            except GpgKeyNotFoundError:
+                pass
 
 
 prime_keycache()

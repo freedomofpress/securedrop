@@ -37,6 +37,7 @@ import journalist_app
 import source_app
 import tests.utils.env as env
 from db import db
+from encryption import EncryptionManager
 from models import Journalist
 from source_user import _SourceScryptManager
 
@@ -296,7 +297,7 @@ class FunctionalTest(object):
         )
 
         def key_available(filesystem_id):
-            assert self.source_app.crypto_util.get_fingerprint(filesystem_id)
+            assert EncryptionManager.get_default().get_source_key_fingerprint(filesystem_id)
 
         self.wait_for(lambda: key_available(filesystem_id), timeout=60)
 

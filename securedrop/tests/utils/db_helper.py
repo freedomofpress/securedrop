@@ -13,10 +13,10 @@ import mock
 from flask import current_app
 
 from db import db
+from encryption import EncryptionManager
 from journalist_app.utils import mark_seen
 from models import Journalist, Reply, SeenReply, Submission
 from passphrases import PassphraseGenerator
-from sdconfig import config
 from source_user import create_source_user
 
 
@@ -74,11 +74,12 @@ def reply(journalist, source, num_replies):
         source.interaction_count += 1
         fname = "{}-{}-reply.gpg".format(source.interaction_count,
                                          source.journalist_filename)
-        current_app.crypto_util.encrypt(
-            str(os.urandom(1)),
-            [current_app.crypto_util.get_fingerprint(source.filesystem_id),
-             config.JOURNALIST_KEY],
-            current_app.storage.path(source.filesystem_id, fname))
+
+        EncryptionManager.get_default().encrypt_journalist_reply(
+            for_source_with_filesystem_id=source.filesystem_id,
+            reply_in=str(os.urandom(1)),
+            encrypted_reply_path_out=current_app.storage.path(source.filesystem_id, fname),
+        )
 
         reply = Reply(journalist, source, fname)
         replies.append(reply)
@@ -133,7 +134,7 @@ def init_source():
         source_passphrase=passphrase,
         source_app_storage=current_app.storage,
     )
-    current_app.crypto_util.genkeypair(source_user)
+    EncryptionManager.get_default().generate_source_key_pair(source_user)
     return source_user.get_db_record(), passphrase
 
 

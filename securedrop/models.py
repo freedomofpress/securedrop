@@ -29,6 +29,7 @@ from typing import Callable, Optional, Union, Dict, List, Any
 from logging import Logger
 from pyotp import TOTP, HOTP
 
+from encryption import EncryptionManager, GpgKeyNotFoundError
 
 LOGIN_HARDENING = True
 if os.environ.get('SECUREDROP_ENV') == 'test':
@@ -110,11 +111,17 @@ class Source(db.Model):
 
     @property
     def fingerprint(self) -> 'Optional[str]':
-        return current_app.crypto_util.get_fingerprint(self.filesystem_id)
+        try:
+            return EncryptionManager.get_default().get_source_key_fingerprint(self.filesystem_id)
+        except GpgKeyNotFoundError:
+            return None
 
     @property
     def public_key(self) -> 'Optional[str]':
-        return current_app.crypto_util.get_pubkey(self.filesystem_id)
+        try:
+            return EncryptionManager.get_default().get_source_public_key(self.filesystem_id)
+        except GpgKeyNotFoundError:
+            return None
 
     def to_json(self) -> 'Dict[str, Union[str, bool, int, str]]':
         docs_msg_count = self.documents_messages_count()

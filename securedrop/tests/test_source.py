@@ -17,7 +17,6 @@ from flask_babel import gettext
 from mock import patch, ANY
 import pytest
 
-import source
 from passphrases import PassphraseGenerator
 from source_app.session_manager import SessionManager
 from . import utils
@@ -148,7 +147,7 @@ def test_generate(source_app):
 
 
 def test_create_duplicate_codename_logged_in_not_in_session(source_app):
-    with patch.object(source.app.logger, 'error') as logger:
+    with patch.object(source_app.logger, 'error') as logger:
         with source_app.test_client() as app:
             resp = app.get(url_for('main.generate'))
             assert resp.status_code == 200
@@ -329,21 +328,24 @@ def test_login_with_missing_reply_files(source_app):
     journalist, _ = utils.db_helper.init_journalist()
     replies = utils.db_helper.reply(journalist, source, 1)
     assert len(replies) > 0
-    with source_app.test_client() as app:
-        with patch("io.open") as ioMock:
-            ioMock.side_effect = FileNotFoundError
-            resp = app.get(url_for('main.login'))
-            assert resp.status_code == 200
-            text = resp.data.decode('utf-8')
-            assert "Enter Codename" in text
+    # Delete the reply file
+    reply_file_path = Path(source_app.storage.path(source.filesystem_id, replies[0].filename))
+    reply_file_path.unlink()
+    assert not reply_file_path.exists()
 
-            resp = app.post(url_for('main.login'),
-                            data=dict(codename=codename),
-                            follow_redirects=True)
-            assert resp.status_code == 200
-            text = resp.data.decode('utf-8')
-            assert "Submit Files" in text
-            assert SessionManager.is_user_logged_in(db_session=db.session)
+    with source_app.test_client() as app:
+        resp = app.get(url_for('main.login'))
+        assert resp.status_code == 200
+        text = resp.data.decode('utf-8')
+        assert "Enter Codename" in text
+
+        resp = app.post(url_for('main.login'),
+                        data=dict(codename=codename),
+                        follow_redirects=True)
+        assert resp.status_code == 200
+        text = resp.data.decode('utf-8')
+        assert "Submit Files" in text
+        assert SessionManager.is_user_logged_in(db_session=db.session)
 
 
 def _dummy_submission(app):

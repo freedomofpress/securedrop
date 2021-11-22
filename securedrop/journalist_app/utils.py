@@ -12,6 +12,7 @@ from flask_babel import gettext, ngettext
 from sqlalchemy.exc import IntegrityError
 
 from db import db
+from encryption import EncryptionManager
 from models import (
     BadTokenException,
     FirstOrLastNameError,
@@ -385,11 +386,7 @@ def delete_collection(filesystem_id: str) -> None:
         current_app.storage.move_to_shredder(path)
 
     # Delete the source's reply keypair
-    try:
-        current_app.crypto_util.delete_reply_keypair(filesystem_id)
-    except ValueError as e:
-        current_app.logger.error("could not delete reply keypair: %s", e)
-        raise
+    EncryptionManager.get_default().delete_source_key_pair(filesystem_id)
 
     # Delete their entry in the db
     source = get_source(filesystem_id, include_deleted=True)

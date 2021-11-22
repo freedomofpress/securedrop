@@ -7,6 +7,7 @@ from tempfile import TemporaryDirectory
 from typing import Any, Generator, Tuple
 
 from unittest import mock
+from unittest.mock import PropertyMock
 
 import pretty_bad_protocol as gnupg
 import logging
@@ -26,6 +27,7 @@ from pyotp import TOTP
 from typing import Dict
 
 import sdconfig
+from encryption import EncryptionManager
 
 from passphrases import PassphraseGenerator
 from source_user import _SourceScryptManager, create_source_user
@@ -131,12 +133,12 @@ def setup_journalist_key_and_gpg_folder() -> Generator[Tuple[str, Path], None, N
         journalist_public_key = journalist_public_key_path.read_text()
         journalist_key_fingerprint = gpg.import_keys(journalist_public_key).fingerprints[0]
 
-        # TODO(AD): Don't import the journalist secret key; will be removed in my next PR
-        journalist_secret_key_path = Path(__file__).parent / "files" / "test_journalist_key.sec"
-        journalist_secret_key = journalist_secret_key_path.read_text()
-        gpg.import_keys(journalist_secret_key)
+        # Reduce source GPG key length to speed up tests at the expense of security
+        with mock.patch.object(
+            EncryptionManager, "GPG_KEY_LENGTH", PropertyMock(return_value=1024)
+        ):
 
-        yield journalist_key_fingerprint, tmp_gpg_dir
+            yield journalist_key_fingerprint, tmp_gpg_dir
 
     finally:
         shutil.rmtree(tmp_gpg_dir, ignore_errors=True)
@@ -270,7 +272,7 @@ def test_source(journalist_app: Flask) -> Dict[str, Any]:
             source_passphrase=passphrase,
             source_app_storage=journalist_app.storage,
         )
-        journalist_app.crypto_util.genkeypair(source_user)
+        EncryptionManager.get_default().generate_source_key_pair(source_user)
         source = source_user.get_db_record()
         return {'source_user': source_user,
                 # TODO(AD): Eventually the next keys could be removed as they are in source_user

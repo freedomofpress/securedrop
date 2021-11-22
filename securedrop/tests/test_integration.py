@@ -7,8 +7,8 @@ import re
 import zipfile
 from base64 import b32encode
 from binascii import unhexlify
-from distutils.version import StrictVersion
 from io import BytesIO
+import mock
 
 from bs4 import BeautifulSoup
 from flask import current_app, escape, g, session
@@ -16,8 +16,10 @@ from pyotp import HOTP, TOTP
 
 import journalist_app as journalist_app_module
 from db import db
+from encryption import EncryptionManager
 from source_app.session_manager import SessionManager
 from . import utils
+from .test_encryption import import_journalist_private_key
 from .utils.instrument import InstrumentedApp
 
 
@@ -82,9 +84,12 @@ def test_submit_message(journalist_app, source_app, test_journo):
 
         resp = app.get(submission_url)
         assert resp.status_code == 200
-        decrypted_data = journalist_app.crypto_util.gpg.decrypt(resp.data)
-        assert decrypted_data.ok
-        assert decrypted_data.data.decode('utf-8') == test_msg
+
+        encryption_mgr = EncryptionManager.get_default()
+        with import_journalist_private_key(encryption_mgr):
+            decryption_result = encryption_mgr._gpg.decrypt(resp.data)
+        assert decryption_result.ok
+        assert decryption_result.data.decode('utf-8') == test_msg
 
         # delete submission
         resp = app.get(col_url)
@@ -181,7 +186,10 @@ def test_submit_file(journalist_app, source_app, test_journo):
 
         resp = app.get(submission_url)
         assert resp.status_code == 200
-        decrypted_data = journalist_app.crypto_util.gpg.decrypt(resp.data)
+
+        encryption_mgr = EncryptionManager.get_default()
+        with import_journalist_private_key(encryption_mgr):
+            decrypted_data = encryption_mgr._gpg.decrypt(resp.data)
         assert decrypted_data.ok
 
         sio = BytesIO(decrypted_data.data)
@@ -270,7 +278,7 @@ def _helper_test_reply(journalist_app, source_app, config, test_journo,
         resp = app.get(col_url)
         assert resp.status_code == 200
 
-    assert current_app.crypto_util.get_fingerprint(filesystem_id) is not None
+    assert EncryptionManager.get_default().get_source_key_fingerprint(filesystem_id)
 
     # Create 2 replies to test deleting on journalist and source interface
     with journalist_app.test_client() as app:
@@ -308,11 +316,8 @@ def _helper_test_reply(journalist_app, source_app, config, test_journo,
 
     zf = zipfile.ZipFile(BytesIO(resp.data), 'r')
     data = zf.read(zf.namelist()[0])
-    _can_decrypt_with_key(journalist_app, data)
-    _can_decrypt_with_key(
-        journalist_app,
-        data,
-        source_user.gpg_secret)
+    _can_decrypt_with_journalist_secret_key(data)
+    _can_decrypt_with_source_secret_key(data, source_user.gpg_secret)
 
     # Test deleting reply on the journalist interface
     last_reply_number = len(
@@ -381,27 +386,24 @@ def _helper_filenames_delete(journalist_app, soup, i):
     utils.asynchronous.wait_for_assertion(assertion)
 
 
-def _can_decrypt_with_key(journalist_app, msg, source_gpg_secret=None):
-    """
-    Test that the given GPG message can be decrypted.
-    """
+def _can_decrypt_with_journalist_secret_key(msg: bytes) -> None:
+    encryption_mgr = EncryptionManager.get_default()
+    with import_journalist_private_key(encryption_mgr):
+        # For GPG 2.1+, a non null passphrase _must_ be passed to decrypt()
+        decryption_result = encryption_mgr._gpg.decrypt(msg, passphrase="dummy passphrase")
 
-    # For GPG 2.1+, a non null passphrase _must_ be passed to decrypt()
-    using_gpg_2_1 = StrictVersion(
-        journalist_app.crypto_util.gpg.binary_version) >= StrictVersion('2.1')
-
-    if source_gpg_secret:
-        final_passphrase = source_gpg_secret
-    elif using_gpg_2_1:
-        final_passphrase = 'dummy passphrase'
-    else:
-        final_passphrase = None
-
-    decrypted_data = journalist_app.crypto_util.gpg.decrypt(
-        msg, passphrase=final_passphrase)
-    assert decrypted_data.ok, \
+    assert decryption_result.ok, \
         "Could not decrypt msg with key, gpg says: {}" \
-        .format(decrypted_data.stderr)
+        .format(decryption_result.stderr)
+
+
+def _can_decrypt_with_source_secret_key(msg: bytes, source_gpg_secret: str) -> None:
+    encryption_mgr = EncryptionManager.get_default()
+    decryption_result = encryption_mgr._gpg.decrypt(msg, passphrase=source_gpg_secret)
+
+    assert decryption_result.ok, \
+        "Could not decrypt msg with key, gpg says: {}" \
+        .format(decryption_result.stderr)
 
 
 def test_reply_normal(journalist_app,
@@ -411,10 +413,11 @@ def test_reply_normal(journalist_app,
     '''Test for regression on #1360 (failure to encode bytes before calling
        gpg functions).
     '''
-    journalist_app.crypto_util.gpg._encoding = "ansi_x3.4_1968"
-    source_app.crypto_util.gpg._encoding = "ansi_x3.4_1968"
-    _helper_test_reply(journalist_app, source_app, config, test_journo,
-                       "This is a test reply.", True)
+    encryption_mgr = EncryptionManager.get_default()
+    with mock.patch.object(encryption_mgr._gpg, "_encoding", "ansi_x3.4_1968"):
+        _helper_test_reply(
+            journalist_app, source_app, config, test_journo, "This is a test reply.", True
+        )
 
 
 def test_unicode_reply_with_ansi_env(journalist_app,
@@ -429,10 +432,11 @@ def test_unicode_reply_with_ansi_env(journalist_app,
     # _encoding attribute it would have had it been initialized in a "C"
     # environment. See
     # https://github.com/freedomofpress/securedrop/issues/1360 for context.
-    journalist_app.crypto_util.gpg._encoding = "ansi_x3.4_1968"
-    source_app.crypto_util.gpg._encoding = "ansi_x3.4_1968"
-    _helper_test_reply(journalist_app, source_app, config, test_journo,
-                       "ᚠᛇᚻ᛫ᛒᛦᚦ᛫ᚠᚱᚩᚠᚢᚱ᛫ᚠᛁᚱᚪ᛫ᚷᛖᚻᚹᛦᛚᚳᚢᛗ", True)
+    encryption_mgr = EncryptionManager.get_default()
+    with mock.patch.object(encryption_mgr._gpg, "_encoding", "ansi_x3.4_1968"):
+        _helper_test_reply(
+            journalist_app, source_app, config, test_journo, "ᚠᛇᚻ᛫ᛒᛦᚦ᛫ᚠᚱᚩᚠᚢᚱ᛫ᚠᛁᚱᚪ᛫ᚷᛖᚻᚹᛦᛚᚳᚢᛗ", True
+        )
 
 
 def test_delete_collection(mocker, source_app, journalist_app, test_journo):
