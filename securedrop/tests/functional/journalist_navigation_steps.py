@@ -826,7 +826,7 @@ class JournalistNavigationStepsMixin:
         cks = cookie_string_from_selenium_cookies(self.driver.get_cookies())
         raw_content = self.return_downloaded_content(file_url, cks)
 
-        decrypted_submission = self.gpg.decrypt(raw_content)
+        decrypted_submission = self.journalist_app.crypto_util.gpg.decrypt(raw_content)
         submission = self._get_submission_content(file_url, decrypted_submission)
         if type(submission) == bytes:
             submission = submission.decode("utf-8")

@@ -132,10 +132,14 @@ case "$1" in
         if ! grep -qE '^allow-loopback-pinentry$' /var/lib/securedrop/keys/gpg-agent.conf; then
             echo allow-loopback-pinentry >> /var/lib/securedrop/keys/gpg-agent.conf
         fi
+        if ! grep -qE '^default-cache-ttl 0$' /var/lib/securedrop/keys/gpg-agent.conf; then
+            echo 'default-cache-ttl 0' >> /var/lib/securedrop/keys/gpg-agent.conf
+        fi
 
     else
         # gpg-agent.conf does not yet exist, create it.
         echo allow-loopback-pinentry > /var/lib/securedrop/keys/gpg-agent.conf
+        echo 'default-cache-ttl 0' >> /var/lib/securedrop/keys/gpg-agent.conf
     fi
 
     # Migrate private keyring to gpg2.1 if needed
