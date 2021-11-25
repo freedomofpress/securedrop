@@ -4,7 +4,7 @@ wanted_apache_headers:
   X-XSS-Protection: "1; mode=block"
   X-Content-Type-Options: nosniff
   X-Download-Options: noopen
-  Content-Security-Policy: "default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self';"
+  Content-Security-Policy: "default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; frame-ancestors 'none';"
   Cross-Origin-Opener-Policy: "same-origin"
   Cross-Origin-Embedder-Policy: "same-origin"
   Cross-Origin-Resource-Policy: "same-site"
