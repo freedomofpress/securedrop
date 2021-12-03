@@ -133,6 +133,8 @@ safety:  ## Run `safety check` to check python dependencies for vulnerabilities.
 		echo "Checking file $$req_file" \
 		&& safety check \
 		--ignore 42050 \
+		--ignore 42926 \
+		--ignore 42923 \
 		--full-report -r $$req_file \
 		&& echo -e '\n' \
 		|| exit 1; \
