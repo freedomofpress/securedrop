@@ -30,6 +30,7 @@ from models import (
     Submission,
     WrongPasswordException,
     get_one_or_else,
+    HOTP_SECRET_LENGTH,
 )
 from store import add_checksum_for_file
 
@@ -134,6 +135,17 @@ def validate_hotp_secret(user: Journalist, otp_secret: str) -> bool:
     :param otp_secret: the new HOTP secret
     :return: True if it validates, False if it does not
     """
+    strip_whitespace = otp_secret.replace(' ', '')
+    secret_length = len(strip_whitespace)
+
+    if secret_length != HOTP_SECRET_LENGTH:
+        flash(ngettext(
+                'HOTP secrets are 40 characters long - you have entered {num}.',
+                'HOTP secrets are 40 characters long - you have entered {num}.',
+                secret_length
+            ).format(num=secret_length), "error")
+        return False
+
     try:
         user.set_hotp_secret(otp_secret)
     except (binascii.Error, TypeError) as e:
@@ -141,12 +153,6 @@ def validate_hotp_secret(user: Journalist, otp_secret: str) -> bool:
             flash(gettext(
                 "Invalid secret format: "
                 "please only submit letters A-F and numbers 0-9."),
-                  "error")
-            return False
-        elif "Odd-length string" in str(e):
-            flash(gettext(
-                "Invalid secret format: "
-                "odd-length secret. Did you mistype the secret?"),
                   "error")
             return False
         else:

@@ -1016,9 +1016,10 @@ def test_admin_resets_user_hotp_format_non_hexa(
 
         old_secret = journo.otp_secret
 
+        non_hexa_secret='0123456789ABCDZZ0123456789ABCDEF01234567'
         with InstrumentedApp(journalist_app) as ins:
             app.post(url_for('admin.reset_two_factor_hotp'),
-                     data=dict(uid=test_journo['id'], otp_secret='ZZ'))
+                     data=dict(uid=test_journo['id'], otp_secret=non_hexa_secret))
 
             # fetch altered DB object
             journo = Journalist.query.get(journo.id)
@@ -1034,6 +1035,38 @@ def test_admin_resets_user_hotp_format_non_hexa(
                 "numbers 0-9.", "error")
 
 
+@pytest.mark.parametrize("the_secret", [' ', '    ', '0123456789ABCDEF0123456789ABCDE'])
+def test_admin_resets_user_hotp_format_too_short(
+        journalist_app, test_admin, test_journo, the_secret):
+
+    with journalist_app.test_client() as app:
+        _login_user(app, test_admin['username'], test_admin['password'],
+                    test_admin['otp_secret'])
+
+        journo = test_journo['journalist']
+        # guard to ensure check below tests the correct condition
+        assert journo.is_totp
+
+        old_secret = journo.otp_secret
+
+        with InstrumentedApp(journalist_app) as ins:
+            app.post(url_for('admin.reset_two_factor_hotp'),
+                     data=dict(uid=test_journo['id'], otp_secret=the_secret))
+
+            # fetch altered DB object
+            journo = Journalist.query.get(journo.id)
+
+            new_secret = journo.otp_secret
+            assert old_secret == new_secret
+
+            # ensure we didn't accidentally enable hotp
+            assert journo.is_totp
+
+            ins.assert_message_flashed(
+                "HOTP secrets are 40 characters long"
+                " - you have entered {num}.".format(num=len(the_secret.replace(' ', ''))), "error")
+
+
 def test_admin_resets_user_hotp(journalist_app, test_admin, test_journo):
     with journalist_app.test_client() as app:
         _login_user(app, test_admin['username'], test_admin['password'],
@@ -1042,10 +1075,11 @@ def test_admin_resets_user_hotp(journalist_app, test_admin, test_journo):
         journo = test_journo['journalist']
         old_secret = journo.otp_secret
 
+        valid_secret="DEADBEEF01234567DEADBEEF01234567DEADBEEF"
         with InstrumentedApp(journalist_app) as ins:
             resp = app.post(url_for('admin.reset_two_factor_hotp'),
                             data=dict(uid=test_journo['id'],
-                                      otp_secret=123456))
+                                      otp_secret=valid_secret))
 
             # fetch altered DB object
             journo = Journalist.query.get(journo.id)
@@ -1059,36 +1093,12 @@ def test_admin_resets_user_hotp(journalist_app, test_admin, test_journo):
                                                uid=journo.id))
 
 
-def test_admin_resets_user_hotp_format_odd(journalist_app,
-                                           test_admin,
-                                           test_journo):
-    old_secret = test_journo['otp_secret']
-
-    with journalist_app.test_client() as app:
-        _login_user(app, test_admin['username'], test_admin['password'],
-                    test_admin['otp_secret'])
-
-        with InstrumentedApp(journalist_app) as ins:
-            app.post(url_for('admin.reset_two_factor_hotp'),
-                     data=dict(uid=test_journo['id'], otp_secret='Z'))
-
-            ins.assert_message_flashed(
-                "Invalid secret format: "
-                "odd-length secret. Did you mistype the secret?", "error")
-
-    # Re-fetch journalist to get fresh DB instance
-    user = Journalist.query.get(test_journo['id'])
-    new_secret = user.otp_secret
-
-    assert old_secret == new_secret
-
-
 def test_admin_resets_user_hotp_error(mocker,
                                       journalist_app,
                                       test_admin,
                                       test_journo):
 
-    bad_secret = '1234'
+    bad_secret = '0123456789ABCDZZ0123456789ABCDZZ01234567'
     error_message = 'SOMETHING WRONG!'
     mocked_error_logger = mocker.patch('journalist.app.logger.error')
     old_secret = test_journo['otp_secret']
@@ -1120,7 +1130,7 @@ def test_admin_resets_user_hotp_error(mocker,
 
 def test_user_resets_hotp(journalist_app, test_journo):
     old_secret = test_journo['otp_secret']
-    new_secret = 123456
+    new_secret = '0123456789ABCDEF0123456789ABCDEF01234567'
 
     # Precondition
     assert new_secret != old_secret
@@ -1142,37 +1152,17 @@ def test_user_resets_hotp(journalist_app, test_journo):
     assert old_secret != new_secret
 
 
-def test_user_resets_user_hotp_format_odd(journalist_app, test_journo):
-    old_secret = test_journo['otp_secret']
-
-    with journalist_app.test_client() as app:
-        _login_user(app, test_journo['username'], test_journo['password'],
-                    test_journo['otp_secret'])
-
-        with InstrumentedApp(journalist_app) as ins:
-            app.post(url_for('account.reset_two_factor_hotp'),
-                     data=dict(otp_secret='123'))
-            ins.assert_message_flashed(
-                "Invalid secret format: "
-                "odd-length secret. Did you mistype the secret?", "error")
-
-    # Re-fetch journalist to get fresh DB instance
-    user = Journalist.query.get(test_journo['id'])
-    new_secret = user.otp_secret
-
-    assert old_secret == new_secret
-
-
 def test_user_resets_user_hotp_format_non_hexa(journalist_app, test_journo):
     old_secret = test_journo['otp_secret']
 
+    non_hexa_secret='0123456789ABCDZZ0123456789ABCDEF01234567'
     with journalist_app.test_client() as app:
         _login_user(app, test_journo['username'], test_journo['password'],
                     test_journo['otp_secret'])
 
         with InstrumentedApp(journalist_app) as ins:
             app.post(url_for('account.reset_two_factor_hotp'),
-                     data=dict(otp_secret='ZZ'))
+                     data=dict(otp_secret=non_hexa_secret))
             ins.assert_message_flashed(
                 "Invalid secret format: "
                 "please only submit letters A-F and numbers 0-9.", "error")
@@ -1187,7 +1177,7 @@ def test_user_resets_user_hotp_format_non_hexa(journalist_app, test_journo):
 def test_user_resets_user_hotp_error(mocker,
                                      journalist_app,
                                      test_journo):
-    bad_secret = '1234'
+    bad_secret = '0123456789ABCDZZ0123456789ABCDZZ01234567'
     old_secret = test_journo['otp_secret']
     error_message = 'SOMETHING WRONG!'
     mocked_error_logger = mocker.patch('journalist.app.logger.error')
@@ -1527,6 +1517,40 @@ def test_admin_add_user_yubikey_odd_length(journalist_app, test_admin, locale, s
                 ).format(num=len(secret))
                 in resp.data.decode("utf-8")
             )
+
+@flaky(rerun_filter=utils.flaky_filter_xfail)
+@pytest.mark.parametrize(
+    "locale, secret",
+    (
+        (locale, ' ' *i)
+        for locale in get_test_locales()
+        for i in range(3)
+    )
+)
+def test_admin_add_user_yubikey_blank_secret(journalist_app, test_admin, locale, secret):
+    with journalist_app.test_client() as app:
+        _login_user(app, test_admin['username'], test_admin['password'],
+                    test_admin['otp_secret'])
+
+        resp = app.post(
+            url_for('admin.add_user', l=locale),
+            data=dict(
+                username='dellsberg',
+                first_name='',
+                last_name='',
+                password=VALID_PASSWORD,
+                password_again=VALID_PASSWORD,
+                is_admin=None,
+                is_hotp=True,
+                otp_secret=secret
+            ),
+        )
+
+        assert page_language(resp.data) == language_tag(locale)
+        msgids = ['The "otp_secret" field is required when "is_hotp" is set.']
+        with xfail_untranslated_messages(config, locale, msgids):
+            # Should redirect to the token verification page
+            assert gettext(msgids[0]) in resp.data.decode('utf-8')
 
 
 @flaky(rerun_filter=utils.flaky_filter_xfail)
@@ -2363,6 +2387,7 @@ def test_regenerate_totp(journalist_app, test_journo):
 
 def test_edit_hotp(journalist_app, test_journo):
     old_secret = test_journo['otp_secret']
+    valid_secret="DEADBEEF01234567DEADBEEF01234567DADEFEEB"
 
     with journalist_app.test_client() as app:
         _login_user(app, test_journo['username'], test_journo['password'],
@@ -2370,7 +2395,7 @@ def test_edit_hotp(journalist_app, test_journo):
 
         with InstrumentedApp(journalist_app) as ins:
             resp = app.post(url_for('account.reset_two_factor_hotp'),
-                            data=dict(otp_secret=123456))
+                            data=dict(otp_secret=valid_secret))
 
             new_secret = Journalist.query.get(test_journo['id']).otp_secret
 

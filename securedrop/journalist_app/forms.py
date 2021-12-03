@@ -6,15 +6,41 @@ from flask_wtf.file import FileField, FileAllowed, FileRequired
 from wtforms import Field
 from wtforms import (TextAreaField, StringField, BooleanField, HiddenField,
                      ValidationError)
-from wtforms.validators import InputRequired, Optional
+from wtforms.validators import InputRequired, Optional, DataRequired, StopValidation
 
-from models import Journalist, InstanceConfig
+from models import Journalist, InstanceConfig, HOTP_SECRET_LENGTH
+
+from typing import Any
+
+
+class RequiredIf(DataRequired):
+
+    def __init__(self, other_field_name: str, *args: Any, **kwargs: Any) -> None:
+        self.other_field_name = other_field_name
+
+    def __call__(self, form: FlaskForm, field: Field) -> None:
+        if self.other_field_name in form:
+            other_field = form[self.other_field_name]
+            if bool(other_field.data):
+                self.message = gettext(
+                    'The "{name}" field is required when "{other_name}" is set.'
+                    .format(other_name=self.other_field_name, name=field.name))
+                super(RequiredIf, self).__call__(form, field)
+            else:
+                field.errors[:] = []
+                raise StopValidation()
+        else:
+            raise ValidationError(
+                gettext(
+                    'The "{other_name}" field was not found - it is required by "{name}".'
+                    .format(other_name=self.other_field_name, name=field.name))
+                )
 
 
 def otp_secret_validation(form: FlaskForm, field: Field) -> None:
     strip_whitespace = field.data.replace(' ', '')
     input_length = len(strip_whitespace)
-    if input_length != 40:
+    if input_length != HOTP_SECRET_LENGTH:
         raise ValidationError(
             ngettext(
                 'HOTP secrets are 40 characters long - you have entered {num}.',
@@ -74,8 +100,8 @@ class NewUserForm(FlaskForm):
     is_admin = BooleanField('is_admin')
     is_hotp = BooleanField('is_hotp')
     otp_secret = StringField('otp_secret', validators=[
-        otp_secret_validation,
-        Optional()
+        RequiredIf("is_hotp"),
+        otp_secret_validation
     ])
 
 

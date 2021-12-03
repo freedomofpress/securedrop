@@ -36,6 +36,8 @@ if os.environ.get('SECUREDROP_ENV') == 'test':
 
 ARGON2_PARAMS = dict(memory_cost=2**16, rounds=4, parallelism=2)
 
+HOTP_SECRET_LENGTH = 40  # 160 bits == 40 hex digits (== 32 ascii-encoded chars in db)
+
 
 def get_one_or_else(query: Query,
                     logger: 'Logger',
