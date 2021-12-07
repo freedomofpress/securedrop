@@ -52,14 +52,31 @@ VALID_PASSWORD = 'correct horse battery staple generic passphrase hooray'
 VALID_PASSWORD_2 = 'another correct horse battery staple generic passphrase'
 
 
-def _login_user(app, username, password, otp_secret):
+def _login_user(app, username, password, otp_secret, success=True):
     resp = app.post(url_for('main.login'),
                     data={'username': username,
                           'password': password,
                           'token': TOTP(otp_secret).now()},
                     follow_redirects=True)
     assert resp.status_code == 200
-    assert hasattr(g, 'user')  # ensure logged in
+    assert (success == hasattr(g, 'user'))  # check logged-in vs expected
+
+
+@pytest.mark.parametrize("otp_secret", ['', 'GA','GARBAGE','JHCOGO7VCER3EJ4'])
+def test_user_with_invalid_otp_secret_cannot_login(journalist_app, otp_secret):
+    # Create a user with whitespace at the end of the username
+    with journalist_app.app_context():
+        new_username = 'badotp' + otp_secret
+        user, password = utils.db_helper.init_journalist(is_admin=False)
+        user.otp_secret = otp_secret
+        user.username = new_username
+        db.session.add(user)
+        db.session.commit()
+
+    # Verify that user is *not* able to login successfully
+    with journalist_app.test_client() as app:
+        _login_user(app, new_username, password,
+                    otp_secret, success=False)
 
 
 def test_user_with_whitespace_in_username_can_login(journalist_app):

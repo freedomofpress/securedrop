@@ -19,7 +19,8 @@ from db import db
 from journalist_app import utils
 from models import (Journalist, Reply, SeenReply, Source, Submission,
                     LoginThrottledException, InvalidUsernameException,
-                    BadTokenException, WrongPasswordException)
+                    BadTokenException, InvalidOTPSecretException,
+                    WrongPasswordException)
 from sdconfig import SDConfig
 from store import NotEncrypted
 
@@ -133,7 +134,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
 
             return response, 200
         except (LoginThrottledException, InvalidUsernameException,
-                BadTokenException, WrongPasswordException):
+                BadTokenException, InvalidOTPSecretException, WrongPasswordException):
             return abort(403, 'Token authentication failed.')
 
     @api.route('/sources', methods=['GET'])

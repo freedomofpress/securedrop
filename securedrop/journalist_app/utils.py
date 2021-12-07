@@ -16,6 +16,7 @@ from models import (
     BadTokenException,
     FirstOrLastNameError,
     InvalidPasswordLength,
+    InvalidOTPSecretException,
     InvalidUsernameException,
     Journalist,
     LoginThrottledException,
@@ -94,6 +95,7 @@ def validate_user(
     try:
         return Journalist.login(username, password, token)
     except (InvalidUsernameException,
+            InvalidOTPSecretException,
             BadTokenException,
             WrongPasswordException,
             LoginThrottledException,
@@ -112,6 +114,11 @@ def validate_user(
                 "Please wait at least {num} seconds before logging in again.",
                 period
             ).format(num=period)
+        elif isinstance(e, InvalidOTPSecretException):
+            login_flashed_msg += ' '
+            login_flashed_msg += gettext(
+                "Your 2FA details are invalid"
+                " - please contact an administrator to reset them.")
         else:
             try:
                 user = Journalist.query.filter_by(

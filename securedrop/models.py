@@ -36,7 +36,12 @@ if os.environ.get('SECUREDROP_ENV') == 'test':
 
 ARGON2_PARAMS = dict(memory_cost=2**16, rounds=4, parallelism=2)
 
+# Required length for hex-format HOTP secrets as input by users
 HOTP_SECRET_LENGTH = 40  # 160 bits == 40 hex digits (== 32 ascii-encoded chars in db)
+
+# Minimum length for ascii-encoded OTP secrets - by default, secrets are now 160-bit (32 chars)
+# but existing Journalist users may still have 80-bit (16-char) secrets
+OTP_SECRET_MIN_ASCII_LENGTH = 16  # 80 bits == 40 hex digits (== 16 ascii-encoded chars in db)
 
 
 def get_one_or_else(query: Query,
@@ -364,6 +369,11 @@ class WrongPasswordException(Exception):
 class BadTokenException(Exception):
 
     """Raised when a user logins in with an incorrect TOTP token"""
+
+
+class InvalidOTPSecretException(Exception):
+
+    """Raised when a user's OTP secret is invalid - for example, too short"""
 
 
 class PasswordError(Exception):
@@ -697,6 +707,9 @@ class Journalist(db.Model):
         if user.username in Journalist.INVALID_USERNAMES and \
                 user.uuid in Journalist.INVALID_USERNAMES:
             raise InvalidUsernameException(gettext("Invalid username"))
+
+        if len(user.otp_secret) < OTP_SECRET_MIN_ASCII_LENGTH:
+            raise InvalidOTPSecretException(gettext("Invalid OTP secret"))
 
         if LOGIN_HARDENING:
             cls.throttle_login(user)
