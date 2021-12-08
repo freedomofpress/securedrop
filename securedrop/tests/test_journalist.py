@@ -1275,7 +1275,7 @@ def test_admin_resets_hotp_with_missing_otp_secret_key(config, journalist_app, t
         )
 
         assert page_language(resp.data) == language_tag(locale)
-        msgids = ['Change Secret']
+        msgids = ['Change HOTP Secret']
         with xfail_untranslated_messages(config, locale, msgids):
             assert gettext(msgids[0]) in resp.data.decode('utf-8')
 
