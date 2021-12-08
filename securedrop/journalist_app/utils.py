@@ -158,7 +158,7 @@ def validate_hotp_secret(user: Journalist, otp_secret: str) -> bool:
     except (binascii.Error, TypeError) as e:
         if "Non-hexadecimal digit found" in str(e):
             flash(gettext(
-                "Invalid secret format: "
+                "Invalid HOTP secret format: "
                 "please only submit letters A-F and numbers 0-9."),
                   "error")
             return False

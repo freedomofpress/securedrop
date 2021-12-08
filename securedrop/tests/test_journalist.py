@@ -1048,7 +1048,7 @@ def test_admin_resets_user_hotp_format_non_hexa(
             assert journo.is_totp
 
             ins.assert_message_flashed(
-                "Invalid secret format: please only submit letters A-F and "
+                "Invalid HOTP secret format: please only submit letters A-F and "
                 "numbers 0-9.", "error")
 
 
@@ -1181,7 +1181,7 @@ def test_user_resets_user_hotp_format_non_hexa(journalist_app, test_journo):
             app.post(url_for('account.reset_two_factor_hotp'),
                      data=dict(otp_secret=non_hexa_secret))
             ins.assert_message_flashed(
-                "Invalid secret format: "
+                "Invalid HOTP secret format: "
                 "please only submit letters A-F and numbers 0-9.", "error")
 
     # Re-fetch journalist to get fresh DB instance
