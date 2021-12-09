@@ -119,6 +119,12 @@ update_to_tls13(){
 #
 # Q4-2021 Apache2 header updates:
 update_apache2_headers(){
+
+    if [ ! -e "$1" ]; then
+        echo "Apache vhost '$1' does not exist, skipping header changes..." >&2
+        return
+    fi
+
     # update CSP header, adding frame-ancestors (see #6178)
     if grep -qP "^Header always set Content-Security-Policy \"default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self';\"" "$1"; then
         sed -i "/^Header always set Content-Security-Policy \"default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self';\"/c\Header always set Content-Security-Policy \"default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; frame-ancestors 'none';\"" "$1"
