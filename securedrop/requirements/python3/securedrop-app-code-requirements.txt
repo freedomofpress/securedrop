@@ -183,6 +183,7 @@ markupsafe==1.1.1 \
     #   -r requirements/python3/securedrop-app-code-requirements.in
     #   jinja2
     #   mako
+    #   wtforms
 mod-wsgi==4.6.7 \
     --hash=sha256:b788abaf0b903a64a7bb8dae609f2e4790c87e6f3d716aa6bc97936410fcbfcc
     # via -r requirements/python3/securedrop-app-code-requirements.in
@@ -266,9 +267,12 @@ werkzeug==0.16.0 \
     # via
     #   -r requirements/python3/securedrop-app-code-requirements.in
     #   flask
-wtforms==2.1 \
-    --hash=sha256:ffdf10bd1fa565b8233380cb77a304cd36fd55c73023e91d4b803c96bc11d46f
-    # via flask-wtf
+wtforms==3.0.0 \
+    --hash=sha256:232dbb0094847dca2f45c72136b5ca1d5dca2a3e24ccd2229823b8b74b3c6698 \
+    --hash=sha256:4abfbaa1d529a1d0ac927d44af8dbb9833afd910e56448a103f1893b0b176886
+    # via
+    #   -r requirements/python3/securedrop-app-code-requirements.in
+    #   flask-wtf
 
 # The following packages are considered to be unsafe in a requirements file:
 setuptools==56.0.0 \

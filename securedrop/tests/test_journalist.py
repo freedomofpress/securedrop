@@ -775,6 +775,7 @@ def test_admin_add_user_when_username_already_taken(config, journalist_app, test
                     first_name='',
                     last_name='',
                     password=VALID_PASSWORD,
+                    otp_secret='',
                     is_admin=None
                 ),
             )
@@ -890,6 +891,7 @@ def test_admin_add_user_password_too_long_warning(config, journalist_app, test_a
                     first_name='',
                     last_name='',
                     password=overly_long_password,
+                    otp_secret='',
                     is_admin=None
                 ),
             )
@@ -917,6 +919,7 @@ def test_admin_add_user_first_name_too_long_warning(config, journalist_app, test
                 first_name=overly_long_name,
                 last_name='',
                 password=VALID_PASSWORD,
+                otp_secret='',
                 is_admin=None
             ),
         )
@@ -947,6 +950,7 @@ def test_admin_add_user_last_name_too_long_warning(config, journalist_app, test_
                 first_name='',
                 last_name=overly_long_name,
                 password=VALID_PASSWORD,
+                otp_secret='',
                 is_admin=None
             ),
         )
@@ -1327,6 +1331,7 @@ def test_admin_add_user(journalist_app, test_admin):
                                       first_name='',
                                       last_name='',
                                       password=VALID_PASSWORD,
+                                      otp_secret='',
                                       is_admin=None))
 
             new_user = Journalist.query.filter_by(username=username).one()
@@ -1349,6 +1354,7 @@ def test_admin_add_user_with_invalid_username(config, journalist_app, test_admin
                 first_name='',
                 last_name='',
                 password=VALID_PASSWORD,
+                otp_secret='',
                 is_admin=None
             ),
         )
@@ -1433,7 +1439,13 @@ def test_admin_add_user_without_username(config, journalist_app, test_admin, loc
 
         resp = app.post(
             url_for('admin.add_user', l=locale),
-            data=dict(username='', password=VALID_PASSWORD, is_admin=None),
+            data=dict(
+                username='',
+                first_name='',
+                last_name='',
+                password=VALID_PASSWORD,
+                otp_secret='',
+                is_admin=None),
         )
 
         assert page_language(resp.data) == language_tag(locale)
@@ -1455,8 +1467,11 @@ def test_admin_add_user_too_short_username(config, journalist_app, test_admin, l
             url_for('admin.add_user', l=locale),
             data=dict(
                 username=username,
+                first_name='',
+                last_name='',
                 password='pentagonpapers',
                 password_again='pentagonpapers',
+                otp_secret='',
                 is_admin=None
             ),
         )
@@ -1584,6 +1599,7 @@ def test_admin_sets_user_to_admin(journalist_app, test_admin):
                         data=dict(username=new_user,
                                   first_name='',
                                   last_name='',
+                                  otp_secret='',
                                   password=VALID_PASSWORD,
                                   is_admin=None))
         assert resp.status_code in (200, 302)
@@ -1612,6 +1628,7 @@ def test_admin_renames_user(journalist_app, test_admin):
                                   first_name='',
                                   last_name='',
                                   password=VALID_PASSWORD,
+                                  otp_secret='',
                                   is_admin=None))
         assert resp.status_code in (200, 302)
         journo = Journalist.query.filter(Journalist.username == new_user).one()
@@ -1640,6 +1657,7 @@ def test_admin_adds_first_name_last_name_to_user(journalist_app, test_admin):
                                   first_name='',
                                   last_name='',
                                   password=VALID_PASSWORD,
+                                  otp_secret='',
                                   is_admin=None))
         assert resp.status_code in (200, 302)
         journo = Journalist.query.filter(Journalist.username == new_user).one()
@@ -1672,6 +1690,7 @@ def test_admin_adds_invalid_first_last_name_to_user(config, journalist_app, test
                 first_name='',
                 last_name='',
                 password=VALID_PASSWORD,
+                otp_secret='',
                 is_admin=None
             )
         )
@@ -1723,6 +1742,7 @@ def test_admin_add_user_integrity_error(config, journalist_app, test_admin, mock
                     first_name='',
                     last_name='',
                     password=VALID_PASSWORD,
+                    otp_secret='',
                     is_admin=None
                 ),
             )
