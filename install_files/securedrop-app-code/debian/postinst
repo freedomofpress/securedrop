@@ -116,6 +116,45 @@ update_to_tls13(){
     fi
 }
 
+#
+# Q4-2021 Apache2 header updates:
+update_apache2_headers(){
+
+    if [ ! -e "$1" ]; then
+        echo "Apache vhost '$1' does not exist, skipping header changes..." >&2
+        return
+    fi
+
+    # update CSP header, adding frame-ancestors (see #6178)
+    if grep -qP "^Header always set Content-Security-Policy \"default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self';\"" "$1"; then
+        sed -i "/^Header always set Content-Security-Policy \"default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self';\"/c\Header always set Content-Security-Policy \"default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; frame-ancestors 'none';\"" "$1"
+    fi
+
+    # remove X-XSS-Protection block if it exists (see #6182)
+    if grep -qP "^Header onsuccess unset X-XSS-Protection" "$1"; then
+        sed -i '/^Header onsuccess unset X-XSS-Protection/d' "$1"
+        sed -i '/^Header always set X-XSS-Protection "1; mode=block"/d' "$1"
+    fi
+
+    # remove X-Download-Only block if it exists (see #6180)
+    if grep -qP "^Header onsuccess unset X-Download-Options" "$1"; then
+        sed -i '/^Header onsuccess unset X-Download-Options/d' "$1"
+        sed -i '/^Header always set X-Download-Options "noopen"/d' "$1"
+    fi
+
+    # Add Cross-Origin headers if not present (see #6176)
+        if ! grep -qP '^Header onsuccess unset Cross-Origin-Opener-Policy' "$1"; then
+            sed -i '/^Header always set Referrer-Policy .*/a Header onsuccess unset Cross-Origin-Opener-Policy\nHeader always set Cross-Origin-Opener-Policy "same-origin"' "$1"
+        fi
+        if ! grep -qP '^Header onsuccess unset Cross-Origin-Embedder-Policy' "$1"; then
+            sed -i '/^Header always set Cross-Origin-Opener-Policy .*/a Header onsuccess unset Cross-Origin-Embedder-Policy\nHeader always set Cross-Origin-Embedder-Policy "same-origin"' "$1"
+        fi
+        if ! grep -qP '^Header onsuccess unset Cross-Origin-Resource-Policy' "$1"; then
+            sed -i '/^Header always set Cross-Origin-Embedder-Policy .*/a Header onsuccess unset Cross-Origin-Resource-Policy\nHeader always set Cross-Origin-Resource-Policy "same-site"' "$1"
+        fi
+}
+
+
 case "$1" in
     configure)
 
@@ -187,6 +226,10 @@ case "$1" in
 
     # Add TLS1.3 configruation to the source configruation if required
     update_to_tls13
+
+    # Apply Q4-2021 header updates
+    update_apache2_headers /etc/apache2/sites-available/source.conf
+    update_apache2_headers /etc/apache2/sites-available/journalist.conf
 
     # Restart apache so it loads with the apparmor profiles in enforce mode.
     service apache2 restart
