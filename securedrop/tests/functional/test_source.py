@@ -146,7 +146,7 @@ class TestDuplicateSourceInterface(
 
     def test_refreshed_duplicate_generate_pages(self):
         # Test generation of multiple codenames in different browser tabs, including behavior
-        # of refreshing the codemae in each tab. Ref. issue 4458.
+        # of refreshing the codename in each tab. Ref. issue 4458.
 
         # Generate a codename in Tab A
         assert len(self.driver.window_handles) == 1

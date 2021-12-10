@@ -47,7 +47,7 @@ class SourceNavigationStepsMixin:
         assert self._is_on_generate_page()
 
     def _source_regenerates_codename(self):
-        self.safe_click_by_id("regenerate-submit")
+        self.driver.refresh()
 
     def _source_chooses_to_submit_documents(self):
         self._source_clicks_submit_documents_on_homepage()

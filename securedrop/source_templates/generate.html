@@ -14,14 +14,6 @@
   <h2 id="codename-heading" class="visually-hidden">{{ gettext('Codename') }}</h2>
   <mark id="codename" class="codename"
     aria-describedby="codename-instructions codename-explanation">{{ codename }}</mark>
-  <div class="pull-right">
-    <form id="regenerate-form" method="post">
-      <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
-      <button type="submit" id="regenerate-submit" class="small">
-        <span>{{ gettext('Refresh codename') }}</span>
-      </button>
-    </form>
-  </div>
 </section>
 
 <p class="explanation">
