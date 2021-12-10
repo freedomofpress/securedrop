@@ -15,7 +15,6 @@ from os.path import dirname
 from os.path import expanduser
 from os.path import join
 from os.path import realpath
-from pathlib import Path
 
 import mock
 import pyotp
@@ -39,11 +38,8 @@ import source_app
 import tests.utils.env as env
 from db import db
 from models import Journalist
-from sdconfig import config
 from source_user import _SourceScryptManager
-from tests.conftest import setup_gpg
 
-os.environ["SECUREDROP_ENV"] = "test"
 
 LOGFILE_PATH = abspath(join(dirname(realpath(__file__)), "../log/driver.log"))
 FIREFOX_PATH = "/usr/bin/firefox/firefox"
@@ -175,6 +171,7 @@ class FunctionalTest(object):
             disable_js(self.torbrowser_driver)
 
     def start_source_server(self, source_port):
+        from sdconfig import config
         config.SESSION_EXPIRATION_MINUTES = self.session_expiration / 60.0
 
         self.source_app.run(port=source_port, debug=True, use_reloader=False, threaded=True)
@@ -202,7 +199,7 @@ class FunctionalTest(object):
             logging.error("Error stopping Firefox driver: %s", e)
 
     @pytest.fixture(autouse=True)
-    def sd_servers(self):
+    def sd_servers(self, setup_journalist_key_and_gpg_folder):
         logging.info(
             "Starting SecureDrop servers (session expiration = %s)", self.session_expiration
         )
@@ -219,6 +216,7 @@ class FunctionalTest(object):
                 self.source_location = "http://127.0.0.1:%d" % source_port
                 self.journalist_location = "http://127.0.0.1:%d" % journalist_port
 
+                from sdconfig import config
                 self.source_app = source_app.create_app(config)
                 self.journalist_app = journalist_app.create_app(config)
                 self.journalist_app.config["WTF_CSRF_ENABLED"] = True
@@ -228,7 +226,6 @@ class FunctionalTest(object):
 
                 env.create_directories(config)
                 db.create_all()
-                setup_gpg(Path(config.GPG_KEY_DIR))
 
                 # Add our test user
                 try:

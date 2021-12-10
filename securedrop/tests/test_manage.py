@@ -15,8 +15,6 @@ from passphrases import PassphraseGenerator
 from source_user import create_source_user
 
 
-os.environ['SECUREDROP_ENV'] = 'test'  # noqa
-
 YUBIKEY_HOTP = ['cb a0 5f ad 41 a2 ff 4e eb 53 56 3a 1b f7 23 2e ce fc dc',
                 'cb a0 5f ad 41 a2 ff 4e eb 53 56 3a 1b f7 23 2e ce fc dc d7']
 

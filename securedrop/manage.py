@@ -21,20 +21,23 @@ from passphrases import PassphraseGenerator
 
 sys.path.insert(0, "/var/www/securedrop")  # noqa: E402
 
-import qrcode
-from sqlalchemy.orm.exc import NoResultFound
+import qrcode  # noqa: E402
+from sqlalchemy.orm.exc import NoResultFound  # noqa: E402
 
-os.environ['SECUREDROP_ENV'] = 'dev'  # noqa
 
-from db import db
-from models import (
+if not os.environ.get("SECUREDROP_ENV"):
+    os.environ['SECUREDROP_ENV'] = 'dev'  # noqa
+
+
+from db import db  # noqa: E402
+from models import (  # noqa: E402
     FirstOrLastNameError,
     InvalidUsernameException,
     Journalist,
 )
-from management import app_context, config
-from management.run import run
-from management.submissions import (
+from management import app_context, config  # noqa: E402
+from management.run import run  # noqa: E402
+from management.submissions import (  # noqa: E402
     add_check_db_disconnect_parser,
     add_check_fs_disconnect_parser,
     add_delete_db_disconnect_parser,

@@ -5,7 +5,6 @@ import pytest
 
 from pretty_bad_protocol._util import _is_stream
 
-os.environ['SECUREDROP_ENV'] = 'test'  # noqa
 from secure_tempfile import SecureTemporaryFile
 
 MESSAGE = '410,757,864,530'

@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 from flask import url_for
-import os
 import pytest
 import random
 
@@ -9,7 +8,6 @@ from sqlalchemy.orm.exc import NoResultFound
 
 from journalist_app.utils import cleanup_expired_revoked_tokens
 
-os.environ['SECUREDROP_ENV'] = 'test'  # noqa
 from .utils.api_helper import get_api_headers
 
 random.seed('◔ ⌣ ◔')

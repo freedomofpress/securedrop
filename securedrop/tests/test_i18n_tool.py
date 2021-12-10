@@ -3,7 +3,6 @@
 import io
 import os
 from os.path import abspath, dirname, exists, getmtime, join, realpath
-os.environ['SECUREDROP_ENV'] = 'test'  # noqa
 import i18n_tool
 from mock import patch
 import pytest

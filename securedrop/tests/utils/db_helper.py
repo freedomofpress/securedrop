@@ -19,8 +19,6 @@ from passphrases import PassphraseGenerator
 from sdconfig import config
 from source_user import create_source_user
 
-os.environ['SECUREDROP_ENV'] = 'test'  # noqa
-
 
 def init_journalist(first_name=None, last_name=None, is_admin=False):
     """Initialize a journalist into the database. Return their

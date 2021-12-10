@@ -10,7 +10,6 @@ import zipfile
 from passphrases import PassphraseGenerator
 from source_user import create_source_user
 
-os.environ['SECUREDROP_ENV'] = 'test'  # noqa
 from . import utils
 
 from db import db

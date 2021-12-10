@@ -14,8 +14,6 @@ from flask import session
 from sh import pybabel
 from .utils.env import TESTS_DIR
 
-os.environ['SECUREDROP_ENV'] = 'test'  # noqa
-
 
 def verify_rel_datetime_format(app):
     with app.test_client() as c:

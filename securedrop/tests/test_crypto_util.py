@@ -10,9 +10,6 @@ from passphrases import PassphraseGenerator
 
 from source_user import create_source_user
 
-
-os.environ['SECUREDROP_ENV'] = 'test'  # noqa
-
 from crypto_util import CryptoUtil, CryptoException
 from db import db
 

@@ -11,7 +11,6 @@ from unittest import mock
 import pretty_bad_protocol as gnupg
 import logging
 
-from _pytest.tmpdir import TempPathFactory
 from flask import Flask
 from hypothesis import settings
 import os
@@ -26,9 +25,7 @@ from flask import url_for
 from pyotp import TOTP
 from typing import Dict
 
-# WARNING: This variable must be set before any import of the securedrop code/app
-# or most tests will fail
-os.environ['SECUREDROP_ENV'] = 'test'  # noqa
+import sdconfig
 
 from passphrases import PassphraseGenerator
 from source_user import _SourceScryptManager, create_source_user
@@ -110,37 +107,39 @@ def insecure_scrypt() -> Generator[None, None, None]:
         yield
 
 
-def setup_gpg(gpg_dir: Path) -> str:
-    # GPG 2.1+ requires gpg-agent, see #4013
-    gpg_agent_config = gpg_dir / "gpg-agent.conf"
-    gpg_agent_config.write_text("allow-loopback-pinentry\ndefault-cache-ttl 0")
-
-    # Import the journalist public key in GPG
-    # WARNING: don't import the journalist secret key; it will make the decryption tests unreliable
-    gpg = gnupg.GPG("gpg2", homedir=str(gpg_dir))
-    journalist_public_key_path = Path(__file__).parent / "files" / "test_journalist_key.pub"
-    journalist_public_key = journalist_public_key_path.read_text()
-    journalist_key_fingerprint = gpg.import_keys(journalist_public_key).fingerprints[0]
-
-    # TODO(AD): Don't import the journalist secret key; will be removed in my next PR
-    journalist_secret_key_path = Path(__file__).parent / "files" / "test_journalist_key.sec"
-    journalist_secret_key = journalist_secret_key_path.read_text()
-    gpg.import_keys(journalist_secret_key)
-
-    return journalist_key_fingerprint
-
-
 @pytest.fixture(scope="session")
-def setup_journalist_key_and_gpg_folder(
-    tmp_path_factory: TempPathFactory
-) -> Generator[Tuple[str, Path], None, None]:
-    """Set up the journalist test key and the key folder.
+def setup_journalist_key_and_gpg_folder() -> Generator[Tuple[str, Path], None, None]:
+    """Set up the journalist test key and the key folder, and reduce source key length for speed.
 
     This fixture takes about 2s to complete hence we use the "session" scope to only run it once.
     """
-    tmp_gpg_dir = tmp_path_factory.mktemp("gpg_dir")
-    journalist_key_fingerprint = setup_gpg(tmp_gpg_dir)
-    yield journalist_key_fingerprint, tmp_gpg_dir
+    # This path matches the GPG_KEY_DIR defined in the config.py used for the tests
+    # If they don't match, it can make the tests flaky and very hard to debug
+    tmp_gpg_dir = Path("/tmp") / "securedrop" / "keys"
+    tmp_gpg_dir.mkdir(parents=True, exist_ok=True)
+
+    try:
+        # GPG 2.1+ requires gpg-agent, see #4013
+        gpg_agent_config = tmp_gpg_dir / "gpg-agent.conf"
+        gpg_agent_config.write_text("allow-loopback-pinentry\ndefault-cache-ttl 0")
+
+        # Import the journalist public key in GPG
+        # WARNING: don't import the journalist secret key; it will make the decryption tests
+        # unreliable
+        gpg = gnupg.GPG("gpg2", homedir=str(tmp_gpg_dir))
+        journalist_public_key_path = Path(__file__).parent / "files" / "test_journalist_key.pub"
+        journalist_public_key = journalist_public_key_path.read_text()
+        journalist_key_fingerprint = gpg.import_keys(journalist_public_key).fingerprints[0]
+
+        # TODO(AD): Don't import the journalist secret key; will be removed in my next PR
+        journalist_secret_key_path = Path(__file__).parent / "files" / "test_journalist_key.sec"
+        journalist_secret_key = journalist_secret_key_path.read_text()
+        gpg.import_keys(journalist_secret_key)
+
+        yield journalist_key_fingerprint, tmp_gpg_dir
+
+    finally:
+        shutil.rmtree(tmp_gpg_dir, ignore_errors=True)
 
 
 @pytest.fixture(scope="function")
@@ -172,7 +171,10 @@ def config(
 
         config.SUPPORTED_LOCALES = i18n.get_test_locales()
 
-        yield config
+        # Set this newly-created config as the "global" config
+        with mock.patch.object(sdconfig, "config", config):
+
+            yield config
 
 
 @pytest.fixture(scope='function')
@@ -194,6 +196,12 @@ def alembic_config(config: SDConfig) -> str:
 
 @pytest.fixture(scope='function')
 def source_app(config: SDConfig) -> Generator[Flask, None, None]:
+    config.SOURCE_APP_FLASK_CONFIG_CLS.TESTING = True
+    config.SOURCE_APP_FLASK_CONFIG_CLS.USE_X_SENDFILE = False
+
+    # Disable CSRF checks to make writing tests easier
+    config.SOURCE_APP_FLASK_CONFIG_CLS.WTF_CSRF_ENABLED = False
+
     app = create_source_app(config)
     app.config['SERVER_NAME'] = 'localhost.localdomain'
     with app.app_context():
@@ -207,6 +215,12 @@ def source_app(config: SDConfig) -> Generator[Flask, None, None]:
 
 @pytest.fixture(scope='function')
 def journalist_app(config: SDConfig) -> Generator[Flask, None, None]:
+    config.JOURNALIST_APP_FLASK_CONFIG_CLS.TESTING = True
+    config.JOURNALIST_APP_FLASK_CONFIG_CLS.USE_X_SENDFILE = False
+
+    # Disable CSRF checks to make writing tests easier
+    config.JOURNALIST_APP_FLASK_CONFIG_CLS.WTF_CSRF_ENABLED = False
+
     app = create_journalist_app(config)
     app.config['SERVER_NAME'] = 'localhost.localdomain'
     with app.app_context():
@@ -259,7 +273,7 @@ def test_source(journalist_app: Flask) -> Dict[str, Any]:
         journalist_app.crypto_util.genkeypair(source_user)
         source = source_user.get_db_record()
         return {'source_user': source_user,
-                # TODO(AD): Eventually the nexy keys could be removed as they are in source_user
+                # TODO(AD): Eventually the next keys could be removed as they are in source_user
                 'source': source,
                 'codename': passphrase,
                 'filesystem_id': source_user.filesystem_id,

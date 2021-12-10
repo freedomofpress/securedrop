@@ -38,8 +38,6 @@ from sh import sed
 from .utils.env import TESTS_DIR
 from werkzeug.datastructures import Headers
 
-os.environ['SECUREDROP_ENV'] = 'test'  # noqa
-
 
 def verify_i18n(app):
     not_translated = 'code hello i18n'

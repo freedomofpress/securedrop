@@ -20,8 +20,6 @@ from source_app.session_manager import SessionManager
 from . import utils
 from .utils.instrument import InstrumentedApp
 
-os.environ['SECUREDROP_ENV'] = 'test'  # noqa
-
 
 # Seed the RNG for deterministic testing
 random.seed('ಠ_ಠ')
