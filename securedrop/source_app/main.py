@@ -34,7 +34,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
     def index() -> str:
         return render_template('index.html')
 
-    @view.route('/generate', methods=('GET', 'POST'))
+    @view.route('/generate', methods=('GET',))
     def generate() -> Union[str, werkzeug.Response]:
         if SessionManager.is_user_logged_in(db_session=db.session):
             flash(gettext(
