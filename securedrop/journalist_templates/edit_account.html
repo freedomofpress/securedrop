@@ -30,7 +30,7 @@
       <input name="is_admin" id="is-admin" type="checkbox" {% if user.is_admin %}checked{% endif %}>
       <label for="is-admin">{{ gettext('Is Admin') }}</label>
     </div>
-    <button type="submit" id="update" aria-label="{{ gettext('Update') }}">{{ gettext('UPDATE') }}</button>
+    <button type="submit" id="update" aria-label="{{ gettext('Update account') }}">{{ gettext('UPDATE') }}</button>
   </form>
   </section>
 {% else %}
@@ -48,7 +48,7 @@
       {% set last_name = g.user.last_name or '' %}
       <input name="last_name" id="last_name" value = "{{ last_name }}">
     </div>
-    <button type="submit" id="change-name-button" aria-label="{{ gettext('Update') }}">{{ gettext('UPDATE') }}</button>
+    <button type="submit" id="change-name-button" aria-label="{{ gettext('Update your account') }}">{{ gettext('UPDATE') }}</button>
   </form>
   </section>
 {% endif %}
