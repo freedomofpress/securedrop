@@ -2,17 +2,12 @@
 {% block body %}
 <h1>{{ gettext('Admin Interface') }}</h1>
 
-<section aria-labelledby="add-user-heading">
-<h2 id="add-user-heading" class="visually-hidden">Add User</h2>
-<form action="{{ url_for('admin.add_user') }}">
-  <button type="submit" id="add-user" aria-label="{{ gettext('Add User') }}">
-    {# FIXME:
-    <img src="{{ url_for('static', filename='icons/plus.png') }}" class="icon" width="13" height="15" alt="">
-    #}
-    {{ gettext('ADD USER') }}
-  </button>
-</form>
-</section>
+<a href="{{ url_for('admin.add_user') }}" class="btn" aria-label="{{ gettext('Add User') }}">
+  {# FIXME:
+  <img src="{{ url_for('static', filename='icons/plus.png') }}" class="icon" width="13" height="15" alt="">
+  #}
+  {{ gettext('ADD USER') }}
+</a>
 
 <section aria-labelledby="users-heading">
   <h2 id="users-heading" class="visually-hidden">Users</h2>
@@ -90,14 +85,11 @@
 {% endif %}
 </section>
 
-<section aria-labelledby="update-instance-config-heading">
-<h2 id="update-instance-config-heading" class="visually-hidden">Update Instance Config</h2>
 <a href="{{ url_for('admin.manage_config') }}" class="btn" id="update-instance-config" aria-label="{{ gettext('Update instance config') }}">
   {# FIXME:
   <img src="{{ url_for('static', filename='icons/pencil-alt.png') }}" class="icon" width="15" height="15" alt="">
   #}
   {{ gettext('INSTANCE CONFIG') }}
 </a>
-</section>
 
 {% endblock %}
