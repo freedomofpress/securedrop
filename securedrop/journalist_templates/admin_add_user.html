@@ -28,22 +28,18 @@
   </div>
   <div class="container flex-end">
     <div>
-      <div>
         <label for="first_name">{{ gettext('First name') }}</label>
         {{ form.first_name() }}
         {% for error in form.first_name.errors %}
           <span class="form-validation-error" role="alert">{{ error }}</span>
         {% endfor %}
-      </div>
     </div>
     <div>
-      <div>
         <label for="last_name">{{ gettext('Last name') }}</label>
         {{ form.last_name() }}
         {% for error in form.last_name.errors %}
           <span class="form-validation-error" role="alert">{{ error }}</span>
         {% endfor %}
-      </div>
     </div>
     <div>
         <ul id="name-notes" class="journalist-username__notes">
