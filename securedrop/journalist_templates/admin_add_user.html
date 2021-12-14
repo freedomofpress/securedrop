@@ -58,7 +58,7 @@
   <div>
     {{ form.is_hotp(id="is-hotp") }}
     <label for="is-hotp">{{ gettext("Is using a YubiKey [HOTP]") }} </label>
-    <label for="otp_secret" class="visually-hidden">{{ gettext('OTP Secret') }}</label>
+    <label for="otp_secret" class="visually-hidden">{{ gettext('HOTP Secret') }}</label>
     {{ form.otp_secret(placeholder=gettext('HOTP Secret'), size="60") }}
     {% for error in form.is_hotp.errors + form.otp_secret.errors %}
       <span class="form-validation-error" role="alert">{{ error }}</span><br>
