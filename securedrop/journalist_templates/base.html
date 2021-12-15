@@ -34,15 +34,15 @@
           {% include 'locales.html' %}
         </header>
         {% endblock %}
-        <main class="panel-container column">
+        <div class="panel-container column">
           <div class="flash-panel">
             {% include 'flashed.html' %}
           </div>
-          <div class="panel selected">
+          <main>
 
             {% block body %}{% endblock %}
-          </div>
-        </main>
+          </main>
+        </div>
       </div>
 
       {% block footer %}

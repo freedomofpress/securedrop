@@ -8,31 +8,19 @@
       <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
       <div>
         <div id="index-select-container"></div>
-        <button type="submit" name="action" value="download-unread" class="small">
-          {# FIXME:
-          <img src="{{ url_for('static', filename='icons/download.png') }}" class="icon" width="11" height="13" alt="">
-          #}
+        <button type="submit" name="action" value="download-unread" class="small icon">
           {{ gettext('Download Unread') }}
         </button>
-        <button type="submit" name="action" value="download-all" class="small">
-          {# FIXME:
-          <img src="{{ url_for('static', filename='icons/download.png') }}" class="icon" width="11" height="13" alt="">
-          #}
+        <button type="submit" name="action" value="download-all" class="small icon">
           {{ gettext('Download') }}
         </button>
-        <button type="submit" name="action" value="star" class="small">
-          {# FIXME:
-          <img src="{{ url_for('static', filename='icons/star.png') }}" class="icon" width="15" height="14" alt="">
-          #}
+        <button type="submit" name="action" value="star" class="small icon">
           {{ gettext('Star') }}
         </button>
-        <button type="submit" name="action" value="un-star" class="small">
-          {# FIXME:
-          <img src="{{ url_for('static', filename='icons/unstar.png') }}" class="icon" width="15" height="14" alt="">
-          #}
+        <button type="submit" name="action" value="un-star" class="small icon">
           {{ gettext('Un-star') }}
         </button>
-        <div class="delete-menu-button"><a href="#delete-sources-modal" id="delete-collections-link" class="small danger">
+        <div class="delete-menu-button"><a href="#delete-sources-modal" id="delete-collections-link" class="btn small danger">
           {{ gettext('Delete') }} </a>
       <!-- Delete confirmation modal -->
       {% with %}
@@ -57,15 +45,15 @@
       <table id="collections" aria-labelledby="all-sources-heading">
         <thead hidden aria-hidden="false">
           <tr>
-          <th scope="col">{{ gettext('Date') }}</th>
           <th scope="col">{{ gettext('Designation') }}</th>
           <th scope="col">{{ gettext('Documents') }}</th>
           <th scope="col">{{ gettext('Messages') }}</th>
           <th scope="col">{{ gettext('Unread') }}</th>
+          <th scope="col">{{ gettext('Date') }}</th>
           </tr>
         </thead>
       {% if starred %}
-        <tbody class="cols plain starred">
+        <tbody class="cols starred">
           {% for source in starred %}
             {% with %}
               {% set loop_index = loop.index %}
@@ -76,7 +64,7 @@
       {% endif %}
 
       {% if unstarred %}
-        <tbody class="cols plain unstarred">
+        <tbody class="cols unstarred">
           {% for source in unstarred %}
             {% with %}
               {% set loop_index = loop.index %}
