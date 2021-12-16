@@ -2,13 +2,10 @@
 {% block body %}
 <div id="content" class="journalist-view-single">
 
-  <nav>
+  <nav class="breadcrumbs">
     <h2 id="breadcrumbs-heading" class="visually-hidden">{{ gettext('You are here:') }}</h2>
-    <ul class="breadcrumbs">
+    <ul>
       <li><a href="/">{{ gettext('All Sources') }}</a></li>
-      {# FIXME:
-      <img src="{{ url_for('static', filename='icons/chevron-right.png') }}" class="icon" width="9" height="14" alt="">
-      #}
       <li>{{ source.journalist_designation }}</li>
     </ul>
   </nav>
@@ -20,13 +17,10 @@
     <form action="/bulk" method="post">
       <div>
         <div id="select-container"></div>
-        <button type="submit" name="action" value="download" class="small">
-          {# FIXME:
-          <img src="{{ url_for('static', filename='icons/download.png') }}" class="icon" width="11" height="13" alt="">
-          #}
+        <button type="submit" name="action" value="download" class="small icon">
           {{ gettext('Download Selected') }}
         </button>
-        <a href="#delete-selected-confirmation-modal" id="delete-selected-link" class="small danger">
+        <a href="#delete-selected-confirmation-modal" id="delete-selected-link" class="btn small danger">
             {{ gettext('Delete Selected') }}
         </a>
       </div>
@@ -34,6 +28,7 @@
       <table id="submissions" class="plain submissions">
         <thead hidden aria-hidden="false">
           <tr>
+          <th scope="col">{{ gettext('Status') }}</th>
           <th scope="col">{{ gettext('Filename') }}</th>
           <th scope="col">{{ gettext('Size') }}</th>
           <th scope="col">{{ gettext('Type') }}</th>
@@ -41,49 +36,51 @@
         </thead>
         {% for doc in source.collection %}
           <tr class="submission {% if not doc.seen and not doc.filename.endswith('reply.gpg') %}unread{% endif %}">
-            <th scope="row" class="filename">
-            <label>
+            {% with %}
             {% if doc.filename.endswith('reply.gpg') %}
               {% if not doc.deleted_by_source %}
-                <input type="checkbox" id="doc-cb-{{ loop.index }}" name="doc_names_selected" value="{{ doc.filename }}" class="doc-check">
-                {# FIXME:
-                <img id="status-icon-{{ loop.index }}" src="{{ url_for('static', filename='icons/reply.png') }}" class="icon" width="16" height="16" alt="{{ gettext('Unread') }}" title="{{ gettext('Unread') }}">
-                #}
+                {% set status = gettext('Unread') %}
+                {% set icon = 'reply' %}
               {% else %}
-                <input type="checkbox" id="doc-cb-{{ loop.index }}" name="doc_names_selected" value="{{ doc.filename }}" class="doc-check">
-                {# FIXME:
-                <img id="status-icon-{{ loop.index }}" src="{{ url_for('static', filename='icons/check.png') }}" class="icon" width="16" height="12" alt="{{ gettext('Read') }}" title="{{ gettext('Read') }}">
-                #}
+                {% set status = gettext('Read') %}
+                {% set icon = 'check' %}
               {% endif %}
             {% elif not doc.seen %}
-              <input type="checkbox" id="doc-cb-{{ loop.index }}" name="doc_names_selected" value="{{ doc.filename }}" class="doc-check unread-cb">
-              {# FIXME:
-              <img id="status-icon-{{ loop.index }}" src="{{ url_for('static', filename='icons/envelope-closed.png') }}" class="icon" width="16" height="15" alt="{{ gettext('Unread') }}" title="{{ gettext('Unread') }}">
-              #}
+              {% set status = gettext('Unread') %}
+              {% set icon = 'envelope-closed' %}
             {% else %}
-              <input type="checkbox" id="doc-cb-{{ loop.index }}" name="doc_names_selected" value="{{ doc.filename }}" class="doc-check">
-              {# FIXME:
-              <img id="status-icon-{{ loop.index }}" src="{{ url_for('static', filename='icons/envelope-open.png') }}" class="icon" width="16" height="15" alt="{{ gettext('Read') }}" title="{{ gettext('Read') }}">
-              #}
+              {% set status = gettext('Read') %}
+              {% set icon = 'envelope-open' %}
             {% endif %}
-            <a id="doc-link-{{ loop.index }}" class="file {% if not doc.seen and not doc.filename.endswith('reply.gpg') %}unread{% else %}read{% endif %}" href="{{ url_for('col.download_single_file', filesystem_id=filesystem_id, fn=doc.filename) }}">{{ doc.filename }}</a>
-            </label>
+            <td class="status">
+                <input type="checkbox" id="doc-cb-{{ loop.index }}" name="doc_names_selected" value="{{ doc.filename }}" class="doc-check">
+                <label for="doc-cb-{{ loop.index }}" class="icon-{{ icon }}">
+                  {{ status }}
+                </label>
+            </td>
+            {% endwith %}
+            <th scope="row" class="filename">
+              <a id="doc-link-{{ loop.index }}" class="file {% if not doc.seen and not doc.filename.endswith('reply.gpg') %}unread{% else %}read{% endif %}" href="{{ url_for('col.download_single_file', filesystem_id=filesystem_id, fn=doc.filename) }}">{{ doc.filename }}</a>
             </th>
             <td class="info" title="{{ doc.size }} bytes">
               {{ doc.size|filesizeformat() }}
             </td>
 
-            <td>
-            {# FIXME: td[class]
+            {% with %}
             {% if doc.filename.endswith('-doc.gz.gpg') %}
-              <img id="type-icon-{{ loop.index }}" src="{{ url_for('static', filename='icons/files.png') }}" class="pull-right" width="14" height="16" alt="{{ gettext('Uploaded Document') }}" title="{{ gettext('Uploaded Document') }}">
+              {% set type = gettext('Uploaded Document') %}
+              {% set icon = 'files' %}
             {% elif doc.filename.endswith('-reply.gpg') %}
-              <img id="type-icon-{{ loop.index }}" src="{{ url_for('static', filename='icons/reply.png') }}" class="pull-right" width="16" height="16" alt="{{ gettext('Reply') }}" title="{{ gettext('Reply') }}">
+              {% set type = gettext('Reply') %}
+              {% set icon = 'reply' %}
             {% else %}
-              <img id="type-icon-{{ loop.index }}" src="{{ url_for('static', filename='icons/messages.png') }}" class="pull-right" width="15" height="13" alt="{{ gettext('Message') }}" title="{{ gettext('Message') }}">
+              {% set type = gettext('Message') %}
+              {% set icon = 'messages' %}
             {% endif %}
-            #}
+            <td class="type icon-{{ icon }}">
+              {{ type }}
             </td>
+            {% endwith %}
             </tr>
         {% endfor %}
       </table>
@@ -111,35 +108,30 @@
     <p>{{ gettext('No submissions to display.') }}</p>
   {% endif %}
 
-  {# FIXME:
-  <hr class="cut-out">
-  <hr class="no-line">
-  #}
-  <h2>{{ gettext('Reply') }}</h2>
+<section aria-labelledby="replies-heading" class="cut-out">
+  <h2 id="replies-heading">{{ gettext('Reply') }}</h2>
   {% if source.has_key %}
     <p>{{ gettext('You can write a secure reply to the person who submitted these messages and/or files:') }}</p>
     <form action="{{ url_for('main.reply') }}" method="post" autocomplete="off">
       <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
       <input type="hidden" name="filesystem_id" value="{{ filesystem_id }}">
       {{ form.message(id="reply-text-field", rows='10', class="journalist-reply__input", placeholder=gettext('Write a reply.'), **{'aria-label': gettext('Write a reply.')}) }}
-      {# FIXME:
-      <hr class="no-line">
-      #}
-      <button id="reply-button" class="button pull-right" type="submit" aria-label="{{ gettext('Submit reply') }}">{{ gettext('SUBMIT') }}</button>
+      <div class="pull-right section-spacing">
+        <button id="reply-button" class="button" type="submit" aria-label="{{ gettext('Submit reply') }}">{{ gettext('SUBMIT') }}</button>
+      </div>
     </form>
   {% else %}
     <p class="notification">{{ gettext("This source has no encryption key.") }}</p>
     <p>{{ gettext("An encryption key will be generated for the source the next time they log in, after which you will be able to reply to the source here.") }}</p>
   {% endif %}
-  {# FIXME:
-  <hr class="no-line">
-  #}
+  </section>
+
   <form id="delete-collection" action="{{ url_for('col.delete_single', filesystem_id=filesystem_id) }}" method="post">
     <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
     <input type="hidden" name="filesystem_id" value="{{ filesystem_id }}">
     <input type="hidden" name="col_name" value="{{ source.journalist_designation }}">
     <div class="center highlight">
-      <a href="#delete-collection-confirmation-modal" id="delete-collection-link" class="danger">
+      <a href="#delete-collection-confirmation-modal" id="delete-collection-link" class="btn danger">
           {{ gettext('Delete Source Account') }}
       </a>
     </div>

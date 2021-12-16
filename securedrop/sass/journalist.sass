@@ -54,13 +54,36 @@ p#no-replies
 #replies blockquote
   margin: 1em 1em
 
-p.breadcrumbs
+nav.breadcrumbs
   text-align: left
   position: relative
   color: #000c6c
+  float: none
+  margin: 0
 
   &:dir(rtl)
     text-align: right
+
+  ul
+    list-style-type: none
+    padding: 0
+
+    li
+      display: inline-block
+      padding-left: 9px + 5px
+
+      background:
+        image: url(/static/icons/chevron-right.png)
+        position: left center
+        repeat: no-repeat
+        size: 9px 14px
+
+    li:first-of-type
+      padding-left: 0
+      background: none
+
+    li:last-of-type
+      font-weight: bold
 
 p#max-file-size
   font-size: 10px
@@ -138,7 +161,7 @@ footer
 form, table
   margin-top: 1em
 
-button[value="download-unread"], button[value="download-all"], a.icon.download
+button[value^="download"], a.icon.download
   &:before
     background-image: url(/static/icons/download.png)
     width: 11px
