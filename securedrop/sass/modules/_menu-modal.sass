@@ -11,17 +11,16 @@
     left: 0
     background: rgba(0, 0, 0, 0.3)
     z-index: 99999
-    opacity: 0
     -moz-transition: opacity 100ms ease-in
     transition: opacity 100ms ease-in
     pointer-events: none
+    visibility: hidden
+    overflow: hidden
 
     &:target
-      opacity: 1
       pointer-events: auto
-
-      dialog, .external
-        visibility: visible
+      visibility: visible
+      overflow: visible
 
     .external
       position: fixed
@@ -29,10 +28,15 @@
       left: 0
       width: 100%
       height: 100%
-      visibility: hidden
 
-    button.modal-stacked
-      width: 70%
+    .modal-stacked
+      li
+        margin-top: 1em
+        margin-bottom: 1em
+
+      .btn
+        display: block
+        width: 70%
 
     .btn-row
       all: unset
@@ -52,23 +56,29 @@
       -moz-box-shadow: 0px 0px 15px 0px rgba(0,0,0,0.5)
       box-shadow: 0px 0px 15px 0px rgba(0,0,0,0.5)
       border: 1.5px solid #000c6c
-      visibility: hidden
 
     #delete-menu-cta
       all: unset
+
+      ul.modal-stacked
+        list-style: none
+        padding: 0
 
     #delete-menu-no-select
       all: unset
       display: none
 
-    p,li,span
+    p, li, .paragraph-spacing
       font-size: 0.9em
-      line-height: 1.4em
-      color: #303030
+      font-weight: normal
 
-    a
-      font-size: 0.9em
+    p, .paragraph-spacing
       line-height: 1.4em
+      margin-top: 1em
+      margin-bottom: 1em
+
+    p, li, h2.paragraph-spacing
+      color: #303030
 
     b
       color: #000000
@@ -83,6 +93,9 @@
     #delete-confirm-menu-dialog
       width: 400px
 
-    span.modal-danger-text
+    .modal-danger-text, .paragraph-spacing.modal-danger-text
       color: $color_urgent_coral
       font-weight: bold
+
+  dialog > a
+    display: inline-block

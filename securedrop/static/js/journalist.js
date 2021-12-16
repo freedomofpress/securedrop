@@ -201,7 +201,7 @@ ready(function() {
       });
   }
 
-  let deleteSourcesButton = document.getElementById('btn-delete-sources');
+  let deleteSourcesButton = document.getElementById('delete-collections-link');
   if (deleteSourcesButton) {
     deleteSourcesButton.onclick = function() {
       var checkboxes = document.querySelectorAll('input[name="cols_selected"]:checked');
