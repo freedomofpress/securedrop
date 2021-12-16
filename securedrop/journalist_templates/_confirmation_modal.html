@@ -2,9 +2,7 @@
   <a href="#close" class="external" aria-label="{{ gettext('Close') }}"></a>
   <dialog open aria-labelledby="{{ modal_data.modal_id }}-heading">
     <a href="#close" title="{{ gettext('Close') }}" class="close">
-      {# FIXME:
-      <img src="{{ url_for('static', filename='i/modal-x-white.png') }}" alt="{{ gettext('Close') }}" height="24" width="24">
-      #}
+      <span>{{ gettext('Close') }}</span>
     </a>
     <h2 id="{{ modal_data.modal_id }}-heading">{{ modal_data.modal_header }}</h2>
     {{ modal_data.modal_body }}
