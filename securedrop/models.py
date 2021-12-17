@@ -31,6 +31,8 @@ from pyotp import TOTP, HOTP
 
 from encryption import EncryptionManager, GpgKeyNotFoundError
 
+_default_instance_config: Optional["InstanceConfig"] = None
+
 LOGIN_HARDENING = True
 if os.environ.get('SECUREDROP_ENV') == 'test':
     LOGIN_HARDENING = False
@@ -891,6 +893,12 @@ class InstanceConfig(db.Model):
             setattr(new, col.name, getattr(self, col.name))
 
         return new
+
+    @classmethod
+    def get_default(cls) -> "InstanceConfig":
+        global _default_instance_config
+        _default_instance_config = InstanceConfig.get_current()
+        return _default_instance_config
 
     @classmethod
     def get_current(cls) -> "InstanceConfig":

@@ -16,7 +16,7 @@ import store
 from db import db
 from encryption import EncryptionManager, GpgKeyNotFoundError
 
-from models import Submission, Reply, get_one_or_else
+from models import Submission, Reply, get_one_or_else, InstanceConfig
 from passphrases import PassphraseGenerator
 from sdconfig import SDConfig
 from source_app.decorators import login_required
@@ -147,7 +147,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
         return render_template(
             'lookup.html',
             is_user_logged_in=True,
-            allow_document_uploads=current_app.instance_config.allow_document_uploads,
+            allow_document_uploads=InstanceConfig.get_default().allow_document_uploads,
             replies=replies,
             new_user_codename=session.get('new_user_codename', None),
             form=SubmissionForm(),
@@ -156,7 +156,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
     @view.route('/submit', methods=('POST',))
     @login_required
     def submit(logged_in_source: SourceUser) -> werkzeug.Response:
-        allow_document_uploads = current_app.instance_config.allow_document_uploads
+        allow_document_uploads = InstanceConfig.get_default().allow_document_uploads
         form = SubmissionForm()
         if not form.validate():
             for field, errors in form.errors.items():

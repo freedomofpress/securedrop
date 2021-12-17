@@ -111,10 +111,6 @@ def create_app(config: 'SDConfig') -> Flask:
         cleanup_expired_revoked_tokens()
 
     @app.before_request
-    def load_instance_config() -> None:
-        app.instance_config = InstanceConfig.get_current()
-
-    @app.before_request
     def setup_g() -> 'Optional[Response]':
         """Store commonly used values in Flask's special g object"""
         if 'expires' in session and datetime.now(timezone.utc) >= session['expires']:
@@ -142,9 +138,9 @@ def create_app(config: 'SDConfig') -> Flask:
 
         i18n.set_locale(config)
 
-        if app.instance_config.organization_name:
+        if InstanceConfig.get_default().organization_name:
             g.organization_name = \
-                app.instance_config.organization_name  # pylint: disable=assigning-non-slot
+                InstanceConfig.get_default().organization_name  # pylint: disable=assigning-non-slot
         else:
             g.organization_name = gettext('SecureDrop')  # pylint: disable=assigning-non-slot
 
