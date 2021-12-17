@@ -14,6 +14,7 @@ from flask_babel import gettext
 import store
 
 from db import db
+from encryption import EncryptionManager, GpgKeyNotFoundError
 
 from models import Submission, Reply, get_one_or_else
 from passphrases import PassphraseGenerator
@@ -117,8 +118,11 @@ def make_blueprint(config: SDConfig) -> Blueprint:
             try:
                 with io.open(reply_path, "rb") as f:
                     contents = f.read()
-                reply_obj = current_app.crypto_util.decrypt(logged_in_source, contents)
-                reply.decrypted = reply_obj
+                decrypted_reply = EncryptionManager.get_default().decrypt_journalist_reply(
+                    for_source_user=logged_in_source,
+                    ciphertext_in=contents
+                )
+                reply.decrypted = decrypted_reply
             except UnicodeDecodeError:
                 current_app.logger.error("Could not decode reply %s" %
                                          reply.filename)
@@ -133,9 +137,12 @@ def make_blueprint(config: SDConfig) -> Blueprint:
         # Sort the replies by date
         replies.sort(key=operator.attrgetter('date'), reverse=True)
 
-        # Generate a keypair to encrypt replies from the journalist
-        if not current_app.crypto_util.get_fingerprint(logged_in_source.filesystem_id):
-            current_app.crypto_util.genkeypair(logged_in_source)
+        # If not done yet, generate a keypair to encrypt replies from the journalist
+        encryption_mgr = EncryptionManager.get_default()
+        try:
+            encryption_mgr.get_source_public_key(logged_in_source.filesystem_id)
+        except GpgKeyNotFoundError:
+            encryption_mgr.generate_source_key_pair(logged_in_source)
 
         return render_template(
             'lookup.html',

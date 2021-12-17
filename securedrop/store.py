@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from pathlib import Path
+
 import binascii
 import gzip
 import os
@@ -12,6 +14,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from werkzeug.utils import secure_filename
 
+from encryption import EncryptionManager
 from secure_tempfile import SecureTemporaryFile
 
 import rm
@@ -89,7 +92,7 @@ def safe_renames(old: str, new: str) -> None:
 
 class Storage:
 
-    def __init__(self, storage_path: str, temp_dir: str, gpg_key: str) -> None:
+    def __init__(self, storage_path: str, temp_dir: str) -> None:
         if not os.path.isabs(storage_path):
             raise PathException("storage_path {} is not absolute".format(
                 storage_path))
@@ -100,12 +103,14 @@ class Storage:
                 temp_dir))
         self.__temp_dir = temp_dir
 
-        self.__gpg_key = gpg_key
-
         # where files and directories are sent to be securely deleted
         self.__shredder_path = os.path.abspath(os.path.join(self.__storage_path, "../shredder"))
         if not os.path.exists(self.__shredder_path):
             os.makedirs(self.__shredder_path, mode=0o700)
+
+        # crash if we don't have a way to securely remove files
+        if not rm.check_secure_delete_capability():
+            raise AssertionError("Secure file deletion is not possible.")
 
     @property
     def storage_path(self) -> str:
@@ -341,8 +346,10 @@ class Storage:
                         break
                     gzf.write(buf)
 
-            current_app.crypto_util.encrypt(
-                stf, [self.__gpg_key], encrypted_file_path)
+            EncryptionManager.get_default().encrypt_source_file(
+                file_in=stf,
+                encrypted_file_path_out=Path(encrypted_file_path),
+            )
 
         return encrypted_file_name
 
@@ -370,7 +377,10 @@ class Storage:
                                 message: str) -> str:
         filename = "{0}-{1}-msg.gpg".format(count, journalist_filename)
         msg_loc = self.path(filesystem_id, filename)
-        current_app.crypto_util.encrypt(message, [self.__gpg_key], msg_loc)
+        EncryptionManager.get_default().encrypt_source_message(
+            message_in=message,
+            encrypted_message_path_out=Path(msg_loc),
+        )
         return filename
 
 

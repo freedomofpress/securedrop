@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 import flask
-from flask import Blueprint, render_template, send_file, current_app, redirect, url_for
+from flask import Blueprint, render_template, send_file, redirect, url_for
 import werkzeug
 
 from io import BytesIO  # noqa
 
+from encryption import EncryptionManager
 from sdconfig import SDConfig
 
 
@@ -21,8 +22,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
 
     @view.route('/public-key')
     def download_public_key() -> flask.Response:
-        journalist_pubkey = current_app.crypto_util.gpg.export_keys(
-            config.JOURNALIST_KEY)
+        journalist_pubkey = EncryptionManager.get_default().get_journalist_public_key()
         data = BytesIO(journalist_pubkey.encode('utf-8'))
         return send_file(data,
                          mimetype="application/pgp-keys",

@@ -23,6 +23,7 @@ from sqlalchemy.sql.expression import func
 from html import escape as htmlescape
 
 import journalist_app as journalist_app_module
+from encryption import EncryptionManager, GpgKeyNotFoundError
 from journalist_app.utils import mark_seen
 import models
 from db import db
@@ -2489,17 +2490,15 @@ def test_delete_source_deletes_source_key(journalist_app,
         utils.db_helper.reply(journo, source, 2)
 
         # Source key exists
-        source_key = current_app.crypto_util.get_fingerprint(
-            test_source['filesystem_id'])
-        assert source_key is not None
+        encryption_mgr = EncryptionManager.get_default()
+        assert encryption_mgr.get_source_key_fingerprint(test_source['filesystem_id'])
 
         journalist_app_module.utils.delete_collection(
             test_source['filesystem_id'])
 
         # Source key no longer exists
-        source_key = current_app.crypto_util.get_fingerprint(
-            test_source['filesystem_id'])
-        assert source_key is None
+        with pytest.raises(GpgKeyNotFoundError):
+            encryption_mgr.get_source_key_fingerprint(test_source['filesystem_id'])
 
 
 def test_delete_source_deletes_docs_on_disk(journalist_app,

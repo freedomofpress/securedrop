@@ -133,7 +133,7 @@ def test_verify_rejects_symlinks(journalist_app):
 
 def test_verify_store_dir_not_absolute():
     with pytest.raises(store.PathException) as exc_info:
-        Storage('..', '/', '<not a gpg key>')
+        Storage('..', '/')
 
     msg = str(exc_info.value)
     assert re.compile('storage_path.*is not absolute').match(msg)
@@ -141,7 +141,7 @@ def test_verify_store_dir_not_absolute():
 
 def test_verify_store_temp_dir_not_absolute():
     with pytest.raises(store.PathException) as exc_info:
-        Storage('/', '..', '<not a gpg key>')
+        Storage('/', '..')
 
     msg = str(exc_info.value)
     assert re.compile('temp_dir.*is not absolute').match(msg)

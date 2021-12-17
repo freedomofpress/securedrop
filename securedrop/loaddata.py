@@ -8,6 +8,8 @@ Loads test data into the SecureDrop database.
 import argparse
 import datetime
 import io
+from pathlib import Path
+
 import math
 import os
 import random
@@ -20,6 +22,7 @@ from sqlalchemy.exc import IntegrityError
 
 import journalist_app
 from db import db
+from encryption import EncryptionManager
 from models import (
     Journalist,
     JournalistLoginAttempt,
@@ -223,15 +226,11 @@ def add_reply(
     """
     record_source_interaction(source)
     fname = "{}-{}-reply.gpg".format(source.interaction_count, source.journalist_filename)
-    current_app.crypto_util.encrypt(
-        next(replies),
-        [
-            current_app.crypto_util.get_fingerprint(source.filesystem_id),
-            config.JOURNALIST_KEY,
-        ],
-        current_app.storage.path(source.filesystem_id, fname),
+    EncryptionManager.get_default().encrypt_journalist_reply(
+        for_source_with_filesystem_id=source.filesystem_id,
+        reply_in=next(replies),
+        encrypted_reply_path_out=Path(current_app.storage.path(source.filesystem_id, fname)),
     )
-
     reply = Reply(journalist, source, fname)
     db.session.add(reply)
     db.session.flush()
@@ -262,7 +261,7 @@ def add_source() -> Tuple[Source, str]:
     db.session.commit()
 
     # Generate source key
-    current_app.crypto_util.genkeypair(source_user)
+    EncryptionManager.get_default().generate_source_key_pair(source_user)
 
     return source, codename
 

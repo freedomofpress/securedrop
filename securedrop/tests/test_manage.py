@@ -100,7 +100,7 @@ def test_exception_handling_when_duplicate_username(journalist_app,
         assert 'successfully added' in out
 
         # Inserting the user for a second time should fail
-        return_value = manage._add_user()
+        return_value = manage._add_user(context=context)
         out, err = capsys.readouterr()
         assert return_value == 1
         assert 'ERROR: That username is already taken!' in out
@@ -120,7 +120,7 @@ def test_delete_user(journalist_app, config, mocker):
         return_value = manage._add_user(context=context)
         assert return_value == 0
 
-        return_value = manage.delete_user(args=None)
+        return_value = manage.delete_user(args=None, context=context)
         assert return_value == 0
 
 

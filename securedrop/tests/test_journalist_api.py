@@ -8,6 +8,7 @@ from pyotp import TOTP
 from uuid import UUID, uuid4
 
 from db import db
+from encryption import EncryptionManager
 from models import (
     Journalist,
     Reply,
@@ -724,9 +725,11 @@ def test_authorized_user_can_add_reply(journalist_app, journalist_api_token,
 
         # First we must encrypt the reply, or it will get rejected
         # by the server.
-        source_key = journalist_app.crypto_util.get_fingerprint(
-            test_source['source'].filesystem_id)
-        reply_content = journalist_app.crypto_util.gpg.encrypt(
+        encryption_mgr = EncryptionManager.get_default()
+        source_key = encryption_mgr.get_source_key_fingerprint(
+            test_source['source'].filesystem_id
+        )
+        reply_content = encryption_mgr._gpg.encrypt(
             'This is a plaintext reply', source_key).data
 
         response = app.post(url_for('api.all_source_replies',

@@ -21,7 +21,9 @@ from selenium.webdriver.support.ui import WebDriverWait
 
 
 # Number of times to try flaky clicks.
+from encryption import EncryptionManager
 from source_user import _SourceScryptManager
+from tests.test_encryption import import_journalist_private_key
 
 CLICK_ATTEMPTS = 15
 
@@ -826,7 +828,9 @@ class JournalistNavigationStepsMixin:
         cks = cookie_string_from_selenium_cookies(self.driver.get_cookies())
         raw_content = self.return_downloaded_content(file_url, cks)
 
-        decrypted_submission = self.journalist_app.crypto_util.gpg.decrypt(raw_content)
+        encryption_mgr = EncryptionManager.get_default()
+        with import_journalist_private_key(encryption_mgr):
+            decrypted_submission = encryption_mgr._gpg.decrypt(raw_content)
         submission = self._get_submission_content(file_url, decrypted_submission)
         if type(submission) == bytes:
             submission = submission.decode("utf-8")
@@ -1049,7 +1053,7 @@ class JournalistNavigationStepsMixin:
         filesystem_id = _SourceScryptManager.get_default().derive_source_filesystem_id(
             self.source_name
         )
-        self.source_app.crypto_util.delete_reply_keypair(filesystem_id)
+        EncryptionManager.get_default().delete_source_key_pair(filesystem_id)
 
     def _journalist_continues_after_flagging(self):
         self.wait_for(lambda: self.driver.find_element_by_id("continue-to-list"))

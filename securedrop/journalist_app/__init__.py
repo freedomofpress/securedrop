@@ -15,7 +15,6 @@ import i18n
 import template_filters
 import version
 
-from crypto_util import CryptoUtil
 from db import db
 from journalist_app import account, admin, api, main, col
 from journalist_app.utils import (get_source, logged_in,
@@ -72,16 +71,7 @@ def create_app(config: 'SDConfig') -> Flask:
 
     # TODO: Attaching a Storage dynamically like this disables all type checking (and
     # breaks code analysis tools) for code that uses current_app.storage; it should be refactored
-    app.storage = Storage(config.STORE_DIR,
-                          config.TEMP_DIR,
-                          config.JOURNALIST_KEY)
-
-    # TODO: Attaching a CryptoUtil dynamically like this disables all type checking (and
-    # breaks code analysis tools) for code that uses current_app.storage; it should be refactored
-    app.crypto_util = CryptoUtil(
-        securedrop_root=config.SECUREDROP_ROOT,
-        gpg_key_dir=config.GPG_KEY_DIR,
-    )
+    app.storage = Storage(config.STORE_DIR, config.TEMP_DIR)
 
     @app.errorhandler(CSRFError)
     def handle_csrf_error(e: CSRFError) -> 'Response':

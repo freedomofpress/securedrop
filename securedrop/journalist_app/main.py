@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from datetime import datetime
+from pathlib import Path
 from typing import Union
 
 import werkzeug
@@ -12,6 +13,7 @@ from sqlalchemy.sql import func
 import store
 
 from db import db
+from encryption import EncryptionManager
 from models import SeenReply, Source, SourceStar, Submission, Reply
 from journalist_app.forms import ReplyForm
 from journalist_app.utils import (validate_user, bulk_delete, download,
@@ -130,11 +132,10 @@ def make_blueprint(config: SDConfig) -> Blueprint:
         g.source.interaction_count += 1
         filename = "{0}-{1}-reply.gpg".format(g.source.interaction_count,
                                               g.source.journalist_filename)
-        current_app.crypto_util.encrypt(
-            form.message.data,
-            [current_app.crypto_util.get_fingerprint(g.filesystem_id),
-             config.JOURNALIST_KEY],
-            output=current_app.storage.path(g.filesystem_id, filename),
+        EncryptionManager.get_default().encrypt_journalist_reply(
+            for_source_with_filesystem_id=g.filesystem_id,
+            reply_in=form.message.data,
+            encrypted_reply_path_out=Path(current_app.storage.path(g.filesystem_id, filename)),
         )
 
         try:
