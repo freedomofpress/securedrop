@@ -124,7 +124,7 @@ def setup_journalist_key_and_gpg_folder() -> Generator[Tuple[str, Path], None, N
     # This path matches the GPG_KEY_DIR defined in the config.py used for the tests
     # If they don't match, it can make the tests flaky and very hard to debug
     tmp_gpg_dir = Path("/tmp") / "securedrop" / "keys"
-    tmp_gpg_dir.mkdir(parents=True, exist_ok=True)
+    tmp_gpg_dir.mkdir(parents=True, exist_ok=True, mode=0o0700)
 
     try:
         # GPG 2.1+ requires gpg-agent, see #4013

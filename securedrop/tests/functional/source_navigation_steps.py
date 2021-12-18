@@ -1,6 +1,5 @@
 import tempfile
 import time
-import json
 
 import pytest
 from selenium.common.exceptions import NoSuchElementException
@@ -28,13 +27,6 @@ class SourceNavigationStepsMixin:
     def _source_visits_source_homepage(self):
         self.driver.get(self.source_location)
         assert self._is_on_source_homepage()
-
-    def _source_checks_instance_metadata(self):
-        self.driver.get(self.source_location + "/metadata")
-        j = json.loads(self.driver.find_element_by_tag_name("body").text)
-        assert j["server_os"] == "20.04"
-        assert j["sd_version"] == self.source_app.jinja_env.globals["version"]
-        assert j["gpg_fpr"] != ""
 
     def _source_clicks_submit_documents_on_homepage(self):
 
@@ -131,14 +123,6 @@ class SourceNavigationStepsMixin:
 
         self.wait_for(submit_page_loaded)
 
-    def _source_continues_to_submit_page_with_colliding_journalist_designation(self):
-        self.safe_click_by_id("continue-button")
-
-        self.wait_for(lambda: self.driver.find_element_by_css_selector(".error"))
-        flash_error = self.driver.find_element_by_css_selector(".error")
-        assert "There was a temporary problem creating your account. Please try again." \
-               == flash_error.text
-
     def _source_submits_a_file(self):
         with tempfile.NamedTemporaryFile() as file:
             file.write(self.secret_message.encode("utf-8"))
@@ -163,9 +147,7 @@ class SourceNavigationStepsMixin:
             # allow time for reply key to be generated
             time.sleep(self.timeout)
 
-    def _source_submits_a_message(
-        self, verify_notification=False, first_submission=False, first_login=False
-    ):
+    def _source_submits_a_message(self):
         self._source_enters_text_in_message_field()
         self._source_clicks_submit_button_on_submission_page()
 
@@ -173,22 +155,6 @@ class SourceNavigationStepsMixin:
             if not self.accept_languages:
                 notification = self.driver.find_element_by_css_selector(".success")
                 assert "Thank" in notification.text
-
-                if verify_notification:
-                    first_submission_text = (
-                        "Please check back later for replies." in notification.text
-                    )
-                    first_login_text = "Forgot your codename?" in notification.text
-
-                    if first_submission:
-                        assert first_submission_text
-
-                        if first_login:
-                            assert first_login_text
-                        else:
-                            assert not first_login_text
-                    else:
-                        assert not first_submission_text
 
         self.wait_for(message_submitted)
 

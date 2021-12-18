@@ -106,8 +106,7 @@ class Storage:
 
         # where files and directories are sent to be securely deleted
         self.__shredder_path = os.path.abspath(os.path.join(self.__storage_path, "../shredder"))
-        if not os.path.exists(self.__shredder_path):
-            os.makedirs(self.__shredder_path, mode=0o700)
+        os.makedirs(self.__shredder_path, mode=0o700, exist_ok=True)
 
         # crash if we don't have a way to securely remove files
         if not rm.check_secure_delete_capability():
