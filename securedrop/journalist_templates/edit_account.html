@@ -5,9 +5,6 @@
   {# Only admins may edit usernames and admin status #}
   <h1>{{ gettext('Edit user "{user}"').format(user=user.username) }}</h1>
   <nav aria-labelledby="back-link" class="back">
-    {# FIXME:
-    <img src="{{ url_for('static', filename='icons/chevron-left.png') }}" class="icon" width="9" height="14" alt="">
-    #}
     <a id="back-link" href="/admin">{{ gettext('Back to admin interface') }}</a>
   </nav>
   <section aria-labeledby="change-heading">
@@ -48,7 +45,9 @@
       {% set last_name = g.user.last_name or '' %}
       <input name="last_name" id="last_name" value = "{{ last_name }}">
     </div>
-    <button type="submit" id="change-name-button" aria-label="{{ gettext('Update your account') }}">{{ gettext('UPDATE') }}</button>
+    <div class="section-spacing">
+      <button type="submit" id="change-name-button" aria-label="{{ gettext('Update your account') }}">{{ gettext('UPDATE') }}</button>
+    </div>
   </form>
   </section>
 {% endif %}
@@ -85,20 +84,13 @@
     {% else %}
       {{ gettext('Your password will be changed to:') }}
     {% endif %}
+    <mark id="password" class="password">{{ password }}</mark>
   </p>
-  <p><mark id="password" class="password">{{ password }}</mark></p>
-  <button type="submit" id="reset-password" class="upper" aria-label="{{ gettext('Reset Password') }}">
-    {# FIXME:
-    <img src="{{ url_for('static', filename='icons/sync.png') }}" class="icon" width="15" height="15" alt="">
-    #}
+  <button type="submit" id="reset-password" class="upper icon icon-reset" aria-label="{{ gettext('Reset Password') }}">
     {{ gettext('Reset Password') }}
   </button>
 </form>
 </section>
-
-{# FIXME:
-<hr class="no-line">
-#}
 
 <section aria-labelledby="2fa-heading">
 <h2 id="2fa-heading">{{ gettext('Reset Two-Factor Authentication') }}</h2>
@@ -128,11 +120,10 @@
   <input name="uid" type="hidden" value="{{ user.id }}">
   {% endif %}
   <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
-  <button id="button-reset-two-factor-{{ type }}" data-tooltip="{{ tooltip_text }}" type="submit" class="pull-right" aria-label="{{ button_aria_label }}">
-    {# FIXME:
-    <img src="{{ url_for('static', filename='icons/sync.png') }}" class="icon" width="15" height="15" alt="">
-    #}
-    {{ button_text }}
+  <button id="button-reset-two-factor-{{ type }}" data-tooltip="{{ tooltip_text }}" type="submit" class="pull-right icon icon-reset" aria-label="{{ button_aria_label }}">
+    <span class="label">
+      {{ button_text }}
+    </span>
     <span class="tooltip">{{ tooltip_text }}</span>
   </button>
 </form>

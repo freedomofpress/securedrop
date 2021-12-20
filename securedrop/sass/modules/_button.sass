@@ -124,7 +124,7 @@
   .full-width
     width: 100%
 
-  a.icon, button.icon, button.button-star > span
+  a.icon, button.icon:not([data-tooltip]), button.button-star > span, button.icon[data-tooltip] > span.label
     &:before
       content: ""
       display: inline-block
