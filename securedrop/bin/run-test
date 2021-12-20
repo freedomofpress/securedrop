@@ -36,7 +36,7 @@ if [ -n "${CIRCLE_BRANCH:-}" ] ; then
         cp tests/log/firefox.log "$TEST_RESULTS"
         tmpdir=$(mktemp -d -t codecov-XXXX)
         curl -s https://codecov.io/bash > "$tmpdir"/codecov;
-        VERSION="$(curl --silent "https://api.github.com/repos/codecov/codecov-bash/releases/latest" | grep '"tag_name":' |sed -E 's/.*"([^"]+)".*/\1/')"
+        VERSION=$(grep -o 'VERSION=\"[0-9\.]*\"' "$tmpdir"/codecov | cut -d'"' -f2);
         curl -s https://raw.githubusercontent.com/codecov/codecov-bash/"${VERSION}"/SHA256SUM > "$tmpdir"/codecov-hashes
         pushd "$tmpdir" && shasum -a 256 -c --ignore-missing codecov-hashes && popd
         chmod +x "$tmpdir"/codecov
