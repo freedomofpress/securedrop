@@ -2,10 +2,7 @@
 {% block body %}
 <h1>{{ gettext('Admin Interface') }}</h1>
 
-<a href="{{ url_for('admin.add_user') }}" class="btn" aria-label="{{ gettext('Add User') }}">
-  {# FIXME:
-  <img src="{{ url_for('static', filename='icons/plus.png') }}" class="icon" width="13" height="15" alt="">
-  #}
+<a href="{{ url_for('admin.add_user') }}" class="btn icon icon-plus" aria-label="{{ gettext('Add User') }}">
   {{ gettext('ADD USER') }}
 </a>
 
@@ -27,29 +24,19 @@
     {% for user in users %}
       <tr class="user">
         <th scope="row">{{ user.username }}</th>
-        <td>
+        <td class="edit-user">
           <a href="/admin/edit/{{ user.id }}" class="plain edit-user" data-username="{{ user.username }}" aria-label="{{ gettext('Edit user {username}').format(username=user.username) }}">
               {{ gettext('Edit') }}
-              {# FIXME:
-              <img src="{{ url_for('static', filename='icons/edit-user.png') }}" class="icon" width="18" height="16">
-              #}
           </a>
         </td>
 	{% if user.id == g.user.id %}
-        <td>
-          {{ gettext('User deletion disabled') }}
-          {# FIXME:
-          <img src="{{ url_for('static', filename='icons/trash-disabled.png') }}" width="14" height="16" alt="{{ gettext('User deletion disabled') }}">
-          #}
+        <td class="delete-user-disabled">
+          <span>{{ gettext('User deletion disabled') }}</span>
         </td>
 	{% else %}
-        <td>
+        <td class="delete-user">
           <a href="?user_id={{ user.id }}#delete-user-confirmation-modal" class="plain delete-user" data-username="{{ user.username}}" aria-label="{{ gettext('Delete user {username}').format(username=user.username) }}">
                 {{ gettext('Delete') }}
-                {# FIXME:
-                <img src="{{ url_for('static', filename='icons/trash.png') }}" class="off-hover" width="14" height="16">
-                <img src="{{ url_for('static', filename='icons/trash-hover-red.png') }}" class="on-hover" width="14" height="16">
-                #}
           </a>
         </td>
 	{% endif %}
@@ -85,10 +72,7 @@
 {% endif %}
 </section>
 
-<a href="{{ url_for('admin.manage_config') }}" class="btn" id="update-instance-config" aria-label="{{ gettext('Update instance config') }}">
-  {# FIXME:
-  <img src="{{ url_for('static', filename='icons/pencil-alt.png') }}" class="icon" width="15" height="15" alt="">
-  #}
+<a href="{{ url_for('admin.manage_config') }}" class="btn icon icon-edit section-spacing-inline" id="update-instance-config" aria-label="{{ gettext('Update instance config') }}">
   {{ gettext('INSTANCE CONFIG') }}
 </a>
 
