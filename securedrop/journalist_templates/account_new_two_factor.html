@@ -12,7 +12,7 @@
 </ol>
 <div id="qrcode-container">{{ user.shared_secret_qrcode }}</div>
 <p>{{ gettext("Can't scan the barcode? You can manually pair FreeOTP with your SecureDrop account by entering the following two-factor secret into the app:") }}</p>
-<mark id="shared-secret" class="center">{{ user.formatted_otp_secret }}</mark>
+<mark id="shared-secret">{{ user.formatted_otp_secret }}</mark>
 <p>{{ gettext("Once you have paired FreeOTP with this account, enter the 6-digit verification code below:") }}</p>
 {% else %}
 <h1>{{ gettext('Enable YubiKey (OATH-HOTP)') }}</h1>
