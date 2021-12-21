@@ -2,7 +2,7 @@
 {% block body %}
 <h1>{{ gettext('Admin Interface') }}</h1>
 
-<a href="{{ url_for('admin.add_user') }}" class="btn icon icon-plus" aria-label="{{ gettext('Add User') }}">
+<a href="{{ url_for('admin.add_user') }}" id="add-user" class="btn icon icon-plus" aria-label="{{ gettext('Add User') }}">
   {{ gettext('ADD USER') }}
 </a>
 
@@ -35,7 +35,7 @@
         </td>
 	{% else %}
         <td class="delete-user">
-          <a href="?user_id={{ user.id }}#delete-user-confirmation-modal" class="plain delete-user" data-username="{{ user.username}}" aria-label="{{ gettext('Delete user {username}').format(username=user.username) }}">
+          <a href="?user_id={{ user.id }}#delete-user-confirmation-modal" class="plain" data-username="{{ user.username}}" aria-label="{{ gettext('Delete user {username}').format(username=user.username) }}">
                 {{ gettext('Delete') }}
           </a>
         </td>

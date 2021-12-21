@@ -471,7 +471,7 @@ class JournalistNavigationStepsMixin:
     def _admin_deletes_user(self):
         for i in range(CLICK_ATTEMPTS):
             try:
-                self.safe_click_by_css_selector(".delete-user")
+                self.safe_click_by_css_selector(".delete-user a")
                 self.wait_for(
                     lambda: expected_conditions.element_to_be_clickable((By.ID, "delete-selected"))
                 )
@@ -619,7 +619,7 @@ class JournalistNavigationStepsMixin:
         # Go to the admin interface
         self.safe_click_by_id("link-admin-index")
 
-        self.wait_for(lambda: self.driver.find_element_by_css_selector("button#add-user"))
+        self.wait_for(lambda: self.driver.find_element_by_id("add-user"))
 
         # Click the "edit user" link for the new user
         # self._edit_user(self.new_user['username'])
@@ -659,7 +659,7 @@ class JournalistNavigationStepsMixin:
         # Go to the admin interface
         self.safe_click_by_id("link-admin-index")
 
-        self.wait_for(lambda: self.driver.find_element_by_css_selector("button#add-user"))
+        self.wait_for(lambda: self.driver.find_element_by_id("add-user"))
 
         # Click the "edit user" link for the new user
         # self._edit_user(self.new_user['username'])
@@ -714,7 +714,7 @@ class JournalistNavigationStepsMixin:
         # Go to the admin interface
         self.safe_click_by_id("link-admin-index")
 
-        self.wait_for(lambda: self.driver.find_element_by_css_selector("button#add-user"))
+        self.wait_for(lambda: self.driver.find_element_by_id("add-user"))
 
         selector = 'a.edit-user[data-username="{}"]'.format(self.new_user["username"])
         new_user_edit_links = self.driver.find_elements_by_css_selector(selector)
@@ -906,7 +906,7 @@ class JournalistNavigationStepsMixin:
         )
 
     def _admin_visits_add_user(self):
-        add_user_btn = self.driver.find_element_by_css_selector("button#add-user")
+        add_user_btn = self.driver.find_element_by_id("add-user")
         self.wait_for(lambda: add_user_btn.is_enabled() and add_user_btn.is_displayed())
         add_user_btn.click()
 
@@ -963,9 +963,9 @@ class JournalistNavigationStepsMixin:
             time.sleep(1)
 
             tip_opacity = self.driver.find_elements_by_css_selector(
-                "#button-reset-two-factor-hotp span")[0].value_of_css_property('opacity')
+                "#button-reset-two-factor-hotp span.tooltip")[0].value_of_css_property('opacity')
             tip_text = self.driver.find_elements_by_css_selector(
-                "#button-reset-two-factor-hotp span")[0].text
+                "#button-reset-two-factor-hotp span.tooltip")[0].text
 
             assert tip_opacity == "1"
 
@@ -996,9 +996,9 @@ class JournalistNavigationStepsMixin:
             time.sleep(1)
 
             tip_opacity = self.driver.find_elements_by_css_selector(
-                "#button-reset-two-factor-totp span")[0].value_of_css_property('opacity')
+                "#button-reset-two-factor-totp span.tooltip")[0].value_of_css_property('opacity')
             tip_text = self.driver.find_elements_by_css_selector(
-                "#button-reset-two-factor-totp span")[0].text
+                "#button-reset-two-factor-totp span.tooltip")[0].text
 
             assert tip_opacity == "1"
             if not self.accept_languages:
