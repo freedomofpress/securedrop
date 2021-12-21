@@ -1,13 +1,10 @@
 {% extends "base.html" %}
 {% block body %}
 <nav class="back" aria-labelledby="back-link">
-  {# FIXME:
-  <img src="{{ url_for('static', filename='icons/chevron-left.png') }}" class="icon" width="9" height="14" alt="">
-  #}
   <a id="back-link" href="/admin">{{ gettext('Back to admin interface') }}</a>
 </nav>
 <section aria-labelledby="add-user-heading">
-<h1 id="add-user-heading" class="visually-hidden">Add User</h1>
+<h1 id="add-user-heading">Add User</h1>
 <form method="post">
   <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
   {{ form.password(value=password, id=False) }}
@@ -64,10 +61,7 @@
       <span class="form-validation-error" role="alert">{{ error }}</span><br>
     {% endfor %}
   </div>
-  <button type="submit" aria-label="{{ gettext('Add User') }}">
-    {# FIXME:
-    <img src="{{ url_for('static', filename='icons/plus.png') }}" class="icon" width="13" height="15" alt="">
-    #}
+  <button type="submit" class="icon icon-plus" aria-label="{{ gettext('Add User') }}">
     {{ gettext('ADD USER') }}
   </button>
 </form>
