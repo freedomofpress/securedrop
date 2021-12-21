@@ -13,6 +13,9 @@
 .grid
   letter-spacing: -0.31em
 
+.content div
+  align-content: center
+
 #replies
   .reply
     border: 1px solid $color_grey_medium
@@ -53,6 +56,25 @@ p#no-replies
 
 #replies blockquote
   margin: 1em 1em
+
+nav.back
+  display: inline-block
+  float: none
+  margin-left: 0
+
+  &:before
+    content: ""
+
+    border: none
+    text-decoration: none
+
+    display: inline-block
+    width: 9px
+    height: 14px
+
+    background:
+      image: url(/static/icons/chevron-left.png)
+      size: contain
 
 nav.breadcrumbs
   text-align: left
@@ -109,9 +131,9 @@ button.small-danger, a.btn.small-danger, .btn.small-danger
   .login-password
     width: 100%
 
-  div
-    display: block
-    margin-bottom: 16px
+form div
+  display: block
+  margin-bottom: 16px
 
 .journalist-reply__input
   width: 100%
@@ -211,4 +233,10 @@ button.icon-reset:not([data-tooltip]), button.icon-reset[data-tooltip] > span.la
   &:before
     background-image: url(/static/icons/pencil-alt.png)
     width: 15px
+    height: 15px
+
+.icon-bell 
+  &:before
+    background-image: url(/static/icons/bell.png)
+    width: 13px
     height: 15px
