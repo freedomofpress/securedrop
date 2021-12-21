@@ -48,12 +48,13 @@
             {% elif not doc.seen %}
               {% set status = gettext('Unread') %}
               {% set icon = 'envelope-closed' %}
+              {% set extra_classes = 'unread-cb' %}
             {% else %}
               {% set status = gettext('Read') %}
               {% set icon = 'envelope-open' %}
             {% endif %}
             <td class="status">
-                <input type="checkbox" id="doc-cb-{{ loop.index }}" name="doc_names_selected" value="{{ doc.filename }}" class="doc-check">
+                <input type="checkbox" id="doc-cb-{{ loop.index }}" name="doc_names_selected" value="{{ doc.filename }}" class="doc-check {{ extra_classes }}">
                 <label for="doc-cb-{{ loop.index }}" class="icon-{{ icon }}">
                   {{ status }}
                 </label>

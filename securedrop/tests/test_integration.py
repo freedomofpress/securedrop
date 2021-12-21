@@ -97,7 +97,7 @@ def test_submit_message(journalist_app, source_app, test_journo):
         text = resp.data.decode('utf-8')
         soup = BeautifulSoup(text, 'html.parser')
         doc_name = soup.select(
-            'table#submissions > tr.submission > th.filename input[name="doc_names_selected"]'
+            'table#submissions > tr.submission > td.status input[name="doc_names_selected"]'
             )[0]['value']
         resp = app.post('/bulk', data=dict(
             action='confirm_delete',
@@ -207,7 +207,7 @@ def test_submit_file(journalist_app, source_app, test_journo):
         text = resp.data.decode('utf-8')
         soup = BeautifulSoup(text, 'html.parser')
         doc_name = soup.select(
-            'table#submissions > tr.submission > th.filename input[name="doc_names_selected"]'
+            'table#submissions > tr.submission > td.status input[name="doc_names_selected"]'
             )[0]['value']
         resp = app.post('/bulk', data=dict(
             action='confirm_delete',
