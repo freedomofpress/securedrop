@@ -22,7 +22,6 @@ from sdconfig import SDConfig
 from source_app import main, info, api
 from source_app.decorators import ignore_static
 from source_app.utils import clear_session_and_redirect_to_logged_out_page
-from store import Storage
 
 
 def get_logo_url(app: Flask) -> str:
@@ -64,10 +63,6 @@ def create_app(config: SDConfig) -> Flask:
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['SQLALCHEMY_DATABASE_URI'] = config.DATABASE_URI
     db.init_app(app)
-
-    # TODO: Attaching a Storage dynamically like this disables all type checking (and
-    # breaks code analysis tools) for code that uses current_app.storage; it should be refactored
-    app.storage = Storage(config.STORE_DIR, config.TEMP_DIR)
 
     @app.errorhandler(CSRFError)
     def handle_csrf_error(e: CSRFError) -> werkzeug.Response:

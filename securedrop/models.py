@@ -30,6 +30,7 @@ from logging import Logger
 from pyotp import TOTP, HOTP
 
 from encryption import EncryptionManager, GpgKeyNotFoundError
+from store import Storage
 
 _default_instance_config: Optional["InstanceConfig"] = None
 
@@ -197,8 +198,8 @@ class Submission(db.Model):
         self.source_id = source.id
         self.filename = filename
         self.uuid = str(uuid.uuid4())
-        self.size = os.stat(current_app.storage.path(source.filesystem_id,
-                                                     filename)).st_size
+        self.size = os.stat(Storage.get_default().path(source.filesystem_id,
+                                                       filename)).st_size
 
     def __repr__(self) -> str:
         return '<Submission %r>' % (self.filename)
@@ -289,8 +290,8 @@ class Reply(db.Model):
         self.source_id = source.id
         self.uuid = str(uuid.uuid4())
         self.filename = filename
-        self.size = os.stat(current_app.storage.path(source.filesystem_id,
-                                                     filename)).st_size
+        self.size = os.stat(Storage.get_default().path(source.filesystem_id,
+                                                       filename)).st_size
 
     def __repr__(self) -> str:
         return '<Reply %r>' % (self.filename)

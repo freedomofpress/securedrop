@@ -6,7 +6,7 @@ from typing import Tuple, Callable, Any, Set, Union
 
 import flask
 import werkzeug
-from flask import abort, Blueprint, current_app, jsonify, request
+from flask import abort, Blueprint, jsonify, request
 from functools import wraps
 
 from sqlalchemy import Column
@@ -22,7 +22,7 @@ from models import (Journalist, Reply, SeenReply, Source, Submission,
                     BadTokenException, InvalidOTPSecretException,
                     WrongPasswordException)
 from sdconfig import SDConfig
-from store import NotEncrypted
+from store import NotEncrypted, Storage
 
 
 TOKEN_EXPIRATION_MINS = 60 * 8
@@ -253,7 +253,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
 
             source.interaction_count += 1
             try:
-                filename = current_app.storage.save_pre_encrypted_reply(
+                filename = Storage.get_default().save_pre_encrypted_reply(
                     source.filesystem_id,
                     source.interaction_count,
                     source.journalist_filename,

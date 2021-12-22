@@ -14,7 +14,7 @@ try:
     from journalist_app import create_app
     from models import Submission, Reply
     from sdconfig import config
-    from store import queued_add_checksum_for_file
+    from store import queued_add_checksum_for_file, Storage
     from worker import create_queue
 except:  # noqa
     if raise_errors:
@@ -58,7 +58,7 @@ def upgrade():
                             """
             )
             for (sub_id, filesystem_id, filename) in conn.execute(query):
-                full_path = app.storage.path(filesystem_id, filename)
+                full_path = Storage.get_default().path(filesystem_id, filename)
                 create_queue().enqueue(
                     queued_add_checksum_for_file,
                     Submission,
@@ -75,7 +75,7 @@ def upgrade():
                             """
             )
             for (rep_id, filesystem_id, filename) in conn.execute(query):
-                full_path = app.storage.path(filesystem_id, filename)
+                full_path = Storage.get_default().path(filesystem_id, filename)
                 create_queue().enqueue(
                     queued_add_checksum_for_file,
                     Reply,

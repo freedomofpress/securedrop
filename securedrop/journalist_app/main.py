@@ -19,6 +19,7 @@ from journalist_app.forms import ReplyForm
 from journalist_app.utils import (validate_user, bulk_delete, download,
                                   confirm_bulk_delete, get_source)
 from sdconfig import SDConfig
+from store import Storage
 
 
 def make_blueprint(config: SDConfig) -> Blueprint:
@@ -135,7 +136,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
         EncryptionManager.get_default().encrypt_journalist_reply(
             for_source_with_filesystem_id=g.filesystem_id,
             reply_in=form.message.data,
-            encrypted_reply_path_out=Path(current_app.storage.path(g.filesystem_id, filename)),
+            encrypted_reply_path_out=Path(Storage.get_default().path(g.filesystem_id, filename)),
         )
 
         try:

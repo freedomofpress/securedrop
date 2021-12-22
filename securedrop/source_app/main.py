@@ -13,6 +13,8 @@ from flask_babel import gettext
 
 import store
 
+from store import Storage
+
 from db import db
 from encryption import EncryptionManager, GpgKeyNotFoundError
 
@@ -82,7 +84,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
                 create_source_user(
                     db_session=db.session,
                     source_passphrase=codename,
-                    source_app_storage=current_app.storage,
+                    source_app_storage=Storage.get_default(),
                 )
             except (SourcePassphraseCollisionError, SourceDesignationCollisionError) as e:
                 current_app.logger.error("Could not create a source: {}".format(e))
@@ -111,7 +113,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
         ).all()
 
         for reply in source_inbox:
-            reply_path = current_app.storage.path(
+            reply_path = Storage.get_default().path(
                 logged_in_source.filesystem_id,
                 reply.filename,
             )
@@ -183,15 +185,15 @@ def make_blueprint(config: SDConfig) -> Blueprint:
         logged_in_source_in_db = logged_in_source.get_db_record()
         first_submission = logged_in_source_in_db.interaction_count == 0
 
-        if not os.path.exists(current_app.storage.path(logged_in_source.filesystem_id)):
+        if not os.path.exists(Storage.get_default().path(logged_in_source.filesystem_id)):
             current_app.logger.debug("Store directory not found for source '{}', creating one."
                                      .format(logged_in_source_in_db.journalist_designation))
-            os.mkdir(current_app.storage.path(logged_in_source.filesystem_id))
+            os.mkdir(Storage.get_default().path(logged_in_source.filesystem_id))
 
         if msg:
             logged_in_source_in_db.interaction_count += 1
             fnames.append(
-                current_app.storage.save_message_submission(
+                Storage.get_default().save_message_submission(
                     logged_in_source_in_db.filesystem_id,
                     logged_in_source_in_db.interaction_count,
                     logged_in_source_in_db.journalist_filename,
@@ -199,7 +201,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
         if fh:
             logged_in_source_in_db.interaction_count += 1
             fnames.append(
-                current_app.storage.save_file_submission(
+                Storage.get_default().save_file_submission(
                     logged_in_source_in_db.filesystem_id,
                     logged_in_source_in_db.interaction_count,
                     logged_in_source_in_db.journalist_filename,

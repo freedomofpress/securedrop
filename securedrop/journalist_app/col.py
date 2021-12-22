@@ -29,6 +29,7 @@ from journalist_app.utils import (make_star_true, make_star_false, get_source,
                                   col_download_all, col_star, col_un_star,
                                   col_delete, col_delete_data, mark_seen)
 from sdconfig import SDConfig
+from store import Storage
 
 
 def make_blueprint(config: SDConfig) -> Blueprint:
@@ -118,7 +119,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
         if '..' in fn or fn.startswith('/'):
             abort(404)
 
-        file = current_app.storage.path(filesystem_id, fn)
+        file = Storage.get_default().path(filesystem_id, fn)
         if not Path(file).is_file():
             flash(
                 gettext(
@@ -145,7 +146,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
         except NoResultFound as e:
             current_app.logger.error("Could not mark {} as seen: {}".format(fn, e))
 
-        return send_file(current_app.storage.path(filesystem_id, fn),
+        return send_file(Storage.get_default().path(filesystem_id, fn),
                          mimetype="application/pgp-encrypted")
 
     return view

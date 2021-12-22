@@ -21,7 +21,6 @@ from journalist_app.utils import (get_source, logged_in,
                                   JournalistInterfaceSessionInterface,
                                   cleanup_expired_revoked_tokens)
 from models import InstanceConfig, Journalist
-from store import Storage
 
 import typing
 # https://www.python.org/dev/peps/pep-0484/#runtime-or-type-checking
@@ -68,10 +67,6 @@ def create_app(config: 'SDConfig') -> Flask:
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['SQLALCHEMY_DATABASE_URI'] = config.DATABASE_URI
     db.init_app(app)
-
-    # TODO: Attaching a Storage dynamically like this disables all type checking (and
-    # breaks code analysis tools) for code that uses current_app.storage; it should be refactored
-    app.storage = Storage(config.STORE_DIR, config.TEMP_DIR)
 
     @app.errorhandler(CSRFError)
     def handle_csrf_error(e: CSRFError) -> 'Response':

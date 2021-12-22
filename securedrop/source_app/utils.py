@@ -8,6 +8,7 @@ from flask import render_template
 from flask import current_app
 from flask import url_for
 from markupsafe import Markup
+from store import Storage
 
 import typing
 
@@ -36,7 +37,7 @@ def normalize_timestamps(logged_in_source: SourceUser) -> None:
     #301.
     """
     source_in_db = logged_in_source.get_db_record()
-    sub_paths = [current_app.storage.path(logged_in_source.filesystem_id, submission.filename)
+    sub_paths = [Storage.get_default().path(logged_in_source.filesystem_id, submission.filename)
                  for submission in source_in_db.submissions]
     if len(sub_paths) > 1:
         args = ["touch", "--no-create"]

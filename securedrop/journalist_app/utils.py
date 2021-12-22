@@ -34,7 +34,7 @@ from models import (
     get_one_or_else,
     HOTP_SECRET_LENGTH,
 )
-from store import add_checksum_for_file
+from store import Storage, add_checksum_for_file
 
 
 def logged_in() -> bool:
@@ -216,7 +216,7 @@ def download(
                              include in the ZIP-file.
     """
     try:
-        zf = current_app.storage.get_bulk_archive(submissions, zip_directory=zip_basename)
+        zf = Storage.get_default().get_bulk_archive(submissions, zip_directory=zip_basename)
     except FileNotFoundError:
         flash(
             ngettext(
@@ -247,9 +247,9 @@ def download(
 
 
 def delete_file_object(file_object: Union[Submission, Reply]) -> None:
-    path = current_app.storage.path(file_object.source.filesystem_id, file_object.filename)
+    path = Storage.get_default().path(file_object.source.filesystem_id, file_object.filename)
     try:
-        current_app.storage.move_to_shredder(path)
+        Storage.get_default().move_to_shredder(path)
     except ValueError as e:
         current_app.logger.error("could not queue file for deletion: %s", e)
         raise
@@ -394,9 +394,9 @@ def col_delete_data(cols_selected: List[str]) -> werkzeug.Response:
 def delete_collection(filesystem_id: str) -> None:
     """deletes source account including files and reply key"""
     # Delete the source's collection of submissions
-    path = current_app.storage.path(filesystem_id)
+    path = Storage.get_default().path(filesystem_id)
     if os.path.exists(path):
-        current_app.storage.move_to_shredder(path)
+        Storage.get_default().move_to_shredder(path)
 
     # Delete the source's reply keypair
     EncryptionManager.get_default().delete_source_key_pair(filesystem_id)
@@ -500,7 +500,7 @@ def col_download_all(cols_selected: List[str]) -> werkzeug.Response:
 
 
 def serve_file_with_etag(db_obj: Union[Reply, Submission]) -> flask.Response:
-    file_path = current_app.storage.path(db_obj.source.filesystem_id, db_obj.filename)
+    file_path = Storage.get_default().path(db_obj.source.filesystem_id, db_obj.filename)
     response = send_file(file_path,
                          mimetype="application/pgp-encrypted",
                          as_attachment=True,
