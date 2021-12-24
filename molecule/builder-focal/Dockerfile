@@ -34,10 +34,10 @@ RUN apt-get -y update && apt-get upgrade -y && apt-get install -y \
         unzip
 
 
-# TEMPORARY: install dh-virtualenv from debian unstable, pending focal package:
+# TEMPORARY: install dh-virtualenv from unstable Ubuntu release, pending focal package:
 # https://github.com/spotify/dh-virtualenv/issues/298
-RUN echo "deb http://archive.ubuntu.com/ubuntu/ groovy universe" > /etc/apt/sources.list.d/ubuntu-groovy.list
-COPY aptpreferences.conf /etc/apt/preferences.d/ubuntu-groovy
+RUN echo "deb http://archive.ubuntu.com/ubuntu/ impish universe main" > /etc/apt/sources.list.d/ubuntu-impish.list
+COPY dh-virtualenv.pref /etc/apt/preferences.d/
 
 RUN apt-get update && apt-get install -y dh-virtualenv
 

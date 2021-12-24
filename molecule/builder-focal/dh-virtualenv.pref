@@ -1,0 +1,11 @@
+Package: *
+Pin: release a=focal
+Pin-Priority: 500
+
+Package: dh-virtualenv libjs-sphinxdoc sphinx-rtd-theme-common
+Pin: release a=impish
+Pin-Priority: 700
+
+Package: *
+Pin: release a=impish
+Pin-Priority: 1
