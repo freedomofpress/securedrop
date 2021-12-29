@@ -4,6 +4,7 @@ import os
 
 SECUREDROP_TARGET_DISTRIBUTION = os.environ.get("SECUREDROP_TARGET_DISTRIBUTION")
 SECUREDROP_PYTHON_VERSION = os.environ.get("SECUREDROP_PYTHON_VERSION", "3.5")
+DH_VIRTUALENV_VERSION = "1.2.2"
 
 testinfra_hosts = [
         "docker://{}-sd-app".format(SECUREDROP_TARGET_DISTRIBUTION)
@@ -48,7 +49,7 @@ def test_dh_virtualenv(host):
     """
     Confirm the expected version of dh-virtualenv is found.
     """
-    expected_version = "1.2.1"
+    expected_version = DH_VIRTUALENV_VERSION
     version_string = "dh_virtualenv {}".format(expected_version)
     c = host.run("dh_virtualenv --version")
     assert c.stdout.startswith(version_string)
