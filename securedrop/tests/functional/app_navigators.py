@@ -286,31 +286,31 @@ class SourceAppNagivator:
         accept_languages: Optional[str] = None,
     ) -> None:
         self._source_app_base_url = source_app_base_url
-        self._nav_helper = _NavigationHelper(web_driver)
+        self.nav_helper = _NavigationHelper(web_driver)
         self.driver = web_driver
         self._accept_languages = accept_languages
 
     def _is_on_source_homepage(self):
-        return self._nav_helper.wait_for(lambda: self.driver.find_element_by_id("source-index"))
+        return self.nav_helper.wait_for(lambda: self.driver.find_element_by_id("source-index"))
 
     def source_visits_source_homepage(self):
         self.driver.get(self._source_app_base_url)
         assert self._is_on_source_homepage()
 
     def _is_on_generate_page(self):
-        return self._nav_helper.wait_for(lambda: self.driver.find_element_by_id("create-form"))
+        return self.nav_helper.wait_for(lambda: self.driver.find_element_by_id("create-form"))
 
     def source_clicks_submit_documents_on_homepage(self):
         # It's the source's first time visiting this SecureDrop site, so they
         # choose to "Submit Documents".
-        self._nav_helper.safe_click_by_id("submit-documents-button")
+        self.nav_helper.safe_click_by_id("submit-documents-button")
 
         # The source should now be on the page where they are presented with
         # a diceware codename they can use for subsequent logins
         assert self._is_on_generate_page()
 
     def source_continues_to_submit_page(self, files_allowed=True):
-        self._nav_helper.safe_click_by_id("continue-button")
+        self.nav_helper.safe_click_by_id("continue-button")
 
         def submit_page_loaded():
             if not self._accept_languages:
@@ -320,4 +320,4 @@ class SourceAppNagivator:
                 else:
                     assert "Submit Messages" == headline.text
 
-        self._nav_helper.wait_for(submit_page_loaded)
+        self.nav_helper.wait_for(submit_page_loaded)
