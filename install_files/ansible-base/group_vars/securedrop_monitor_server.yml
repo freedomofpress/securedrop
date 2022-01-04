@@ -14,7 +14,6 @@ local_deb_packages:
 
 # Configure the tor onion services. The Monitor server has only one,
 # for SSH, since no web interfaces.
-tor_instances: "{{ [{ 'service': 'ssh', 'filename': 'mon-ssh-aths'}] if enable_ssh_over_tor else [] }}"
 tor_instances_v3: "{{ [{ 'service': 'sshv3', 'filename': 'mon-ssh.auth_private'}] if enable_ssh_over_tor else [] }}"
 
 tor_auth_instances_v3:
