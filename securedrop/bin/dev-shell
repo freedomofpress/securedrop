@@ -11,6 +11,18 @@ export PATH="/opt/venvs/securedrop-app-code/bin:$PATH"
 TOPLEVEL=$(git rev-parse --show-toplevel)
 BASE_OS="${BASE_OS:-focal}"
 USE_TOR="${USE_TOR:-}"
+USE_PODMAN="${USE_PODMAN:-}"
+DOCKER_RUN_ARGUMENTS="${DOCKER_RUN_ARGUMENTS:-}"
+
+# Allow opting into using podman with USE_PODMAN=1
+if  [[ -n "${USE_PODMAN}" ]]; then
+    DOCKER_BIN="podman"
+    # Make sure host UID/GID are mapped into container,
+    # see podman-run(1) manual.
+    DOCKER_RUN_ARGUMENTS="${DOCKER_RUN_ARGUMENTS} --userns=keep-id"
+else
+    DOCKER_BIN="docker"
+fi
 
 ## Get an integer offset for exposed ports, to support multiple containers
 get_port_offset() {
@@ -26,7 +38,7 @@ get_port_offset() {
 }
 
 function docker_image() {
-    docker build \
+    $DOCKER_BIN build \
            ${DOCKER_BUILD_ARGUMENTS:-} \
            --build-arg=USER_ID="$(id -u)" \
            --build-arg=USER_NAME="${USER:-root}" \
@@ -75,7 +87,7 @@ function docker_run() {
 
     # The --shm-size argument sets up dedicated shared memory for the
     # container. Our tests can fail with the default of 64m.
-    docker run $ci_env \
+    $DOCKER_BIN run $ci_env \
            --shm-size 2g \
            --rm \
            -p "127.0.0.1:${SD_HOSTPORT_VNC}:5909" \
@@ -94,7 +106,7 @@ function docker_run() {
            --volume "${TOPLEVEL}:${TOPLEVEL}" \
            --workdir "${TOPLEVEL}/securedrop" \
            --name "${SD_CONTAINER}" \
-           -ti ${DOCKER_RUN_ARGUMENTS:-} "securedrop-test-${1}-py3" "${@:2}"
+           -ti $DOCKER_RUN_ARGUMENTS "securedrop-test-${1}-py3" "${@:2}"
 }
 
 if [ "${DOCKER_BUILD_VERBOSE:-'false'}" = "true" ]
