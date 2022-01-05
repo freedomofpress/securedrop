@@ -16,13 +16,15 @@ import socket
 import time
 
 
-@pytest.fixture(scope="session")
+# Function-scoped so that tests can be run in parallel if needed
+@pytest.fixture(scope="function")
 def firefox_web_driver() -> WebDriver:
     with get_web_driver(web_driver_type=WebDriverTypeEnum.FIREFOX) as web_driver:
         yield web_driver
 
 
-@pytest.fixture(scope="session")
+# Function-scoped so that tests can be run in parallel if needed
+@pytest.fixture(scope="function")
 def tor_browser_web_driver() -> WebDriver:
     with get_web_driver(web_driver_type=WebDriverTypeEnum.TOR_BROWSER) as web_driver:
         yield web_driver

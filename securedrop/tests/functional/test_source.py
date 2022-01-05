@@ -1,8 +1,10 @@
+import requests
+from tests.functional import tor_utils
 import werkzeug
 
 import source_user
 from ..test_journalist import VALID_PASSWORD
-from . import source_navigation_steps, journalist_navigation_steps
+from . import source_navigation_steps
 from . import functional_test
 from sdconfig import config
 
@@ -76,16 +78,15 @@ class TestSourceInterface(
         self._source_submits_a_message(verify_notification=True)
 
 
-class TestDownloadKey(
-        functional_test.FunctionalTest,
-        journalist_navigation_steps.JournalistNavigationStepsMixin):
+class TestSourceAppDownloadJournalistKey:
 
-    def test_journalist_key_from_source_interface(self):
-        data = self.return_downloaded_content(self.source_location +
-                                              "/public-key", None)
+    def test(self, sd_servers_v2):
+        # Given a source app, when fetching the instance's journalist public key
+        url = f"{sd_servers_v2.source_app_base_url}/public-key"
+        response = requests.get(url=url, proxies=tor_utils.proxies_for_url(url))
 
-        data = data.decode('utf-8')
-        assert "BEGIN PGP PUBLIC KEY BLOCK" in data
+        # Then it succeeds and the right data is returned
+        assert "BEGIN PGP PUBLIC KEY BLOCK" in response.content.decode("utf-8")
 
 
 class TestDuplicateSourceInterface(

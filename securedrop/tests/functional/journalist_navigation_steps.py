@@ -22,6 +22,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 
 # Number of times to try flaky clicks.
 from encryption import EncryptionManager
+from tests.functional.tor_utils import proxies_for_url
 from source_user import _SourceScryptManager
 from tests.test_encryption import import_journalist_private_key
 
@@ -65,10 +66,7 @@ class JournalistNavigationStepsMixin:
         :param cookies: the cookies to access
         :return: Content of the URL
         """
-        proxies = None
-        if ".onion" in url:
-            proxies = {"http": "socks5h://127.0.0.1:9150", "https": "socks5h://127.0.0.1:9150"}
-        r = requests.get(url, cookies=cookies, proxies=proxies, stream=True)
+        r = requests.get(url, cookies=cookies, proxies=proxies_for_url(url), stream=True)
         if r.status_code != 200:
             raise Exception("Failed to download the data.")
         data = b""
