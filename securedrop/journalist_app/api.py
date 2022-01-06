@@ -265,7 +265,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
             # issue #3918
             filename = path.basename(filename)
 
-            reply = Reply(user, source, filename)
+            reply = Reply(user, source, filename, Storage.get_default())
 
             reply_uuid = data.get('uuid', None)
             if reply_uuid is not None:

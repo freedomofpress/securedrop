@@ -140,12 +140,12 @@ def make_blueprint(config: SDConfig) -> Blueprint:
         )
 
         try:
-            reply = Reply(g.user, g.source, filename)
+            reply = Reply(g.user, g.source, filename, Storage.get_default())
             db.session.add(reply)
             seen_reply = SeenReply(reply=reply, journalist=g.user)
             db.session.add(seen_reply)
             db.session.commit()
-            store.async_add_checksum_for_file(reply)
+            store.async_add_checksum_for_file(reply, Storage.get_default())
         except Exception as exc:
             flash(gettext(
                 "An unexpected error occurred! Please "

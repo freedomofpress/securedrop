@@ -186,7 +186,7 @@ def submit_message(source: Source, journalist_who_saw: Optional[Journalist]) -> 
         source.journalist_filename,
         next(messages),
     )
-    submission = Submission(source, fpath)
+    submission = Submission(source, fpath, Storage.get_default())
     db.session.add(submission)
 
     if journalist_who_saw:
@@ -206,7 +206,7 @@ def submit_file(source: Source, journalist_who_saw: Optional[Journalist]) -> Non
         "memo.txt",
         io.BytesIO(b"This is an example of a plain text file upload."),
     )
-    submission = Submission(source, fpath)
+    submission = Submission(source, fpath, Storage.get_default())
     db.session.add(submission)
 
     if journalist_who_saw:
@@ -227,7 +227,7 @@ def add_reply(
         reply_in=next(replies),
         encrypted_reply_path_out=Path(Storage.get_default().path(source.filesystem_id, fname)),
     )
-    reply = Reply(journalist, source, fname)
+    reply = Reply(journalist, source, fname, Storage.get_default())
     db.session.add(reply)
 
     # Journalist who replied has seen the reply

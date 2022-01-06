@@ -233,7 +233,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
 
         new_submissions = []
         for fname in fnames:
-            submission = Submission(logged_in_source_in_db, fname)
+            submission = Submission(logged_in_source_in_db, fname, Storage.get_default())
             db.session.add(submission)
             new_submissions.append(submission)
 
@@ -242,7 +242,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
         db.session.commit()
 
         for sub in new_submissions:
-            store.async_add_checksum_for_file(sub)
+            store.async_add_checksum_for_file(sub, Storage.get_default())
 
         normalize_timestamps(logged_in_source)
 

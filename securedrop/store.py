@@ -402,12 +402,12 @@ class Storage:
         return filename
 
 
-def async_add_checksum_for_file(db_obj: 'Union[Submission, Reply]') -> str:
+def async_add_checksum_for_file(db_obj: 'Union[Submission, Reply]', storage: Storage) -> str:
     return create_queue().enqueue(
         queued_add_checksum_for_file,
         type(db_obj),
         db_obj.id,
-        Storage.get_default().path(db_obj.source.filesystem_id, db_obj.filename),
+        storage.path(db_obj.source.filesystem_id, db_obj.filename),
         current_app.config['SQLALCHEMY_DATABASE_URI'],
     )
 

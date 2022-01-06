@@ -194,12 +194,11 @@ class Submission(db.Model):
     '''
     checksum = Column(String(255))
 
-    def __init__(self, source: Source, filename: str) -> None:
+    def __init__(self, source: Source, filename: str, storage: Storage) -> None:
         self.source_id = source.id
         self.filename = filename
         self.uuid = str(uuid.uuid4())
-        self.size = os.stat(Storage.get_default().path(source.filesystem_id,
-                                                       filename)).st_size
+        self.size = os.stat(storage.path(source.filesystem_id, filename)).st_size
 
     def __repr__(self) -> str:
         return '<Submission %r>' % (self.filename)
@@ -285,13 +284,13 @@ class Reply(db.Model):
     def __init__(self,
                  journalist: 'Journalist',
                  source: Source,
-                 filename: str) -> None:
+                 filename: str,
+                 storage: Storage) -> None:
         self.journalist = journalist
         self.source_id = source.id
         self.uuid = str(uuid.uuid4())
         self.filename = filename
-        self.size = os.stat(Storage.get_default().path(source.filesystem_id,
-                                                       filename)).st_size
+        self.size = os.stat(storage.path(source.filesystem_id, filename)).st_size
 
     def __repr__(self) -> str:
         return '<Reply %r>' % (self.filename)
