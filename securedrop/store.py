@@ -332,9 +332,10 @@ class Storage:
                              filename: typing.Optional[str],
                              stream: 'IO[bytes]') -> str:
 
-        sanitized_filename = secure_filename("unknown.file")
         if filename is not None:
             sanitized_filename = secure_filename(filename)
+        else:
+            sanitized_filename = secure_filename("unknown.file")
 
         # We store file submissions in a .gz file for two reasons:
         #

@@ -138,8 +138,8 @@ def make_blueprint(config: SDConfig) -> Blueprint:
                 reply = Reply.query.filter(Reply.filename == fn).one()
                 mark_seen([reply], journalist)
             elif fn.endswith("-doc.gz.gpg") or fn.endswith("doc.zip.gpg"):
-                the_file = Submission.query.filter(Submission.filename == fn).one()
-                mark_seen([the_file], journalist)
+                submitted_file = Submission.query.filter(Submission.filename == fn).one()
+                mark_seen([submitted_file], journalist)
             else:
                 message = Submission.query.filter(Submission.filename == fn).one()
                 mark_seen([message], journalist)
