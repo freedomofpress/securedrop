@@ -64,7 +64,9 @@ def create_app(config: SDConfig) -> Flask:
     app.config['SQLALCHEMY_DATABASE_URI'] = config.DATABASE_URI
     db.init_app(app)
 
-    @app.errorhandler(CSRFError)
+    # TODO: enable typechecking once upstream Flask fix is available. See:
+    # https://github.com/pallets/flask/issues/4295
+    @app.errorhandler(CSRFError)  # type: ignore
     def handle_csrf_error(e: CSRFError) -> werkzeug.Response:
         return clear_session_and_redirect_to_logged_out_page(flask_session=session)
 

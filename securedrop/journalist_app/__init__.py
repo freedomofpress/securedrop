@@ -68,7 +68,9 @@ def create_app(config: 'SDConfig') -> Flask:
     app.config['SQLALCHEMY_DATABASE_URI'] = config.DATABASE_URI
     db.init_app(app)
 
-    @app.errorhandler(CSRFError)
+    # TODO: enable type checking once upstream Flask fix is available. See:
+    # https://github.com/pallets/flask/issues/4295
+    @app.errorhandler(CSRFError)  # type: ignore
     def handle_csrf_error(e: CSRFError) -> 'Response':
         app.logger.error("The CSRF token is invalid.")
         session.clear()
@@ -81,9 +83,12 @@ def create_app(config: 'SDConfig') -> Flask:
     ) -> 'Tuple[Union[Response, str], Optional[int]]':
         # Workaround for no blueprint-level 404/5 error handlers, see:
         # https://github.com/pallets/flask/issues/503#issuecomment-71383286
+        # TODO: clean up API error handling such that all except 404/5s are
+        # registered in the blueprint and 404/5s are handled at the application
+        # level.
         handler = list(app.error_handler_spec['api'][error.code].values())[0]
         if request.path.startswith('/api/') and handler:
-            return handler(error)
+            return handler(error)  # type: ignore
 
         return render_template('error.html', error=error), error.code
 

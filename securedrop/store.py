@@ -28,9 +28,8 @@ if typing.TYPE_CHECKING:
     # That is why all type annotation relative import
     # statements has to be marked as noqa.
     # http://flake8.pycqa.org/en/latest/user/error-codes.html?highlight=f401
-    from typing import List, Type, Union  # noqa: F401
+    from typing import List, Type, Union, Optional, IO  # noqa: F401
     from tempfile import _TemporaryFileWrapper  # type: ignore # noqa: F401
-    from io import BufferedIOBase  # noqa: F401
     from sqlalchemy.orm import Session  # noqa: F401
     from models import Reply, Submission  # noqa: F401
 
@@ -330,9 +329,12 @@ class Storage:
                              filesystem_id: str,
                              count: int,
                              journalist_filename: str,
-                             filename: str,
-                             stream: 'BufferedIOBase') -> str:
-        sanitized_filename = secure_filename(filename)
+                             filename: typing.Optional[str],
+                             stream: 'IO[bytes]') -> str:
+
+        sanitized_filename = secure_filename("unknown.file")
+        if filename is not None:
+            sanitized_filename = secure_filename(filename)
 
         # We store file submissions in a .gz file for two reasons:
         #

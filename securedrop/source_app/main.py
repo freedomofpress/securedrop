@@ -19,7 +19,7 @@ from db import db
 from encryption import EncryptionManager, GpgKeyNotFoundError
 
 from models import Submission, Reply, get_one_or_else, InstanceConfig
-from passphrases import PassphraseGenerator
+from passphrases import PassphraseGenerator, DicewarePassphrase
 from sdconfig import SDConfig
 from source_app.decorators import login_required
 from source_app.session_manager import SessionManager
@@ -99,7 +99,8 @@ def make_blueprint(config: SDConfig) -> Blueprint:
             # All done - source user was successfully created
             current_app.logger.info("New source user created")
             session['new_user_codename'] = codename
-            SessionManager.log_user_in(db_session=db.session, supplied_passphrase=codename)
+            SessionManager.log_user_in(db_session=db.session,
+                                       supplied_passphrase=DicewarePassphrase(codename))
 
         return redirect(url_for('.lookup'))
 
@@ -291,7 +292,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
             try:
                 SessionManager.log_user_in(
                     db_session=db.session,
-                    supplied_passphrase=request.form['codename'].strip()
+                    supplied_passphrase=DicewarePassphrase(request.form['codename'].strip())
                 )
             except InvalidPassphraseError:
                 current_app.logger.info("Login failed for invalid codename")

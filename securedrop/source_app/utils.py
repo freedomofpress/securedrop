@@ -7,6 +7,7 @@ from flask import redirect
 from flask import render_template
 from flask import current_app
 from flask import url_for
+from flask.sessions import SessionMixin
 from markupsafe import Markup
 from store import Storage
 
@@ -20,7 +21,7 @@ if typing.TYPE_CHECKING:
     from typing import Optional
 
 
-def clear_session_and_redirect_to_logged_out_page(flask_session: typing.Dict) -> werkzeug.Response:
+def clear_session_and_redirect_to_logged_out_page(flask_session: SessionMixin) -> werkzeug.Response:
     msg = render_template('session_timeout.html')
 
     # Clear the session after we render the message so it's localized

@@ -133,7 +133,7 @@ class Source(db.Model):
         except GpgKeyNotFoundError:
             return None
 
-    def to_json(self) -> 'Dict[str, Union[str, bool, int, str]]':
+    def to_json(self) -> 'Dict[str, object]':
         docs_msg_count = self.documents_messages_count()
 
         if self.last_updated:

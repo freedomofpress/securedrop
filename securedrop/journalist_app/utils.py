@@ -518,7 +518,7 @@ class JournalistInterfaceSessionInterface(
         sessions.SecureCookieSessionInterface):
     """A custom session interface that skips storing sessions for api requests but
     otherwise just uses the default behaviour."""
-    def save_session(self, app: flask.Flask, session: Any, response: werkzeug.Response) -> None:
+    def save_session(self, app: flask.Flask, session: Any, response: flask.Response) -> None:
         # If this is an api request do not save the session
         if request.path.split("/")[1] == "api":
             return
