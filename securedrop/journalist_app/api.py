@@ -278,8 +278,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
 
             try:
                 db.session.add(reply)
-                db.session.flush()
-                seen_reply = SeenReply(reply_id=reply.id, journalist_id=user.id)
+                seen_reply = SeenReply(reply=reply, journalist=user)
                 db.session.add(seen_reply)
                 db.session.add(source)
                 db.session.commit()
