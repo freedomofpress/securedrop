@@ -34,8 +34,8 @@ function run_x11vnc() {
 }
 
 function urandom() {
-    sudo rm /dev/random
-    sudo ln -s /dev/urandom /dev/random
+    sudo rm /dev/random ||:
+    sudo ln -s /dev/urandom /dev/random || echo "Unable to replace /dev/random"
 }
 
 function append_to_exit() {
