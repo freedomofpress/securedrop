@@ -113,7 +113,7 @@ def create_app(config: SDConfig) -> Flask:
     @app.before_request
     @ignore_static
     def setup_g() -> Optional[werkzeug.Response]:
-        if InstanceConfig.get_default().organization_name:
+        if InstanceConfig.get_default(refresh=True).organization_name:
             g.organization_name = \
                 InstanceConfig.get_default().organization_name  # pylint: disable=assigning-non-slot
         else:

@@ -111,6 +111,10 @@ def create_app(config: 'SDConfig') -> Flask:
         cleanup_expired_revoked_tokens()
 
     @app.before_request
+    def update_instance_config() -> None:
+        InstanceConfig.get_default(refresh=True)
+
+    @app.before_request
     def setup_g() -> 'Optional[Response]':
         """Store commonly used values in Flask's special g object"""
         if 'expires' in session and datetime.now(timezone.utc) >= session['expires']:

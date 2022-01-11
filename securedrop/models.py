@@ -895,9 +895,10 @@ class InstanceConfig(db.Model):
         return new
 
     @classmethod
-    def get_default(cls) -> "InstanceConfig":
+    def get_default(cls, refresh: Optional[bool] = False) -> "InstanceConfig":
         global _default_instance_config
-        _default_instance_config = InstanceConfig.get_current()
+        if (_default_instance_config is None) or (refresh is not None and refresh is True):
+            _default_instance_config = InstanceConfig.get_current()
         return _default_instance_config
 
     @classmethod
