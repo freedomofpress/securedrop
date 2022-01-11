@@ -19,7 +19,7 @@ TEST_SALT_FOR_FILESYSTEM_ID = "mEFXIwvxoBqjyxc/JypLdvgMRNRjApoaM0OBNrxJM2E="
 
 
 class TestSourceUser:
-    def test_create_source_user(self, source_app):
+    def test_create_source_user(self, source_app, app_storage):
         # Given a passphrase
         passphrase = PassphraseGenerator.get_default().generate_passphrase()
 
@@ -27,18 +27,18 @@ class TestSourceUser:
         source_user = create_source_user(
             db_session=db.session,
             source_passphrase=passphrase,
-            source_app_storage=source_app.storage,
+            source_app_storage=app_storage,
         )
         assert source_user
         assert source_user.get_db_record()
 
-    def test_create_source_user_passphrase_collision(self, source_app):
+    def test_create_source_user_passphrase_collision(self, source_app, app_storage):
         # Given a source in the DB
         passphrase = PassphraseGenerator.get_default().generate_passphrase()
         create_source_user(
             db_session=db.session,
             source_passphrase=passphrase,
-            source_app_storage=source_app.storage,
+            source_app_storage=app_storage,
         )
 
         # When trying to create another with the same passphrase, it fails
@@ -46,15 +46,15 @@ class TestSourceUser:
             create_source_user(
                 db_session=db.session,
                 source_passphrase=passphrase,
-                source_app_storage=source_app.storage,
+                source_app_storage=app_storage,
             )
 
-    def test_create_source_user_designation_collision(self, source_app):
+    def test_create_source_user_designation_collision(self, source_app, app_storage):
         # Given a source in the DB
         existing_source = create_source_user(
             db_session=db.session,
             source_passphrase=PassphraseGenerator.get_default().generate_passphrase(),
-            source_app_storage=source_app.storage,
+            source_app_storage=app_storage,
         )
         existing_designation = existing_source.get_db_record().journalist_designation
 
@@ -69,16 +69,16 @@ class TestSourceUser:
                 create_source_user(
                     db_session=db.session,
                     source_passphrase=PassphraseGenerator.get_default().generate_passphrase(),
-                    source_app_storage=source_app.storage,
+                    source_app_storage=app_storage,
                 )
 
-    def test_authenticate_source_user(self, source_app):
+    def test_authenticate_source_user(self, source_app, app_storage):
         # Given a source in the DB
         passphrase = PassphraseGenerator.get_default().generate_passphrase()
         source_user = create_source_user(
             db_session=db.session,
             source_passphrase=passphrase,
-            source_app_storage=source_app.storage,
+            source_app_storage=app_storage,
         )
 
         # When they try to authenticate using their passphrase
@@ -90,12 +90,12 @@ class TestSourceUser:
         assert authenticated_user
         assert authenticated_user.db_record_id == source_user.db_record_id
 
-    def test_authenticate_source_user_wrong_passphrase(self, source_app):
+    def test_authenticate_source_user_wrong_passphrase(self, source_app, app_storage):
         # Given a source in the DB
         create_source_user(
             db_session=db.session,
             source_passphrase=PassphraseGenerator.get_default().generate_passphrase(),
-            source_app_storage=source_app.storage,
+            source_app_storage=app_storage,
         )
 
         # When a user tries to authenticate using a wrong passphrase, it fails

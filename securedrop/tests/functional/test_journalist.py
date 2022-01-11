@@ -23,6 +23,7 @@ from source_user import _SourceScryptManager
 from . import functional_test as ft
 from . import journalist_navigation_steps
 from . import source_navigation_steps
+from store import Storage
 
 from tbselenium.utils import SECURITY_LOW
 
@@ -120,7 +121,7 @@ class TestJournalistMissingFile(
         filesystem_id = _SourceScryptManager.get_default().derive_source_filesystem_id(
             self.source_name
         )
-        storage_path = Path(self.journalist_app.storage.storage_path) / filesystem_id
+        storage_path = Path(Storage.get_default().storage_path) / filesystem_id
         msg_files = [p for p in storage_path.glob("*-msg.gpg")]
         assert len(msg_files) == 1
         msg_files[0].unlink()

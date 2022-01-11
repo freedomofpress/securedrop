@@ -10,7 +10,6 @@ import random
 from typing import Dict, List
 
 import mock
-from flask import current_app
 
 from db import db
 from encryption import EncryptionManager
@@ -18,6 +17,7 @@ from journalist_app.utils import mark_seen
 from models import Journalist, Reply, SeenReply, Submission
 from passphrases import PassphraseGenerator
 from source_user import create_source_user
+from store import Storage
 
 
 def init_journalist(first_name=None, last_name=None, is_admin=False):
@@ -55,7 +55,7 @@ def delete_journalist(journalist):
     db.session.commit()
 
 
-def reply(journalist, source, num_replies):
+def reply(storage, journalist, source, num_replies):
     """Generates and submits *num_replies* replies to *source*
     from *journalist*. Returns reply objects as a list.
 
@@ -78,10 +78,10 @@ def reply(journalist, source, num_replies):
         EncryptionManager.get_default().encrypt_journalist_reply(
             for_source_with_filesystem_id=source.filesystem_id,
             reply_in=str(os.urandom(1)),
-            encrypted_reply_path_out=current_app.storage.path(source.filesystem_id, fname),
+            encrypted_reply_path_out=storage.path(source.filesystem_id, fname),
         )
 
-        reply = Reply(journalist, source, fname)
+        reply = Reply(journalist, source, fname, storage)
         replies.append(reply)
         db.session.add(reply)
         seen_reply = SeenReply(reply=reply, journalist=journalist)
@@ -118,7 +118,7 @@ def mark_downloaded(*submissions):
 # {Source,Submission}
 
 
-def init_source():
+def init_source(storage):
     """Initialize a source: create their database record, the
     filesystem directory that stores their submissions & replies,
     and their GPG key encrypted with their codename. Return a source
@@ -131,16 +131,18 @@ def init_source():
     source_user = create_source_user(
         db_session=db.session,
         source_passphrase=passphrase,
-        source_app_storage=current_app.storage,
+        source_app_storage=storage,
     )
     EncryptionManager.get_default().generate_source_key_pair(source_user)
     return source_user.get_db_record(), passphrase
 
 
-def submit(source, num_submissions, submission_type="message"):
+def submit(storage, source, num_submissions, submission_type="message"):
     """Generates and submits *num_submissions*
     :class:`Submission`s on behalf of a :class:`Source`
     *source*.
+
+    :param Storage storage: the Storage object to use.
 
     :param Source source: The source on who's behalf to make
                              submissions.
@@ -158,7 +160,7 @@ def submit(source, num_submissions, submission_type="message"):
         source.interaction_count += 1
         source.pending = False
         if submission_type == "file":
-            fpath = current_app.storage.save_file_submission(
+            fpath = storage.save_file_submission(
                 source.filesystem_id,
                 source.interaction_count,
                 source.journalist_filename,
@@ -166,13 +168,13 @@ def submit(source, num_submissions, submission_type="message"):
                 io.BytesIO(b"Ceci n'est pas une pipe.")
             )
         else:
-            fpath = current_app.storage.save_message_submission(
+            fpath = storage.save_message_submission(
                 source.filesystem_id,
                 source.interaction_count,
                 source.journalist_filename,
                 str(os.urandom(1))
             )
-        submission = Submission(source, fpath)
+        submission = Submission(source, fpath, storage)
         submissions.append(submission)
         db.session.add(source)
         db.session.add(submission)
@@ -190,7 +192,7 @@ def new_codename(client, session):
     return codename
 
 
-def bulk_setup_for_seen_only(journo: Journalist) -> List[Dict]:
+def bulk_setup_for_seen_only(journo: Journalist, storage: Storage) -> List[Dict]:
     """
     Create some sources with some seen submissions that are not marked as 'downloaded' in the
     database and some seen replies from journo.
@@ -201,13 +203,13 @@ def bulk_setup_for_seen_only(journo: Journalist) -> List[Dict]:
     for i in range(random.randint(2, 4)):
         collection = {}
 
-        source, _ = init_source()
+        source, _ = init_source(storage)
 
-        submissions = submit(source, random.randint(2, 4))
+        submissions = submit(storage, source, random.randint(2, 4))
         half = math.ceil(len(submissions) / 2)
         messages = submissions[half:]
         files = submissions[:half]
-        replies = reply(journo, source, random.randint(1, 3))
+        replies = reply(storage, journo, source, random.randint(1, 3))
 
         seen_files = random.sample(files, math.ceil(len(files) / 2))
         seen_messages = random.sample(messages, math.ceil(len(messages) / 2))

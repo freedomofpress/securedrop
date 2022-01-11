@@ -215,7 +215,7 @@ def test_clean_tmp_removed(config, caplog):
     assert 'FILE removed' in caplog.text
 
 
-def test_were_there_submissions_today(source_app, config):
+def test_were_there_submissions_today(source_app, config, app_storage):
     with source_app.app_context() as context:
         # We need to override the config to point at the per-test DB
         data_root = config.SECUREDROP_DATA_ROOT
@@ -225,7 +225,7 @@ def test_were_there_submissions_today(source_app, config):
         source_user = create_source_user(
             db_session=db.session,
             source_passphrase=PassphraseGenerator.get_default().generate_passphrase(),
-            source_app_storage=source_app.storage,
+            source_app_storage=app_storage,
         )
         source = source_user.get_db_record()
         source.last_updated = (datetime.datetime.utcnow() - datetime.timedelta(hours=24*2))

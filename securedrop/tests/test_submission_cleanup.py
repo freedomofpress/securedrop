@@ -8,16 +8,16 @@ from models import Submission
 from tests import utils
 
 
-def test_delete_disconnected_db_submissions(journalist_app, config):
+def test_delete_disconnected_db_submissions(journalist_app, app_storage, config):
     """
     Test that Submission records without corresponding files are deleted.
     """
     with journalist_app.app_context():
-        source, _ = utils.db_helper.init_source()
+        source, _ = utils.db_helper.init_source(app_storage)
         source_id = source.id
 
         # make two submissions
-        utils.db_helper.submit(source, 2)
+        utils.db_helper.submit(app_storage, source, 2)
         submission_id = source.submissions[0].id
 
         # remove one submission's file
@@ -39,14 +39,14 @@ def test_delete_disconnected_db_submissions(journalist_app, config):
         assert db.session.query(Submission).filter(Submission.source_id == source_id).count() == 1
 
 
-def test_delete_disconnected_fs_submissions(journalist_app, config):
+def test_delete_disconnected_fs_submissions(journalist_app, app_storage, config):
     """
     Test that files in the store without corresponding Submission records are deleted.
     """
-    source, _ = utils.db_helper.init_source()
+    source, _ = utils.db_helper.init_source(app_storage)
 
     # make two submissions
-    utils.db_helper.submit(source, 2)
+    utils.db_helper.submit(app_storage, source, 2)
     source_filesystem_id = source.filesystem_id
     submission_filename = source.submissions[0].filename
     disconnect_path = os.path.join(config.STORE_DIR, source_filesystem_id, submission_filename)
@@ -54,7 +54,7 @@ def test_delete_disconnected_fs_submissions(journalist_app, config):
     # make two replies, to make sure that their files are not seen
     # as disconnects
     journalist, _ = utils.db_helper.init_journalist("Mary", "Lane")
-    utils.db_helper.reply(journalist, source, 2)
+    utils.db_helper.reply(app_storage, journalist, source, 2)
 
     # delete the first Submission record
     db.session.delete(source.submissions[0])

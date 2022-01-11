@@ -17,13 +17,14 @@ class TestEncryptionManager:
         assert encryption_mgr
         assert encryption_mgr.get_journalist_public_key()
 
-    def test_generate_source_key_pair(self, setup_journalist_key_and_gpg_folder, source_app):
+    def test_generate_source_key_pair(self, setup_journalist_key_and_gpg_folder,
+                                      source_app, app_storage):
         # Given a source user
         with source_app.app_context():
             source_user = create_source_user(
                 db_session=db.session,
                 source_passphrase=PassphraseGenerator.get_default().generate_passphrase(),
-                source_app_storage=source_app.storage,
+                source_app_storage=app_storage,
             )
 
         # And an encryption manager
@@ -225,7 +226,8 @@ class TestEncryptionManager:
         # For GPG 2.1+, a non-null passphrase _must_ be passed to decrypt()
         assert not encryption_mgr._gpg.decrypt(encrypted_file, passphrase="test 123").ok
 
-    def test_encrypt_and_decrypt_journalist_reply(self, source_app, test_source, tmp_path):
+    def test_encrypt_and_decrypt_journalist_reply(self, source_app, test_source,
+                                                  tmp_path, app_storage):
         # Given a source user with a key pair in the default encryption manager
         source_user1 = test_source["source_user"]
         encryption_mgr = EncryptionManager.get_default()
@@ -235,7 +237,7 @@ class TestEncryptionManager:
             source_user2 = create_source_user(
                 db_session=db.session,
                 source_passphrase=PassphraseGenerator.get_default().generate_passphrase(),
-                source_app_storage=source_app.storage,
+                source_app_storage=app_storage,
             )
         encryption_mgr.generate_source_key_pair(source_user2)
 

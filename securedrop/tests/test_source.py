@@ -319,17 +319,17 @@ def test_login_with_whitespace(source_app):
             login_test(app, codename_)
 
 
-def test_login_with_missing_reply_files(source_app):
+def test_login_with_missing_reply_files(source_app, app_storage):
     """
     Test that source can log in when replies are present in database but missing
     from storage.
     """
-    source, codename = utils.db_helper.init_source()
+    source, codename = utils.db_helper.init_source(app_storage)
     journalist, _ = utils.db_helper.init_journalist()
-    replies = utils.db_helper.reply(journalist, source, 1)
+    replies = utils.db_helper.reply(app_storage, journalist, source, 1)
     assert len(replies) > 0
     # Delete the reply file
-    reply_file_path = Path(source_app.storage.path(source.filesystem_id, replies[0].filename))
+    reply_file_path = Path(app_storage.path(source.filesystem_id, replies[0].filename))
     reply_file_path.unlink()
     assert not reply_file_path.exists()
 
@@ -445,12 +445,12 @@ def test_submit_both(source_app):
         assert "Thanks! We received your message and document" in text
 
 
-def test_delete_all_successfully_deletes_replies(source_app):
+def test_delete_all_successfully_deletes_replies(source_app, app_storage):
     with source_app.app_context():
         journalist, _ = utils.db_helper.init_journalist()
-        source, codename = utils.db_helper.init_source()
+        source, codename = utils.db_helper.init_source(app_storage)
         source_id = source.id
-        utils.db_helper.reply(journalist, source, 1)
+        utils.db_helper.reply(app_storage, journalist, source, 1)
 
     with source_app.test_client() as app:
         resp = app.post(url_for('main.login'),
@@ -469,13 +469,13 @@ def test_delete_all_successfully_deletes_replies(source_app):
             assert reply.deleted_by_source is True
 
 
-def test_delete_all_replies_deleted_by_source_but_not_journalist(source_app):
+def test_delete_all_replies_deleted_by_source_but_not_journalist(source_app, app_storage):
     """Replies can be deleted by a source, but not by journalists. As such,
     replies may still exist in the replies table, but no longer be visible."""
     with source_app.app_context():
         journalist, _ = utils.db_helper.init_journalist()
-        source, codename = utils.db_helper.init_source()
-        utils.db_helper.reply(journalist, source, 1)
+        source, codename = utils.db_helper.init_source(app_storage)
+        utils.db_helper.reply(app_storage, journalist, source, 1)
         replies = Reply.query.filter(Reply.source_id == source.id).all()
         for reply in replies:
             reply.deleted_by_source = True
@@ -496,10 +496,10 @@ def test_delete_all_replies_deleted_by_source_but_not_journalist(source_app):
             )
 
 
-def test_delete_all_replies_already_deleted_by_journalists(source_app):
+def test_delete_all_replies_already_deleted_by_journalists(source_app, app_storage):
     with source_app.app_context():
         journalist, _ = utils.db_helper.init_journalist()
-        source, codename = utils.db_helper.init_source()
+        source, codename = utils.db_helper.init_source(app_storage)
         # Note that we are creating the source and no replies
 
     with source_app.test_client() as app:
@@ -627,7 +627,7 @@ def test_login_with_overly_long_codename(source_app):
                 .format(PassphraseGenerator.MAX_PASSPHRASE_LENGTH)) in text
 
 
-def test_normalize_timestamps(source_app):
+def test_normalize_timestamps(source_app, app_storage):
     """
     Check function of source_app.utils.normalize_timestamps.
 
@@ -637,14 +637,14 @@ def test_normalize_timestamps(source_app):
     """
     with source_app.test_client() as app:
         # create a source
-        source, codename = utils.db_helper.init_source()
+        source, codename = utils.db_helper.init_source(app_storage)
 
         # create one submission
-        first_submission = submit(source, 1)[0]
+        first_submission = submit(app_storage, source, 1)[0]
 
         # delete the submission's file from the store
         first_submission_path = Path(
-            source_app.storage.path(source.filesystem_id, first_submission.filename)
+            app_storage.path(source.filesystem_id, first_submission.filename)
         )
         first_submission_path.unlink()
         assert not first_submission_path.exists()
@@ -676,7 +676,7 @@ def test_normalize_timestamps(source_app):
         # only two of the source's three submissions should have files in the store
         assert 3 == len(source.submissions)
         submission_paths = [
-            Path(source_app.storage.path(source.filesystem_id, s.filename))
+            Path(app_storage.path(source.filesystem_id, s.filename))
             for s in source.submissions
         ]
         extant_paths = [p for p in submission_paths if p.exists()]
@@ -827,14 +827,14 @@ def test_csrf_error_page(source_app):
         assert 'You were logged out due to inactivity' in text
 
 
-def test_source_can_only_delete_own_replies(source_app):
+def test_source_can_only_delete_own_replies(source_app, app_storage):
     '''This test checks for a bug an authenticated source A could delete
        replies send to source B by "guessing" the filename.
     '''
-    source0, codename0 = utils.db_helper.init_source()
-    source1, codename1 = utils.db_helper.init_source()
+    source0, codename0 = utils.db_helper.init_source(app_storage)
+    source1, codename1 = utils.db_helper.init_source(app_storage)
     journalist, _ = utils.db_helper.init_journalist()
-    replies = utils.db_helper.reply(journalist, source0, 1)
+    replies = utils.db_helper.reply(app_storage, journalist, source0, 1)
     filename = replies[0].filename
     confirmation_msg = 'Reply deleted'
 
