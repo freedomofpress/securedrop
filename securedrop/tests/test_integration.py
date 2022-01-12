@@ -641,7 +641,7 @@ def test_user_change_password(journalist_app, test_journo):
 def test_login_after_regenerate_hotp(journalist_app, test_journo):
     """Test that journalists can login after resetting their HOTP 2fa"""
 
-    otp_secret = 'aaaaaa'
+    otp_secret = '0123456789abcdef0123456789abcdef01234567'
     b32_otp_secret = b32encode(unhexlify(otp_secret))
 
     # edit hotp
