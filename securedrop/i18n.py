@@ -101,7 +101,7 @@ class RequestLocaleInfo:
         return get_locale_identifier(parse_locale(str(self.locale)), sep="-")
 
 
-def configure_babel(config: SDConfig, app: Flask) -> None:
+def configure_babel(config: SDConfig, app: Flask) -> Babel:
     """
     Set up Flask-Babel according to the SecureDrop configuration.
     """
@@ -123,9 +123,10 @@ def configure_babel(config: SDConfig, app: Flask) -> None:
 
     # register the function used to determine the locale of a request
     babel.localeselector(lambda: get_locale(config))
+    return babel
 
 
-def validate_locale_configuration(config: SDConfig, app: Flask) -> None:
+def validate_locale_configuration(config: SDConfig, babel: Babel) -> None:
     """
     Ensure that the configured locales are valid and translated.
     """
@@ -136,7 +137,7 @@ def validate_locale_configuration(config: SDConfig, app: Flask) -> None:
             )
         )
 
-    translations = app.babel_instance.list_translations()
+    translations = babel.list_translations()
     for locale in config.SUPPORTED_LOCALES:
         if locale == "en_US":
             continue
@@ -179,8 +180,8 @@ def map_locale_display_names(config: SDConfig) -> None:
 
 
 def configure(config: SDConfig, app: Flask) -> None:
-    configure_babel(config, app)
-    validate_locale_configuration(config, app)
+    babel = configure_babel(config, app)
+    validate_locale_configuration(config, babel)
     map_locale_display_names(config)
 
 
