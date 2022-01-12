@@ -488,9 +488,9 @@ def test_authorized_user_can_get_single_reply(journalist_app, test_files,
         assert response.json['journalist_uuid'] == \
             reply.journalist.uuid
         assert response.json['journalist_first_name'] == \
-            reply.journalist.first_name
+            (reply.journalist.first_name or '')
         assert response.json['journalist_last_name'] == \
-            reply.journalist.last_name
+            (reply.journalist.last_name or '')
         assert response.json['is_deleted_by_source'] is False
         assert response.json['filename'] == \
             test_files['source'].replies[0].filename
@@ -508,12 +508,12 @@ def test_reply_of_deleted_journalist(journalist_app,
                                    source_uuid=uuid,
                                    reply_uuid=reply_uuid),
                            headers=get_api_headers(journalist_api_token))
-
+        deleted_uuid = Journalist.get_deleted().uuid
         assert response.status_code == 200
 
         assert response.json['uuid'] == reply_uuid
         assert response.json['journalist_username'] == "deleted"
-        assert response.json['journalist_uuid'] == "deleted"
+        assert response.json['journalist_uuid'] == deleted_uuid
         assert response.json['journalist_first_name'] == ""
         assert response.json['journalist_last_name'] == ""
         assert response.json['is_deleted_by_source'] is False

@@ -382,7 +382,7 @@ def load(args: argparse.Namespace) -> None:
 
         # delete one journalist
         _, _, journalist_to_be_deleted = journalists
-        db.session.delete(journalist_to_be_deleted)
+        journalist_to_be_deleted.delete()
         db.session.commit()
 
 
