@@ -60,7 +60,7 @@ class TestEncryptionManager:
         # And the user's key does not expire
         assert source_key_details["expires"] == ""
 
-    def test_get_source_public_key(self, source_app, test_source):
+    def test_get_source_public_key(self, test_source):
         # Given a source user with a key pair in the default encryption manager
         source_user = test_source["source_user"]
         encryption_mgr = EncryptionManager.get_default()
