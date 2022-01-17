@@ -6,6 +6,9 @@ import pytest
 import re
 import stat
 import zipfile
+from pathlib import Path
+from tempfile import TemporaryDirectory
+from typing import Generator
 
 from passphrases import PassphraseGenerator
 from source_user import create_source_user
@@ -19,9 +22,25 @@ import store
 from store import Storage, queued_add_checksum_for_file, async_add_checksum_for_file
 
 
-def create_file_in_source_dir(config, filesystem_id, filename):
+@pytest.fixture(scope="function")
+def test_storage(
+) -> Generator[Storage, None, None]:
+    # Setup the filesystem for the storage object
+    with TemporaryDirectory() as data_dir_name:
+        data_dir = Path(data_dir_name)
+        store_dir = data_dir / "store"
+        store_dir.mkdir()
+        tmp_dir = data_dir / "tmp"
+        tmp_dir.mkdir()
+
+        storage = Storage(str(store_dir), str(tmp_dir))
+
+        yield storage
+
+
+def create_file_in_source_dir(base_dir, filesystem_id, filename):
     """Helper function for simulating files"""
-    source_directory = os.path.join(config.STORE_DIR,
+    source_directory = os.path.join(base_dir,
                                     filesystem_id)
     os.makedirs(source_directory)
 
@@ -32,33 +51,33 @@ def create_file_in_source_dir(config, filesystem_id, filename):
     return source_directory, file_path
 
 
-def test_path_returns_filename_of_folder(journalist_app, app_storage, config):
+def test_path_returns_filename_of_folder(test_storage):
     """`Storage.path` is called in this way in
         journalist.delete_collection
     """
     filesystem_id = 'example'
-    generated_absolute_path = app_storage.path(filesystem_id)
+    generated_absolute_path = test_storage.path(filesystem_id)
 
-    expected_absolute_path = os.path.join(config.STORE_DIR, filesystem_id)
+    expected_absolute_path = os.path.join(test_storage.storage_path, filesystem_id)
     assert generated_absolute_path == expected_absolute_path
 
 
-def test_path_returns_filename_of_items_within_folder(journalist_app, app_storage, config):
-    """`Storage.path` is called in this way in journalist.bulk_delete"""
+def test_path_returns_filename_of_items_within_folder(test_storage):
+    """`Storage.path` is called in this  way in journalist.bulk_delete"""
     filesystem_id = 'example'
     item_filename = '1-quintuple_cant-msg.gpg'
-    generated_absolute_path = app_storage.path(filesystem_id, item_filename)
+    generated_absolute_path = test_storage.path(filesystem_id, item_filename)
 
-    expected_absolute_path = os.path.join(config.STORE_DIR,
+    expected_absolute_path = os.path.join(test_storage.storage_path,
                                           filesystem_id, item_filename)
     assert generated_absolute_path == expected_absolute_path
 
 
-def test_path_without_filesystem_id(journalist_app, app_storage, config):
+def test_path_without_filesystem_id(test_storage):
     filesystem_id = 'example'
     item_filename = '1-quintuple_cant-msg.gpg'
 
-    basedir = os.path.join(config.STORE_DIR, filesystem_id)
+    basedir = os.path.join(test_storage.storage_path, filesystem_id)
     os.makedirs(basedir)
 
     path_to_file = os.path.join(basedir, item_filename)
@@ -66,20 +85,20 @@ def test_path_without_filesystem_id(journalist_app, app_storage, config):
         os.utime(path_to_file, None)
 
     generated_absolute_path = \
-        app_storage.path_without_filesystem_id(item_filename)
+        test_storage.path_without_filesystem_id(item_filename)
 
-    expected_absolute_path = os.path.join(config.STORE_DIR,
+    expected_absolute_path = os.path.join(test_storage.storage_path,
                                           filesystem_id, item_filename)
     assert generated_absolute_path == expected_absolute_path
 
 
-def test_path_without_filesystem_id_duplicate_files(journalist_app, app_storage, config):
+def test_path_without_filesystem_id_duplicate_files(test_storage):
     filesystem_id = 'example'
     filesystem_id_duplicate = 'example2'
     item_filename = '1-quintuple_cant-msg.gpg'
 
-    basedir = os.path.join(config.STORE_DIR, filesystem_id)
-    duplicate_basedir = os.path.join(config.STORE_DIR, filesystem_id_duplicate)
+    basedir = os.path.join(test_storage.storage_path, filesystem_id)
+    duplicate_basedir = os.path.join(test_storage.storage_path, filesystem_id_duplicate)
 
     for directory in [basedir, duplicate_basedir]:
         os.makedirs(directory)
@@ -88,43 +107,43 @@ def test_path_without_filesystem_id_duplicate_files(journalist_app, app_storage,
             os.utime(path_to_file, None)
 
     with pytest.raises(store.TooManyFilesException):
-        app_storage.path_without_filesystem_id(item_filename)
+        test_storage.path_without_filesystem_id(item_filename)
 
 
-def test_path_without_filesystem_id_no_file(journalist_app, app_storage, config):
+def test_path_without_filesystem_id_no_file(test_storage):
     item_filename = 'not there'
     with pytest.raises(store.NoFileFoundException):
-        app_storage.path_without_filesystem_id(item_filename)
+        test_storage.path_without_filesystem_id(item_filename)
 
 
-def test_verify_path_not_absolute(journalist_app, app_storage, config):
+def test_verify_path_not_absolute(test_storage):
     with pytest.raises(store.PathException):
-        app_storage.verify(
-            os.path.join(config.STORE_DIR, '..', 'etc', 'passwd'))
+        test_storage.verify(
+            os.path.join(test_storage.storage_path, '..', 'etc', 'passwd'))
 
 
-def test_verify_in_store_dir(journalist_app, app_storage, config):
+def test_verify_in_store_dir(test_storage):
     with pytest.raises(store.PathException) as e:
-        path = config.STORE_DIR + "_backup"
-        app_storage.verify(path)
+        path = test_storage.storage_path + "_backup"
+        test_storage.verify(path)
         assert e.message == "Path not valid in store: {}".format(path)
 
 
-def test_verify_store_path_not_absolute(journalist_app, app_storage):
+def test_verify_store_path_not_absolute(test_storage):
     with pytest.raises(store.PathException) as e:
-        app_storage.verify('..')
+        test_storage.verify('..')
         assert e.message == "Path not valid in store: .."
 
 
-def test_verify_rejects_symlinks(journalist_app, app_storage):
+def test_verify_rejects_symlinks(test_storage):
     """
     Test that verify rejects paths involving links outside the store.
     """
     try:
-        link = os.path.join(app_storage.storage_path, "foo")
+        link = os.path.join(test_storage.storage_path, "foo")
         os.symlink("/foo", link)
         with pytest.raises(store.PathException) as e:
-            app_storage.verify(link)
+            test_storage.verify(link)
             assert e.message == "Path not valid in store: {}".format(link)
     finally:
         os.unlink(link)
@@ -146,7 +165,7 @@ def test_verify_store_temp_dir_not_absolute():
     assert re.compile('temp_dir.*is not absolute').match(msg)
 
 
-def test_verify_regular_submission_in_sourcedir_returns_true(journalist_app, config, app_storage):
+def test_verify_regular_submission_in_sourcedir_returns_true(test_storage):
     """
     Tests that verify is happy with a regular submission file.
 
@@ -154,34 +173,32 @@ def test_verify_regular_submission_in_sourcedir_returns_true(journalist_app, con
     naming scheme of submissions.
     """
     source_directory, file_path = create_file_in_source_dir(
-        config, 'example-filesystem-id', '1-regular-doc.gz.gpg'
+        test_storage.storage_path, 'example-filesystem-id', '1-regular-doc.gz.gpg'
     )
 
-    assert app_storage.verify(file_path)
+    assert test_storage.verify(file_path)
 
 
-def test_verify_invalid_file_extension_in_sourcedir_raises_exception(
-        journalist_app, app_storage, config):
+def test_verify_invalid_file_extension_in_sourcedir_raises_exception(test_storage):
 
     source_directory, file_path = create_file_in_source_dir(
-        config, 'example-filesystem-id', 'not_valid.txt'
+        test_storage.storage_path, 'example-filesystem-id', 'not_valid.txt'
     )
 
     with pytest.raises(store.PathException) as e:
-        app_storage.verify(file_path)
+        test_storage.verify(file_path)
 
     assert 'Path not valid in store: {}'.format(file_path) in str(e)
 
 
-def test_verify_invalid_filename_in_sourcedir_raises_exception(
-        journalist_app, app_storage, config):
+def test_verify_invalid_filename_in_sourcedir_raises_exception(test_storage):
 
     source_directory, file_path = create_file_in_source_dir(
-        config, 'example-filesystem-id', 'NOTVALID.gpg'
+        test_storage.storage_path, 'example-filesystem-id', 'NOTVALID.gpg'
     )
 
     with pytest.raises(store.PathException) as e:
-        app_storage.verify(file_path)
+        test_storage.verify(file_path)
         assert e.message == 'Path not valid in store: {}'.format(file_path)
 
 
@@ -300,7 +317,7 @@ def test_async_add_checksum_for_file(config, app_storage, db_model):
         assert db_obj.checksum == 'sha256:' + expected_hash
 
 
-def test_path_configuration_is_immutable(journalist_app, app_storage):
+def test_path_configuration_is_immutable(test_storage):
     """
     Check that the store's paths cannot be changed.
 
@@ -310,18 +327,18 @@ def test_path_configuration_is_immutable(journalist_app, app_storage):
     are prevented.
     """
     with pytest.raises(AttributeError):
-        app_storage.storage_path = "/foo"
+        test_storage.storage_path = "/foo"
 
-    original_storage_path = app_storage.storage_path[:]
-    app_storage.__storage_path = "/foo"
-    assert app_storage.storage_path == original_storage_path
+    original_storage_path = test_storage.storage_path[:]
+    test_storage.__storage_path = "/foo"
+    assert test_storage.storage_path == original_storage_path
 
     with pytest.raises(AttributeError):
-        app_storage.shredder_path = "/foo"
+        test_storage.shredder_path = "/foo"
 
-    original_shredder_path = app_storage.shredder_path[:]
-    app_storage.__shredder_path = "/foo"
-    assert app_storage.shredder_path == original_shredder_path
+    original_shredder_path = test_storage.shredder_path[:]
+    test_storage.__shredder_path = "/foo"
+    assert test_storage.shredder_path == original_shredder_path
 
 
 def test_shredder_configuration(journalist_app, app_storage):
