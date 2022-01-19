@@ -243,7 +243,7 @@ case "$1" in
 
     ;;
 
-    abort-upgrade|abort-remove|abort-deconfigure)
+    abort-upgrade|abort-remove|abort-deconfigure|triggered)
     ;;
 
     *)

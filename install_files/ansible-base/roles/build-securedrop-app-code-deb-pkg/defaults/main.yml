@@ -46,7 +46,3 @@ securedrop_venv: "/opt/venvs/securedrop-app-code"
 securedrop_venv_bin: "{{ securedrop_venv }}/bin"
 securedrop_python_version: "{{ '3.8' if securedrop_target_distribution == 'focal' else '3.5' }}"
 securedrop_venv_site_packages: "{{ securedrop_venv }}/lib/python{{ securedrop_python_version }}/site-packages"
-
-securedrop_app_focal_files:
-  - src: securedrop-app-code.triggers-focal
-    dest: "{{ securedrop_app_code_prep_dir }}/debian/securedrop-app-code.triggers"
