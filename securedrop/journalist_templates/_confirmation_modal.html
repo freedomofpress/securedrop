@@ -7,11 +7,14 @@
     <h2 id="{{ modal_data.modal_id }}-heading">{{ modal_data.modal_header }}</h2>
     {{ modal_data.modal_body }}
     {% if modal_data.modal_warning is defined %}
-      <p class="warning">{{ modal_data.modal_warning }}</p>
+    <p class="warning">{{ modal_data.modal_warning }}</p>
     {% endif %}
     <div class="btn-row">
-      <a href="#close" id="{{ modal_data.cancel_id }}" title="{{ gettext('Cancel') }}" class="btn cancel small">{{ gettext('Cancel') }}</a>
-      <button type="submit" id="{{ modal_data.submit_id }}" name="action" value="delete" {% if modal_data.modal_action is defined %} formaction="{{ modal_data.modal_action }}" {% endif %} class="btn small {{ modal_data.submit_btn_type }}">{{ modal_data.submit_btn_text }}</button>
+      <a href="#close" id="{{ modal_data.cancel_id }}" title="{{ gettext('Cancel') }}"
+        class="btn cancel small">{{ gettext('Cancel') }}</a>
+      <button type="submit" id="{{ modal_data.submit_id }}" name="action" value="delete"
+        {% if modal_data.modal_action is defined %} formaction="{{ modal_data.modal_action }}" {% endif %}
+        class="btn small {{ modal_data.submit_btn_type }}">{{ modal_data.submit_btn_text }}</button>
     </div>
   </dialog>
 </div>

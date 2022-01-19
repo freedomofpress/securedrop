@@ -2,56 +2,64 @@
 {% block body %}
 <h1>{{ gettext('Admin Interface') }}</h1>
 
-<a href="{{ url_for('admin.add_user') }}" id="add-user" class="btn icon icon-plus" aria-label="{{ gettext('Add User') }}">
+<a href="{{ url_for('admin.add_user') }}" id="add-user" class="btn icon icon-plus"
+  aria-label="{{ gettext('Add User') }}">
   {{ gettext('ADD USER') }}
 </a>
 
 <section aria-labelledby="users-heading">
   <h2 id="users-heading" class="visually-hidden">Users</h2>
-{% if users %}
-<form id="user-actions" method="post">
-  <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
-  <table id="users" aria-labelledby="users-heading">
-    <thead>
-      <tr>
-      <th scope="col">{{ gettext('Username') }}</th>
-      <th scope="col">{{ gettext('Edit') }}</th>
-      <th scope="col">{{ gettext('Delete') }}</th>
-      <th scope="col">{{ gettext('Created') }}</th>
-      <th scope="col">{{ gettext('Last login') }}</th>
-      </tr>
-    </thead>
-    {% for user in users %}
+  {% if users %}
+  <form id="user-actions" method="post">
+    <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
+    <table id="users" aria-labelledby="users-heading">
+      <thead>
+        <tr>
+          <th scope="col">{{ gettext('Username') }}</th>
+          <th scope="col">{{ gettext('Edit') }}</th>
+          <th scope="col">{{ gettext('Delete') }}</th>
+          <th scope="col">{{ gettext('Created') }}</th>
+          <th scope="col">{{ gettext('Last login') }}</th>
+        </tr>
+      </thead>
+      {% for user in users %}
       <tr class="user">
         <th scope="row">{{ user.username }}</th>
         <td class="edit-user">
-          <a href="/admin/edit/{{ user.id }}" class="plain edit-user" data-username="{{ user.username }}" aria-label="{{ gettext('Edit user {username}').format(username=user.username) }}">
-              {{ gettext('Edit') }}
+          <a href="/admin/edit/{{ user.id }}" class="plain edit-user" data-username="{{ user.username }}"
+            aria-label="{{ gettext('Edit user {username}').format(username=user.username) }}">
+            {{ gettext('Edit') }}
           </a>
         </td>
-	{% if user.id == g.user.id %}
+        {% if user.id == g.user.id %}
         <td class="delete-user-disabled">
           <span>{{ gettext('User deletion disabled') }}</span>
         </td>
-	{% else %}
+        {% else %}
         <td class="delete-user">
-          <a href="?user_id={{ user.id }}#delete-user-confirmation-modal" class="plain" data-username="{{ user.username}}" aria-label="{{ gettext('Delete user {username}').format(username=user.username) }}">
-                {{ gettext('Delete') }}
+          <a href="?user_id={{ user.id }}#delete-user-confirmation-modal" class="plain"
+            data-username="{{ user.username}}"
+            aria-label="{{ gettext('Delete user {username}').format(username=user.username) }}">
+            {{ gettext('Delete') }}
           </a>
         </td>
-	{% endif %}
-        <td class="date" aria-label="{{ user.created_on|rel_datetime_format(relative=True) }}"><time datetime="{{ user.created_on|html_datetime_format }}" title="{{ user.created_on }}">{{ user.created_on|rel_datetime_format(relative=True) }}</time></td>
+        {% endif %}
+        <td class="date" aria-label="{{ user.created_on|rel_datetime_format(relative=True) }}"><time
+            datetime="{{ user.created_on|html_datetime_format }}"
+            title="{{ user.created_on }}">{{ user.created_on|rel_datetime_format(relative=True) }}</time></td>
         {% if user.last_access %}
-          <td class="date" aria-label="{{ user.last_access|rel_datetime_format(relative=True) }}"><time datetime="{{ user.last_access|html_datetime_format }}" title="{{ user.last_access }}">{{ user.last_access|rel_datetime_format(relative=True) }}</time></td>
+        <td class="date" aria-label="{{ user.last_access|rel_datetime_format(relative=True) }}"><time
+            datetime="{{ user.last_access|html_datetime_format }}"
+            title="{{ user.last_access }}">{{ user.last_access|rel_datetime_format(relative=True) }}</time></td>
         {% else %}
-          <td class="date">{{ gettext('never') }}</td>
+        <td class="date">{{ gettext('never') }}</td>
         {% endif %}
       </tr>
-    {% endfor %}
-  </table>
+      {% endfor %}
+    </table>
 
-  <!-- Delete Confirmation modal for user -->
-  {% with %}
+    <!-- Delete Confirmation modal for user -->
+    {% with %}
     {% set modal_data = {
                           "modal_id": "delete-user-confirmation-modal",
                           "modal_header": gettext('Delete Confirmation'),
@@ -64,15 +72,16 @@
                         }
     %}
     {% include '_confirmation_modal.html' %}
-  {% endwith %}
+    {% endwith %}
 
-</form>
-{% else %}
-<p>{{ gettext('No users to display') }}</p>
-{% endif %}
+  </form>
+  {% else %}
+  <p>{{ gettext('No users to display') }}</p>
+  {% endif %}
 </section>
 
-<a href="{{ url_for('admin.manage_config') }}" class="btn icon icon-edit section-spacing-inline" id="update-instance-config" aria-label="{{ gettext('Update instance config') }}">
+<a href="{{ url_for('admin.manage_config') }}" class="btn icon icon-edit section-spacing-inline"
+  id="update-instance-config" aria-label="{{ gettext('Update instance config') }}">
   {{ gettext('INSTANCE CONFIG') }}
 </a>
 

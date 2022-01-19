@@ -1,28 +1,38 @@
 {% set docs = source.documents_messages_count()['documents'] %}
 {% set msgs = source.documents_messages_count()['messages'] %}
-<tr class="source {% if source.num_unread != 0 %}unread{% else %}read{% endif %}" data-source-designation="{{ source.journalist_designation|lower }}">
+<tr class="source {% if source.num_unread != 0 %}unread{% else %}read{% endif %}"
+  data-source-designation="{{ source.journalist_designation|lower }}">
   <th class="designation" scope="row">
     {% if source.star.starred %}
-      <button class="button-star starred" type="submit" formaction="{{ url_for('col.remove_star', filesystem_id=source.filesystem_id) }}" aria-label="{{ gettext('Un-star {designation}').format(designation=source.journalist_designation) }}">
-        <span>Unstar</span>
-      </button>
-      <input type="checkbox" name="cols_selected" value="{{ source.filesystem_id }}" aria-labelledby="starred-source-link-{{ loop_index }}">
-      <a href="/col/{{ source.filesystem_id }}" id="starred-source-link-{{ loop_index }}" class="code-name {% if source.num_unread != 0 %}unread{% else %}read{% endif %}">
-        {{ source.journalist_designation }}
-      </a>
+    <button class="button-star starred" type="submit"
+      formaction="{{ url_for('col.remove_star', filesystem_id=source.filesystem_id) }}"
+      aria-label="{{ gettext('Un-star {designation}').format(designation=source.journalist_designation) }}">
+      <span>Unstar</span>
+    </button>
+    <input type="checkbox" name="cols_selected" value="{{ source.filesystem_id }}"
+      aria-labelledby="starred-source-link-{{ loop_index }}">
+    <a href="/col/{{ source.filesystem_id }}" id="starred-source-link-{{ loop_index }}"
+      class="code-name {% if source.num_unread != 0 %}unread{% else %}read{% endif %}">
+      {{ source.journalist_designation }}
+    </a>
     {% else %}
-      <button class="button-star un-starred" type="submit" formaction="{{ url_for('col.add_star', filesystem_id=source.filesystem_id) }}" aria-label="{{ gettext('Star {designation}' ).format(designation=source.journalist_designation) }}">
-        <span>Star</span>
-      </button>
-      <input type="checkbox" name="cols_selected" value="{{ source.filesystem_id }}" aria-labelledby="un-starred-source-link-{{ loop_index }}">
-      <a href="/col/{{ source.filesystem_id }}" id="un-starred-source-link-{{ loop_index }}" class="code-name {% if source.num_unread != 0 %}unread{% else %}read{% endif %}">
-        {{ source.journalist_designation }}
-      </a>
+    <button class="button-star un-starred" type="submit"
+      formaction="{{ url_for('col.add_star', filesystem_id=source.filesystem_id) }}"
+      aria-label="{{ gettext('Star {designation}' ).format(designation=source.journalist_designation) }}">
+      <span>Star</span>
+    </button>
+    <input type="checkbox" name="cols_selected" value="{{ source.filesystem_id }}"
+      aria-labelledby="un-starred-source-link-{{ loop_index }}">
+    <a href="/col/{{ source.filesystem_id }}" id="un-starred-source-link-{{ loop_index }}"
+      class="code-name {% if source.num_unread != 0 %}unread{% else %}read{% endif %}">
+      {{ source.journalist_designation }}
+    </a>
     {% endif %}
-    <input type="hidden" name="count-{{ source.journalist_designation|lower|replace(" ", "_") }}" class="submission-count-element" value="{{ docs + msgs }}">
+    <input type="hidden" name="count-{{ source.journalist_designation|lower|replace(" ", "_") }}"
+      class="submission-count-element" value="{{ docs + msgs }}">
   </th>
   <td class="submission-count files">
-      {{ ngettext('1 doc', '{num} docs', docs).format(num=docs) }}
+    {{ ngettext('1 doc', '{num} docs', docs).format(num=docs) }}
   </td>
   <td class="submission-count messages">
     {{ ngettext('1 message', '{num} messages', msgs).format(num=msgs) }}
@@ -38,5 +48,8 @@
     </span>
     {% endif %}
   </td>
-  <td class="date" aria-label="{{ source.last_updated|rel_datetime_format(relative=True) }}"><time title="{{ source.last_updated|rel_datetime_format }}" datetime="{{ source.last_updated|html_datetime_format }}">{{ source.last_updated|rel_datetime_format(relative=True) }}</time></td>
+  <td class="date" aria-label="{{ source.last_updated|rel_datetime_format(relative=True) }}"><time
+      title="{{ source.last_updated|rel_datetime_format }}"
+      datetime="{{ source.last_updated|html_datetime_format }}">{{ source.last_updated|rel_datetime_format(relative=True) }}</time>
+  </td>
 </tr>
