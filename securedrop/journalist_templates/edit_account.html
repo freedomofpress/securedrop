@@ -62,11 +62,13 @@
   {% set password_reset_url = url_for('admin.new_password', user_id=user.id) %}
 {% else %}
   {% set password_reset_url = url_for('account.new_password') %}
-  <p>{{ gettext('Please enter your current password and two-factor code.') }}</p>
+  {% set legend = gettext('Please enter your current password and two-factor code.') %}
 {% endif %}
 
 <form action="{{ password_reset_url }}" method="post" id="new-password" class="login-form">
    {% if not user or g.user == user %}
+  <fieldset>
+  <legend>{{ legend }}</legend>
   <div>
     <label for="current_password" class="visually-hidden">{{ gettext('Current Password') }}</label>
     <input type="password" id="current_password" name="current_password" placeholder="{{ gettext('Current Password') }}">
@@ -75,17 +77,20 @@
     <label for="token" class="visually-hidden">{{ gettext('Two-factor Code') }}</label>
     <input name="token" id="token" type="text" placeholder="{{ gettext('Two-factor Code') }}">
   </div>
+  </fieldset>
   {% endif %}
   <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
   <input name="password" type="hidden" value="{{ password }}">
-  <p>
+  <fieldset>
+    <legend>
     {% if user %}
       {{ gettext("The user's password will be changed to:") }}
     {% else %}
       {{ gettext('Your password will be changed to:') }}
     {% endif %}
+    </legend>
     <mark id="password" class="password">{{ password }}</mark>
-  </p>
+</fieldset>
   <button type="submit" id="reset-password" class="upper icon icon-reset" aria-label="{{ gettext('Reset Password') }}">
     {{ gettext('Reset Password') }}
   </button>
