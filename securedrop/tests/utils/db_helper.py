@@ -84,8 +84,7 @@ def reply(journalist, source, num_replies):
         reply = Reply(journalist, source, fname)
         replies.append(reply)
         db.session.add(reply)
-        db.session.flush()
-        seen_reply = SeenReply(reply_id=reply.id, journalist_id=journalist.id)
+        seen_reply = SeenReply(reply=reply, journalist=journalist)
         db.session.add(seen_reply)
 
     db.session.commit()

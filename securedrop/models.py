@@ -283,7 +283,7 @@ class Reply(db.Model):
                  journalist: 'Journalist',
                  source: Source,
                  filename: str) -> None:
-        self.journalist_id = journalist.id
+        self.journalist = journalist
         self.source_id = source.id
         self.uuid = str(uuid.uuid4())
         self.filename = filename
@@ -841,7 +841,7 @@ class JournalistLoginAttempt(db.Model):
     journalist_id = Column(Integer, ForeignKey('journalists.id'))
 
     def __init__(self, journalist: Journalist) -> None:
-        self.journalist_id = journalist.id
+        self.journalist = journalist
 
 
 class RevokedToken(db.Model):

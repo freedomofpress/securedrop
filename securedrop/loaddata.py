@@ -188,12 +188,10 @@ def submit_message(source: Source, journalist_who_saw: Optional[Journalist]) -> 
     )
     submission = Submission(source, fpath)
     db.session.add(submission)
-    db.session.flush()
 
     if journalist_who_saw:
-        seen_message = SeenMessage(message_id=submission.id, journalist_id=journalist_who_saw.id)
+        seen_message = SeenMessage(message=submission, journalist=journalist_who_saw)
         db.session.add(seen_message)
-        db.session.flush()
 
 
 def submit_file(source: Source, journalist_who_saw: Optional[Journalist]) -> None:
@@ -210,12 +208,10 @@ def submit_file(source: Source, journalist_who_saw: Optional[Journalist]) -> Non
     )
     submission = Submission(source, fpath)
     db.session.add(submission)
-    db.session.flush()
 
     if journalist_who_saw:
-        seen_file = SeenFile(file_id=submission.id, journalist_id=journalist_who_saw.id)
+        seen_file = SeenFile(file=submission, journalist=journalist_who_saw)
         db.session.add(seen_file)
-        db.session.flush()
 
 
 def add_reply(
@@ -233,14 +229,13 @@ def add_reply(
     )
     reply = Reply(journalist, source, fname)
     db.session.add(reply)
-    db.session.flush()
 
     # Journalist who replied has seen the reply
-    author_seen_reply = SeenReply(reply_id=reply.id, journalist_id=journalist.id)
+    author_seen_reply = SeenReply(reply=reply, journalist=journalist)
     db.session.add(author_seen_reply)
 
     if journalist_who_saw:
-        other_seen_reply = SeenReply(reply_id=reply.id, journalist_id=journalist_who_saw.id)
+        other_seen_reply = SeenReply(reply=reply, journalist=journalist_who_saw)
         db.session.add(other_seen_reply)
 
     db.session.commit()

@@ -141,8 +141,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
         try:
             reply = Reply(g.user, g.source, filename)
             db.session.add(reply)
-            db.session.flush()
-            seen_reply = SeenReply(reply_id=reply.id, journalist_id=g.user.id)
+            seen_reply = SeenReply(reply=reply, journalist=g.user)
             db.session.add(seen_reply)
             db.session.commit()
             store.async_add_checksum_for_file(reply)
