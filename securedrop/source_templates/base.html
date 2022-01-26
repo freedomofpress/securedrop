@@ -21,6 +21,7 @@
   <div class="content">
     <div class="container">
       <header>
+        <a href="#main" class="visually-hidden until-focus">{{ gettext('Skip to main content') }}</a>
         {% block header %}
         <a href="{% if is_user_logged_in %}{{ url_for('main.lookup') }}{% else %}{{ url_for('main.index') }}{% endif %}"
           class="no-bottom-border">
@@ -30,7 +31,7 @@
         {% endblock %}
       </header>
 
-      <main>
+      <main id="main" tabindex="-1">
         {% if g.show_offline_message %}
         <section>
           <h1>{{ gettext("We're sorry, our SecureDrop is currently offline.") }}</h1>
