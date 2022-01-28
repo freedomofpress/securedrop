@@ -1,6 +1,6 @@
 =tooltip
 
-  [tooltip]
+  [data-tooltip]
     position: relative
 
     /* Applies to all tooltips */
@@ -45,32 +45,32 @@
         white-space: unset
 
   /* don't show empty tooltips */
-  [tooltip='']::before,
-  [tooltip=''] .tooltip
+  [data-tooltip='']::before,
+  [data-tooltip=''] .tooltip
     display: none !important
 
   /* FLOW: UP */
-  [tooltip]:not([flow])::before,
-  [tooltip][flow^="up"]::before
+  [data-tooltip]:not([flow])::before,
+  [data-tooltip][flow^="up"]::before
     bottom: 100%
     border-bottom-width: 0
     border-top-color: #333
 
-  [tooltip]:not([flow]) .tooltip,
-  [tooltip][flow^="up"] .tooltip
+  [data-tooltip]:not([flow]) .tooltip,
+  [data-tooltip][flow^="up"] .tooltip
     bottom: calc(100% + 0.3em)
 
-  [tooltip]:not([flow])::before,
-  [tooltip]:not([flow]) .tooltip,
-  [tooltip][flow^="up"]::before,
-  [tooltip][flow^="up"] .tooltip
+  [data-tooltip]:not([flow])::before,
+  [data-tooltip]:not([flow]) .tooltip,
+  [data-tooltip][flow^="up"]::before,
+  [data-tooltip][flow^="up"] .tooltip
     left: 50%
     transform: translate(-50%, -.5em)
 
-  [tooltip]:not([flow]):hover::before,
-  [tooltip]:not([flow]):hover .tooltip,
-  [tooltip][flow^="up"]:hover::before,
-  [tooltip][flow^="up"]:hover .tooltip
+  [data-tooltip]:not([flow]):hover::before,
+  [data-tooltip]:not([flow]):hover .tooltip,
+  [data-tooltip][flow^="up"]:hover::before,
+  [data-tooltip][flow^="up"]:hover .tooltip
     animation: tooltips-vert 300ms ease-out forwards
 
   /* KEYFRAMES */

@@ -93,7 +93,7 @@ class JournalistNavigationStepsMixin:
             self._try_login_user(username, password, token)
             # Successful login should redirect to the index
             self.wait_for(
-                lambda: self.driver.find_element_by_id("logout"), timeout=self.timeout * 2
+                lambda: self.driver.find_element_by_id("link-logout"), timeout=self.timeout * 2
             )
             if self.driver.current_url != self.journalist_location + "/":
                 new_token = str(otp.now())
@@ -122,11 +122,11 @@ class JournalistNavigationStepsMixin:
         assert self._is_on_journalist_homepage()
 
     def _journalist_visits_col(self):
-        self.wait_for(lambda: self.driver.find_element_by_id("cols"))
+        self.wait_for(lambda: self.driver.find_element_by_css_selector("table#collections"))
 
         self.safe_click_by_id("un-starred-source-link-1")
 
-        self.wait_for(lambda: self.driver.find_element_by_css_selector("ul#submissions"))
+        self.wait_for(lambda: self.driver.find_element_by_css_selector("table#submissions"))
 
     def _journalist_selects_first_doc(self):
         self.safe_click_by_css_selector('input[type="checkbox"][name="doc_names_selected"]')
@@ -197,7 +197,7 @@ class JournalistNavigationStepsMixin:
         self.wait_for(lambda: self.driver.find_element_by_id(displayed_id))
 
     def _journalist_clicks_delete_selected_link(self):
-        self.safe_click_by_css_selector("a#delete-selected-link > button.danger")
+        self.safe_click_by_css_selector("a#delete-selected-link")
         self.wait_for(lambda: self.driver.find_element_by_id("delete-selected-confirmation-modal"))
 
     def _journalist_clicks_delete_collections_link(self):
@@ -298,9 +298,9 @@ class JournalistNavigationStepsMixin:
                 flash_msg = self.driver.find_element_by_css_selector(".flash")
                 assert "The files and messages have been deleted" in flash_msg.text
             if not self.accept_languages:
-                count_div = self.driver.find_element_by_css_selector(".submission-count")
-                assert "0 docs" in count_div.text
-                assert "0 messages" in count_div.text
+                counts = self.driver.find_elements_by_css_selector(".submission-count")
+                assert "0 docs" in counts[0].text
+                assert "0 messages" in counts[1].text
 
         self.wait_for(one_source_no_files)
         time.sleep(5)
@@ -471,7 +471,7 @@ class JournalistNavigationStepsMixin:
     def _admin_deletes_user(self):
         for i in range(CLICK_ATTEMPTS):
             try:
-                self.safe_click_by_css_selector(".delete-user")
+                self.safe_click_by_css_selector(".delete-user a")
                 self.wait_for(
                     lambda: expected_conditions.element_to_be_clickable((By.ID, "delete-selected"))
                 )
@@ -570,11 +570,8 @@ class JournalistNavigationStepsMixin:
     def _edit_user(self, username, is_admin=False):
         self.wait_for(lambda: self.driver.find_element_by_id("users"))
 
-        new_user_edit_links = [
-            el
-            for el in self.driver.find_elements_by_tag_name("a")
-            if el.get_attribute("data-username") == username
-        ]
+        selector = 'a.edit-user[data-username="{}"]'.format(username)
+        new_user_edit_links = self.driver.find_elements_by_css_selector(selector)
 
         assert 1 == len(new_user_edit_links)
         new_user_edit_links[0].click()
@@ -622,15 +619,12 @@ class JournalistNavigationStepsMixin:
         # Go to the admin interface
         self.safe_click_by_id("link-admin-index")
 
-        self.wait_for(lambda: self.driver.find_element_by_css_selector("button#add-user"))
+        self.wait_for(lambda: self.driver.find_element_by_id("add-user"))
 
         # Click the "edit user" link for the new user
         # self._edit_user(self.new_user['username'])
-        new_user_edit_links = [
-            el
-            for el in self.driver.find_elements_by_tag_name("a")
-            if (el.get_attribute("data-username") == self.new_user["username"])
-        ]
+        selector = 'a.edit-user[data-username="{}"]'.format(self.new_user["username"])
+        new_user_edit_links = self.driver.find_elements_by_css_selector(selector)
         assert len(new_user_edit_links) == 1
         new_user_edit_links[0].click()
 
@@ -665,15 +659,12 @@ class JournalistNavigationStepsMixin:
         # Go to the admin interface
         self.safe_click_by_id("link-admin-index")
 
-        self.wait_for(lambda: self.driver.find_element_by_css_selector("button#add-user"))
+        self.wait_for(lambda: self.driver.find_element_by_id("add-user"))
 
         # Click the "edit user" link for the new user
         # self._edit_user(self.new_user['username'])
-        new_user_edit_links = [
-            el
-            for el in self.driver.find_elements_by_tag_name("a")
-            if (el.get_attribute("data-username") == self.new_user["username"])
-        ]
+        selector = 'a.edit-user[data-username="{}"]'.format(self.new_user["username"])
+        new_user_edit_links = self.driver.find_elements_by_css_selector(selector)
         assert len(new_user_edit_links) == 1
         new_user_edit_links[0].click()
 
@@ -723,9 +714,9 @@ class JournalistNavigationStepsMixin:
         # Go to the admin interface
         self.safe_click_by_id("link-admin-index")
 
-        self.wait_for(lambda: self.driver.find_element_by_css_selector("button#add-user"))
+        self.wait_for(lambda: self.driver.find_element_by_id("add-user"))
 
-        selector = 'a[data-username="{}"]'.format(self.new_user["username"])
+        selector = 'a.edit-user[data-username="{}"]'.format(self.new_user["username"])
         new_user_edit_links = self.driver.find_elements_by_css_selector(selector)
         assert len(new_user_edit_links) == 1
         self.safe_click_by_css_selector(selector)
@@ -760,7 +751,7 @@ class JournalistNavigationStepsMixin:
 
         if not self.accept_languages:
             # There should be a "1 unread" span in the sole collection entry
-            unread_span = self.driver.find_element_by_css_selector("span.unread")
+            unread_span = self.driver.find_element_by_css_selector("tr.unread")
             assert "1 unread" in unread_span.text
 
     def _journalist_stars_and_unstars_single_message(self):
@@ -808,7 +799,7 @@ class JournalistNavigationStepsMixin:
     def _journalist_downloads_message(self):
         self._journalist_selects_the_first_source()
 
-        self.wait_for(lambda: self.driver.find_element_by_css_selector("ul#submissions"))
+        self.wait_for(lambda: self.driver.find_element_by_css_selector("table#submissions"))
 
         submissions = self.driver.find_elements_by_css_selector("#submissions a")
         assert 1 == len(submissions)
@@ -840,7 +831,7 @@ class JournalistNavigationStepsMixin:
     def _journalist_downloads_message_missing_file(self):
         self._journalist_selects_the_first_source()
 
-        self.wait_for(lambda: self.driver.find_element_by_css_selector("ul#submissions"))
+        self.wait_for(lambda: self.driver.find_element_by_css_selector("table#submissions"))
 
         submissions = self.driver.find_elements_by_css_selector("#submissions a")
         assert 1 == len(submissions)
@@ -915,14 +906,14 @@ class JournalistNavigationStepsMixin:
         )
 
     def _admin_visits_add_user(self):
-        add_user_btn = self.driver.find_element_by_css_selector("button#add-user")
+        add_user_btn = self.driver.find_element_by_id("add-user")
         self.wait_for(lambda: add_user_btn.is_enabled() and add_user_btn.is_displayed())
         add_user_btn.click()
 
         self.wait_for(lambda: self.driver.find_element_by_id("username"))
 
     def _admin_visits_edit_user(self):
-        selector = 'a[data-username="{}"]'.format(self.new_user["username"])
+        selector = 'a.edit-user[data-username="{}"]'.format(self.new_user["username"])
         new_user_edit_links = self.driver.find_elements_by_css_selector(selector)
         assert len(new_user_edit_links) == 1
         self.safe_click_by_css_selector(selector)
@@ -972,9 +963,9 @@ class JournalistNavigationStepsMixin:
             time.sleep(1)
 
             tip_opacity = self.driver.find_elements_by_css_selector(
-                "#button-reset-two-factor-hotp span")[0].value_of_css_property('opacity')
+                "#button-reset-two-factor-hotp span.tooltip")[0].value_of_css_property('opacity')
             tip_text = self.driver.find_elements_by_css_selector(
-                "#button-reset-two-factor-hotp span")[0].text
+                "#button-reset-two-factor-hotp span.tooltip")[0].text
 
             assert tip_opacity == "1"
 
@@ -1005,9 +996,9 @@ class JournalistNavigationStepsMixin:
             time.sleep(1)
 
             tip_opacity = self.driver.find_elements_by_css_selector(
-                "#button-reset-two-factor-totp span")[0].value_of_css_property('opacity')
+                "#button-reset-two-factor-totp span.tooltip")[0].value_of_css_property('opacity')
             tip_text = self.driver.find_elements_by_css_selector(
-                "#button-reset-two-factor-totp span")[0].text
+                "#button-reset-two-factor-totp span.tooltip")[0].text
 
             assert tip_opacity == "1"
             if not self.accept_languages:
@@ -1068,7 +1059,7 @@ class JournalistNavigationStepsMixin:
 
     def _journalist_delete_all_confirmation(self):
         self.safe_click_all_by_css_selector("[name=doc_names_selected]")
-        self.safe_click_by_css_selector("a#delete-selected-link > button.danger")
+        self.safe_click_by_css_selector("a#delete-selected-link")
 
     def _journalist_delete_one(self):
         self.safe_click_by_css_selector("[name=doc_names_selected]")
@@ -1209,7 +1200,7 @@ class JournalistNavigationStepsMixin:
             )
 
         if self.accept_languages is None:
-            assert notification.text == error_msg
+            assert notification.text in error_msg
 
     def _journalist_is_on_collection_page(self):
         return self.wait_for(
@@ -1217,7 +1208,9 @@ class JournalistNavigationStepsMixin:
         )
 
     def _journalist_clicks_source_unread(self):
-        self.driver.find_element_by_css_selector("span.unread a").click()
+        self.driver.find_element_by_css_selector(
+            "table#collections tr.source > td.unread a"
+            ).click()
 
     def _journalist_selects_first_source_then_download_all(self):
         checkboxes = self.driver.find_elements_by_name("cols_selected")

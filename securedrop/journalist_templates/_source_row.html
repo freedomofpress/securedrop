@@ -1,44 +1,55 @@
 {% set docs = source.documents_messages_count()['documents'] %}
 {% set msgs = source.documents_messages_count()['messages'] %}
-<li class="source {% if source.num_unread != 0 %}unread{% else %}read{% endif %}" data-source-designation="{{ source.journalist_designation|lower }}">
-  <time class="date" title="{{ source.last_updated|rel_datetime_format }}" datetime="{{ source.last_updated|html_datetime_format }}">{{ source.last_updated|rel_datetime_format(relative=True) }}</time>
-  <div class="designation">
+<tr class="source {% if source.num_unread != 0 %}unread{% else %}read{% endif %}"
+  data-source-designation="{{ source.journalist_designation|lower }}">
+  <th class="designation" scope="row">
     {% if source.star.starred %}
-      <button class="button-star starred" type="submit" formaction="{{ url_for('col.remove_star', filesystem_id=source.filesystem_id) }}" aria-label="{{ gettext('Un-star {designation}').format(designation=source.journalist_designation) }}">
-        <img src="{{ url_for('static', filename='icons/starred.png') }}" class="icon-drop icon-star-source" width="16" height="15" alt="{{ gettext('{designation} is starred').format(designation=source.journalist_designation) }}">
-      </button>
-      <input type="checkbox" name="cols_selected" value="{{ source.filesystem_id }}" aria-labelledby="starred-source-link-{{ loop_index }}">
-      <a href="/col/{{ source.filesystem_id }}" id="starred-source-link-{{ loop_index }}" class="code-name {% if source.num_unread != 0 %}unread{% else %}read{% endif %}">
-        {{ source.journalist_designation }}
-      </a>
+    <button class="button-star starred" type="submit"
+      formaction="{{ url_for('col.remove_star', filesystem_id=source.filesystem_id) }}"
+      aria-label="{{ gettext('Un-star {designation}').format(designation=source.journalist_designation) }}">
+      <span>Unstar</span>
+    </button>
+    <input type="checkbox" name="cols_selected" value="{{ source.filesystem_id }}"
+      aria-labelledby="starred-source-link-{{ loop_index }}">
+    <a href="/col/{{ source.filesystem_id }}" id="starred-source-link-{{ loop_index }}"
+      class="code-name {% if source.num_unread != 0 %}unread{% else %}read{% endif %}">
+      {{ source.journalist_designation }}
+    </a>
     {% else %}
-      <button class="button-star un-starred" type="submit" formaction="{{ url_for('col.add_star', filesystem_id=source.filesystem_id) }}" aria-label="{{ gettext('Star {designation}' ).format(designation=source.journalist_designation) }}">
-        <img src="{{ url_for('static', filename='icons/unstarred.png') }}" class="icon-drop icon-star-source off-hover" width="16" height="15" alt="{{ gettext('{designation} is not starred').format(designation=source.journalist_designation) }}">
-        <img src="{{ url_for('static', filename='icons/starred.png') }}" class="icon-drop icon-star-source on-hover" width="16" height="15" alt="{{ gettext('{designation} is not starred').format(designation=source.journalist_designation) }}">
-      </button>
-      <input type="checkbox" name="cols_selected" value="{{ source.filesystem_id }}" aria-labelledby="un-starred-source-link-{{ loop_index }}">
-      <a href="/col/{{ source.filesystem_id }}" id="un-starred-source-link-{{ loop_index }}" class="code-name {% if source.num_unread != 0 %}unread{% else %}read{% endif %}">
-        {{ source.journalist_designation }}
-      </a>
+    <button class="button-star un-starred" type="submit"
+      formaction="{{ url_for('col.add_star', filesystem_id=source.filesystem_id) }}"
+      aria-label="{{ gettext('Star {designation}' ).format(designation=source.journalist_designation) }}">
+      <span>Star</span>
+    </button>
+    <input type="checkbox" name="cols_selected" value="{{ source.filesystem_id }}"
+      aria-labelledby="un-starred-source-link-{{ loop_index }}">
+    <a href="/col/{{ source.filesystem_id }}" id="un-starred-source-link-{{ loop_index }}"
+      class="code-name {% if source.num_unread != 0 %}unread{% else %}read{% endif %}">
+      {{ source.journalist_designation }}
+    </a>
     {% endif %}
-  </div>
-  <div class="submission-count">
-    <input type="hidden" name="count-{{ source.journalist_designation|lower|replace(" ", "_") }}" class="submission-count-element" value="{{ docs + msgs }}">
-    <span>
-      <img src="{{ url_for('static', filename='icons/files.png') }}" class="icon-drop" width="14" height="16" alt="">
-      {{ ngettext('1 doc', '{num} docs', docs).format(num=docs) }}
-    </span>
-    <span>
-      <img src="{{ url_for('static', filename='icons/messages.png') }}" class="icon-drop" width="16" height="14" alt="">
-      {{ ngettext('1 message', '{num} messages', msgs).format(num=msgs) }}
-    </span>
+    <input type="hidden" name="count-{{ source.journalist_designation|lower|replace(" ", "_") }}"
+      class="submission-count-element" value="{{ docs + msgs }}">
+  </th>
+  <td class="submission-count files">
+    {{ ngettext('1 doc', '{num} docs', docs).format(num=docs) }}
+  </td>
+  <td class="submission-count messages">
+    {{ ngettext('1 message', '{num} messages', msgs).format(num=msgs) }}
+  </td>
+  <td class="unread">
     {% if source.num_unread > 0 %}
-      <span class="unread">
-        <a class="btn small" href="/download_unread/{{ source.filesystem_id }}">
-          <img src="{{ url_for('static', filename='icons/download.png') }}" class="icon" width="11" height="13" alt="{{ gettext('Download') }}">
-          {{ ngettext('1 unread', '{num} unread', source.num_unread).format(num=source.num_unread) }}
-        </a>
-      </span>
+    <a class="btn small icon download" href="/download_unread/{{ source.filesystem_id }}">
+      {{ ngettext('1 unread', '{num} unread', source.num_unread).format(num=source.num_unread) }}
+    </a>
+    {% else %}
+    <span class="visually-hidden">
+      {{ ngettext('1 unread', '{num} unread', source.num_unread).format(num=source.num_unread) }}
+    </span>
     {% endif %}
-  </div>
-</li>
+  </td>
+  <td class="date" aria-label="{{ source.last_updated|rel_datetime_format(relative=True) }}"><time
+      title="{{ source.last_updated|rel_datetime_format }}"
+      datetime="{{ source.last_updated|html_datetime_format }}">{{ source.last_updated|rel_datetime_format(relative=True) }}</time>
+  </td>
+</tr>

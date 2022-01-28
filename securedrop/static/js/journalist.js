@@ -3,6 +3,9 @@
  * confusing users, this function dynamically adds elements that require JS.
  */
 
+const COLLECTION_SELECTOR_PREFIX = "table";
+const ROW_SELECTOR_PREFIX = COLLECTION_SELECTOR_PREFIX + " tr"
+
 function closest(element, selector) {
   let parent = element.parentNode;
   let closest = null;
@@ -23,7 +26,7 @@ function hide(selector) {
   });
 }
 
-function show(selector, displayStyle = "block") {
+function show(selector, displayStyle = "revert") {
   let nodelist = document.querySelectorAll(selector);
   Array.prototype.forEach.call(nodelist, function(element) {
     element.style.display = displayStyle;
@@ -36,6 +39,8 @@ function enhance_ui() {
   let filterContainer = document.getElementById("filter-container");
   if (filterContainer) {
     filterContainer.innerHTML = '<input id="filter" type="text" placeholder="' +
+      get_string("filter-by-codename-placeholder-string") +
+      '" aria-label="' +
       get_string("filter-by-codename-placeholder-string") +
       '" autofocus >';
   }
@@ -84,11 +89,11 @@ String.prototype.supplant = function (o) {
 
 function filter_codenames(value) {
   if(value == ""){
-    show('ul#cols li');
+    show(ROW_SELECTOR_PREFIX);
   } else {
-    hide('ul#cols li');
+    hide(ROW_SELECTOR_PREFIX);
     show(
-      'ul#cols li[data-source-designation*="' + value.replace(/"/g, "").toLowerCase() + '"]'
+      ROW_SELECTOR_PREFIX + '[data-source-designation*="' + value.replace(/"/g, "").toLowerCase() + '"]'
     );
   }
 }
@@ -109,7 +114,7 @@ ready(function() {
   if (selectAll) {
     selectAll.style.cursor = "pointer";
     selectAll.addEventListener("click", function() {
-      let checkboxes = document.querySelectorAll(".panel li:not(.hidden) input[type=checkbox]");
+      let checkboxes = document.querySelectorAll(ROW_SELECTOR_PREFIX + ":not(.hidden) input[type=checkbox]");
       for (let i = 0; i < checkboxes.length; i++) {
         checkboxes[i].checked = true;
       }
@@ -120,7 +125,7 @@ ready(function() {
   if (selectNone) {
     selectNone.style.cursor = "pointer";
     selectNone.addEventListener("click", function() {
-      let checkboxes = document.querySelectorAll(".panel li:not(.hidden) input[type=checkbox]");
+      let checkboxes = document.querySelectorAll(ROW_SELECTOR_PREFIX + ":not(.hidden) input[type=checkbox]");
       for (let i = 0; i < checkboxes.length; i++) {
         checkboxes[i].checked = false;
       }
@@ -131,7 +136,7 @@ ready(function() {
   if (selectUnread) {
     selectUnread.style.cursor = "pointer";
     selectUnread.addEventListener("click", function() {
-      let checkboxes = document.querySelectorAll(".submission > input[type='checkbox']:not(.hidden)");
+      let checkboxes = document.querySelectorAll(ROW_SELECTOR_PREFIX + " input[type='checkbox']:not(.hidden)");
       for (let i = 0; i < checkboxes.length; i++) {
         if (checkboxes[i].classList.contains("unread-cb")) {
           checkboxes[i].checked = true;
@@ -196,7 +201,7 @@ ready(function() {
       });
   }
 
-  let deleteSourcesButton = document.getElementById('btn-delete-sources');
+  let deleteSourcesButton = document.getElementById('delete-collections-link');
   if (deleteSourcesButton) {
     deleteSourcesButton.onclick = function() {
       var checkboxes = document.querySelectorAll('input[name="cols_selected"]:checked');
@@ -207,11 +212,11 @@ ready(function() {
               deleteMenuCTA.style.display = "none"
           }
           if (deleteMenuNoSelect) {
-              deleteMenuNoSelect.style.display = "block"
+              deleteMenuNoSelect.style.display = "revert"
           }
       } else {
           if (deleteMenuCTA) {
-              deleteMenuCTA.style.display = "block"
+              deleteMenuCTA.style.display = "revert"
           }
           if (deleteMenuNoSelect) {
               deleteMenuNoSelect.style.display = "none"

@@ -5,11 +5,23 @@
 
 <form method="post" action="/login" autocomplete="off" class="login-form">
   <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
-  <p><input class="login-username" type="text" name="username" autocomplete="off" placeholder="{{ gettext('Username') }}" autofocus></p>
-  <p><input class="login-password" id="login-form-password" type="password" name="password" placeholder="{{ gettext('Password') }}"></p>
-  <p class="show-password-checkbox-container"><label><input id="show-password-check" type="checkbox">{{ gettext('Show password') }}</label></p>
-  <p><input class="login-token" name="token" id="token" type="text" placeholder="{{ gettext('Two-factor Code') }}"></p>
-  <button type="submit">{{ gettext('LOG IN') }}</button>
+  <div>
+    <label for="username" class="visually-hidden">{{ gettext('Username') }}</label>
+    <input class="login-username" type="text" id="username" name="username" autocomplete="off"
+      placeholder="{{ gettext('Username') }}" autofocus>
+  </div>
+  <div>
+    <label for="login-form-password" class="visually-hidden">{{ gettext('Password') }}</label>
+    <input class="login-password" id="login-form-password" type="password" name="password"
+      placeholder="{{ gettext('Password') }}">
+  </div>
+  <div class="show-password-checkbox-container"><label><input id="show-password-check"
+        type="checkbox">{{ gettext('Show password') }}</label></div>
+  <div>
+    <label for="token" class="visually-hidden">{{ gettext('Two-factor Code') }}</label>
+    <input class="login-token" name="token" id="token" type="text" placeholder="{{ gettext('Two-factor Code') }}">
+  </div>
+  <button type="submit" aria-label="{{ gettext('Log In') }}">{{ gettext('LOG IN') }}</button>
 </form>
 
 {% endblock %}

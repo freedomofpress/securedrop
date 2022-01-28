@@ -104,7 +104,7 @@
     background: white
     border: 2px solid $color_urgent_coral
 
-  button.danger, a.danger, .btn.danger
+  button.danger, a.danger, .btn.danger, .btn.small.danger
     color: $color_urgent_coral
     background: white
     border: 2px solid $color_urgent_coral
@@ -124,28 +124,31 @@
   .full-width
     width: 100%
 
-  a > img.on-hover, button img.on-hover
-    display: none
+  a.icon, button.icon:not([data-tooltip]), button.button-star > span, button.icon[data-tooltip] > span.label
+    &:before
+      content: ""
+      display: inline-block
+      opacity: .9
 
-  a:hover > img.off-hover, button:hover img.off-hover
-    display: none
+      margin-right: 3px
+      margin-bottom: 2px
+      vertical-align: middle
 
-  a:hover > img.on-hover, button:hover img.on-hover
-    display: inline
-
-  a > img.icon, button > img.icon
-    vertical-align: middle
-    margin-right: 3px
-    margin-bottom: 2px
-    opacity: .9
-
-  // The source star icon must not inherit the vertical alignment of other button icons
-  button > img.icon-star-source
-    margin-right: 3px
+      background:
+        origin: content-box
+        position: center
+        repeat: no-repeat
+        size: contain
 
   .button-star
-    padding: 0
+    background: transparent
     border: none
+    font-size: 0
+    padding: 0
+    vertical-align: middle
+
+    &:hover
+      background: transparent
 
   .btn--space
     margin-bottom: 5px

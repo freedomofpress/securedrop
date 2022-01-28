@@ -68,19 +68,19 @@ def test_submit_message(journalist_app, source_app, test_journo):
 
         # The source should have a "download unread" link that
         # says "1 unread"
-        col = soup.select('ul#cols > li')[0]
-        unread_span = col.select('span.unread a')[0]
+        col = soup.select('table#collections tr.source')[0]
+        unread_span = col.select('td.unread a')[0]
         assert "1 unread" in unread_span.get_text()
 
-        col_url = soup.select('ul#cols > li a')[0]['href']
+        col_url = soup.select('table#collections th.designation a')[0]['href']
         resp = app.get(col_url)
         assert resp.status_code == 200
         text = resp.data.decode('utf-8')
         soup = BeautifulSoup(text, 'html.parser')
-        submission_url = soup.select('ul#submissions li a')[0]['href']
+        submission_url = soup.select('table#submissions th.filename a')[0]['href']
         assert "-msg" in submission_url
-        span = soup.select('ul#submissions li span.info span')[0]
-        assert re.compile(r'\d+ bytes').match(span['title'])
+        size = soup.select('table#submissions td.info')[0]
+        assert re.compile(r'\d+ bytes').match(size['title'])
 
         resp = app.get(submission_url)
         assert resp.status_code == 200
@@ -97,7 +97,8 @@ def test_submit_message(journalist_app, source_app, test_journo):
         text = resp.data.decode('utf-8')
         soup = BeautifulSoup(text, 'html.parser')
         doc_name = soup.select(
-            'ul > li > input[name="doc_names_selected"]')[0]['value']
+            'table#submissions > tr.submission > td.status input[name="doc_names_selected"]'
+            )[0]['value']
         resp = app.post('/bulk', data=dict(
             action='confirm_delete',
             filesystem_id=filesystem_id,
@@ -170,19 +171,19 @@ def test_submit_file(journalist_app, source_app, test_journo):
 
         # The source should have a "download unread" link that says
         # "1 unread"
-        col = soup.select('ul#cols > li')[0]
-        unread_span = col.select('span.unread a')[0]
+        col = soup.select('table#collections tr.source')[0]
+        unread_span = col.select('td.unread a')[0]
         assert "1 unread" in unread_span.get_text()
 
-        col_url = soup.select('ul#cols > li a')[0]['href']
+        col_url = soup.select('table#collections th.designation a')[0]['href']
         resp = app.get(col_url)
         assert resp.status_code == 200
         text = resp.data.decode('utf-8')
         soup = BeautifulSoup(text, 'html.parser')
-        submission_url = soup.select('ul#submissions li a')[0]['href']
+        submission_url = soup.select('table#submissions th.filename a')[0]['href']
         assert "-doc" in submission_url
-        span = soup.select('ul#submissions li span.info span')[0]
-        assert re.compile(r'\d+ bytes').match(span['title'])
+        size = soup.select('table#submissions td.info')[0]
+        assert re.compile(r'\d+ bytes').match(size['title'])
 
         resp = app.get(submission_url)
         assert resp.status_code == 200
@@ -206,7 +207,8 @@ def test_submit_file(journalist_app, source_app, test_journo):
         text = resp.data.decode('utf-8')
         soup = BeautifulSoup(text, 'html.parser')
         doc_name = soup.select(
-            'ul > li > input[name="doc_names_selected"]')[0]['value']
+            'table#submissions > tr.submission > td.status input[name="doc_names_selected"]'
+            )[0]['value']
         resp = app.post('/bulk', data=dict(
             action='confirm_delete',
             filesystem_id=filesystem_id,
@@ -273,7 +275,7 @@ def _helper_test_reply(journalist_app, source_app, config, test_journo,
         text = resp.data.decode('utf-8')
         assert "Sources" in text
         soup = BeautifulSoup(resp.data, 'html.parser')
-        col_url = soup.select('ul#cols > li a')[0]['href']
+        col_url = soup.select('table#collections tr.source > th.designation a')[0]['href']
 
         resp = app.get(col_url)
         assert resp.status_code == 200
@@ -458,7 +460,7 @@ def test_delete_collection(mocker, source_app, journalist_app, test_journo):
         resp = app.get('/')
         # navigate to the collection page
         soup = BeautifulSoup(resp.data.decode('utf-8'), 'html.parser')
-        first_col_url = soup.select('ul#cols > li a')[0]['href']
+        first_col_url = soup.select('table#collections tr.source > th.designation a')[0]['href']
         resp = app.get(first_col_url)
         assert resp.status_code == 200
 
@@ -561,7 +563,7 @@ def test_filenames(source_app, journalist_app, test_journo):
         _login_user(app, test_journo)
         resp = app.get('/')
         soup = BeautifulSoup(resp.data.decode('utf-8'), 'html.parser')
-        first_col_url = soup.select('ul#cols > li a')[0]['href']
+        first_col_url = soup.select('table#collections tr.source > th.designation a')[0]['href']
         resp = app.get(first_col_url)
         assert resp.status_code == 200
 
@@ -569,7 +571,7 @@ def test_filenames(source_app, journalist_app, test_journo):
         soup = BeautifulSoup(resp.data.decode('utf-8'), 'html.parser')
         submission_filename_re = r'^{0}-[a-z0-9-_]+(-msg|-doc\.gz)\.gpg$'
         for i, submission_link in enumerate(
-                soup.select('ul#submissions li a .filename')):
+                soup.select('table#submissions tr.submission > th.filename a')):
             filename = str(submission_link.contents[0])
             assert re.match(submission_filename_re.format(i + 1), filename)
 
@@ -588,7 +590,7 @@ def test_filenames_delete(journalist_app, source_app, test_journo):
         _login_user(app, test_journo)
         resp = app.get('/')
         soup = BeautifulSoup(resp.data.decode('utf-8'), 'html.parser')
-        first_col_url = soup.select('ul#cols > li a')[0]['href']
+        first_col_url = soup.select('table#collections tr.source > th.designation a')[0]['href']
         resp = app.get(first_col_url)
         assert resp.status_code == 200
         soup = BeautifulSoup(resp.data.decode('utf-8'), 'html.parser')
@@ -601,13 +603,13 @@ def test_filenames_delete(journalist_app, source_app, test_journo):
         # test filenames and sort order
         submission_filename_re = r'^{0}-[a-z0-9-_]+(-msg|-doc\.gz)\.gpg$'
         filename = str(
-            soup.select('ul#submissions li a .filename')[0].contents[0])
+            soup.select('table#submissions tr.submission > th.filename a')[0].contents[0])
         assert re.match(submission_filename_re.format(1), filename)
         filename = str(
-            soup.select('ul#submissions li a .filename')[1].contents[0])
+            soup.select('table#submissions tr.submission > th.filename a')[1].contents[0])
         assert re.match(submission_filename_re.format(3), filename)
         filename = str(
-            soup.select('ul#submissions li a .filename')[2].contents[0])
+            soup.select('table#submissions tr.submission > th.filename a')[2].contents[0])
         assert re.match(submission_filename_re.format(4), filename)
 
 

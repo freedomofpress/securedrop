@@ -2,23 +2,28 @@
 {% block body %}
 
 {% with count=items_selected|length %}
-<p>{{ ngettext('The following file has been selected for <strong>permanent deletion</strong>:', 'The following {num} files have been selected for <strong>permanent deletion</strong>:', count).format(num=count)|safe }}</p>
+<p>
+  {{ ngettext('The following file has been selected for <strong>permanent deletion</strong>:', 'The following {num} files have been selected for <strong>permanent deletion</strong>:', count).format(num=count)|safe }}
+</p>
 {% endwith %}
 
 <form action="/bulk" method="post">
   <ul>
-  {% for item in items_selected %}
+    {% for item in items_selected %}
     <li>
       {{ item.filename }}
       <input type="hidden" name="doc_names_selected" value="{{ item.filename }}">
     </li>
-  {% endfor %}
+    {% endfor %}
   </ul>
   <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
   <input type="hidden" name="filesystem_id" value="{{ filesystem_id }}" autocomplete="off">
   <input type="hidden" name="confirm_delete" value="true">
-  <p><button type="submit" name="action" value="delete" id="confirm-delete">{{ gettext('PERMANENTLY DELETE FILES') }}</button></p>
+  <button type="submit" name="action" value="delete" id="confirm-delete"
+    aria-label="{{ gettext('Permanently Delete Files') }}">{{ gettext('PERMANENTLY DELETE FILES') }}</button></p>
 </form>
 
-<p><a href="/col/{{ filesystem_id }}">{{ gettext('Return to the list of documents for {source_name}…').format(source_name=source.journalist_designation) }}</a></p>
+<nav class="back" aria-labelledby="back-link"><a id="back-link"
+    href="/col/{{ filesystem_id }}">{{ gettext('Return to the list of documents for {source_name}…').format(source_name=source.journalist_designation) }}</a>
+</nav>
 {% endblock %}

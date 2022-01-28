@@ -3,17 +3,22 @@
 {% block body %}
 {% if user.is_totp %}
 <h1>{{ gettext('Enable FreeOTP') }}</h1>
-<p>{{ gettext("You're almost done! To finish adding this new user, have them follow the instructions below to set up two-factor authentication with FreeOTP. Once they've added an entry for this account in the app, have them enter one of the 6-digit codes from the app to confirm that two-factor authentication is set up correctly.") }}</p>
+<p>
+  {{ gettext("You're almost done! To finish adding this new user, have them follow the instructions below to set up two-factor authentication with FreeOTP. Once they've added an entry for this account in the app, have them enter one of the 6-digit codes from the app to confirm that two-factor authentication is set up correctly.") }}
+</p>
 
 <ol>
   <li>{{ gettext('Install FreeOTP on your phone') }}</li>
   <li>{{ gettext('Open the FreeOTP app') }}</li>
   <li>{{ gettext('Tap the QR code symbol at the top') }}</li>
-  <li>{{ gettext('Your phone will now be in "scanning" mode. When you are in this mode, scan the barcode below:') }}</li>
+  <li>{{ gettext('Your phone will now be in "scanning" mode. When you are in this mode, scan the barcode below:') }}
+  </li>
 </ol>
 <div id="qrcode-container">{{ user.shared_secret_qrcode }}</div>
-<p>{{ gettext("Can't scan the barcode? You can manually pair FreeOTP with this account by entering the following two-factor secret into the app:") }}</p>
-<p class="center"><span id="shared-secret">{{ user.formatted_otp_secret }}</span></p>
+<p>
+  {{ gettext("Can't scan the barcode? You can manually pair FreeOTP with this account by entering the following two-factor secret into the app:") }}
+</p>
+<mark id="shared-secret">{{ user.formatted_otp_secret }}</mark>
 
 <p>{{ gettext('Once you have paired FreeOTP with this account, enter the 6-digit verification code below:') }}</p>
 {% else %}
@@ -24,6 +29,6 @@
   <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
   <label for="token">{{ gettext('Verification code') }}</label>
   <input name="token" id="token" type="text" placeholder="123456">
-  <button type="submit">{{ gettext('SUBMIT') }}</button>
+  <button type="submit" aria-label="{{ gettext('Submit verification code') }}">{{ gettext('SUBMIT') }}</button>
 </form>
 {% endblock %}

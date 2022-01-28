@@ -1,80 +1,69 @@
 {% extends "base.html" %}
 {% block body %}
-<p>
-  <img src="{{ url_for('static', filename='icons/chevron-left.png') }}" class="icon" width="9" height="14" alt="">
-  <a href="/admin">{{ gettext('Back to admin interface') }}</a>
-</p>
-<form method="post">
-  <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
-  <p>
+<nav class="back" aria-labelledby="back-link">
+  <a id="back-link" href="/admin">{{ gettext('Back to admin interface') }}</a>
+</nav>
+<section aria-labelledby="add-user-heading">
+  <h1 id="add-user-heading">Add User</h1>
+  <form method="post">
+    <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
     {{ form.password(value=password, id=False) }}
-  </p>
-  <div class="container flex-end">
-    <div>
-      <p>
-        <label for="first_name">{{ gettext('Username') }}</label>
+    <div class="container flex-end">
+      <div>
+        <label for="username">{{ gettext('Username') }}</label>
         {{ form.username() }}
-        <br>
         {% for error in form.username.errors %}
-          <span class="form-validation-error">{{ error }}</span>
+        <span class="form-validation-error" role="alert">{{ error }}</span>
         {% endfor %}
-      </p>
-    </div>
-    <div>
-        <ul class="journalist-username__notes">
-            <li>{{gettext("Username can contain spaces")}}</li>
-            <li>{{gettext("Username is case-sensitive")}}</li>
+      </div>
+      <div>
+        <ul id="username-notes" class="journalist-username__notes">
+          <li>{{gettext("Username can contain spaces")}}</li>
+          <li>{{gettext("Username is case-sensitive")}}</li>
         </ul>
+      </div>
     </div>
-  </div>
-  <div class="container flex-end">
-    <div>
-      <p>
+    <div class="container flex-end">
+      <div>
         <label for="first_name">{{ gettext('First name') }}</label>
         {{ form.first_name() }}
-        <br>
         {% for error in form.first_name.errors %}
-          <span class="form-validation-error">{{ error }}</span>
+        <span class="form-validation-error" role="alert">{{ error }}</span>
         {% endfor %}
-      </p>
-    </div>
-    <div>
-      <p>
+      </div>
+      <div>
         <label for="last_name">{{ gettext('Last name') }}</label>
         {{ form.last_name() }}
-        <br>
         {% for error in form.last_name.errors %}
-          <span class="form-validation-error">{{ error }}</span>
+        <span class="form-validation-error" role="alert">{{ error }}</span>
         {% endfor %}
-      </p>
+      </div>
+      <div>
+        <ul id="name-notes" class="journalist-username__notes">
+          <li>{{gettext("First name and last name are optional")}}</li>
+        </ul>
+      </div>
+    </div>
+    <p>{{ gettext("The user's password will be:") }} <mark class="password" id="password">{{ password }}</mark></p>
+    <div>
+      {{ form.is_admin(id="is-admin") }}
+      <label for="is-admin">{{ gettext('Is Admin') }}</label>
+      {% for error in form.is_admin.errors %}
+      <span class="form-validation-error" role="alert">{{ error }}</span>
+      {% endfor %}
     </div>
     <div>
-        <ul class="journalist-username__notes">
-            <li>{{gettext("First name and last name are optional")}}</li>
-        </ul>
+      {{ form.is_hotp(id="is-hotp") }}
+      <label for="is-hotp">{{ gettext("Is using a YubiKey [HOTP]") }} </label>
+      <label for="otp_secret" class="visually-hidden">{{ gettext('HOTP Secret') }}</label>
+      {{ form.otp_secret(placeholder=gettext('HOTP Secret'), size="60") }}
+      {% for error in form.is_hotp.errors + form.otp_secret.errors %}
+      <span class="form-validation-error" role="alert">{{ error }}</span><br>
+      {% endfor %}
     </div>
-  </div>
-  <p>{{ gettext("The user's password will be:") }} <span class="password" id="password">{{ password }}</span></p>
-  <p>
-    {{ form.is_admin(id="is-admin") }}
-    <label for="is-admin">{{ gettext('Is Admin') }}</label>
-    <br>
-    {% for error in form.is_admin.errors %}
-      <span class="form-validation-error">{{ error }}</span>
-    {% endfor %}
-  </p>
-  <p>
-    {{ form.is_hotp(id="is-hotp") }}
-    <label for="is-hotp">{{ gettext("Is using a YubiKey [HOTP]") }} </label>
-    {{ form.otp_secret(placeholder=gettext('HOTP Secret'), size="60") }}
-    <br>
-    {% for error in form.is_hotp.errors + form.otp_secret.errors %}
-      <span class="form-validation-error">{{ error }}</span><br>
-    {% endfor %}
-  </p>
-  <button type="submit">
-    <img src="{{ url_for('static', filename='icons/plus.png') }}" class="icon" width="13" height="15" alt="">
-    {{ gettext('ADD USER') }}
-  </button>
-</form>
+    <button type="submit" class="icon icon-plus" aria-label="{{ gettext('Add User') }}">
+      {{ gettext('ADD USER') }}
+    </button>
+  </form>
+</section>
 {% endblock %}

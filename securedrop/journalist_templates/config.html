@@ -1,89 +1,90 @@
 {% extends "base.html" %}
 {% block body %}
-<p>
-  <img src="{{ url_for('static', filename='icons/chevron-left.png') }}" class="icon" width="9" height="14" alt="">
-  <a href="/admin">{{ gettext('Back to admin interface') }}</a>
-</p>
+<nav class="back" aria-labelledby="back-link">
+  <a id="back-link" href="/admin">{{ gettext('Back to admin interface') }}</a>
+</nav>
 
 <h1>{{ gettext('Instance Configuration') }}</h1>
 
-<h2 id="config-orgname">{{ gettext('Organization Name') }}</h2>
+<section aria-labelledby="config-orgname">
+  <h2 id="config-orgname">{{ gettext('Organization Name') }}</h2>
 
-<form action="{{ url_for('admin.update_org_name') }}" method="post">
-  <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
-  <p>
-    <label for="organization_name">{{ gettext('Set the organization name used on the SecureDrop web interfaces:') }}</label><br>
-    {{ organization_name_form.organization_name() }}
-  </p>
-  <button type="submit" id="submit-update-org-name">
-    <img src="{{ url_for('static', filename='icons/pencil-alt.png') }}" class="icon" width="15" height="15" alt="">
-    {{ gettext('SET ORGANIZATION NAME') }}
-  </button>
-  {% set prefs_filter = ["org-name-error","org-name-success"] %}
-  {% include 'preferences_saved_flash.html' %}
-</form>
+  <form action="{{ url_for('admin.update_org_name') }}" method="post">
+    <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
+    <div><label
+        for="organization_name">{{ gettext('Set the organization name used on the SecureDrop web interfaces:') }}</label>
+    </div>
+    <div>{{ organization_name_form.organization_name() }}</div>
+    <div class="section-spacing">
+      <button type="submit" id="submit-update-org-name" class="icon icon-edit"
+        aria-label="{{ gettext('Set Organization Name') }}">
+        {{ gettext('SET ORGANIZATION NAME') }}
+      </button>
+    </div>
+    {% set prefs_filter = ["org-name-error","org-name-success"] %}
+    {% include 'preferences_saved_flash.html' %}
+  </form>
+</section>
 
-<hr class="no-line">
+<section aria-labelledby="config-logoimage">
+  <h2 id="config-logoimage">{{ gettext('Logo Image') }}</h2>
 
-<h2 id="config-logoimage">{{ gettext('Logo Image') }}</h2>
+  <p>{{ gettext('Here you can update the image displayed on the SecureDrop web interfaces:') }}</p>
 
-<p>{{ gettext('Here you can update the image displayed on the SecureDrop web interfaces:') }}</p>
+  <img id="current-logo" src="{{ g.logo }}" class="logo small" alt="{{ g.organization_name }}" width="250">
 
-<p>
-  <img src="{{ g.logo }}" class="logo small" alt="{{ g.organization_name }}" width="250">
-</p>
+  <form method="post" enctype="multipart/form-data">
+    <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
+    <label for="logo-upload" class="visually-hidden">{{ gettext('Logo image:') }}</label>
+    {{ logo_form.logo(id="logo-upload", **{'aria-controls': 'current-logo', 'aria-describedby': 'size-instructions'}) }}
+    <p id="size-instructions">
+      {{ gettext('Recommended size: 500px * 450px') }}
+    </p>
+    <div class="section-spacing">
+      <button type="submit" id="submit-logo-update" class="icon icon-edit" aria-label="{{ gettext('Update Logo') }}">
+        {{ gettext('UPDATE LOGO') }}
+      </button>
+    </div>
+    {% set prefs_filter = ["logo-success","logo-error"] %}
+    {% include 'preferences_saved_flash.html' %}
+  </form>
+</section>
 
-<form method="post" enctype="multipart/form-data">
-  <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
-  <p>
-    {{ logo_form.logo(id="logo-upload") }}
-    <br>
-  </p>
-  <h5>
-    {{ gettext('Recommended size: 500px * 450px') }}
-  </h5>
-  <button type="submit" id="submit-logo-update">
-    <img src="{{ url_for('static', filename='icons/pencil-alt.png') }}" class="icon" width="15" height="15" alt="">
-    {{ gettext('UPDATE LOGO') }}
-  </button>
-  {% set prefs_filter = ["logo-success","logo-error"] %}
-  {% include 'preferences_saved_flash.html' %}
-</form>
+<section aria-labelledby="config-preventuploads">
+  <h2 id="config-preventuploads">{{ gettext('Submission Preferences') }}</h2>
 
-<hr class="no-line">
-
-<h2 id="config-preventuploads">{{ gettext('Submission Preferences') }}</h2>
-
-<form action="{{ url_for('admin.update_submission_preferences') }}" method="post">
-  <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
-  <p>
+  <form action="{{ url_for('admin.update_submission_preferences') }}" method="post">
+    <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
     {{ submission_preferences_form.prevent_document_uploads() }}
-    <label for="prevent_document_uploads">{{ gettext('Prevent sources from uploading documents. Sources will still be able to send messages.') }}</label>
-  </p>
-  <button type="submit" id="submit-submission-preferences">
-    <img src="{{ url_for('static', filename='icons/pencil-alt.png') }}" class="icon" width="15" height="15" alt="">
-    {{ gettext('UPDATE SUBMISSION PREFERENCES') }}
-  </button>
-  {% set prefs_filter = ["submission-preferences-success","submission-preferences-error"] %}
-  {% include 'preferences_saved_flash.html' %}
-</form>
+    <label
+      for="prevent_document_uploads">{{ gettext('Prevent sources from uploading documents. Sources will still be able to send messages.') }}</label>
+    <div class="section-spacing">
+      <button type="submit" id="submit-submission-preferences" class="icon icon-edit"
+        aria-label="{{ gettext('Update Submission Preferences') }}">
+        {{ gettext('UPDATE SUBMISSION PREFERENCES') }}
+      </button>
+    </div>
+    {% set prefs_filter = ["submission-preferences-success","submission-preferences-error"] %}
+    {% include 'preferences_saved_flash.html' %}
+  </form>
+</section>
 
-<hr class="no-line">
+<section aria-labelledby="config-testalert">
+  <h2 id="config-testalert">{{ gettext('Alerts') }}</h2>
 
-<h2 id="config-testalert">{{ gettext('Alerts') }}</h2>
+  <p>{{ gettext('Send an encrypted email to verify if OSSEC alerts work correctly:') }}</p>
 
-<p>{{ gettext('Send an encrypted email to verify if OSSEC alerts work correctly:') }}</p>
-
-<form method="post" action="{{ url_for('admin.ossec_test') }}">
-  <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
-  <p>
-    <button type="submit" id="test-ossec-alert">
-      <img src="{{ url_for('static', filename='icons/bell.png') }}" class="icon" width="13" height="15" alt="">
-      {{ gettext('SEND TEST OSSEC ALERT') }}
-    </button>
+  <form method="post" action="{{ url_for('admin.ossec_test') }}">
+    <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
+    <div class="section-spacing">
+      <button type="submit" id="test-ossec-alert" class="icon icon-bell"
+        aria-label="{{ gettext('Send Test OSSEC Alert') }}">
+        {{ gettext('SEND TEST OSSEC ALERT') }}
+      </button>
+    </div>
     {% set prefs_filter = ["testalert-success","testalert-error","testalert-notification"] %}
     {% include 'preferences_saved_flash.html' %}
-  </p>
-</form>
+  </form>
+</section>
 
 {% endblock %}

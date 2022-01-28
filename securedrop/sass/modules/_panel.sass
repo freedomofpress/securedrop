@@ -1,6 +1,6 @@
 =panel
   body:not(#source-index)
-    main, div.panel
+    main
       max-width: 800px
       width: 100%
       margin: 0 auto
@@ -8,9 +8,12 @@
       border: 1px solid #e1e1e1
       float: right
 
-      section, article, .section-spacing
+      section, article, .section-spacing, .section-spacing-inline
         display: flow-root
         margin-top: 10px + 2*8px  // cf. hr.no-line
+
+      .section-spacing-inline
+        display: inline-block
 
   li
     section, article, .section-spacing

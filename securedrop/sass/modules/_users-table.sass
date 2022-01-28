@@ -2,8 +2,59 @@
   table#users
     width: 100%
 
+    th
+      white-space: nowrap
+
     th, td
       padding-bottom: .85em
 
     td
       text-align: center
+
+    tr.user
+      th 
+        font-weight: normal
+
+    td.edit-user a
+      font-size: 0
+
+      &:before
+        content: ""
+        display: inline-block
+
+        width: 18px
+        height: 16px
+
+        background:
+          image: url(/static/icons/edit-user.png)
+          position: center
+          repeat: no-repeat
+          size: contain
+
+    td.delete-user-disabled span, td.delete-user a
+      font-size: 0
+
+      &:before
+        content: ""
+        display: inline-block
+
+        width: 14px
+        height: 16px
+
+        background:
+          origin: content-box
+          position: center
+          repeat: no-repeat
+          size: contain
+
+    td.delete-user-disabled span
+      &:before
+        background-image: url(/static/icons/trash-disabled.png)
+
+    td.delete-user a
+      &:before
+        background-image: url(/static/icons/trash.png)
+
+      &:active, &:hover
+        &:before
+          background-image: url(/static/icons/trash-hover-red.png)

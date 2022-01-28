@@ -1,76 +1,83 @@
 {% extends "base.html" %}
 {% block body %}
 <div id="content" class="journalist-view-all">
-  <h1><span class="headline">{{ gettext('All Sources') }}</span></h1>
+  <h1 id="all-sources-heading" class="headline">{{ gettext('All Sources') }}</h1>
   {% if unstarred or starred %}
-    <div id="filter-container"></div>
-    <form id="process-collections" action="{{ url_for('col.process') }}" method="post">
-      <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
-      <p>
-        <div id="index-select-container"></div>
-        <button type="submit" name="action" value="download-unread" class="small">
-          <img src="{{ url_for('static', filename='icons/download.png') }}" class="icon" width="11" height="13" alt="">
-          {{ gettext('Download Unread') }}
-        </button>
-        <button type="submit" name="action" value="download-all" class="small">
-          <img src="{{ url_for('static', filename='icons/download.png') }}" class="icon" width="11" height="13" alt="">
-          {{ gettext('Download') }}
-        </button>
-        <button type="submit" name="action" value="star" class="small">
-          <img src="{{ url_for('static', filename='icons/star.png') }}" class="icon" width="15" height="14" alt="">
-          {{ gettext('Star') }}
-        </button>
-        <button type="submit" name="action" value="un-star" class="small">
-          <img src="{{ url_for('static', filename='icons/unstar.png') }}" class="icon" width="15" height="14" alt="">
-          {{ gettext('Un-star') }}
-        </button>
-        <div class="delete-menu-button"><a href="#delete-sources-modal" id="delete-collections-link">
-          <button type="button" id="btn-delete-sources" class="small danger"> {{ gettext('Delete') }} </button> </a>
-      <!-- Delete confirmation modal -->
-      {% with %}
+  <div id="filter-container"></div>
+  <form id="process-collections" action="{{ url_for('col.process') }}" method="post">
+    <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
+    <div>
+      <div id="index-select-container"></div>
+      <button type="submit" name="action" value="download-unread" class="small icon">
+        {{ gettext('Download Unread') }}
+      </button>
+      <button type="submit" name="action" value="download-all" class="small icon">
+        {{ gettext('Download') }}
+      </button>
+      <button type="submit" name="action" value="star" class="small icon">
+        {{ gettext('Star') }}
+      </button>
+      <button type="submit" name="action" value="un-star" class="small icon">
+        {{ gettext('Un-star') }}
+      </button>
+      <div class="delete-menu-button"><a href="#delete-sources-modal" id="delete-collections-link"
+          class="btn small danger">
+          {{ gettext('Delete') }} </a>
+        <!-- Delete confirmation modal -->
+        {% with %}
         {% set modal_data = {
                               "modal_id": "delete-sources-modal",
                             }
         %}
         {% include '_sources_confirmation_modal.html' %}
-      {% endwith %}
-      <!-- Delete confirmation modal -->
-      {% with %}
+        {% endwith %}
+        <!-- Delete confirmation modal -->
+        {% with %}
         {% set modal_data = {
                               "modal_id": "delete-sources-confirm-modal",
                             }
         %}
         {% include '_sources_confirmation_final_modal.html' %}
-      {% endwith %}
+        {% endwith %}
       </div>
 
-      </p>
+    </div>
 
+    <table id="collections" aria-labelledby="all-sources-heading">
+      <thead hidden aria-hidden="false">
+        <tr>
+          <th scope="col">{{ gettext('Designation') }}</th>
+          <th scope="col">{{ gettext('Documents') }}</th>
+          <th scope="col">{{ gettext('Messages') }}</th>
+          <th scope="col">{{ gettext('Unread') }}</th>
+          <th scope="col">{{ gettext('Date') }}</th>
+        </tr>
+      </thead>
       {% if starred %}
-        <ul id="cols" class="plain starred">
-          {% for source in starred %}
-            {% with %}
-              {% set loop_index = loop.index %}
-              {% include '_source_row.html' %}
-            {% endwith %}
-          {% endfor %}
-        </ul>
+      <tbody class="cols starred">
+        {% for source in starred %}
+        {% with %}
+        {% set loop_index = loop.index %}
+        {% include '_source_row.html' %}
+        {% endwith %}
+        {% endfor %}
+      </tbody>
       {% endif %}
 
       {% if unstarred %}
-        <ul id="cols" class="plain unstarred">
-          {% for source in unstarred %}
-            {% with %}
-              {% set loop_index = loop.index %}
-              {% include '_source_row.html' %}
-            {% endwith %}
-          {% endfor %}
-        </ul>
+      <tbody class="cols unstarred">
+        {% for source in unstarred %}
+        {% with %}
+        {% set loop_index = loop.index %}
+        {% include '_source_row.html' %}
+        {% endwith %}
+        {% endfor %}
+      </tbody>
       {% endif %}
-
-    </form>
+    </table>
+  </form>
   {% else %}
-    <p>{{ gettext('No documents have been submitted!') }}</p>
+  <p>{{ gettext('No documents have been submitted!') }}</p>
   {% endif %}
 </div>
 {% endblock %}

@@ -1,58 +1,61 @@
 <!DOCTYPE html>
 <html lang="{{ g.localeinfo.language_tag }}" dir="{{ g.localeinfo.text_direction }}">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ g.organization_name }}</title>
 
-    <link rel="stylesheet" href="/static/css/journalist.css">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ g.organization_name }}</title>
 
-    <link rel="icon" type="image/png" href="/static/i/favicon.png">
+  <link rel="stylesheet" href="/static/css/journalist.css">
 
-    {% include 'js-strings.html' %}
+  <link rel="icon" type="image/png" href="/static/i/favicon.png">
 
-    {% assets filters="jsmin", output="gen/journalist.js", "js/journalist.js" %}
-      <script src="{{ ASSET_URL }}"></script>
-    {% endassets %}
-    {% block extrahead %}{% endblock %}
-  </head>
-  <body>
+  {% assets filters="jsmin", output="gen/journalist.js", "js/journalist.js" %}
+  <script src="{{ ASSET_URL }}"></script>
+  {% endassets %}
+  {% block extrahead %}{% endblock %}
+</head>
 
-    {% if g.user %}
-    <div id="logout">
-      {{ gettext('Logged on as') }} <a href="{{ url_for('account.edit') }}" id="link-edit-account">{{ g.user.username }}</a> |
-      {% if g.user and g.user.is_admin %}
-      <a href="{{ url_for('admin.index') }}" id="link-admin-index">{{ gettext('Admin') }}</a> |
-      {% endif %}
-      <a href="{{ url_for('main.logout') }}" id="link-logout">{{ gettext('Log Out') }}</a>
-    </div>
-    <div class="clearfix"></div>
+<body>
+
+  {% if g.user %}
+  <nav aria-label="{{ gettext('Navigation') }}">
+    {{ gettext('Logged on as') }}
+    <a href="{{ url_for('account.edit') }}" id="link-edit-account">{{ g.user.username }}</a> |
+    {% if g.user and g.user.is_admin %}
+    <a href="{{ url_for('admin.index') }}" id="link-admin-index">{{ gettext('Admin') }}</a> |
     {% endif %}
+    <a href="{{ url_for('main.logout') }}" id="link-logout">{{ gettext('Log Out') }}</a>
+  </nav>
+  {% endif %}
 
-    <div class="content">
-      <div class="container">
-        {% block header %}
-        <div id="header">
-          <a href="{{ url_for('main.index') }}" class="no-bottom-border"><img src="{{ g.logo }}" class="logo small" alt="{{ g.organization_name }} | Home" width="250"></a>
-          {% include 'locales.html' %}
-        </div>
-        {% endblock %}
-        <div class="panel-container column">
-          <div class="flash-panel">
-            {% include 'flashed.html' %}
-          </div>
-          <div class="panel selected">
-
-            {% block body %}{% endblock %}
-          </div>
-        </div>
-      </div>
-
-      {% block footer %}
-      <footer>
-        {{ gettext("Powered by <em>SecureDrop {version}</em>.").format(version=version)|safe }}
-      </footer>
+  <div class="content">
+    <div class="container">
+      {% block header %}
+      <header>
+        <a href="{{ url_for('main.index') }}" class="no-bottom-border"><img src="{{ g.logo }}" class="logo small"
+            alt="{{ g.organization_name }} logo" width="250"></a>
+        {% include 'locales.html' %}
+      </header>
       {% endblock %}
+      <div class="panel-container column">
+        <div class="flash-panel">
+          {% include 'flashed.html' %}
+        </div>
+        <main>
+
+          {% block body %}{% endblock %}
+        </main>
+      </div>
     </div>
-  </body>
+
+    {% block footer %}
+    <footer>
+      {{ gettext("Powered by <b>SecureDrop {version}</b>.").format(version=version)|safe }}
+    </footer>
+    {% endblock %}
+  </div>
+  {% include 'js-strings.html' %}
+</body>
+
 </html>

@@ -1,35 +1,34 @@
 {% if g.locales|length > 1 %}
-<div class="menu">
-  <input id="menu-1-checkbox" class="menu__checkbox visually-hidden" type="checkbox" >
-  <label for="menu-1-checkbox" class="menu__trigger">
-    <div class="menu-icon-container">
-      <img class="menu__trigger-icon" src="/static/i/languages_globe.png" alt="" width="18" height="18">
-    </div>
-    <div class="menu-text-container">
-      <span class="menu__trigger-text">{{ g.locales[g.localeinfo.id].display_name }}</span>
-    </div>
-    <div class="menu-trigger-container">
-      <img class="menu__trigger-icon" src="/static/i/languages_arrow.png" alt="" width="12" height="18">
-    </div>
+<section class="menu" aria-labelledby="locale-menu-heading">
+  <h2 id="locale-menu-heading" hidden>
+    {{ gettext('Selected language')}}: {{ g.locales[g.localeinfo.id].display_name }}
+  </h2>
+  <label id="locale-menu-trigger" for="menu-1-checkbox" class="menu__trigger" aria-hidden="true">
+    {{ g.locales[g.localeinfo.id].display_name }}
   </label>
+  <input id="menu-1-checkbox" class="menu__checkbox visually-hidden" type="checkbox" role="button"
+    aria-label="{{ gettext('Choose language') }}" aria-haspopup="menu" aria-controls="locales-menu" aria-pressed="true">
 
-  <ul class="menu__items">
-    {% for locale in g.locales %}
-      <li class="menu__item">
-        {% if locale != g.localeinfo.id %}
-          {% set args = {} %}
-          {% set _ = args.update(request.args or {}) %}
-          {% set _ = args.update(request.view_args or {}) %}
-          {% set _ = args.update({'l': locale}) %}
-          {% set url = url_for(request.endpoint or 'main.index', **args) %}
-        {% else %}
-          {% set url = '' %}
-        {% endif %}
-        <a href="{{ url }}" rel="nofollow" class="no-bottom-border">
-          <span>{{ g.locales[locale].display_name }}</span>
-        </a>
-      </li>
+  <ul id="locales-menu" class="menu__items" role="menu" aria-labelledby="menu-1-checkbox">
+    {% for locale in g.locales.keys() %}
+    <li class="menu__item" role="none">
+      {% if locale != g.localeinfo.id %}
+      {% set args = {} %}
+      {% set _ = args.update(request.args or {}) %}
+      {% set _ = args.update(request.view_args or {}) %}
+      {% set _ = args.update({'l': locale}) %}
+      {% set checked = 'false' %}
+      {% set url = url_for(request.endpoint or 'main.index', **args) %}
+      {% else %}
+      {% set url = '' %}
+      {% set checked = 'true' %}
+      {% endif %}
+      <a href="{{ url }}" rel="nofollow" class="no-bottom-border" lang="{{ g.locales[locale].language_tag }}"
+        hreflang="{{ g.locales[locale].language_tag }}" role="menuitemradio" aria-checked="{{ checked }}">
+        {{ g.locales[locale].display_name }}
+      </a>
+    </li>
     {% endfor %}
   </ul>
-</div>
+</section>
 {% endif %}

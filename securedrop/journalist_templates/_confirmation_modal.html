@@ -1,17 +1,20 @@
 <div id="{{ modal_data.modal_id }}" class="modal-dialog">
-  <a href="#close" class="external"></a>
-  <div>
-    <a href="#close" title="{{ gettext('Close') }}" class="close"> <img src="{{ url_for('static', filename='i/modal-x-white.png') }}" alt="{{ gettext('Close') }}" height="24" width="24"></a>
-    <h2>{{ modal_data.modal_header }}</h2>
-    <p>{{ modal_data.modal_body }}</p>
+  <a href="#close" class="external" aria-label="{{ gettext('Close') }}"></a>
+  <dialog open aria-labelledby="{{ modal_data.modal_id }}-heading">
+    <a href="#close" title="{{ gettext('Close') }}" class="close">
+      <span>{{ gettext('Close') }}</span>
+    </a>
+    <h2 id="{{ modal_data.modal_id }}-heading">{{ modal_data.modal_header }}</h2>
+    {{ modal_data.modal_body }}
     {% if modal_data.modal_warning is defined %}
-      <p><em>{{ modal_data.modal_warning }}</em></p>
+    <p class="warning">{{ modal_data.modal_warning }}</p>
     {% endif %}
-    <center>
-      <div class="btn-row">
-        <a href="#close" id="{{ modal_data.cancel_id }}" title="{{ gettext('Cancel') }}" class="btn cancel small">{{ gettext('Cancel') }}</a>
-        <button type="submit" id="{{ modal_data.submit_id }}" name="action" value="delete" {% if modal_data.modal_action is defined %} formaction="{{ modal_data.modal_action }}" {% endif %} class="btn small {{ modal_data.submit_btn_type }}">{{ modal_data.submit_btn_text }}</button>
-      </div>
-    </center>
-  </div>
+    <div class="btn-row">
+      <a href="#close" id="{{ modal_data.cancel_id }}" title="{{ gettext('Cancel') }}"
+        class="btn cancel small">{{ gettext('Cancel') }}</a>
+      <button type="submit" id="{{ modal_data.submit_id }}" name="action" value="delete"
+        {% if modal_data.modal_action is defined %} formaction="{{ modal_data.modal_action }}" {% endif %}
+        class="btn small {{ modal_data.submit_btn_type }}">{{ modal_data.submit_btn_text }}</button>
+    </div>
+  </dialog>
 </div>

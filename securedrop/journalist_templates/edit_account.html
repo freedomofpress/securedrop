@@ -2,124 +2,153 @@
 {% block body %}
 
 {% if user %}
-  {# Only admins may edit usernames and admin status #}
-  <h1>{{ gettext('Edit user "{user}"').format(user=user.username) }}</h1>
-  <p>
-    <img src="{{ url_for('static', filename='icons/chevron-left.png') }}" class="icon" width="9" height="14" alt="">
-    <a href="/admin">{{ gettext('Back to admin interface') }}</a>
-  </p>
-  <h2>{{ gettext('Change Name and Admin Status') }}</h2>
+{# Only admins may edit usernames and admin status #}
+<h1>{{ gettext('Edit user "{user}"').format(user=user.username) }}</h1>
+<nav aria-labelledby="back-link" class="back">
+  <a id="back-link" href="/admin">{{ gettext('Back to admin interface') }}</a>
+</nav>
+<section aria-labeledby="change-heading">
+  <h2 id="change-heading">{{ gettext('Change Name and Admin Status') }}</h2>
   <form method="post">
     <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
-    <p>
+    <div>
       <label for="username">{{ gettext('Username') }}</label>
       <input name="username" id="username" type="text" value="{{ user.username }}">
-    </p>
-    <p>
+    </div>
+    <div>
       <label for="first_name">{{ gettext('First name') }}</label>
       {% set first_name = user.first_name or '' %}
       <input name="first_name" id="first_name" type="text" value="{{ first_name }}">
       <label for="last_name">{{ gettext('Last name') }}</label>
       {% set last_name = user.last_name or '' %}
       <input name="last_name" id="last_name" type="text" value="{{ last_name }}">
-    </p>
-    <p>
+    </div>
+    <div>
       <input name="is_admin" id="is-admin" type="checkbox" {% if user.is_admin %}checked{% endif %}>
       <label for="is-admin">{{ gettext('Is Admin') }}</label>
-    </p>
-    <button type="submit" id="update">{{ gettext('UPDATE') }}</button>
+    </div>
+    <button type="submit" id="update" aria-label="{{ gettext('Update account') }}">{{ gettext('UPDATE') }}</button>
   </form>
+</section>
 {% else %}
-  <h1>{{ gettext('Edit your account') }}</h1>
-  <h2>{{ gettext('Change Name') }}</h2>
+<h1>{{ gettext('Edit your account') }}</h1>
+<section aria-labelledby="change-heading">
+  <h2 id="change-heading">{{ gettext('Change Name') }}</h2>
   {% set change_name_url = url_for('account.change_name') %}
-  <form action="{{ change_name_url }}" method="post" id="change-name">
-    <p>
+  <form action="{{ change_name_url }}" method="post" id="change-name-form">
+    <div>
       <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
       <label for="first_name">{{ gettext('First name') }}</label>
       {% set first_name = g.user.first_name or '' %}
-      <input name="first_name" id="first_name" value = "{{ first_name }}">
+      <input name="first_name" id="first_name" value="{{ first_name }}">
       <label for="last_name">{{ gettext('Last name') }}</label>
       {% set last_name = g.user.last_name or '' %}
-      <input name="last_name" id="last_name" value = "{{ last_name }}"">
-    </p>
-    <button type="submit" id="change-name">{{ gettext('UPDATE') }}</button>
+      <input name="last_name" id="last_name" value="{{ last_name }}">
+    </div>
+    <div class="section-spacing">
+      <button type="submit" id="change-name-button"
+        aria-label="{{ gettext('Update your account') }}">{{ gettext('UPDATE') }}</button>
+    </div>
   </form>
+</section>
 {% endif %}
 
-<h2>{{ gettext('Reset Password') }}</h2>
+<section aria-labelledby="password-heading">
+  <h2 id="password-heading">{{ gettext('Reset Password') }}</h2>
 
-<p>{{ gettext('SecureDrop uses automatically generated diceware passwords.') }}</p>
-<p>{{ gettext('Your password will be changed immediately, so you will need to save it before pressing the "Reset Password" button.') }}</p>
-
-{% if user and g.user != user %}
-  {% set password_reset_url = url_for('admin.new_password', user_id=user.id) %}
-{% else %}
-  {% set password_reset_url = url_for('account.new_password') %}
-  <p>{{ gettext('Please enter your current password and two-factor code.') }}</p>
-{% endif %}
-
-<form action="{{ password_reset_url }}" method="post" id="new-password" class="login-form">
-   {% if not user or g.user == user %}
-  <p><input type="password" name="current_password" placeholder="{{ gettext('Current Password') }}"></p>
-  <p><input name="token" id="token" type="text" placeholder="{{ gettext('Two-factor Code') }}"></p>
-  {% endif %}
-  <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
-  <input name="password" type="hidden" value="{{ password }}">
+  <p>{{ gettext('SecureDrop uses automatically generated diceware passwords.') }}</p>
   <p>
-    {% if user %}
-      {{ gettext("The user's password will be changed to:") }}
-    {% else %}
-      {{ gettext('Your password will be changed to:') }}
-    {% endif %}
-    <br>
-    <span id="password" class="password">{{ password }}</span>
+    {{ gettext('Your password will be changed immediately, so you will need to save it before pressing the "Reset Password" button.') }}
   </p>
-  <button type="submit" id="reset-password" class="upper">
-    <img src="{{ url_for('static', filename='icons/sync.png') }}" class="icon" width="15" height="15" alt="">
-    {{ gettext('Reset Password') }}
-  </button>
-</form>
 
-<hr class="no-line">
+  {% if user and g.user != user %}
+  {% set password_reset_url = url_for('admin.new_password', user_id=user.id) %}
+  {% else %}
+  {% set password_reset_url = url_for('account.new_password') %}
+  {% set legend = gettext('Please enter your current password and two-factor code.') %}
+  {% endif %}
 
-<h2>{{ gettext('Reset Two-Factor Authentication') }}</h2>
+  <form action="{{ password_reset_url }}" method="post" id="new-password" class="login-form">
+    {% if not user or g.user == user %}
+    <fieldset>
+      <legend>{{ legend }}</legend>
+      <div>
+        <label for="current_password" class="visually-hidden">{{ gettext('Current Password') }}</label>
+        <input type="password" id="current_password" name="current_password"
+          placeholder="{{ gettext('Current Password') }}">
+      </div>
+      <div>
+        <label for="token" class="visually-hidden">{{ gettext('Two-factor Code') }}</label>
+        <input name="token" id="token" type="text" placeholder="{{ gettext('Two-factor Code') }}">
+      </div>
+    </fieldset>
+    {% endif %}
+    <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
+    <input name="password" type="hidden" value="{{ password }}">
+    <fieldset>
+      <legend>
+        {% if user %}
+        {{ gettext("The user's password will be changed to:") }}
+        {% else %}
+        {{ gettext('Your password will be changed to:') }}
+        {% endif %}
+      </legend>
+      <mark id="password" class="password">{{ password }}</mark>
+    </fieldset>
+    <button type="submit" id="reset-password" class="upper icon icon-reset"
+      aria-label="{{ gettext('Reset Password') }}">
+      {{ gettext('Reset Password') }}
+    </button>
+  </form>
+</section>
 
-{% if user %}
-<p>{{ gettext("If a user's two-factor authentication credentials have been lost or compromised, you can reset them here. <em>If you do this, make sure the user is present and ready to set up their device with the new two-factor credentials. Otherwise, they will be locked out of their account.</em>") }}</p>
-{% else %}
-<p>{{ gettext('If your two-factor authentication credentials have been lost or compromised, or you got a new device, you can reset your credentials here. <em>If you do this, make sure you are ready to set up your new device, otherwise you will be locked out of your account.</em>') }}</p>
-{% endif %}
-<p>{{ gettext('To reset two-factor authentication for mobile apps such as FreeOTP, choose the first option. For security keys like the YubiKey, choose the second one.') }}</p>
+<section aria-labelledby="2fa-heading">
+  <h2 id="2fa-heading">{{ gettext('Reset Two-Factor Authentication') }}</h2>
+  {% if user %}
+  <p>
+    {{ gettext("If a user's two-factor authentication credentials have been lost or compromised, you can reset them here. <em>If you do this, make sure the user is present and ready to set up their device with the new two-factor credentials. Otherwise, they will be locked out of their account.</em>") }}
+  </p>
+  {% else %}
+  <p>
+    {{ gettext('If your two-factor authentication credentials have been lost or compromised, or you got a new device, you can reset your credentials here. <em>If you do this, make sure you are ready to set up your new device, otherwise you will be locked out of your account.</em>') }}
+  </p>
+  {% endif %}
+  <p>
+    {{ gettext('To reset two-factor authentication for mobile apps such as FreeOTP, choose the first option. For security keys like the YubiKey, choose the second one.') }}
+  </p>
 
-{% if user %}
+  {% if user %}
   {% set totp_reset_url = url_for('admin.reset_two_factor_totp') %}
   {% set hotp_reset_url = url_for('admin.reset_two_factor_hotp') %}
-{% else %}
+  {% else %}
   {% set totp_reset_url = url_for('account.reset_two_factor_totp') %}
   {% set hotp_reset_url = url_for('account.reset_two_factor_hotp') %}
-{% endif %}
-
-{% macro twofa_reset(user, reset_url, type, tooltip_text, button_text) %}
-{% if user %}
-  {% set username = user.username %}
-{% else %}
-  {% set username = g.user.username %}
-{% endif %}
-<form method="post" action="{{ reset_url }}" id="reset-two-factor-{{ type }}" class="reset-two-factor" data-username="{{ username }}">
-  {% if user %}
-  <input name="uid" type="hidden" value="{{ user.id }}">
   {% endif %}
-  <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
-  <button id="button-reset-two-factor-{{ type }}" tooltip="{{ tooltip_text }}" type="submit" class="pull-right">
-    <img src="{{ url_for('static', filename='icons/sync.png') }}" class="icon" width="15" height="15" alt="">
-    {{ button_text }}
-    <span class="tooltip">{{ tooltip_text }}</span>
-  </button>
-</form>
-{%- endmacro %}
 
-{{ twofa_reset(user, totp_reset_url, "totp", gettext("Reset two-factor authentication for mobile apps, such as FreeOTP"), gettext("RESET MOBILE APP CREDENTIALS"))}}
-{{ twofa_reset(user, hotp_reset_url, "hotp", gettext("Reset two-factor authentication for security keys, like a YubiKey"), gettext("RESET SECURITY KEY CREDENTIALS"))}}
+  {% macro twofa_reset(user, reset_url, type, tooltip_text, button_text, button_aria_label) %}
+  {% if user %}
+  {% set username = user.username %}
+  {% else %}
+  {% set username = g.user.username %}
+  {% endif %}
+  <form method="post" action="{{ reset_url }}" id="reset-two-factor-{{ type }}" class="reset-two-factor"
+    data-username="{{ username }}">
+    {% if user %}
+    <input name="uid" type="hidden" value="{{ user.id }}">
+    {% endif %}
+    <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
+    <button id="button-reset-two-factor-{{ type }}" data-tooltip="{{ tooltip_text }}" type="submit"
+      class="pull-right icon icon-reset" aria-label="{{ button_aria_label }}">
+      <span class="label">
+        {{ button_text }}
+      </span>
+      <span class="tooltip">{{ tooltip_text }}</span>
+    </button>
+  </form>
+  {%- endmacro %}
+
+  {{ twofa_reset(user, totp_reset_url, "totp", gettext("Reset two-factor authentication for mobile apps, such as FreeOTP"), gettext("RESET MOBILE APP CREDENTIALS"), gettext('Reset Mobile App Credentials'))}}
+  {{ twofa_reset(user, hotp_reset_url, "hotp", gettext("Reset two-factor authentication for security keys, like a YubiKey"), gettext("RESET SECURITY KEY CREDENTIALS"), gettext('Reset Security Key Credentials'))}}
+</section>
 
 {% endblock %}

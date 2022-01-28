@@ -17,16 +17,29 @@
       font-size: 18pt
 
     &.success
-      background-color: $color_success_background
+      padding-left: 20px + 20px + 8px  // outer padding + width + inner padding
+      background:
+        color: $color_success_background
+        image: url(/static/i/flash-success.png)
+        position: 20px center  // X outer padding
+        repeat: no-repeat
+        size: 20px 15px
 
       b
         color: $color_success_text_strong
         padding-right: 0.5em
 
     &.notification
-      background-color: $color_notification_background
       font-size: medium
       font-weight: normal
+
+      padding-left: 20px + 15px + 8px  // outer padding + width + inner padding
+      background:
+        color: $color_notification_background
+        image: url(/static/i/flash-notification.png)
+        position: 20px center  // X outer padding
+        repeat: no-repeat
+        size: 15px 35px
 
       i
         color: $color_notification_text_strong
@@ -35,7 +48,13 @@
         padding-right: 0.5em
 
     &.error
-      background-color: $color_error_background
+      padding-left: 20px + 9px + 8px  // outer padding + width + inner padding
+      background:
+        color: $color_error_background
+        image: url(/static/i/flash-error.png)
+        position: 20px center  // X outer padding
+        repeat: no-repeat
+        size: 9px 30px
 
       i
         color: $color_error_text_strong
@@ -73,6 +92,3 @@
 
       p
         color: #555555
-
-    img
-      margin-right: 8px

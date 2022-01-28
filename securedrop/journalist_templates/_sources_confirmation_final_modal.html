@@ -1,19 +1,20 @@
 <div id="{{ modal_data.modal_id }}" class="menu-modal-dialog">
-  <a href="#close" class="external"></a>
-  <div id="delete-confirm-menu-dialog">
-    <p>
+  <a href="#close" class="external" aria-label="{{ gettext('Close') }}"></a>
+  <dialog open id="delete-confirm-menu-dialog" aria-labelledby="confirm-heading">
+    <h2 id="confirm-heading" class="paragraph-spacing">
       {{ gettext('When the account for a source is deleted:') }}
-      <ul>
-        <li>{{ gettext('The source will no longer be able to log in with their codename.') }}</li>
-        <li>{{ gettext('You will not be able to send them replies.') }}</li>
-        <li>{{ gettext('All files and messages from that source will also be destroyed.') }}</li>
-      </ul>
-    </p>
-    <p>
-      <span class="modal-danger-text">{{ gettext('Are you sure this is what you want?') }}</span</p>
+    </h2>
+    <ul>
+      <li>{{ gettext('The source will no longer be able to log in with their codename.') }}</li>
+      <li>{{ gettext('You will not be able to send them replies.') }}</li>
+      <li>{{ gettext('All files and messages from that source will also be destroyed.') }}</li>
+    </ul>
+    <p class="modal-danger-text">{{ gettext('Are you sure this is what you want?') }}</p>
     <div class="btn-row">
-      <a href="#close" id="cancel-collections-deletions" title="{{ gettext('Cancel') }}" class="btn cancel small">{{ gettext('Cancel') }}</a>
-      <button type="submit" id="delete-collections-confirm" name="action" value="delete" class="btn small danger">{{ gettext('Yes, Delete Selected Source Accounts') }}</button>
+      <a href="#close" id="cancel-collections-deletions" title="{{ gettext('Cancel') }}"
+        class="btn cancel small">{{ gettext('Cancel') }}</a>
+      <button type="submit" id="delete-collections-confirm" name="action" value="delete"
+        class="btn small danger">{{ gettext('Yes, Delete Selected Source Accounts') }}</button>
     </div>
-  </div>
+  </dialog>
 </div>

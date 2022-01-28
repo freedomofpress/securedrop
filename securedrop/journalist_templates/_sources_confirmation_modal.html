@@ -1,32 +1,24 @@
 <div id="{{ modal_data.modal_id }}" class="menu-modal-dialog">
-  <a href="#close" class="external"></a>
-  <div id="delete-menu-dialog">
-    <div id="delete-menu-no-select">
-      <p class="modal-danger-text">
-      <span class="modal-danger-text">{{ gettext("Nothing Selected") }}</span>
-      </p>
-      <p>
-      {{ gettext("You must select one or more items for deletion.") }}
-      </p>
+  <a href="#close" class="external" aria-label="{{ gettext('Close') }}"></a>
+  <dialog open id="delete-menu-dialog">
+    <div id="delete-menu-no-select" aria-labelledby="nothing-selected-heading">
+      <h2 id="nothing-selected-heading" class="modal-danger-text paragraph-spacing">{{ gettext("Nothing Selected") }}
+      </h2>
+      <p>{{ gettext("You must select one or more items for deletion.") }}</p>
     </div>
-    <div id="delete-menu-cta">
-    <p>
-      <span id="delete-menu-summary"></span>
-    </p>
-    <p>
-    {{ gettext("What would you like to delete?") }}
-    </p>
-    <p>
-      <button id="delete-files-and-messages" type="submit" name="action" value="delete-data" class="small btn danger modal-stacked">{{ gettext('Files and Messages') }}</button>
-    </p>
-    <p>
-      <a href="#delete-sources-confirm-modal" id="delete-collections">
-        <button type="button" class="small danger btn modal-stacked">{{ gettext('Source Accounts') }}</button>
-      </a>
-    </p>
+    <div id="delete-menu-cta" aria-labelledby="delete-heading">
+      <p id="delete-menu-summary"></p>
+      <h2 id="delete-heading" class="paragraph-spacing">{{ gettext("What would you like to delete?") }}</h2>
+      <ul class="modal-stacked">
+        <li><button id="delete-files-and-messages" type="submit" name="action" value="delete-data"
+            class="small btn danger">{{ gettext('Files and Messages') }}</button></li>
+        <li>
+          <a href="#delete-sources-confirm-modal" id="delete-collections" class="small danger btn">
+            {{ gettext('Source Accounts') }}
+          </a>
+        </li>
+      </ul>
     </div>
-    <p>
-      <a href="#close" id="delete-menu-dialog-cancel">{{ gettext('Cancel') }}</a>
-    </p>
-  </div>
+    <a href="#close" id="delete-menu-dialog-cancel" class="paragraph-spacing">{{ gettext('Cancel') }}</a>
+  </dialog>
 </div>
