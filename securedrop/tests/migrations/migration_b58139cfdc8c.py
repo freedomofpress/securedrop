@@ -3,6 +3,7 @@ import io
 import os
 import random
 import uuid
+import mock
 
 from os import path
 from sqlalchemy import text
@@ -10,6 +11,7 @@ from sqlalchemy.exc import NoSuchColumnError
 
 from db import db
 from journalist_app import create_app
+from store import Storage
 from .helpers import random_chars, random_datetime
 
 random.seed('ᕕ( ᐛ )ᕗ')
@@ -123,25 +125,32 @@ class UpgradeTester(Helper):
         self.config = config
         self.app = create_app(config)
 
+        # as this class requires access to the Storage object, which is no longer
+        # attached to app, we create it here and mock the call to return it below.
+        self.storage = Storage(config.STORE_DIR, config.TEMP_DIR)
+
     def load_data(self):
         global DATA
-        with self.app.app_context():
-            self.create_journalist()
-            self.create_source()
+        with mock.patch("store.Storage.get_default") as mock_storage_global:
+            mock_storage_global.return_value = self.storage
+            with self.app.app_context():
+                self.create_journalist()
+                self.create_source()
 
-            submission_id, submission_filename = self.create_submission()
-            reply_id, reply_filename = self.create_reply()
+                submission_id, submission_filename = self.create_submission()
+                reply_id, reply_filename = self.create_reply()
 
-            # we need to actually create files and write data to them so the RQ worker can hash them
-            for fn in [submission_filename, reply_filename]:
-                full_path = self.app.storage.path(self.source_filesystem_id, fn)
+                # we need to actually create files and write data to them so the
+                # RQ worker can hash them
+                for fn in [submission_filename, reply_filename]:
+                    full_path = Storage.get_default().path(self.source_filesystem_id, fn)
 
-                dirname = path.dirname(full_path)
-                if not path.exists(dirname):
-                    os.mkdir(dirname)
+                    dirname = path.dirname(full_path)
+                    if not path.exists(dirname):
+                        os.mkdir(dirname)
 
-                with io.open(full_path, 'wb') as f:
-                    f.write(DATA)
+                    with io.open(full_path, 'wb') as f:
+                        f.write(DATA)
 
     def check_upgrade(self):
         '''

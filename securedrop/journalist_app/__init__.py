@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 from flask import (Flask, session, redirect, url_for, flash, g, request,
@@ -21,7 +21,6 @@ from journalist_app.utils import (get_source, logged_in,
                                   JournalistInterfaceSessionInterface,
                                   cleanup_expired_revoked_tokens)
 from models import InstanceConfig, Journalist
-from store import Storage
 
 import typing
 # https://www.python.org/dev/peps/pep-0484/#runtime-or-type-checking
@@ -69,11 +68,9 @@ def create_app(config: 'SDConfig') -> Flask:
     app.config['SQLALCHEMY_DATABASE_URI'] = config.DATABASE_URI
     db.init_app(app)
 
-    # TODO: Attaching a Storage dynamically like this disables all type checking (and
-    # breaks code analysis tools) for code that uses current_app.storage; it should be refactored
-    app.storage = Storage(config.STORE_DIR, config.TEMP_DIR)
-
-    @app.errorhandler(CSRFError)
+    # TODO: enable type checking once upstream Flask fix is available. See:
+    # https://github.com/pallets/flask/issues/4295
+    @app.errorhandler(CSRFError)  # type: ignore
     def handle_csrf_error(e: CSRFError) -> 'Response':
         app.logger.error("The CSRF token is invalid.")
         session.clear()
@@ -86,9 +83,12 @@ def create_app(config: 'SDConfig') -> Flask:
     ) -> 'Tuple[Union[Response, str], Optional[int]]':
         # Workaround for no blueprint-level 404/5 error handlers, see:
         # https://github.com/pallets/flask/issues/503#issuecomment-71383286
+        # TODO: clean up API error handling such that all except 404/5s are
+        # registered in the blueprint and 404/5s are handled at the application
+        # level.
         handler = list(app.error_handler_spec['api'][error.code].values())[0]
         if request.path.startswith('/api/') and handler:
-            return handler(error)
+            return handler(error)  # type: ignore
 
         return render_template('error.html', error=error), error.code
 
@@ -111,13 +111,13 @@ def create_app(config: 'SDConfig') -> Flask:
         cleanup_expired_revoked_tokens()
 
     @app.before_request
-    def load_instance_config() -> None:
-        app.instance_config = InstanceConfig.get_current()
+    def update_instance_config() -> None:
+        InstanceConfig.get_default(refresh=True)
 
     @app.before_request
     def setup_g() -> 'Optional[Response]':
         """Store commonly used values in Flask's special g object"""
-        if 'expires' in session and datetime.utcnow() >= session['expires']:
+        if 'expires' in session and datetime.now(timezone.utc) >= session['expires']:
             session.clear()
             flash(gettext('You have been logged out due to inactivity.'),
                   'error')
@@ -131,24 +131,25 @@ def create_app(config: 'SDConfig') -> Flask:
                 flash(gettext('You have been logged out due to password change'),
                       'error')
 
-        session['expires'] = datetime.utcnow() + \
+        session['expires'] = datetime.now(timezone.utc) + \
             timedelta(minutes=getattr(config,
                                       'SESSION_EXPIRATION_MINUTES',
                                       120))
 
         uid = session.get('uid', None)
         if uid:
-            g.user = Journalist.query.get(uid)
+            g.user = Journalist.query.get(uid)  # pylint: disable=assigning-non-slot
 
         i18n.set_locale(config)
 
-        if app.instance_config.organization_name:
-            g.organization_name = app.instance_config.organization_name
+        if InstanceConfig.get_default().organization_name:
+            g.organization_name = \
+                InstanceConfig.get_default().organization_name  # pylint: disable=assigning-non-slot
         else:
-            g.organization_name = gettext('SecureDrop')
+            g.organization_name = gettext('SecureDrop')  # pylint: disable=assigning-non-slot
 
         try:
-            g.logo = get_logo_url(app)
+            g.logo = get_logo_url(app)  # pylint: disable=assigning-non-slot
         except FileNotFoundError:
             app.logger.error("Site logo not found.")
 
@@ -161,8 +162,8 @@ def create_app(config: 'SDConfig') -> Flask:
         if request.method == 'POST':
             filesystem_id = request.form.get('filesystem_id')
             if filesystem_id:
-                g.filesystem_id = filesystem_id
-                g.source = get_source(filesystem_id)
+                g.filesystem_id = filesystem_id  # pylint: disable=assigning-non-slot
+                g.source = get_source(filesystem_id)  # pylint: disable=assigning-non-slot
 
         return None
 

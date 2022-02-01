@@ -30,6 +30,9 @@ from logging import Logger
 from pyotp import TOTP, HOTP
 
 from encryption import EncryptionManager, GpgKeyNotFoundError
+from store import Storage
+
+_default_instance_config: Optional["InstanceConfig"] = None
 
 LOGIN_HARDENING = True
 if os.environ.get('SECUREDROP_ENV') == 'test':
@@ -130,7 +133,7 @@ class Source(db.Model):
         except GpgKeyNotFoundError:
             return None
 
-    def to_json(self) -> 'Dict[str, Union[str, bool, int, str]]':
+    def to_json(self) -> 'Dict[str, object]':
         docs_msg_count = self.documents_messages_count()
 
         if self.last_updated:
@@ -191,12 +194,11 @@ class Submission(db.Model):
     '''
     checksum = Column(String(255))
 
-    def __init__(self, source: Source, filename: str) -> None:
+    def __init__(self, source: Source, filename: str, storage: Storage) -> None:
         self.source_id = source.id
         self.filename = filename
         self.uuid = str(uuid.uuid4())
-        self.size = os.stat(current_app.storage.path(source.filesystem_id,
-                                                     filename)).st_size
+        self.size = os.stat(storage.path(source.filesystem_id, filename)).st_size
 
     def __repr__(self) -> str:
         return '<Submission %r>' % (self.filename)
@@ -282,13 +284,13 @@ class Reply(db.Model):
     def __init__(self,
                  journalist: 'Journalist',
                  source: Source,
-                 filename: str) -> None:
+                 filename: str,
+                 storage: Storage) -> None:
         self.journalist = journalist
         self.source_id = source.id
         self.uuid = str(uuid.uuid4())
         self.filename = filename
-        self.size = os.stat(current_app.storage.path(source.filesystem_id,
-                                                     filename)).st_size
+        self.size = os.stat(storage.path(source.filesystem_id, filename)).st_size
 
     def __repr__(self) -> str:
         return '<Reply %r>' % (self.filename)
@@ -891,6 +893,13 @@ class InstanceConfig(db.Model):
             setattr(new, col.name, getattr(self, col.name))
 
         return new
+
+    @classmethod
+    def get_default(cls, refresh: bool = False) -> "InstanceConfig":
+        global _default_instance_config
+        if (_default_instance_config is None) or (refresh is True):
+            _default_instance_config = InstanceConfig.get_current()
+        return _default_instance_config
 
     @classmethod
     def get_current(cls) -> "InstanceConfig":

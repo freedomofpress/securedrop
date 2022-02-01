@@ -11,12 +11,13 @@ from io import BytesIO
 import mock
 
 from bs4 import BeautifulSoup
-from flask import current_app, escape, g, session
+from flask import escape, g, session
 from pyotp import HOTP, TOTP
 
 import journalist_app as journalist_app_module
 from db import db
 from encryption import EncryptionManager
+from store import Storage
 from source_app.session_manager import SessionManager
 from . import utils
 from .test_encryption import import_journalist_private_key
@@ -37,7 +38,7 @@ def _login_user(app, user_dict):
     assert hasattr(g, 'user')  # ensure logged in
 
 
-def test_submit_message(journalist_app, source_app, test_journo):
+def test_submit_message(journalist_app, source_app, test_journo, app_storage):
     """When a source creates an account, test that a new entry appears
     in the journalist interface"""
     test_msg = "This is a test message."
@@ -135,12 +136,12 @@ def test_submit_message(journalist_app, source_app, test_journo):
         # needs to wait for the worker to get the job and execute it
         def assertion():
             assert not (
-                os.path.exists(current_app.storage.path(filesystem_id,
-                                                        doc_name)))
+                os.path.exists(app_storage.path(filesystem_id,
+                                                doc_name)))
         utils.asynchronous.wait_for_assertion(assertion)
 
 
-def test_submit_file(journalist_app, source_app, test_journo):
+def test_submit_file(journalist_app, source_app, test_journo, app_storage):
     """When a source creates an account, test that a new entry appears
     in the journalist interface"""
     test_file_contents = b"This is a test file."
@@ -245,8 +246,7 @@ def test_submit_file(journalist_app, source_app, test_journo):
         # needs to wait for the worker to get the job and execute it
         def assertion():
             assert not (
-                os.path.exists(current_app.storage.path(filesystem_id,
-                                                        doc_name)))
+                os.path.exists(app_storage.path(filesystem_id, doc_name)))
         utils.asynchronous.wait_for_assertion(assertion)
 
 
@@ -382,8 +382,8 @@ def _helper_filenames_delete(journalist_app, soup, i):
 
     # Make sure the files were deleted from the filesystem
     def assertion():
-        assert not any([os.path.exists(current_app.storage.path(filesystem_id,
-                                                                doc_name))
+        assert not any([os.path.exists(Storage.get_default().path(filesystem_id,
+                                                                  doc_name))
                         for doc_name in checkbox_values])
     utils.asynchronous.wait_for_assertion(assertion)
 
@@ -483,7 +483,7 @@ def test_delete_collection(mocker, source_app, journalist_app, test_journo):
 
         # Make sure the collection is deleted from the filesystem
         def assertion():
-            assert not os.path.exists(current_app.storage.path(filesystem_id))
+            assert not os.path.exists(Storage.get_default().path(filesystem_id))
 
         utils.asynchronous.wait_for_assertion(assertion)
 
@@ -527,7 +527,7 @@ def test_delete_collections(mocker, journalist_app, source_app, test_journo):
         # Make sure the collections are deleted from the filesystem
         def assertion():
             assert not (
-                any([os.path.exists(current_app.storage.path(filesystem_id))
+                any([os.path.exists(Storage.get_default().path(filesystem_id))
                     for filesystem_id in checkbox_values]))
 
         utils.asynchronous.wait_for_assertion(assertion)

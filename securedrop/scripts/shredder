@@ -17,6 +17,7 @@ sys.path.insert(0, "/var/www/securedrop")  # noqa: E402
 
 import journalist_app
 from sdconfig import config
+from store import Storage
 
 
 def parse_args():
@@ -33,7 +34,7 @@ def parse_args():
 
 def clear_shredder():
     try:
-        app.storage.clear_shredder()
+        Storage.get_default().clear_shredder()
     except Exception as e:
         logging.info("Error clearing shredder: {}".format(e))
 

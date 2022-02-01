@@ -718,7 +718,7 @@ def test_unencrypted_replies_get_rejected(journalist_app, journalist_api_token,
 
 
 def test_authorized_user_can_add_reply(journalist_app, journalist_api_token,
-                                       test_source, test_journo):
+                                       test_source, test_journo, app_storage):
     with journalist_app.test_client() as app:
         source_id = test_source['source'].id
         uuid = test_source['source'].uuid
@@ -760,8 +760,7 @@ def test_authorized_user_can_add_reply(journalist_app, journalist_api_token,
         expected_filename = '{}-{}-reply.gpg'.format(
             source.interaction_count, source.journalist_filename)
 
-        expected_filepath = journalist_app.storage.path(
-            source.filesystem_id, expected_filename)
+        expected_filepath = app_storage.path(source.filesystem_id, expected_filename)
 
         with open(expected_filepath, 'rb') as fh:
             saved_content = fh.read()

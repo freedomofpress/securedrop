@@ -17,7 +17,6 @@ import string
 from itertools import cycle
 from typing import Optional, Tuple
 
-from flask import current_app
 from sqlalchemy.exc import IntegrityError
 
 import journalist_app
@@ -38,6 +37,7 @@ from passphrases import PassphraseGenerator
 from sdconfig import config
 from source_user import create_source_user
 from specialstrings import strings
+from store import Storage
 
 messages = cycle(strings)
 replies = cycle(strings)
@@ -180,13 +180,13 @@ def submit_message(source: Source, journalist_who_saw: Optional[Journalist]) -> 
     Adds a single message submitted by a source.
     """
     record_source_interaction(source)
-    fpath = current_app.storage.save_message_submission(
+    fpath = Storage.get_default().save_message_submission(
         source.filesystem_id,
         source.interaction_count,
         source.journalist_filename,
         next(messages),
     )
-    submission = Submission(source, fpath)
+    submission = Submission(source, fpath, Storage.get_default())
     db.session.add(submission)
 
     if journalist_who_saw:
@@ -199,14 +199,14 @@ def submit_file(source: Source, journalist_who_saw: Optional[Journalist]) -> Non
     Adds a single file submitted by a source.
     """
     record_source_interaction(source)
-    fpath = current_app.storage.save_file_submission(
+    fpath = Storage.get_default().save_file_submission(
         source.filesystem_id,
         source.interaction_count,
         source.journalist_filename,
         "memo.txt",
         io.BytesIO(b"This is an example of a plain text file upload."),
     )
-    submission = Submission(source, fpath)
+    submission = Submission(source, fpath, Storage.get_default())
     db.session.add(submission)
 
     if journalist_who_saw:
@@ -225,9 +225,9 @@ def add_reply(
     EncryptionManager.get_default().encrypt_journalist_reply(
         for_source_with_filesystem_id=source.filesystem_id,
         reply_in=next(replies),
-        encrypted_reply_path_out=Path(current_app.storage.path(source.filesystem_id, fname)),
+        encrypted_reply_path_out=Path(Storage.get_default().path(source.filesystem_id, fname)),
     )
-    reply = Reply(journalist, source, fname)
+    reply = Reply(journalist, source, fname, Storage.get_default())
     db.session.add(reply)
 
     # Journalist who replied has seen the reply
@@ -249,7 +249,7 @@ def add_source() -> Tuple[Source, str]:
     source_user = create_source_user(
         db_session=db.session,
         source_passphrase=codename,
-        source_app_storage=current_app.storage,
+        source_app_storage=Storage.get_default(),
     )
     source = source_user.get_db_record()
     source.pending = False

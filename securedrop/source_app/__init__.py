@@ -22,7 +22,6 @@ from sdconfig import SDConfig
 from source_app import main, info, api
 from source_app.decorators import ignore_static
 from source_app.utils import clear_session_and_redirect_to_logged_out_page
-from store import Storage
 
 
 def get_logo_url(app: Flask) -> str:
@@ -65,11 +64,9 @@ def create_app(config: SDConfig) -> Flask:
     app.config['SQLALCHEMY_DATABASE_URI'] = config.DATABASE_URI
     db.init_app(app)
 
-    # TODO: Attaching a Storage dynamically like this disables all type checking (and
-    # breaks code analysis tools) for code that uses current_app.storage; it should be refactored
-    app.storage = Storage(config.STORE_DIR, config.TEMP_DIR)
-
-    @app.errorhandler(CSRFError)
+    # TODO: enable typechecking once upstream Flask fix is available. See:
+    # https://github.com/pallets/flask/issues/4295
+    @app.errorhandler(CSRFError)  # type: ignore
     def handle_csrf_error(e: CSRFError) -> werkzeug.Response:
         return clear_session_and_redirect_to_logged_out_page(flask_session=session)
 
@@ -115,19 +112,15 @@ def create_app(config: SDConfig) -> Flask:
 
     @app.before_request
     @ignore_static
-    def load_instance_config() -> None:
-        app.instance_config = InstanceConfig.get_current()
-
-    @app.before_request
-    @ignore_static
     def setup_g() -> Optional[werkzeug.Response]:
-        if app.instance_config.organization_name:
-            g.organization_name = app.instance_config.organization_name
+        if InstanceConfig.get_default(refresh=True).organization_name:
+            g.organization_name = \
+                InstanceConfig.get_default().organization_name  # pylint: disable=assigning-non-slot
         else:
-            g.organization_name = gettext('SecureDrop')
+            g.organization_name = gettext('SecureDrop')  # pylint: disable=assigning-non-slot
 
         try:
-            g.logo = get_logo_url(app)
+            g.logo = get_logo_url(app)  # pylint: disable=assigning-non-slot
         except FileNotFoundError:
             app.logger.error("Site logo not found.")
 

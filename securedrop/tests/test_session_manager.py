@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from unittest import mock
 
 import pytest
@@ -15,13 +15,13 @@ from source_user import create_source_user
 
 
 class TestSessionManager:
-    def test_log_user_in(self, source_app):
+    def test_log_user_in(self, source_app, app_storage):
         # Given a source user
         passphrase = PassphraseGenerator.get_default().generate_passphrase()
         source_user = create_source_user(
             db_session=db.session,
             source_passphrase=passphrase,
-            source_app_storage=source_app.storage,
+            source_app_storage=app_storage,
         )
 
         with source_app.test_request_context():
@@ -33,13 +33,13 @@ class TestSessionManager:
             logged_in_user = SessionManager.get_logged_in_user(db_session=db.session)
             assert logged_in_user.db_record_id == source_user.db_record_id
 
-    def test_log_user_out(self, source_app):
+    def test_log_user_out(self, source_app, app_storage):
         # Given a source user
         passphrase = PassphraseGenerator.get_default().generate_passphrase()
         create_source_user(
             db_session=db.session,
             source_passphrase=passphrase,
-            source_app_storage=source_app.storage,
+            source_app_storage=app_storage,
         )
 
         with source_app.test_request_context():
@@ -54,13 +54,13 @@ class TestSessionManager:
             with pytest.raises(UserNotLoggedIn):
                 SessionManager.get_logged_in_user(db_session=db.session)
 
-    def test_get_logged_in_user_but_session_expired(self, source_app):
+    def test_get_logged_in_user_but_session_expired(self, source_app, app_storage):
         # Given a source user
         passphrase = PassphraseGenerator.get_default().generate_passphrase()
         create_source_user(
             db_session=db.session,
             source_passphrase=passphrase,
-            source_app_storage=source_app.storage,
+            source_app_storage=app_storage,
         )
 
         with source_app.test_request_context():
@@ -69,21 +69,21 @@ class TestSessionManager:
 
             # But we're now 6 hours later hence their session expired
             with mock.patch("source_app.session_manager.datetime") as mock_datetime:
-                six_hours_later = datetime.utcnow() + timedelta(hours=6)
-                mock_datetime.utcnow.return_value = six_hours_later
+                six_hours_later = datetime.now(timezone.utc) + timedelta(hours=6)
+                mock_datetime.now.return_value = six_hours_later
 
                 # When querying the current user from the SessionManager
                 # it fails with the right error
                 with pytest.raises(UserSessionExpired):
                     SessionManager.get_logged_in_user(db_session=db.session)
 
-    def test_get_logged_in_user_but_user_deleted(self, source_app):
+    def test_get_logged_in_user_but_user_deleted(self, source_app, app_storage):
         # Given a source user
         passphrase = PassphraseGenerator.get_default().generate_passphrase()
         source_user = create_source_user(
             db_session=db.session,
             source_passphrase=passphrase,
-            source_app_storage=source_app.storage,
+            source_app_storage=app_storage,
         )
 
         with source_app.test_request_context():

@@ -2261,11 +2261,11 @@ def test_passphrase_migration_on_reset(journalist_app):
     assert journalist.valid_password(VALID_PASSWORD)
 
 
-def test_journalist_reply_view(journalist_app, test_source, test_journo):
-    source, _ = utils.db_helper.init_source()
+def test_journalist_reply_view(journalist_app, test_source, test_journo, app_storage):
+    source, _ = utils.db_helper.init_source(app_storage)
     journalist, _ = utils.db_helper.init_journalist()
-    submissions = utils.db_helper.submit(source, 1)
-    replies = utils.db_helper.reply(journalist, source, 1)
+    submissions = utils.db_helper.submit(app_storage, source, 1)
+    replies = utils.db_helper.reply(app_storage, journalist, source, 1)
 
     subm_url = url_for('col.download_single_file',
                        filesystem_id=submissions[0].source.filesystem_id,
@@ -2426,7 +2426,8 @@ def test_edit_hotp(journalist_app, test_journo):
 
 def test_delete_data_deletes_submissions_retaining_source(journalist_app,
                                                           test_journo,
-                                                          test_source):
+                                                          test_source,
+                                                          app_storage):
     """Verify that when only a source's data is deleted, the submissions
     are deleted but the source is not."""
 
@@ -2434,8 +2435,8 @@ def test_delete_data_deletes_submissions_retaining_source(journalist_app,
         source = Source.query.get(test_source['id'])
         journo = Journalist.query.get(test_journo['id'])
 
-        utils.db_helper.submit(source, 2)
-        utils.db_helper.reply(journo, source, 2)
+        utils.db_helper.submit(app_storage, source, 2)
+        utils.db_helper.reply(app_storage, journo, source, 2)
 
         assert len(source.collection) == 4
 
@@ -2450,7 +2451,8 @@ def test_delete_data_deletes_submissions_retaining_source(journalist_app,
 
 def test_delete_source_deletes_submissions(journalist_app,
                                            test_journo,
-                                           test_source):
+                                           test_source,
+                                           app_storage):
     """Verify that when a source is deleted, the submissions that
     correspond to them are also deleted."""
 
@@ -2458,8 +2460,8 @@ def test_delete_source_deletes_submissions(journalist_app,
         source = Source.query.get(test_source['id'])
         journo = Journalist.query.get(test_journo['id'])
 
-        utils.db_helper.submit(source, 2)
-        utils.db_helper.reply(journo, source, 2)
+        utils.db_helper.submit(app_storage, source, 2)
+        utils.db_helper.reply(app_storage, journo, source, 2)
 
         journalist_app_module.utils.delete_collection(
             test_source['filesystem_id'])
@@ -2468,7 +2470,7 @@ def test_delete_source_deletes_submissions(journalist_app,
         assert res is None
 
 
-def test_delete_collection_updates_db(journalist_app, test_journo, test_source):
+def test_delete_collection_updates_db(journalist_app, test_journo, test_source, app_storage):
     """
     Verify that when a source is deleted, the Source record is deleted and all records associated
     with the source are deleted.
@@ -2477,11 +2479,11 @@ def test_delete_collection_updates_db(journalist_app, test_journo, test_source):
     with journalist_app.app_context():
         source = Source.query.get(test_source["id"])
         journo = Journalist.query.get(test_journo["id"])
-        files = utils.db_helper.submit(source, 2)
+        files = utils.db_helper.submit(app_storage, source, 2)
         mark_seen(files, journo)
-        messages = utils.db_helper.submit(source, 2)
+        messages = utils.db_helper.submit(app_storage, source, 2)
         mark_seen(messages, journo)
-        replies = utils.db_helper.reply(journo, source, 2)
+        replies = utils.db_helper.reply(app_storage, journo, source, 2)
         mark_seen(replies, journo)
 
         journalist_app_module.utils.delete_collection(test_source["filesystem_id"])
@@ -2520,7 +2522,8 @@ def test_delete_collection_updates_db(journalist_app, test_journo, test_source):
 
 def test_delete_source_deletes_source_key(journalist_app,
                                           test_source,
-                                          test_journo):
+                                          test_journo,
+                                          app_storage):
     """Verify that when a source is deleted, the PGP key that corresponds
     to them is also deleted."""
 
@@ -2528,8 +2531,8 @@ def test_delete_source_deletes_source_key(journalist_app,
         source = Source.query.get(test_source['id'])
         journo = Journalist.query.get(test_journo['id'])
 
-        utils.db_helper.submit(source, 2)
-        utils.db_helper.reply(journo, source, 2)
+        utils.db_helper.submit(app_storage, source, 2)
+        utils.db_helper.reply(app_storage, journo, source, 2)
 
         # Source key exists
         encryption_mgr = EncryptionManager.get_default()
@@ -2546,7 +2549,8 @@ def test_delete_source_deletes_source_key(journalist_app,
 def test_delete_source_deletes_docs_on_disk(journalist_app,
                                             test_source,
                                             test_journo,
-                                            config):
+                                            config,
+                                            app_storage):
     """Verify that when a source is deleted, the encrypted documents that
     exist on disk is also deleted."""
 
@@ -2554,8 +2558,8 @@ def test_delete_source_deletes_docs_on_disk(journalist_app,
         source = Source.query.get(test_source['id'])
         journo = Journalist.query.get(test_journo['id'])
 
-        utils.db_helper.submit(source, 2)
-        utils.db_helper.reply(journo, source, 2)
+        utils.db_helper.submit(app_storage, source, 2)
+        utils.db_helper.reply(app_storage, journo, source, 2)
 
         dir_source_docs = os.path.join(config.STORE_DIR, test_source['filesystem_id'])
         assert os.path.exists(dir_source_docs)
@@ -2571,7 +2575,8 @@ def test_delete_source_deletes_docs_on_disk(journalist_app,
 def test_bulk_delete_deletes_db_entries(journalist_app,
                                         test_source,
                                         test_journo,
-                                        config):
+                                        config,
+                                        app_storage):
     """
     Verify that when files are deleted, the corresponding db entries are
     also deleted.
@@ -2581,8 +2586,8 @@ def test_bulk_delete_deletes_db_entries(journalist_app,
         source = Source.query.get(test_source['id'])
         journo = Journalist.query.get(test_journo['id'])
 
-        utils.db_helper.submit(source, 2)
-        utils.db_helper.reply(journo, source, 2)
+        utils.db_helper.submit(app_storage, source, 2)
+        utils.db_helper.reply(app_storage, journo, source, 2)
 
         dir_source_docs = os.path.join(config.STORE_DIR, test_source['filesystem_id'])
         assert os.path.exists(dir_source_docs)
@@ -2614,18 +2619,19 @@ def test_bulk_delete_deletes_db_entries(journalist_app,
 def test_bulk_delete_works_when_files_absent(journalist_app,
                                              test_source,
                                              test_journo,
-                                             config):
+                                             config,
+                                             app_storage):
     """
     Verify that when files are deleted but are already missing,
-    the corresponding db entries are still
+    the corresponding db entries are still deleted
     """
 
     with journalist_app.app_context():
         source = Source.query.get(test_source['id'])
         journo = Journalist.query.get(test_journo['id'])
 
-        utils.db_helper.submit(source, 2)
-        utils.db_helper.reply(journo, source, 2)
+        utils.db_helper.submit(app_storage, source, 2)
+        utils.db_helper.reply(app_storage, journo, source, 2)
 
         dir_source_docs = os.path.join(config.STORE_DIR, test_source['filesystem_id'])
         assert os.path.exists(dir_source_docs)
@@ -2705,12 +2711,12 @@ def test_render_locales(config, journalist_app, test_journo, test_source):
 
 
 def test_download_selected_submissions_and_replies(
-    journalist_app, test_journo, test_source
+    journalist_app, test_journo, test_source, app_storage
 ):
     journo = Journalist.query.get(test_journo["id"])
     source = Source.query.get(test_source["id"])
-    submissions = utils.db_helper.submit(source, 4)
-    replies = utils.db_helper.reply(journo, source, 4)
+    submissions = utils.db_helper.submit(app_storage, source, 4)
+    replies = utils.db_helper.reply(app_storage, journo, source, 4)
     selected_submissions = random.sample(submissions, 2)
     selected_replies = random.sample(replies, 2)
     selected = [submission.filename for submission in selected_submissions + selected_replies]
@@ -2775,12 +2781,12 @@ def test_download_selected_submissions_and_replies(
 
 
 def test_download_selected_submissions_and_replies_previously_seen(
-    journalist_app, test_journo, test_source
+    journalist_app, test_journo, test_source, app_storage
 ):
     journo = Journalist.query.get(test_journo["id"])
     source = Source.query.get(test_source["id"])
-    submissions = utils.db_helper.submit(source, 4)
-    replies = utils.db_helper.reply(journo, source, 4)
+    submissions = utils.db_helper.submit(app_storage, source, 4)
+    replies = utils.db_helper.reply(app_storage, journo, source, 4)
     selected_submissions = random.sample(submissions, 2)
     selected_replies = random.sample(replies, 2)
     selected = [submission.filename for submission in selected_submissions + selected_replies]
@@ -2853,12 +2859,12 @@ def test_download_selected_submissions_and_replies_previously_seen(
 
 
 def test_download_selected_submissions_previously_downloaded(
-    journalist_app, test_journo, test_source
+    journalist_app, test_journo, test_source, app_storage
 ):
     journo = Journalist.query.get(test_journo["id"])
     source = Source.query.get(test_source["id"])
-    submissions = utils.db_helper.submit(source, 4)
-    replies = utils.db_helper.reply(journo, source, 4)
+    submissions = utils.db_helper.submit(app_storage, source, 4)
+    replies = utils.db_helper.reply(app_storage, journo, source, 4)
     selected_submissions = random.sample(submissions, 2)
     selected_replies = random.sample(replies, 2)
     selected = [submission.filename for submission in selected_submissions + selected_replies]
@@ -2915,13 +2921,13 @@ def test_download_selected_submissions_previously_downloaded(
 
 
 @pytest.fixture(scope="function")
-def selected_missing_files(journalist_app, test_source):
+def selected_missing_files(journalist_app, test_source, app_storage):
     """Fixture for the download tests with missing files in storage."""
     source = Source.query.get(test_source["id"])
-    submissions = utils.db_helper.submit(source, 2)
+    submissions = utils.db_helper.submit(app_storage, source, 2)
     selected = sorted([s.filename for s in submissions])
 
-    storage_path = Path(journalist_app.storage.storage_path)
+    storage_path = Path(app_storage.storage_path)
     msg_files = sorted([p for p in storage_path.rglob("*") if p.is_file()])
     assert len(msg_files) == 2
     for file in msg_files:
@@ -2931,7 +2937,7 @@ def selected_missing_files(journalist_app, test_source):
 
 
 def test_download_selected_submissions_missing_files(
-    journalist_app, test_journo, test_source, mocker, selected_missing_files
+    journalist_app, test_journo, test_source, mocker, selected_missing_files, app_storage
 ):
     """Tests download of selected submissions with missing files in storage."""
     mocked_error_logger = mocker.patch('journalist.app.logger.error')
@@ -2958,7 +2964,7 @@ def test_download_selected_submissions_missing_files(
     expected_calls = []
     for file in selected_missing_files:
         missing_file = (
-            Path(journalist_app.storage.storage_path)
+            Path(app_storage.storage_path)
             .joinpath(test_source["filesystem_id"])
             .joinpath(file)
             .as_posix()
@@ -2969,7 +2975,7 @@ def test_download_selected_submissions_missing_files(
 
 
 def test_download_single_submission_missing_file(
-    journalist_app, test_journo, test_source, mocker, selected_missing_files
+    journalist_app, test_journo, test_source, mocker, selected_missing_files, app_storage
 ):
     """Tests download of single submissions with missing files in storage."""
     mocked_error_logger = mocker.patch('journalist.app.logger.error')
@@ -2994,7 +3000,7 @@ def test_download_single_submission_missing_file(
     assert resp.status_code == 302
 
     missing_file = (
-        Path(journalist_app.storage.storage_path)
+        Path(app_storage.storage_path)
         .joinpath(test_source["filesystem_id"])
         .joinpath(missing_file)
         .as_posix()
@@ -3005,14 +3011,14 @@ def test_download_single_submission_missing_file(
     )
 
 
-def test_download_unread_all_sources(journalist_app, test_journo):
+def test_download_unread_all_sources(journalist_app, test_journo, app_storage):
     """
     Test that downloading all unread creates a zip that contains all unread submissions from the
     selected sources and marks these submissions as seen.
     """
     journo = Journalist.query.get(test_journo["id"])
 
-    bulk = utils.db_helper.bulk_setup_for_seen_only(journo)
+    bulk = utils.db_helper.bulk_setup_for_seen_only(journo, app_storage)
 
     with journalist_app.test_client() as app:
         _login_user(app, journo.username, test_journo["password"], test_journo["otp_secret"])
@@ -3081,14 +3087,14 @@ def test_download_unread_all_sources(journalist_app, test_journo):
                 assert zipinfo
 
 
-def test_download_all_selected_sources(journalist_app, test_journo):
+def test_download_all_selected_sources(journalist_app, test_journo, app_storage):
     """
     Test that downloading all selected sources creates zip that contains all submissions from the
     selected sources and marks these submissions as seen.
     """
     journo = Journalist.query.get(test_journo["id"])
 
-    bulk = utils.db_helper.bulk_setup_for_seen_only(journo)
+    bulk = utils.db_helper.bulk_setup_for_seen_only(journo, app_storage)
 
     with journalist_app.test_client() as app:
         _login_user(app, journo.username, test_journo["password"], test_journo["otp_secret"])
@@ -3263,14 +3269,14 @@ def test_col_process_aborts_with_bad_action(journalist_app, test_journo):
 
 
 def test_col_process_successfully_deletes_multiple_sources(journalist_app,
-                                                           test_journo):
+                                                           test_journo, app_storage):
     # Create two sources with one submission each
-    source_1, _ = utils.db_helper.init_source()
-    utils.db_helper.submit(source_1, 1)
-    source_2, _ = utils.db_helper.init_source()
-    utils.db_helper.submit(source_2, 1)
-    source_3, _ = utils.db_helper.init_source()
-    utils.db_helper.submit(source_3, 1)
+    source_1, _ = utils.db_helper.init_source(app_storage)
+    utils.db_helper.submit(app_storage, source_1, 1)
+    source_2, _ = utils.db_helper.init_source(app_storage)
+    utils.db_helper.submit(app_storage, source_2, 1)
+    source_3, _ = utils.db_helper.init_source(app_storage)
+    utils.db_helper.submit(app_storage, source_3, 1)
 
     with journalist_app.test_client() as app:
         _login_user(app, test_journo['username'], test_journo['password'],
@@ -3296,8 +3302,9 @@ def test_col_process_successfully_deletes_multiple_sources(journalist_app,
 
 def test_col_process_successfully_stars_sources(journalist_app,
                                                 test_journo,
-                                                test_source):
-    utils.db_helper.submit(test_source['source'], 1)
+                                                test_source,
+                                                app_storage):
+    utils.db_helper.submit(app_storage, test_source['source'], 1)
 
     with journalist_app.test_client() as app:
         _login_user(app, test_journo['username'], test_journo['password'],
@@ -3316,8 +3323,9 @@ def test_col_process_successfully_stars_sources(journalist_app,
 
 def test_col_process_successfully_unstars_sources(journalist_app,
                                                   test_journo,
-                                                  test_source):
-    utils.db_helper.submit(test_source['source'], 1)
+                                                  test_source,
+                                                  app_storage):
+    utils.db_helper.submit(app_storage, test_source['source'], 1)
 
     with journalist_app.test_client() as app:
         _login_user(app, test_journo['username'], test_journo['password'],

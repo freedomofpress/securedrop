@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import TYPE_CHECKING
 
 import sqlalchemy
@@ -50,7 +50,8 @@ class SessionManager:
 
         # Save the session expiration date in the user's session cookie
         session_duration = timedelta(minutes=config.SESSION_EXPIRATION_MINUTES)
-        session[cls._SESSION_COOKIE_KEY_FOR_EXPIRATION_DATE] = datetime.utcnow() + session_duration
+        session[cls._SESSION_COOKIE_KEY_FOR_EXPIRATION_DATE] = datetime.now(
+            timezone.utc) + session_duration
 
         return source_user
 
@@ -77,7 +78,7 @@ class SessionManager:
             cls.log_user_out()
             raise UserNotLoggedIn()
 
-        if datetime.utcnow() >= date_session_expires:
+        if datetime.now(timezone.utc) >= date_session_expires:
             cls.log_user_out()
             raise UserSessionExpired()
 

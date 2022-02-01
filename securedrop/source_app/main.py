@@ -3,7 +3,7 @@ import os
 import io
 
 from base64 import urlsafe_b64encode
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import Union
 
 import werkzeug
@@ -13,11 +13,13 @@ from flask_babel import gettext
 
 import store
 
+from store import Storage
+
 from db import db
 from encryption import EncryptionManager, GpgKeyNotFoundError
 
-from models import Submission, Reply, get_one_or_else
-from passphrases import PassphraseGenerator
+from models import Submission, Reply, get_one_or_else, InstanceConfig
+from passphrases import PassphraseGenerator, DicewarePassphrase
 from sdconfig import SDConfig
 from source_app.decorators import login_required
 from source_app.session_manager import SessionManager
@@ -56,7 +58,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
         codenames = session.get('codenames', {})
         codenames[tab_id] = codename
         session['codenames'] = fit_codenames_into_cookie(codenames)
-        session["codenames_expire"] = datetime.utcnow() + timedelta(
+        session["codenames_expire"] = datetime.now(timezone.utc) + timedelta(
             minutes=config.SESSION_EXPIRATION_MINUTES
         )
         return render_template('generate.html', codename=codename, tab_id=tab_id)
@@ -70,7 +72,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
         else:
             # Ensure the codenames have not expired
             date_codenames_expire = session.get("codenames_expire")
-            if not date_codenames_expire or datetime.utcnow() >= date_codenames_expire:
+            if not date_codenames_expire or datetime.now(timezone.utc) >= date_codenames_expire:
                 return clear_session_and_redirect_to_logged_out_page(flask_session=session)
 
             tab_id = request.form['tab_id']
@@ -82,7 +84,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
                 create_source_user(
                     db_session=db.session,
                     source_passphrase=codename,
-                    source_app_storage=current_app.storage,
+                    source_app_storage=Storage.get_default(),
                 )
             except (SourcePassphraseCollisionError, SourceDesignationCollisionError) as e:
                 current_app.logger.error("Could not create a source: {}".format(e))
@@ -97,7 +99,8 @@ def make_blueprint(config: SDConfig) -> Blueprint:
             # All done - source user was successfully created
             current_app.logger.info("New source user created")
             session['new_user_codename'] = codename
-            SessionManager.log_user_in(db_session=db.session, supplied_passphrase=codename)
+            SessionManager.log_user_in(db_session=db.session,
+                                       supplied_passphrase=DicewarePassphrase(codename))
 
         return redirect(url_for('.lookup'))
 
@@ -111,7 +114,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
         ).all()
 
         for reply in source_inbox:
-            reply_path = current_app.storage.path(
+            reply_path = Storage.get_default().path(
                 logged_in_source.filesystem_id,
                 reply.filename,
             )
@@ -147,7 +150,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
         return render_template(
             'lookup.html',
             is_user_logged_in=True,
-            allow_document_uploads=current_app.instance_config.allow_document_uploads,
+            allow_document_uploads=InstanceConfig.get_default().allow_document_uploads,
             replies=replies,
             new_user_codename=session.get('new_user_codename', None),
             form=SubmissionForm(),
@@ -156,7 +159,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
     @view.route('/submit', methods=('POST',))
     @login_required
     def submit(logged_in_source: SourceUser) -> werkzeug.Response:
-        allow_document_uploads = current_app.instance_config.allow_document_uploads
+        allow_document_uploads = InstanceConfig.get_default().allow_document_uploads
         form = SubmissionForm()
         if not form.validate():
             for field, errors in form.errors.items():
@@ -183,15 +186,15 @@ def make_blueprint(config: SDConfig) -> Blueprint:
         logged_in_source_in_db = logged_in_source.get_db_record()
         first_submission = logged_in_source_in_db.interaction_count == 0
 
-        if not os.path.exists(current_app.storage.path(logged_in_source.filesystem_id)):
+        if not os.path.exists(Storage.get_default().path(logged_in_source.filesystem_id)):
             current_app.logger.debug("Store directory not found for source '{}', creating one."
                                      .format(logged_in_source_in_db.journalist_designation))
-            os.mkdir(current_app.storage.path(logged_in_source.filesystem_id))
+            os.mkdir(Storage.get_default().path(logged_in_source.filesystem_id))
 
         if msg:
             logged_in_source_in_db.interaction_count += 1
             fnames.append(
-                current_app.storage.save_message_submission(
+                Storage.get_default().save_message_submission(
                     logged_in_source_in_db.filesystem_id,
                     logged_in_source_in_db.interaction_count,
                     logged_in_source_in_db.journalist_filename,
@@ -199,7 +202,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
         if fh:
             logged_in_source_in_db.interaction_count += 1
             fnames.append(
-                current_app.storage.save_file_submission(
+                Storage.get_default().save_file_submission(
                     logged_in_source_in_db.filesystem_id,
                     logged_in_source_in_db.interaction_count,
                     logged_in_source_in_db.journalist_filename,
@@ -230,16 +233,16 @@ def make_blueprint(config: SDConfig) -> Blueprint:
 
         new_submissions = []
         for fname in fnames:
-            submission = Submission(logged_in_source_in_db, fname)
+            submission = Submission(logged_in_source_in_db, fname, Storage.get_default())
             db.session.add(submission)
             new_submissions.append(submission)
 
         logged_in_source_in_db.pending = False
-        logged_in_source_in_db.last_updated = datetime.utcnow()
+        logged_in_source_in_db.last_updated = datetime.now(timezone.utc)
         db.session.commit()
 
         for sub in new_submissions:
-            store.async_add_checksum_for_file(sub)
+            store.async_add_checksum_for_file(sub, Storage.get_default())
 
         normalize_timestamps(logged_in_source)
 
@@ -289,7 +292,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
             try:
                 SessionManager.log_user_in(
                     db_session=db.session,
-                    supplied_passphrase=request.form['codename'].strip()
+                    supplied_passphrase=DicewarePassphrase(request.form['codename'].strip())
                 )
             except InvalidPassphraseError:
                 current_app.logger.info("Login failed for invalid codename")

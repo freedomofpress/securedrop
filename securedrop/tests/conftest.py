@@ -34,6 +34,8 @@ from source_user import _SourceScryptManager, create_source_user
 
 from sdconfig import SDConfig, config as original_config
 
+from store import Storage
+
 from os import path
 
 from db import db
@@ -197,41 +199,50 @@ def alembic_config(config: SDConfig) -> str:
 
 
 @pytest.fixture(scope='function')
-def source_app(config: SDConfig) -> Generator[Flask, None, None]:
+def app_storage(config: SDConfig) -> 'Storage':
+    return Storage(config.STORE_DIR, config.TEMP_DIR)
+
+
+@pytest.fixture(scope='function')
+def source_app(config: SDConfig, app_storage: Storage) -> Generator[Flask, None, None]:
     config.SOURCE_APP_FLASK_CONFIG_CLS.TESTING = True
     config.SOURCE_APP_FLASK_CONFIG_CLS.USE_X_SENDFILE = False
 
     # Disable CSRF checks to make writing tests easier
     config.SOURCE_APP_FLASK_CONFIG_CLS.WTF_CSRF_ENABLED = False
 
-    app = create_source_app(config)
-    app.config['SERVER_NAME'] = 'localhost.localdomain'
-    with app.app_context():
-        db.create_all()
-        try:
-            yield app
-        finally:
-            db.session.rollback()
-            db.drop_all()
+    with mock.patch("store.Storage.get_default") as mock_storage_global:
+        mock_storage_global.return_value = app_storage
+        app = create_source_app(config)
+        app.config['SERVER_NAME'] = 'localhost.localdomain'
+        with app.app_context():
+            db.create_all()
+            try:
+                yield app
+            finally:
+                db.session.rollback()
+                db.drop_all()
 
 
 @pytest.fixture(scope='function')
-def journalist_app(config: SDConfig) -> Generator[Flask, None, None]:
+def journalist_app(config: SDConfig, app_storage: Storage) -> Generator[Flask, None, None]:
     config.JOURNALIST_APP_FLASK_CONFIG_CLS.TESTING = True
     config.JOURNALIST_APP_FLASK_CONFIG_CLS.USE_X_SENDFILE = False
 
     # Disable CSRF checks to make writing tests easier
     config.JOURNALIST_APP_FLASK_CONFIG_CLS.WTF_CSRF_ENABLED = False
 
-    app = create_journalist_app(config)
-    app.config['SERVER_NAME'] = 'localhost.localdomain'
-    with app.app_context():
-        db.create_all()
-        try:
-            yield app
-        finally:
-            db.session.rollback()
-            db.drop_all()
+    with mock.patch("store.Storage.get_default") as mock_storage_global:
+        mock_storage_global.return_value = app_storage
+        app = create_journalist_app(config)
+        app.config['SERVER_NAME'] = 'localhost.localdomain'
+        with app.app_context():
+            db.create_all()
+            try:
+                yield app
+            finally:
+                db.session.rollback()
+                db.drop_all()
 
 
 @pytest.fixture(scope='function')
@@ -264,13 +275,13 @@ def test_admin(journalist_app: Flask) -> Dict[str, Any]:
 
 
 @pytest.fixture(scope='function')
-def test_source(journalist_app: Flask) -> Dict[str, Any]:
+def test_source(journalist_app: Flask, app_storage: Storage) -> Dict[str, Any]:
     with journalist_app.app_context():
         passphrase = PassphraseGenerator.get_default().generate_passphrase()
         source_user = create_source_user(
             db_session=db.session,
             source_passphrase=passphrase,
-            source_app_storage=journalist_app.storage,
+            source_app_storage=app_storage,
         )
         EncryptionManager.get_default().generate_source_key_pair(source_user)
         source = source_user.get_db_record()
@@ -284,10 +295,10 @@ def test_source(journalist_app: Flask) -> Dict[str, Any]:
 
 
 @pytest.fixture(scope='function')
-def test_submissions(journalist_app: Flask) -> Dict[str, Any]:
+def test_submissions(journalist_app: Flask, app_storage: Storage) -> Dict[str, Any]:
     with journalist_app.app_context():
-        source, codename = utils.db_helper.init_source()
-        utils.db_helper.submit(source, 2)
+        source, codename = utils.db_helper.init_source(app_storage)
+        utils.db_helper.submit(app_storage, source, 2)
         return {'source': source,
                 'codename': codename,
                 'filesystem_id': source.filesystem_id,
@@ -296,11 +307,11 @@ def test_submissions(journalist_app: Flask) -> Dict[str, Any]:
 
 
 @pytest.fixture(scope='function')
-def test_files(journalist_app, test_journo):
+def test_files(journalist_app, test_journo, app_storage):
     with journalist_app.app_context():
-        source, codename = utils.db_helper.init_source()
-        utils.db_helper.submit(source, 2, submission_type="file")
-        utils.db_helper.reply(test_journo['journalist'], source, 1)
+        source, codename = utils.db_helper.init_source(app_storage)
+        utils.db_helper.submit(app_storage, source, 2, submission_type="file")
+        utils.db_helper.reply(app_storage, test_journo['journalist'], source, 1)
         return {'source': source,
                 'codename': codename,
                 'filesystem_id': source.filesystem_id,
@@ -310,13 +321,13 @@ def test_files(journalist_app, test_journo):
 
 
 @pytest.fixture(scope='function')
-def test_files_deleted_journalist(journalist_app, test_journo):
+def test_files_deleted_journalist(journalist_app, test_journo, app_storage):
     with journalist_app.app_context():
-        source, codename = utils.db_helper.init_source()
-        utils.db_helper.submit(source, 2)
+        source, codename = utils.db_helper.init_source(app_storage)
+        utils.db_helper.submit(app_storage, source, 2)
         test_journo['journalist']
         juser, _ = utils.db_helper.init_journalist("f", "l", is_admin=False)
-        utils.db_helper.reply(juser, source, 1)
+        utils.db_helper.reply(app_storage, juser, source, 1)
         utils.db_helper.delete_journalist(juser)
         return {'source': source,
                 'codename': codename,

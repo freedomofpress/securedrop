@@ -245,6 +245,6 @@ def set_locale(config: SDConfig) -> None:
     Update locale info in request and session.
     """
     locale = get_locale(config)
-    g.localeinfo = RequestLocaleInfo(locale)
+    g.localeinfo = RequestLocaleInfo(locale)  # pylint: disable=assigning-non-slot
     session["locale"] = locale
-    g.locales = LOCALES
+    g.locales = LOCALES  # pylint: disable=assigning-non-slot

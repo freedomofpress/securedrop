@@ -1,5 +1,5 @@
 from io import BytesIO
-from typing import Optional, BinaryIO
+from typing import Optional, IO
 
 from flask import wrappers
 from werkzeug.formparser import FormDataParser
@@ -11,11 +11,11 @@ class RequestThatSecuresFileUploads(wrappers.Request):
 
     def _secure_file_stream(
         self,
-        total_content_length: int,
+        total_content_length: Optional[int],
         content_type: Optional[str],
         filename: Optional[str] = None,
         content_length: Optional[int] = None,
-    ) -> BinaryIO:
+    ) -> IO[bytes]:
         """Storage class for data streamed in from requests.
 
         If the data is relatively small (512KB), just store it in
@@ -24,7 +24,7 @@ class RequestThatSecuresFileUploads(wrappers.Request):
         forensic recovery of the plaintext.
 
         """
-        if total_content_length > 1024 * 512:
+        if total_content_length is None or total_content_length > 1024 * 512:
             # We don't use `config.TEMP_DIR` here because that
             # directory is exposed via X-Send-File and there is no
             # reason for these files to be publicly accessible. See

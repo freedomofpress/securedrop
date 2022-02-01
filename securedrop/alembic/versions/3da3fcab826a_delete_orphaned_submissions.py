@@ -17,7 +17,7 @@ raise_errors = os.environ.get("SECUREDROP_ENV", "prod") != "prod"
 try:
     from journalist_app import create_app
     from sdconfig import config
-    from store import NoFileFoundException, TooManyFilesException
+    from store import NoFileFoundException, TooManyFilesException, Storage
 except ImportError:
     # This is a fresh install, and config.py has not been created yet.
     if raise_errors:
@@ -61,8 +61,8 @@ def upgrade():
                     """).bindparams(id=submission.id)
                     )
 
-                    path = app.storage.path_without_filesystem_id(submission.filename)
-                    app.storage.move_to_shredder(path)
+                    path = Storage.get_default().path_without_filesystem_id(submission.filename)
+                    Storage.get_default().move_to_shredder(path)
                 except NoFileFoundException:
                     # The file must have been deleted by the admin, remove the row
                     conn.execute(
@@ -83,8 +83,8 @@ def upgrade():
                         """).bindparams(id=reply.id)
                     )
 
-                    path = app.storage.path_without_filesystem_id(reply.filename)
-                    app.storage.move_to_shredder(path)
+                    path = Storage.get_default().path_without_filesystem_id(reply.filename)
+                    Storage.get_default().move_to_shredder(path)
                 except NoFileFoundException:
                     # The file must have been deleted by the admin, remove the row
                     conn.execute(

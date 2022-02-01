@@ -38,9 +38,9 @@ def make_blueprint(config: SDConfig) -> Blueprint:
     def manage_config() -> Union[str, werkzeug.Response]:
         # The UI prompt ("prevent") is the opposite of the setting ("allow"):
         submission_preferences_form = SubmissionPreferencesForm(
-            prevent_document_uploads=not current_app.instance_config.allow_document_uploads)
+            prevent_document_uploads=not InstanceConfig.get_default().allow_document_uploads)
         organization_name_form = OrgNameForm(
-            organization_name=current_app.instance_config.organization_name)
+            organization_name=InstanceConfig.get_default().organization_name)
         logo_form = LogoForm()
         if logo_form.validate_on_submit():
             f = logo_form.logo.data

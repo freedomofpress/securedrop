@@ -74,18 +74,19 @@ def test_throttle_login(journalist_app, test_journo):
             Journalist.throttle_login(journalist)
 
 
-def test_submission_string_representation(journalist_app, test_source):
+def test_submission_string_representation(journalist_app, test_source, app_storage):
     with journalist_app.app_context():
-        db_helper.submit(test_source['source'], 2)
+        db_helper.submit(app_storage, test_source['source'], 2)
         test_submission = Submission.query.first()
         test_submission.__repr__()
 
 
 def test_reply_string_representation(journalist_app,
                                      test_journo,
-                                     test_source):
+                                     test_source,
+                                     app_storage):
     with journalist_app.app_context():
-        db_helper.reply(test_journo['journalist'],
+        db_helper.reply(app_storage, test_journo['journalist'],
                         test_source['source'],
                         2)
         test_reply = Reply.query.first()

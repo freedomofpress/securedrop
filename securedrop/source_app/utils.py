@@ -7,7 +7,9 @@ from flask import redirect
 from flask import render_template
 from flask import current_app
 from flask import url_for
+from flask.sessions import SessionMixin
 from markupsafe import Markup
+from store import Storage
 
 import typing
 
@@ -19,7 +21,7 @@ if typing.TYPE_CHECKING:
     from typing import Optional
 
 
-def clear_session_and_redirect_to_logged_out_page(flask_session: typing.Dict) -> werkzeug.Response:
+def clear_session_and_redirect_to_logged_out_page(flask_session: SessionMixin) -> werkzeug.Response:
     msg = render_template('session_timeout.html')
 
     # Clear the session after we render the message so it's localized
@@ -36,7 +38,7 @@ def normalize_timestamps(logged_in_source: SourceUser) -> None:
     #301.
     """
     source_in_db = logged_in_source.get_db_record()
-    sub_paths = [current_app.storage.path(logged_in_source.filesystem_id, submission.filename)
+    sub_paths = [Storage.get_default().path(logged_in_source.filesystem_id, submission.filename)
                  for submission in source_in_db.submissions]
     if len(sub_paths) > 1:
         args = ["touch", "--no-create"]
