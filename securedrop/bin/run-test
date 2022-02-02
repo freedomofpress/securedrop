@@ -65,4 +65,5 @@ pytest \
     --cov-report "xml:${TEST_RESULTS}/cov.xml" \
     --cov-report "annotate:${TEST_RESULTS}/cov_annotate" \
     --cov=. \
+    --strict-markers \
     "$@"
