@@ -1,4 +1,4 @@
-Jinja2>=2.11.3
+Jinja2>=3.0.0
 ansible-lint>=4.2.0
 ansible>=2.9.23,<2.10.0
 argon2_cffi>=20.1.0
@@ -13,7 +13,7 @@ dnspython
 flake8
 html-linter
 importlib-resources
-markupsafe>=1.1
+markupsafe>=2.0
 molecule>=3.0.1
 molecule-vagrant>=0.3
 mypy>=0.761
