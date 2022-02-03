@@ -39,8 +39,8 @@ securedrop_cond_reboot_file: /tmp/sd-reboot-now
 
 # If you bump this, also remember to bump in molecule/builder-focal/tests/vars.yml
 securedrop_pkg_grsec_focal:
-  ver: "5.4.136"
-  depends: "linux-image-5.4.136-grsec-securedrop,intel-microcode"
+  ver: "5.15.18"
+  depends: "linux-image-5.15.18-grsec-securedrop,intel-microcode"
 
 # Mostly useful for local package installation
 grsec_version: "{{ securedrop_pkg_grsec_focal.ver }}"
