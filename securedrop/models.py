@@ -30,6 +30,7 @@ from logging import Logger
 from pyotp import TOTP, HOTP
 
 from encryption import EncryptionManager, GpgKeyNotFoundError
+from passphrases import PassphraseGenerator
 from store import Storage
 
 _default_instance_config: Optional["InstanceConfig"] = None
@@ -256,7 +257,7 @@ class Reply(db.Model):
     id = Column(Integer, primary_key=True)
     uuid = Column(String(36), unique=True, nullable=False)
 
-    journalist_id = Column(Integer, ForeignKey('journalists.id'))
+    journalist_id = Column(Integer, ForeignKey('journalists.id'), nullable=False)
     journalist = relationship(
         "Journalist",
         backref=backref(
@@ -296,18 +297,8 @@ class Reply(db.Model):
         return '<Reply %r>' % (self.filename)
 
     def to_json(self) -> 'Dict[str, Any]':
-        journalist_username = "deleted"
-        journalist_first_name = ""
-        journalist_last_name = ""
-        journalist_uuid = "deleted"
-        if self.journalist:
-            journalist_username = self.journalist.username
-            journalist_first_name = self.journalist.first_name
-            journalist_last_name = self.journalist.last_name
-            journalist_uuid = self.journalist.uuid
         seen_by = [
             r.journalist.uuid for r in SeenReply.query.filter(SeenReply.reply_id == self.id)
-            if r.journalist
         ]
         json_reply = {
             'source_url': url_for('api.single_source',
@@ -317,10 +308,10 @@ class Reply(db.Model):
                                  reply_uuid=self.uuid) if self.source else None,
             'filename': self.filename,
             'size': self.size,
-            'journalist_username': journalist_username,
-            'journalist_first_name': journalist_first_name,
-            'journalist_last_name': journalist_last_name,
-            'journalist_uuid': journalist_uuid,
+            'journalist_username': self.journalist.username,
+            'journalist_first_name': self.journalist.first_name or '',
+            'journalist_last_name': self.journalist.last_name or '',
+            'journalist_uuid': self.journalist.uuid,
             'uuid': self.uuid,
             'is_deleted_by_source': self.deleted_by_source,
             'seen_by': seen_by
@@ -436,10 +427,17 @@ class Journalist(db.Model):
     )  # type: Column[Optional[datetime.datetime]]
     last_access = Column(DateTime)  # type: Column[Optional[datetime.datetime]]
     passphrase_hash = Column(String(256))  # type: Column[Optional[str]]
+
     login_attempts = relationship(
         "JournalistLoginAttempt",
-        backref="journalist"
+        backref="journalist",
+        cascade="all, delete"
     )  # type: RelationshipProperty[JournalistLoginAttempt]
+    revoked_tokens = relationship(
+        "RevokedToken",
+        backref="journalist",
+        cascade="all, delete"
+    )  # type: RelationshipProperty[RevokedToken]
 
     MIN_USERNAME_LEN = 3
     MIN_NAME_LEN = 0
@@ -713,8 +711,7 @@ class Journalist(db.Model):
         except NoResultFound:
             raise InvalidUsernameException(gettext("Invalid username"))
 
-        if user.username in Journalist.INVALID_USERNAMES and \
-                user.uuid in Journalist.INVALID_USERNAMES:
+        if user.username in Journalist.INVALID_USERNAMES:
             raise InvalidUsernameException(gettext("Invalid username"))
 
         if len(user.otp_secret) < OTP_SECRET_MIN_ASCII_LENGTH:
@@ -786,13 +783,84 @@ class Journalist(db.Model):
 
         return json_user
 
+    def is_deleted_user(self) -> bool:
+        """Is this the special "deleted" user managed by the system?"""
+        return self.username == "deleted"
+
+    @classmethod
+    def get_deleted(cls) -> "Journalist":
+        """Get a system user that represents deleted journalists for referential integrity
+
+        Callers must commit the session themselves
+        """
+        deleted = Journalist.query.filter_by(username='deleted').one_or_none()
+        if deleted is None:
+            # Lazily create
+            deleted = cls(
+                # Use a placeholder username to bypass validation that would reject
+                # "deleted" as unusable
+                username="placeholder",
+                # We store a randomly generated passphrase for this account that is
+                # never revealed to anyone.
+                password=PassphraseGenerator.get_default().generate_passphrase()
+            )
+            deleted.username = "deleted"
+            db.session.add(deleted)
+        return deleted
+
+    def delete(self) -> None:
+        """delete a journalist, migrating some data over to the "deleted" journalist
+
+        Callers must commit the session themselves
+        """
+        deleted = self.get_deleted()
+        # All replies should be reassociated with the "deleted" journalist
+        for reply in Reply.query.filter_by(journalist_id=self.id).all():
+            reply.journalist_id = deleted.id
+            db.session.add(reply)
+
+        # For seen indicators, we need to make sure one doesn't already exist
+        # otherwise it'll hit a unique key conflict
+        already_seen_files = {
+            file.file_id for file in
+            SeenFile.query.filter_by(journalist_id=deleted.id).all()}
+        for file in SeenFile.query.filter_by(journalist_id=self.id).all():
+            if file.file_id in already_seen_files:
+                db.session.delete(file)
+            else:
+                file.journalist_id = deleted.id
+                db.session.add(file)
+
+        already_seen_messages = {
+            message.message_id for message in
+            SeenMessage.query.filter_by(journalist_id=deleted.id).all()}
+        for message in SeenMessage.query.filter_by(journalist_id=self.id).all():
+            if message.message_id in already_seen_messages:
+                db.session.delete(message)
+            else:
+                message.journalist_id = deleted.id
+                db.session.add(message)
+
+        already_seen_replies = {
+            reply.reply_id for reply in
+            SeenReply.query.filter_by(journalist_id=deleted.id).all()}
+        for reply in SeenReply.query.filter_by(journalist_id=self.id).all():
+            if reply.reply_id in already_seen_replies:
+                db.session.delete(reply)
+            else:
+                reply.journalist_id = deleted.id
+                db.session.add(reply)
+
+        # For the rest of the associated data we rely on cascading deletions
+        db.session.delete(self)
+
 
 class SeenFile(db.Model):
     __tablename__ = "seen_files"
     __table_args__ = (db.UniqueConstraint("file_id", "journalist_id"),)
     id = Column(Integer, primary_key=True)
     file_id = Column(Integer, ForeignKey("submissions.id"), nullable=False)
-    journalist_id = Column(Integer, ForeignKey("journalists.id"), nullable=True)
+    journalist_id = Column(Integer, ForeignKey("journalists.id"), nullable=False)
     file = relationship(
         "Submission", backref=backref("seen_files", lazy="dynamic", cascade="all,delete")
     )  # type: RelationshipProperty[Submission]
@@ -806,7 +874,7 @@ class SeenMessage(db.Model):
     __table_args__ = (db.UniqueConstraint("message_id", "journalist_id"),)
     id = Column(Integer, primary_key=True)
     message_id = Column(Integer, ForeignKey("submissions.id"), nullable=False)
-    journalist_id = Column(Integer, ForeignKey("journalists.id"), nullable=True)
+    journalist_id = Column(Integer, ForeignKey("journalists.id"), nullable=False)
     message = relationship(
         "Submission", backref=backref("seen_messages", lazy="dynamic", cascade="all,delete")
     )  # type: RelationshipProperty[Submission]
@@ -820,7 +888,7 @@ class SeenReply(db.Model):
     __table_args__ = (db.UniqueConstraint("reply_id", "journalist_id"),)
     id = Column(Integer, primary_key=True)
     reply_id = Column(Integer, ForeignKey("replies.id"), nullable=False)
-    journalist_id = Column(Integer, ForeignKey("journalists.id"), nullable=True)
+    journalist_id = Column(Integer, ForeignKey("journalists.id"), nullable=False)
     reply = relationship(
         "Reply", backref=backref("seen_replies", cascade="all,delete")
     )  # type: RelationshipProperty[Reply]
@@ -840,7 +908,7 @@ class JournalistLoginAttempt(db.Model):
         DateTime,
         default=datetime.datetime.utcnow
     )  # type: Column[Optional[datetime.datetime]]
-    journalist_id = Column(Integer, ForeignKey('journalists.id'))
+    journalist_id = Column(Integer, ForeignKey('journalists.id'), nullable=False)
 
     def __init__(self, journalist: Journalist) -> None:
         self.journalist = journalist
@@ -855,7 +923,7 @@ class RevokedToken(db.Model):
     __tablename__ = 'revoked_tokens'
 
     id = Column(Integer, primary_key=True)
-    journalist_id = Column(Integer, ForeignKey('journalists.id'))
+    journalist_id = Column(Integer, ForeignKey('journalists.id'), nullable=False)
     token = db.Column(db.Text, nullable=False, unique=True)
 
 

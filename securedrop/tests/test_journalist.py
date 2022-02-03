@@ -31,6 +31,7 @@ from models import (
     InvalidPasswordLength,
     InstanceConfig,
     Journalist,
+    JournalistLoginAttempt,
     Reply,
     SeenFile,
     SeenMessage,
@@ -39,6 +40,7 @@ from models import (
     InvalidUsernameException,
     Submission
 )
+from passphrases import PassphraseGenerator
 from sdconfig import config
 
 from .utils.instrument import InstrumentedApp
@@ -645,6 +647,19 @@ def test_admin_deletes_invalid_user_404(journalist_app, test_admin):
                     test_admin['otp_secret'])
         resp = app.post(url_for('admin.delete_user', user_id=invalid_id))
         assert resp.status_code == 404
+
+
+def test_admin_deletes_deleted_user_403(journalist_app, test_admin):
+    with journalist_app.app_context():
+        deleted = Journalist.get_deleted()
+        db.session.commit()
+        deleted_id = deleted.id
+
+    with journalist_app.test_client() as app:
+        _login_user(app, test_admin['username'], test_admin['password'],
+                    test_admin['otp_secret'])
+        resp = app.post(url_for('admin.delete_user', user_id=deleted_id))
+        assert resp.status_code == 403
 
 
 @flaky(rerun_filter=utils.flaky_filter_xfail)
@@ -1377,17 +1392,12 @@ def test_admin_add_user_with_invalid_username(config, journalist_app, test_admin
 @flaky(rerun_filter=utils.flaky_filter_xfail)
 @pytest.mark.parametrize("locale", get_test_locales())
 def test_deleted_user_cannot_login(config, journalist_app, locale):
-    username = 'deleted'
-    uuid = 'deleted'
-
-    # Create a user with username and uuid as deleted
     with journalist_app.app_context():
-        user, password = utils.db_helper.init_journalist(is_admin=False)
-        otp_secret = user.otp_secret
-        user.username = username
-        user.uuid = uuid
-        db.session.add(user)
+        user = Journalist.get_deleted()
+        password = PassphraseGenerator.get_default().generate_passphrase()
+        user.set_password(password)
         db.session.commit()
+        otp_secret = user.otp_secret
 
     with InstrumentedApp(journalist_app) as ins:
         # Verify that deleted user is not able to login
@@ -1395,9 +1405,9 @@ def test_deleted_user_cannot_login(config, journalist_app, locale):
             resp = app.post(
                 url_for('main.login', l=locale),
                 data=dict(
-                    username=username,
+                    username="deleted",
                     password=password,
-                    token=otp_secret
+                    token=TOTP(otp_secret).now()
                 ),
             )
             assert page_language(resp.data) == language_tag(locale)
@@ -1421,21 +1431,16 @@ def test_deleted_user_cannot_login(config, journalist_app, locale):
 @flaky(rerun_filter=utils.flaky_filter_xfail)
 @pytest.mark.parametrize("locale", get_test_locales())
 def test_deleted_user_cannot_login_exception(journalist_app, locale):
-    username = 'deleted'
-    uuid = 'deleted'
-
-    # Create a user with username and uuid as deleted
     with journalist_app.app_context():
-        user, password = utils.db_helper.init_journalist(is_admin=False)
-        otp_secret = user.otp_secret
-        user.username = username
-        user.uuid = uuid
-        db.session.add(user)
+        user = Journalist.get_deleted()
+        password = PassphraseGenerator.get_default().generate_passphrase()
+        user.set_password(password)
         db.session.commit()
+        otp_secret = user.otp_secret
 
     with journalist_app.test_request_context('/'):
         with pytest.raises(InvalidUsernameException):
-            Journalist.login(username, password, TOTP(otp_secret).now())
+            Journalist.login("deleted", password, TOTP(otp_secret).now())
 
 
 @flaky(rerun_filter=utils.flaky_filter_xfail)
@@ -3379,3 +3384,46 @@ def test_app_error_handlers_defined(journalist_app):
     for status_code in [400, 401, 403, 404, 500]:
         # This will raise KeyError if an app-wide error handler is not defined
         assert journalist_app.error_handler_spec[None][status_code]
+
+
+def test_lazy_deleted_journalist_creation(journalist_app):
+    """test lazy creation of "deleted" jousrnalist works"""
+    not_found = Journalist.query.filter_by(username='deleted').one_or_none()
+    assert not_found is None, "deleted journalist doesn't exist yet"
+    deleted = Journalist.get_deleted()
+    db.session.commit()
+    # Can be found as a normal Journalist object
+    found = Journalist.query.filter_by(username='deleted').one()
+    assert deleted.uuid == found.uuid
+    assert found.is_deleted_user() is True
+    # And get_deleted() now returns the same instance
+    deleted2 = Journalist.get_deleted()
+    assert deleted.uuid == deleted2.uuid
+
+
+def test_journalist_deletion(journalist_app, app_storage):
+    """test deleting a journalist and see data reassociated to "deleted" journalist"""
+    # Create a journalist that's seen two replies and has a login attempt
+    source, _ = utils.db_helper.init_source(app_storage)
+    journalist, _ = utils.db_helper.init_journalist()
+    db.session.add(JournalistLoginAttempt(journalist))
+    replies = utils.db_helper.reply(app_storage, journalist, source, 2)
+    # Create a second journalist that's seen those replies
+    journalist2, _ = utils.db_helper.init_journalist()
+    for reply in replies:
+        db.session.add(SeenReply(reply=reply, journalist=journalist2))
+    db.session.commit()
+    # Only one login attempt in the table
+    assert len(JournalistLoginAttempt.query.all()) == 1
+    # And four SeenReplys
+    assert len(SeenReply.query.all()) == 4
+    # Delete the journalists
+    journalist.delete()
+    journalist2.delete()
+    db.session.commit()
+    # Verify the "deleted" journalist has 2 associated rows of both types
+    deleted = Journalist.get_deleted()
+    assert len(Reply.query.filter_by(journalist_id=deleted.id).all()) == 2
+    assert len(SeenReply.query.filter_by(journalist_id=deleted.id).all()) == 2
+    # And there are no login attempts
+    assert JournalistLoginAttempt.query.all() == []

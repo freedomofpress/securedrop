@@ -51,7 +51,7 @@ def delete_journalist(journalist):
 
     :returns: None
     """
-    db.session.delete(journalist)
+    journalist.delete()
     db.session.commit()
 
 

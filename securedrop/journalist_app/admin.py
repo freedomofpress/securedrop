@@ -30,7 +30,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
     @view.route('/', methods=('GET', 'POST'))
     @admin_required
     def index() -> str:
-        users = Journalist.query.all()
+        users = Journalist.query.filter(Journalist.username != "deleted").all()
         return render_template("admin.html", users=users)
 
     @view.route('/config', methods=('GET', 'POST'))
@@ -288,16 +288,22 @@ def make_blueprint(config: SDConfig) -> Blueprint:
             current_app.logger.error(
                 "Admin {} tried to delete itself".format(g.user.username))
             abort(403)
-        elif user:
-            db.session.delete(user)
-            db.session.commit()
-            flash(gettext("Deleted user '{user}'.").format(
-                user=user.username), "notification")
-        else:
+        elif not user:
             current_app.logger.error(
                 "Admin {} tried to delete nonexistent user with pk={}".format(
                     g.user.username, user_id))
             abort(404)
+        elif user.is_deleted_user():
+            # Do not flash because the interface does not expose this.
+            # It can only happen by manually crafting a POST request
+            current_app.logger.error(
+                "Admin {} tried to delete \"deleted\" user".format(g.user.username))
+            abort(403)
+        else:
+            user.delete()
+            db.session.commit()
+            flash(gettext("Deleted user '{user}'.").format(
+                user=user.username), "notification")
 
         return redirect(url_for('admin.index'))
 
