@@ -2,6 +2,22 @@
 
 ## 2.2.0~rc1
 
+### Web applications
+* Improved accessibility of Journalist Interface via semantic markup (#6165)
+* Improve handling of HOTP tokens setup (#5599)
+* Disabled caching of passphrases in gpg-agent (#
+* Added additional defensive HTTP headers to Apache config (#6187)
+* Updated dependencies: click 6.7 to 8.0.3; flask 1.0.2 to 2.0.2; flask-wtf 0.14.2 to 1.0.0; jinja2 2.11.3 to 3.0.2; markupsafe 1.1.1 to 2.0.1; redis 3.3.6 to 3.5.3; rq 1.1.0 to 1.10.0; werkzeug 0.16.0 to 2.0.2 (#6190, #6217)
+
+### Operations
+
+* Migrated kernel version from 5.4.136 to 5.15.18, for newer hardware support (#6242)
+* Added support for custom hostnames to `./securedrop-admin verify` (#6154)
+* Removed references to v2 onion config (#6169)
+
+### Development
+* Added support for onion services to dev container (#6152)
+* Refactored cryptography functions to add type-checking throughout (#5599)
 
 ## 2.1.0
 
