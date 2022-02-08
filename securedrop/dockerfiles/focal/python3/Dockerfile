@@ -25,7 +25,7 @@ RUN gem install sass -v 3.4.23
 # Current versions of the test browser software. Tor Browser is based
 # on a specific version of Firefox, noted in Help > About Tor Browser.
 # Ideally we'll keep those in sync.
-ENV FF_VERSION 78.10.0esr
+ENV FF_VERSION 91.5.0esr
 ENV GECKODRIVER_VERSION v0.29.1
 
 # Import Tor release signing key
