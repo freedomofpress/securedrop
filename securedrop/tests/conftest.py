@@ -66,6 +66,10 @@ def pytest_addoption(parser):
                      default=False, help="run page layout tests")
 
 
+def pytest_configure(config):
+    config.addinivalue_line("markers", "pagelayout: Tests which verify page layout")
+
+
 def pytest_collection_modifyitems(config, items):
     if config.getoption("--page-layout"):
         return

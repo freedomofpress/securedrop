@@ -15,12 +15,15 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
+import pytest
+
 from tests.functional import journalist_navigation_steps
 from tests.functional import source_navigation_steps
 from tests.functional.functional_test import TORBROWSER
 from . import functional_test
 
 
+@pytest.mark.pagelayout
 class TestSourceLayoutTorbrowser(
         functional_test.FunctionalTest,
         source_navigation_steps.SourceNavigationStepsMixin,
