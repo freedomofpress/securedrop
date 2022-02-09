@@ -121,7 +121,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
 
             response = jsonify({
                 'token': journalist.generate_api_token(expiration=TOKEN_EXPIRATION_MINS * 60),
-                'expiration': token_expiry.isoformat() + 'Z',
+                'expiration': token_expiry.isoformat(),
                 'journalist_uuid': journalist.uuid,
                 'journalist_first_name': journalist.first_name,
                 'journalist_last_name': journalist.last_name,
