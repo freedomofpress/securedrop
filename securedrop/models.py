@@ -48,6 +48,9 @@ HOTP_SECRET_LENGTH = 40  # 160 bits == 40 hex digits (== 32 ascii-encoded chars 
 # but existing Journalist users may still have 80-bit (16-char) secrets
 OTP_SECRET_MIN_ASCII_LENGTH = 16  # 80 bits == 40 hex digits (== 16 ascii-encoded chars in db)
 
+# Timezone-naive datetime format expected by SecureDrop Client
+API_DATETIME_FORMAT = "%Y-%m-%dT%H:%M:%S.%fZ"
+
 
 def get_one_or_else(query: Query,
                     logger: 'Logger',
@@ -138,9 +141,9 @@ class Source(db.Model):
         docs_msg_count = self.documents_messages_count()
 
         if self.last_updated:
-            last_updated = self.last_updated.isoformat() + 'Z'
+            last_updated = self.last_updated.strftime(API_DATETIME_FORMAT)
         else:
-            last_updated = datetime.datetime.utcnow().isoformat() + 'Z'
+            last_updated = datetime.datetime.utcnow().strftime(API_DATETIME_FORMAT)
 
         if self.star and self.star.starred:
             starred = True
@@ -777,7 +780,7 @@ class Journalist(db.Model):
         if all_info is True:
             json_user['is_admin'] = self.is_admin
             if self.last_access:
-                json_user['last_login'] = self.last_access.isoformat() + 'Z'
+                json_user['last_login'] = self.last_access.strftime(API_DATETIME_FORMAT)
             else:
                 json_user['last_login'] = None
 
