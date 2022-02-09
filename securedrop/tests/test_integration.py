@@ -101,21 +101,6 @@ def test_submit_message(journalist_app, source_app, test_journo, app_storage):
             'table#submissions > tr.submission > td.status input[name="doc_names_selected"]'
             )[0]['value']
         resp = app.post('/bulk', data=dict(
-            action='confirm_delete',
-            filesystem_id=filesystem_id,
-            doc_names_selected=doc_name
-        ))
-
-        assert resp.status_code == 200
-        text = resp.data.decode('utf-8')
-        soup = BeautifulSoup(text, 'html.parser')
-        assert "The following file has been selected for" in text
-
-        # confirm delete submission
-        doc_name = soup.select
-        doc_name = soup.select(
-            'ul > li > input[name="doc_names_selected"]')[0]['value']
-        resp = app.post('/bulk', data=dict(
             action='delete',
             filesystem_id=filesystem_id,
             doc_names_selected=doc_name,
@@ -210,21 +195,6 @@ def test_submit_file(journalist_app, source_app, test_journo, app_storage):
         doc_name = soup.select(
             'table#submissions > tr.submission > td.status input[name="doc_names_selected"]'
             )[0]['value']
-        resp = app.post('/bulk', data=dict(
-            action='confirm_delete',
-            filesystem_id=filesystem_id,
-            doc_names_selected=doc_name
-        ))
-
-        assert resp.status_code == 200
-        text = resp.data.decode('utf-8')
-        assert "The following file has been selected for" in text
-        soup = BeautifulSoup(resp.data, 'html.parser')
-
-        # confirm delete submission
-        doc_name = soup.select
-        doc_name = soup.select(
-            'ul > li > input[name="doc_names_selected"]')[0]['value']
         resp = app.post('/bulk', data=dict(
             action='delete',
             filesystem_id=filesystem_id,
@@ -361,17 +331,6 @@ def _helper_filenames_delete(journalist_app, soup, i):
         soup.select('input[name="doc_names_selected"]')[i]['value']]
 
     # delete
-    resp = journalist_app.post('/bulk', data=dict(
-        filesystem_id=filesystem_id,
-        action='confirm_delete',
-        doc_names_selected=checkbox_values
-    ), follow_redirects=True)
-    assert resp.status_code == 200
-    text = resp.data.decode('utf-8')
-    assert (("The following file has been selected for"
-             " <strong>permanent deletion</strong>") in text)
-
-    # confirm delete
     resp = journalist_app.post('/bulk', data=dict(
         filesystem_id=filesystem_id,
         action='delete',
