@@ -1,6 +1,6 @@
 # Changelog
 
-## 2.2.0~rc1
+## 2.2.0~rc2
 
 ### Web applications
 
@@ -15,7 +15,7 @@
 * Stop explicitly flushing the database session (#6223).
 * Upgrade to Flask 2.0 and associated refactoring (#6217).
 * Improve accessibility of journalist interface by using semantic HTML5/ARIA markup (#6165).
-* Information corresponding to deleted journalists will now be associated with a reserved "deleted" account internally. (#6225).
+* Information corresponding to deleted journalists will now be associated with a reserved "deleted" account internally (#6225).
 
 ### Operations
 
