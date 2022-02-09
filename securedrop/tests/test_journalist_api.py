@@ -21,9 +21,13 @@ from models import (
 
 from .utils.api_helper import get_api_headers
 
-API_DATETIME_FORMAT = "%Y-%m-%dT%H:%M:%S.%fZ"
-
 random.seed('◔ ⌣ ◔')
+
+
+def assert_valid_timestamp(timestamp: str) -> None:
+    """verify the timestamp is encoded in the format we want"""
+    dt_format = "%Y-%m-%dT%H:%M:%S.%fZ"
+    assert timestamp == datetime.strptime(timestamp, dt_format).strftime(dt_format)
 
 
 def test_unauthenticated_user_gets_all_endpoints(journalist_app):
@@ -56,14 +60,7 @@ def test_valid_user_can_get_an_api_token(journalist_app, test_journo):
         assert response.json['journalist_first_name'] == test_journo['first_name']
         assert response.json['journalist_last_name'] == test_journo['last_name']
 
-        def _valid_date(date_str, date_format):
-            try:
-                if date_str != datetime.strptime(date_str, date_format).strftime(date_format):
-                    raise ValueError
-                return True
-            except ValueError:
-                return False
-        assert _valid_date(response.json['expiration'], API_DATETIME_FORMAT)
+        assert_valid_timestamp(response.json['expiration'])
 
 
 def test_user_cannot_get_an_api_token_with_wrong_password(journalist_app,
@@ -151,6 +148,8 @@ def test_authorized_user_gets_all_sources(journalist_app, test_submissions,
         # We expect to see our test source in the response
         assert test_submissions['source'].journalist_designation == \
             response.json['sources'][0]['journalist_designation']
+        for source in response.json['sources']:
+            assert_valid_timestamp(source['last_updated'])
 
 
 def test_user_without_token_cannot_get_protected_endpoints(journalist_app,

@@ -20,7 +20,7 @@ from journalist_app import utils
 from models import (Journalist, Reply, SeenReply, Source, Submission,
                     LoginThrottledException, InvalidUsernameException,
                     BadTokenException, InvalidOTPSecretException,
-                    WrongPasswordException, API_DATETIME_FORMAT)
+                    WrongPasswordException)
 from sdconfig import SDConfig
 from store import NotEncrypted, Storage
 
@@ -120,7 +120,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
 
             response = jsonify({
                 'token': journalist.generate_api_token(expiration=TOKEN_EXPIRATION_MINS * 60),
-                'expiration': token_expiry.strftime(API_DATETIME_FORMAT),
+                'expiration': token_expiry,
                 'journalist_uuid': journalist.uuid,
                 'journalist_first_name': journalist.first_name,
                 'journalist_last_name': journalist.last_name,
