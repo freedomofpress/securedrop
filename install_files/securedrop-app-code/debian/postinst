@@ -108,7 +108,7 @@ remove_bytecode() {
 # Modify existing instance to use only TLS1.3 for the source.
 update_to_tls13(){
     source_conf="/etc/apache2/sites-available/source.conf"
-    if grep -qP '^SSLProtocol all' "$source_conf"; then
+    if grep -qP '^SSLProtocol all -SSLv3 -TLSv1 -TLSv1.1$' "$source_conf"; then
         sed -i '/^SSLProtocol all/c\SSLProtocol all -SSLv3 -TLSv1 -TLSv1.1 -TLSv1.2' "$source_conf"
         sed -i '/^SSLCipherSuite ECDHE-ECDSA-AES256-GCM-SHA384/d' "$source_conf"
         sed -i '/^SSLHonorCipherOrder on/c\SSLHonorCipherOrder off' "$source_conf"
