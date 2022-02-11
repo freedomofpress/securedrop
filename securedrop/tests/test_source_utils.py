@@ -2,9 +2,10 @@
 import json
 import os
 
+import pytest
 import werkzeug
 
-from source_app.utils import check_url_file, fit_codenames_into_cookie
+from source_app.utils import check_url_file, codename_detected, fit_codenames_into_cookie
 from .test_journalist import VALID_PASSWORD
 
 
@@ -61,3 +62,14 @@ def test_fit_codenames_into_cookie(config):
     assert(len(serialized) > werkzeug.Response.max_cookie_size)
     serialized = json.dumps(fit_codenames_into_cookie(codenames)).encode()
     assert(len(serialized) < werkzeug.Response.max_cookie_size)
+
+
+@pytest.mark.parametrize('message,expected', (
+    ('Foo', False),
+    ('codename', True),
+    (' codename ', True),
+    ('Codename codename', True),
+    ('foocodenamebar', False),
+))
+def test_codename_detected(message, expected):
+    assert codename_detected(message, 'codename') is expected

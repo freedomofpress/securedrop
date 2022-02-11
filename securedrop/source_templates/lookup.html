@@ -44,6 +44,15 @@
       {% endif %}
       <div class="message grid-item{% if not allow_document_uploads %} wide{% endif %}">
         {{ form.msg(class="fill-parent") }}
+  {% if allow_document_uploads %}
+      {% if min_len > 0 %}
+         <p class="center" id="min-msg-length">{{ gettext('If you are only sending a message, it must be at least {} characters long.'.format(min_len)) }}</p>
+      {% endif %}
+  {% else %}
+      {% if min_len > 0 %}
+        <p class="center" id="min-msg-length">{{ gettext('Your first message must be at least {} characters long.'.format(min_len)) }}</p>
+      {% endif %}
+  {% endif %}
       </div>
     </div>
 
@@ -51,8 +60,6 @@
       <button type="submit" id="submit-doc-button" aria-label="{{ gettext('Submit') }}">
         {{ gettext('SUBMIT') }}
       </button>
-
-
 
       <a href="{{ url_for('main.lookup') }}" class="btn secondary" id="cancel" role="button"
         aria-label="{{ gettext('Cancel') }}">
