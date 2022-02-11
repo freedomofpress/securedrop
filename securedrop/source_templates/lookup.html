@@ -19,8 +19,14 @@
   {% if allow_document_uploads %}
   <h2 id="submit-heading" class="headline">{{ gettext('Submit Files or Messages') }}</h2>
   <p class="explanation">{{ gettext('You can submit any kind of file, a message, or both.') }}</p>
+      {% if min_len > 0 %}
+      <p class="explanation">{{ gettext('If your initial submission is message-only, it must be at least {} characters long.'.format(min_len)) }}</p>
+      {% endif %}
   {% else %}
   <h2 id="submit-heading" class="headline">{{ gettext('Submit Messages') }}</h2>
+      {% if min_len > 0 %}
+      <p class="explanation">{{ gettext('Your initial message must be at least {} characters long.'.format(min_len)) }}</p>
+      {% endif %}
   {% endif %}
 
   <p class="explanation extended-explanation">

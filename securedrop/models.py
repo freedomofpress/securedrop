@@ -943,6 +943,8 @@ class InstanceConfig(db.Model):
     valid_until = Column(DateTime, default=None, unique=True)
     allow_document_uploads = Column(Boolean, default=True)
     organization_name = Column(String(255), nullable=True, default="SecureDrop")
+    initial_message_min_len = Column(Integer, nullable=False, default=0)
+    reject_message_with_codename = Column(Boolean, default=False)
 
     # Columns not listed here will be included by InstanceConfig.copy() when
     # updating the configuration.
@@ -1028,6 +1030,38 @@ class InstanceConfig(db.Model):
 
         new = old.copy()
         new.allow_document_uploads = value
+        db.session.add(new)
+
+        db.session.commit()
+
+    @classmethod
+    def set_initial_message_min_len(cls, value: int) -> None:
+        '''Invalidate the current configuration and append a new one with the
+        requested change.
+        '''
+
+        old = cls.get_current()
+        old.valid_until = datetime.datetime.utcnow()
+        db.session.add(old)
+
+        new = old.copy()
+        new.initial_message_min_len = max(value, 0)
+        db.session.add(new)
+
+        db.session.commit()
+
+    @classmethod
+    def set_reject_message_with_codename(cls, value: bool) -> None:
+        '''Invalidate the current configuration and append a new one with the
+        requested change.
+        '''
+
+        old = cls.get_current()
+        old.valid_until = datetime.datetime.utcnow()
+        db.session.add(old)
+
+        new = old.copy()
+        new.reject_message_with_codename = value
         db.session.add(new)
 
         db.session.commit()

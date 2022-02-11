@@ -24,7 +24,7 @@ from sdconfig import SDConfig
 from source_app.decorators import login_required
 from source_app.session_manager import SessionManager
 from source_app.utils import normalize_timestamps, fit_codenames_into_cookie, \
-    clear_session_and_redirect_to_logged_out_page
+    clear_session_and_redirect_to_logged_out_page, codename_detected
 from source_app.forms import LoginForm, SubmissionForm
 from source_user import InvalidPassphraseError, create_source_user, \
     SourcePassphraseCollisionError, SourceDesignationCollisionError, SourceUser
@@ -119,6 +119,13 @@ def make_blueprint(config: SDConfig) -> Blueprint:
             source_id=logged_in_source_in_db.id, deleted_by_source=False
         ).all()
 
+        first_submission = logged_in_source_in_db.interaction_count == 0
+
+        if first_submission:
+            min_message_length = InstanceConfig.get_default().initial_message_min_len
+        else:
+            min_message_length = 0
+
         for reply in source_inbox:
             reply_path = Storage.get_default().path(
                 logged_in_source.filesystem_id,
@@ -158,6 +165,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
             is_user_logged_in=True,
             allow_document_uploads=InstanceConfig.get_default().allow_document_uploads,
             replies=replies,
+            min_len=min_message_length,
             new_user_codename=session.get('new_user_codename', None),
             form=SubmissionForm(),
         )
@@ -191,6 +199,22 @@ def make_blueprint(config: SDConfig) -> Blueprint:
         fnames = []
         logged_in_source_in_db = logged_in_source.get_db_record()
         first_submission = logged_in_source_in_db.interaction_count == 0
+
+        if first_submission:
+            min_len = InstanceConfig.get_default().initial_message_min_len
+            if (min_len > 0) and (msg and not fh) and (len(msg) < min_len):
+                flash(gettext(
+                    "Your initial message must be at least {} characters long.".format(min_len)),
+                    "error")
+                return redirect(f"{url_for('main.lookup')}#flashed")
+
+            codenames_rejected = InstanceConfig.get_default().reject_message_with_codename
+            if codenames_rejected and codename_detected(msg, session['new_user_codename']):
+                flash(gettext(
+                    "Please do not submit your codename! Keep it secret, and"
+                    " use it to log in later to check for replies."),
+                     "error")
+                return redirect(f"{url_for('main.lookup')}#flashed")
 
         if not os.path.exists(Storage.get_default().path(logged_in_source.filesystem_id)):
             current_app.logger.debug("Store directory not found for source '{}', creating one."
