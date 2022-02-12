@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 import json
+import jwt
 import random
+import time
 
 from datetime import datetime
 from flask import url_for
-from itsdangerous import TimedJSONWebSignatureSerializer
 from pyotp import TOTP
 from uuid import UUID, uuid4
 
@@ -207,14 +208,16 @@ def test_attacker_cannot_create_valid_token_with_none_alg(journalist_app,
                                                           test_journo):
     with journalist_app.test_client() as app:
         uuid = test_source['source'].uuid
-        s = TimedJSONWebSignatureSerializer('not the secret key',
-                                            algorithm_name='none')
-        attacker_token = s.dumps({'id': test_journo['id']}).decode('ascii')
-
+        attacker_token = jwt.encode(
+            {'id': test_journo['id'], 'exp': time.time() + 300},
+            None,
+            algorithm='none'
+        )
         response = app.delete(url_for('api.single_source', source_uuid=uuid),
                               headers=get_api_headers(attacker_token))
 
         assert response.status_code == 403
+        assert Journalist._decode_jwt(attacker_token) is None
 
 
 def test_attacker_cannot_use_token_after_admin_deletes(journalist_app,
@@ -1195,3 +1198,49 @@ def test_seen_bad_requests(journalist_app, journalist_api_token):
         response = app.post(seen_url, data=json.dumps(data), headers=headers)
         assert response.status_code == 404
         assert response.json["message"] == "reply not found: not-a-reply"
+
+
+def test_api_token_decodes(journalist_app, test_journo):
+    """With a valid token, we get the correct journalist back"""
+    with journalist_app.test_client() as _:
+        journalist = test_journo['journalist']
+        token = journalist.generate_api_token(expiration=300)
+        found = Journalist.validate_api_token_and_get_user(token)
+        assert found is not None
+        assert found.uuid == journalist.uuid
+
+
+def test_api_token_expires(journalist_app, test_journo):
+    """An expired token is rejected"""
+    with journalist_app.test_client() as _:
+        journalist = test_journo['journalist']
+        # Create a token that is already expired
+        token = journalist.generate_api_token(expiration=-1)
+        assert Journalist._decode_jwt(token) is None
+        assert Journalist.validate_token_is_not_expired_or_invalid(token) is False
+        assert Journalist.validate_api_token_and_get_user(token) is None
+
+
+def test_invalid_api_tokens(journalist_app):
+    """Verify various invalid tokens are rejected"""
+    with journalist_app.test_client() as _:
+        # Not a real token
+        assert Journalist._decode_jwt("thisisnotarealtoken") is None
+        # Signed with wrong key
+        assert Journalist._decode_jwt(jwt.encode(
+            {'id': 123, 'exp': time.time() + 300},
+            "wrong secret key",
+            algorithm="HS512",
+        )) is None
+        # Using a different algorithm
+        assert Journalist._decode_jwt(jwt.encode(
+            {'id': 123, 'exp': time.time() + 300},
+            journalist_app.config['SECRET_KEY'],
+            algorithm="HS256",
+        )) is None
+        # No expiry set
+        assert Journalist._decode_jwt(jwt.encode(
+            {'id': 123},
+            journalist_app.config['SECRET_KEY'],
+            algorithm="HS512"
+        )) is None

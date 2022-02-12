@@ -251,6 +251,10 @@ psutil==5.7.0 \
 pycparser==2.18 \
     --hash=sha256:99a8ca03e29851d96616ad0404b4aad7d9ee16f25c9f9708a11faf2810f7b226
     # via cffi
+pyjwt==2.3.0 \
+    --hash=sha256:b888b4d56f06f6dcd777210c334e69c737be74755d3e5e9ee3fe67dc18a0ee41 \
+    --hash=sha256:e0c4bb8d9f0af0c7f5b1ec4c5036309617d03d56932877f2f7a0beeb5318322f
+    # via -r requirements/python3/securedrop-app-code-requirements.in
 pyotp==2.6.0 \
     --hash=sha256:9d144de0f8a601d6869abe1409f4a3f75f097c37b50a36a3bf165810a6e23f28 \
     --hash=sha256:d28ddfd40e0c1b6a6b9da961c7d47a10261fb58f378cb00f05ce88b26df9c432

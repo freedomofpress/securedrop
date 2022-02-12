@@ -2,11 +2,13 @@
 import binascii
 import datetime
 import base64
+import jwt
 import os
 import pyotp
 import qrcode
 # Using svg because it doesn't require additional dependencies
 import qrcode.image.svg
+import time
 import uuid
 from io import BytesIO
 
@@ -14,7 +16,6 @@ from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives.kdf import scrypt
 from flask import current_app, url_for
 from flask_babel import gettext, ngettext
-from itsdangerous import TimedJSONWebSignatureSerializer, BadData
 from jinja2 import Markup
 from passlib.hash import argon2
 from sqlalchemy import ForeignKey
@@ -737,26 +738,34 @@ class Journalist(db.Model):
         return user
 
     def generate_api_token(self, expiration: int) -> str:
-        s = TimedJSONWebSignatureSerializer(
-            current_app.config['SECRET_KEY'], expires_in=expiration)
-        return s.dumps({'id': self.id}).decode('ascii')  # type:ignore
+        """Generate a token that will expire in `expiration` seconds"""
+        return jwt.encode(
+            {'id': self.id, 'exp': time.time() + expiration},
+            current_app.config['SECRET_KEY'],
+            algorithm="HS512"
+        )
+
+    @staticmethod
+    def _decode_jwt(token: str) -> 'Optional[dict]':
+        """Decode a user-supplied jwt, verifying the signature and that it's not expired"""
+        try:
+            return jwt.decode(
+                token, current_app.config['SECRET_KEY'],
+                algorithms=["HS512"],
+                options={'verify_exp': True, 'require': ["exp"]},
+            )
+        except (jwt.DecodeError, jwt.ExpiredSignatureError,
+                jwt.MissingRequiredClaimError, jwt.InvalidAlgorithmError):
+            return None
 
     @staticmethod
     def validate_token_is_not_expired_or_invalid(token: str) -> bool:
-        s = TimedJSONWebSignatureSerializer(current_app.config['SECRET_KEY'])
-        try:
-            s.loads(token)
-        except BadData:
-            return False
-
-        return True
+        return Journalist._decode_jwt(token) is not None
 
     @staticmethod
     def validate_api_token_and_get_user(token: str) -> 'Optional[Journalist]':
-        s = TimedJSONWebSignatureSerializer(current_app.config['SECRET_KEY'])
-        try:
-            data = s.loads(token)
-        except BadData:
+        data = Journalist._decode_jwt(token)
+        if data is None:
             return None
 
         revoked_token = RevokedToken.query.filter_by(token=token).one_or_none()
