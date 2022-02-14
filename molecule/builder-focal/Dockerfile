@@ -42,14 +42,13 @@ COPY dh-virtualenv.pref /etc/apt/preferences.d/
 RUN apt-get update && apt-get install -y dh-virtualenv
 
 ENV RUST_VERSION 1.58.1
+ENV RUSTUP_VERSION 1.24.3
+ENV RUSTUP_INIT_SHA256 3dc5ef50861ee18657f9db2eeb7392f9c2a6c95c90ab41e45ab4ca71476b4338
 
 # Install Rust for building cryptography
 RUN TMPDIR=`mktemp -d` && cd ${TMPDIR} \
-        && curl --proto '=https' --tlsv1.2 -OO -sSf https://static.rust-lang.org/rustup/dist/x86_64-unknown-linux-gnu/rustup-init{,.sha256} \
-        && mkdir -p target/x86_64-unknown-linux-gnu/release/ \
-        && mv rustup-init target/x86_64-unknown-linux-gnu/release/ \
-        && sha256sum --check rustup-init.sha256 \
-        && cd target/x86_64-unknown-linux-gnu/release/ \
+        && curl --proto '=https' --tlsv1.2 -OO -sSf https://static.rust-lang.org/rustup/archive/${RUSTUP_VERSION}/x86_64-unknown-linux-gnu/rustup-init \
+        && echo "${RUSTUP_INIT_SHA256} *rustup-init" | sha256sum -c - \
         && chmod +x rustup-init \
         && ./rustup-init --default-toolchain=${RUST_VERSION} -y \
         && cd && rm -rf ${TMPDIR}
