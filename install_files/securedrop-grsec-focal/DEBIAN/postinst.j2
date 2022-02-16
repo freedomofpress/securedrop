@@ -28,7 +28,8 @@ set_grub_default() {
     # When using CONFIG_PAX_KERNEXEC, the grsecurity team recommends the kernel
     # is booted with "noefi" on the kernel command line if "CONFIG_EFI" is
     # enabled, as EFI runtime services are necessarily mapped as RWX.
-    sed -i '/^GRUB_CMDLINE_LINUX_DEFAULT=/s/=.*/=\"noefi ipv6\.disable=1 quiet\"/' /etc/default/grub
+    # 'nomodeset' is added to work around issues with Mac Mini graphics support
+    sed -i '/^GRUB_CMDLINE_LINUX_DEFAULT=/s/=.*/=\"noefi nomodeset ipv6\.disable=1 quiet\"/' /etc/default/grub
     update-grub
 }
 
