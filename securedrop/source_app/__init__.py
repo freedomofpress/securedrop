@@ -1,6 +1,8 @@
 from pathlib import Path
 from typing import Optional
 
+import os
+import time
 import werkzeug
 from flask import (Flask, render_template, escape, flash, Markup, request, g, session,
                    url_for)
@@ -133,5 +135,16 @@ def create_app(config: SDConfig) -> Flask:
     @app.errorhandler(500)
     def internal_error(error: werkzeug.exceptions.HTTPException) -> Tuple[str, int]:
         return render_template('error.html'), 500
+
+    # Obscure the creation time of source private keys by touching them all
+    # on startup.
+    private_keys = Path(config.GPG_KEY_DIR) / 'private-keys-v1.d'
+    now = time.time()
+    for entry in os.scandir(private_keys):
+        if not entry.is_file() or not entry.name.endswith('.key'):
+            continue
+        os.utime(entry.path, times=(now, now))
+        # So the ctime is also updated
+        os.chmod(entry.path, entry.stat().st_mode)
 
     return app
