@@ -1,6 +1,6 @@
 # Changelog
 
-## 2.2.0~rc2
+## 2.2.0~rc3
 
 ### Web applications
 
@@ -22,6 +22,7 @@
 * Update grsecurity-patched Linux Kernel from 5.4.136 to 5.15.18 (#6242).
 * Add support for custom hostnames to `./securedrop-admin verify` (#6153).
 * Remove remnants of v2 onion services related configuration (#6169).
+* Overwrite timestamps on source keys during application start (#6270).
 * Dependency updates:
   * click from 6.7 to 8.0.3 (#6217)
   * flask-babel from 011.2 to 2.0.0 (#6217)
