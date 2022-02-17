@@ -1,6 +1,6 @@
 # Changelog
 
-## 2.2.0~rc3
+## 2.2.0
 
 ### Web applications
 
