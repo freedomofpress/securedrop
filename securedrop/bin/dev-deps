@@ -56,7 +56,7 @@ function run_sass() {
 }
 
 function maybe_use_tor() {
-    if  [[ -n "${USE_TOR}" ]]; then
+    if [[ -n "${USE_TOR:-}" ]]; then
         echo "Setting up Tor..."
         # append torrc lines for SI and JI
         sudo -u debian-tor mkdir -p /var/lib/tor/services
