@@ -40,7 +40,7 @@
       cursor: pointer
 
       &:after
-        content: "Show"
+        content: attr(data-show)
         display: block
         float: right
 
@@ -56,7 +56,7 @@
     &[open]
       summary
         &:after
-          content: "Hide"
+          content: attr(data-hide)
 
 @media only screen and (max-width: 880px)
   #codename-hint
