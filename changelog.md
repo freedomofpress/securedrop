@@ -1,7 +1,54 @@
 # Changelog
 
-## 2.2.0~rc1
+## 2.3.0~rc1
 
+
+
+## 2.2.0
+
+### Web applications
+
+* Refactor and simplify code for creating a new source (#6087).
+* Timestamps will now be displayed using the language's "long" format (#6144).
+* The "Forgot your codename?" hint will only be shown on the initial login (#6130).
+* Disable caching of GPG passphrases to ensure the correct passphrase must be passed every time (#6174).
+* Set minimum length requirements on HOTP and TOTP secrets (#6191).
+* Improve security-related/defensive HTTP headers used in the source and journalist interfaces (#6187).
+* Remove "Refresh codename" feature because of potential user confusion (#6195).
+* Refactor code related to encryption (#6160).
+* Stop explicitly flushing the database session (#6223).
+* Upgrade to Flask 2.0 and associated refactoring (#6217).
+* Improve accessibility of journalist interface by using semantic HTML5/ARIA markup (#6165).
+* Information corresponding to deleted journalists will now be associated with a reserved "deleted" account internally (#6225).
+
+### Operations
+
+* Update grsecurity-patched Linux Kernel from 5.4.136 to 5.15.18 (#6242).
+* Add support for custom hostnames to `./securedrop-admin verify` (#6153).
+* Remove remnants of v2 onion services related configuration (#6169).
+* Overwrite timestamps on source keys during application start (#6270).
+* Dependency updates:
+  * click from 6.7 to 8.0.3 (#6217)
+  * flask-babel from 011.2 to 2.0.0 (#6217)
+  * flask-wtf from 0.14.2 to 1.0.0 (#6217)
+  * Flask from 1.0.2 to 2.0.2 (#6217)
+  * itsdangerous from 0.24 to 2.0.1 (#6217)
+  * jinja2 from 2.11.3 to 3.0.2 (#6217)
+  * markupsafe from 1.1.1 to 2.0.1 (#6217)
+  * redis from 3.3.6 to 3.5.3 (#6217)
+  * rq from 1.1.0 to 1.10.0 (#6217)
+  * werkzeug from 0.16.0 to 2.0.2 (#6217)
+  * wtforms from 2.1.0 to 3.0.0 (#6190)
+* Install dh-virtualenv from Ubuntu 21.10/Impish (#6206).
+* Upgrade builder to use Rust 1.58.1 (#6234).
+* Don't register trigger on Python for securedrop-app-code package (#6231).
+
+### Development
+
+* Improve robustness of Tor Browser version check in `make dev` (#6166).
+* Remove unsupported Xenial dev Dockerfiles, templates and more. (#6166, #6185).
+* Support running the dev setup using onion services with `make dev-tor` (#6167).
+* Support using Podman for the development environment as an alternative to Docker (#6216).
 
 ## 2.1.0
 
