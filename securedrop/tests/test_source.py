@@ -869,3 +869,13 @@ def test_source_can_only_delete_own_replies(source_app, app_storage):
 
     reply = Reply.query.filter_by(filename=filename).one()
     assert reply.deleted_by_source
+
+
+def test_robots_txt(source_app):
+    """Test that robots.txt works"""
+    with source_app.test_client() as app:
+        # Not using url_for here because we care about the actual URL path
+        resp = app.get('/robots.txt')
+        assert resp.status_code == 200
+        text = resp.data.decode('utf-8')
+        assert 'Disallow: /' in text
