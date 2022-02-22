@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
 import flask
-from flask import Blueprint, render_template, send_file, redirect, url_for
+from flask import Blueprint, render_template, send_file, redirect, url_for, flash
+from flask_babel import gettext
 import werkzeug
 
 from io import BytesIO  # noqa
 
 from encryption import EncryptionManager
 from sdconfig import SDConfig
+from source_app.utils import get_sourcev3_url
 
 
 def make_blueprint(config: SDConfig) -> Blueprint:
@@ -14,7 +16,8 @@ def make_blueprint(config: SDConfig) -> Blueprint:
 
     @view.route('/tor2web-warning')
     def tor2web_warning() -> str:
-        return render_template("tor2web-warning.html")
+        flash(gettext("Tor2Web proxies do not protect your anonymity!"), "error")
+        return render_template("tor2web-warning.html", source_url=get_sourcev3_url())
 
     @view.route('/use-tor')
     def recommend_tor_browser() -> str:

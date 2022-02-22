@@ -4,7 +4,7 @@ from typing import Optional
 import os
 import time
 import werkzeug
-from flask import (Flask, render_template, escape, flash, Markup, request, g, session,
+from flask import (Flask, flash, render_template, request, g, session,
                    url_for)
 from flask_babel import gettext
 from flask_assets import Environment
@@ -23,7 +23,7 @@ from request_that_secures_file_uploads import RequestThatSecuresFileUploads
 from sdconfig import SDConfig
 from source_app import main, info, api
 from source_app.decorators import ignore_static
-from source_app.utils import clear_session_and_redirect_to_logged_out_page
+from source_app.utils import clear_session_and_redirect_to_logged_out_page, get_sourcev3_url
 
 
 def get_logo_url(app: Flask) -> str:
@@ -90,28 +90,8 @@ def create_app(config: SDConfig) -> Flask:
     for module in [main, info, api]:
         app.register_blueprint(module.make_blueprint(config))  # type: ignore
 
-    @app.before_request
-    @ignore_static
-    def check_tor2web() -> None:
-        # ignore_static here so we only flash a single message warning
-        # about Tor2Web, corresponding to the initial page load.
-        if 'X-tor2web' in request.headers:
-            flash(
-                Markup(
-                    '<strong>{}</strong>&nbsp;{}&nbsp;<a href="{}">{}</a>'.format(
-                        escape(gettext("WARNING:")),
-                        escape(
-                            gettext(
-                                'You appear to be using Tor2Web, which does not provide anonymity.'
-                            )
-                        ),
-                        url_for('info.tor2web_warning'),
-                        escape(gettext('Why is this dangerous?')),
-                    )
-                ),
-                "banner-warning"
-            )
-
+    # before_request hooks are executed in order of declaration, so set up g object
+    # before the potential tor2web 403 response.
     @app.before_request
     @ignore_static
     def setup_g() -> Optional[werkzeug.Response]:
@@ -126,6 +106,14 @@ def create_app(config: SDConfig) -> Flask:
         except FileNotFoundError:
             app.logger.error("Site logo not found.")
 
+        return None
+
+    @app.before_request
+    @ignore_static
+    def check_tor2web() -> Optional[Tuple[str, int]]:
+        if 'X-tor2web' in request.headers:
+            flash(gettext("Tor2Web proxies do not protect your anonymity!"), "error")
+            return render_template('tor2web-warning.html', source_url=get_sourcev3_url()), 403
         return None
 
     @app.errorhandler(404)
