@@ -445,6 +445,20 @@ def test_submit_both(source_app):
         assert "Thanks! We received your message and document" in text
 
 
+def test_submit_antispam(source_app):
+    """
+    Test the antispam check.
+    """
+    with source_app.test_client() as app:
+        new_codename(app, session)
+        _dummy_submission(app)
+        resp = app.post(
+            url_for('main.submit'),
+            data=dict(msg="Test", fh=(StringIO(''), ''), text="blah"),
+            follow_redirects=True)
+        assert resp.status_code == 403
+
+
 def test_delete_all_successfully_deletes_replies(source_app, app_storage):
     with source_app.app_context():
         journalist, _ = utils.db_helper.init_journalist()
