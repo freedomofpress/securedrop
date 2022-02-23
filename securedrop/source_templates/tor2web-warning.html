@@ -4,12 +4,12 @@
 <div class="center">
   {% include 'flashed.html' %}
 </div>
-<p>{{ gettext(' If you use a Tor2Web proxy to connect to SecureDrop, anyone monitoring your Internet traffic &mdash; such as your government, your Internet provider, or the proxy operator &mdash; may be able to identify you.') }}
+<p>{{ gettext(' If you use a remote proxy like Tor2Web to connect to SecureDrop, anyone monitoring your Internet traffic &mdash; including your government, your Internet provider, or the proxy operator &mdash; may be able to identify you.') }}
 </p>
-<p>{{ gettext('Use the <a href="www.torproject.org/projects/torbrowser.html">Tor Browser</a>, and access this service directly instead. The correct onion service address is:') }}
+<p>{{ gettext('Use the <a href="www.torproject.org/projects/torbrowser.html">Tor Browser</a>, and access this site directly instead. The correct address is:') }}
 <pre>{{ source_url }}</pre>
 </p>
-<p> {{ gettext ('If you are using Tor Browser and have been brought to this page, generate a new identity before connecting to this service directly.') }} {{ gettext('Click the <img src={icon} alt="" width="16" height="16">&nbsp;<b>New Identity</b> button in your Tor Browser\'s toolbar. This will clear your Tor Browser activity data on this device.').format(icon=url_for('static', filename='i/torbroom-black.png'))  }}
+<p> {{ gettext ('If you are using Tor Browser and have been brought to this page, generate a new identity before connecting to this site directly.') }} {{ gettext('Click the <img src={icon} alt="" width="16" height="16">&nbsp;<b>New Identity</b> button in your Tor Browser\'s toolbar. This will clear your Tor Browser activity data on this device.').format(icon=url_for('static', filename='i/torbroom-black.png'))  }}
 </p>
 <p>{{ gettext('If there is a reasonable risk of your Internet traffic being monitored, you should also consider connecting from a different location or network.') }}
 </p>
