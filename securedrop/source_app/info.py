@@ -16,7 +16,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
 
     @view.route('/tor2web-warning')
     def tor2web_warning() -> flask.Response:
-        flash(gettext("Tor2Web proxies do not protect your anonymity!"), "error")
+        flash(gettext("Your connection is not anonymous right now!"), "error")
         return flask.Response(
             render_template("tor2web-warning.html", source_url=get_sourcev3_url()),
             403)

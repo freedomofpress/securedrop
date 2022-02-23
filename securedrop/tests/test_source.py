@@ -546,14 +546,14 @@ def test_redirect_when_tor2web(config, source_app, test_url):
             follow_redirects=True)
         text = resp.data.decode('utf-8')
         assert resp.status_code == 403
-        assert "Tor2Web Detected" in text
+        assert "Proxy Service Detected" in text
 
 def test_tor2web_warning(source_app):
     with source_app.test_client() as app:
         resp = app.get(url_for('info.tor2web_warning'))
         assert resp.status_code == 403
         text = resp.data.decode('utf-8')
-        assert "Tor2Web Detected" in text
+        assert "Proxy Service Detected" in text
 
 
 
