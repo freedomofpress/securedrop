@@ -4,8 +4,7 @@ from typing import Optional
 import os
 import time
 import werkzeug
-from flask import (Flask, flash, render_template, request, g, session,
-                   url_for)
+from flask import (Flask, render_template, request, g, session, redirect, url_for)
 from flask_babel import gettext
 from flask_assets import Environment
 from flask_wtf.csrf import CSRFProtect, CSRFError
@@ -23,7 +22,7 @@ from request_that_secures_file_uploads import RequestThatSecuresFileUploads
 from sdconfig import SDConfig
 from source_app import main, info, api
 from source_app.decorators import ignore_static
-from source_app.utils import clear_session_and_redirect_to_logged_out_page, get_sourcev3_url
+from source_app.utils import clear_session_and_redirect_to_logged_out_page
 
 
 def get_logo_url(app: Flask) -> str:
@@ -110,10 +109,11 @@ def create_app(config: SDConfig) -> Flask:
 
     @app.before_request
     @ignore_static
-    def check_tor2web() -> Optional[Tuple[str, int]]:
+    def check_tor2web() -> Optional[werkzeug.Response]:
+        # TODO: expand header checking logic to catch modern tor2web proxies
         if 'X-tor2web' in request.headers:
-            flash(gettext("Tor2Web proxies do not protect your anonymity!"), "error")
-            return render_template('tor2web-warning.html', source_url=get_sourcev3_url()), 403
+            if request.path != url_for('info.tor2web_warning'):
+                return redirect(url_for('info.tor2web_warning'))
         return None
 
     @app.errorhandler(404)

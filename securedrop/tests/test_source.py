@@ -538,16 +538,20 @@ def test_submit_sanitizes_filename(source_app):
 
 
 @pytest.mark.parametrize("test_url", ['main.index', 'main.create', 'main.submit'])
-def test_tor2web_warning_as_403(config, source_app, test_url):
+def test_redirect_when_tor2web(config, source_app, test_url):
     with source_app.test_client() as app:
-        resp = app.get(url_for(test_url), headers=[('X-tor2web', 'encrypted')])
+        resp = app.get(
+            url_for(test_url),
+            headers=[('X-tor2web', 'encrypted')],
+            follow_redirects=True)
         text = resp.data.decode('utf-8')
+        assert resp.status_code == 403
         assert "Tor2Web Detected" in text
 
 def test_tor2web_warning(source_app):
     with source_app.test_client() as app:
         resp = app.get(url_for('info.tor2web_warning'))
-        assert resp.status_code == 200
+        assert resp.status_code == 403
         text = resp.data.decode('utf-8')
         assert "Tor2Web Detected" in text
 
