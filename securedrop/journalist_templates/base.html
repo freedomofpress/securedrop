@@ -21,9 +21,10 @@
   {% if g.user %}
   <nav aria-label="{{ gettext('Navigation') }}">
     {{ gettext('Logged on as') }}
-    <a href="{{ url_for('account.edit') }}" id="link-edit-account">{{ g.user.username }}</a> |
+    <a href="{{ url_for('account.edit') }}" id="link-edit-account">{{ g.user.username }}</a> <b>|</b>
     {% if g.user and g.user.is_admin %}
-    <a href="{{ url_for('admin.index') }}" id="link-admin-index">{{ gettext('Admin') }}</a> |
+    Admin: <a href="{{ url_for('admin.index') }}" id="link-admin-index">{{ gettext('Users') }}</a> |
+    <a href="{{ url_for('admin.manage_config') }}" id="link-config-index">{{ gettext('Config') }}</a> <b>|</b>
     {% endif %}
     <a href="{{ url_for('main.logout') }}" id="link-logout">{{ gettext('Log Out') }}</a>
   </nav>

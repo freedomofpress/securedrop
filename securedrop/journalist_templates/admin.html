@@ -1,12 +1,6 @@
 {% extends "base.html" %}
 {% block body %}
-<h1>{{ gettext('Admin Interface') }}</h1>
-
-<a href="{{ url_for('admin.add_user') }}" id="add-user" class="btn icon icon-plus"
-  aria-label="{{ gettext('Add User') }}">
-  {{ gettext('ADD USER') }}
-</a>
-
+<h1>{{ gettext('Admin: User Management') }}</h1>
 <section aria-labelledby="users-heading">
   <h2 id="users-heading" class="visually-hidden">Users</h2>
   {% if users %}
@@ -79,10 +73,11 @@
   <p>{{ gettext('No users to display') }}</p>
   {% endif %}
 </section>
-
-<a href="{{ url_for('admin.manage_config') }}" class="btn icon icon-edit section-spacing-inline"
-  id="update-instance-config" aria-label="{{ gettext('Update instance config') }}">
-  {{ gettext('INSTANCE CONFIG') }}
+<p>
+<a href="{{ url_for('admin.add_user') }}" id="add-user" class="btn icon icon-plus"
+  aria-label="{{ gettext('Add User') }}">
+  {{ gettext('ADD USER') }}
 </a>
+</p>
 
 {% endblock %}
