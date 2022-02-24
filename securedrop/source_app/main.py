@@ -8,7 +8,7 @@ from typing import Union
 
 import werkzeug
 from flask import (Blueprint, render_template, flash, redirect, url_for,
-                   session, current_app, request, Markup, abort, g)
+                   session, current_app, request, Markup, abort, g, make_response)
 from flask_babel import gettext
 
 import store
@@ -321,5 +321,12 @@ def make_blueprint(config: SDConfig) -> Blueprint:
             return render_template('logout.html')
         else:
             return redirect(url_for('.index'))
+
+    @view.route('/robots.txt')
+    def robots_txt() -> werkzeug.Response:
+        """Tell robots we don't want them"""
+        resp = make_response("User-agent: *\nDisallow: /")
+        resp.headers["content-type"] = "text/plain"
+        return resp
 
     return view
