@@ -122,6 +122,15 @@ function suggestTor() {
   addFadingClose("use-tor-browser-close", useTorBrowser);
 }
 
+function checkClearnet() {
+  let url = new URL(location.href);
+  // Allow localhost for development
+  let localhost = ["127.0.0.1", "localhost"];
+  if (localhost.indexOf(url.hostname) === -1 && !url.host.endsWith(".onion")) {
+    location.href = "/tor2web-warning"
+  }
+}
+
 function ready(fn) {
   if (document.readyState != "loading"){
     fn();
@@ -140,4 +149,5 @@ ready(function() {
       suggestTor();
     }
   }
+  checkClearnet();
 });
