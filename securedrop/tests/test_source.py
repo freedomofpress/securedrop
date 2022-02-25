@@ -537,38 +537,24 @@ def test_submit_sanitizes_filename(source_app):
                                         mtime=0)
 
 
-@flaky(rerun_filter=utils.flaky_filter_xfail)
-@pytest.mark.parametrize("locale", get_test_locales())
-def test_tor2web_warning_headers(config, source_app, locale):
+@pytest.mark.parametrize("test_url", ['main.index', 'main.create', 'main.submit'])
+def test_redirect_when_tor2web(config, source_app, test_url):
     with source_app.test_client() as app:
-        with InstrumentedApp(app) as ins:
-            resp = app.get(url_for('main.index', l=locale), headers=[('X-tor2web', 'encrypted')])
-            assert resp.status_code == 200
-
-            assert page_language(resp.data) == language_tag(locale)
-            msgids = [
-                "WARNING:",
-                "You appear to be using Tor2Web, which does not provide anonymity.",
-                "Why is this dangerous?",
-            ]
-            with xfail_untranslated_messages(config, locale, msgids):
-                ins.assert_message_flashed(
-                    '<strong>{}</strong>&nbsp;{}&nbsp;<a href="{}">{}</a>'.format(
-                        escape(gettext(msgids[0])),
-                        escape(gettext(msgids[1])),
-                        url_for('info.tor2web_warning'),
-                        escape(gettext(msgids[2])),
-                    ),
-                    'banner-warning'
-                )
-
+        resp = app.get(
+            url_for(test_url),
+            headers=[('X-tor2web', 'encrypted')],
+            follow_redirects=True)
+        text = resp.data.decode('utf-8')
+        assert resp.status_code == 403
+        assert "Proxy Service Detected" in text
 
 def test_tor2web_warning(source_app):
     with source_app.test_client() as app:
         resp = app.get(url_for('info.tor2web_warning'))
-        assert resp.status_code == 200
+        assert resp.status_code == 403
         text = resp.data.decode('utf-8')
-        assert "Why is there a warning about Tor2Web?" in text
+        assert "Proxy Service Detected" in text
+
 
 
 def test_why_use_tor_browser(source_app):

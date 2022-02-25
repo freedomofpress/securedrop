@@ -1,9 +1,18 @@
 {% extends "base.html" %}
 {% block body %}
-<h1>{{ gettext('Why is there a warning about Tor2Web?') }}</h1>
-<p>{{ gettext('Using Tor2Web to connect to SecureDrop will not protect your anonymity.') }}</p>
-<p>{{ gettext('It could be possible for anyone monitoring your Internet traffic (your government, your Internet provider), to identify you.') }}
+<h1>{{ gettext('Proxy Service Detected') }}</h1>
+<div class="center">
+  {% include 'flashed.html' %}
+</div>
+<p>{{ gettext('You appear to be using a Tor proxy service to access SecureDrop. Proxy services do not protect your anonymity.') }}
 </p>
-<p>{{ gettext('We <strong>strongly advise</strong> you to use the <a href="www.torproject.org/projects/torbrowser.html">Tor Browser</a> instead.') }}
+<p>{{ gettext('Anyone monitoring your Internet traffic &mdash; including your government, your Internet provider, or the proxy operator &mdash; may be able to identify you.') }}
+</p>
+<p>{{ gettext('Always use <a href="www.torproject.org/projects/torbrowser.html">Tor Browser</a> to access SecureDrop. Valid SecureDrop site addresses end with <code>.onion</code>. The correct address for this site is:') }}
+<pre>{{ source_url }}</pre>
+</p>
+<p> {{ gettext ('If you are already using Tor Browser, copy the address above and generate a new identity before you access SecureDrop.') }} {{ gettext('Click the <img src={icon} alt="" width="16" height="16">&nbsp;<b>New Identity</b> button in your Tor Browser\'s toolbar. This will clear your Tor Browser activity data on this device.').format(icon=url_for('static', filename='i/torbroom-black.png'))  }}
+</p>
+<p>{{ gettext('If there is a reasonable risk of your Internet traffic being monitored, consider connecting from a different location or network.') }}
 </p>
 {% endblock %}
