@@ -20,6 +20,7 @@
 
   {% if g.user %}
   <nav aria-label="{{ gettext('Navigation') }}">
+    <a href="#main" class="visually-hidden until-focus">{{ gettext('Skip to main content') }}</a>
     {{ gettext('Logged on as') }}
     <a href="{{ url_for('account.edit') }}" id="link-edit-account">{{ g.user.username }}</a> |
     {% if g.user and g.user.is_admin %}
@@ -42,7 +43,7 @@
         <div class="flash-panel">
           {% include 'flashed.html' %}
         </div>
-        <main>
+        <main id="main" tabindex="-1">
 
           {% block body %}{% endblock %}
         </main>
