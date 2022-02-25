@@ -5,7 +5,7 @@ flaky
 html5validator
 mock
 pathlib2
-pillow>=9.0.0  # for CVE-2022-{22815,22816,22817}
+pillow>=9.0.1  # for CVE-2022-{22817,24303}
 pip-tools>=6.1.0
 py>=1.10.0
 pytest>=6.1.1
