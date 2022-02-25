@@ -38,7 +38,10 @@ def make_blueprint(config: SDConfig) -> Blueprint:
     def manage_config() -> Union[str, werkzeug.Response]:
         # The UI prompt ("prevent") is the opposite of the setting ("allow"):
         submission_preferences_form = SubmissionPreferencesForm(
-            prevent_document_uploads=not InstanceConfig.get_default().allow_document_uploads)
+            prevent_document_uploads=not InstanceConfig.get_default().allow_document_uploads,
+            min_message_length=InstanceConfig.get_default().initial_message_min_len,
+            reject_codename_messages=InstanceConfig.get_default().reject_message_with_codename
+            )
         organization_name_form = OrgNameForm(
             organization_name=InstanceConfig.get_default().organization_name)
         logo_form = LogoForm()
@@ -75,9 +78,24 @@ def make_blueprint(config: SDConfig) -> Blueprint:
         form = SubmissionPreferencesForm()
         if form.validate_on_submit():
             # The UI prompt ("prevent") is the opposite of the setting ("allow"):
+            allow_uploads = not form.prevent_document_uploads.data
+
+            try:
+                msg_length = form.min_message_length.data
+
+                if isinstance(msg_length, int):
+                    int_length = msg_length
+                elif isinstance(msg_length, str):
+                    int_length = int(msg_length)
+                else:
+                    int_length = 0
+            except ValueError:
+                int_length = 0
+
+            reject_codenames = form.reject_codename_messages.data
+
+            InstanceConfig.update_submission_prefs(allow_uploads, int_length, reject_codenames)
             flash(gettext("Preferences saved."), "submission-preferences-success")
-            value = not bool(request.form.get('prevent_document_uploads'))
-            InstanceConfig.set_allow_document_uploads(value)
             return redirect(url_for('admin.manage_config') + "#config-preventuploads")
         else:
             for field, errors in list(form.errors.items()):

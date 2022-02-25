@@ -4,7 +4,7 @@ from flask_babel import lazy_gettext as gettext, ngettext
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileAllowed, FileRequired
 from wtforms import Field
-from wtforms import (TextAreaField, StringField, BooleanField, HiddenField,
+from wtforms import (TextAreaField, StringField, BooleanField, HiddenField, IntegerField,
                      ValidationError)
 from wtforms.validators import InputRequired, Optional, DataRequired, StopValidation
 
@@ -89,6 +89,12 @@ def check_invalid_usernames(form: FlaskForm, field: Field) -> None:
             "This username is invalid because it is reserved for internal use by the software."))
 
 
+def check_message_length(form: FlaskForm, field: Field) -> None:
+    msg_len = field.data
+    if not isinstance(msg_len, int) or msg_len < 0:
+        raise ValidationError(gettext("Please specify an integer value greater than 0."))
+
+
 class NewUserForm(FlaskForm):
     username = StringField('username', validators=[
         InputRequired(message=gettext('This field is required.')),
@@ -121,7 +127,18 @@ class ReplyForm(FlaskForm):
 
 
 class SubmissionPreferencesForm(FlaskForm):
-    prevent_document_uploads = BooleanField('prevent_document_uploads')
+    prevent_document_uploads = BooleanField(
+                                            'prevent_document_uploads',
+                                            false_values=('false', 'False', '')
+                                           )
+    min_message_length = IntegerField('min_message_length', validators=[check_message_length],
+                                      render_kw={
+                                          'aria-describedby': 'message-length-notes',
+                                          'class': 'short_int_field'})
+    reject_codename_messages = BooleanField(
+                                            'reject_codename_messages',
+                                            false_values=('false', 'False', '')
+                                           )
 
 
 class OrgNameForm(FlaskForm):

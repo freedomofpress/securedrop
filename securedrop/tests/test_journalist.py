@@ -1813,7 +1813,8 @@ def test_prevent_document_uploads(config, journalist_app, test_admin, locale):
         _login_user(app, test_admin['username'], test_admin['password'],
                     test_admin['otp_secret'])
         form = journalist_app_module.forms.SubmissionPreferencesForm(
-            prevent_document_uploads=True)
+            prevent_document_uploads=True,
+            min_message_length=0)
         app.post(url_for('admin.update_submission_preferences'),
                  data=form.data,
                  follow_redirects=True)
@@ -1836,12 +1837,16 @@ def test_no_prevent_document_uploads(config, journalist_app, test_admin, locale)
     with journalist_app.test_client() as app:
         _login_user(app, test_admin['username'], test_admin['password'],
                     test_admin['otp_secret'])
+        form = journalist_app_module.forms.SubmissionPreferencesForm(
+            min_message_length=0)
         app.post(url_for('admin.update_submission_preferences'),
+                 data=form.data,
                  follow_redirects=True)
         assert InstanceConfig.get_current().allow_document_uploads is True
         with InstrumentedApp(journalist_app) as ins:
             resp = app.post(
                 url_for('admin.update_submission_preferences', l=locale),
+                data=form.data,
                 follow_redirects=True
             )
             assert InstanceConfig.get_current().allow_document_uploads is True
@@ -1856,7 +1861,8 @@ def test_prevent_document_uploads_invalid(journalist_app, test_admin):
         _login_user(app, test_admin['username'], test_admin['password'],
                     test_admin['otp_secret'])
         form_true = journalist_app_module.forms.SubmissionPreferencesForm(
-            prevent_document_uploads=True)
+            prevent_document_uploads=True,
+            min_message_length=0)
         app.post(url_for('admin.update_submission_preferences'),
                  data=form_true.data,
                  follow_redirects=True)

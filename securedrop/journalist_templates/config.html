@@ -55,9 +55,23 @@
 
   <form action="{{ url_for('admin.update_submission_preferences') }}" method="post">
     <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
-    {{ submission_preferences_form.prevent_document_uploads() }}
-    <label
+      <div class="config_form_element">
+        {{ submission_preferences_form.prevent_document_uploads() }}
+        <label
       for="prevent_document_uploads">{{ gettext('Prevent sources from uploading documents. Sources will still be able to send messages.') }}</label>
+      </div>
+
+      <div class="config_form_element">
+        {{ submission_preferences_form.min_message_length() }}
+        <label
+      for="min_message_length">{{ gettext('Minimum message length in chars for sources\' first submission if no document included. Set to 0 to disable.') }}</label>
+      </div>
+
+      <div class="config_form_element">
+        {{ submission_preferences_form.reject_codename_messages() }}
+        <label
+      for="reject_codename_messages">{{ gettext('Prevent sources from submitting their codename as a message') }}</label>
+      </div>
     <div class="section-spacing">
       <button type="submit" id="submit-submission-preferences" class="icon icon-edit"
         aria-label="{{ gettext('Update Submission Preferences') }}">

@@ -1019,9 +1019,14 @@ class InstanceConfig(db.Model):
         db.session.commit()
 
     @classmethod
-    def set_allow_document_uploads(cls, value: bool) -> None:
+    def update_submission_prefs(
+            cls,
+            allow_uploads: bool,
+            min_length: int,
+            reject_codenames: bool
+            ) -> None:
         '''Invalidate the current configuration and append a new one with the
-        requested change.
+        updated submission preferences.
         '''
 
         old = cls.get_current()
@@ -1029,39 +1034,9 @@ class InstanceConfig(db.Model):
         db.session.add(old)
 
         new = old.copy()
-        new.allow_document_uploads = value
-        db.session.add(new)
-
-        db.session.commit()
-
-    @classmethod
-    def set_initial_message_min_len(cls, value: int) -> None:
-        '''Invalidate the current configuration and append a new one with the
-        requested change.
-        '''
-
-        old = cls.get_current()
-        old.valid_until = datetime.datetime.utcnow()
-        db.session.add(old)
-
-        new = old.copy()
-        new.initial_message_min_len = max(value, 0)
-        db.session.add(new)
-
-        db.session.commit()
-
-    @classmethod
-    def set_reject_message_with_codename(cls, value: bool) -> None:
-        '''Invalidate the current configuration and append a new one with the
-        requested change.
-        '''
-
-        old = cls.get_current()
-        old.valid_until = datetime.datetime.utcnow()
-        db.session.add(old)
-
-        new = old.copy()
-        new.reject_message_with_codename = value
+        new.allow_document_uploads = allow_uploads
+        new.initial_message_min_len = min_length
+        new.reject_message_with_codename = reject_codenames
         db.session.add(new)
 
         db.session.commit()
