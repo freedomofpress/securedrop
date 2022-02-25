@@ -211,9 +211,9 @@ def test_i18n(journalist_app, config):
         '--compile',
     ])
 
-    fake_config = SDConfig()
+    fake_config = SDConfig.from_config()
     fake_config.SUPPORTED_LOCALES = ['ar', 'en_US', 'fr_FR', 'nb_NO', 'zh_Hans']
-    fake_config.TRANSLATION_DIRS = Path(config.TEMP_DIR)
+    fake_config.TRANSLATION_DIRS = config.TEMP_DIR
 
     # Use our config (and not an app fixture) because the i18n module
     # grabs values at init time and we can't inject them later.
@@ -226,12 +226,12 @@ def test_i18n(journalist_app, config):
 
 
 def test_supported_locales(config):
-    fake_config = SDConfig()
+    fake_config = SDConfig.from_config()
 
     # Check that an invalid locale raises an error during app
     # configuration.
     fake_config.SUPPORTED_LOCALES = ['en_US', 'yy_ZZ']
-    fake_config.TRANSLATION_DIRS = Path(config.TEMP_DIR)
+    fake_config.TRANSLATION_DIRS = config.TEMP_DIR
 
     with pytest.raises(UnknownLocaleError):
         journalist_app_module.create_app(fake_config)

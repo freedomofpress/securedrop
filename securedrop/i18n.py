@@ -106,7 +106,7 @@ def configure_babel(config: SDConfig, app: Flask) -> Babel:
     Set up Flask-Babel according to the SecureDrop configuration.
     """
     # Tell Babel where to find our translations.
-    translations_directory = str(config.TRANSLATION_DIRS.absolute())
+    translations_directory = str(config.translation_dirs.absolute())
     app.config["BABEL_TRANSLATION_DIRECTORIES"] = translations_directory
 
     # Create the app's Babel instance. Passing the app to the

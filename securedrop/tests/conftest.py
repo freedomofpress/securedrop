@@ -154,7 +154,7 @@ def setup_journalist_key_and_gpg_folder() -> Generator[Tuple[str, Path], None, N
 def config(
     setup_journalist_key_and_gpg_folder: Tuple[str, Path]
 ) -> Generator[SDConfig, None, None]:
-    config = SDConfig()
+    config = SDConfig.from_config()
     journalist_key_fingerprint, gpg_key_dir = setup_journalist_key_and_gpg_folder
     config.GPG_KEY_DIR = str(gpg_key_dir)
     config.JOURNALIST_KEY = journalist_key_fingerprint

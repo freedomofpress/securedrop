@@ -1,141 +1,115 @@
+from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Dict
-from typing import Optional
-
-from typing import Type
-
-import config as _config
-from typing import Set
+from typing import Any, Dict, List, Optional, Type
 
 
+@dataclass()  # TODO: make frozen=True
 class SDConfig:
-    def __init__(self) -> None:
+    JOURNALIST_APP_FLASK_CONFIG_CLS: Type
+    SOURCE_APP_FLASK_CONFIG_CLS: Type
+
+    DATABASE_ENGINE: str
+    DATABASE_FILE: str
+
+    ADJECTIVES: str
+    NOUNS: str
+    GPG_KEY_DIR: str
+    JOURNALIST_KEY: str
+    JOURNALIST_TEMPLATES_DIR: str
+    SCRYPT_GPG_PEPPER: str
+    SCRYPT_ID_PEPPER: str
+    SCRYPT_PARAMS: Dict[str, int]
+    SECUREDROP_DATA_ROOT: str
+    SECUREDROP_ROOT: str
+    SOURCE_TEMPLATES_DIR: str
+    TEMP_DIR: str
+    STORE_DIR: str
+    WORKER_PIDFILE: str
+
+    env: str = 'prod'
+    RQ_WORKER_NAME: str = 'default'
+
+    DATABASE_USERNAME: Optional[str] = None
+    DATABASE_PASSWORD: Optional[str] = None
+    DATABASE_HOST: Optional[str] = None
+    DATABASE_NAME: Optional[str] = None
+
+    TRANSLATION_DIRS: Optional[str] = None
+
+    SESSION_EXPIRATION_MINUTES: int = 120
+
+    DEFAULT_LOCALE: str = 'en_US'
+    SUPPORTED_LOCALES: List[str] = field(default_factory=lambda: ["en_US"])
+
+    @classmethod
+    def from_config(cls) -> "SDConfig":
+        import config as _config
+
+        kwargs: Dict[str, Any] = {}
         try:
-            self.JOURNALIST_APP_FLASK_CONFIG_CLS = (
-                _config.JournalistInterfaceFlaskConfig
-            )  # type: Type
+            kwargs['JOURNALIST_APP_FLASK_CONFIG_CLS'] = _config.JournalistInterfaceFlaskConfig
         except AttributeError:
             pass
 
         try:
-            self.SOURCE_APP_FLASK_CONFIG_CLS = _config.SourceInterfaceFlaskConfig  # type: Type
+            kwargs['SOURCE_APP_FLASK_CONFIG_CLS'] = _config.SourceInterfaceFlaskConfig
         except AttributeError:
             pass
 
-        try:
-            self.DATABASE_ENGINE = _config.DATABASE_ENGINE  # type: str
-        except AttributeError:
-            pass
+        fields = [
+            'DATABASE_ENGINE',
+            'DATABASE_FILE',
+            'DATABASE_USERNAME',
+            'DATABASE_PASSWORD',
+            'DATABASE_HOST',
+            'DATABASE_NAME',
+            'ADJECTIVES',
+            'NOUNS',
+            'GPG_KEY_DIR',
+            'JOURNALIST_KEY',
+            'JOURNALIST_TEMPLATES_DIR',
+            'SCRYPT_GPG_PEPPER',
+            'SCRYPT_ID_PEPPER',
+            'SCRYPT_PARAMS',
+            'SECUREDROP_DATA_ROOT',
+            'SECUREDROP_ROOT',
+            'SESSION_EXPIRATION_MINUTES',
+            'SOURCE_TEMPLATES_DIR',
+            'TEMP_DIR',
+            'STORE_DIR',
+            'WORKER_PIDFILE',
+            'env',
+            'DEFAULT_LOCALE',
+            'TRANSLATION_DIRS',
+            'SUPPORTED_LOCALES',
+        ]
 
-        try:
-            self.DATABASE_FILE = _config.DATABASE_FILE  # type: str
-        except AttributeError:
-            pass
-
-        self.DATABASE_USERNAME = getattr(_config, "DATABASE_USERNAME", None)  # type: Optional[str]
-        self.DATABASE_PASSWORD = getattr(_config, "DATABASE_PASSWORD", None)  # type: Optional[str]
-        self.DATABASE_HOST = getattr(_config, "DATABASE_HOST", None)  # type: Optional[str]
-        self.DATABASE_NAME = getattr(_config, "DATABASE_NAME", None)  # type: Optional[str]
-
-        try:
-            self.ADJECTIVES = _config.ADJECTIVES  # type: str
-        except AttributeError:
-            pass
-
-        try:
-            self.NOUNS = _config.NOUNS  # type: str
-        except AttributeError:
-            pass
-
-        try:
-            self.GPG_KEY_DIR = _config.GPG_KEY_DIR  # type: str
-        except AttributeError:
-            pass
-
-        try:
-            self.JOURNALIST_KEY = _config.JOURNALIST_KEY  # type: str
-        except AttributeError:
-            pass
-
-        try:
-            self.JOURNALIST_TEMPLATES_DIR = _config.JOURNALIST_TEMPLATES_DIR  # type: str
-        except AttributeError:
-            pass
-
-        try:
-            self.SCRYPT_GPG_PEPPER = _config.SCRYPT_GPG_PEPPER  # type: str
-        except AttributeError:
-            pass
-
-        try:
-            self.SCRYPT_ID_PEPPER = _config.SCRYPT_ID_PEPPER  # type: str
-        except AttributeError:
-            pass
-
-        try:
-            self.SCRYPT_PARAMS = _config.SCRYPT_PARAMS  # type: Dict[str, int]
-        except AttributeError:
-            pass
-
-        try:
-            self.SECUREDROP_DATA_ROOT = _config.SECUREDROP_DATA_ROOT  # type: str
-        except AttributeError:
-            pass
-
-        try:
-            self.SECUREDROP_ROOT = _config.SECUREDROP_ROOT  # type: str
-        except AttributeError:
-            pass
-
-        self.SESSION_EXPIRATION_MINUTES: int = getattr(
-            _config, "SESSION_EXPIRATION_MINUTES", 120
-        )
-
-        try:
-            self.SOURCE_TEMPLATES_DIR = _config.SOURCE_TEMPLATES_DIR  # type: str
-        except AttributeError:
-            pass
-
-        try:
-            self.TEMP_DIR = _config.TEMP_DIR  # type: str
-        except AttributeError:
-            pass
-
-        try:
-            self.STORE_DIR = _config.STORE_DIR  # type: str
-        except AttributeError:
-            pass
-
-        try:
-            self.WORKER_PIDFILE = _config.WORKER_PIDFILE  # type: str
-        except AttributeError:
-            pass
-
-        self.env = getattr(_config, 'env', 'prod')  # type: str
-        if self.env == 'test':
-            self.RQ_WORKER_NAME = 'test'  # type: str
-        else:
-            self.RQ_WORKER_NAME = 'default'
-
-        # Config entries used by i18n.py
-        # Use en_US as the default locale if the key is not defined in _config
-        self.DEFAULT_LOCALE = getattr(
-            _config, "DEFAULT_LOCALE", "en_US"
-        )  # type: str
-        supported_locales = set(getattr(
-            _config, "SUPPORTED_LOCALES", [self.DEFAULT_LOCALE]
-        ))  # type: Set[str]
-        supported_locales.add(self.DEFAULT_LOCALE)
-        self.SUPPORTED_LOCALES = sorted(list(supported_locales))
-
-        translation_dirs_in_conf = getattr(_config, "TRANSLATION_DIRS", None)  # type: Optional[str]
-        if translation_dirs_in_conf:
-            self.TRANSLATION_DIRS = Path(translation_dirs_in_conf)  # type: Path
-        else:
+        for fieldname in fields:
             try:
-                self.TRANSLATION_DIRS = Path(_config.SECUREDROP_ROOT) / "translations"
+                kwargs[fieldname] = getattr(_config, fieldname)
             except AttributeError:
                 pass
+
+        if kwargs.get('env') == 'test':
+            kwargs['RQ_WORKER_NAME'] = 'test'
+
+        return cls(**kwargs)
+
+    @property
+    def translation_dirs(self) -> Path:
+        if self.TRANSLATION_DIRS:
+            return Path(self.TRANSLATION_DIRS)
+        else:
+            return Path(self.SECUREDROP_ROOT) / "translations"
+
+    @property
+    def supported_locales(self) -> List[str]:
+        locales = set(self.SUPPORTED_LOCALES)
+        # Make sure the default locale is included
+        locales.add(self.DEFAULT_LOCALE)
+        supported_locales = list(locales)
+        supported_locales.sort()
+        return supported_locales
 
     @property
     def DATABASE_URI(self) -> str:
@@ -162,4 +136,4 @@ class SDConfig:
         return db_uri
 
 
-config = SDConfig()  # type: SDConfig
+config = SDConfig.from_config()  # type: SDConfig

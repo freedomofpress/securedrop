@@ -63,7 +63,7 @@ def message_catalog(config: SDConfig, locale: str) -> Catalog:
     >>> german.get("Password").string
     'Passwort'
     """
-    return read_po(open(str(config.TRANSLATION_DIRS / locale / "LC_MESSAGES/messages.po")))
+    return read_po(open(str(config.translation_dirs / locale / "LC_MESSAGES/messages.po")))
 
 
 def page_language(page_text: str) -> Optional[str]:

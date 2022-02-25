@@ -42,6 +42,6 @@ def test_missing_config_attribute_is_handled():
 
         from sdconfig import SDConfig
 
-        SDConfig()
+        SDConfig.from_config()
     finally:
         importlib.reload(_config)
