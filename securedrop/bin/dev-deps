@@ -71,6 +71,8 @@ function maybe_use_tor() {
         grep -v " PRIVATE KEY" < /tmp/k1.prv.pem | base64pem -d | tail --bytes=32 | base32 | sed 's/=//g' > /tmp/k1.prv.key
         openssl pkey -in /tmp/k1.prv.pem -pubout | grep -v " PUBLIC KEY" | base64pem -d | tail --bytes=32 | base32 | sed 's/=//g' > /tmp/k1.pub.key
         echo "descriptor:x25519:$(cat /tmp/k1.pub.key)" | sudo -u debian-tor tee /var/lib/tor/services/journalist/authorized_clients/client.auth
+        # shellcheck disable=SC2024
+        sudo -u debian-tor cat /var/lib/tor/services/source/hostname > /var/lib/securedrop/source_v3_url
         # kill and restart Tor to pick up authorized_clients change
         # (restart a little flaky hence the kill)
         sudo kill "$(cat /run/tor/tor.pid)"; sudo service tor restart
