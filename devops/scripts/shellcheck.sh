@@ -2,18 +2,25 @@
 
 set -e
 
+USE_PODMAN="${USE_PODMAN:-}"
+
+# Allow opting into using podman with USE_PODMAN=1
+if  [[ -n "${USE_PODMAN}" ]]; then
+    DOCKER_BIN="podman"
+else
+    DOCKER_BIN="docker"
+fi
 
 function run_native_or_in_docker () {
     EXCLUDE_RULES="SC1090,SC1091,SC2001,SC2064,SC2181,SC1117"
     if [ "$(command -v shellcheck)" ]; then
-        shellcheck -x --exclude="$EXCLUDE_RULES" "$1"
+        shellcheck -x --exclude="$EXCLUDE_RULES" "$@"
     else
-        docker run --rm -v "$(pwd):/sd" -w /sd \
-            -t koalaman/shellcheck:v0.4.7 \
-            -x --exclude=$EXCLUDE_RULES "$1"
+        $DOCKER_BIN run --rm -v "$(pwd):/sd" -w /sd \
+            -t docker.io/koalaman/shellcheck:v0.4.7 \
+            -x --exclude=$EXCLUDE_RULES "$@"
     fi
 }
-export -f run_native_or_in_docker
 
 # Omitting:
 # - the `.git/` directory since its hooks won't pass # validation, and
@@ -24,7 +31,7 @@ export -f run_native_or_in_docker
 # - Python, JavaScript, YAML, HTML, SASS, PNG files because they're not shell scripts.
 # - Cache directories of mypy, SASS, or Tox.
 # - test results
-find "." \
+FILES=$(find "." \
      \( \
         -path '*.html' \
         -o -path '*.js' \
@@ -48,5 +55,10 @@ find "." \
      -o -type f \
      -exec file --mime {} + \
     | awk '$2 ~ /x-shellscript/ { print $1 }' \
-    | sed 's/://' \
-    | xargs -I {} -n1 bash -c 'run_native_or_in_docker "{}"' _
+    | sed 's/://')
+# Turn the multiline find output into a single space-separated line
+FILES=$(echo "$FILES" | tr '\n' ' ')
+
+# Intentionally unquoted so each file is passed as its own argument
+# shellcheck disable=SC2086
+run_native_or_in_docker $FILES
