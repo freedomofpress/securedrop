@@ -17,7 +17,7 @@ from encryption import EncryptionManager
 from models import SeenReply, Source, SourceStar, Submission, Reply
 from journalist_app.forms import ReplyForm
 from journalist_app.utils import (validate_user, bulk_delete, download,
-                                  confirm_bulk_delete, get_source)
+                                  get_source)
 from sdconfig import SDConfig
 from store import Storage
 
@@ -188,7 +188,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
                             escape(gettext("You must select one or more items for download"))
                         )
                     ), 'error')
-            elif action in ('delete', 'confirm_delete'):
+            elif action == 'delete':
                 flash(
                     Markup(
                         "<b>{}</b> {}".format(
@@ -197,6 +197,8 @@ def make_blueprint(config: SDConfig) -> Blueprint:
                             escape(gettext("You must select one or more items for deletion"))
                         )
                     ), 'error')
+            else:
+                abort(400)
 
             return redirect(error_redirect)
 
@@ -207,8 +209,6 @@ def make_blueprint(config: SDConfig) -> Blueprint:
             )
         elif action == 'delete':
             return bulk_delete(g.filesystem_id, selected_docs)
-        elif action == 'confirm_delete':
-            return confirm_bulk_delete(g.filesystem_id, selected_docs)
         else:
             abort(400)
 

@@ -7,7 +7,7 @@ from typing import Optional, List, Union, Any
 import flask
 import werkzeug
 from flask import (g, flash, current_app, abort, send_file, redirect, url_for,
-                   render_template, Markup, sessions, request, escape)
+                   Markup, sessions, request, escape)
 from flask_babel import gettext, ngettext
 from sqlalchemy.exc import IntegrityError
 
@@ -284,13 +284,6 @@ def bulk_delete(
         current_app.logger.error("Disconnected submission entries (%d) were detected",
                                  deletion_errors)
     return redirect(url_for('col.col', filesystem_id=filesystem_id))
-
-
-def confirm_bulk_delete(filesystem_id: str, items_selected: List[Union[Submission, Reply]]) -> str:
-    return render_template('delete.html',
-                           filesystem_id=filesystem_id,
-                           source=g.source,
-                           items_selected=items_selected)
 
 
 def make_star_true(filesystem_id: str) -> None:
