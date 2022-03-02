@@ -85,6 +85,7 @@ def create_app(config: SDConfig) -> Flask:
     app.jinja_env.filters['filesizeformat'] = template_filters.filesizeformat
     app.jinja_env.filters['html_datetime_format'] = \
         template_filters.html_datetime_format
+    app.jinja_env.add_extension('jinja2.ext.do')
 
     for module in [main, info, api]:
         app.register_blueprint(module.make_blueprint(config))  # type: ignore

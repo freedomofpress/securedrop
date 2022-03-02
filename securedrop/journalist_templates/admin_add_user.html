@@ -11,10 +11,16 @@
     <div class="container flex-end">
       <div>
         <label for="username">{{ gettext('Username') }}</label>
-        {{ form.username() }}
+        {% set aria_attributes = {} %}
+        {% if form.username.errors %}
+        {% do aria_attributes.update({'aria-describedby': 'username-errors', 'aria-invalid': 'true'}) %}
+        {% endif %}
+        {{ form.username(**aria_attributes) }}
+        <span id="username-errors">
         {% for error in form.username.errors %}
         <span class="form-validation-error" role="alert">{{ error }}</span>
         {% endfor %}
+        </span>
       </div>
       <div>
         <ul id="username-notes" class="journalist-username__notes">
@@ -26,17 +32,29 @@
     <div class="container flex-end">
       <div>
         <label for="first_name">{{ gettext('First name') }}</label>
-        {{ form.first_name() }}
+        {% set aria_attributes = {} %}
+        {% if form.first_name.errors %}
+        {% do aria_attributes.update({'aria-describedby': 'first-name-errors', 'aria-invalid': 'true'}) %}
+        {% endif %}
+        {{ form.first_name(**aria_attributes) }}
+        <span id="first-name-errors">
         {% for error in form.first_name.errors %}
         <span class="form-validation-error" role="alert">{{ error }}</span>
         {% endfor %}
+        </span>
       </div>
       <div>
         <label for="last_name">{{ gettext('Last name') }}</label>
-        {{ form.last_name() }}
+        {% set aria_attributes = {} %}
+        {% if form.last_name.errors %}
+        {% do aria_attributes.update({'aria-describedby': 'last-name-errors', 'aria-invalid': 'true'}) %}
+        {% endif %}
+        {{ form.last_name(**aria_attributes) }}
+        <span id="last-name-errors">
         {% for error in form.last_name.errors %}
         <span class="form-validation-error" role="alert">{{ error }}</span>
         {% endfor %}
+        </span>
       </div>
       <div>
         <ul id="name-notes" class="journalist-username__notes">
@@ -46,20 +64,32 @@
     </div>
     <p>{{ gettext("The user's password will be:") }} <mark class="password" id="password">{{ password }}</mark></p>
     <div>
-      {{ form.is_admin(id="is-admin") }}
+      {% set aria_attributes = {} %}
+      {% if form.is_admin.errors %}
+      {% do aria_attributes.update({'aria-describedby': 'is-admin-errors', 'aria-invalid': 'true'}) %}
+      {% endif %}
+      {{ form.is_admin(id="is-admin", **aria_attributes) }}
       <label for="is-admin">{{ gettext('Is Admin') }}</label>
+      <span id="is-admin-errors">
       {% for error in form.is_admin.errors %}
       <span class="form-validation-error" role="alert">{{ error }}</span>
       {% endfor %}
+      </span>
     </div>
     <div>
-      {{ form.is_hotp(id="is-hotp") }}
+      {% set aria_attributes = {} %}
+      {% if form.is_hotp.errors or form.otp_secret.errors %}
+      {% do aria_attributes.update({'aria-describedby': 'otp-errors', 'aria-invalid': 'true'}) %}
+      {% endif %}
+      {{ form.is_hotp(id="is-hotp", **aria_attributes) }}
       <label for="is-hotp">{{ gettext("Is using a YubiKey [HOTP]") }} </label>
       <label for="otp_secret" class="visually-hidden">{{ gettext('HOTP Secret') }}</label>
-      {{ form.otp_secret(placeholder=gettext('HOTP Secret'), size="60") }}
+      {{ form.otp_secret(placeholder=gettext('HOTP Secret'), size="60", **aria_attributes) }}
+      <span id="otp-errors">
       {% for error in form.is_hotp.errors + form.otp_secret.errors %}
-      <span class="form-validation-error" role="alert">{{ error }}</span><br>
+      <span class="form-validation-error" role="alert">{{ error }}</span>
       {% endfor %}
+      </span>
     </div>
     <button type="submit" class="icon icon-plus" aria-label="{{ gettext('Add User') }}">
       {{ gettext('ADD USER') }}
