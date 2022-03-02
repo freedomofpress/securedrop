@@ -31,6 +31,8 @@ from .utils.db_helper import new_codename, submit
 from .utils.i18n import get_test_locales, language_tag, page_language, xfail_untranslated_messages
 from .utils.instrument import InstrumentedApp
 
+GENERATE_DATA = {'tor2web_check': 'href="fake.onion"'}
+
 
 def test_logo_default_available(config, source_app):
     # if the custom image is available, this test will fail
@@ -108,10 +110,10 @@ def test_generate_already_logged_in(source_app):
     with source_app.test_client() as app:
         new_codename(app, session)
         # Make sure it redirects to /lookup when logged in
-        resp = app.get(url_for('main.generate'))
+        resp = app.post(url_for('main.generate'), data=GENERATE_DATA)
         assert resp.status_code == 302
         # Make sure it flashes the message on the lookup page
-        resp = app.get(url_for('main.generate'), follow_redirects=True)
+        resp = app.post(url_for('main.generate'), data=GENERATE_DATA, follow_redirects=True)
         # Should redirect to /lookup
         assert resp.status_code == 200
         text = resp.data.decode('utf-8')
@@ -120,7 +122,7 @@ def test_generate_already_logged_in(source_app):
 
 def test_create_new_source(source_app):
     with source_app.test_client() as app:
-        resp = app.get(url_for('main.generate'))
+        resp = app.post(url_for('main.generate'), data=GENERATE_DATA)
         assert resp.status_code == 200
         tab_id = next(iter(session['codenames'].keys()))
         resp = app.post(url_for('main.create'), data={'tab_id': tab_id}, follow_redirects=True)
@@ -133,7 +135,7 @@ def test_create_new_source(source_app):
 
 def test_generate(source_app):
     with source_app.test_client() as app:
-        resp = app.get(url_for('main.generate'))
+        resp = app.post(url_for('main.generate'), data=GENERATE_DATA)
         assert resp.status_code == 200
         session_codename = next(iter(session['codenames'].values()))
 
@@ -149,7 +151,7 @@ def test_generate(source_app):
 def test_create_duplicate_codename_logged_in_not_in_session(source_app):
     with patch.object(source_app.logger, 'error') as logger:
         with source_app.test_client() as app:
-            resp = app.get(url_for('main.generate'))
+            resp = app.post(url_for('main.generate'), data=GENERATE_DATA)
             assert resp.status_code == 200
             tab_id, codename = next(iter(session['codenames'].items()))
 
@@ -172,12 +174,12 @@ def test_create_duplicate_codename_logged_in_not_in_session(source_app):
 def test_create_duplicate_codename_logged_in_in_session(source_app):
     with source_app.test_client() as app:
         # Given a user who generated a codename in a browser tab
-        resp = app.get(url_for('main.generate'))
+        resp = app.post(url_for('main.generate'), data=GENERATE_DATA)
         assert resp.status_code == 200
         first_tab_id, first_codename = list(session['codenames'].items())[0]
 
         # And then they opened a new browser tab to generate a second codename
-        resp = app.get(url_for('main.generate'))
+        resp = app.post(url_for('main.generate'), data=GENERATE_DATA)
         assert resp.status_code == 200
         second_tab_id, second_codename = list(session['codenames'].items())[1]
         assert first_codename != second_codename
@@ -780,7 +782,7 @@ def test_source_session_expiration(source_app):
 def test_source_session_expiration_create(source_app):
     with source_app.test_client() as app:
         # Given a source user who is in the middle of the account creation flow
-        resp = app.get(url_for('main.generate'))
+        resp = app.post(url_for('main.generate'), data=GENERATE_DATA)
         assert resp.status_code == 200
 
         # But we're now 6 hours later hence they did not finish the account creation flow in time

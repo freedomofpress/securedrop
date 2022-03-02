@@ -36,18 +36,22 @@ class SourceNavigationStepsMixin:
         assert j["sd_version"] == self.source_app.jinja_env.globals["version"]
         assert j["gpg_fpr"] != ""
 
-    def _source_clicks_submit_documents_on_homepage(self):
+    def _source_clicks_submit_documents_on_homepage(self, assert_success=True):
 
         # It's the source's first time visiting this SecureDrop site, so they
         # choose to "Submit Documents".
         self.safe_click_by_id("submit-documents-button")
 
-        # The source should now be on the page where they are presented with
-        # a diceware codename they can use for subsequent logins
-        assert self._is_on_generate_page()
+        if assert_success:
+            # The source should now be on the page where they are presented with
+            # a diceware codename they can use for subsequent logins
+            assert self._is_on_generate_page()
 
     def _source_regenerates_codename(self):
-        self.driver.refresh()
+        self._source_visits_source_homepage()
+        # We do not want to assert success here since it's possible they got
+        # redirected if already logged in.
+        self._source_clicks_submit_documents_on_homepage(assert_success=False)
 
     def _source_chooses_to_submit_documents(self):
         self._source_clicks_submit_documents_on_homepage()

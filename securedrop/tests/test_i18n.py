@@ -275,7 +275,7 @@ def test_html_en_lang_correct(journalist_app, config):
     assert re.compile('<html lang="en-US".*>').search(html), html
 
     # check '/generate' too because '/' uses a different template
-    resp = app.get('/generate', follow_redirects=True)
+    resp = app.post('/generate', data={'tor2web_check': 'href="fake.onion"'}, follow_redirects=True)
     html = resp.data.decode('utf-8')
     assert re.compile('<html lang="en-US".*>').search(html), html
 
@@ -299,7 +299,8 @@ def test_html_fr_lang_correct(journalist_app, config):
     assert re.compile('<html lang="fr-FR".*>').search(html), html
 
     # check '/generate' too because '/' uses a different template
-    resp = app.get('/generate?l=fr_FR', follow_redirects=True)
+    resp = app.post('/generate?l=fr_FR', data={'tor2web_check': 'href="fake.onion"'},
+                    follow_redirects=True)
     html = resp.data.decode('utf-8')
     assert re.compile('<html lang="fr-FR".*>').search(html), html
 
@@ -329,9 +330,11 @@ def test_html_attributes(journalist_app, config):
     assert '<html lang="en-US" dir="ltr">' in html
 
     # check '/generate' too because '/' uses a different template
-    resp = app.get('/generate?l=ar', follow_redirects=True)
+    resp = app.post('/generate?l=ar', data={'tor2web_check': 'href="fake.onion"'},
+                    follow_redirects=True)
     html = resp.data.decode('utf-8')
     assert '<html lang="ar" dir="rtl">' in html
-    resp = app.get('/generate?l=en_US', follow_redirects=True)
+    resp = app.post('/generate?l=en_US', data={'tor2web_check': 'href="fake.onion"'},
+                    follow_redirects=True)
     html = resp.data.decode('utf-8')
     assert '<html lang="en-US" dir="ltr">' in html

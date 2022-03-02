@@ -78,10 +78,14 @@
               <p class="extended-welcome-text">{{ gettext('First time submitting to our SecureDrop? Start here.') }}</p>
             </div>
             <div class="index-column-bottom-container">
-              <a href="{{ url_for('main.generate') }}" id="submit-documents-button" class="btn alt"
-                aria-label="{{ gettext('Get Started') }}">
-                {{ gettext('GET STARTED') }}
-              </a>
+              <form id="started-form" method="post" action="/generate" autocomplete="off">
+                <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
+                <input name="tor2web_check" type="hidden" value='href="fake.onion"'>
+                <button type="submit" class="btn alt" id="submit-documents-button"
+                  aria-label="{{ gettext('Get Started') }}">
+                  {{ gettext('GET STARTED') }}
+                </button>
+              </form>
             </div>
           </section>
           <div id="middle-separator"></div>
