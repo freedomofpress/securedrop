@@ -19,7 +19,7 @@ from jinja2 import Markup
 from passlib.hash import argon2
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import relationship, backref, Query, RelationshipProperty
-from sqlalchemy import Column, Index, Integer, String, Boolean, DateTime, LargeBinary
+from sqlalchemy import Column, Integer, String, Boolean, DateTime, LargeBinary
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
 
@@ -932,7 +932,7 @@ class RevokedToken(db.Model):
 
 class InstanceConfig(db.Model):
     '''Versioned key-value store of settings configurable from the journalist
-    interface.  The current version has valid_until=None.
+    interface.  The current version has valid_until=0 (unix epoch start)
     '''
 
     # Limits length of org name used in SI and JI titles, image alt texts etc.
@@ -940,10 +940,11 @@ class InstanceConfig(db.Model):
 
     __tablename__ = 'instance_config'
     version = Column(Integer, primary_key=True)
-    valid_until = Column(DateTime, default=None, unique=True)
+    valid_until = Column(DateTime, default=datetime.datetime.fromtimestamp(0),
+                         nullable=False, unique=True)
     allow_document_uploads = Column(Boolean, default=True)
     organization_name = Column(String(255), nullable=True, default="SecureDrop")
-    initial_message_min_len = Column(Integer, nullable=False, default=0)
+    initial_message_min_len = Column(Integer, default=0)
     reject_message_with_codename = Column(Boolean, default=False)
 
     # Columns not listed here will be included by InstanceConfig.copy() when
@@ -951,7 +952,16 @@ class InstanceConfig(db.Model):
     metadata_cols = ['version', 'valid_until']
 
     def __repr__(self) -> str:
-        return "<InstanceConfig(version=%s, valid_until=%s)>" % (self.version, self.valid_until)
+        return "<InstanceConfig(version=%s, valid_until=%s, " \
+            "allow_document_uploads=%s, organization_name=%s, " \
+            "initial_message_min_len=%s, reject_message_with_codename=%s)>" % (
+                                                   self.version,
+                                                   self.valid_until,
+                                                   self.allow_document_uploads,
+                                                   self.organization_name,
+                                                   self.initial_message_min_len,
+                                                   self.reject_message_with_codename
+                                                  )
 
     def copy(self) -> "InstanceConfig":
         '''Make a copy of only the configuration columns of the given
@@ -983,7 +993,7 @@ class InstanceConfig(db.Model):
         '''
 
         try:
-            return cls.query.filter(cls.valid_until == None).one()  # lgtm [py/test-equals-none]  # noqa: E711, E501
+            return cls.query.filter(cls.valid_until == datetime.datetime.fromtimestamp(0)).one()  # lgtm [py/test-equals-none]  # noqa: E711, E501
         except NoResultFound:
             try:
                 current = cls()
@@ -991,7 +1001,7 @@ class InstanceConfig(db.Model):
                 db.session.commit()
                 return current
             except IntegrityError:
-                return cls.query.filter(cls.valid_until == None).one()  # lgtm [py/test-equals-none]  # noqa: E711, E501
+                return cls.query.filter(cls.valid_until == datetime.datetime.fromtimestamp(0)).one()  # lgtm [py/test-equals-none]  # noqa: E711, E501
 
     @classmethod
     def check_name_acceptable(cls, name: str) -> None:
@@ -1040,11 +1050,3 @@ class InstanceConfig(db.Model):
         db.session.add(new)
 
         db.session.commit()
-
-
-one_active_instance_config_index = Index(
-    'ix_one_active_instance_config',
-    InstanceConfig.valid_until.is_(None),
-    unique=True,
-    sqlite_where=(InstanceConfig.valid_until.is_(None))
-)
