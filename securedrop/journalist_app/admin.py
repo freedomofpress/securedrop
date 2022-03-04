@@ -15,7 +15,7 @@ from sqlalchemy.orm.exc import NoResultFound
 from db import db
 from html import escape
 from models import (InstanceConfig, Journalist, InvalidUsernameException,
-                    FirstOrLastNameError, PasswordError)
+                    FirstOrLastNameError, PasswordError, Submission)
 from journalist_app.decorators import admin_required
 from journalist_app.utils import (commit_account_changes, set_diceware_password,
                                   validate_hotp_secret, revoke_token)
@@ -36,9 +36,15 @@ def make_blueprint(config: SDConfig) -> Blueprint:
     @view.route('/config', methods=('GET', 'POST'))
     @admin_required
     def manage_config() -> Union[str, werkzeug.Response]:
-        # The UI prompt ("prevent") is the opposite of the setting ("allow"):
+        # The UI document upload prompt ("prevent") is the opposite of the setting ("allow")
+        if InstanceConfig.get_default().initial_message_min_len > 0:
+            prevent_short_messages = True
+        else:
+            prevent_short_messages = False
+
         submission_preferences_form = SubmissionPreferencesForm(
             prevent_document_uploads=not InstanceConfig.get_default().allow_document_uploads,
+            prevent_short_messages=prevent_short_messages,
             min_message_length=InstanceConfig.get_default().initial_message_min_len,
             reject_codename_messages=InstanceConfig.get_default().reject_message_with_codename
             )
@@ -70,6 +76,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
             return render_template("config.html",
                                    submission_preferences_form=submission_preferences_form,
                                    organization_name_form=organization_name_form,
+                                   max_len=Submission.MAX_MESSAGE_LEN,
                                    logo_form=logo_form)
 
     @view.route('/update-submission-preferences', methods=['POST'])
@@ -80,16 +87,19 @@ def make_blueprint(config: SDConfig) -> Blueprint:
             # The UI prompt ("prevent") is the opposite of the setting ("allow"):
             allow_uploads = not form.prevent_document_uploads.data
 
-            try:
-                msg_length = form.min_message_length.data
+            if form.prevent_short_messages.data:
+                try:
+                    msg_length = form.min_message_length.data
 
-                if isinstance(msg_length, int):
-                    int_length = msg_length
-                elif isinstance(msg_length, str):
-                    int_length = int(msg_length)
-                else:
+                    if isinstance(msg_length, int):
+                        int_length = msg_length
+                    elif isinstance(msg_length, str):
+                        int_length = int(msg_length)
+                    else:
+                        int_length = 0
+                except ValueError:
                     int_length = 0
-            except ValueError:
+            else:
                 int_length = 0
 
             reject_codenames = form.reject_codename_messages.data

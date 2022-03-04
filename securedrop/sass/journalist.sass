@@ -16,6 +16,21 @@
 .content div
   align-content: center
 
+.config_form_subelement
+  margin-left: 1.5em
+  margin-bottom: 0
+
+.config_form_element
+  padding: 3px
+  margin-bottom: 1.0em
+
+#min_message_length
+  width: 6em
+
+.form-field-hint
+  font-size: 0.9em
+  font-style: italic
+
 #replies
   .reply
     border: 1px solid $color_grey_medium
@@ -203,7 +218,7 @@ button.button-star.un-starred
     background-image: url(/static/icons/unstarred.png)
     width: 16px
     height: 15px
-  
+
   &:active, &:hover
     span:before
       background-image: url(/static/icons/starred.png)
@@ -232,7 +247,7 @@ button.icon-reset:not([data-tooltip]), button.icon-reset[data-tooltip] > span.la
     width: 15px
     height: 15px
 
-.icon-bell 
+.icon-bell
   &:before
     background-image: url(/static/icons/bell.png)
     width: 13px

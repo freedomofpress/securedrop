@@ -12,19 +12,32 @@ from models import Journalist, InstanceConfig, HOTP_SECRET_LENGTH
 
 from typing import Any
 
+import typing
+
 
 class RequiredIf(DataRequired):
 
-    def __init__(self, other_field_name: str, *args: Any, **kwargs: Any) -> None:
+    def __init__(self,
+                 other_field_name: str,
+                 custom_message: typing.Optional[str] = None,
+                 *args: Any, **kwargs: Any) -> None:
+
         self.other_field_name = other_field_name
+        if custom_message is not None:
+            self.custom_message = custom_message
+        else:
+            self.custom_message = ""
 
     def __call__(self, form: FlaskForm, field: Field) -> None:
         if self.other_field_name in form:
             other_field = form[self.other_field_name]
             if bool(other_field.data):
-                self.message = gettext(
-                    'The "{name}" field is required when "{other_name}" is set.'
-                    .format(other_name=self.other_field_name, name=field.name))
+                if self.custom_message != "":
+                    self.message = self.custom_message
+                else:
+                    self.message = gettext(
+                        'The "{name}" field is required when "{other_name}" is set.'
+                        .format(other_name=self.other_field_name, name=field.name))
                 super(RequiredIf, self).__call__(form, field)
             else:
                 field.errors[:] = []
@@ -131,10 +144,20 @@ class SubmissionPreferencesForm(FlaskForm):
                                             'prevent_document_uploads',
                                             false_values=('false', 'False', '')
                                            )
-    min_message_length = IntegerField('min_message_length', validators=[check_message_length],
+    prevent_short_messages = BooleanField(
+                                            'prevent_short_messages',
+                                            false_values=('false', 'False', '')
+                                           )
+    min_message_length = IntegerField('min_message_length',
+                                      validators=[
+                                          RequiredIf(
+                                              'prevent_short_messages',
+                                              gettext("To configure a minimum message length, "
+                                                      "you must set the required number of "
+                                                      "characters.")),
+                                          check_message_length],
                                       render_kw={
-                                          'aria-describedby': 'message-length-notes',
-                                          'class': 'short_int_field'})
+                                          'aria-describedby': 'message-length-notes'})
     reject_codename_messages = BooleanField(
                                             'reject_codename_messages',
                                             false_values=('false', 'False', '')

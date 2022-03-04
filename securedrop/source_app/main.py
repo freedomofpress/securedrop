@@ -7,7 +7,7 @@ from datetime import datetime, timedelta, timezone
 from typing import Union
 
 import werkzeug
-from flask import (Blueprint, render_template, flash, redirect, url_for,
+from flask import (Blueprint, render_template, flash, redirect, url_for, escape,
                    session, current_app, request, Markup, abort, g, make_response)
 from flask_babel import gettext
 
@@ -204,16 +204,17 @@ def make_blueprint(config: SDConfig) -> Blueprint:
             min_len = InstanceConfig.get_default().initial_message_min_len
             if (min_len > 0) and (msg and not fh) and (len(msg) < min_len):
                 flash(gettext(
-                    "Your initial message must be at least {} characters long.".format(min_len)),
+                    "Your first message must be at least {} characters long.".format(min_len)),
                     "error")
                 return redirect(f"{url_for('main.lookup')}#flashed")
 
             codenames_rejected = InstanceConfig.get_default().reject_message_with_codename
             if codenames_rejected and codename_detected(msg, session['new_user_codename']):
-                flash(gettext(
-                    "Please do not submit your codename! Keep it secret, and"
-                    " use it to log in later to check for replies."),
-                     "error")
+                flash(Markup('{}<br>{}'.format(
+                    escape(gettext("Please do not submit your codename!")),
+                    escape(gettext("Keep your codename secret, and use it to log in later"
+                                   " to check for replies."))
+                    )), "error")
                 return redirect(f"{url_for('main.lookup')}#flashed")
 
         if not os.path.exists(Storage.get_default().path(logged_in_source.filesystem_id)):
