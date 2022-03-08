@@ -1,0 +1,4 @@
+{%- macro relative_time(date) -%}
+<time title="{{ date|rel_datetime_format }}"
+      datetime="{{ date|html_datetime_format }}">{{ date|rel_datetime_format(relative=True) }}</time>
+{%- endmacro -%}

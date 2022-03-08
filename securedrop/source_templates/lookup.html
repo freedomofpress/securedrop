@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% import 'utils.html' as utils %}
 
 {% block body %}
 {% if new_user_codename %}
@@ -74,9 +75,9 @@
       {{ gettext("You have received a reply. To protect your identity in the unlikely event someone learns your codename, please delete all replies when you're done with them. This also lets us know that you are aware of our reply. You can respond by submitting new files and messages above.") }}
     </p>
     {% for reply in replies %}
+    {%- set timestamp = utils.relative_time(reply.date) -%}
     <article class="reply">
-      <h3 class="date"><time title="{{ reply.date|rel_datetime_format }}"
-          datetime="{{ reply.date|html_datetime_format }}">{{ reply.date|rel_datetime_format(relative=True) }}</time></h3>
+      <h3 class="date">{{ timestamp }}</h3>
       <form id="delete" class="message" method="post" action="{{ url_for('main.delete') }}" autocomplete="off">
         <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
         <input type="hidden" name="reply_filename" value="{{ reply.filename }}" autocomplete="off">
@@ -86,8 +87,9 @@
         </a>
         <dialog open id="confirm-delete-{{ reply.filename }}" class="confirm-prompt"
           aria-labelledby="delete-heading-{{ reply.filename }}">
-          <h3 id="delete-heading-{{ reply.filename }}" hidden>Delete reply from
-            {{ reply.date|rel_datetime_format(relative=True) }}?</h3>
+          <h3 id="delete-heading-{{ reply.filename }}" hidden>
+            {{ gettext('Delete reply from {timestamp}?').format(timestamp=timestamp) }}
+          </h3>
           <p>{{ gettext('Delete this reply?') }}
             <a href="#delete" role="button">{{ gettext('Cancel') }}</a>
             <button type="submit" class="danger" id="confirm-delete-reply-button-{{ reply.filename }}" role="button"
