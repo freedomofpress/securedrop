@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.2.1~rc1
+
+* Update default grsec kernel version to 5.15.26 (#6325)
+* Update pillow test dependency from 9.0.0 to 9.0.1 (#6305)
+
 ## 2.2.0
 
 ### Web applications
