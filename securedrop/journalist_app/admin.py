@@ -36,12 +36,12 @@ def make_blueprint(config: SDConfig) -> Blueprint:
     @view.route('/config', methods=('GET', 'POST'))
     @admin_required
     def manage_config() -> Union[str, werkzeug.Response]:
-        # The UI document upload prompt ("prevent") is the opposite of the setting ("allow")
         if InstanceConfig.get_default().initial_message_min_len > 0:
             prevent_short_messages = True
         else:
             prevent_short_messages = False
 
+        # The UI document upload prompt ("prevent") is the opposite of the setting ("allow")
         submission_preferences_form = SubmissionPreferencesForm(
             prevent_document_uploads=not InstanceConfig.get_default().allow_document_uploads,
             prevent_short_messages=prevent_short_messages,
@@ -88,23 +88,13 @@ def make_blueprint(config: SDConfig) -> Blueprint:
             allow_uploads = not form.prevent_document_uploads.data
 
             if form.prevent_short_messages.data:
-                try:
-                    msg_length = form.min_message_length.data
-
-                    if isinstance(msg_length, int):
-                        int_length = msg_length
-                    elif isinstance(msg_length, str):
-                        int_length = int(msg_length)
-                    else:
-                        int_length = 0
-                except ValueError:
-                    int_length = 0
+                msg_length = form.min_message_length.data
             else:
-                int_length = 0
+                msg_length = 0
 
             reject_codenames = form.reject_codename_messages.data
 
-            InstanceConfig.update_submission_prefs(allow_uploads, int_length, reject_codenames)
+            InstanceConfig.update_submission_prefs(allow_uploads, msg_length, reject_codenames)
             flash(gettext("Preferences saved."), "submission-preferences-success")
             return redirect(url_for('admin.manage_config') + "#config-preventuploads")
         else:

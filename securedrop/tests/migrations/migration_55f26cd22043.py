@@ -81,11 +81,9 @@ class DowngradeTester:
         assert index_definition in get_schema(self.app)
 
         with self.app.app_context():
-            with pytest.raises(sqlalchemy.exc.OperationalError):
-                for query in [
-                     "SELECT * FROM instance_config WHERE initial_message_min_len IS NOT NULL",
-                     "SELECT * FROM instance_config WHERE reject_message_with_codename IS NOT NULL"
-                     ]:
-
-                    result = db.engine.execute(sqlalchemy.text(query)).fetchall()
-                    assert len(result) == 0
+            for query in [
+                 "SELECT * FROM instance_config WHERE initial_message_min_len IS NOT NULL",
+                 "SELECT * FROM instance_config WHERE reject_message_with_codename IS NOT NULL"
+                 ]:
+                with pytest.raises(sqlalchemy.exc.OperationalError):
+                    db.engine.execute(sqlalchemy.text(query)).fetchall()
