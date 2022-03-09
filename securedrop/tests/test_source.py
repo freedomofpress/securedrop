@@ -419,6 +419,40 @@ def test_submit_big_message(source_app):
         assert "Message text too long." in text
 
 
+def test_submit_initial_short_message(source_app):
+    """
+    Test the message size limit.
+    """
+    with source_app.test_client() as app:
+        InstanceConfig.get_default().update_submission_prefs(
+            allow_uploads=True, min_length=10, reject_codenames=False)
+        new_codename(app, session)
+        resp = app.post(
+            url_for('main.submit'),
+            data=dict(msg="A" * 5, fh=(StringIO(''), '')),
+            follow_redirects=True)
+        assert resp.status_code == 200
+        text = resp.data.decode('utf-8')
+        assert "Your first message must be at least 10 characters long." in text
+        # Now retry with a longer message
+        resp = app.post(
+            url_for('main.submit'),
+            data=dict(msg="A" * 25, fh=(StringIO(''), '')),
+            follow_redirects=True)
+        assert resp.status_code == 200
+        text = resp.data.decode('utf-8')
+        assert "Thank you for sending this information to us." in text
+        # Now send another short message, that should still be accepted since
+        # it's no longer the initial one
+        resp = app.post(
+            url_for('main.submit'),
+            data=dict(msg="A", fh=(StringIO(''), '')),
+            follow_redirects=True)
+        assert resp.status_code == 200
+        text = resp.data.decode('utf-8')
+        assert "Thanks! We received your message." in text
+
+
 def test_submit_file(source_app):
     with source_app.test_client() as app:
         new_codename(app, session)
@@ -459,6 +493,33 @@ def test_submit_antispam(source_app):
             data=dict(msg="Test", fh=(StringIO(''), ''), text="blah"),
             follow_redirects=True)
         assert resp.status_code == 403
+
+
+def test_submit_codename(source_app):
+    """
+    Test preventions against people submitting their codename.
+    """
+    with source_app.test_client() as app:
+        InstanceConfig.get_default().update_submission_prefs(
+            allow_uploads=True, min_length=0, reject_codenames=True)
+        codename = new_codename(app, session)
+        resp = app.post(
+            url_for('main.submit'),
+            data=dict(msg=codename, fh=(StringIO(''), '')),
+            follow_redirects=True)
+        assert resp.status_code == 200
+        text = resp.data.decode('utf-8')
+        assert "Please do not submit your codename!" in text
+        # Do a dummy submission
+        _dummy_submission(app)
+        # Now resubmit the codename, should be accepted.
+        resp = app.post(
+            url_for('main.submit'),
+            data=dict(msg=codename, fh=(StringIO(''), '')),
+            follow_redirects=True)
+        assert resp.status_code == 200
+        text = resp.data.decode('utf-8')
+        assert "Thanks! We received your message" in text
 
 
 def test_delete_all_successfully_deletes_replies(source_app, app_storage):
