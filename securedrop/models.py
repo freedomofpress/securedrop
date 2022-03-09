@@ -993,7 +993,7 @@ class InstanceConfig(db.Model):
         '''
 
         try:
-            return cls.query.filter(cls.valid_until == datetime.datetime.fromtimestamp(0)).one()  # lgtm [py/test-equals-none]  # noqa: E711, E501
+            return cls.query.filter(cls.valid_until == datetime.datetime.fromtimestamp(0)).one()
         except NoResultFound:
             try:
                 current = cls()
@@ -1001,7 +1001,7 @@ class InstanceConfig(db.Model):
                 db.session.commit()
                 return current
             except IntegrityError:
-                return cls.query.filter(cls.valid_until == datetime.datetime.fromtimestamp(0)).one()  # lgtm [py/test-equals-none]  # noqa: E711, E501
+                return cls.query.filter(cls.valid_until == datetime.datetime.fromtimestamp(0)).one()
 
     @classmethod
     def check_name_acceptable(cls, name: str) -> None:
