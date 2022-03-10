@@ -140,7 +140,7 @@ def test_generate(source_app):
         session_codename = next(iter(session['codenames'].values()))
 
     text = resp.data.decode('utf-8')
-    assert "This codename is what you will use in future visits" in text
+    assert "functions as both your username and your password" in text
 
     codename = _find_codename(resp.data.decode('utf-8'))
     # codename is also stored in the session - make sure it matches the
