@@ -3,11 +3,9 @@
 <section id="flashed" role="alert">
   <ul>
     {% for category, message in messages %}
-    {% if category != 'banner-warning' %}
     <li class="flash {{ category }}" aria-label="{{ gettext(category) }}">
       {{ message }}
     </li>
-    {% endif %}
     {% endfor %}
   </ul>
 </section>

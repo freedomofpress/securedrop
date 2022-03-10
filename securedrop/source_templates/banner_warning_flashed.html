@@ -1,8 +1,0 @@
-{# these are flash messages that appear at the top and are really scary, like if you're using tor2web #}
-{% with messages = get_flashed_messages(with_categories=True, category_filter=["banner-warning"]) %}
-{% for category, message in messages %}
-<p class="flash {{ category }}" role="alert">
-  {{ message }}
-</p>
-{% endfor %}
-{% endwith %}
