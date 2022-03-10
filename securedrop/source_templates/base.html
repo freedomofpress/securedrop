@@ -22,6 +22,9 @@
   <div class="content">
     <div class="container">
       <header>
+        {% if get_flashed_messages() %}
+        <a href="#flashed" class="visually-hidden until-focus">{{ gettext('Skip to notification') }}</a>
+        {% endif %}
         <a href="#main" class="visually-hidden until-focus">{{ gettext('Skip to main content') }}</a>
         {% block header %}
         <a href="{% if is_user_logged_in %}{{ url_for('main.lookup') }}{% else %}{{ url_for('main.index') }}{% endif %}"

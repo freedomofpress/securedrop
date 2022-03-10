@@ -171,7 +171,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
             for field, errors in form.errors.items():
                 for error in errors:
                     flash(error, "error")
-            return redirect(f"{url_for('main.lookup')}#flashed")
+            return redirect(url_for('main.lookup'))
 
         msg = request.form['msg']
         fh = None
@@ -186,7 +186,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
                       "error")
             else:
                 flash(gettext("You must enter a message."), "error")
-            return redirect(f"{url_for('main.lookup')}#flashed")
+            return redirect(url_for('main.lookup'))
 
         fnames = []
         logged_in_source_in_db = logged_in_source.get_db_record()
@@ -252,7 +252,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
 
         normalize_timestamps(logged_in_source)
 
-        return redirect(f"{url_for('main.lookup')}#flashed")
+        return redirect(url_for('main.lookup'))
 
     @view.route('/delete', methods=('POST',))
     @login_required
