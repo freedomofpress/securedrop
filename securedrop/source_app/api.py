@@ -1,4 +1,5 @@
 import json
+import os
 
 import flask
 from flask import Blueprint, make_response
@@ -20,9 +21,11 @@ def make_blueprint(config: SDConfig) -> Blueprint:
             'organization_name': InstanceConfig.get_default().organization_name,
             'allow_document_uploads': InstanceConfig.get_default().allow_document_uploads,
             'gpg_fpr': config.JOURNALIST_KEY,
+            'kernel_version': os.uname().release,
             'sd_version': version.__version__,
             'server_os': server_os.get_os_release(),
             'supported_languages': config.SUPPORTED_LOCALES,
+            'tor_version': server_os.get_tor_version(),
             'v3_source_url': get_sourcev3_url()
         }
         resp = make_response(json.dumps(meta))

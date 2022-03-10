@@ -591,17 +591,21 @@ def test_why_journalist_key(source_app):
 
 def test_metadata_route(config, source_app):
     with patch("server_os.get_os_release", return_value="20.04"):
-        with source_app.test_client() as app:
-            resp = app.get(url_for('api.metadata'))
-            assert resp.status_code == 200
-            assert resp.headers.get('Content-Type') == 'application/json'
-            assert resp.json.get('allow_document_uploads') ==\
-                InstanceConfig.get_current().allow_document_uploads
-            assert resp.json.get('sd_version') == version.__version__
-            assert resp.json.get('server_os') == '20.04'
-            assert resp.json.get('supported_languages') ==\
-                config.SUPPORTED_LOCALES
-            assert resp.json.get('v3_source_url') is None
+        with patch("server_os.get_tor_version", return_value="0.4.5.11"):
+            with source_app.test_client() as app:
+                resp = app.get(url_for('api.metadata'))
+                assert resp.status_code == 200
+                assert resp.headers.get('Content-Type') == 'application/json'
+                assert resp.json.get('allow_document_uploads') ==\
+                    InstanceConfig.get_current().allow_document_uploads
+                # Kernel version should start with #.##.###
+                assert re.match(r'\d\.\d{1,2}\.\d{1,3}', resp.json.get('kernel_version'))
+                assert resp.json.get('sd_version') == version.__version__
+                assert resp.json.get('server_os') == '20.04'
+                assert resp.json.get('supported_languages') ==\
+                    config.SUPPORTED_LOCALES
+                assert resp.json.get('tor_version') == "0.4.5.11"
+                assert resp.json.get('v3_source_url') is None
 
 
 def test_metadata_v3_url(source_app):
