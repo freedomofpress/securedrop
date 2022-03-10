@@ -16,12 +16,10 @@
     aria-describedby="codename-instructions codename-explanation">{{ codename }}</mark>
 </section>
 
-<p class="explanation">
-  <ul class="explanation">
-    <li>{{ gettext('<strong>Keep it secret.</strong> Do not share it with anyone.') }}</li>
-    <li>{{ gettext('<strong>Keep it safe.</strong> There is no account recovery option.') }}</li>
-  </ul>
-</p>
+<ul class="explanation">
+  <li>{{ gettext('<strong>Keep it secret.</strong> Do not share it with anyone.') }}</li>
+  <li>{{ gettext('<strong>Keep it safe.</strong> There is no account recovery option.') }}</li>
+</ul>
 
 <form id="create-form" method="post" action="/create" autocomplete="off">
   <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
