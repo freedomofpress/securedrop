@@ -221,7 +221,6 @@
   /var/www/securedrop/source_app/main.py r,
   /var/www/securedrop/source_app/session_manager.py r,
   /var/www/securedrop/source_app/utils.py r,
-  /var/www/securedrop/source_templates/banner_warning_flashed.html r,
   /var/www/securedrop/source_templates/base.html r,
   /var/www/securedrop/source_templates/error.html r,
   /var/www/securedrop/source_templates/first_submission_flashed_message.html r,
