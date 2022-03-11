@@ -4,7 +4,7 @@ from flask_babel import lazy_gettext as gettext, ngettext
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileAllowed, FileRequired
 from wtforms import Field
-from wtforms import (TextAreaField, StringField, BooleanField, HiddenField,
+from wtforms import (TextAreaField, StringField, BooleanField, HiddenField, IntegerField,
                      ValidationError)
 from wtforms.validators import InputRequired, Optional, DataRequired, StopValidation
 
@@ -12,19 +12,32 @@ from models import Journalist, InstanceConfig, HOTP_SECRET_LENGTH
 
 from typing import Any
 
+import typing
+
 
 class RequiredIf(DataRequired):
 
-    def __init__(self, other_field_name: str, *args: Any, **kwargs: Any) -> None:
+    def __init__(self,
+                 other_field_name: str,
+                 custom_message: typing.Optional[str] = None,
+                 *args: Any, **kwargs: Any) -> None:
+
         self.other_field_name = other_field_name
+        if custom_message is not None:
+            self.custom_message = custom_message
+        else:
+            self.custom_message = ""
 
     def __call__(self, form: FlaskForm, field: Field) -> None:
         if self.other_field_name in form:
             other_field = form[self.other_field_name]
             if bool(other_field.data):
-                self.message = gettext(
-                    'The "{name}" field is required when "{other_name}" is set.'
-                    .format(other_name=self.other_field_name, name=field.name))
+                if self.custom_message != "":
+                    self.message = self.custom_message
+                else:
+                    self.message = gettext(
+                        'The "{name}" field is required when "{other_name}" is set.'
+                        .format(other_name=self.other_field_name, name=field.name))
                 super(RequiredIf, self).__call__(form, field)
             else:
                 field.errors[:] = []
@@ -89,6 +102,12 @@ def check_invalid_usernames(form: FlaskForm, field: Field) -> None:
             "This username is invalid because it is reserved for internal use by the software."))
 
 
+def check_message_length(form: FlaskForm, field: Field) -> None:
+    msg_len = field.data
+    if not isinstance(msg_len, int) or msg_len < 0:
+        raise ValidationError(gettext("Please specify an integer value greater than 0."))
+
+
 class NewUserForm(FlaskForm):
     username = StringField('username', validators=[
         InputRequired(message=gettext('This field is required.')),
@@ -121,7 +140,28 @@ class ReplyForm(FlaskForm):
 
 
 class SubmissionPreferencesForm(FlaskForm):
-    prevent_document_uploads = BooleanField('prevent_document_uploads')
+    prevent_document_uploads = BooleanField(
+                                            'prevent_document_uploads',
+                                            false_values=('false', 'False', '')
+                                           )
+    prevent_short_messages = BooleanField(
+                                            'prevent_short_messages',
+                                            false_values=('false', 'False', '')
+                                           )
+    min_message_length = IntegerField('min_message_length',
+                                      validators=[
+                                          RequiredIf(
+                                              'prevent_short_messages',
+                                              gettext("To configure a minimum message length, "
+                                                      "you must set the required number of "
+                                                      "characters.")),
+                                          check_message_length],
+                                      render_kw={
+                                          'aria-describedby': 'message-length-notes'})
+    reject_codename_messages = BooleanField(
+                                            'reject_codename_messages',
+                                            false_values=('false', 'False', '')
+                                           )
 
 
 class OrgNameForm(FlaskForm):

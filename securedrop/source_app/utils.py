@@ -10,6 +10,8 @@ from flask import url_for
 from flask.sessions import SessionMixin
 from markupsafe import Markup
 from store import Storage
+from hmac import compare_digest
+from flask_babel import gettext
 
 import typing
 
@@ -19,6 +21,19 @@ from source_user import SourceUser
 
 if typing.TYPE_CHECKING:
     from typing import Optional
+
+
+def codename_detected(message: str, codename: str) -> bool:
+    """
+    Check for codenames in incoming messages. including case where user copy/pasted
+    from /generate and the visually-hidden codename heading was included
+    """
+    message = message.strip()
+    localised_label = gettext("Codename")
+    if message.startswith(localised_label):
+        message = message[len(localised_label):]
+
+    return compare_digest(message.strip(), codename)
 
 
 def clear_session_and_redirect_to_logged_out_page(flask_session: SessionMixin) -> werkzeug.Response:

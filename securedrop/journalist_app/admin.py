@@ -15,7 +15,7 @@ from sqlalchemy.orm.exc import NoResultFound
 from db import db
 from html import escape
 from models import (InstanceConfig, Journalist, InvalidUsernameException,
-                    FirstOrLastNameError, PasswordError)
+                    FirstOrLastNameError, PasswordError, Submission)
 from journalist_app.decorators import admin_required
 from journalist_app.utils import (commit_account_changes, set_diceware_password,
                                   validate_hotp_secret, revoke_token)
@@ -36,9 +36,18 @@ def make_blueprint(config: SDConfig) -> Blueprint:
     @view.route('/config', methods=('GET', 'POST'))
     @admin_required
     def manage_config() -> Union[str, werkzeug.Response]:
-        # The UI prompt ("prevent") is the opposite of the setting ("allow"):
+        if InstanceConfig.get_default().initial_message_min_len > 0:
+            prevent_short_messages = True
+        else:
+            prevent_short_messages = False
+
+        # The UI document upload prompt ("prevent") is the opposite of the setting ("allow")
         submission_preferences_form = SubmissionPreferencesForm(
-            prevent_document_uploads=not InstanceConfig.get_default().allow_document_uploads)
+            prevent_document_uploads=not InstanceConfig.get_default().allow_document_uploads,
+            prevent_short_messages=prevent_short_messages,
+            min_message_length=InstanceConfig.get_default().initial_message_min_len,
+            reject_codename_messages=InstanceConfig.get_default().reject_message_with_codename
+            )
         organization_name_form = OrgNameForm(
             organization_name=InstanceConfig.get_default().organization_name)
         logo_form = LogoForm()
@@ -67,6 +76,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
             return render_template("config.html",
                                    submission_preferences_form=submission_preferences_form,
                                    organization_name_form=organization_name_form,
+                                   max_len=Submission.MAX_MESSAGE_LEN,
                                    logo_form=logo_form)
 
     @view.route('/update-submission-preferences', methods=['POST'])
@@ -75,9 +85,17 @@ def make_blueprint(config: SDConfig) -> Blueprint:
         form = SubmissionPreferencesForm()
         if form.validate_on_submit():
             # The UI prompt ("prevent") is the opposite of the setting ("allow"):
+            allow_uploads = not form.prevent_document_uploads.data
+
+            if form.prevent_short_messages.data:
+                msg_length = form.min_message_length.data
+            else:
+                msg_length = 0
+
+            reject_codenames = form.reject_codename_messages.data
+
+            InstanceConfig.update_submission_prefs(allow_uploads, msg_length, reject_codenames)
             flash(gettext("Preferences saved."), "submission-preferences-success")
-            value = not bool(request.form.get('prevent_document_uploads'))
-            InstanceConfig.set_allow_document_uploads(value)
             return redirect(url_for('admin.manage_config') + "#config-preventuploads")
         else:
             for field, errors in list(form.errors.items()):

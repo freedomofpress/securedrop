@@ -9,9 +9,11 @@ from alembic.config import Config as AlembicConfig
 from alembic.script import ScriptDirectory
 from os import path
 from sqlalchemy import text
+from collections import OrderedDict
 
 from db import db
 from journalist_app import create_app
+
 
 MIGRATION_PATH = path.join(path.dirname(__file__), '..', 'alembic', 'versions')
 
@@ -79,10 +81,19 @@ def ddl_equal(left, right):
 
         column1 TEXT NOT NULL,
         column2 TEXT NOT NULL
+
+        Also, sometimes CHECK constraints are duplicated by alembic, like:
+        CHECK (column IN (0, 1)),
+        CHECK (column IN (0, 1)),
+        So dedupe alembic's output as well
+
     '''
     # ignore the autoindex cases
     if left is None and right is None:
         return True
+
+    # dedupe alembic's output by line
+    left = "\n".join(list(OrderedDict.fromkeys(left.split("\n"))))
 
     left = [x for x in WHITESPACE_REGEX.split(left) if x]
     right = [x for x in WHITESPACE_REGEX.split(right) if x]

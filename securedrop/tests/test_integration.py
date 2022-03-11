@@ -644,7 +644,8 @@ def test_prevent_document_uploads(source_app, journalist_app, test_admin):
     with journalist_app.test_client() as app:
         _login_user(app, test_admin)
         form = journalist_app_module.forms.SubmissionPreferencesForm(
-            prevent_document_uploads=True)
+            prevent_document_uploads=True,
+            min_message_length=0)
         resp = app.post('/admin/update-submission-preferences',
                         data=form.data,
                         follow_redirects=True)
@@ -672,7 +673,11 @@ def test_no_prevent_document_uploads(source_app, journalist_app, test_admin):
     # Set allow_document_uploads = True:
     with journalist_app.test_client() as app:
         _login_user(app, test_admin)
+        form = journalist_app_module.forms.SubmissionPreferencesForm(
+            prevent_document_uploads=False,
+            min_message_length=0)
         resp = app.post('/admin/update-submission-preferences',
+                        data=form.data,
                         follow_redirects=True)
         assert resp.status_code == 200
 
