@@ -206,7 +206,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
                 flash(gettext(
                     "Your first message must be at least {} characters long.".format(min_len)),
                     "error")
-                return redirect(f"{url_for('main.lookup')}#flashed")
+                return redirect(url_for('main.lookup'))
 
             codenames_rejected = InstanceConfig.get_default().reject_message_with_codename
             if codenames_rejected and codename_detected(msg, session['new_user_codename']):
@@ -215,7 +215,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
                     escape(gettext("Keep your codename secret, and use it to log in later"
                                    " to check for replies."))
                     )), "error")
-                return redirect(f"{url_for('main.lookup')}#flashed")
+                return redirect(url_for('main.lookup'))
 
         if not os.path.exists(Storage.get_default().path(logged_in_source.filesystem_id)):
             current_app.logger.debug("Store directory not found for source '{}', creating one."
