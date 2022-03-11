@@ -4,7 +4,19 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2018.
 #
 msgid ""
-msgstr "Project-Id-Version: SecureDrop 0.8.0~rc1\nReport-Msgid-Bugs-To: securedrop@freedom.press\nPO-Revision-Date: 2022-02-09 21:04+0000\nLast-Translator: Dimitris Maroulidis <dmaroulidis@dimitrismaroulidis.com>\nLanguage-Team: Greek <https://weblate.securedrop.org/projects/securedrop/securedrop/el/>\nLanguage: el\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=2; plural=n != 1;\nX-Generator: Weblate 4.6\nGenerated-By: Babel 2.5.1\n"
+msgstr ""
+"Project-Id-Version: SecureDrop 0.8.0~rc1\n"
+"Report-Msgid-Bugs-To: securedrop@freedom.press\n"
+"PO-Revision-Date: 2022-02-09 21:04+0000\n"
+"Last-Translator: Dimitris Maroulidis <dmaroulidis@dimitrismaroulidis.com>\n"
+"Language-Team: Greek <https://weblate.securedrop.org/projects/securedrop/securedrop/el/>\n"
+"Language: el\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.6\n"
+"Generated-By: Babel 2.5.1\n"
 
 msgid "Name too long"
 msgstr "Το όνομα είναι πολύ μεγάλο"
@@ -130,11 +142,17 @@ msgid_plural "Cannot be longer than {num} characters."
 msgstr[0] "Δεν μπορεί να περιέχει παραπάνω από {num} χαρακτήρα."
 msgstr[1] "Δεν μπορεί να περιέχει παραπάνω από {num} χαρακτήρες."
 
+msgid "Please specify an integer value greater than 0."
+msgstr ""
+
 msgid "This field is required."
 msgstr "Αυτό το πεδίο είναι υποχρεωτικό."
 
 msgid "You cannot send an empty reply."
 msgstr "Δεν μπορείτε να στείλετε κενή απάντηση."
+
+msgid "To configure a minimum message length, you must set the required number of characters."
+msgstr ""
 
 msgid "File required."
 msgstr "Απαιτείται αρχείο."
@@ -409,6 +427,9 @@ msgstr "Όταν ολοκληρώσετε την παραμετροποίηση 
 msgid "Navigation"
 msgstr "Πλοήγηση"
 
+msgid "Skip to main content"
+msgstr ""
+
 msgid "Logged on as"
 msgstr "Συνδεδεμένος/η ως"
 
@@ -532,6 +553,15 @@ msgstr "Ρυθμίσεις καταχωρήσεων"
 msgid "Prevent sources from uploading documents. Sources will still be able to send messages."
 msgstr "Να μην επιτρέπεται σε πηγές να ανεβάζουν έγγραφα. Οι πηγές θα μπορούν παρ' όλα αυτά να στέλνουν μηνύματα."
 
+msgid "Prevent sources from sending initial messages shorter than the minimum required length:"
+msgstr ""
+
+msgid "Minimum number of characters."
+msgstr ""
+
+msgid "Prevent sources from submitting their codename as an initial message."
+msgstr ""
+
 msgid "Update Submission Preferences"
 msgstr "Ενημέρωση ρυθμίσεων υποβολών"
 
@@ -549,20 +579,6 @@ msgstr "Αποστολή δοκιμαστικής ειδοποίησης OSSEC"
 
 msgid "SEND TEST OSSEC ALERT"
 msgstr "ΑΠΟΣΤΟΛΗ ΔΟΚΙΜΑΣΤΙΚΗΣ ΕΙΔΟΠΟΙΗΣΗΣ OSSEC"
-
-msgid "The following file has been selected for <strong>permanent deletion</strong>:"
-msgid_plural "The following {num} files have been selected for <strong>permanent deletion</strong>:"
-msgstr[0] "Το ακόλουθο αρχείο έχει επιλεχθεί για <strong>μόνιμη διαγραφή</strong>:"
-msgstr[1] "Τα ακόλουθα {num} αρχεία έχουν επιλεχθεί για <strong>μόνιμη διαγραφή</strong>:"
-
-msgid "Permanently Delete Files"
-msgstr "Μόνιμη διαγραφή αρχείων"
-
-msgid "PERMANENTLY DELETE FILES"
-msgstr "ΜΟΝΙΜΗ ΔΙΑΓΡΑΦΗ ΑΡΧΕΙΩΝ"
-
-msgid "Return to the list of documents for {source_name}…"
-msgstr "Επιστροφή στη λίστα εγγράφων για τον/την {source_name}…"
 
 msgid "Edit user \"{user}\""
 msgstr "Επεξεργασία χρήστη \"{user}\""
@@ -705,15 +721,6 @@ msgstr "Σύνδεση"
 msgid "LOG IN"
 msgstr "ΣΥΝΔΕΣΗ"
 
-msgid "WARNING:"
-msgstr "ΠΡΟΣΟΧΗ:"
-
-msgid "You appear to be using Tor2Web, which does not provide anonymity."
-msgstr "Φαίνεται πως χρησιμοποιείτε το Tor2Web, το οποίο δεν παρέχει ανωνυμία."
-
-msgid "Why is this dangerous?"
-msgstr "Γιατί είναι επικίνδυνο;"
-
 msgid "Field must be between 1 and {max_codename_len} characters long."
 msgstr "Το πεδίο πρέπει να περιέχει μεταξύ 1 και {max_codename_len} χαρακτήρες."
 
@@ -732,6 +739,9 @@ msgstr "Το κείμενο του μηνύματος είναι πολύ μεγ
 msgid "Large blocks of text must be uploaded as a file, not copied and pasted."
 msgstr "Μεγάλα κείμενα πρέπει να ανεβαίνουν ως αρχεία, και όχι να αντιγράφονται και να επικολλούνται."
 
+msgid "Your connection is not anonymous right now!"
+msgstr ""
+
 msgid "You were redirected because you are already logged in. If you want to create a new account, you should log out first."
 msgstr "Ανακατευθυνθήκατε επειδή είστε ήδη συνδεδεμένος. Αν θέλετε να δημιουργήσετε έναν νέο λογαριασμό, πρέπει πρώτα να αποσυνδεθείτε."
 
@@ -746,6 +756,22 @@ msgstr "Πρέπει να πληκτρολογήσετε ένα μήνυμα ή 
 
 msgid "You must enter a message."
 msgstr "Πρέπει να πληκτρολογήσετε ένα μήνυμα."
+
+#, fuzzy
+#| msgid "Must be at least {num} character long."
+#| msgid_plural "Must be at least {num} characters long."
+msgid "Your first message must be at least {} characters long."
+msgstr "Πρέπει να έχει τουλάχιστον {num} χαρακτήρα."
+
+#, fuzzy
+#| msgid "Forgot your codename?"
+msgid "Please do not submit your codename!"
+msgstr "Ξεχάσατε το κωδικό όνομά σας;"
+
+#, fuzzy
+#| msgid "If you have already submitted to journalists, log in here to check for responses."
+msgid "Keep your codename secret, and use it to log in later to check for replies."
+msgstr "Αν έχετε ήδη υποβάλλει κάτι στους δημοσιογράφους, συνδεθείτε για να ελέγξετε για απαντήσεις."
 
 msgid "Thanks! We received your message."
 msgstr "Ευχαριστούμε! Λάβαμε το μήνυμά σας."
@@ -765,8 +791,14 @@ msgstr "Όλες οι απαντήσεις διαγράφτηκαν"
 msgid "Sorry, that is not a recognized codename."
 msgstr "Συγγνώμη, το κωδικό όνομα δεν αναγνωρίζεται."
 
+msgid "Codename"
+msgstr "Κωδικό όνομα"
+
 msgid "Protecting Journalists and Sources"
 msgstr "Προστατεύοντας δημοσιογράφους και πηγές"
+
+msgid "Skip to notification"
+msgstr ""
 
 msgid "We're sorry, our SecureDrop is currently offline."
 msgstr "Συγγνώμη, αυτή τη στιγμή το SecureDrop μας είναι εκτός σύνδεσης."
@@ -801,29 +833,25 @@ msgstr "Σημείωση: Η κοινοποίηση ευαίσθητων αρχ�
 msgid "SecureDrop is a project of Freedom of the Press Foundation."
 msgstr "Το SecureDrop είναι έργο του ιδρύματος Freedom of the Press."
 
-msgid "Welcome"
-msgstr "Καλωσήλθατε"
+#, fuzzy
+#| msgid "Enter your codename"
+msgid "Get Your Codename"
+msgstr "Γράψτε το κωδικό όνομά σας"
 
-msgid "Please either write this codename down and keep it in a safe place, or memorize it."
-msgstr "Παρακαλώ είτε γράψτε και αποθηκεύστε το κωδικό όνομά σας σε κάποιο ασφαλές σημείο, ή αποστηθίστε το."
+msgid "A <em>codename</em> in SecureDrop functions as both your username and your password."
+msgstr ""
 
-msgid "This codename is what you will use in future visits to receive messages from our team in response to what you submit on the next screen."
-msgstr "Θα χρησιμοποιείτε αυτό το κωδικό όνομα σε μελλοντικές επισκέψεις σας, για να λαμβάνετε μηνύματα από την ομάδα μας, που θα απαντούν σε αυτά που θα υποβάλετε στην επόμενη οθόνη."
+msgid "You will need this codename to log into our SecureDrop later:"
+msgstr ""
 
-msgid "Codename"
-msgstr "Κωδικό όνομα"
+msgid "<strong>Keep it secret.</strong> Do not share it with anyone."
+msgstr ""
 
-msgid ""
-"Because we do not track users of our <b>SecureDrop</b>\n"
-" service, in future visits, using this codename will be the only way we have to communicate with you should we have\n"
-" questions or are interested in additional information. Unlike passwords, there is no way to retrieve a lost codename."
-msgstr "Επειδή δεν παρακολουθούμε τους χρήστες της υπηρεσίας <b>SecureDrop</b> μας,\nσε μελλοντικές επισκέψεις σας, η χρήση αυτού του κωδικού ονόματος είναι ο μοναδικός τρόπος για να επικοινωνήσουμε μαζί σας αν έχουμε απορίες ή ενδιαφερόμαστε για περισσότερες πληροφορίες. Σε αντίθεση με τους κωδικούς, δεν υπάρχει τρόπος να ανακτήσετε το κωδικό όνομα αν το χάσετε ή το ξεχάσετε."
+msgid "<strong>Keep it safe.</strong> There is no account recovery option."
+msgstr ""
 
-msgid "Submit Documents"
-msgstr "Υποβολή εγγράφων"
-
-msgid "SUBMIT DOCUMENTS"
-msgstr "ΥΠΟΒΟΛΗ ΕΓΓΡΑΦΩΝ"
+msgid "Continue"
+msgstr "Συνέχεια"
 
 msgid "Your Tor Browser's <a id=\"disable-js\" href=\"\"><b>Security Level</b></a> is too low. Use the <img src=\"{icon}\" alt=\"&quot;Security Level&quot;\"> button in your browser’s toolbar to change it."
 msgstr "Το <a id=\"disable-js\" href=\"\"><b>Επίπεδο ασφαλείας</b></a> του Tor Browser σας είναι πολύ χαμηλό. Χρησιμοποιήστε το κουμπί <img src=\"{icon}\" alt=\"&quot;Επίπεδο ασφαλείας&quot;\"> στη γραμμή εργαλειών για να το αλλάξετε."
@@ -834,11 +862,11 @@ msgstr "Πως να αλλάξετε το επίπεδο ασφαλείας σα
 msgid "Click the <img src=\"{icon}\" alt=\"&quot;Security Level&quot; button\"> in the toolbar above"
 msgstr "Πατήστε το <img src=\"{icon}\" alt=\"κουμπί &quot;Επίπεδο ασφαλείας&quot;\">στη γραμμή εργαλειών παραπάνω"
 
-msgid "Select <b>Advanced Security Settings</b>"
-msgstr "Επιλέξτε τις <b>Ρυθμίσεις ασφαλείας για προχωρημένους</b>"
+msgid "Click <b>Change</b> to open Security Level preferences"
+msgstr ""
 
-msgid "Select <b>Safest</b>"
-msgstr "Επιλέξτε <b>Ασφαλέστατο</b>"
+msgid "Select <b>Safest</b> and close the preferences tab"
+msgstr ""
 
 msgid "<a href=\"/\" aria-label=\"Follow these instructions, then refresh this page\">Refresh this page</a>, and you're done!"
 msgstr "<a href=\"/\" aria-label=\"Ακολουθήστε αυτές τις οδηγίες, και μετά ανανεώστε τη σελίδα\">Ανανεώστε τη σελίδα</a> και τελειώσατε!"
@@ -873,9 +901,6 @@ msgstr "Εισαγωγή κωδικού ονόματος"
 msgid "Enter your codename"
 msgstr "Γράψτε το κωδικό όνομά σας"
 
-msgid "Continue"
-msgstr "Συνέχεια"
-
 msgid "CANCEL"
 msgstr "ΆΚΥΡΟ"
 
@@ -884,6 +909,12 @@ msgstr "Κάτι ακόμα..."
 
 msgid "Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar. This will clear your Tor Browser activity data on this device."
 msgstr "Πατήστε το κουμπί <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>Νέα Ταυτότητα</b> στη γραμμη εργαλείων του Tor Browser σας. Αυτό θα διαγράψει τα δεδομένα δραστηριότητας του Tor Browser σας σε αυτή τη συσκευή."
+
+msgid "Show"
+msgstr "Εμφάνιση"
+
+msgid "Hide"
+msgstr "Απόκρυψη"
 
 msgid "Remember, your codename is:"
 msgstr "Θυμήσου, το κωδικό όνομά σου είναι:"
@@ -912,6 +943,9 @@ msgstr "Μέγιστο μέγεθος υποβολής: 500 MB"
 msgid "Submit"
 msgstr "Υποβολή"
 
+msgid "Anti-spam check. Do not fill this in!"
+msgstr ""
+
 msgid "Read Replies"
 msgstr "Ανάγνωση απαντήσεων"
 
@@ -920,6 +954,9 @@ msgstr "Έχετε λάβει μια απάντηση. Για να προστα�
 
 msgid "Delete this reply"
 msgstr "Διαγραφή αυτής της απάντησης"
+
+msgid "Delete reply from {timestamp}?"
+msgstr ""
 
 msgid "Delete this reply?"
 msgstr "Διαγραφή αυτής της απάντησης;"
@@ -954,17 +991,27 @@ msgstr "Σημαντικό"
 msgid "You were logged out due to inactivity. Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
 msgstr "Αποσυνδεθήκατε λόγω αδράνειας. Πατήστε το κουμπί <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>Νέα Ταυτότητα</b> στη γραμμή εργαλείων του Tor Browser σας πριν συνεχίσετε. Αυτό θα διαγράψει τα δεδομένα δραστηριότητας του Tor Browser σε αυτή τη συσκευή."
 
-msgid "Why is there a warning about Tor2Web?"
-msgstr "Γιατί υπάρχει προειδοποίηση για το Tor2Web;"
+msgid "Proxy Service Detected"
+msgstr ""
 
-msgid "Using Tor2Web to connect to SecureDrop will not protect your anonymity."
+#, fuzzy
+#| msgid "Using Tor2Web to connect to SecureDrop will not protect your anonymity."
+msgid "You appear to be using a Tor proxy service to access SecureDrop. Proxy services do not protect your anonymity."
 msgstr "Η χρήση του Tor2Web για να συνδεθείτε στο SecureDrop δεν θα προστατεύσει την ανωνυμία σας."
 
-msgid "It could be possible for anyone monitoring your Internet traffic (your government, your Internet provider), to identify you."
+#, fuzzy
+#| msgid "It could be possible for anyone monitoring your Internet traffic (your government, your Internet provider), to identify you."
+msgid "Anyone monitoring your Internet traffic &mdash; including your government, your Internet provider, or the proxy operator &mdash; may be able to identify you."
 msgstr "Είναι δυνατό να παρακολουθεί ο οποιοσδήποτε την κίνηση δικτύου σας (η κυβέρνηση, ο πάροχός σας) για να σας ταυτοποιήσει."
 
-msgid "We <strong>strongly advise</strong> you to use the <a href=\"www.torproject.org/projects/torbrowser.html\">Tor Browser</a> instead."
-msgstr "<strong>Προτείνουμε ανεπιφύλακτα</strong> να χρησιμοποιήσετε τον <a href=\"www.torproject.org/projects/torbrowser.html\">Tor Browser</a> καλύτερα."
+msgid "Always use <a href=\"www.torproject.org/projects/torbrowser.html\">Tor Browser</a> to access SecureDrop. Valid SecureDrop site addresses end with <code>.onion</code>. The correct address for this site is:"
+msgstr ""
+
+msgid "If you are already using Tor Browser, copy the address above and generate a new identity before you access SecureDrop."
+msgstr ""
+
+msgid "If there is a reasonable risk of your Internet traffic being monitored, consider connecting from a different location or network."
+msgstr ""
 
 msgid "You Should Use Tor Browser"
 msgstr "Καλό θα ήταν να χρησιμοποιήσετε τον Tor Browser"
@@ -1020,6 +1067,64 @@ msgstr "<strong>Σημαντικό:</strong> Αν επιθυμείτε να δι
 
 msgid "Back to submission page"
 msgstr "Πίσω στη σελίδα υποβολών"
+
+#~ msgid "The following file has been selected for <strong>permanent deletion</strong>:"
+#~ msgid_plural "The following {num} files have been selected for <strong>permanent deletion</strong>:"
+#~ msgstr[0] "Το ακόλουθο αρχείο έχει επιλεχθεί για <strong>μόνιμη διαγραφή</strong>:"
+#~ msgstr[1] "Τα ακόλουθα {num} αρχεία έχουν επιλεχθεί για <strong>μόνιμη διαγραφή</strong>:"
+
+#~ msgid "Permanently Delete Files"
+#~ msgstr "Μόνιμη διαγραφή αρχείων"
+
+#~ msgid "PERMANENTLY DELETE FILES"
+#~ msgstr "ΜΟΝΙΜΗ ΔΙΑΓΡΑΦΗ ΑΡΧΕΙΩΝ"
+
+#~ msgid "Return to the list of documents for {source_name}…"
+#~ msgstr "Επιστροφή στη λίστα εγγράφων για τον/την {source_name}…"
+
+#~ msgid "WARNING:"
+#~ msgstr "ΠΡΟΣΟΧΗ:"
+
+#~ msgid "You appear to be using Tor2Web, which does not provide anonymity."
+#~ msgstr "Φαίνεται πως χρησιμοποιείτε το Tor2Web, το οποίο δεν παρέχει ανωνυμία."
+
+#~ msgid "Why is this dangerous?"
+#~ msgstr "Γιατί είναι επικίνδυνο;"
+
+#~ msgid "Welcome"
+#~ msgstr "Καλωσήλθατε"
+
+#~ msgid "Please either write this codename down and keep it in a safe place, or memorize it."
+#~ msgstr "Παρακαλώ είτε γράψτε και αποθηκεύστε το κωδικό όνομά σας σε κάποιο ασφαλές σημείο, ή αποστηθίστε το."
+
+#~ msgid "This codename is what you will use in future visits to receive messages from our team in response to what you submit on the next screen."
+#~ msgstr "Θα χρησιμοποιείτε αυτό το κωδικό όνομα σε μελλοντικές επισκέψεις σας, για να λαμβάνετε μηνύματα από την ομάδα μας, που θα απαντούν σε αυτά που θα υποβάλετε στην επόμενη οθόνη."
+
+#~ msgid ""
+#~ "Because we do not track users of our <b>SecureDrop</b>\n"
+#~ " service, in future visits, using this codename will be the only way we have to communicate with you should we have\n"
+#~ " questions or are interested in additional information. Unlike passwords, there is no way to retrieve a lost codename."
+#~ msgstr ""
+#~ "Επειδή δεν παρακολουθούμε τους χρήστες της υπηρεσίας <b>SecureDrop</b> μας,\n"
+#~ "σε μελλοντικές επισκέψεις σας, η χρήση αυτού του κωδικού ονόματος είναι ο μοναδικός τρόπος για να επικοινωνήσουμε μαζί σας αν έχουμε απορίες ή ενδιαφερόμαστε για περισσότερες πληροφορίες. Σε αντίθεση με τους κωδικούς, δεν υπάρχει τρόπος να ανακτήσετε το κωδικό όνομα αν το χάσετε ή το ξεχάσετε."
+
+#~ msgid "Submit Documents"
+#~ msgstr "Υποβολή εγγράφων"
+
+#~ msgid "SUBMIT DOCUMENTS"
+#~ msgstr "ΥΠΟΒΟΛΗ ΕΓΓΡΑΦΩΝ"
+
+#~ msgid "Select <b>Advanced Security Settings</b>"
+#~ msgstr "Επιλέξτε τις <b>Ρυθμίσεις ασφαλείας για προχωρημένους</b>"
+
+#~ msgid "Select <b>Safest</b>"
+#~ msgstr "Επιλέξτε <b>Ασφαλέστατο</b>"
+
+#~ msgid "Why is there a warning about Tor2Web?"
+#~ msgstr "Γιατί υπάρχει προειδοποίηση για το Tor2Web;"
+
+#~ msgid "We <strong>strongly advise</strong> you to use the <a href=\"www.torproject.org/projects/torbrowser.html\">Tor Browser</a> instead."
+#~ msgstr "<strong>Προτείνουμε ανεπιφύλακτα</strong> να χρησιμοποιήσετε τον <a href=\"www.torproject.org/projects/torbrowser.html\">Tor Browser</a> καλύτερα."
 
 #~ msgid "Invalid secret format: odd-length secret. Did you mistype the secret?"
 #~ msgstr "Άκυρη μορφή μυστικού: το μυστικό έχει μονό αριθμό ψηφίων. Μήπως κάνατε κάποιο λάθος στην πληκτρολόγηση;"
@@ -1077,12 +1182,6 @@ msgstr "Πίσω στη σελίδα υποβολών"
 
 #~ msgid "SecureDrop Home"
 #~ msgstr "Κεντρική σελίδα SecureDrop"
-
-#~ msgid "Show"
-#~ msgstr "Εμφάνιση"
-
-#~ msgid "Hide"
-#~ msgstr "Απόκρυψη"
 
 #~ msgid "— No Messages —"
 #~ msgstr "— Δεν υπάρχουν μηνύματα —"
@@ -1239,9 +1338,6 @@ msgstr "Πίσω στη σελίδα υποβολών"
 
 #~ msgid "Already submitted something?"
 #~ msgstr "Έχετε ήδη υποβάλλει κάτι;"
-
-#~ msgid "If you have already submitted to journalists, log in here to check for responses."
-#~ msgstr "Αν έχετε ήδη υποβάλλει κάτι στους δημοσιογράφους, συνδεθείτε για να ελέγξετε για απαντήσεις."
 
 #~ msgid "CHECK FOR A RESPONSE"
 #~ msgstr "ΕΛΕΓΧΟΣ ΓΙΑ ΑΠΑΝΤΗΣΕΙΣ"

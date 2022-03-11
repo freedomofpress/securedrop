@@ -4,7 +4,20 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
 # Ahmad Gharbeia أحمد غربية <ahmad@gharbeia.org>, 2017.
 msgid ""
-msgstr "Project-Id-Version: SecureDrop 0.3.12\nReport-Msgid-Bugs-To: securedrop@freedom.press\nPOT-Creation-Date: 2017-09-02 07:28+0000\nPO-Revision-Date: 2022-02-15 22:04+0000\nLast-Translator: Ahmed Essam <ahmedessamdev@gmail.com>\nLanguage-Team: Arabic <https://weblate.securedrop.org/projects/securedrop/securedrop/ar/>\nLanguage: ar\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\nX-Generator: Weblate 4.6\nGenerated-By: Babel 2.4.0\n"
+msgstr ""
+"Project-Id-Version: SecureDrop 0.3.12\n"
+"Report-Msgid-Bugs-To: securedrop@freedom.press\n"
+"POT-Creation-Date: 2017-09-02 07:28+0000\n"
+"PO-Revision-Date: 2022-02-15 22:04+0000\n"
+"Last-Translator: Ahmed Essam <ahmedessamdev@gmail.com>\n"
+"Language-Team: Arabic <https://weblate.securedrop.org/projects/securedrop/securedrop/ar/>\n"
+"Language: ar\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
+"X-Generator: Weblate 4.6\n"
+"Generated-By: Babel 2.4.0\n"
 
 msgid "Name too long"
 msgstr "الاسم طويلٌ جداً"
@@ -146,11 +159,17 @@ msgstr[3] "هذا الحقل لا يقبل أكثر من {num} حروف."
 msgstr[4] "هذا الحقل لا يقبل أكثر من {num} حرفًا."
 msgstr[5] "هذا الحقل لا يقبل أكثر من {num} حرفًا."
 
+msgid "Please specify an integer value greater than 0."
+msgstr ""
+
 msgid "This field is required."
 msgstr "هذا الحقل مطلوب."
 
 msgid "You cannot send an empty reply."
 msgstr "لا يمكن إرسال ردّ فارغ."
+
+msgid "To configure a minimum message length, you must set the required number of characters."
+msgstr ""
 
 msgid "File required."
 msgstr "يجب اختيار ملف."
@@ -449,6 +468,9 @@ msgstr "بعد إتمام ضبط مفتاح الاستيثاق \"YubiKey\" أد�
 msgid "Navigation"
 msgstr "التنقل"
 
+msgid "Skip to main content"
+msgstr ""
+
 msgid "Logged on as"
 msgstr "والج باسم"
 
@@ -572,6 +594,15 @@ msgstr "تفضيلات الإرسال"
 msgid "Prevent sources from uploading documents. Sources will still be able to send messages."
 msgstr "منع المصادر من رفع وثائق. سوف تظل المصادر قادرة على توجيه رسائل."
 
+msgid "Prevent sources from sending initial messages shorter than the minimum required length:"
+msgstr ""
+
+msgid "Minimum number of characters."
+msgstr ""
+
+msgid "Prevent sources from submitting their codename as an initial message."
+msgstr ""
+
 msgid "Update Submission Preferences"
 msgstr "تحديث تفضيلات الإرسال"
 
@@ -589,24 +620,6 @@ msgstr "إرسال الإنذار الخاص بإختبار OSSEC"
 
 msgid "SEND TEST OSSEC ALERT"
 msgstr "أرسل تنبيه OSSEC تجريبي"
-
-msgid "The following file has been selected for <strong>permanent deletion</strong>:"
-msgid_plural "The following {num} files have been selected for <strong>permanent deletion</strong>:"
-msgstr[0] "لم يُختر أيّ ملف<strong> لحذفه نهائيا</strong>:"
-msgstr[1] "اختير الملف التالي <strong>لحذفه نهائيا</strong>:"
-msgstr[2] "اختير الملفان التاليان <strong>لحذفهما نهائيا</strong>:"
-msgstr[3] "اختيرت الملفات {num} التالية <strong>لحذفها نهائيا</strong>:"
-msgstr[4] "اختيرت الملفات {num} التالية <strong>لحذفها نهائيا</strong>:"
-msgstr[5] "اختيرت الملفات {num} التالية <strong>لحذفها نهائيا</strong>:"
-
-msgid "Permanently Delete Files"
-msgstr "حذف الملفات نهائيا"
-
-msgid "PERMANENTLY DELETE FILES"
-msgstr "احذف الملفات نهائيا"
-
-msgid "Return to the list of documents for {source_name}…"
-msgstr "العودة إلى قائمة مستندات {source_name}…"
 
 msgid "Edit user \"{user}\""
 msgstr "تعديل حساب المستخدم \"{user}\""
@@ -749,15 +762,6 @@ msgstr "تسجيل الدخول"
 msgid "LOG IN"
 msgstr "لِج"
 
-msgid "WARNING:"
-msgstr "تحذير:"
-
-msgid "You appear to be using Tor2Web, which does not provide anonymity."
-msgstr "يبدو أنك تستخدم Tor2Web الذي لا يوفر خاصية إخفاء الهوية."
-
-msgid "Why is this dangerous?"
-msgstr "لماذا يُعد هذا خطيرًا؟"
-
 msgid "Field must be between 1 and {max_codename_len} characters long."
 msgstr "يجب أن يتراوح طول الحقل بين محرف واحد و&nbsp;{max_codename_len} محرفا."
 
@@ -776,6 +780,9 @@ msgstr "إن نص الرسالة طويلٌ جداً."
 msgid "Large blocks of text must be uploaded as a file, not copied and pasted."
 msgstr "يجب تحميل النصوص الكبيرة والطويلة كملفات مرفقة وبالتالي عدم نسخها ولصقها."
 
+msgid "Your connection is not anonymous right now!"
+msgstr ""
+
 msgid "You were redirected because you are already logged in. If you want to create a new account, you should log out first."
 msgstr "تمت إعادة توجيهك إلى حسابك لأنّك والج إليه بالفعل. إنَ كنت تريد إنشاء حساب جديد فعليك الخروج من هذا الحساب أوّلا."
 
@@ -790,6 +797,22 @@ msgstr "يجب إدخال نصّ رسالة أو اختيار ملف لإيدا�
 
 msgid "You must enter a message."
 msgstr "يجب إدخال نصّ رسالة."
+
+#, fuzzy
+#| msgid "Must be at least {num} character long."
+#| msgid_plural "Must be at least {num} characters long."
+msgid "Your first message must be at least {} characters long."
+msgstr "يجب ألا يحوي أي حرف."
+
+#, fuzzy
+#| msgid "Forgot your codename?"
+msgid "Please do not submit your codename!"
+msgstr "هل نسيت اسمك الرمزي بك؟"
+
+#, fuzzy
+#| msgid "If you have already submitted to journalists, log in here to check for responses."
+msgid "Keep your codename secret, and use it to log in later to check for replies."
+msgstr "إذا كنت قد أودعت مسبقًا مستندات لدى صحافيينا فلِج هنا لترى إن وصلتك منهم ردود."
 
 msgid "Thanks! We received your message."
 msgstr "شكرا! لقد تلقينا الرسالة."
@@ -809,8 +832,14 @@ msgstr "حُذِفَت كُلّ الردود"
 msgid "Sorry, that is not a recognized codename."
 msgstr "عذرًا، لا يمكن التعرف على الاسم الرمزي."
 
+msgid "Codename"
+msgstr "الاسم الرمزي"
+
 msgid "Protecting Journalists and Sources"
 msgstr "لحماية الصحافيين و&nbsp;المصادر"
+
+msgid "Skip to notification"
+msgstr ""
 
 msgid "We're sorry, our SecureDrop is currently offline."
 msgstr "عذرا، SecureDrop الخاص بنا غير متصل حاليا."
@@ -845,32 +874,25 @@ msgstr "يرجى الانتباه: قد تعرّضك مشاركة وثائق ح�
 msgid "SecureDrop is a project of Freedom of the Press Foundation."
 msgstr "إن سيكيور دروب SecureDrop لمشروع من مؤسسة حرية الصحافة Freedom of the Press Foundation."
 
-msgid "Welcome"
-msgstr "أهلا بك"
+#, fuzzy
+#| msgid "Enter your codename"
+msgid "Get Your Codename"
+msgstr "أدخل اسمك الرمزي"
 
-msgid "Please either write this codename down and keep it in a safe place, or memorize it."
-msgstr "يجب عليك إمّا تدوين هذا الاسم الرمزي و&nbsp;حفظه في مكان آمن، أو التيقّن من حفظه في ذاكرتك."
-
-msgid "This codename is what you will use in future visits to receive messages from our team in response to what you submit on the next screen."
-msgstr "هذا الاسم الرمزي هو ما ستستعمله في زياراتك المقبلة لتلقي الرسائل من فريقنا ردّا على ما ستودعه في الخطوة التالية."
-
-msgid "Codename"
-msgstr "الاسم الرمزي"
-
-msgid ""
-"Because we do not track users of our <b>SecureDrop</b>\n"
-" service, in future visits, using this codename will be the only way we have to communicate with you should we have\n"
-" questions or are interested in additional information. Unlike passwords, there is no way to retrieve a lost codename."
+msgid "A <em>codename</em> in SecureDrop functions as both your username and your password."
 msgstr ""
-"لاحظ أننا لا نتتبّع مستخدمي خدمة <b>SecureDrop</b>،\n"
-"لذا فاستعمال الاسم الرمزي في الزيارات المقبلة هو الوسيلة الوحيدة التي يمكننا بها التواصل معك في حال وجود أسئلة\n"
-" أو اهتمام بمزيد من المعلومات. وعلى خلاف كلمات السر، لا توجد أيّة وسيلة لاسترجاع الاسم الرمزي في حال فقدانه."
 
-msgid "Submit Documents"
-msgstr "إرسال المستندات"
+msgid "You will need this codename to log into our SecureDrop later:"
+msgstr ""
 
-msgid "SUBMIT DOCUMENTS"
-msgstr "أودع مستندات"
+msgid "<strong>Keep it secret.</strong> Do not share it with anyone."
+msgstr ""
+
+msgid "<strong>Keep it safe.</strong> There is no account recovery option."
+msgstr ""
+
+msgid "Continue"
+msgstr "الاستمرار"
 
 msgid "Your Tor Browser's <a id=\"disable-js\" href=\"\"><b>Security Level</b></a> is too low. Use the <img src=\"{icon}\" alt=\"&quot;Security Level&quot;\"> button in your browser’s toolbar to change it."
 msgstr "حاليًا <a id=\"disable-js\" href=\"\"><b>مستوى الأمان</b></a> في متصفّح تور أضعف مما ينبغي. اضغط على زرّ <img src=\"{icon}\" alt=\"&quot;مستوى الأمان&quot;\"> &nbsp في شريط أدوات متصفحك لتغييرها."
@@ -881,11 +903,11 @@ msgstr "كيفية تغيير مستوى الأمان الخاص بك"
 msgid "Click the <img src=\"{icon}\" alt=\"&quot;Security Level&quot; button\"> in the toolbar above"
 msgstr "اضغط على زرّ <img src=\"{icon}\" alt=\"&quot;مستوى الأمان&quot; زرر\"> في شريط الأدوات أعلاه"
 
-msgid "Select <b>Advanced Security Settings</b>"
-msgstr "اختَر <b>إعدادات الأمان المتقدمة</b>"
+msgid "Click <b>Change</b> to open Security Level preferences"
+msgstr ""
 
-msgid "Select <b>Safest</b>"
-msgstr "اختَر <b>أقصى أمان</b>"
+msgid "Select <b>Safest</b> and close the preferences tab"
+msgstr ""
 
 msgid "<a href=\"/\" aria-label=\"Follow these instructions, then refresh this page\">Refresh this page</a>, and you're done!"
 msgstr "<a href=\"/\" aria-label=\"اتبع هذه التعليمات ثم قم بانعاش هذه الصفحة\">أنعش هذه الصفحة</a> فتكون قد أنجزت!"
@@ -920,9 +942,6 @@ msgstr "أدخل الاسم الرمزي"
 msgid "Enter your codename"
 msgstr "أدخل اسمك الرمزي"
 
-msgid "Continue"
-msgstr "الاستمرار"
-
 msgid "CANCEL"
 msgstr "ألغ"
 
@@ -931,6 +950,12 @@ msgstr "هناك أمرٌ آخر نود أن نلفت نظرك إليه..."
 
 msgid "Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar. This will clear your Tor Browser activity data on this device."
 msgstr "اضغط على الزر <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>هوية جديدة</b> في شريط متصفحك تور إذ أن ذلك من شأنه أن يمسح أي نشاط قمت به على متصفح تور من هذا الجهاز."
+
+msgid "Show"
+msgstr "أظهر"
+
+msgid "Hide"
+msgstr "اخفِ"
 
 msgid "Remember, your codename is:"
 msgstr "تذكر أنّ اسمك الرمزي:"
@@ -959,6 +984,9 @@ msgstr "الحجم الأقصى الممكن رفعه: 500 ميجابايت"
 msgid "Submit"
 msgstr "إرسال"
 
+msgid "Anti-spam check. Do not fill this in!"
+msgstr ""
+
 msgid "Read Replies"
 msgstr "قراءة الردود"
 
@@ -967,6 +995,9 @@ msgstr "لقد تلقيت ردّا. لدواعي حماية هويتك إذا ح
 
 msgid "Delete this reply"
 msgstr "أتريد حذف هذا الرد"
+
+msgid "Delete reply from {timestamp}?"
+msgstr ""
 
 msgid "Delete this reply?"
 msgstr "أتريد حذف هذا الرد؟"
@@ -1001,17 +1032,27 @@ msgstr "هام"
 msgid "You were logged out due to inactivity. Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
 msgstr "لقد تم إخراجك من الحساب نظراً لعدم نشاطك. اضغط على زر <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>هوية جديدة</b>في متصفحك تور. إن ذلك سيمسح أي نشاط لك على متصفح تور في هذا الجهاز."
 
-msgid "Why is there a warning about Tor2Web?"
-msgstr "لماذا يوجد تحذير بشأن Tor2Web؟"
+msgid "Proxy Service Detected"
+msgstr ""
 
-msgid "Using Tor2Web to connect to SecureDrop will not protect your anonymity."
+#, fuzzy
+#| msgid "Using Tor2Web to connect to SecureDrop will not protect your anonymity."
+msgid "You appear to be using a Tor proxy service to access SecureDrop. Proxy services do not protect your anonymity."
 msgstr "إنّ استخدام Tor2Web للنفاذ إلى SecureDrop لا يحقّق لك المجهولية."
 
-msgid "It could be possible for anyone monitoring your Internet traffic (your government, your Internet provider), to identify you."
+#, fuzzy
+#| msgid "It could be possible for anyone monitoring your Internet traffic (your government, your Internet provider), to identify you."
+msgid "Anyone monitoring your Internet traffic &mdash; including your government, your Internet provider, or the proxy operator &mdash; may be able to identify you."
 msgstr "بوسع أي جهة تراقب الإنترنت (مثل مقدم خدمة الاتصال بالإنترنت أو السُّلطات) معرفة هويتك."
 
-msgid "We <strong>strongly advise</strong> you to use the <a href=\"www.torproject.org/projects/torbrowser.html\">Tor Browser</a> instead."
-msgstr "<strong>نحثّكم بشدة</strong> على استخدام <a href=\"www.torproject.org/projects/torbrowser.html\">متصفح تور</a> عِوضًا عن غيره."
+msgid "Always use <a href=\"www.torproject.org/projects/torbrowser.html\">Tor Browser</a> to access SecureDrop. Valid SecureDrop site addresses end with <code>.onion</code>. The correct address for this site is:"
+msgstr ""
+
+msgid "If you are already using Tor Browser, copy the address above and generate a new identity before you access SecureDrop."
+msgstr ""
+
+msgid "If there is a reasonable risk of your Internet traffic being monitored, consider connecting from a different location or network."
+msgstr ""
 
 msgid "You Should Use Tor Browser"
 msgstr "الأحرى بك استخدام متصفح تور"
@@ -1068,6 +1109,69 @@ msgstr "<strong>هام:</strong> إذا كنت ترغب في البقاء مجه
 msgid "Back to submission page"
 msgstr "الرجوع إلى صفحة الإيداع"
 
+#~ msgid "The following file has been selected for <strong>permanent deletion</strong>:"
+#~ msgid_plural "The following {num} files have been selected for <strong>permanent deletion</strong>:"
+#~ msgstr[0] "لم يُختر أيّ ملف<strong> لحذفه نهائيا</strong>:"
+#~ msgstr[1] "اختير الملف التالي <strong>لحذفه نهائيا</strong>:"
+#~ msgstr[2] "اختير الملفان التاليان <strong>لحذفهما نهائيا</strong>:"
+#~ msgstr[3] "اختيرت الملفات {num} التالية <strong>لحذفها نهائيا</strong>:"
+#~ msgstr[4] "اختيرت الملفات {num} التالية <strong>لحذفها نهائيا</strong>:"
+#~ msgstr[5] "اختيرت الملفات {num} التالية <strong>لحذفها نهائيا</strong>:"
+
+#~ msgid "Permanently Delete Files"
+#~ msgstr "حذف الملفات نهائيا"
+
+#~ msgid "PERMANENTLY DELETE FILES"
+#~ msgstr "احذف الملفات نهائيا"
+
+#~ msgid "Return to the list of documents for {source_name}…"
+#~ msgstr "العودة إلى قائمة مستندات {source_name}…"
+
+#~ msgid "WARNING:"
+#~ msgstr "تحذير:"
+
+#~ msgid "You appear to be using Tor2Web, which does not provide anonymity."
+#~ msgstr "يبدو أنك تستخدم Tor2Web الذي لا يوفر خاصية إخفاء الهوية."
+
+#~ msgid "Why is this dangerous?"
+#~ msgstr "لماذا يُعد هذا خطيرًا؟"
+
+#~ msgid "Welcome"
+#~ msgstr "أهلا بك"
+
+#~ msgid "Please either write this codename down and keep it in a safe place, or memorize it."
+#~ msgstr "يجب عليك إمّا تدوين هذا الاسم الرمزي و&nbsp;حفظه في مكان آمن، أو التيقّن من حفظه في ذاكرتك."
+
+#~ msgid "This codename is what you will use in future visits to receive messages from our team in response to what you submit on the next screen."
+#~ msgstr "هذا الاسم الرمزي هو ما ستستعمله في زياراتك المقبلة لتلقي الرسائل من فريقنا ردّا على ما ستودعه في الخطوة التالية."
+
+#~ msgid ""
+#~ "Because we do not track users of our <b>SecureDrop</b>\n"
+#~ " service, in future visits, using this codename will be the only way we have to communicate with you should we have\n"
+#~ " questions or are interested in additional information. Unlike passwords, there is no way to retrieve a lost codename."
+#~ msgstr ""
+#~ "لاحظ أننا لا نتتبّع مستخدمي خدمة <b>SecureDrop</b>،\n"
+#~ "لذا فاستعمال الاسم الرمزي في الزيارات المقبلة هو الوسيلة الوحيدة التي يمكننا بها التواصل معك في حال وجود أسئلة\n"
+#~ " أو اهتمام بمزيد من المعلومات. وعلى خلاف كلمات السر، لا توجد أيّة وسيلة لاسترجاع الاسم الرمزي في حال فقدانه."
+
+#~ msgid "Submit Documents"
+#~ msgstr "إرسال المستندات"
+
+#~ msgid "SUBMIT DOCUMENTS"
+#~ msgstr "أودع مستندات"
+
+#~ msgid "Select <b>Advanced Security Settings</b>"
+#~ msgstr "اختَر <b>إعدادات الأمان المتقدمة</b>"
+
+#~ msgid "Select <b>Safest</b>"
+#~ msgstr "اختَر <b>أقصى أمان</b>"
+
+#~ msgid "Why is there a warning about Tor2Web?"
+#~ msgstr "لماذا يوجد تحذير بشأن Tor2Web؟"
+
+#~ msgid "We <strong>strongly advise</strong> you to use the <a href=\"www.torproject.org/projects/torbrowser.html\">Tor Browser</a> instead."
+#~ msgstr "<strong>نحثّكم بشدة</strong> على استخدام <a href=\"www.torproject.org/projects/torbrowser.html\">متصفح تور</a> عِوضًا عن غيره."
+
 #~ msgid "Invalid secret format: odd-length secret. Did you mistype the secret?"
 #~ msgstr "صيغة البيانات السرية غير صحيحة: عدد كلمات العبارة السرية يجب أن يكون زوجيًّا لا فرديًّا. هل أخطأت في كتابة العبارة السرية؟"
 
@@ -1117,12 +1221,6 @@ msgstr "الرجوع إلى صفحة الإيداع"
 
 #~ msgid "SecureDrop Home"
 #~ msgstr "SecureDrop الصفحة الرئيسية"
-
-#~ msgid "Show"
-#~ msgstr "أظهر"
-
-#~ msgid "Hide"
-#~ msgstr "اخفِ"
 
 #~ msgid "— No Messages —"
 #~ msgstr "—ليس هناك أي رسالة—"
@@ -1294,9 +1392,6 @@ msgstr "الرجوع إلى صفحة الإيداع"
 
 #~ msgid "Already submitted something?"
 #~ msgstr "هل سبق لك إيداع شيء؟"
-
-#~ msgid "If you have already submitted to journalists, log in here to check for responses."
-#~ msgstr "إذا كنت قد أودعت مسبقًا مستندات لدى صحافيينا فلِج هنا لترى إن وصلتك منهم ردود."
 
 #~ msgid "CHECK FOR A RESPONSE"
 #~ msgstr "تَفحَّص إنْ وصلك رَدّ منّا"

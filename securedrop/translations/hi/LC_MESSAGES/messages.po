@@ -146,11 +146,17 @@ msgid_plural "Cannot be longer than {num} characters."
 msgstr[0] "{num} वर्ण से अधिक लंबा नहीं होना चाहिए।"
 msgstr[1] "{num} अक्षर से लंबा नहीं होना चाहिए।"
 
+msgid "Please specify an integer value greater than 0."
+msgstr ""
+
 msgid "This field is required."
 msgstr "यह फ़ील्ड आवश्यक है।"
 
 msgid "You cannot send an empty reply."
 msgstr "आप एक खाली जवाब नहीं भेज सकते।"
+
+msgid "To configure a minimum message length, you must set the required number of characters."
+msgstr ""
 
 msgid "File required."
 msgstr "आवश्यक फाइल।"
@@ -437,6 +443,9 @@ msgstr "एक बार जब आप अपने YubiKey को कॉन्�
 msgid "Navigation"
 msgstr "प्रमाणीकरण संख्या"
 
+msgid "Skip to main content"
+msgstr ""
+
 msgid "Logged on as"
 msgstr "जैसे लॉग ऑन"
 
@@ -572,6 +581,15 @@ msgstr "सबमिशन पसंदगी"
 msgid "Prevent sources from uploading documents. Sources will still be able to send messages."
 msgstr "दस्तावेज़ अपलोड करने से स्रोतों को रोकें। स्रोत अभी भी संदेश भेजने में सक्षम होंगे।"
 
+msgid "Prevent sources from sending initial messages shorter than the minimum required length:"
+msgstr ""
+
+msgid "Minimum number of characters."
+msgstr ""
+
+msgid "Prevent sources from submitting their codename as an initial message."
+msgstr ""
+
 #, fuzzy
 #| msgid "Submission Preferences"
 msgid "Update Submission Preferences"
@@ -591,20 +609,6 @@ msgstr ""
 
 msgid "SEND TEST OSSEC ALERT"
 msgstr "परीक्षण OSSEC अलर्ट भेजें"
-
-msgid "The following file has been selected for <strong>permanent deletion</strong>:"
-msgid_plural "The following {num} files have been selected for <strong>permanent deletion</strong>:"
-msgstr[0] "निम्न फ़ाइल को <strong>स्थायी </strong>रूप से मिटने के लिए लिए चुना गया है:"
-msgstr[1] "निम्न {num} फाइलों को <strong>स्थायी </strong>रूप से मिटने के लिए लिए चुना गया है:"
-
-msgid "Permanently Delete Files"
-msgstr ""
-
-msgid "PERMANENTLY DELETE FILES"
-msgstr "स्थायी रूप से फ़ाइलें हटाएं"
-
-msgid "Return to the list of documents for {source_name}…"
-msgstr "{source_name} के लिए दस्तावेज़ों की सूची पर लौटें…"
 
 msgid "Edit user \"{user}\""
 msgstr "उपयोगकर्ता \"{user}\" संपादित करें"
@@ -759,15 +763,6 @@ msgstr "लोग आउट"
 msgid "LOG IN"
 msgstr "लॉग इन"
 
-msgid "WARNING:"
-msgstr "चेतावनी:"
-
-msgid "You appear to be using Tor2Web, which does not provide anonymity."
-msgstr "आप Tor2Web का उपयोग कर रहे हैं, जो गुमनामी प्रदान नहीं करता है।"
-
-msgid "Why is this dangerous?"
-msgstr "यह असुरक्षित क्यों है?"
-
 msgid "Field must be between 1 and {max_codename_len} characters long."
 msgstr "फ़ील्ड 1 और {max_codename_len} वर्णों के बीच लंबा होना चाहिए।"
 
@@ -786,6 +781,9 @@ msgstr "संदेश पाठ बहुत लंबा है |"
 msgid "Large blocks of text must be uploaded as a file, not copied and pasted."
 msgstr "पाठ के बड़े ब्लॉक को एक फ़ाइल के रूप में अपलोड किया जाना चाहिए, कॉपी और पेस्ट नहीं किया जाना चाहिए।"
 
+msgid "Your connection is not anonymous right now!"
+msgstr ""
+
 msgid "You were redirected because you are already logged in. If you want to create a new account, you should log out first."
 msgstr "आपको पुनर्निर्देशित किया गया था क्योंकि आप पहले ही लॉग इन हैं। यदि आप एक नया खाता बनाना चाहते हैं, तो आपको पहले लॉग आउट करना चाहिए।"
 
@@ -800,6 +798,22 @@ msgstr "सबमिट करने के लिए आपको कोई स
 
 msgid "You must enter a message."
 msgstr "आपको कोई संदेश दर्ज करना होगा |"
+
+#, fuzzy
+#| msgid "Must be at least {num} character long."
+#| msgid_plural "Must be at least {num} characters long."
+msgid "Your first message must be at least {} characters long."
+msgstr "कम से कम {num} वर्ण लंबा होना चाहिए।"
+
+#, fuzzy
+#| msgid "Forgot your codename?"
+msgid "Please do not submit your codename!"
+msgstr "अपना संकेत नाम भूल गए?"
+
+#, fuzzy
+#| msgid "If you have already submitted to journalists, log in here to check for responses."
+msgid "Keep your codename secret, and use it to log in later to check for replies."
+msgstr "यदि आप पहले से ही पत्रकारों को जमा कर चुके हैं, तो प्रतिक्रियाओं की जांच के लिए यहां लॉग इन करें।"
 
 msgid "Thanks! We received your message."
 msgstr "धन्यवाद! हमें आपका संदेशा मिला|"
@@ -819,8 +833,16 @@ msgstr "सभी उत्तर हटा दिए गए हैं"
 msgid "Sorry, that is not a recognized codename."
 msgstr "क्षमा करें, वह एक मान्यता प्राप्त कोडनाम नहीं है |"
 
+#, fuzzy
+#| msgid "Enter Codename"
+msgid "Codename"
+msgstr "संकेत नाम दर्ज करें"
+
 msgid "Protecting Journalists and Sources"
 msgstr "पत्रकारों और स्रोतों की रक्षा करते हुए"
+
+msgid "Skip to notification"
+msgstr ""
 
 msgid "We're sorry, our SecureDrop is currently offline."
 msgstr "हमें खेद है, हमारा SecureDrop वर्तमान में ऑफ़लाइन है।"
@@ -855,34 +877,25 @@ msgstr "कृपया ध्यान दें: Tor और SecureDrop द्�
 msgid "SecureDrop is a project of Freedom of the Press Foundation."
 msgstr "Securedrop Freedom of the Press Foundation का एक प्रोजेक्ट है।"
 
-msgid "Welcome"
-msgstr "स्वागत हे"
-
-msgid "Please either write this codename down and keep it in a safe place, or memorize it."
-msgstr "कृपया यह संकेत नाम नीचे लिखें और इसे किसी सुरक्षित स्थान पर रखें, या इसे याद रखें।"
-
-msgid "This codename is what you will use in future visits to receive messages from our team in response to what you submit on the next screen."
-msgstr "यह संकेत नाम आप अगली स्क्रीन पर सबमिट की गई प्रतिक्रिया के उत्तर में हमारे टीम से संदेश प्राप्त करने के लिए भविष्य में आने वाले दौरा में उपयोग करें।"
-
 #, fuzzy
-#| msgid "Enter Codename"
-msgid "Codename"
-msgstr "संकेत नाम दर्ज करें"
+#| msgid "Enter your codename"
+msgid "Get Your Codename"
+msgstr "आपका संकेत नाम दर्ज करें"
 
-msgid ""
-"Because we do not track users of our <b>SecureDrop</b>\n"
-" service, in future visits, using this codename will be the only way we have to communicate with you should we have\n"
-" questions or are interested in additional information. Unlike passwords, there is no way to retrieve a lost codename."
-msgstr ""
-"क्योंकि हम हमारे उपयोगकर्ताओं को ट्रैक नहीं करते हैं <b>SecureDrop</b>\n"
-"सेवा, भविष्य के दौरे में, इस संकेत नाम का उपयोग करने का एकमात्र तरीका है कि हमारे साथ संवाद करना चाहिए था हमारे पास होना चाहिए प्रश्न या \n"
-"अतिरिक्त जानकारी में रुचि रखते हैं। पासवर्ड के विपरीत, खोई हुई कोडनाम को पुनः प्राप्त करने का कोई तरीका नहीं है।"
-
-msgid "Submit Documents"
+msgid "A <em>codename</em> in SecureDrop functions as both your username and your password."
 msgstr ""
 
-msgid "SUBMIT DOCUMENTS"
-msgstr "दस्तावेज़ जमा करें"
+msgid "You will need this codename to log into our SecureDrop later:"
+msgstr ""
+
+msgid "<strong>Keep it secret.</strong> Do not share it with anyone."
+msgstr ""
+
+msgid "<strong>Keep it safe.</strong> There is no account recovery option."
+msgstr ""
+
+msgid "Continue"
+msgstr ""
 
 msgid "Your Tor Browser's <a id=\"disable-js\" href=\"\"><b>Security Level</b></a> is too low. Use the <img src=\"{icon}\" alt=\"&quot;Security Level&quot;\"> button in your browser’s toolbar to change it."
 msgstr "आपके Tor ब्राउज़र का <a id=\"disable-js\" href=\"\"><b>सुरक्षा स्तर</b></a> बहुत कम है। ब्राउज़र टूलबार के <img src=\"{icon}\" alt=\"&quot;सुरक्षा स्तर&quot;\"> &nbsp;बटन से इसे बदलें।"
@@ -893,11 +906,11 @@ msgstr ""
 msgid "Click the <img src=\"{icon}\" alt=\"&quot;Security Level&quot; button\"> in the toolbar above"
 msgstr "ऊपर दिये गये टूलबार मे <img src=\"{icon}\" alt=\"&quot;सुरक्षा स्तर&quot;\"> &nbsp; पर क्लिक करें"
 
-msgid "Select <b>Advanced Security Settings</b>"
-msgstr "<b>उन्न्त सुरक्षा स्तर</b> चुनें"
+msgid "Click <b>Change</b> to open Security Level preferences"
+msgstr ""
 
-msgid "Select <b>Safest</b>"
-msgstr "<b>सबसे सुरक्षित</b> चुनें"
+msgid "Select <b>Safest</b> and close the preferences tab"
+msgstr ""
 
 #, fuzzy
 #| msgid "<a href=\"/\">Refresh this page</a>, and you're done!"
@@ -934,9 +947,6 @@ msgstr "संकेत नाम दर्ज करें"
 msgid "Enter your codename"
 msgstr "आपका संकेत नाम दर्ज करें"
 
-msgid "Continue"
-msgstr ""
-
 msgid "CANCEL"
 msgstr "रद्द करें"
 
@@ -945,6 +955,12 @@ msgstr "एक और चीज़..."
 
 msgid "Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar. This will clear your Tor Browser activity data on this device."
 msgstr "अपने Tor ब्राउज़र के टूलबार में <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>नई पहचान </b> बटन पर क्लिक करें. यह इस उपकरण पर आपके Tor ब्राउज़र गतिविधि डेटा को साफ़ कर देगा."
+
+msgid "Show"
+msgstr "दिखाएं"
+
+msgid "Hide"
+msgstr "छुपाएं"
 
 msgid "Remember, your codename is:"
 msgstr "याद रखें, आपका संकेत नाम है:"
@@ -973,6 +989,9 @@ msgstr "अधिकतम अपलोड माप: 500 MB"
 msgid "Submit"
 msgstr ""
 
+msgid "Anti-spam check. Do not fill this in!"
+msgstr ""
+
 msgid "Read Replies"
 msgstr "उत्तर पढ़ें"
 
@@ -981,6 +1000,9 @@ msgstr "आपको एक उत्तर मिला है| किसी �
 
 msgid "Delete this reply"
 msgstr "यह उत्तर हटाएं"
+
+msgid "Delete reply from {timestamp}?"
+msgstr ""
 
 msgid "Delete this reply?"
 msgstr "यह उत्तर हटाएं?"
@@ -1019,17 +1041,27 @@ msgstr "जरूरी"
 msgid "You were logged out due to inactivity. Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
 msgstr "आप निष्क्रियता के कारण लॉग आउट हो गया. आगे बढ़ने से पहले अपने Tor ब्राउज़र के टूलबार में <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b> नई पहचान </b> बटन पर क्लिक करें."
 
-msgid "Why is there a warning about Tor2Web?"
-msgstr "Tor2Web के बारे में चेतावनी क्यों है?"
+msgid "Proxy Service Detected"
+msgstr ""
 
-msgid "Using Tor2Web to connect to SecureDrop will not protect your anonymity."
+#, fuzzy
+#| msgid "Using Tor2Web to connect to SecureDrop will not protect your anonymity."
+msgid "You appear to be using a Tor proxy service to access SecureDrop. Proxy services do not protect your anonymity."
 msgstr "SecureDrop से कनेक्ट करने के लिए Tor2Web का उपयोग करने से आपकी अनामिकता की रक्षा नहीं होगी।"
 
-msgid "It could be possible for anyone monitoring your Internet traffic (your government, your Internet provider), to identify you."
+#, fuzzy
+#| msgid "It could be possible for anyone monitoring your Internet traffic (your government, your Internet provider), to identify you."
+msgid "Anyone monitoring your Internet traffic &mdash; including your government, your Internet provider, or the proxy operator &mdash; may be able to identify you."
 msgstr "आपकी पहचान करने के लिए किसी भी व्यक्ति के लिए आपके इंटरनेट यातायात (आपकी सरकार, आपका इंटरनेट प्रदाता) की निगरानी करना संभव हो सकता है।"
 
-msgid "We <strong>strongly advise</strong> you to use the <a href=\"www.torproject.org/projects/torbrowser.html\">Tor Browser</a> instead."
-msgstr "हम <strong>दृढ़ता से सलाह देते हैं</strong> आप <a href=\"www.torproject.org/projects/torbrowser.html\">Tor browser</a> ब्राउज़र का उपयोग करने के लिए।"
+msgid "Always use <a href=\"www.torproject.org/projects/torbrowser.html\">Tor Browser</a> to access SecureDrop. Valid SecureDrop site addresses end with <code>.onion</code>. The correct address for this site is:"
+msgstr ""
+
+msgid "If you are already using Tor Browser, copy the address above and generate a new identity before you access SecureDrop."
+msgstr ""
+
+msgid "If there is a reasonable risk of your Internet traffic being monitored, consider connecting from a different location or network."
+msgstr ""
 
 msgid "You Should Use Tor Browser"
 msgstr "आपको Tor ब्राउज़र का इस्तेमाल करना चाहिए"
@@ -1086,6 +1118,59 @@ msgstr "<strong>महत्वपूर्ण:</strong> यदि आप गु
 msgid "Back to submission page"
 msgstr "सबमिशन पृष्ठ पर वापस जाएं"
 
+#~ msgid "The following file has been selected for <strong>permanent deletion</strong>:"
+#~ msgid_plural "The following {num} files have been selected for <strong>permanent deletion</strong>:"
+#~ msgstr[0] "निम्न फ़ाइल को <strong>स्थायी </strong>रूप से मिटने के लिए लिए चुना गया है:"
+#~ msgstr[1] "निम्न {num} फाइलों को <strong>स्थायी </strong>रूप से मिटने के लिए लिए चुना गया है:"
+
+#~ msgid "PERMANENTLY DELETE FILES"
+#~ msgstr "स्थायी रूप से फ़ाइलें हटाएं"
+
+#~ msgid "Return to the list of documents for {source_name}…"
+#~ msgstr "{source_name} के लिए दस्तावेज़ों की सूची पर लौटें…"
+
+#~ msgid "WARNING:"
+#~ msgstr "चेतावनी:"
+
+#~ msgid "You appear to be using Tor2Web, which does not provide anonymity."
+#~ msgstr "आप Tor2Web का उपयोग कर रहे हैं, जो गुमनामी प्रदान नहीं करता है।"
+
+#~ msgid "Why is this dangerous?"
+#~ msgstr "यह असुरक्षित क्यों है?"
+
+#~ msgid "Welcome"
+#~ msgstr "स्वागत हे"
+
+#~ msgid "Please either write this codename down and keep it in a safe place, or memorize it."
+#~ msgstr "कृपया यह संकेत नाम नीचे लिखें और इसे किसी सुरक्षित स्थान पर रखें, या इसे याद रखें।"
+
+#~ msgid "This codename is what you will use in future visits to receive messages from our team in response to what you submit on the next screen."
+#~ msgstr "यह संकेत नाम आप अगली स्क्रीन पर सबमिट की गई प्रतिक्रिया के उत्तर में हमारे टीम से संदेश प्राप्त करने के लिए भविष्य में आने वाले दौरा में उपयोग करें।"
+
+#~ msgid ""
+#~ "Because we do not track users of our <b>SecureDrop</b>\n"
+#~ " service, in future visits, using this codename will be the only way we have to communicate with you should we have\n"
+#~ " questions or are interested in additional information. Unlike passwords, there is no way to retrieve a lost codename."
+#~ msgstr ""
+#~ "क्योंकि हम हमारे उपयोगकर्ताओं को ट्रैक नहीं करते हैं <b>SecureDrop</b>\n"
+#~ "सेवा, भविष्य के दौरे में, इस संकेत नाम का उपयोग करने का एकमात्र तरीका है कि हमारे साथ संवाद करना चाहिए था हमारे पास होना चाहिए प्रश्न या \n"
+#~ "अतिरिक्त जानकारी में रुचि रखते हैं। पासवर्ड के विपरीत, खोई हुई कोडनाम को पुनः प्राप्त करने का कोई तरीका नहीं है।"
+
+#~ msgid "SUBMIT DOCUMENTS"
+#~ msgstr "दस्तावेज़ जमा करें"
+
+#~ msgid "Select <b>Advanced Security Settings</b>"
+#~ msgstr "<b>उन्न्त सुरक्षा स्तर</b> चुनें"
+
+#~ msgid "Select <b>Safest</b>"
+#~ msgstr "<b>सबसे सुरक्षित</b> चुनें"
+
+#~ msgid "Why is there a warning about Tor2Web?"
+#~ msgstr "Tor2Web के बारे में चेतावनी क्यों है?"
+
+#~ msgid "We <strong>strongly advise</strong> you to use the <a href=\"www.torproject.org/projects/torbrowser.html\">Tor Browser</a> instead."
+#~ msgstr "हम <strong>दृढ़ता से सलाह देते हैं</strong> आप <a href=\"www.torproject.org/projects/torbrowser.html\">Tor browser</a> ब्राउज़र का उपयोग करने के लिए।"
+
 #~ msgid "Invalid secret format: odd-length secret. Did you mistype the secret?"
 #~ msgstr "अवैध गुप्त स्वरूप: विषम-लंबाई रहस्य| क्या आपने गुप्त टेक्स्ट को गलत तरीके से लिखा है?"
 
@@ -1135,12 +1220,6 @@ msgstr "सबमिशन पृष्ठ पर वापस जाएं"
 
 #~ msgid "SecureDrop Home"
 #~ msgstr "SecureDrop होम"
-
-#~ msgid "Show"
-#~ msgstr "दिखाएं"
-
-#~ msgid "Hide"
-#~ msgstr "छुपाएं"
 
 #~ msgid "— No Messages —"
 #~ msgstr "— कोई संदेश नहीं —"
@@ -1294,9 +1373,6 @@ msgstr "सबमिशन पृष्ठ पर वापस जाएं"
 
 #~ msgid "Already submitted something?"
 #~ msgstr "पहले से कुछ जमा किया है?"
-
-#~ msgid "If you have already submitted to journalists, log in here to check for responses."
-#~ msgstr "यदि आप पहले से ही पत्रकारों को जमा कर चुके हैं, तो प्रतिक्रियाओं की जांच के लिए यहां लॉग इन करें।"
 
 #~ msgid "CHECK FOR A RESPONSE"
 #~ msgstr "जवाब के लिए जाँच करें"
