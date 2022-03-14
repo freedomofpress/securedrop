@@ -495,6 +495,43 @@ def test_submit_antispam(source_app):
         assert resp.status_code == 403
 
 
+def test_submit_codename_second_login(source_app):
+    """
+    Test codename submissions *not* prevented on second session
+    """
+    with source_app.test_client() as app:
+        InstanceConfig.get_default().update_submission_prefs(
+            allow_uploads=True, min_length=0, reject_codenames=True)
+        codename = new_codename(app, session)
+        resp = app.post(
+            url_for('main.submit'),
+            data=dict(msg=codename, fh=(StringIO(''), '')),
+            follow_redirects=True)
+        assert resp.status_code == 200
+        text = resp.data.decode('utf-8')
+        assert "Please do not submit your codename!" in text
+
+        resp = app.get(url_for('main.logout'),
+                       follow_redirects=True)
+        assert not SessionManager.is_user_logged_in(db_session=db.session)
+        text = resp.data.decode('utf-8')
+        assert 'This will clear your Tor Browser activity data' in text
+
+        resp = app.post(url_for('main.login'),
+                        data=dict(codename=codename),
+                        follow_redirects=True)
+        assert resp.status_code == 200
+        assert SessionManager.is_user_logged_in(db_session=db.session)
+
+        resp = app.post(
+            url_for('main.submit'),
+            data=dict(msg=codename, fh=(StringIO(''), '')),
+            follow_redirects=True)
+        assert resp.status_code == 200
+        text = resp.data.decode('utf-8')
+        assert "Thank you for sending this information" in text
+
+
 def test_submit_codename(source_app):
     """
     Test preventions against people submitting their codename.

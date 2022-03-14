@@ -208,14 +208,19 @@ def make_blueprint(config: SDConfig) -> Blueprint:
                     "error")
                 return redirect(url_for('main.lookup'))
 
+            # if the new_user_codename key is not present in the session, this is
+            # not a first session
+            new_codename = session.get('new_user_codename', None)
+
             codenames_rejected = InstanceConfig.get_default().reject_message_with_codename
-            if codenames_rejected and codename_detected(msg, session['new_user_codename']):
-                flash(Markup('{}<br>{}'.format(
-                    escape(gettext("Please do not submit your codename!")),
-                    escape(gettext("Keep your codename secret, and use it to log in later"
-                                   " to check for replies."))
-                    )), "error")
-                return redirect(url_for('main.lookup'))
+            if new_codename is not None:
+                if codenames_rejected and codename_detected(msg, new_codename):
+                    flash(Markup('{}<br>{}'.format(
+                        escape(gettext("Please do not submit your codename!")),
+                        escape(gettext("Keep your codename secret, and use it to log in later"
+                                       " to check for replies."))
+                        )), "error")
+                    return redirect(url_for('main.lookup'))
 
         if not os.path.exists(Storage.get_default().path(logged_in_source.filesystem_id)):
             current_app.logger.debug("Store directory not found for source '{}', creating one."
