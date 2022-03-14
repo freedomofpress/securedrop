@@ -4,7 +4,19 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
 #
 msgid ""
-msgstr "Project-Id-Version: SecureDrop 0.4.3\nReport-Msgid-Bugs-To: securedrop@freedom.press\nPO-Revision-Date: 2022-02-17 07:04+0000\nLast-Translator: leilane <leilane.a@protonmail.com>\nLanguage-Team: Portuguese (Brazil) <https://weblate.securedrop.org/projects/securedrop/securedrop/pt_BR/>\nLanguage: pt_BR\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=2; plural=n > 1;\nX-Generator: Weblate 4.6\nGenerated-By: Babel 2.4.0\n"
+msgstr ""
+"Project-Id-Version: SecureDrop 0.4.3\n"
+"Report-Msgid-Bugs-To: securedrop@freedom.press\n"
+"PO-Revision-Date: 2022-02-17 07:04+0000\n"
+"Last-Translator: leilane <leilane.a@protonmail.com>\n"
+"Language-Team: Portuguese (Brazil) <https://weblate.securedrop.org/projects/securedrop/securedrop/pt_BR/>\n"
+"Language: pt_BR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 4.6\n"
+"Generated-By: Babel 2.4.0\n"
 
 msgid "Name too long"
 msgstr "Nome muito longo"
@@ -130,11 +142,17 @@ msgid_plural "Cannot be longer than {num} characters."
 msgstr[0] "Não pode conter mais do que {num} caracteres."
 msgstr[1] "Não pode conter mais do que {num} caracteres."
 
+msgid "Please specify an integer value greater than 0."
+msgstr ""
+
 msgid "This field is required."
 msgstr "Este campo é obrigatório."
 
 msgid "You cannot send an empty reply."
 msgstr "Não é possível enviar uma resposta em branco."
+
+msgid "To configure a minimum message length, you must set the required number of characters."
+msgstr ""
 
 msgid "File required."
 msgstr "Arquivo obrigatório."
@@ -409,6 +427,9 @@ msgstr "Após configurar a sua YubiKey, insira o código de seis dígitos abaixo
 msgid "Navigation"
 msgstr "Navegação"
 
+msgid "Skip to main content"
+msgstr ""
+
 msgid "Logged on as"
 msgstr "Conectado(a) como"
 
@@ -532,6 +553,15 @@ msgstr "Configurações de Envio"
 msgid "Prevent sources from uploading documents. Sources will still be able to send messages."
 msgstr "Impedir que as fontes carreguem documentos. Elas continuarão a ter permissão para enviar mensagens."
 
+msgid "Prevent sources from sending initial messages shorter than the minimum required length:"
+msgstr ""
+
+msgid "Minimum number of characters."
+msgstr ""
+
+msgid "Prevent sources from submitting their codename as an initial message."
+msgstr ""
+
 msgid "Update Submission Preferences"
 msgstr "Atualizar Configurações de Envio"
 
@@ -549,20 +579,6 @@ msgstr "Envie um alerta OSSEC de teste"
 
 msgid "SEND TEST OSSEC ALERT"
 msgstr "ENVIAR ALERTA DE VERIFICAÇÃO DO OSSEC"
-
-msgid "The following file has been selected for <strong>permanent deletion</strong>:"
-msgid_plural "The following {num} files have been selected for <strong>permanent deletion</strong>:"
-msgstr[0] "O seguinte arquivo será <strong>apagado definitivamente</strong>:"
-msgstr[1] "Os seguintes {num} arquivos serão <strong>apagados definitivamente</strong>:"
-
-msgid "Permanently Delete Files"
-msgstr "Apagar arquivos permanentemente"
-
-msgid "PERMANENTLY DELETE FILES"
-msgstr "APAGAR ARQUIVOS DEFINITIVAMENTE"
-
-msgid "Return to the list of documents for {source_name}…"
-msgstr "Voltar para a lista de documentos de {source_name}…"
 
 msgid "Edit user \"{user}\""
 msgstr "Editar usuário \"{user}\""
@@ -705,15 +721,6 @@ msgstr "Conectar"
 msgid "LOG IN"
 msgstr "ACESSAR"
 
-msgid "WARNING:"
-msgstr "AVISO:"
-
-msgid "You appear to be using Tor2Web, which does not provide anonymity."
-msgstr "Você parece estar usando o Tor2Web, que não fornece anonimato."
-
-msgid "Why is this dangerous?"
-msgstr "Por que isso é perigoso?"
-
 msgid "Field must be between 1 and {max_codename_len} characters long."
 msgstr "Este campo deve conter entre 1 e {max_codename_len} caracteres."
 
@@ -732,6 +739,9 @@ msgstr "Mensagem de texto muito longa."
 msgid "Large blocks of text must be uploaded as a file, not copied and pasted."
 msgstr "Longos textos devem ser carregados como arquivos, não simplesmente copiados e colados."
 
+msgid "Your connection is not anonymous right now!"
+msgstr ""
+
 msgid "You were redirected because you are already logged in. If you want to create a new account, you should log out first."
 msgstr "Sessão já iniciada. Para criar uma nova conta, é preciso encerrar esta sessão."
 
@@ -746,6 +756,22 @@ msgstr "É preciso escrever uma mensagem ou escolher um arquivo para enviar."
 
 msgid "You must enter a message."
 msgstr "Você deve escrever uma mensagem."
+
+#, fuzzy
+#| msgid "Must be at least {num} character long."
+#| msgid_plural "Must be at least {num} characters long."
+msgid "Your first message must be at least {} characters long."
+msgstr "Deve conter pelo menos {num} caractere."
+
+#, fuzzy
+#| msgid "Forgot your codename?"
+msgid "Please do not submit your codename!"
+msgstr "Esqueceu o seu codinome?"
+
+#, fuzzy
+#| msgid "If you have already submitted to journalists, log in here to check for responses."
+msgid "Keep your codename secret, and use it to log in later to check for replies."
+msgstr "Se você já tiver feito algum envio, faça login aqui para ler as respostas."
 
 msgid "Thanks! We received your message."
 msgstr "Agradecemos a contribuição. Recebemos a sua mensagem."
@@ -765,8 +791,14 @@ msgstr "Todas as respostas foram apagadas"
 msgid "Sorry, that is not a recognized codename."
 msgstr "Desculpe, este codinome não foi reconhecido."
 
+msgid "Codename"
+msgstr "Codinome"
+
 msgid "Protecting Journalists and Sources"
 msgstr "Protegendo Jornalistas e Fontes"
+
+msgid "Skip to notification"
+msgstr ""
 
 msgid "We're sorry, our SecureDrop is currently offline."
 msgstr "Desculpas, o nosso SecureDrop está offline atualmente."
@@ -801,32 +833,25 @@ msgstr "Por favor, preste atenção: Ao compartilhar documentos confidenciais, v
 msgid "SecureDrop is a project of Freedom of the Press Foundation."
 msgstr "SecureDrop é um projeto da Freedom of the Press Foundation (Fundação pela Liberdade de Imprensa)."
 
-msgid "Welcome"
-msgstr "Bem-vindo(a)"
+#, fuzzy
+#| msgid "Enter your codename"
+msgid "Get Your Codename"
+msgstr "Digite o seu codinome"
 
-msgid "Please either write this codename down and keep it in a safe place, or memorize it."
-msgstr "Por favor, anote o seu codinome e guarde-o em um lugar seguro, ou memorize-o."
-
-msgid "This codename is what you will use in future visits to receive messages from our team in response to what you submit on the next screen."
-msgstr "Este codinome é o que você usará em futuras visitas para receber mensagens de nossos jornalistas em resposta ao que você enviar na próxima tela."
-
-msgid "Codename"
-msgstr "Codinome"
-
-msgid ""
-"Because we do not track users of our <b>SecureDrop</b>\n"
-" service, in future visits, using this codename will be the only way we have to communicate with you should we have\n"
-" questions or are interested in additional information. Unlike passwords, there is no way to retrieve a lost codename."
+msgid "A <em>codename</em> in SecureDrop functions as both your username and your password."
 msgstr ""
-"Como não rastreamos as pessoas que utilizam <b>SecureDrop</b>, \n"
-"este codinome é a nossa única maneira de entrar em contato com você para fazer perguntas ou pedir mais \n"
-"informações. Contrariamente a uma senha, não é possível recuperar um codinome perdido."
 
-msgid "Submit Documents"
-msgstr "Enviar Documentos"
+msgid "You will need this codename to log into our SecureDrop later:"
+msgstr ""
 
-msgid "SUBMIT DOCUMENTS"
-msgstr "ENVIAR DOCUMENTOS"
+msgid "<strong>Keep it secret.</strong> Do not share it with anyone."
+msgstr ""
+
+msgid "<strong>Keep it safe.</strong> There is no account recovery option."
+msgstr ""
+
+msgid "Continue"
+msgstr "Continuar"
 
 msgid "Your Tor Browser's <a id=\"disable-js\" href=\"\"><b>Security Level</b></a> is too low. Use the <img src=\"{icon}\" alt=\"&quot;Security Level&quot;\"> button in your browser’s toolbar to change it."
 msgstr "O <a id=\"disable-js\" href=\"\"><b>nível de segurança</b></a> do seu navegador Tor está muito baixo. Use o botão <img src=\"{icon}\" alt=\"&quot;nível de segurança&quot;\"> &nbsp;no seu navegador para modificá-lo."
@@ -837,11 +862,11 @@ msgstr "Como mudar seu nível de segurança"
 msgid "Click the <img src=\"{icon}\" alt=\"&quot;Security Level&quot; button\"> in the toolbar above"
 msgstr "Clique no <img src=\"{icon}\" alt=\"&quot;nível de segurança&quot;\"> na barra de ferramentas, acima"
 
-msgid "Select <b>Advanced Security Settings</b>"
-msgstr "Selecionar <b> Configurações de Segurança Avançadas </b>"
+msgid "Click <b>Change</b> to open Security Level preferences"
+msgstr ""
 
-msgid "Select <b>Safest</b>"
-msgstr "Selecionar <b>O mais seguro (Superlative)</b>"
+msgid "Select <b>Safest</b> and close the preferences tab"
+msgstr ""
 
 msgid "<a href=\"/\" aria-label=\"Follow these instructions, then refresh this page\">Refresh this page</a>, and you're done!"
 msgstr "<a href=\"/\" aria-label=\"Siga estas instruções para então atualizar esta página\">Refresh this page</a>, e pronto!"
@@ -876,9 +901,6 @@ msgstr "Inserir Codinome"
 msgid "Enter your codename"
 msgstr "Digite o seu codinome"
 
-msgid "Continue"
-msgstr "Continuar"
-
 msgid "CANCEL"
 msgstr "CANCELAR"
 
@@ -887,6 +909,12 @@ msgstr "Uma última coisa..."
 
 msgid "Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar. This will clear your Tor Browser activity data on this device."
 msgstr "Clique no botão <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>Nova identidade</b> na barra de ferramentas do Tor Browser. Assim, os dados da sua atividade no navegador Tor serão eliminados deste aparelho."
+
+msgid "Show"
+msgstr "Mostrar"
+
+msgid "Hide"
+msgstr "Ocultar"
 
 msgid "Remember, your codename is:"
 msgstr "Lembre-se, o seu codinome é:"
@@ -915,6 +943,9 @@ msgstr "Tamanho máximo de envio: 500 MB"
 msgid "Submit"
 msgstr "Enviar"
 
+msgid "Anti-spam check. Do not fill this in!"
+msgstr ""
+
 msgid "Read Replies"
 msgstr "Ler Respostas"
 
@@ -923,6 +954,9 @@ msgstr "Você recebeu uma resposta. Para proteger a sua identidade caso alguém 
 
 msgid "Delete this reply"
 msgstr "Apagar esta resposta"
+
+msgid "Delete reply from {timestamp}?"
+msgstr ""
 
 msgid "Delete this reply?"
 msgstr "Apagar esta resposta?"
@@ -957,17 +991,27 @@ msgstr "Importante"
 msgid "You were logged out due to inactivity. Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
 msgstr "A sua sessão foi encerrada por inatividade. Clique no botão <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>Nova identidade</b> na barra de ferramentas do Tor Browser. Assim, os dados da sua atividade no navegador Tor serão eliminados deste aparelho."
 
-msgid "Why is there a warning about Tor2Web?"
-msgstr "Por que há uma advertência sobre o Tor2Web?"
+msgid "Proxy Service Detected"
+msgstr ""
 
-msgid "Using Tor2Web to connect to SecureDrop will not protect your anonymity."
+#, fuzzy
+#| msgid "Using Tor2Web to connect to SecureDrop will not protect your anonymity."
+msgid "You appear to be using a Tor proxy service to access SecureDrop. Proxy services do not protect your anonymity."
 msgstr "O uso de Tor2Web para conectar-se ao SecureDrop não protege o seu anonimato."
 
-msgid "It could be possible for anyone monitoring your Internet traffic (your government, your Internet provider), to identify you."
+#, fuzzy
+#| msgid "It could be possible for anyone monitoring your Internet traffic (your government, your Internet provider), to identify you."
+msgid "Anyone monitoring your Internet traffic &mdash; including your government, your Internet provider, or the proxy operator &mdash; may be able to identify you."
 msgstr "Assim, a sua identidade pode ser descoberta por qualquer pessoa que monitore a sua atividade na Internet (seu governo, seu provedor de Internet)."
 
-msgid "We <strong>strongly advise</strong> you to use the <a href=\"www.torproject.org/projects/torbrowser.html\">Tor Browser</a> instead."
-msgstr "Nós <strong>recomendamos fortemente</strong> que você use o <a href=\"www.torproject.org/projects/torbrowser.html\">Navegador Tor</a> em vez do Tor2Web."
+msgid "Always use <a href=\"www.torproject.org/projects/torbrowser.html\">Tor Browser</a> to access SecureDrop. Valid SecureDrop site addresses end with <code>.onion</code>. The correct address for this site is:"
+msgstr ""
+
+msgid "If you are already using Tor Browser, copy the address above and generate a new identity before you access SecureDrop."
+msgstr ""
+
+msgid "If there is a reasonable risk of your Internet traffic being monitored, consider connecting from a different location or network."
+msgstr ""
 
 msgid "You Should Use Tor Browser"
 msgstr "Recomendamos o uso do navegador Tor"
@@ -1024,6 +1068,65 @@ msgstr "<strong>Importante:</strong> Para manter o seu anonimato, <strong>não</
 msgid "Back to submission page"
 msgstr "Voltar à página de envio"
 
+#~ msgid "The following file has been selected for <strong>permanent deletion</strong>:"
+#~ msgid_plural "The following {num} files have been selected for <strong>permanent deletion</strong>:"
+#~ msgstr[0] "O seguinte arquivo será <strong>apagado definitivamente</strong>:"
+#~ msgstr[1] "Os seguintes {num} arquivos serão <strong>apagados definitivamente</strong>:"
+
+#~ msgid "Permanently Delete Files"
+#~ msgstr "Apagar arquivos permanentemente"
+
+#~ msgid "PERMANENTLY DELETE FILES"
+#~ msgstr "APAGAR ARQUIVOS DEFINITIVAMENTE"
+
+#~ msgid "Return to the list of documents for {source_name}…"
+#~ msgstr "Voltar para a lista de documentos de {source_name}…"
+
+#~ msgid "WARNING:"
+#~ msgstr "AVISO:"
+
+#~ msgid "You appear to be using Tor2Web, which does not provide anonymity."
+#~ msgstr "Você parece estar usando o Tor2Web, que não fornece anonimato."
+
+#~ msgid "Why is this dangerous?"
+#~ msgstr "Por que isso é perigoso?"
+
+#~ msgid "Welcome"
+#~ msgstr "Bem-vindo(a)"
+
+#~ msgid "Please either write this codename down and keep it in a safe place, or memorize it."
+#~ msgstr "Por favor, anote o seu codinome e guarde-o em um lugar seguro, ou memorize-o."
+
+#~ msgid "This codename is what you will use in future visits to receive messages from our team in response to what you submit on the next screen."
+#~ msgstr "Este codinome é o que você usará em futuras visitas para receber mensagens de nossos jornalistas em resposta ao que você enviar na próxima tela."
+
+#~ msgid ""
+#~ "Because we do not track users of our <b>SecureDrop</b>\n"
+#~ " service, in future visits, using this codename will be the only way we have to communicate with you should we have\n"
+#~ " questions or are interested in additional information. Unlike passwords, there is no way to retrieve a lost codename."
+#~ msgstr ""
+#~ "Como não rastreamos as pessoas que utilizam <b>SecureDrop</b>, \n"
+#~ "este codinome é a nossa única maneira de entrar em contato com você para fazer perguntas ou pedir mais \n"
+#~ "informações. Contrariamente a uma senha, não é possível recuperar um codinome perdido."
+
+#~ msgid "Submit Documents"
+#~ msgstr "Enviar Documentos"
+
+#~ msgid "SUBMIT DOCUMENTS"
+#~ msgstr "ENVIAR DOCUMENTOS"
+
+#~ msgid "Select <b>Advanced Security Settings</b>"
+#~ msgstr "Selecionar <b> Configurações de Segurança Avançadas </b>"
+
+#~ msgid "Select <b>Safest</b>"
+#~ msgstr "Selecionar <b>O mais seguro (Superlative)</b>"
+
+#~ msgid "Why is there a warning about Tor2Web?"
+#~ msgstr "Por que há uma advertência sobre o Tor2Web?"
+
+#~ msgid "We <strong>strongly advise</strong> you to use the <a href=\"www.torproject.org/projects/torbrowser.html\">Tor Browser</a> instead."
+#~ msgstr "Nós <strong>recomendamos fortemente</strong> que você use o <a href=\"www.torproject.org/projects/torbrowser.html\">Navegador Tor</a> em vez do Tor2Web."
+
 #~ msgid "Invalid secret format: odd-length secret. Did you mistype the secret?"
 #~ msgstr "Formato do segredo inválido: número ímpar de caracteres. O segredo foi digitado corretamente?"
 
@@ -1073,12 +1176,6 @@ msgstr "Voltar à página de envio"
 
 #~ msgid "SecureDrop Home"
 #~ msgstr "Página inicial do SecureDrop"
-
-#~ msgid "Show"
-#~ msgstr "Mostrar"
-
-#~ msgid "Hide"
-#~ msgstr "Ocultar"
 
 #~ msgid "— No Messages —"
 #~ msgstr "— Nenhuma Mensagem —"
@@ -1241,9 +1338,6 @@ msgstr "Voltar à página de envio"
 
 #~ msgid "Already submitted something?"
 #~ msgstr "Já enviou algum material?"
-
-#~ msgid "If you have already submitted to journalists, log in here to check for responses."
-#~ msgstr "Se você já tiver feito algum envio, faça login aqui para ler as respostas."
 
 #~ msgid "CHECK FOR A RESPONSE"
 #~ msgstr "LER RESPOSTAS"

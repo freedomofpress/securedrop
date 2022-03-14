@@ -4,7 +4,19 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2019.
 #
 msgid ""
-msgstr "Project-Id-Version: SecureDrop 0.14.0~rc1\nReport-Msgid-Bugs-To: securedrop@freedom.press\nPO-Revision-Date: 2022-02-14 12:04+0000\nLast-Translator: Honza Cibulka <honza@datastory.cz>\nLanguage-Team: Czech <https://weblate.securedrop.org/projects/securedrop/securedrop/cs/>\nLanguage: cs\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\nX-Generator: Weblate 4.6\nGenerated-By: Babel 2.5.1\n"
+msgstr ""
+"Project-Id-Version: SecureDrop 0.14.0~rc1\n"
+"Report-Msgid-Bugs-To: securedrop@freedom.press\n"
+"PO-Revision-Date: 2022-02-14 12:04+0000\n"
+"Last-Translator: Honza Cibulka <honza@datastory.cz>\n"
+"Language-Team: Czech <https://weblate.securedrop.org/projects/securedrop/securedrop/cs/>\n"
+"Language: cs\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+"X-Generator: Weblate 4.6\n"
+"Generated-By: Babel 2.5.1\n"
 
 msgid "Name too long"
 msgstr "Uživatelské jméno je příliš dlouhé"
@@ -134,11 +146,17 @@ msgstr[0] "Uživatelské jméno nemůže obsahovat více než {num} znak."
 msgstr[1] "Uživatelské jméno nemůže obsahovat více než {num} znaky."
 msgstr[2] "Uživatelské jméno nemůže obsahovat více než {num} znaků."
 
+msgid "Please specify an integer value greater than 0."
+msgstr ""
+
 msgid "This field is required."
 msgstr "Toto pole je povinné."
 
 msgid "You cannot send an empty reply."
 msgstr "Nemůžete odeslat prázdnou odpověď."
+
+msgid "To configure a minimum message length, you must set the required number of characters."
+msgstr ""
 
 msgid "File required."
 msgstr "Soubor je povinný."
@@ -419,6 +437,9 @@ msgstr "Jakmile nastavíte svůj YubiKey, zadejte šesticiferný kód níže:"
 msgid "Navigation"
 msgstr "Navigace"
 
+msgid "Skip to main content"
+msgstr ""
+
 msgid "Logged on as"
 msgstr "Přihlášen/a jako"
 
@@ -542,6 +563,15 @@ msgstr "Preference podání"
 msgid "Prevent sources from uploading documents. Sources will still be able to send messages."
 msgstr "Zabraňte zdrojům nahrávat dokumenty. Zdroje budou stále moci posílat zprávy."
 
+msgid "Prevent sources from sending initial messages shorter than the minimum required length:"
+msgstr ""
+
+msgid "Minimum number of characters."
+msgstr ""
+
+msgid "Prevent sources from submitting their codename as an initial message."
+msgstr ""
+
 msgid "Update Submission Preferences"
 msgstr "Aktualizujte preference podání"
 
@@ -559,21 +589,6 @@ msgstr "Pošlete testovací OSSEC upozornění"
 
 msgid "SEND TEST OSSEC ALERT"
 msgstr "POSLAT TESTOVACÍ UPOZORNĚNÍ OSSEC"
-
-msgid "The following file has been selected for <strong>permanent deletion</strong>:"
-msgid_plural "The following {num} files have been selected for <strong>permanent deletion</strong>:"
-msgstr[0] "Následující soubor byl vybrán pro <strong>trvalé smazání</strong>:"
-msgstr[1] "Následující {num} soubory byly vybrány pro <strong>trvalé smazání</strong>:"
-msgstr[2] "Následujících {num} souborů bylo vybráno pro <strong>trvalé smazání</strong>:"
-
-msgid "Permanently Delete Files"
-msgstr "Trvale smazat soubory"
-
-msgid "PERMANENTLY DELETE FILES"
-msgstr "TRVALE SMAZAT SOUBORY"
-
-msgid "Return to the list of documents for {source_name}…"
-msgstr "Vrátit se do seznamu dokumentů od „{source_name}“…"
 
 msgid "Edit user \"{user}\""
 msgstr "Upravit uživatele „{user}“"
@@ -716,15 +731,6 @@ msgstr "Přihlásit se"
 msgid "LOG IN"
 msgstr "PŘIHLÁSIT SE"
 
-msgid "WARNING:"
-msgstr "VAROVÁNÍ:"
-
-msgid "You appear to be using Tor2Web, which does not provide anonymity."
-msgstr "Vypadá to, že používáte Tor2Web, který neposkytuje anonymitu."
-
-msgid "Why is this dangerous?"
-msgstr "Proč je tohle nebezpečné?"
-
 msgid "Field must be between 1 and {max_codename_len} characters long."
 msgstr "Pole musí mít mezi 1 a {max_codename_len} znaky."
 
@@ -743,6 +749,9 @@ msgstr "Zpráva je příliš dlouhá."
 msgid "Large blocks of text must be uploaded as a file, not copied and pasted."
 msgstr "Rozsáhlé bloky textu musí být nahrány jako soubor, ne zkopírovány a vloženy."
 
+msgid "Your connection is not anonymous right now!"
+msgstr ""
+
 msgid "You were redirected because you are already logged in. If you want to create a new account, you should log out first."
 msgstr "Protože jste již přihlášen/a, byl/a jste přesměrován/a na tuto stránku. Pokud chcete vytvořit nový účet, nejprve se odhlaste."
 
@@ -757,6 +766,20 @@ msgstr "Musíte napsat zprávu nebo vybrat soubor pro nahrání."
 
 msgid "You must enter a message."
 msgstr "Musíte vložit zprávu."
+
+#, fuzzy
+#| msgid "Must be at least {num} character long."
+#| msgid_plural "Must be at least {num} characters long."
+msgid "Your first message must be at least {} characters long."
+msgstr "Uživatelské jméno musí mít alespoň {num} znak."
+
+#, fuzzy
+#| msgid "Forgot your codename?"
+msgid "Please do not submit your codename!"
+msgstr "Zapomněli jste své krycí jméno?"
+
+msgid "Keep your codename secret, and use it to log in later to check for replies."
+msgstr ""
 
 msgid "Thanks! We received your message."
 msgstr "Děkujeme! Obdrželi jsme vaši zprávu."
@@ -776,8 +799,14 @@ msgstr "Všechny odpovědi byly smazány"
 msgid "Sorry, that is not a recognized codename."
 msgstr "Promiňte, toto krycí jméno nikdo nepoužívá."
 
+msgid "Codename"
+msgstr "Krycí jméno"
+
 msgid "Protecting Journalists and Sources"
 msgstr "Chráníme novináře a jejich zdroje"
+
+msgid "Skip to notification"
+msgstr ""
 
 msgid "We're sorry, our SecureDrop is currently offline."
 msgstr "Omlouváme se, náš SecureDrop je aktuálně offline."
@@ -812,29 +841,25 @@ msgstr "Uvědomte si prosím, že sdílení citlivých dokumentů Vás může oh
 msgid "SecureDrop is a project of Freedom of the Press Foundation."
 msgstr "SecureDrop je projekt Freedom of the Press Foundation."
 
-msgid "Welcome"
-msgstr "Vítejte"
+#, fuzzy
+#| msgid "Enter your codename"
+msgid "Get Your Codename"
+msgstr "Zadejte své krycí jméno"
 
-msgid "Please either write this codename down and keep it in a safe place, or memorize it."
-msgstr "Zapište si prosím toto krycí jméno a uchovávejte ho na bezpečném místě, nebo si jej zapamatujte."
+msgid "A <em>codename</em> in SecureDrop functions as both your username and your password."
+msgstr ""
 
-msgid "This codename is what you will use in future visits to receive messages from our team in response to what you submit on the next screen."
-msgstr "Toto krycí jméno budete v budoucnu využívat pro komunikaci s naším týmem na základě toho, co pošlete na příští obrazovce."
+msgid "You will need this codename to log into our SecureDrop later:"
+msgstr ""
 
-msgid "Codename"
-msgstr "Krycí jméno"
+msgid "<strong>Keep it secret.</strong> Do not share it with anyone."
+msgstr ""
 
-msgid ""
-"Because we do not track users of our <b>SecureDrop</b>\n"
-" service, in future visits, using this codename will be the only way we have to communicate with you should we have\n"
-" questions or are interested in additional information. Unlike passwords, there is no way to retrieve a lost codename."
-msgstr "Protože nesledujeme uživatele naší služby <b>SecureDrop</b>\n pro Vaše příští návštěvy bude použití tohoto krycího jména jedinou možností, jak s Vámi můžeme komunikovat,\n budete-li se chtít na něco zeptat. Na rozdíl od hesla neexistuje způsob, jak zapomenuté krycí jméno získat zpět."
+msgid "<strong>Keep it safe.</strong> There is no account recovery option."
+msgstr ""
 
-msgid "Submit Documents"
-msgstr "Odeslat dokumenty"
-
-msgid "SUBMIT DOCUMENTS"
-msgstr "ODESLAT DOKUMENTY"
+msgid "Continue"
+msgstr "Pokračovat"
 
 msgid "Your Tor Browser's <a id=\"disable-js\" href=\"\"><b>Security Level</b></a> is too low. Use the <img src=\"{icon}\" alt=\"&quot;Security Level&quot;\"> button in your browser’s toolbar to change it."
 msgstr "<a id=\"disable-js\" href=\"\"><b>Úroveň zabezpečení</b></a> vašeho prohlížeče Tor je příliš nízká. Pro jeho změnu použijte tlačítko&nbsp;<img src=\"{icon}\" alt=\"&quot;Úroveň zabezpečení&quot;\"> na liště prohlížeče."
@@ -845,11 +870,11 @@ msgstr "Jak změnit úroveň vašeho zabezpečení"
 msgid "Click the <img src=\"{icon}\" alt=\"&quot;Security Level&quot; button\"> in the toolbar above"
 msgstr "Klepněte na <img src=\"{icon}\" alt=\"&quot;Security Level&quot; button\"> v panelu nástrojů výše"
 
-msgid "Select <b>Advanced Security Settings</b>"
-msgstr "Vyberte <b>Rozšířené bezpečnostní nastavení</b>"
+msgid "Click <b>Change</b> to open Security Level preferences"
+msgstr ""
 
-msgid "Select <b>Safest</b>"
-msgstr "Zvolte <b>Nejbezpečnější</b>"
+msgid "Select <b>Safest</b> and close the preferences tab"
+msgstr ""
 
 msgid "<a href=\"/\" aria-label=\"Follow these instructions, then refresh this page\">Refresh this page</a>, and you're done!"
 msgstr "<a href=\"/\" aria-label=\"Postupujte podle instrukcí, obnovte tuto stránku\">Obnovte stránku</a> a máte hotovo!"
@@ -884,9 +909,6 @@ msgstr "Zadat krycí jméno"
 msgid "Enter your codename"
 msgstr "Zadejte své krycí jméno"
 
-msgid "Continue"
-msgstr "Pokračovat"
-
 msgid "CANCEL"
 msgstr "ZRUŠIT"
 
@@ -895,6 +917,12 @@ msgstr "Ještě jedna věc..."
 
 msgid "Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar. This will clear your Tor Browser activity data on this device."
 msgstr "Klepněte na <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>Nová identita</b> na liště svého prohlížeče Tor. Smažete tím data o aktivitě prohlížeče Tor na tomto zařízení."
+
+msgid "Show"
+msgstr "Zobrazit"
+
+msgid "Hide"
+msgstr "Skrýt"
 
 msgid "Remember, your codename is:"
 msgstr "Pamatujte, vaše krycí jméno je:"
@@ -923,6 +951,9 @@ msgstr "Maximální velikost uploadu: 500 MB"
 msgid "Submit"
 msgstr "Odeslat"
 
+msgid "Anti-spam check. Do not fill this in!"
+msgstr ""
+
 msgid "Read Replies"
 msgstr "Přečtěte si odpovědi"
 
@@ -931,6 +962,9 @@ msgstr "Obdržel/a jste odpověď. Pro případ, že by se někdo dozvěděl va�
 
 msgid "Delete this reply"
 msgstr "Smazat tuto odpověď"
+
+msgid "Delete reply from {timestamp}?"
+msgstr ""
 
 msgid "Delete this reply?"
 msgstr "Smazat tuto odpověď?"
@@ -965,17 +999,27 @@ msgstr "Důležité"
 msgid "You were logged out due to inactivity. Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
 msgstr "Z důvodu neaktivity jste byli odhlášeni. Než budete pokračovat, klepněte na <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>Nová identita</b> na liště svého prohlížeče Tor. Smažete tím data o aktivitě Toru na tomto zařízení."
 
-msgid "Why is there a warning about Tor2Web?"
-msgstr "Proč je tady upozornění o Tor2Web?"
+msgid "Proxy Service Detected"
+msgstr ""
 
-msgid "Using Tor2Web to connect to SecureDrop will not protect your anonymity."
+#, fuzzy
+#| msgid "Using Tor2Web to connect to SecureDrop will not protect your anonymity."
+msgid "You appear to be using a Tor proxy service to access SecureDrop. Proxy services do not protect your anonymity."
 msgstr "Používaní Tor2Web pro připojení k SecureDropu neochrání vaši anonymitu."
 
-msgid "It could be possible for anyone monitoring your Internet traffic (your government, your Internet provider), to identify you."
+#, fuzzy
+#| msgid "It could be possible for anyone monitoring your Internet traffic (your government, your Internet provider), to identify you."
+msgid "Anyone monitoring your Internet traffic &mdash; including your government, your Internet provider, or the proxy operator &mdash; may be able to identify you."
 msgstr "Kdokoliv, kdo sleduje vaši aktivitu na internetu (vláda nebo poskytovatel připojení) vás může identifikovat."
 
-msgid "We <strong>strongly advise</strong> you to use the <a href=\"www.torproject.org/projects/torbrowser.html\">Tor Browser</a> instead."
-msgstr "<strong>Velmi doporučujeme</strong> použití <a href=\"www.torproject.org/projects/torbrowser.html\">prohlížeče Tor</a>."
+msgid "Always use <a href=\"www.torproject.org/projects/torbrowser.html\">Tor Browser</a> to access SecureDrop. Valid SecureDrop site addresses end with <code>.onion</code>. The correct address for this site is:"
+msgstr ""
+
+msgid "If you are already using Tor Browser, copy the address above and generate a new identity before you access SecureDrop."
+msgstr ""
+
+msgid "If there is a reasonable risk of your Internet traffic being monitored, consider connecting from a different location or network."
+msgstr ""
 
 msgid "You Should Use Tor Browser"
 msgstr "Doporučujeme použít prohlížeč Tor"
@@ -1031,6 +1075,66 @@ msgstr "<strong>Důležité:</strong> Chcete-li zůstat v anonymitě, <strong>ne
 
 msgid "Back to submission page"
 msgstr "Zpátky na stránku podání"
+
+#~ msgid "The following file has been selected for <strong>permanent deletion</strong>:"
+#~ msgid_plural "The following {num} files have been selected for <strong>permanent deletion</strong>:"
+#~ msgstr[0] "Následující soubor byl vybrán pro <strong>trvalé smazání</strong>:"
+#~ msgstr[1] "Následující {num} soubory byly vybrány pro <strong>trvalé smazání</strong>:"
+#~ msgstr[2] "Následujících {num} souborů bylo vybráno pro <strong>trvalé smazání</strong>:"
+
+#~ msgid "Permanently Delete Files"
+#~ msgstr "Trvale smazat soubory"
+
+#~ msgid "PERMANENTLY DELETE FILES"
+#~ msgstr "TRVALE SMAZAT SOUBORY"
+
+#~ msgid "Return to the list of documents for {source_name}…"
+#~ msgstr "Vrátit se do seznamu dokumentů od „{source_name}“…"
+
+#~ msgid "WARNING:"
+#~ msgstr "VAROVÁNÍ:"
+
+#~ msgid "You appear to be using Tor2Web, which does not provide anonymity."
+#~ msgstr "Vypadá to, že používáte Tor2Web, který neposkytuje anonymitu."
+
+#~ msgid "Why is this dangerous?"
+#~ msgstr "Proč je tohle nebezpečné?"
+
+#~ msgid "Welcome"
+#~ msgstr "Vítejte"
+
+#~ msgid "Please either write this codename down and keep it in a safe place, or memorize it."
+#~ msgstr "Zapište si prosím toto krycí jméno a uchovávejte ho na bezpečném místě, nebo si jej zapamatujte."
+
+#~ msgid "This codename is what you will use in future visits to receive messages from our team in response to what you submit on the next screen."
+#~ msgstr "Toto krycí jméno budete v budoucnu využívat pro komunikaci s naším týmem na základě toho, co pošlete na příští obrazovce."
+
+#~ msgid ""
+#~ "Because we do not track users of our <b>SecureDrop</b>\n"
+#~ " service, in future visits, using this codename will be the only way we have to communicate with you should we have\n"
+#~ " questions or are interested in additional information. Unlike passwords, there is no way to retrieve a lost codename."
+#~ msgstr ""
+#~ "Protože nesledujeme uživatele naší služby <b>SecureDrop</b>\n"
+#~ " pro Vaše příští návštěvy bude použití tohoto krycího jména jedinou možností, jak s Vámi můžeme komunikovat,\n"
+#~ " budete-li se chtít na něco zeptat. Na rozdíl od hesla neexistuje způsob, jak zapomenuté krycí jméno získat zpět."
+
+#~ msgid "Submit Documents"
+#~ msgstr "Odeslat dokumenty"
+
+#~ msgid "SUBMIT DOCUMENTS"
+#~ msgstr "ODESLAT DOKUMENTY"
+
+#~ msgid "Select <b>Advanced Security Settings</b>"
+#~ msgstr "Vyberte <b>Rozšířené bezpečnostní nastavení</b>"
+
+#~ msgid "Select <b>Safest</b>"
+#~ msgstr "Zvolte <b>Nejbezpečnější</b>"
+
+#~ msgid "Why is there a warning about Tor2Web?"
+#~ msgstr "Proč je tady upozornění o Tor2Web?"
+
+#~ msgid "We <strong>strongly advise</strong> you to use the <a href=\"www.torproject.org/projects/torbrowser.html\">Tor Browser</a> instead."
+#~ msgstr "<strong>Velmi doporučujeme</strong> použití <a href=\"www.torproject.org/projects/torbrowser.html\">prohlížeče Tor</a>."
 
 #~ msgid "Invalid secret format: odd-length secret. Did you mistype the secret?"
 #~ msgstr "Nesprávná forma hesla: lichá délka hesla. Neudělal/a jste překlep?"
@@ -1088,12 +1192,6 @@ msgstr "Zpátky na stránku podání"
 
 #~ msgid "SecureDrop Home"
 #~ msgstr "Domovská stránka SecureDrop"
-
-#~ msgid "Show"
-#~ msgstr "Zobrazit"
-
-#~ msgid "Hide"
-#~ msgstr "Skrýt"
 
 #~ msgid "— No Messages —"
 #~ msgstr "— Žádné zprávy —"

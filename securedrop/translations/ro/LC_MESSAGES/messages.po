@@ -150,11 +150,17 @@ msgstr[0] "Nu poate avea mai mult de {num} caracter."
 msgstr[1] "Nu poate avea mai mult de {num} caractere."
 msgstr[2] "Nu poate avea mai mult de {num} de caractere."
 
+msgid "Please specify an integer value greater than 0."
+msgstr ""
+
 msgid "This field is required."
 msgstr "Acest câmp este obligatoriu."
 
 msgid "You cannot send an empty reply."
 msgstr "Nu poți trimite un răspuns gol."
+
+msgid "To configure a minimum message length, you must set the required number of characters."
+msgstr ""
 
 msgid "File required."
 msgstr "Trebuie să existe un fișier."
@@ -447,6 +453,9 @@ msgstr "După ce ai configurat cheia fizică YubiKey, introdu codul de 6 cifre d
 msgid "Navigation"
 msgstr "Cod de verificare"
 
+msgid "Skip to main content"
+msgstr ""
+
 msgid "Logged on as"
 msgstr "Autentificat ca"
 
@@ -582,6 +591,15 @@ msgstr "Preferințe de trimitere"
 msgid "Prevent sources from uploading documents. Sources will still be able to send messages."
 msgstr "Împiedică sursele să încarce documente. Sursele vor putea să trimită mesaje în continuare."
 
+msgid "Prevent sources from sending initial messages shorter than the minimum required length:"
+msgstr ""
+
+msgid "Minimum number of characters."
+msgstr ""
+
+msgid "Prevent sources from submitting their codename as an initial message."
+msgstr ""
+
 #, fuzzy
 #| msgid "Submission Preferences"
 msgid "Update Submission Preferences"
@@ -601,21 +619,6 @@ msgstr ""
 
 msgid "SEND TEST OSSEC ALERT"
 msgstr "TRIMITE ALERTĂ OSSEC DE PROBĂ"
-
-msgid "The following file has been selected for <strong>permanent deletion</strong>:"
-msgid_plural "The following {num} files have been selected for <strong>permanent deletion</strong>:"
-msgstr[0] "Următorul fișier a fost selectat pentru <strong>ștergere definitivă</strong>:"
-msgstr[1] "Următoarele {num} fișiere au fost selectate pentru <strong>ștergere definitivă</strong>:"
-msgstr[2] "Următoarele {num} de fișiere au fost selectate pentru <strong>ștergere definitivă</strong>:"
-
-msgid "Permanently Delete Files"
-msgstr ""
-
-msgid "PERMANENTLY DELETE FILES"
-msgstr "ȘTERGE DEFINITIV FIȘIERELE"
-
-msgid "Return to the list of documents for {source_name}…"
-msgstr "Întoarcere la lista de documente pentru {source_name}…"
 
 msgid "Edit user \"{user}\""
 msgstr "Editează utilizatorul „{user}”"
@@ -770,15 +773,6 @@ msgstr "Deconectare"
 msgid "LOG IN"
 msgstr "CONECTARE"
 
-msgid "WARNING:"
-msgstr "AVERTISMENT:"
-
-msgid "You appear to be using Tor2Web, which does not provide anonymity."
-msgstr "Se pare că folosiți Tor2Web, care nu asigură anonimitate."
-
-msgid "Why is this dangerous?"
-msgstr "De ce este periculos?"
-
 msgid "Field must be between 1 and {max_codename_len} characters long."
 msgstr "Câmpul trebuie să aibă între 1 și {max_codename_len} caractere."
 
@@ -797,6 +791,9 @@ msgstr "Textul mesajului este prea lung."
 msgid "Large blocks of text must be uploaded as a file, not copied and pasted."
 msgstr "Blocurile mari de text trebuie încărcate ca fișier, nu copiate și lipite."
 
+msgid "Your connection is not anonymous right now!"
+msgstr ""
+
 msgid "You were redirected because you are already logged in. If you want to create a new account, you should log out first."
 msgstr "Ai fost redirecționat(ă) pentru că ești deja autentificat(ă). Dacă vrei să creezi un cont nou trebuie să te deconectezi mai întâi."
 
@@ -811,6 +808,22 @@ msgstr "Trebuie să introduci un mesaj sau să alegi un fișier de trimis."
 
 msgid "You must enter a message."
 msgstr "Trebuie să introduci un mesaj."
+
+#, fuzzy
+#| msgid "Must be at least {num} character long."
+#| msgid_plural "Must be at least {num} characters long."
+msgid "Your first message must be at least {} characters long."
+msgstr "Trebuie să aibă cel puțin {num} caracter."
+
+#, fuzzy
+#| msgid "Forgot your codename?"
+msgid "Please do not submit your codename!"
+msgstr "Ți-ai uitat numele de cod?"
+
+#, fuzzy
+#| msgid "If you have already submitted to journalists, log in here to check for responses."
+msgid "Keep your codename secret, and use it to log in later to check for replies."
+msgstr "Dacă ai mai trimis ceva înainte jurnaliștilor, autentifică-te aici pentru a citi răspunsurile."
 
 msgid "Thanks! We received your message."
 msgstr "Îți mulțumim! Am primit mesajul tău."
@@ -830,8 +843,16 @@ msgstr "Toate răspunsurile au fost șterse"
 msgid "Sorry, that is not a recognized codename."
 msgstr "Ne pare rău, acesta nu este un nume de cod recunoscut."
 
+#, fuzzy
+#| msgid "Enter Codename"
+msgid "Codename"
+msgstr "Introdu numele de cod"
+
 msgid "Protecting Journalists and Sources"
 msgstr "Pentru protecția jurnaliștilor și a surselor"
+
+msgid "Skip to notification"
+msgstr ""
 
 msgid "We're sorry, our SecureDrop is currently offline."
 msgstr "Ne pare rău, contul nostru SecureDrop este acum offline."
@@ -866,34 +887,25 @@ msgstr "Notă: Partajarea de documente sensibile te poate supune la riscuri, chi
 msgid "SecureDrop is a project of Freedom of the Press Foundation."
 msgstr "SecureDrop este un proiect al Fundației Freedom of the Press."
 
-msgid "Welcome"
-msgstr "Bine ai venit"
-
-msgid "Please either write this codename down and keep it in a safe place, or memorize it."
-msgstr "Te rugăm să îți notezi acest nume de cod și să-l păstrezi într-un loc sigur sau să-l memorezi."
-
-msgid "This codename is what you will use in future visits to receive messages from our team in response to what you submit on the next screen."
-msgstr "Pe viitor, vei folosi acest nume de cod pentru a primi mesaje de la echipa noastră ca răspuns la ce vei transmite în ecranul următor."
-
 #, fuzzy
-#| msgid "Enter Codename"
-msgid "Codename"
-msgstr "Introdu numele de cod"
+#| msgid "Enter your codename"
+msgid "Get Your Codename"
+msgstr "Introdu numele tău de cod"
 
-msgid ""
-"Because we do not track users of our <b>SecureDrop</b>\n"
-" service, in future visits, using this codename will be the only way we have to communicate with you should we have\n"
-" questions or are interested in additional information. Unlike passwords, there is no way to retrieve a lost codename."
-msgstr ""
-"Deoarece noi nu urmărim utilizatorii serviciului nostru <b>SecureDrop</b>,\n"
-"în vizitele tale ulterioare, acest nume de cod va fi singura metodă prin care vom putea comunica cu tine\n"
-"în caz că avem întrebări sau dorim să ne trimiți informații suplimentare. Spre deosebire de parole, numele de cod pierdute nu mai pot fi recuperate."
-
-msgid "Submit Documents"
+msgid "A <em>codename</em> in SecureDrop functions as both your username and your password."
 msgstr ""
 
-msgid "SUBMIT DOCUMENTS"
-msgstr "TRIMITE DOCUMENTE"
+msgid "You will need this codename to log into our SecureDrop later:"
+msgstr ""
+
+msgid "<strong>Keep it secret.</strong> Do not share it with anyone."
+msgstr ""
+
+msgid "<strong>Keep it safe.</strong> There is no account recovery option."
+msgstr ""
+
+msgid "Continue"
+msgstr ""
 
 msgid "Your Tor Browser's <a id=\"disable-js\" href=\"\"><b>Security Level</b></a> is too low. Use the <img src=\"{icon}\" alt=\"&quot;Security Level&quot;\"> button in your browser’s toolbar to change it."
 msgstr "<a id=\"disable-js\" href=\"\"><b>Nivelul de securitate</b></a> din browserul tău Tor este prea slab. Folosește butonul <img src=\"{icon}\" alt=\"&quot;Nivelul de securitate&quot;\"> &nbsp;din bara de instrumente a browserului pentru a-l schimba."
@@ -906,11 +918,11 @@ msgstr ""
 msgid "Click the <img src=\"{icon}\" alt=\"&quot;Security Level&quot; button\"> in the toolbar above"
 msgstr "Dă click pe <img src=\"{icon}\" alt=\"shield icon\"> în bara de instrumente de mai sus"
 
-msgid "Select <b>Advanced Security Settings</b>"
-msgstr "Selectează <b>Setări avansate de securitate</b>"
+msgid "Click <b>Change</b> to open Security Level preferences"
+msgstr ""
 
-msgid "Select <b>Safest</b>"
-msgstr "Selectează <b>Cele mai sigure</b>"
+msgid "Select <b>Safest</b> and close the preferences tab"
+msgstr ""
 
 #, fuzzy
 #| msgid "<a href=\"/\">Refresh this page</a>, and you're done!"
@@ -947,9 +959,6 @@ msgstr "Introdu numele de cod"
 msgid "Enter your codename"
 msgstr "Introdu numele tău de cod"
 
-msgid "Continue"
-msgstr ""
-
 msgid "CANCEL"
 msgstr "RENUNȚĂ"
 
@@ -958,6 +967,12 @@ msgstr "Încă ceva..."
 
 msgid "Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar. This will clear your Tor Browser activity data on this device."
 msgstr "Dă clic pe butonul <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>Identitate nouă</b> din bara de instrumente a browserului Tor. Îți va șterge activitatea din browserul Tor de pe acest dispozitiv."
+
+msgid "Show"
+msgstr "Arată"
+
+msgid "Hide"
+msgstr "Ascunde"
 
 msgid "Remember, your codename is:"
 msgstr "Reține, numele tău de cod este:"
@@ -986,6 +1001,9 @@ msgstr "Mărime maximă fișiere la încărcare: 500 MB"
 msgid "Submit"
 msgstr ""
 
+msgid "Anti-spam check. Do not fill this in!"
+msgstr ""
+
 msgid "Read Replies"
 msgstr "Citește răspunsurile"
 
@@ -994,6 +1012,9 @@ msgstr "Ai primit un răspuns. Pentru a-ți proteja identitatea în cazul improb
 
 msgid "Delete this reply"
 msgstr "Ștergi acest răspuns"
+
+msgid "Delete reply from {timestamp}?"
+msgstr ""
 
 msgid "Delete this reply?"
 msgstr "Ștergi acest răspuns?"
@@ -1032,17 +1053,27 @@ msgstr "Important"
 msgid "You were logged out due to inactivity. Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
 msgstr "Ai fost deconectat(ă) din cauza inactivității. Dă clic pe butonul <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>Identitate nouă</b> din bara de instrumente a browserului Tor înainte de a merge mai departe. Îți va șterge activitatea din browserul Tor de pe acest dispozitiv."
 
-msgid "Why is there a warning about Tor2Web?"
-msgstr "De ce sunt avertizat(ă) despre Tor2Web?"
+msgid "Proxy Service Detected"
+msgstr ""
 
-msgid "Using Tor2Web to connect to SecureDrop will not protect your anonymity."
+#, fuzzy
+#| msgid "Using Tor2Web to connect to SecureDrop will not protect your anonymity."
+msgid "You appear to be using a Tor proxy service to access SecureDrop. Proxy services do not protect your anonymity."
 msgstr "Folosirea Tor2Web pentru a te conecta la SecureDrop nu îți va proteja anonimitatea."
 
-msgid "It could be possible for anyone monitoring your Internet traffic (your government, your Internet provider), to identify you."
+#, fuzzy
+#| msgid "It could be possible for anyone monitoring your Internet traffic (your government, your Internet provider), to identify you."
+msgid "Anyone monitoring your Internet traffic &mdash; including your government, your Internet provider, or the proxy operator &mdash; may be able to identify you."
 msgstr "Oricine îți monitorizează traficul pe internet (statul, furnizorul de internet) poate să te identifice."
 
-msgid "We <strong>strongly advise</strong> you to use the <a href=\"www.torproject.org/projects/torbrowser.html\">Tor Browser</a> instead."
-msgstr "<strong>Îți recomandăm puternic</strong> să folosești <a href=\"www.torproject.org/projects/torbrowser.html\">browserul Tor</a> în schimb."
+msgid "Always use <a href=\"www.torproject.org/projects/torbrowser.html\">Tor Browser</a> to access SecureDrop. Valid SecureDrop site addresses end with <code>.onion</code>. The correct address for this site is:"
+msgstr ""
+
+msgid "If you are already using Tor Browser, copy the address above and generate a new identity before you access SecureDrop."
+msgstr ""
+
+msgid "If there is a reasonable risk of your Internet traffic being monitored, consider connecting from a different location or network."
+msgstr ""
 
 msgid "You Should Use Tor Browser"
 msgstr "Ar trebui să folosești browserul Tor"
@@ -1099,6 +1130,60 @@ msgstr "<strong>Important:</strong> Dacă vrei să rămâi anonim(ă), <strong>n
 msgid "Back to submission page"
 msgstr "Înapoi la pagina de trimitere"
 
+#~ msgid "The following file has been selected for <strong>permanent deletion</strong>:"
+#~ msgid_plural "The following {num} files have been selected for <strong>permanent deletion</strong>:"
+#~ msgstr[0] "Următorul fișier a fost selectat pentru <strong>ștergere definitivă</strong>:"
+#~ msgstr[1] "Următoarele {num} fișiere au fost selectate pentru <strong>ștergere definitivă</strong>:"
+#~ msgstr[2] "Următoarele {num} de fișiere au fost selectate pentru <strong>ștergere definitivă</strong>:"
+
+#~ msgid "PERMANENTLY DELETE FILES"
+#~ msgstr "ȘTERGE DEFINITIV FIȘIERELE"
+
+#~ msgid "Return to the list of documents for {source_name}…"
+#~ msgstr "Întoarcere la lista de documente pentru {source_name}…"
+
+#~ msgid "WARNING:"
+#~ msgstr "AVERTISMENT:"
+
+#~ msgid "You appear to be using Tor2Web, which does not provide anonymity."
+#~ msgstr "Se pare că folosiți Tor2Web, care nu asigură anonimitate."
+
+#~ msgid "Why is this dangerous?"
+#~ msgstr "De ce este periculos?"
+
+#~ msgid "Welcome"
+#~ msgstr "Bine ai venit"
+
+#~ msgid "Please either write this codename down and keep it in a safe place, or memorize it."
+#~ msgstr "Te rugăm să îți notezi acest nume de cod și să-l păstrezi într-un loc sigur sau să-l memorezi."
+
+#~ msgid "This codename is what you will use in future visits to receive messages from our team in response to what you submit on the next screen."
+#~ msgstr "Pe viitor, vei folosi acest nume de cod pentru a primi mesaje de la echipa noastră ca răspuns la ce vei transmite în ecranul următor."
+
+#~ msgid ""
+#~ "Because we do not track users of our <b>SecureDrop</b>\n"
+#~ " service, in future visits, using this codename will be the only way we have to communicate with you should we have\n"
+#~ " questions or are interested in additional information. Unlike passwords, there is no way to retrieve a lost codename."
+#~ msgstr ""
+#~ "Deoarece noi nu urmărim utilizatorii serviciului nostru <b>SecureDrop</b>,\n"
+#~ "în vizitele tale ulterioare, acest nume de cod va fi singura metodă prin care vom putea comunica cu tine\n"
+#~ "în caz că avem întrebări sau dorim să ne trimiți informații suplimentare. Spre deosebire de parole, numele de cod pierdute nu mai pot fi recuperate."
+
+#~ msgid "SUBMIT DOCUMENTS"
+#~ msgstr "TRIMITE DOCUMENTE"
+
+#~ msgid "Select <b>Advanced Security Settings</b>"
+#~ msgstr "Selectează <b>Setări avansate de securitate</b>"
+
+#~ msgid "Select <b>Safest</b>"
+#~ msgstr "Selectează <b>Cele mai sigure</b>"
+
+#~ msgid "Why is there a warning about Tor2Web?"
+#~ msgstr "De ce sunt avertizat(ă) despre Tor2Web?"
+
+#~ msgid "We <strong>strongly advise</strong> you to use the <a href=\"www.torproject.org/projects/torbrowser.html\">Tor Browser</a> instead."
+#~ msgstr "<strong>Îți recomandăm puternic</strong> să folosești <a href=\"www.torproject.org/projects/torbrowser.html\">browserul Tor</a> în schimb."
+
 #~ msgid "Invalid secret format: odd-length secret. Did you mistype the secret?"
 #~ msgstr "Secret cu format nevalid: lungimea este impară. Ai tastat greșit secretul?"
 
@@ -1148,12 +1233,6 @@ msgstr "Înapoi la pagina de trimitere"
 
 #~ msgid "SecureDrop Home"
 #~ msgstr "Acasă SecureDrop"
-
-#~ msgid "Show"
-#~ msgstr "Arată"
-
-#~ msgid "Hide"
-#~ msgstr "Ascunde"
 
 #~ msgid "— No Messages —"
 #~ msgstr "— Niciun mesaj —"
@@ -1313,9 +1392,6 @@ msgstr "Înapoi la pagina de trimitere"
 
 #~ msgid "Already submitted something?"
 #~ msgstr "Ai trimis deja ceva?"
-
-#~ msgid "If you have already submitted to journalists, log in here to check for responses."
-#~ msgstr "Dacă ai mai trimis ceva înainte jurnaliștilor, autentifică-te aici pentru a citi răspunsurile."
 
 #~ msgid "CHECK FOR A RESPONSE"
 #~ msgstr "VERIFICĂ DACĂ AI UN RĂSPUNS"

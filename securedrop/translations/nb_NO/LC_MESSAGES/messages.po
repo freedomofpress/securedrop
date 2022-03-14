@@ -4,7 +4,20 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
 #
 msgid ""
-msgstr "Project-Id-Version: SecureDrop 0.3.12\nReport-Msgid-Bugs-To: securedrop@freedom.press\nPOT-Creation-Date: 2017-09-02 07:28+0000\nPO-Revision-Date: 2022-02-11 19:04+0000\nLast-Translator: Øyvind Bye Skille <oyvind@byeskille.net>\nLanguage-Team: Norwegian Bokmål <https://weblate.securedrop.org/projects/securedrop/securedrop/nb_NO/>\nLanguage: nb_NO\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=2; plural=n != 1;\nX-Generator: Weblate 4.6\nGenerated-By: Babel 2.4.0\n"
+msgstr ""
+"Project-Id-Version: SecureDrop 0.3.12\n"
+"Report-Msgid-Bugs-To: securedrop@freedom.press\n"
+"POT-Creation-Date: 2017-09-02 07:28+0000\n"
+"PO-Revision-Date: 2022-02-11 19:04+0000\n"
+"Last-Translator: Øyvind Bye Skille <oyvind@byeskille.net>\n"
+"Language-Team: Norwegian Bokmål <https://weblate.securedrop.org/projects/securedrop/securedrop/nb_NO/>\n"
+"Language: nb_NO\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.6\n"
+"Generated-By: Babel 2.4.0\n"
 
 msgid "Name too long"
 msgstr "Navnet er for langt"
@@ -130,11 +143,17 @@ msgid_plural "Cannot be longer than {num} characters."
 msgstr[0] "Kan ikke inneholde mer enn {num} tegn."
 msgstr[1] "Kan ikke inneholde mer enn {num} tegn."
 
+msgid "Please specify an integer value greater than 0."
+msgstr ""
+
 msgid "This field is required."
 msgstr "Dette feltet er påkrevd."
 
 msgid "You cannot send an empty reply."
 msgstr "Du kan ikke sende et tomt svar."
+
+msgid "To configure a minimum message length, you must set the required number of characters."
+msgstr ""
 
 msgid "File required."
 msgstr "Fil påkrevd."
@@ -409,6 +428,9 @@ msgstr "Når du har satt opp din YubiKey, skriv inn den 6 tegn lange koden neden
 msgid "Navigation"
 msgstr "Navigasjon"
 
+msgid "Skip to main content"
+msgstr ""
+
 msgid "Logged on as"
 msgstr "Innlogget som"
 
@@ -532,6 +554,15 @@ msgstr "Forsendelsesinnstillinger"
 msgid "Prevent sources from uploading documents. Sources will still be able to send messages."
 msgstr "Forhindre kilder i å laste opp filer. De vil fortsatt kunne sende inn meldinger."
 
+msgid "Prevent sources from sending initial messages shorter than the minimum required length:"
+msgstr ""
+
+msgid "Minimum number of characters."
+msgstr ""
+
+msgid "Prevent sources from submitting their codename as an initial message."
+msgstr ""
+
 msgid "Update Submission Preferences"
 msgstr "Oppdater forsendelsesinnstillinger"
 
@@ -549,20 +580,6 @@ msgstr "Send test-alarm fra OSSEC"
 
 msgid "SEND TEST OSSEC ALERT"
 msgstr "SEND TEST OSSEC-VARSEL"
-
-msgid "The following file has been selected for <strong>permanent deletion</strong>:"
-msgid_plural "The following {num} files have been selected for <strong>permanent deletion</strong>:"
-msgstr[0] "Følgende fil er markert for <strong>permanent sletting</strong>:"
-msgstr[1] "Følgende {num} filer er markert for <strong>permanent sletting</strong>:"
-
-msgid "Permanently Delete Files"
-msgstr "Permanent slett filer"
-
-msgid "PERMANENTLY DELETE FILES"
-msgstr "PERMANENT SLETTING AV FILER"
-
-msgid "Return to the list of documents for {source_name}…"
-msgstr "Tilbake til listen over filer for {source_name}…"
 
 msgid "Edit user \"{user}\""
 msgstr "Rediger brukeren \"{user}\""
@@ -705,15 +722,6 @@ msgstr "Logg inn"
 msgid "LOG IN"
 msgstr "LOGG INN"
 
-msgid "WARNING:"
-msgstr "ADVARSEL:"
-
-msgid "You appear to be using Tor2Web, which does not provide anonymity."
-msgstr "Det virker som du bruker Tor2Web, som ikke gir anonymitet."
-
-msgid "Why is this dangerous?"
-msgstr "Hvorfor utgjør dette en fare?"
-
 msgid "Field must be between 1 and {max_codename_len} characters long."
 msgstr "Feltet må være mellom ett og {max_codename_len} tegn langt."
 
@@ -732,6 +740,9 @@ msgstr "Meldingsteksten er for lang."
 msgid "Large blocks of text must be uploaded as a file, not copied and pasted."
 msgstr "Store mengder tekst må lastes opp som fil, ikke klippes og limes inn."
 
+msgid "Your connection is not anonymous right now!"
+msgstr ""
+
 msgid "You were redirected because you are already logged in. If you want to create a new account, you should log out first."
 msgstr "Du ble omdirigert fordi du allerede er logget inn. Om du ønsker å lage en ny konto må du først logge ut."
 
@@ -746,6 +757,22 @@ msgstr "Du må skrive inn en melding eller velge ei fil å sende inn."
 
 msgid "You must enter a message."
 msgstr "Du må skrive inn en melding."
+
+#, fuzzy
+#| msgid "Must be at least {num} character long."
+#| msgid_plural "Must be at least {num} characters long."
+msgid "Your first message must be at least {} characters long."
+msgstr "Må være minst {num} tegn langt."
+
+#, fuzzy
+#| msgid "Forgot your codename?"
+msgid "Please do not submit your codename!"
+msgstr "Glemt kodenavnet ditt?"
+
+#, fuzzy
+#| msgid "If you have already submitted to journalists, log in here to check for responses."
+msgid "Keep your codename secret, and use it to log in later to check for replies."
+msgstr "Om du har sendt inn noe tidligere, logg inn her for å se etter svar og tilbakemeldinger."
 
 msgid "Thanks! We received your message."
 msgstr "Takk! Vi mottok meldingen din."
@@ -765,8 +792,14 @@ msgstr "Alle svar har blitt slettet"
 msgid "Sorry, that is not a recognized codename."
 msgstr "Beklager, det er ikke et gjenkjent kodenavn."
 
+msgid "Codename"
+msgstr "Kodenavn"
+
 msgid "Protecting Journalists and Sources"
 msgstr "Sikkerhet for journalister og kilder"
+
+msgid "Skip to notification"
+msgstr ""
 
 msgid "We're sorry, our SecureDrop is currently offline."
 msgstr "Vi beklager, vår SecureDrop er for tiden ute av drift."
@@ -801,32 +834,25 @@ msgstr "Obs: Deling av sensitive dokumenter kan innebære risiko for deg, også 
 msgid "SecureDrop is a project of Freedom of the Press Foundation."
 msgstr "SecureDrop er et prosjekt drevet av Freedom of the Press Foundation."
 
-msgid "Welcome"
-msgstr "Velkommen"
+#, fuzzy
+#| msgid "Enter your codename"
+msgid "Get Your Codename"
+msgstr "Skriv inn ditt kodenavn"
 
-msgid "Please either write this codename down and keep it in a safe place, or memorize it."
-msgstr "Husk, eller skriv ned kodenavnet på et sikkert sted."
-
-msgid "This codename is what you will use in future visits to receive messages from our team in response to what you submit on the next screen."
-msgstr "Dette er kodenavnet du kan bruke i fremtiden for å fortsette kommunikasjonen med oss, f.eks. for å sjekke om vi har besvart det du sender inn i neste dialogvindu."
-
-msgid "Codename"
-msgstr "Kodenavn"
-
-msgid ""
-"Because we do not track users of our <b>SecureDrop</b>\n"
-" service, in future visits, using this codename will be the only way we have to communicate with you should we have\n"
-" questions or are interested in additional information. Unlike passwords, there is no way to retrieve a lost codename."
+msgid "A <em>codename</em> in SecureDrop functions as both your username and your password."
 msgstr ""
-"Fordi vi ikke sporer brukerne på vår <b>SecureDrop</b>-tjeneste, \n"
-"er dette kodenavnet den eneste måten for senere kommunikasjon om vi har spørsmål eller vil vise interesse \n"
-"for mer informasjon. I motsetning til passord, er det umulig å finne tilbake til kodenavnet om du glemmer det."
 
-msgid "Submit Documents"
-msgstr "Send inn dokumenter"
+msgid "You will need this codename to log into our SecureDrop later:"
+msgstr ""
 
-msgid "SUBMIT DOCUMENTS"
-msgstr "SEND INN DOKUMENTER"
+msgid "<strong>Keep it secret.</strong> Do not share it with anyone."
+msgstr ""
+
+msgid "<strong>Keep it safe.</strong> There is no account recovery option."
+msgstr ""
+
+msgid "Continue"
+msgstr "Fortsett"
 
 msgid "Your Tor Browser's <a id=\"disable-js\" href=\"\"><b>Security Level</b></a> is too low. Use the <img src=\"{icon}\" alt=\"&quot;Security Level&quot;\"> button in your browser’s toolbar to change it."
 msgstr "<a id=\"disable-js\" href=\"\"><b>Sikkerhetsinnstillingene</b></a> i din Tor-nettleser er satt for lavt. Bruk <img src=\"{icon}\" alt=\"&quot;Sikkerhetsnivå&quot;\"\">knappen i nettleserens verktøylinje for å endre nivået."
@@ -837,11 +863,11 @@ msgstr "Hvordan endre sikkerhetsnivået"
 msgid "Click the <img src=\"{icon}\" alt=\"&quot;Security Level&quot; button\"> in the toolbar above"
 msgstr "Klikk på <img src=\"{icon}\" alt=\"&quot;Sikkerhetsnivå&quot; button\"> i verktøylinjen ovenfor"
 
-msgid "Select <b>Advanced Security Settings</b>"
-msgstr "Velg <b>Avanserte sikkerhetsinnstillinger</b>"
+msgid "Click <b>Change</b> to open Security Level preferences"
+msgstr ""
 
-msgid "Select <b>Safest</b>"
-msgstr "Velg <b>Tryggest</b>"
+msgid "Select <b>Safest</b> and close the preferences tab"
+msgstr ""
 
 msgid "<a href=\"/\" aria-label=\"Follow these instructions, then refresh this page\">Refresh this page</a>, and you're done!"
 msgstr "<a href=\"/\" aria-label=\"Følg disse instruksjonene, deretter oppdater siden\">Last inn siden igjen</a>, og så er du ferdig!"
@@ -876,9 +902,6 @@ msgstr "Skriv inn kodenavn"
 msgid "Enter your codename"
 msgstr "Skriv inn ditt kodenavn"
 
-msgid "Continue"
-msgstr "Fortsett"
-
 msgid "CANCEL"
 msgstr "AVBRYT"
 
@@ -887,6 +910,12 @@ msgstr "Én ting til…"
 
 msgid "Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar. This will clear your Tor Browser activity data on this device."
 msgstr "Klikk på <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>Ny identitet</b>-knappen i Tor-nettleserens verktøylinje. Det vil slette loggføringen av din Tor-bruk på denne enheten."
+
+msgid "Show"
+msgstr "Vis"
+
+msgid "Hide"
+msgstr "Skjul"
 
 msgid "Remember, your codename is:"
 msgstr "Husk, kodenavnet ditt er:"
@@ -915,6 +944,9 @@ msgstr "Maksimal opplastningsstørrelse: 500MB"
 msgid "Submit"
 msgstr "Send inn"
 
+msgid "Anti-spam check. Do not fill this in!"
+msgstr ""
+
 msgid "Read Replies"
 msgstr "Les svar"
 
@@ -923,6 +955,9 @@ msgstr "Du har mottatt et svar. For å beskytte din egen identitet i tilfelle no
 
 msgid "Delete this reply"
 msgstr "Slett dette svaret"
+
+msgid "Delete reply from {timestamp}?"
+msgstr ""
 
 msgid "Delete this reply?"
 msgstr "Slett dette svaret?"
@@ -957,17 +992,27 @@ msgstr "Viktig"
 msgid "You were logged out due to inactivity. Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
 msgstr "Du ble utlogget som følge av inaktivitet. Klikk på <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>Ny identitiet</b>-knappen i Tor-nettleserens verktøylinje før du fortsetter. Dette vil slette loggen over aktivitet i Tor-nettleseren på denne enheten."
 
-msgid "Why is there a warning about Tor2Web?"
-msgstr "Hvorfor er det en advarsel om Tor2Web?"
+msgid "Proxy Service Detected"
+msgstr ""
 
-msgid "Using Tor2Web to connect to SecureDrop will not protect your anonymity."
+#, fuzzy
+#| msgid "Using Tor2Web to connect to SecureDrop will not protect your anonymity."
+msgid "You appear to be using a Tor proxy service to access SecureDrop. Proxy services do not protect your anonymity."
 msgstr "Bruk av Tor2Web for å kommunisere med SecureDrop vil ikke beskytte din anonymitet."
 
-msgid "It could be possible for anyone monitoring your Internet traffic (your government, your Internet provider), to identify you."
+#, fuzzy
+#| msgid "It could be possible for anyone monitoring your Internet traffic (your government, your Internet provider), to identify you."
+msgid "Anyone monitoring your Internet traffic &mdash; including your government, your Internet provider, or the proxy operator &mdash; may be able to identify you."
 msgstr "Det er en mulighet for at alle som kan følge med på internettbruken din (myndigheter, internettilbyderen din) kan identifisere deg."
 
-msgid "We <strong>strongly advise</strong> you to use the <a href=\"www.torproject.org/projects/torbrowser.html\">Tor Browser</a> instead."
-msgstr "Vi <strong>anbefaler sterkt</strong> at du bruker <a href=\"www.torproject.org/projects/torbrowser.html\">Tor-nettleseren</a> i stedet."
+msgid "Always use <a href=\"www.torproject.org/projects/torbrowser.html\">Tor Browser</a> to access SecureDrop. Valid SecureDrop site addresses end with <code>.onion</code>. The correct address for this site is:"
+msgstr ""
+
+msgid "If you are already using Tor Browser, copy the address above and generate a new identity before you access SecureDrop."
+msgstr ""
+
+msgid "If there is a reasonable risk of your Internet traffic being monitored, consider connecting from a different location or network."
+msgstr ""
 
 msgid "You Should Use Tor Browser"
 msgstr "Du burde bruke Tor-nettleseren"
@@ -1023,6 +1068,65 @@ msgstr "<strong>Viktig:</strong> Om du ønsker å være helt anonym, <strong>ikk
 
 msgid "Back to submission page"
 msgstr "Tilbake til innsendelsesside"
+
+#~ msgid "The following file has been selected for <strong>permanent deletion</strong>:"
+#~ msgid_plural "The following {num} files have been selected for <strong>permanent deletion</strong>:"
+#~ msgstr[0] "Følgende fil er markert for <strong>permanent sletting</strong>:"
+#~ msgstr[1] "Følgende {num} filer er markert for <strong>permanent sletting</strong>:"
+
+#~ msgid "Permanently Delete Files"
+#~ msgstr "Permanent slett filer"
+
+#~ msgid "PERMANENTLY DELETE FILES"
+#~ msgstr "PERMANENT SLETTING AV FILER"
+
+#~ msgid "Return to the list of documents for {source_name}…"
+#~ msgstr "Tilbake til listen over filer for {source_name}…"
+
+#~ msgid "WARNING:"
+#~ msgstr "ADVARSEL:"
+
+#~ msgid "You appear to be using Tor2Web, which does not provide anonymity."
+#~ msgstr "Det virker som du bruker Tor2Web, som ikke gir anonymitet."
+
+#~ msgid "Why is this dangerous?"
+#~ msgstr "Hvorfor utgjør dette en fare?"
+
+#~ msgid "Welcome"
+#~ msgstr "Velkommen"
+
+#~ msgid "Please either write this codename down and keep it in a safe place, or memorize it."
+#~ msgstr "Husk, eller skriv ned kodenavnet på et sikkert sted."
+
+#~ msgid "This codename is what you will use in future visits to receive messages from our team in response to what you submit on the next screen."
+#~ msgstr "Dette er kodenavnet du kan bruke i fremtiden for å fortsette kommunikasjonen med oss, f.eks. for å sjekke om vi har besvart det du sender inn i neste dialogvindu."
+
+#~ msgid ""
+#~ "Because we do not track users of our <b>SecureDrop</b>\n"
+#~ " service, in future visits, using this codename will be the only way we have to communicate with you should we have\n"
+#~ " questions or are interested in additional information. Unlike passwords, there is no way to retrieve a lost codename."
+#~ msgstr ""
+#~ "Fordi vi ikke sporer brukerne på vår <b>SecureDrop</b>-tjeneste, \n"
+#~ "er dette kodenavnet den eneste måten for senere kommunikasjon om vi har spørsmål eller vil vise interesse \n"
+#~ "for mer informasjon. I motsetning til passord, er det umulig å finne tilbake til kodenavnet om du glemmer det."
+
+#~ msgid "Submit Documents"
+#~ msgstr "Send inn dokumenter"
+
+#~ msgid "SUBMIT DOCUMENTS"
+#~ msgstr "SEND INN DOKUMENTER"
+
+#~ msgid "Select <b>Advanced Security Settings</b>"
+#~ msgstr "Velg <b>Avanserte sikkerhetsinnstillinger</b>"
+
+#~ msgid "Select <b>Safest</b>"
+#~ msgstr "Velg <b>Tryggest</b>"
+
+#~ msgid "Why is there a warning about Tor2Web?"
+#~ msgstr "Hvorfor er det en advarsel om Tor2Web?"
+
+#~ msgid "We <strong>strongly advise</strong> you to use the <a href=\"www.torproject.org/projects/torbrowser.html\">Tor Browser</a> instead."
+#~ msgstr "Vi <strong>anbefaler sterkt</strong> at du bruker <a href=\"www.torproject.org/projects/torbrowser.html\">Tor-nettleseren</a> i stedet."
 
 #~ msgid "Invalid secret format: odd-length secret. Did you mistype the secret?"
 #~ msgstr "Feil hemmelighet, du har lagt til eller glemt noe."
@@ -1080,12 +1184,6 @@ msgstr "Tilbake til innsendelsesside"
 
 #~ msgid "SecureDrop Home"
 #~ msgstr "SecureDrop hjem"
-
-#~ msgid "Show"
-#~ msgstr "Vis"
-
-#~ msgid "Hide"
-#~ msgstr "Skjul"
 
 #~ msgid "— No Messages —"
 #~ msgstr "— Ingen meldinger —"
@@ -1245,9 +1343,6 @@ msgstr "Tilbake til innsendelsesside"
 
 #~ msgid "Already submitted something?"
 #~ msgstr "Har du allerede sendt inn noe?"
-
-#~ msgid "If you have already submitted to journalists, log in here to check for responses."
-#~ msgstr "Om du har sendt inn noe tidligere, logg inn her for å se etter svar og tilbakemeldinger."
 
 #~ msgid "CHECK FOR A RESPONSE"
 #~ msgstr "SE ETTER SVAR"

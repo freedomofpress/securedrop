@@ -4,7 +4,19 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
 #
 msgid ""
-msgstr "Project-Id-Version: SecureDrop 0.5-rc4\nReport-Msgid-Bugs-To: securedrop@freedom.press\nPO-Revision-Date: 2022-02-16 21:04+0000\nLast-Translator: Kaya Zeren <kayazeren@gmail.com>\nLanguage-Team: Turkish <https://weblate.securedrop.org/projects/securedrop/securedrop/tr/>\nLanguage: tr\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=2; plural=n != 1;\nX-Generator: Weblate 4.6\nGenerated-By: Babel 2.4.0\n"
+msgstr ""
+"Project-Id-Version: SecureDrop 0.5-rc4\n"
+"Report-Msgid-Bugs-To: securedrop@freedom.press\n"
+"PO-Revision-Date: 2022-02-16 21:04+0000\n"
+"Last-Translator: Kaya Zeren <kayazeren@gmail.com>\n"
+"Language-Team: Turkish <https://weblate.securedrop.org/projects/securedrop/securedrop/tr/>\n"
+"Language: tr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.6\n"
+"Generated-By: Babel 2.4.0\n"
 
 msgid "Name too long"
 msgstr "İsim çok uzun"
@@ -130,11 +142,17 @@ msgid_plural "Cannot be longer than {num} characters."
 msgstr[0] "{num} karakterden uzun olamaz."
 msgstr[1] "{num} karakterden uzun olamaz."
 
+msgid "Please specify an integer value greater than 0."
+msgstr ""
+
 msgid "This field is required."
 msgstr "Bu alanın doldurulması zorunludur."
 
 msgid "You cannot send an empty reply."
 msgstr "Boş bir yanıt gönderemezsiniz."
+
+msgid "To configure a minimum message length, you must set the required number of characters."
+msgstr ""
 
 msgid "File required."
 msgstr "Dosya gerekli."
@@ -409,6 +427,9 @@ msgstr "YubiKey yapılandırmasını tamamladığınızda, aşağıdaki 6 haneli
 msgid "Navigation"
 msgstr "Gezinme"
 
+msgid "Skip to main content"
+msgstr ""
+
 msgid "Logged on as"
 msgstr "Oturum açan"
 
@@ -532,6 +553,15 @@ msgstr "Gönderim Tercihleri"
 msgid "Prevent sources from uploading documents. Sources will still be able to send messages."
 msgstr "Kaynakların belge yüklemelerini engeller. Kaynaklar halen ileti gönderebilir."
 
+msgid "Prevent sources from sending initial messages shorter than the minimum required length:"
+msgstr ""
+
+msgid "Minimum number of characters."
+msgstr ""
+
+msgid "Prevent sources from submitting their codename as an initial message."
+msgstr ""
+
 msgid "Update Submission Preferences"
 msgstr "Gönderim tercihlerini ayarla"
 
@@ -549,20 +579,6 @@ msgstr "OSSEC uyarı denemesi gönder"
 
 msgid "SEND TEST OSSEC ALERT"
 msgstr "OSSEC UYARI GÖNDERME DENEMESİ"
-
-msgid "The following file has been selected for <strong>permanent deletion</strong>:"
-msgid_plural "The following {num} files have been selected for <strong>permanent deletion</strong>:"
-msgstr[0] "Aşağıdaki dosya <strong>kalıcı bir şekilde silinmek</strong> üzere seçilmiş:"
-msgstr[1] "Aşağıdaki {num} dosya <strong>kalıcı bir şekilde silinmek</strong> üzere seçilmiş:"
-
-msgid "Permanently Delete Files"
-msgstr "Dosyaları kalıcı olarak sil"
-
-msgid "PERMANENTLY DELETE FILES"
-msgstr "DOSYALARI KALICI OLARAK SİL"
-
-msgid "Return to the list of documents for {source_name}…"
-msgstr "{source_name} belgelerinin listesine geri dön…"
 
 msgid "Edit user \"{user}\""
 msgstr "\"{user}\" kullanıcısını düzenle"
@@ -705,15 +721,6 @@ msgstr "Oturum aç"
 msgid "LOG IN"
 msgstr "OTURUM AÇ"
 
-msgid "WARNING:"
-msgstr "UYARI:"
-
-msgid "You appear to be using Tor2Web, which does not provide anonymity."
-msgstr "Anonimlik sağlamayan Tor2Web kullanıyor gibisiniz."
-
-msgid "Why is this dangerous?"
-msgstr "Bu neden tehlikeli?"
-
 msgid "Field must be between 1 and {max_codename_len} characters long."
 msgstr "Alanda 1 ile {max_codename_len} arasında karakter bulunmalıdır."
 
@@ -732,6 +739,9 @@ msgstr "İleti metni çok uzun."
 msgid "Large blocks of text must be uploaded as a file, not copied and pasted."
 msgstr "Büyük metin gövdeleri dosya olarak yüklenmelidir, kopyala ve yapıştır yapılmamalıdır."
 
+msgid "Your connection is not anonymous right now!"
+msgstr ""
+
 msgid "You were redirected because you are already logged in. If you want to create a new account, you should log out first."
 msgstr "Oturumunuz zaten açık olduğundan buraya yönlendirildiniz. Yeni bir hesap açmak istiyorsanız, önce oturumunuzu kapatmalısınız."
 
@@ -746,6 +756,22 @@ msgstr "Bir ileti yazmalı ya da gönderilecek bir dosya seçmelisiniz."
 
 msgid "You must enter a message."
 msgstr "Bir ileti yazmalısınız."
+
+#, fuzzy
+#| msgid "Must be at least {num} character long."
+#| msgid_plural "Must be at least {num} characters long."
+msgid "Your first message must be at least {} characters long."
+msgstr "{num} karakterden az olamaz."
+
+#, fuzzy
+#| msgid "Forgot your codename?"
+msgid "Please do not submit your codename!"
+msgstr "Kod adınızı mı unuttunuz?"
+
+#, fuzzy
+#| msgid "If you have already submitted to journalists, log in here to check for responses."
+msgid "Keep your codename secret, and use it to log in later to check for replies."
+msgstr "Daha önce de gazetecilere bir şey gönderdiyseniz, oturum açarak yanıtları kontrol edin."
 
 msgid "Thanks! We received your message."
 msgstr "Teşekkürler! İletiniz alındı."
@@ -765,8 +791,14 @@ msgstr "Bütün yanıtlar silindi"
 msgid "Sorry, that is not a recognized codename."
 msgstr "Maalesef, kod adı anlaşılamadı."
 
+msgid "Codename"
+msgstr "Kod adı"
+
 msgid "Protecting Journalists and Sources"
 msgstr "Gazetecileri ve Kaynakları Korumak"
+
+msgid "Skip to notification"
+msgstr ""
 
 msgid "We're sorry, our SecureDrop is currently offline."
 msgstr "Maalesef, SecureDrop şu anda çevrimdışı."
@@ -801,32 +833,25 @@ msgstr "Lütfen unutmayın: Tor ve SecureDrop kullanıyor olsanız bile önemli 
 msgid "SecureDrop is a project of Freedom of the Press Foundation."
 msgstr "SecureDrop, Freedom of the Press (Basın Özgürlüğü) vakfının bir projesidir."
 
-msgid "Welcome"
-msgstr "Hoş Geldiniz"
+#, fuzzy
+#| msgid "Enter your codename"
+msgid "Get Your Codename"
+msgstr "Kod adınızı yazın"
 
-msgid "Please either write this codename down and keep it in a safe place, or memorize it."
-msgstr "Lütfen bu kod adını bir yere yazın ve güvenli bir şekilde saklayın ya da ezberleyin."
-
-msgid "This codename is what you will use in future visits to receive messages from our team in response to what you submit on the next screen."
-msgstr "Bir sonraki sayfada göndereceğiniz bilgilere, ekibimizin gönderdiği yanıtları almak için yeniden geldiğinizde bu kod adını kullanacaksınız."
-
-msgid "Codename"
-msgstr "Kod adı"
-
-msgid ""
-"Because we do not track users of our <b>SecureDrop</b>\n"
-" service, in future visits, using this codename will be the only way we have to communicate with you should we have\n"
-" questions or are interested in additional information. Unlike passwords, there is no way to retrieve a lost codename."
+msgid "A <em>codename</em> in SecureDrop functions as both your username and your password."
 msgstr ""
-"<b>SecureDrop</b> hizmetimizin kullanıcılarını izlemediğimiz için, \n"
-"sizinle iletişim kurabilmemiz, soru sorabilmemiz ya da ek bilgi gereksinimlerini bildirebilmemiz için kullanılabilecek\n"
-"tek yol sonraki ziyaretlerinizde bu kod adını kullanmanızdır. Parolaların aksine kod adı kaybolduğunda geri alınamaz."
 
-msgid "Submit Documents"
-msgstr "Belgeleri gönder"
+msgid "You will need this codename to log into our SecureDrop later:"
+msgstr ""
 
-msgid "SUBMIT DOCUMENTS"
-msgstr "BELGE GÖNDER"
+msgid "<strong>Keep it secret.</strong> Do not share it with anyone."
+msgstr ""
+
+msgid "<strong>Keep it safe.</strong> There is no account recovery option."
+msgstr ""
+
+msgid "Continue"
+msgstr "Devam"
 
 msgid "Your Tor Browser's <a id=\"disable-js\" href=\"\"><b>Security Level</b></a> is too low. Use the <img src=\"{icon}\" alt=\"&quot;Security Level&quot;\"> button in your browser’s toolbar to change it."
 msgstr "Tor Browser <a id=\"disable-js\" href=\"\"><b>Güvenlik Düzeyi</b></a> çok düşük. Tor Browser araç çubuğundaki <img src=\"{icon}\" alt=\"&quot;Güvenlik Düzeyi&quot;\"> &nbsp;düğmesini kullanarak değiştirebilirsiniz."
@@ -837,11 +862,11 @@ msgstr "Güvenlik düzeyi nasıl değiştirilir"
 msgid "Click the <img src=\"{icon}\" alt=\"&quot;Security Level&quot; button\"> in the toolbar above"
 msgstr "Yukarıdaki araç çubuğundan <img src=\"{icon}\" alt=\"&quot;Güvenlik Düzeyi&quot;\"> düğmesine tıklayın"
 
-msgid "Select <b>Advanced Security Settings</b>"
-msgstr "<b>Gelişmiş Güvenlik Ayarlarını</b> seçin"
+msgid "Click <b>Change</b> to open Security Level preferences"
+msgstr ""
 
-msgid "Select <b>Safest</b>"
-msgstr "<b>En güvenli</b> seçeneğini seçin"
+msgid "Select <b>Safest</b> and close the preferences tab"
+msgstr ""
 
 msgid "<a href=\"/\" aria-label=\"Follow these instructions, then refresh this page\">Refresh this page</a>, and you're done!"
 msgstr "<a href=\"/\" aria-label=\"Bu yönergeleri izleyin ve sayfayı yenileyin\">Bu sayfayı yenileyin</a> ve işlemi tamamlayın!"
@@ -876,9 +901,6 @@ msgstr "Kod Adını Yazın"
 msgid "Enter your codename"
 msgstr "Kod adınızı yazın"
 
-msgid "Continue"
-msgstr "Devam"
-
 msgid "CANCEL"
 msgstr "İPTAL"
 
@@ -887,6 +909,12 @@ msgstr "Bir şey daha var..."
 
 msgid "Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar. This will clear your Tor Browser activity data on this device."
 msgstr "Tor Browser araç çubuğundan <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>Kimliği yenile</b> üzerine tıklayın. Bu işlem bu aygıt üzerindeki Tor Browser etkinliklerini siler."
+
+msgid "Show"
+msgstr "Göster"
+
+msgid "Hide"
+msgstr "Gizle"
 
 msgid "Remember, your codename is:"
 msgstr "Unutmayın, kod adınız:"
@@ -915,6 +943,9 @@ msgstr "En büyük yükleme boyutu: 500 MB"
 msgid "Submit"
 msgstr "Gönder"
 
+msgid "Anti-spam check. Do not fill this in!"
+msgstr ""
+
 msgid "Read Replies"
 msgstr "Yanıtları Okuyun"
 
@@ -923,6 +954,9 @@ msgstr "Bir yanıt aldınız. Pek mümkün olmasa da birinin kod adınızı öğ
 
 msgid "Delete this reply"
 msgstr "Bu yanıtı sil"
+
+msgid "Delete reply from {timestamp}?"
+msgstr ""
 
 msgid "Delete this reply?"
 msgstr "Bu yanıt silinsin mi?"
@@ -957,17 +991,27 @@ msgstr "Önemli"
 msgid "You were logged out due to inactivity. Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
 msgstr "Bir süredir işlem yapmadığınız için oturumunuz kapatıldı. İlerlemeden önce Tor Browser araç çubuğundan <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>Kimliği yenile</b> üzerine tıklayın. Bu işlem bu aygıttaki Tor Browser etkinlik bilgilerini siler."
 
-msgid "Why is there a warning about Tor2Web?"
-msgstr "Neden Tor2Web hakkında bir uyarı var?"
+msgid "Proxy Service Detected"
+msgstr ""
 
-msgid "Using Tor2Web to connect to SecureDrop will not protect your anonymity."
+#, fuzzy
+#| msgid "Using Tor2Web to connect to SecureDrop will not protect your anonymity."
+msgid "You appear to be using a Tor proxy service to access SecureDrop. Proxy services do not protect your anonymity."
 msgstr "SecureDrop uygulamasına Tor2Web kullanarak bağlanmak anonim kalmanızı sağlamaz."
 
-msgid "It could be possible for anyone monitoring your Internet traffic (your government, your Internet provider), to identify you."
+#, fuzzy
+#| msgid "It could be possible for anyone monitoring your Internet traffic (your government, your Internet provider), to identify you."
+msgid "Anyone monitoring your Internet traffic &mdash; including your government, your Internet provider, or the proxy operator &mdash; may be able to identify you."
 msgstr "İnternet kullanımını gözetleyen herhangi birinin (hükümetiniz, İnternet sağlayıcınız) sizin kim olduğunuzu belirleyebilir."
 
-msgid "We <strong>strongly advise</strong> you to use the <a href=\"www.torproject.org/projects/torbrowser.html\">Tor Browser</a> instead."
-msgstr "Bunun yerine <a href=\"www.torproject.org/projects/torbrowser.html\">Tor Browser</a> kullanmanızı <strong>önemle öneririz</strong>."
+msgid "Always use <a href=\"www.torproject.org/projects/torbrowser.html\">Tor Browser</a> to access SecureDrop. Valid SecureDrop site addresses end with <code>.onion</code>. The correct address for this site is:"
+msgstr ""
+
+msgid "If you are already using Tor Browser, copy the address above and generate a new identity before you access SecureDrop."
+msgstr ""
+
+msgid "If there is a reasonable risk of your Internet traffic being monitored, consider connecting from a different location or network."
+msgstr ""
 
 msgid "You Should Use Tor Browser"
 msgstr "Tor Browser kullanmalısınız"
@@ -1023,6 +1067,65 @@ msgstr "<strong>Önemli:</strong> Anonim kalmak istiyorsanız, dosyanın GPG tar
 
 msgid "Back to submission page"
 msgstr "Gönderi sayfasına geri dön"
+
+#~ msgid "The following file has been selected for <strong>permanent deletion</strong>:"
+#~ msgid_plural "The following {num} files have been selected for <strong>permanent deletion</strong>:"
+#~ msgstr[0] "Aşağıdaki dosya <strong>kalıcı bir şekilde silinmek</strong> üzere seçilmiş:"
+#~ msgstr[1] "Aşağıdaki {num} dosya <strong>kalıcı bir şekilde silinmek</strong> üzere seçilmiş:"
+
+#~ msgid "Permanently Delete Files"
+#~ msgstr "Dosyaları kalıcı olarak sil"
+
+#~ msgid "PERMANENTLY DELETE FILES"
+#~ msgstr "DOSYALARI KALICI OLARAK SİL"
+
+#~ msgid "Return to the list of documents for {source_name}…"
+#~ msgstr "{source_name} belgelerinin listesine geri dön…"
+
+#~ msgid "WARNING:"
+#~ msgstr "UYARI:"
+
+#~ msgid "You appear to be using Tor2Web, which does not provide anonymity."
+#~ msgstr "Anonimlik sağlamayan Tor2Web kullanıyor gibisiniz."
+
+#~ msgid "Why is this dangerous?"
+#~ msgstr "Bu neden tehlikeli?"
+
+#~ msgid "Welcome"
+#~ msgstr "Hoş Geldiniz"
+
+#~ msgid "Please either write this codename down and keep it in a safe place, or memorize it."
+#~ msgstr "Lütfen bu kod adını bir yere yazın ve güvenli bir şekilde saklayın ya da ezberleyin."
+
+#~ msgid "This codename is what you will use in future visits to receive messages from our team in response to what you submit on the next screen."
+#~ msgstr "Bir sonraki sayfada göndereceğiniz bilgilere, ekibimizin gönderdiği yanıtları almak için yeniden geldiğinizde bu kod adını kullanacaksınız."
+
+#~ msgid ""
+#~ "Because we do not track users of our <b>SecureDrop</b>\n"
+#~ " service, in future visits, using this codename will be the only way we have to communicate with you should we have\n"
+#~ " questions or are interested in additional information. Unlike passwords, there is no way to retrieve a lost codename."
+#~ msgstr ""
+#~ "<b>SecureDrop</b> hizmetimizin kullanıcılarını izlemediğimiz için, \n"
+#~ "sizinle iletişim kurabilmemiz, soru sorabilmemiz ya da ek bilgi gereksinimlerini bildirebilmemiz için kullanılabilecek\n"
+#~ "tek yol sonraki ziyaretlerinizde bu kod adını kullanmanızdır. Parolaların aksine kod adı kaybolduğunda geri alınamaz."
+
+#~ msgid "Submit Documents"
+#~ msgstr "Belgeleri gönder"
+
+#~ msgid "SUBMIT DOCUMENTS"
+#~ msgstr "BELGE GÖNDER"
+
+#~ msgid "Select <b>Advanced Security Settings</b>"
+#~ msgstr "<b>Gelişmiş Güvenlik Ayarlarını</b> seçin"
+
+#~ msgid "Select <b>Safest</b>"
+#~ msgstr "<b>En güvenli</b> seçeneğini seçin"
+
+#~ msgid "Why is there a warning about Tor2Web?"
+#~ msgstr "Neden Tor2Web hakkında bir uyarı var?"
+
+#~ msgid "We <strong>strongly advise</strong> you to use the <a href=\"www.torproject.org/projects/torbrowser.html\">Tor Browser</a> instead."
+#~ msgstr "Bunun yerine <a href=\"www.torproject.org/projects/torbrowser.html\">Tor Browser</a> kullanmanızı <strong>önemle öneririz</strong>."
 
 #~ msgid "Invalid secret format: odd-length secret. Did you mistype the secret?"
 #~ msgstr "Gizli biçim hatalı: Gizli kod tek uzunlukta. Gizli kodu yanlış mı yazdınız?"
@@ -1080,12 +1183,6 @@ msgstr "Gönderi sayfasına geri dön"
 
 #~ msgid "SecureDrop Home"
 #~ msgstr "SecureDrop Anasayfa"
-
-#~ msgid "Show"
-#~ msgstr "Göster"
-
-#~ msgid "Hide"
-#~ msgstr "Gizle"
 
 #~ msgid "— No Messages —"
 #~ msgstr "— Henüz Bir İleti Yok —"
@@ -1248,9 +1345,6 @@ msgstr "Gönderi sayfasına geri dön"
 
 #~ msgid "Already submitted something?"
 #~ msgstr "Daha önce bir şeyler gönderdiniz mi?"
-
-#~ msgid "If you have already submitted to journalists, log in here to check for responses."
-#~ msgstr "Daha önce de gazetecilere bir şey gönderdiyseniz, oturum açarak yanıtları kontrol edin."
 
 #~ msgid "CHECK FOR A RESPONSE"
 #~ msgstr "YANITLARI KONTROL EDİN"

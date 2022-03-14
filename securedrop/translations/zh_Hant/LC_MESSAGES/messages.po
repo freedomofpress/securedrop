@@ -4,7 +4,20 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
 #
 msgid ""
-msgstr "Project-Id-Version: SecureDrop 0.3.12\nReport-Msgid-Bugs-To: securedrop@freedom.press\nPOT-Creation-Date: 2017-09-02 07:28+0000\nPO-Revision-Date: 2022-02-10 04:04+0000\nLast-Translator: Chi-Hsun Tsai <chihsun.tsai@gmail.com>\nLanguage-Team: Chinese (Traditional) <https://weblate.securedrop.org/projects/securedrop/securedrop/zh_Hant/>\nLanguage: zh_Hant\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=1; plural=0;\nX-Generator: Weblate 4.6\nGenerated-By: Babel 2.4.0\n"
+msgstr ""
+"Project-Id-Version: SecureDrop 0.3.12\n"
+"Report-Msgid-Bugs-To: securedrop@freedom.press\n"
+"POT-Creation-Date: 2017-09-02 07:28+0000\n"
+"PO-Revision-Date: 2022-02-10 04:04+0000\n"
+"Last-Translator: Chi-Hsun Tsai <chihsun.tsai@gmail.com>\n"
+"Language-Team: Chinese (Traditional) <https://weblate.securedrop.org/projects/securedrop/securedrop/zh_Hant/>\n"
+"Language: zh_Hant\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 4.6\n"
+"Generated-By: Babel 2.4.0\n"
 
 msgid "Name too long"
 msgstr "名稱過長"
@@ -126,11 +139,17 @@ msgid "Cannot be longer than {num} character."
 msgid_plural "Cannot be longer than {num} characters."
 msgstr[0] "不可多於 {num} 字元。"
 
+msgid "Please specify an integer value greater than 0."
+msgstr ""
+
 msgid "This field is required."
 msgstr "這是必填項目。"
 
 msgid "You cannot send an empty reply."
 msgstr "回覆內容不可空白。"
+
+msgid "To configure a minimum message length, you must set the required number of characters."
+msgstr ""
 
 msgid "File required."
 msgstr "檔案欄為必要。"
@@ -399,6 +418,9 @@ msgstr "設定 Yubikey 後，請在下面輸入 6 位數字代碼："
 msgid "Navigation"
 msgstr "導覽"
 
+msgid "Skip to main content"
+msgstr ""
+
 msgid "Logged on as"
 msgstr "登入為"
 
@@ -522,6 +544,15 @@ msgstr "提交偏好"
 msgid "Prevent sources from uploading documents. Sources will still be able to send messages."
 msgstr "防止消息來源上傳文件，但來源仍可以傳送訊息。"
 
+msgid "Prevent sources from sending initial messages shorter than the minimum required length:"
+msgstr ""
+
+msgid "Minimum number of characters."
+msgstr ""
+
+msgid "Prevent sources from submitting their codename as an initial message."
+msgstr ""
+
 msgid "Update Submission Preferences"
 msgstr "更新提交偏好"
 
@@ -539,19 +570,6 @@ msgstr "發送 OSSEC 警告測試"
 
 msgid "SEND TEST OSSEC ALERT"
 msgstr "傳送測試 OSSEC 警報"
-
-msgid "The following file has been selected for <strong>permanent deletion</strong>:"
-msgid_plural "The following {num} files have been selected for <strong>permanent deletion</strong>:"
-msgstr[0] "下方被挑選的 {num} 文件，將被<strong>永久删除</strong>："
-
-msgid "Permanently Delete Files"
-msgstr "永久刪除檔案"
-
-msgid "PERMANENTLY DELETE FILES"
-msgstr "永久地删除文件"
-
-msgid "Return to the list of documents for {source_name}…"
-msgstr "返回 {source_name} 的文件列表…"
 
 msgid "Edit user \"{user}\""
 msgstr "編輯帳户 \"{user}\""
@@ -694,15 +712,6 @@ msgstr "登入"
 msgid "LOG IN"
 msgstr "登錄"
 
-msgid "WARNING:"
-msgstr "警告："
-
-msgid "You appear to be using Tor2Web, which does not provide anonymity."
-msgstr "您似乎正在使用 Tor2Web，其不提供匿名性。"
-
-msgid "Why is this dangerous?"
-msgstr "這樣為什麼很危險？"
-
 msgid "Field must be between 1 and {max_codename_len} characters long."
 msgstr "此處字段長度必須在 1 和 {max_codename_len} 個字符之間。"
 
@@ -721,6 +730,9 @@ msgstr "訊息文字過長。"
 msgid "Large blocks of text must be uploaded as a file, not copied and pasted."
 msgstr "大量文字必須以檔案方式上傳，不要用複製貼上的作法。"
 
+msgid "Your connection is not anonymous right now!"
+msgstr ""
+
 msgid "You were redirected because you are already logged in. If you want to create a new account, you should log out first."
 msgstr "你被重定向了， 因為已在登錄狀態。如果想創建一個新帳戶，請先登出。"
 
@@ -735,6 +747,22 @@ msgstr "你必须輸入一則訊息，或是選擇一個文件來提交。"
 
 msgid "You must enter a message."
 msgstr "您必須輸入訊息。"
+
+#, fuzzy
+#| msgid "Must be at least {num} character long."
+#| msgid_plural "Must be at least {num} characters long."
+msgid "Your first message must be at least {} characters long."
+msgstr "须至少有 {num} 個字符長度。"
+
+#, fuzzy
+#| msgid "Forgot your codename?"
+msgid "Please do not submit your codename!"
+msgstr "忘記你的代號？"
+
+#, fuzzy
+#| msgid "If you have already submitted to journalists, log in here to check for responses."
+msgid "Keep your codename secret, and use it to log in later to check for replies."
+msgstr "如果您已提交過文件，您可在此登入來查閱回覆。"
 
 msgid "Thanks! We received your message."
 msgstr "謝謝！我們已收到你的訊息。"
@@ -754,8 +782,14 @@ msgstr "所有的回覆都已被删除"
 msgid "Sorry, that is not a recognized codename."
 msgstr "對不起，無法識別這個代號。"
 
+msgid "Codename"
+msgstr "代號名稱"
+
 msgid "Protecting Journalists and Sources"
 msgstr "保護新聞記者與消息來源線人"
+
+msgid "Skip to notification"
+msgstr ""
 
 msgid "We're sorry, our SecureDrop is currently offline."
 msgstr "抱歉，目前 SecureDrop 關機維修。"
@@ -790,32 +824,25 @@ msgstr "請注意：即便利用 Tor 或 SecureDrop，但分享敏感文件還�
 msgid "SecureDrop is a project of Freedom of the Press Foundation."
 msgstr "SecureDrop 為新聞自由基金會(Freedom of the Press Foundation)的專案。"
 
-msgid "Welcome"
-msgstr "歡迎"
+#, fuzzy
+#| msgid "Enter your codename"
+msgid "Get Your Codename"
+msgstr "請輸入您的代號"
 
-msgid "Please either write this codename down and keep it in a safe place, or memorize it."
-msgstr "請抄下代號並妥善保管，或牢牢記住它。"
-
-msgid "This codename is what you will use in future visits to receive messages from our team in response to what you submit on the next screen."
-msgstr "之後你將使用這個代號來讀取本站團隊對你（在下一個畫面所提交資訊）的回應。"
-
-msgid "Codename"
-msgstr "代號名稱"
-
-msgid ""
-"Because we do not track users of our <b>SecureDrop</b>\n"
-" service, in future visits, using this codename will be the only way we have to communicate with you should we have\n"
-" questions or are interested in additional information. Unlike passwords, there is no way to retrieve a lost codename."
+msgid "A <em>codename</em> in SecureDrop functions as both your username and your password."
 msgstr ""
-"因為我們不會追蹤<b> SecureDrop</b> 用戶，日後要再訪問，您須提供此代號以供登入，它也是將來我們若有疑問或需要更多資訊時要求，和您溝通的唯一管道。\n"
-"\n"
-"代號和密碼不同，一旦遺失便無法再恢復獲取。"
 
-msgid "Submit Documents"
-msgstr "提交文件"
+msgid "You will need this codename to log into our SecureDrop later:"
+msgstr ""
 
-msgid "SUBMIT DOCUMENTS"
-msgstr "提交文件"
+msgid "<strong>Keep it secret.</strong> Do not share it with anyone."
+msgstr ""
+
+msgid "<strong>Keep it safe.</strong> There is no account recovery option."
+msgstr ""
+
+msgid "Continue"
+msgstr "繼續"
 
 msgid "Your Tor Browser's <a id=\"disable-js\" href=\"\"><b>Security Level</b></a> is too low. Use the <img src=\"{icon}\" alt=\"&quot;Security Level&quot;\"> button in your browser’s toolbar to change it."
 msgstr "Tor 瀏覽器的 <a id=\"disable-js\" href=\"\"><b>安全性</b></a>等級過低。請使用瀏覽器工具列中的 <img src=\"{icon}\" alt=\"&quot;Security Level&quot;\">按鈕來變更它。"
@@ -826,11 +853,11 @@ msgstr "如何變更安全層級"
 msgid "Click the <img src=\"{icon}\" alt=\"&quot;Security Level&quot; button\"> in the toolbar above"
 msgstr "在上方工具列點擊 <img src=\"{icon}\" alt=\"&quot;Security Level&quot; button\">"
 
-msgid "Select <b>Advanced Security Settings</b>"
-msgstr "選取 <b>進階安全設置</b>"
+msgid "Click <b>Change</b> to open Security Level preferences"
+msgstr ""
 
-msgid "Select <b>Safest</b>"
-msgstr "選取 <b>最安全等級</b>"
+msgid "Select <b>Safest</b> and close the preferences tab"
+msgstr ""
 
 msgid "<a href=\"/\" aria-label=\"Follow these instructions, then refresh this page\">Refresh this page</a>, and you're done!"
 msgstr "<a href=\"/\" aria-label=\"Follow these instructions, then refresh this page\">重新載入本頁</a>後，一切已完緒!"
@@ -865,9 +892,6 @@ msgstr "輸入代號"
 msgid "Enter your codename"
 msgstr "請輸入您的代號"
 
-msgid "Continue"
-msgstr "繼續"
-
 msgid "CANCEL"
 msgstr "取消"
 
@@ -876,6 +900,12 @@ msgstr "還有一件事...."
 
 msgid "Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar. This will clear your Tor Browser activity data on this device."
 msgstr "點擊 Tor 瀏覽器工具列 <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b>按鈕，將可清除此設備上的瀏覽資料記錄。"
+
+msgid "Show"
+msgstr "顯示"
+
+msgid "Hide"
+msgstr "隱藏"
 
 msgid "Remember, your codename is:"
 msgstr "記住，您的代號是："
@@ -904,6 +934,9 @@ msgstr "檔案上傳限制：500 MB"
 msgid "Submit"
 msgstr "提交"
 
+msgid "Anti-spam check. Do not fill this in!"
+msgstr ""
+
 msgid "Read Replies"
 msgstr "閱讀回覆"
 
@@ -912,6 +945,9 @@ msgstr "您已經收到一則回覆。為保護您的身份，防止某人知道
 
 msgid "Delete this reply"
 msgstr "刪除這條回覆"
+
+msgid "Delete reply from {timestamp}?"
+msgstr ""
 
 msgid "Delete this reply?"
 msgstr "刪除這條回覆嗎？"
@@ -946,17 +982,27 @@ msgstr "重要"
 msgid "You were logged out due to inactivity. Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
 msgstr "因聞置過久已遭系統登出，可先點擊 Tor 瀏覽器工具列<img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b>按鍵來清除此設備上的瀏覽記錄。"
 
-msgid "Why is there a warning about Tor2Web?"
-msgstr "為什麼出現一個 Tor2Web 的警告？"
+msgid "Proxy Service Detected"
+msgstr ""
 
-msgid "Using Tor2Web to connect to SecureDrop will not protect your anonymity."
+#, fuzzy
+#| msgid "Using Tor2Web to connect to SecureDrop will not protect your anonymity."
+msgid "You appear to be using a Tor proxy service to access SecureDrop. Proxy services do not protect your anonymity."
 msgstr "使用 Tor2Web 連至 SecureDrop 將無法保護您的匿名安全。"
 
-msgid "It could be possible for anyone monitoring your Internet traffic (your government, your Internet provider), to identify you."
+#, fuzzy
+#| msgid "It could be possible for anyone monitoring your Internet traffic (your government, your Internet provider), to identify you."
+msgid "Anyone monitoring your Internet traffic &mdash; including your government, your Internet provider, or the proxy operator &mdash; may be able to identify you."
 msgstr "任何網路流量監控者（如政府、網路服務業者）都有可能認出您。"
 
-msgid "We <strong>strongly advise</strong> you to use the <a href=\"www.torproject.org/projects/torbrowser.html\">Tor Browser</a> instead."
-msgstr "<strong>強烈建議</strong>以<a href=\"www.torproject.org/projects/torbrowser.html\">Tor 瀏覽器</a>為替代。"
+msgid "Always use <a href=\"www.torproject.org/projects/torbrowser.html\">Tor Browser</a> to access SecureDrop. Valid SecureDrop site addresses end with <code>.onion</code>. The correct address for this site is:"
+msgstr ""
+
+msgid "If you are already using Tor Browser, copy the address above and generate a new identity before you access SecureDrop."
+msgstr ""
+
+msgid "If there is a reasonable risk of your Internet traffic being monitored, consider connecting from a different location or network."
+msgstr ""
 
 msgid "You Should Use Tor Browser"
 msgstr "您應使用 Tor 瀏覽器"
@@ -1012,6 +1058,64 @@ msgstr "<strong>重要：</strong>如果您希望保持匿名，<strong>請勿</
 
 msgid "Back to submission page"
 msgstr "返回提交文件頁面"
+
+#~ msgid "The following file has been selected for <strong>permanent deletion</strong>:"
+#~ msgid_plural "The following {num} files have been selected for <strong>permanent deletion</strong>:"
+#~ msgstr[0] "下方被挑選的 {num} 文件，將被<strong>永久删除</strong>："
+
+#~ msgid "Permanently Delete Files"
+#~ msgstr "永久刪除檔案"
+
+#~ msgid "PERMANENTLY DELETE FILES"
+#~ msgstr "永久地删除文件"
+
+#~ msgid "Return to the list of documents for {source_name}…"
+#~ msgstr "返回 {source_name} 的文件列表…"
+
+#~ msgid "WARNING:"
+#~ msgstr "警告："
+
+#~ msgid "You appear to be using Tor2Web, which does not provide anonymity."
+#~ msgstr "您似乎正在使用 Tor2Web，其不提供匿名性。"
+
+#~ msgid "Why is this dangerous?"
+#~ msgstr "這樣為什麼很危險？"
+
+#~ msgid "Welcome"
+#~ msgstr "歡迎"
+
+#~ msgid "Please either write this codename down and keep it in a safe place, or memorize it."
+#~ msgstr "請抄下代號並妥善保管，或牢牢記住它。"
+
+#~ msgid "This codename is what you will use in future visits to receive messages from our team in response to what you submit on the next screen."
+#~ msgstr "之後你將使用這個代號來讀取本站團隊對你（在下一個畫面所提交資訊）的回應。"
+
+#~ msgid ""
+#~ "Because we do not track users of our <b>SecureDrop</b>\n"
+#~ " service, in future visits, using this codename will be the only way we have to communicate with you should we have\n"
+#~ " questions or are interested in additional information. Unlike passwords, there is no way to retrieve a lost codename."
+#~ msgstr ""
+#~ "因為我們不會追蹤<b> SecureDrop</b> 用戶，日後要再訪問，您須提供此代號以供登入，它也是將來我們若有疑問或需要更多資訊時要求，和您溝通的唯一管道。\n"
+#~ "\n"
+#~ "代號和密碼不同，一旦遺失便無法再恢復獲取。"
+
+#~ msgid "Submit Documents"
+#~ msgstr "提交文件"
+
+#~ msgid "SUBMIT DOCUMENTS"
+#~ msgstr "提交文件"
+
+#~ msgid "Select <b>Advanced Security Settings</b>"
+#~ msgstr "選取 <b>進階安全設置</b>"
+
+#~ msgid "Select <b>Safest</b>"
+#~ msgstr "選取 <b>最安全等級</b>"
+
+#~ msgid "Why is there a warning about Tor2Web?"
+#~ msgstr "為什麼出現一個 Tor2Web 的警告？"
+
+#~ msgid "We <strong>strongly advise</strong> you to use the <a href=\"www.torproject.org/projects/torbrowser.html\">Tor Browser</a> instead."
+#~ msgstr "<strong>強烈建議</strong>以<a href=\"www.torproject.org/projects/torbrowser.html\">Tor 瀏覽器</a>為替代。"
 
 #~ msgid "Invalid secret format: odd-length secret. Did you mistype the secret?"
 #~ msgstr "動態密碼格式不符：輸入長度為奇數。是否輸入錯誤？"
@@ -1069,12 +1173,6 @@ msgstr "返回提交文件頁面"
 
 #~ msgid "SecureDrop Home"
 #~ msgstr "SecureDrop 首頁"
-
-#~ msgid "Show"
-#~ msgstr "顯示"
-
-#~ msgid "Hide"
-#~ msgstr "隱藏"
 
 #~ msgid "— No Messages —"
 #~ msgstr "— 無新訊息 —"
@@ -1231,9 +1329,6 @@ msgstr "返回提交文件頁面"
 
 #~ msgid "Already submitted something?"
 #~ msgstr "已曾提交過文件？"
-
-#~ msgid "If you have already submitted to journalists, log in here to check for responses."
-#~ msgstr "如果您已提交過文件，您可在此登入來查閱回覆。"
 
 #~ msgid "CHECK FOR A RESPONSE"
 #~ msgstr "檢查回應"

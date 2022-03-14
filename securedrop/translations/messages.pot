@@ -6,7 +6,7 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: SecureDrop 2.2.0~rc1\n"
+"Project-Id-Version: SecureDrop 2.3.0~rc1\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
@@ -140,10 +140,16 @@ msgid_plural "Cannot be longer than {num} characters."
 msgstr[0] ""
 msgstr[1] ""
 
+msgid "Please specify an integer value greater than 0."
+msgstr ""
+
 msgid "This field is required."
 msgstr ""
 
 msgid "You cannot send an empty reply."
+msgstr ""
+
+msgid "To configure a minimum message length, you must set the required number of characters."
 msgstr ""
 
 msgid "File required."
@@ -419,6 +425,9 @@ msgstr ""
 msgid "Navigation"
 msgstr ""
 
+msgid "Skip to main content"
+msgstr ""
+
 msgid "Logged on as"
 msgstr ""
 
@@ -542,6 +551,15 @@ msgstr ""
 msgid "Prevent sources from uploading documents. Sources will still be able to send messages."
 msgstr ""
 
+msgid "Prevent sources from sending initial messages shorter than the minimum required length:"
+msgstr ""
+
+msgid "Minimum number of characters."
+msgstr ""
+
+msgid "Prevent sources from submitting their codename as an initial message."
+msgstr ""
+
 msgid "Update Submission Preferences"
 msgstr ""
 
@@ -558,20 +576,6 @@ msgid "Send Test OSSEC Alert"
 msgstr ""
 
 msgid "SEND TEST OSSEC ALERT"
-msgstr ""
-
-msgid "The following file has been selected for <strong>permanent deletion</strong>:"
-msgid_plural "The following {num} files have been selected for <strong>permanent deletion</strong>:"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Permanently Delete Files"
-msgstr ""
-
-msgid "PERMANENTLY DELETE FILES"
-msgstr ""
-
-msgid "Return to the list of documents for {source_name}…"
 msgstr ""
 
 msgid "Edit user \"{user}\""
@@ -715,15 +719,6 @@ msgstr ""
 msgid "LOG IN"
 msgstr ""
 
-msgid "WARNING:"
-msgstr ""
-
-msgid "You appear to be using Tor2Web, which does not provide anonymity."
-msgstr ""
-
-msgid "Why is this dangerous?"
-msgstr ""
-
 msgid "Field must be between 1 and {max_codename_len} characters long."
 msgstr ""
 
@@ -742,6 +737,9 @@ msgstr ""
 msgid "Large blocks of text must be uploaded as a file, not copied and pasted."
 msgstr ""
 
+msgid "Your connection is not anonymous right now!"
+msgstr ""
+
 msgid "You were redirected because you are already logged in. If you want to create a new account, you should log out first."
 msgstr ""
 
@@ -755,6 +753,15 @@ msgid "You must enter a message or choose a file to submit."
 msgstr ""
 
 msgid "You must enter a message."
+msgstr ""
+
+msgid "Your first message must be at least {} characters long."
+msgstr ""
+
+msgid "Please do not submit your codename!"
+msgstr ""
+
+msgid "Keep your codename secret, and use it to log in later to check for replies."
 msgstr ""
 
 msgid "Thanks! We received your message."
@@ -775,7 +782,13 @@ msgstr ""
 msgid "Sorry, that is not a recognized codename."
 msgstr ""
 
+msgid "Codename"
+msgstr ""
+
 msgid "Protecting Journalists and Sources"
+msgstr ""
+
+msgid "Skip to notification"
 msgstr ""
 
 msgid "We're sorry, our SecureDrop is currently offline."
@@ -811,28 +824,22 @@ msgstr ""
 msgid "SecureDrop is a project of Freedom of the Press Foundation."
 msgstr ""
 
-msgid "Welcome"
+msgid "Get Your Codename"
 msgstr ""
 
-msgid "Please either write this codename down and keep it in a safe place, or memorize it."
+msgid "A <em>codename</em> in SecureDrop functions as both your username and your password."
 msgstr ""
 
-msgid "This codename is what you will use in future visits to receive messages from our team in response to what you submit on the next screen."
+msgid "You will need this codename to log into our SecureDrop later:"
 msgstr ""
 
-msgid "Codename"
+msgid "<strong>Keep it secret.</strong> Do not share it with anyone."
 msgstr ""
 
-msgid ""
-"Because we do not track users of our <b>SecureDrop</b>\n"
-" service, in future visits, using this codename will be the only way we have to communicate with you should we have\n"
-" questions or are interested in additional information. Unlike passwords, there is no way to retrieve a lost codename."
+msgid "<strong>Keep it safe.</strong> There is no account recovery option."
 msgstr ""
 
-msgid "Submit Documents"
-msgstr ""
-
-msgid "SUBMIT DOCUMENTS"
+msgid "Continue"
 msgstr ""
 
 msgid "Your Tor Browser's <a id=\"disable-js\" href=\"\"><b>Security Level</b></a> is too low. Use the <img src=\"{icon}\" alt=\"&quot;Security Level&quot;\"> button in your browser’s toolbar to change it."
@@ -844,10 +851,10 @@ msgstr ""
 msgid "Click the <img src=\"{icon}\" alt=\"&quot;Security Level&quot; button\"> in the toolbar above"
 msgstr ""
 
-msgid "Select <b>Advanced Security Settings</b>"
+msgid "Click <b>Change</b> to open Security Level preferences"
 msgstr ""
 
-msgid "Select <b>Safest</b>"
+msgid "Select <b>Safest</b> and close the preferences tab"
 msgstr ""
 
 msgid "<a href=\"/\" aria-label=\"Follow these instructions, then refresh this page\">Refresh this page</a>, and you're done!"
@@ -883,9 +890,6 @@ msgstr ""
 msgid "Enter your codename"
 msgstr ""
 
-msgid "Continue"
-msgstr ""
-
 msgid "CANCEL"
 msgstr ""
 
@@ -893,6 +897,12 @@ msgid "One more thing..."
 msgstr ""
 
 msgid "Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar. This will clear your Tor Browser activity data on this device."
+msgstr ""
+
+msgid "Show"
+msgstr ""
+
+msgid "Hide"
 msgstr ""
 
 msgid "Remember, your codename is:"
@@ -922,6 +932,9 @@ msgstr ""
 msgid "Submit"
 msgstr ""
 
+msgid "Anti-spam check. Do not fill this in!"
+msgstr ""
+
 msgid "Read Replies"
 msgstr ""
 
@@ -929,6 +942,9 @@ msgid "You have received a reply. To protect your identity in the unlikely event
 msgstr ""
 
 msgid "Delete this reply"
+msgstr ""
+
+msgid "Delete reply from {timestamp}?"
 msgstr ""
 
 msgid "Delete this reply?"
@@ -964,16 +980,22 @@ msgstr ""
 msgid "You were logged out due to inactivity. Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
 msgstr ""
 
-msgid "Why is there a warning about Tor2Web?"
+msgid "Proxy Service Detected"
 msgstr ""
 
-msgid "Using Tor2Web to connect to SecureDrop will not protect your anonymity."
+msgid "You appear to be using a Tor proxy service to access SecureDrop. Proxy services do not protect your anonymity."
 msgstr ""
 
-msgid "It could be possible for anyone monitoring your Internet traffic (your government, your Internet provider), to identify you."
+msgid "Anyone monitoring your Internet traffic &mdash; including your government, your Internet provider, or the proxy operator &mdash; may be able to identify you."
 msgstr ""
 
-msgid "We <strong>strongly advise</strong> you to use the <a href=\"www.torproject.org/projects/torbrowser.html\">Tor Browser</a> instead."
+msgid "Always use <a href=\"www.torproject.org/projects/torbrowser.html\">Tor Browser</a> to access SecureDrop. Valid SecureDrop site addresses end with <code>.onion</code>. The correct address for this site is:"
+msgstr ""
+
+msgid "If you are already using Tor Browser, copy the address above and generate a new identity before you access SecureDrop."
+msgstr ""
+
+msgid "If there is a reasonable risk of your Internet traffic being monitored, consider connecting from a different location or network."
 msgstr ""
 
 msgid "You Should Use Tor Browser"
