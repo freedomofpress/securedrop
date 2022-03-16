@@ -944,8 +944,9 @@ class InstanceConfig(db.Model):
                          nullable=False, unique=True)
     allow_document_uploads = Column(Boolean, default=True)
     organization_name = Column(String(255), nullable=True, default="SecureDrop")
-    initial_message_min_len = Column(Integer, default=0)
-    reject_message_with_codename = Column(Boolean, default=False)
+    initial_message_min_len = Column(Integer, nullable=False, default=0, server_default="0")
+    reject_message_with_codename = Column(Boolean, nullable=False,
+                                          default=False, server_default="0")
 
     # Columns not listed here will be included by InstanceConfig.copy() when
     # updating the configuration.
