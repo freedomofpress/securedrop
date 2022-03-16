@@ -236,6 +236,7 @@
   /var/www/securedrop/source_templates/notfound.html r,
   /var/www/securedrop/source_templates/session_timeout.html r,
   /var/www/securedrop/source_templates/tor2web-warning.html r,
+  /var/www/securedrop/source_templates/utils.html r,
   /var/www/securedrop/source_templates/use-tor-browser.html r,
   /var/www/securedrop/source_templates/why-public-key.html r,
   /var/www/securedrop/static/.webassets-cache/** rw,
