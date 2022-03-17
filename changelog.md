@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.3.0~rc2
+
+* Bugfix: updated instance_config message filter fields to set default values (#6345)
+* Bugfix: updated Apache2 apparmor profile to include new template file (#6344) 
+
 ## 2.3.0~rc1
 
 ### Web Applications
@@ -19,10 +24,10 @@
 * Added /robots.txt route and meta tags to disallow bots on the Source Interface (#6299)
 * Fixed text overflow issue in the "Read Replies" widget (#6301)
 * Updated data attributes in the codename widget to be translateable strings (#6288)
+* Added support for future user-agent strings  with a 3-digit Firefox version (#6309)
 
 ### Development
 
-* Added support for future user-agent strings  with a 3-digit Firefox version (#6309)
 * Updated `make shellcheck` to optionally use podman instead of Docker (#6239)
 * Updated `make dev-tor` to set correct v3 address in Source Interface /metadata endpoint (#6308)
 
