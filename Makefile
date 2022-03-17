@@ -349,12 +349,6 @@ vagrant-package:  ## Package a Vagrant box of the last stable SecureDrop release
 	@devops/scripts/vagrant-package
 	@echo
 
-.PHONY: fetch-tor-packages
-fetch-tor-packages:  ## Retrieves the most recent Tor packages, for apt repo.
-	@echo "Fetching most recent Tor packages..."
-	@$(SDROOT)/devops/scripts/fetch-tor-packages.sh
-	@echo
-
 # Explanation of the below shell command should it ever break.
 # 1. Set the field separator to ":  ##" and any make targets that might appear between : and ##
 # 2. Use sed-like syntax to remove the make targets
