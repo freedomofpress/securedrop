@@ -16,7 +16,6 @@ importlib-resources
 markupsafe>=2.0
 molecule>=3.0.1
 molecule-vagrant>=0.3
-mypy>=0.761
 # Needed for ansible network filter
 # http://docs.ansible.com/ansible/latest/playbooks_filters_ipaddr.html
 netaddr
@@ -39,4 +38,3 @@ setuptools>=56.0.0
 testinfra>=5.3.1
 urllib3>=1.26.5
 yamllint
-sqlalchemy-stubs==0.3

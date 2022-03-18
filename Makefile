@@ -113,7 +113,7 @@ shellcheckclean:  ## Clean up temporary container associated with shellcheck tar
 .PHONY: typelint
 typelint:  ## Run mypy type linting.
 	@echo "███ Running mypy type checking..."
-	@mypy ./securedrop ./admin
+	@$(SDROOT)/securedrop/bin/run-mypy
 	@echo
 
 .PHONY: yamllint

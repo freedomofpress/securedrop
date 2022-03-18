@@ -16,7 +16,7 @@ branch_labels = None
 depends_on = None
 
 
-def upgrade():
+def upgrade() -> None:
     conn = op.get_bind()
     conn.execute("PRAGMA legacy_alter_table=ON")
     # Schema migration
@@ -64,6 +64,6 @@ def upgrade():
     op.drop_table("replies_tmp")
 
 
-def downgrade():
+def downgrade() -> None:
     with op.batch_alter_table("replies", schema=None) as batch_op:
         batch_op.drop_column("deleted_by_source")

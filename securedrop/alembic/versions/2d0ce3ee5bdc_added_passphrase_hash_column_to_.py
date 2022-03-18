@@ -16,11 +16,11 @@ branch_labels = None
 depends_on = None
 
 
-def upgrade():
+def upgrade() -> None:
     op.add_column("journalists", sa.Column("passphrase_hash", sa.String(length=256), nullable=True))
 
 
-def downgrade():
+def downgrade() -> None:
     # sqlite has no `drop column` command, so we recreate the original table
     # then load it from a temp table
     conn = op.get_bind()
