@@ -4,12 +4,12 @@ import os
 import pytest
 import re
 import subprocess
+from collections import OrderedDict
 
 from alembic.config import Config as AlembicConfig
 from alembic.script import ScriptDirectory
 from os import path
 from sqlalchemy import text
-from collections import OrderedDict
 
 from db import db
 from journalist_app import create_app
@@ -55,22 +55,12 @@ def get_schema(app):
 
 
 def assert_schemas_equal(left, right):
-    for (k, v) in list(left.items()):
-        if k not in right:
-            raise AssertionError(
-                'Left contained {} but right did not'.format(k))
-        if not ddl_equal(v, right[k]):
-            raise AssertionError(
-                'Schema for {} did not match:\nLeft:\n{}\nRight:\n{}'
-                .format(k, v, right[k]))
-        right.pop(k)
-
-    if right:
-        raise AssertionError(
-            'Right had additional tables: {}'.format(list(right.keys())))
+    assert list(left) == list(right), 'Left and right do not contain same list of tables'
+    for (table, left_schema) in list(left.items()):
+        assert_ddl_equal(left_schema, right[table])
 
 
-def ddl_equal(left, right):
+def assert_ddl_equal(left, right):
     '''Check the "tokenized" DDL is equivalent because, because sometimes
         Alembic schemas append columns on the same line to the DDL comes out
         like:
@@ -90,19 +80,25 @@ def ddl_equal(left, right):
     '''
     # ignore the autoindex cases
     if left is None and right is None:
-        return True
+        return
 
-    # dedupe alembic's output by line
+    left_schema = left
+    right_schema = right
+
+    # dedupe output by line
     left = "\n".join(list(OrderedDict.fromkeys(left.split("\n"))))
+    right = "\n".join(list(OrderedDict.fromkeys(right.split("\n"))))
 
     left = [x for x in WHITESPACE_REGEX.split(left) if x]
     right = [x for x in WHITESPACE_REGEX.split(right) if x]
 
     # Strip commas and quotes
     left = [x.replace("\"", "").replace(",", "") for x in left]
+    left.sort()
     right = [x.replace("\"", "").replace(",", "") for x in right]
+    right.sort()
 
-    return sorted(left) == sorted(right)
+    assert left == right, f"Schemas don't match:\nLeft\n{left_schema}\nRight:\n{right_schema}"
 
 
 def test_alembic_head_matches_db_models(journalist_app,
