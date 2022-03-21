@@ -202,19 +202,6 @@ jobs:
           command: |
             cd admin; make test
 
-  fetch-tor-debs:
-    docker:
-      - image: cimg/python:3.7
-    steps:
-      - run: sudo apt-get update && sudo apt-get install -y make virtualenv python3-pip enchant jq rsync
-      - checkout
-      - setup_remote_docker
-      - run:
-          name: Fetch Tor packages
-          command: |
-            export LC_ALL="C.UTF-8"
-            make fetch-tor-packages
-
   updater-gui-tests:
     docker:
       - image: cimg/python:3.8
@@ -399,4 +386,3 @@ workflows:
     jobs:
       - deb-tests
       - translation-tests
-      - fetch-tor-debs
