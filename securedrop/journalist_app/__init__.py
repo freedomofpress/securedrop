@@ -4,7 +4,7 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 from flask import (Flask, session, redirect, url_for, flash, g, request,
-                   render_template)
+                   render_template, json)
 from flask_assets import Environment
 from flask_babel import gettext
 from flask_wtf.csrf import CSRFProtect, CSRFError
@@ -35,6 +35,8 @@ if typing.TYPE_CHECKING:
     from werkzeug.exceptions import HTTPException  # noqa: F401
 
 _insecure_views = ['main.login', 'static']
+# Timezone-naive datetime format expected by SecureDrop Client
+API_DATETIME_FORMAT = "%Y-%m-%dT%H:%M:%S.%fZ"
 
 
 def get_logo_url(app: Flask) -> str:
@@ -67,6 +69,16 @@ def create_app(config: 'SDConfig') -> Flask:
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['SQLALCHEMY_DATABASE_URI'] = config.DATABASE_URI
     db.init_app(app)
+
+    class JSONEncoder(json.JSONEncoder):
+        """Custom JSON encoder to use our preferred timestamp format"""
+
+        def default(self, obj: 'Any') -> 'Any':
+            if isinstance(obj, datetime):
+                return obj.strftime(API_DATETIME_FORMAT)
+            super(JSONEncoder, self).default(obj)
+
+    app.json_encoder = JSONEncoder
 
     # TODO: enable type checking once upstream Flask fix is available. See:
     # https://github.com/pallets/flask/issues/4295
