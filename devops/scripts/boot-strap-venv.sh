@@ -53,6 +53,7 @@ function virtualenv_bootstrap() {
             virtualenv -p "${p}" "${VENV}"
         fi
 
+        "${VENV}/bin/pip" install setuptools==56.0.0
         "${VENV}/bin/pip" install -q -r "securedrop/requirements/python${PYTHON_VERSION}/develop-requirements.txt"
 
         . "${VENV}/bin/activate"
