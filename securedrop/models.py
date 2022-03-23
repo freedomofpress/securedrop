@@ -15,7 +15,7 @@ from cryptography.hazmat.primitives.kdf import scrypt
 from flask import current_app, url_for
 from flask_babel import gettext, ngettext
 from itsdangerous import TimedJSONWebSignatureSerializer, BadData
-from jinja2 import Markup
+from markupsafe import Markup
 from passlib.hash import argon2
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import relationship, backref, Query, RelationshipProperty

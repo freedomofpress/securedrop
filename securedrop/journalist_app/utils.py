@@ -241,7 +241,7 @@ def download(
     return send_file(
         zf.name,
         mimetype="application/zip",
-        attachment_filename=attachment_filename,
+        download_name=attachment_filename,
         as_attachment=True,
     )
 
@@ -497,7 +497,7 @@ def serve_file_with_etag(db_obj: Union[Reply, Submission]) -> flask.Response:
     response = send_file(file_path,
                          mimetype="application/pgp-encrypted",
                          as_attachment=True,
-                         add_etags=False)  # Disable Flask default ETag
+                         etag=False)  # Disable Flask default ETag
 
     if not db_obj.checksum:
         add_checksum_for_file(db.session, db_obj, file_path)

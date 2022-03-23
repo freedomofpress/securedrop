@@ -8,7 +8,6 @@ from flask import (Flask, render_template, request, g, session, redirect, url_fo
 from flask_babel import gettext
 from flask_assets import Environment
 from flask_wtf.csrf import CSRFProtect, CSRFError
-from jinja2 import evalcontextfilter
 from os import path
 from typing import Tuple
 
@@ -81,7 +80,7 @@ def create_app(config: SDConfig) -> Flask:
     app.jinja_env.globals['submission_key_fpr'] = config.JOURNALIST_KEY
     app.jinja_env.filters['rel_datetime_format'] = \
         template_filters.rel_datetime_format
-    app.jinja_env.filters['nl2br'] = evalcontextfilter(template_filters.nl2br)
+    app.jinja_env.filters['nl2br'] = template_filters.nl2br
     app.jinja_env.filters['filesizeformat'] = template_filters.filesizeformat
     app.jinja_env.filters['html_datetime_format'] = \
         template_filters.html_datetime_format

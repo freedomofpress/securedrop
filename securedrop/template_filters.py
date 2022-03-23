@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
+from jinja2 import pass_eval_context
 from flask_babel import gettext, get_locale
 from babel import units, dates
 from datetime import datetime
-from jinja2 import Markup, escape
+from markupsafe import Markup, escape
 import math
 
 from jinja2.nodes import EvalContext
@@ -21,6 +22,7 @@ def rel_datetime_format(
         return dates.format_datetime(dt, fmt, locale=get_locale())
 
 
+@pass_eval_context
 def nl2br(context: EvalContext, value: str) -> str:
     formatted = '<br>\n'.join(escape(value).split('\n'))
     if context.autoescape:
