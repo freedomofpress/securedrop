@@ -1,6 +1,6 @@
+import multiprocessing
 from contextlib import contextmanager
 from dataclasses import dataclass
-from multiprocessing.context import Process
 from pathlib import Path
 from typing import Generator
 import requests
@@ -100,9 +100,21 @@ def spawn_sd_servers(
         # Spawn the source and journalist web apps in separate processes
         source_port = _get_unused_port()
         journalist_port = _get_unused_port()
-        source_app_process = Process(target=_start_source_server, args=(source_port, config_to_use))
+
+        # Start the server subprocesses using the "spawn" method instead of "fork".
+        # This is needed for the config_to_use argument to work; if "fork" is used, the subprocess
+        # will inherit all the globals from the parent process, which will include the Python
+        # variables declared as "global" in the SD code base
+        # (example: see _DesignationGenerator.get_default()).
+        # This means the config_to_use will be ignored if these globals have already been
+        # initialized (for example by tests running before the code here).
+        mp_spawn_ctx = multiprocessing.get_context("spawn")
+
+        source_app_process = mp_spawn_ctx.Process(  # type: ignore
+            target=_start_source_server, args=(source_port, config_to_use)
+        )
         source_app_process.start()
-        journalist_app_process = Process(
+        journalist_app_process = mp_spawn_ctx.Process(  # type: ignore
             target=_start_journalist_server, args=(journalist_port, config_to_use)
         )
         journalist_app_process.start()
