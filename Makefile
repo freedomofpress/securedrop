@@ -238,8 +238,8 @@ test-focal:  test
 
 .PHONY: validate-test-html
 validate-test-html:
-	@echo "███ Validating HTML source from $(shell find securedrop/tests/pageslayout/html -name "*.html" | wc -l | xargs echo -n) page-layout test(s)"
-	@$(DEVSHELL) html5validator tests/pageslayout/html
+	@echo "███ Validating HTML source from $(shell find securedrop/tests/functional/pageslayout/html -name "*.html" | wc -l | xargs echo -n) page-layout test(s)"
+	@$(DEVSHELL) html5validator tests/functional/pageslayout/html
 	@echo
 
 .PHONY: docker-vnc
@@ -295,7 +295,7 @@ endif
 	@echo "Running page layout tests to update screenshots used in user guide..."
 	@$(DEVSHELL) $(SDBIN)/generate-docs-screenshots
 	@echo "Copying screenshots..."
-	cp securedrop/tests/pageslayout/screenshots/en_US/*.png $${DOCS_REPO_DIR}/docs/images/manual/screenshots
+	cp securedrop/tests/functional/pageslayout/screenshots/en_US/*.png $${DOCS_REPO_DIR}/docs/images/manual/screenshots
 	@echo
 
 

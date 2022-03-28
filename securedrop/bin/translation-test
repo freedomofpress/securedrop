@@ -41,5 +41,5 @@ do
     --force-flaky --max-runs=3 \
     --page-layout \
     --durations 10 \
-    tests/pageslayout
+    tests/functional/pageslayout
 done

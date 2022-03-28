@@ -19,7 +19,7 @@ import pytest
 
 from tests.functional import journalist_navigation_steps
 from tests.functional import source_navigation_steps
-import tests.pageslayout.functional_test as pft
+import tests.functional.pageslayout.functional_test as pft
 
 
 @pytest.mark.pagelayout

@@ -14,4 +14,4 @@ run_sass --force --update
 maybe_create_config_py
 
 ./i18n_tool.py translate-messages --compile
-pytest -v --page-layout "${@:-tests/pageslayout}"
+pytest -v --page-layout "${@:-tests/functional/pageslayout}"
