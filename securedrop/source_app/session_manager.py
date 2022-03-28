@@ -4,7 +4,6 @@ from typing import TYPE_CHECKING
 import sqlalchemy
 from flask import session
 
-from sdconfig import config
 from source_user import SourceUser, authenticate_source_user, InvalidPassphraseError
 
 if TYPE_CHECKING:
@@ -40,6 +39,9 @@ class SessionManager:
         db_session: sqlalchemy.orm.Session,
         supplied_passphrase: "DicewarePassphrase"
     ) -> SourceUser:
+        # Late import so the module can be used without a config.py in the parent folder
+        from sdconfig import config
+
         # Validate the passphrase; will raise an exception if it is not valid
         source_user = authenticate_source_user(
             db_session=db_session, supplied_passphrase=supplied_passphrase
