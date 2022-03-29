@@ -46,11 +46,11 @@
         {{ form.msg(class="fill-parent") }}
   {% if allow_document_uploads %}
       {% if min_len > 0 %}
-         <p class="center" id="min-msg-length">{{ gettext('If you are only sending a message, it must be at least {} characters long.'.format(min_len)) }}</p>
+         <p class="center" id="min-msg-length">{{ gettext('If you are only sending a message, it must be at least {} characters long.').format(min_len) }}</p>
       {% endif %}
   {% else %}
       {% if min_len > 0 %}
-        <p class="center" id="min-msg-length">{{ gettext('Your first message must be at least {} characters long.'.format(min_len)) }}</p>
+        <p class="center" id="min-msg-length">{{ gettext('Your first message must be at least {} characters long.').format(min_len) }}</p>
       {% endif %}
   {% endif %}
       </div>
