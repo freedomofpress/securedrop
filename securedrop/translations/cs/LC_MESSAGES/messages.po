@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SecureDrop 0.14.0~rc1\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2022-02-14 12:04+0000\n"
-"Last-Translator: Honza Cibulka <honza@datastory.cz>\n"
+"PO-Revision-Date: 2022-03-29 11:38+0000\n"
+"Last-Translator: slrslr <adm@prnet.info>\n"
 "Language-Team: Czech <https://weblate.securedrop.org/projects/securedrop/securedrop/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.6\n"
+"X-Generator: Weblate 4.11.2\n"
 "Generated-By: Babel 2.5.1\n"
 
 msgid "Name too long"
@@ -147,7 +147,7 @@ msgstr[1] "Uživatelské jméno nemůže obsahovat více než {num} znaky."
 msgstr[2] "Uživatelské jméno nemůže obsahovat více než {num} znaků."
 
 msgid "Please specify an integer value greater than 0."
-msgstr ""
+msgstr "Prosím zvolte celé číslo vyšší než 0."
 
 msgid "This field is required."
 msgstr "Toto pole je povinné."
@@ -156,7 +156,7 @@ msgid "You cannot send an empty reply."
 msgstr "Nemůžete odeslat prázdnou odpověď."
 
 msgid "To configure a minimum message length, you must set the required number of characters."
-msgstr ""
+msgstr "Pro nastavení minimální délky zprávy musíte nastavit požadovaný počet znaků."
 
 msgid "File required."
 msgstr "Soubor je povinný."
@@ -438,7 +438,7 @@ msgid "Navigation"
 msgstr "Navigace"
 
 msgid "Skip to main content"
-msgstr ""
+msgstr "Skočit na hlavní obsah"
 
 msgid "Logged on as"
 msgstr "Přihlášen/a jako"
@@ -564,13 +564,13 @@ msgid "Prevent sources from uploading documents. Sources will still be able to s
 msgstr "Zabraňte zdrojům nahrávat dokumenty. Zdroje budou stále moci posílat zprávy."
 
 msgid "Prevent sources from sending initial messages shorter than the minimum required length:"
-msgstr ""
+msgstr "Zabránit zdrojům odeslat úvodní zprávu kratší než je minimální požadovaná délka:"
 
 msgid "Minimum number of characters."
-msgstr ""
+msgstr "Minimální počet znaků."
 
 msgid "Prevent sources from submitting their codename as an initial message."
-msgstr ""
+msgstr "Zabránit zdrojům odeslat jejich krycí jméno jako úvodní zprávu."
 
 msgid "Update Submission Preferences"
 msgstr "Aktualizujte preference podání"
@@ -750,7 +750,7 @@ msgid "Large blocks of text must be uploaded as a file, not copied and pasted."
 msgstr "Rozsáhlé bloky textu musí být nahrány jako soubor, ne zkopírovány a vloženy."
 
 msgid "Your connection is not anonymous right now!"
-msgstr ""
+msgstr "Vaše spojení není anonymní v tuto chvíli!"
 
 msgid "You were redirected because you are already logged in. If you want to create a new account, you should log out first."
 msgstr "Protože jste již přihlášen/a, byl/a jste přesměrován/a na tuto stránku. Pokud chcete vytvořit nový účet, nejprve se odhlaste."
@@ -767,19 +767,14 @@ msgstr "Musíte napsat zprávu nebo vybrat soubor pro nahrání."
 msgid "You must enter a message."
 msgstr "Musíte vložit zprávu."
 
-#, fuzzy
-#| msgid "Must be at least {num} character long."
-#| msgid_plural "Must be at least {num} characters long."
 msgid "Your first message must be at least {} characters long."
-msgstr "Uživatelské jméno musí mít alespoň {num} znak."
+msgstr "Vaše první zpráva musí mít délku alespoň {} znaků."
 
-#, fuzzy
-#| msgid "Forgot your codename?"
 msgid "Please do not submit your codename!"
-msgstr "Zapomněli jste své krycí jméno?"
+msgstr "Prosím neodesílejte své krycí jméno!"
 
 msgid "Keep your codename secret, and use it to log in later to check for replies."
-msgstr ""
+msgstr "Udržte své krycí jméno v tajnosti a použijte jej k pozdějšímu přihlášení pro kontrolu odpovědí."
 
 msgid "Thanks! We received your message."
 msgstr "Děkujeme! Obdrželi jsme vaši zprávu."
@@ -806,7 +801,7 @@ msgid "Protecting Journalists and Sources"
 msgstr "Chráníme novináře a jejich zdroje"
 
 msgid "Skip to notification"
-msgstr ""
+msgstr "Skočit na upozornění"
 
 msgid "We're sorry, our SecureDrop is currently offline."
 msgstr "Omlouváme se, náš SecureDrop je aktuálně offline."
@@ -841,22 +836,20 @@ msgstr "Uvědomte si prosím, že sdílení citlivých dokumentů Vás může oh
 msgid "SecureDrop is a project of Freedom of the Press Foundation."
 msgstr "SecureDrop je projekt Freedom of the Press Foundation."
 
-#, fuzzy
-#| msgid "Enter your codename"
 msgid "Get Your Codename"
-msgstr "Zadejte své krycí jméno"
+msgstr "Získejte své krycí jméno"
 
 msgid "A <em>codename</em> in SecureDrop functions as both your username and your password."
-msgstr ""
+msgstr "<em>Krycí jméno</em> v SecureDrop funguje jako uživatelské jméno i heslo."
 
 msgid "You will need this codename to log into our SecureDrop later:"
-msgstr ""
+msgstr "Toto krycí jméno budete potřebovat pro pozdější přihlášení do SecureDrop:"
 
 msgid "<strong>Keep it secret.</strong> Do not share it with anyone."
-msgstr ""
+msgstr "<strong>Udržujte v tajnosti.</strong> S nikým nesdílejte."
 
 msgid "<strong>Keep it safe.</strong> There is no account recovery option."
-msgstr ""
+msgstr "<strong>Udržujte v bezpečí.</strong> Obnovení účtu není možné."
 
 msgid "Continue"
 msgstr "Pokračovat"
@@ -871,10 +864,10 @@ msgid "Click the <img src=\"{icon}\" alt=\"&quot;Security Level&quot; button\"> 
 msgstr "Klepněte na <img src=\"{icon}\" alt=\"&quot;Security Level&quot; button\"> v panelu nástrojů výše"
 
 msgid "Click <b>Change</b> to open Security Level preferences"
-msgstr ""
+msgstr "Klikněte na <b>Změnit</b> pro otevření možností Úrovně zabezpečení"
 
 msgid "Select <b>Safest</b> and close the preferences tab"
-msgstr ""
+msgstr "Vyberte <b>Nejbezpečnější</b> a zavřete kartu nastavení"
 
 msgid "<a href=\"/\" aria-label=\"Follow these instructions, then refresh this page\">Refresh this page</a>, and you're done!"
 msgstr "<a href=\"/\" aria-label=\"Postupujte podle instrukcí, obnovte tuto stránku\">Obnovte stránku</a> a máte hotovo!"
@@ -952,7 +945,7 @@ msgid "Submit"
 msgstr "Odeslat"
 
 msgid "Anti-spam check. Do not fill this in!"
-msgstr ""
+msgstr "Ochrana proti SPAMu. Nevyplňujte!"
 
 msgid "Read Replies"
 msgstr "Přečtěte si odpovědi"
@@ -964,7 +957,7 @@ msgid "Delete this reply"
 msgstr "Smazat tuto odpověď"
 
 msgid "Delete reply from {timestamp}?"
-msgstr ""
+msgstr "Smazat odpověď z {timestamp}?"
 
 msgid "Delete this reply?"
 msgstr "Smazat tuto odpověď?"
@@ -1000,26 +993,22 @@ msgid "You were logged out due to inactivity. Click the <img src={icon} alt=\"\"
 msgstr "Z důvodu neaktivity jste byli odhlášeni. Než budete pokračovat, klepněte na <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>Nová identita</b> na liště svého prohlížeče Tor. Smažete tím data o aktivitě Toru na tomto zařízení."
 
 msgid "Proxy Service Detected"
-msgstr ""
+msgstr "Proxy služba byla rozpoznána"
 
-#, fuzzy
-#| msgid "Using Tor2Web to connect to SecureDrop will not protect your anonymity."
 msgid "You appear to be using a Tor proxy service to access SecureDrop. Proxy services do not protect your anonymity."
-msgstr "Používaní Tor2Web pro připojení k SecureDropu neochrání vaši anonymitu."
+msgstr "Zdá se, že pro přístup k SecureDrop používáte Tor proxy službu. Proxy služby vám nezaručí anonymitu."
 
-#, fuzzy
-#| msgid "It could be possible for anyone monitoring your Internet traffic (your government, your Internet provider), to identify you."
 msgid "Anyone monitoring your Internet traffic &mdash; including your government, your Internet provider, or the proxy operator &mdash; may be able to identify you."
-msgstr "Kdokoliv, kdo sleduje vaši aktivitu na internetu (vláda nebo poskytovatel připojení) vás může identifikovat."
+msgstr "Kdokoliv, kdo sleduje vaši aktivitu na internetu &mdash; včetně vlády nebo poskytovatele internetu &mdash; vás může identifikovat."
 
 msgid "Always use <a href=\"www.torproject.org/projects/torbrowser.html\">Tor Browser</a> to access SecureDrop. Valid SecureDrop site addresses end with <code>.onion</code>. The correct address for this site is:"
-msgstr ""
+msgstr "Vždy používejte <a href=\"www.torproject.org/projects/torbrowser.html\">Tor Browser</a> pro přístup k SecureDrop. Platná adresa SecureDrop stránky končí <code>.onion</code>. Správná adresa této stránky je:"
 
 msgid "If you are already using Tor Browser, copy the address above and generate a new identity before you access SecureDrop."
-msgstr ""
+msgstr "Pokud již používáte Prohlížeč Tor, zkopírujte adresu výše a vygenerujte novou identitu před přístupem na SecureDrop."
 
 msgid "If there is a reasonable risk of your Internet traffic being monitored, consider connecting from a different location or network."
-msgstr ""
+msgstr "Pokud máte důvod se domnívat, že váš internetový provoz je monitorován, zvažte připojení z jiného umístění nebo jiné sítě."
 
 msgid "You Should Use Tor Browser"
 msgstr "Doporučujeme použít prohlížeč Tor"
