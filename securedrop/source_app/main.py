@@ -204,7 +204,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
             min_len = InstanceConfig.get_default().initial_message_min_len
             if (min_len > 0) and (msg and not fh) and (len(msg) < min_len):
                 flash(gettext(
-                    "Your first message must be at least {} characters long.".format(min_len)),
+                    "Your first message must be at least {} characters long.").format(min_len),
                     "error")
                 return redirect(url_for('main.lookup'))
 
