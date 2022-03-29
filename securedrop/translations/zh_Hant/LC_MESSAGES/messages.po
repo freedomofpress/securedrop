@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2022-02-10 04:04+0000\n"
-"Last-Translator: Chi-Hsun Tsai <chihsun.tsai@gmail.com>\n"
+"PO-Revision-Date: 2022-03-29 21:18+0000\n"
+"Last-Translator: Erik Moeller <eloquence@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://weblate.securedrop.org/projects/securedrop/securedrop/zh_Hant/>\n"
 "Language: zh_Hant\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.6\n"
+"X-Generator: Weblate 4.11.2\n"
 "Generated-By: Babel 2.4.0\n"
 
 msgid "Name too long"
@@ -140,7 +140,7 @@ msgid_plural "Cannot be longer than {num} characters."
 msgstr[0] "不可多於 {num} 字元。"
 
 msgid "Please specify an integer value greater than 0."
-msgstr ""
+msgstr "請指定任一個比 O大的整數"
 
 msgid "This field is required."
 msgstr "這是必填項目。"
@@ -149,7 +149,7 @@ msgid "You cannot send an empty reply."
 msgstr "回覆內容不可空白。"
 
 msgid "To configure a minimum message length, you must set the required number of characters."
-msgstr ""
+msgstr "您必須先設定所要求的字符數才能設置最小的訊息長度"
 
 msgid "File required."
 msgstr "檔案欄為必要。"
@@ -419,7 +419,7 @@ msgid "Navigation"
 msgstr "導覽"
 
 msgid "Skip to main content"
-msgstr ""
+msgstr "略至主要內容"
 
 msgid "Logged on as"
 msgstr "登入為"
@@ -545,13 +545,13 @@ msgid "Prevent sources from uploading documents. Sources will still be able to s
 msgstr "防止消息來源上傳文件，但來源仍可以傳送訊息。"
 
 msgid "Prevent sources from sending initial messages shorter than the minimum required length:"
-msgstr ""
+msgstr "防止線人傳送不足字數長度的訊息:"
 
 msgid "Minimum number of characters."
-msgstr ""
+msgstr "最少的字符長度要求。"
 
 msgid "Prevent sources from submitting their codename as an initial message."
-msgstr ""
+msgstr "防上線人發送以自己的代碼名為初次訊息。"
 
 msgid "Update Submission Preferences"
 msgstr "更新提交偏好"
@@ -731,7 +731,7 @@ msgid "Large blocks of text must be uploaded as a file, not copied and pasted."
 msgstr "大量文字必須以檔案方式上傳，不要用複製貼上的作法。"
 
 msgid "Your connection is not anonymous right now!"
-msgstr ""
+msgstr "此刻您的連線非匿名狀態!"
 
 msgid "You were redirected because you are already logged in. If you want to create a new account, you should log out first."
 msgstr "你被重定向了， 因為已在登錄狀態。如果想創建一個新帳戶，請先登出。"
@@ -748,21 +748,14 @@ msgstr "你必须輸入一則訊息，或是選擇一個文件來提交。"
 msgid "You must enter a message."
 msgstr "您必須輸入訊息。"
 
-#, fuzzy
-#| msgid "Must be at least {num} character long."
-#| msgid_plural "Must be at least {num} characters long."
 msgid "Your first message must be at least {} characters long."
-msgstr "须至少有 {num} 個字符長度。"
+msgstr "首次訊息须至少有 {} 個字符長度。"
 
-#, fuzzy
-#| msgid "Forgot your codename?"
 msgid "Please do not submit your codename!"
-msgstr "忘記你的代號？"
+msgstr "請勿傳送您的代號!"
 
-#, fuzzy
-#| msgid "If you have already submitted to journalists, log in here to check for responses."
 msgid "Keep your codename secret, and use it to log in later to check for replies."
-msgstr "如果您已提交過文件，您可在此登入來查閱回覆。"
+msgstr "妥善保存您的代號，以利用它來登入查閱回覆。"
 
 msgid "Thanks! We received your message."
 msgstr "謝謝！我們已收到你的訊息。"
@@ -789,7 +782,7 @@ msgid "Protecting Journalists and Sources"
 msgstr "保護新聞記者與消息來源線人"
 
 msgid "Skip to notification"
-msgstr ""
+msgstr "略過通知"
 
 msgid "We're sorry, our SecureDrop is currently offline."
 msgstr "抱歉，目前 SecureDrop 關機維修。"
@@ -824,22 +817,20 @@ msgstr "請注意：即便利用 Tor 或 SecureDrop，但分享敏感文件還�
 msgid "SecureDrop is a project of Freedom of the Press Foundation."
 msgstr "SecureDrop 為新聞自由基金會(Freedom of the Press Foundation)的專案。"
 
-#, fuzzy
-#| msgid "Enter your codename"
 msgid "Get Your Codename"
-msgstr "請輸入您的代號"
+msgstr "取得您的代號"
 
 msgid "A <em>codename</em> in SecureDrop functions as both your username and your password."
-msgstr ""
+msgstr "SecureDrop 底下的 <em>代碼名</em>，其作用相當於您的用戶名稱與密碼。"
 
 msgid "You will need this codename to log into our SecureDrop later:"
-msgstr ""
+msgstr "您稍後需透過此代碼名來登入 SecureDrop 系統："
 
 msgid "<strong>Keep it secret.</strong> Do not share it with anyone."
-msgstr ""
+msgstr "<strong>妥善地保管它</strong> 不要與別人共用。"
 
 msgid "<strong>Keep it safe.</strong> There is no account recovery option."
-msgstr ""
+msgstr "<strong>妥善保存</strong> 它沒辦法重新取得。"
 
 msgid "Continue"
 msgstr "繼續"
@@ -854,10 +845,10 @@ msgid "Click the <img src=\"{icon}\" alt=\"&quot;Security Level&quot; button\"> 
 msgstr "在上方工具列點擊 <img src=\"{icon}\" alt=\"&quot;Security Level&quot; button\">"
 
 msgid "Click <b>Change</b> to open Security Level preferences"
-msgstr ""
+msgstr "點擊 <b>變更</b> 以開啟安全層級的偏好設定"
 
 msgid "Select <b>Safest</b> and close the preferences tab"
-msgstr ""
+msgstr "選擇 <b>最安全</b> 再關閉偏好設定分頁"
 
 msgid "<a href=\"/\" aria-label=\"Follow these instructions, then refresh this page\">Refresh this page</a>, and you're done!"
 msgstr "<a href=\"/\" aria-label=\"Follow these instructions, then refresh this page\">重新載入本頁</a>後，一切已完緒!"
@@ -935,7 +926,7 @@ msgid "Submit"
 msgstr "提交"
 
 msgid "Anti-spam check. Do not fill this in!"
-msgstr ""
+msgstr "反垃圾檢查，請勿填入!"
 
 msgid "Read Replies"
 msgstr "閱讀回覆"
@@ -947,7 +938,7 @@ msgid "Delete this reply"
 msgstr "刪除這條回覆"
 
 msgid "Delete reply from {timestamp}?"
-msgstr ""
+msgstr "刪除 {timestamp} 的回覆?"
 
 msgid "Delete this reply?"
 msgstr "刪除這條回覆嗎？"
@@ -983,26 +974,22 @@ msgid "You were logged out due to inactivity. Click the <img src={icon} alt=\"\"
 msgstr "因聞置過久已遭系統登出，可先點擊 Tor 瀏覽器工具列<img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b>按鍵來清除此設備上的瀏覽記錄。"
 
 msgid "Proxy Service Detected"
-msgstr ""
+msgstr "偵測到代理服務器"
 
-#, fuzzy
-#| msgid "Using Tor2Web to connect to SecureDrop will not protect your anonymity."
 msgid "You appear to be using a Tor proxy service to access SecureDrop. Proxy services do not protect your anonymity."
-msgstr "使用 Tor2Web 連至 SecureDrop 將無法保護您的匿名安全。"
+msgstr "您好像使用 Tor 代理服務來連線至 SecureDrop，但代理服務並無法保護您的匿名安全。"
 
-#, fuzzy
-#| msgid "It could be possible for anyone monitoring your Internet traffic (your government, your Internet provider), to identify you."
 msgid "Anyone monitoring your Internet traffic &mdash; including your government, your Internet provider, or the proxy operator &mdash; may be able to identify you."
-msgstr "任何網路流量監控者（如政府、網路服務業者）都有可能認出您。"
+msgstr "任何網路流量監控者（如政府、網路服務業者、代理服務商）都有可能認出您。"
 
 msgid "Always use <a href=\"www.torproject.org/projects/torbrowser.html\">Tor Browser</a> to access SecureDrop. Valid SecureDrop site addresses end with <code>.onion</code>. The correct address for this site is:"
-msgstr ""
+msgstr "請使用 <a href=\"www.torproject.org/projects/torbrowser.html\">Tor 瀏覽器r</a> 來連線 SecureDrop，有效的 SecureDrop 網站其網址尾綴為 <code>.onion</code>，網站正確的網址為:"
 
 msgid "If you are already using Tor Browser, copy the address above and generate a new identity before you access SecureDrop."
-msgstr ""
+msgstr "若已使用 Tor 瀏覽器，請複製上方網址以自動產生新的身份連線到 SecureDrop 。"
 
 msgid "If there is a reasonable risk of your Internet traffic being monitored, consider connecting from a different location or network."
-msgstr ""
+msgstr "如合理懷疑自己受到網路監控，請考慮從別的地點或其它網路上網。"
 
 msgid "You Should Use Tor Browser"
 msgstr "您應使用 Tor 瀏覽器"
