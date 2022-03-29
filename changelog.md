@@ -1,18 +1,13 @@
 # Changelog
 
-## 2.3.0~rc2
-
-* Bugfix: updated instance_config message filter fields to set default values (#6345)
-* Bugfix: updated Apache2 apparmor profile to include new template file (#6344) 
-
-## 2.3.0~rc1
+## 2.3.0
 
 ### Web Applications
 
-* Added optional message filtering to allow instances to set a minimum initial message length and block initial messages containing source codenames (#6306, #6340)
+* Added optional message filtering to allow instances to set a minimum initial message length and block initial messages containing source codenames (#6306, #6340, #6345, #6368)
 * Added "skip to notification" link to allow screen-readers to navigate to flashed messages (#6336)
 * Updated /generate to improve and simplify instructions on use of the codename (#6330)
-* Fixed untranslated string in Read Replies widget (#6321)
+* Fixed untranslated string in Read Replies widget (#6321, #6344)
 * Updated Source Interface browser security level widget to reflect current Tor Browser UI (#6320)
 * Added ARIA annotations for forms in Journalist Interface (#6240)
 * Added tor2web detection via URL mangling (#6304)
