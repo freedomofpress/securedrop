@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SecureDrop 0.4.3\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2022-02-12 15:04+0000\n"
+"PO-Revision-Date: 2022-03-15 20:11+0000\n"
 "Last-Translator: Andrey <andrey@mailbox.org>\n"
 "Language-Team: Russian <https://weblate.securedrop.org/projects/securedrop/securedrop/ru/>\n"
 "Language: ru\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.6\n"
+"X-Generator: Weblate 4.11.2\n"
 "Generated-By: Babel 2.4.0\n"
 
 msgid "Name too long"
@@ -147,7 +147,7 @@ msgstr[1] "Длина не может превышать {num} символа."
 msgstr[2] "Длина не может превышать {num} символов."
 
 msgid "Please specify an integer value greater than 0."
-msgstr ""
+msgstr "Пожалуйста, укажите целое значение больше 0."
 
 msgid "This field is required."
 msgstr "Это обязательное поле."
@@ -156,7 +156,7 @@ msgid "You cannot send an empty reply."
 msgstr "Вы не можете отправить пустой ответ."
 
 msgid "To configure a minimum message length, you must set the required number of characters."
-msgstr ""
+msgstr "Для настройки минимальной длины сообщения необходимо задать необходимое количество символов."
 
 msgid "File required."
 msgstr "Файл обязателен."
@@ -438,7 +438,7 @@ msgid "Navigation"
 msgstr "Навигация"
 
 msgid "Skip to main content"
-msgstr ""
+msgstr "Перейти к основному контенту"
 
 msgid "Logged on as"
 msgstr "Вы вошли как"
@@ -564,13 +564,13 @@ msgid "Prevent sources from uploading documents. Sources will still be able to s
 msgstr "Запретить источникам загрузку документов. Источники все ещё смогут отправлять сообщения."
 
 msgid "Prevent sources from sending initial messages shorter than the minimum required length:"
-msgstr ""
+msgstr "Запретить источникам отправлять первичные сообщения короче минимально необходимой длины:"
 
 msgid "Minimum number of characters."
-msgstr ""
+msgstr "Минимальное количество символов."
 
 msgid "Prevent sources from submitting their codename as an initial message."
-msgstr ""
+msgstr "Запретить источникам отправлять свое кодовое имя в качестве первичного сообщения."
 
 msgid "Update Submission Preferences"
 msgstr "Обновить настройки доставки"
@@ -750,7 +750,7 @@ msgid "Large blocks of text must be uploaded as a file, not copied and pasted."
 msgstr "Большие блоки текста следует загружать в виде файла, а не копировать и вставлять."
 
 msgid "Your connection is not anonymous right now!"
-msgstr ""
+msgstr "Ваше соединение в данный момент не является анонимным!"
 
 msgid "You were redirected because you are already logged in. If you want to create a new account, you should log out first."
 msgstr "Вы были перенаправлены, так как уже выполнили вход в систему. Если вы хотите создать новый аккаунт, то сначала нужно выйти из системы."
@@ -767,21 +767,14 @@ msgstr "Вы должны ввести сообщение или выбрать 
 msgid "You must enter a message."
 msgstr "Вы должны ввести сообщение."
 
-#, fuzzy
-#| msgid "Must be at least {num} character long."
-#| msgid_plural "Must be at least {num} characters long."
 msgid "Your first message must be at least {} characters long."
-msgstr "Должно быть не менее {num} символ."
+msgstr "Ваше первое сообщение должно быть длиной не менее {} символов."
 
-#, fuzzy
-#| msgid "Forgot your codename?"
 msgid "Please do not submit your codename!"
-msgstr "Забыли ваше кодовое имя?"
+msgstr "Пожалуйста, не указывайте свое кодовое имя!"
 
-#, fuzzy
-#| msgid "If you have already submitted to journalists, log in here to check for responses."
 msgid "Keep your codename secret, and use it to log in later to check for replies."
-msgstr "Если вы уже отправляли журналистам, войдите в систему, чтобы проверить ответы."
+msgstr "Сохраняйте свое кодовое имя в тайне и используйте его позже для авторизации, чтобы проверить наличие ответов."
 
 msgid "Thanks! We received your message."
 msgstr "Спасибо! Мы получили ваше сообщение."
@@ -808,7 +801,7 @@ msgid "Protecting Journalists and Sources"
 msgstr "Защита журналистов и источников"
 
 msgid "Skip to notification"
-msgstr ""
+msgstr "Перейти к уведомлению"
 
 msgid "We're sorry, our SecureDrop is currently offline."
 msgstr "Упс, наш SecureDrop сейчас без интернета."
@@ -843,22 +836,20 @@ msgstr "Пометка: выкладывать секретными докуме
 msgid "SecureDrop is a project of Freedom of the Press Foundation."
 msgstr "SecureDrop - Это проект Фонда поддержки свободы прессы."
 
-#, fuzzy
-#| msgid "Enter your codename"
 msgid "Get Your Codename"
-msgstr "Введите ваше кодовое имя"
+msgstr "Получение кодового имени"
 
 msgid "A <em>codename</em> in SecureDrop functions as both your username and your password."
-msgstr ""
+msgstr "<em>Кодовое имя</em> в SecureDrop одновременно является и вашим именем пользователя, и вашим паролем."
 
 msgid "You will need this codename to log into our SecureDrop later:"
-msgstr ""
+msgstr "Это кодовое имя понадобится вам позже для авторизации в SecureDrop:"
 
 msgid "<strong>Keep it secret.</strong> Do not share it with anyone."
-msgstr ""
+msgstr "<strong>Сохраняйте его в тайне.</strong> Не делитесь им ни с кем."
 
 msgid "<strong>Keep it safe.</strong> There is no account recovery option."
-msgstr ""
+msgstr "<strong>Сохраняйте его в безопасности.</strong> Возможность восстановления аккаунта отсутствует."
 
 msgid "Continue"
 msgstr "Продолжить"
@@ -873,10 +864,10 @@ msgid "Click the <img src=\"{icon}\" alt=\"&quot;Security Level&quot; button\"> 
 msgstr "Нажмите <img src=\"{icon}\" alt=\"&quote;Уровень безопасности&quot;\"> на панели инструментов выше"
 
 msgid "Click <b>Change</b> to open Security Level preferences"
-msgstr ""
+msgstr "Нажмите <b>Изменить</b>, чтобы открыть настройки уровня безопасности"
 
 msgid "Select <b>Safest</b> and close the preferences tab"
-msgstr ""
+msgstr "Выберите <b>Самый безопасный</b> и закройте вкладку параметров"
 
 msgid "<a href=\"/\" aria-label=\"Follow these instructions, then refresh this page\">Refresh this page</a>, and you're done!"
 msgstr "<a href=\"/\" aria-label=\"Следуйте этим инструкциям, затем обновите эту страницу\">Обновить страницу</a>, и все!"
@@ -954,7 +945,7 @@ msgid "Submit"
 msgstr "Принять"
 
 msgid "Anti-spam check. Do not fill this in!"
-msgstr ""
+msgstr "Проверка антиспама. Не заполняйте это поле!"
 
 msgid "Read Replies"
 msgstr "Читать ответы"
@@ -966,7 +957,7 @@ msgid "Delete this reply"
 msgstr "Удалить этот ответ"
 
 msgid "Delete reply from {timestamp}?"
-msgstr ""
+msgstr "Удалить ответ из {timestamp}?"
 
 msgid "Delete this reply?"
 msgstr "Удалить этот ответ?"
@@ -1002,26 +993,22 @@ msgid "You were logged out due to inactivity. Click the <img src={icon} alt=\"\"
 msgstr "Вы были деавторизованы из-за неактивности. Нажмите кнопку <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>Новая идентичность</b> в панели инструментов вашего браузера Tor перед тем, как продолжить. Это очистит данные об активности вашего браузера Tor на этом устройстве."
 
 msgid "Proxy Service Detected"
-msgstr ""
+msgstr "Обнаружена служба прокси"
 
-#, fuzzy
-#| msgid "Using Tor2Web to connect to SecureDrop will not protect your anonymity."
 msgid "You appear to be using a Tor proxy service to access SecureDrop. Proxy services do not protect your anonymity."
-msgstr "Использование Tor2Web при подключении к SecureDrop не добавит вам анонимности."
+msgstr "Вероятно, вы используете прокси-сервис Tor для доступа к SecureDrop. Прокси-сервисы не защищают вашу анонимность."
 
-#, fuzzy
-#| msgid "It could be possible for anyone monitoring your Internet traffic (your government, your Internet provider), to identify you."
 msgid "Anyone monitoring your Internet traffic &mdash; including your government, your Internet provider, or the proxy operator &mdash; may be able to identify you."
-msgstr "Контролирующие интернет-трафик организации (правительство, интернет-провайдер) легко могут вас идентифицировать."
+msgstr "Любой, кто контролирует ваш интернет-трафик (правительство, интернет-провайдер или владелец прокси-сервера) сможет идентифицировать вас."
 
 msgid "Always use <a href=\"www.torproject.org/projects/torbrowser.html\">Tor Browser</a> to access SecureDrop. Valid SecureDrop site addresses end with <code>.onion</code>. The correct address for this site is:"
-msgstr ""
+msgstr "Всегда используйте <a href=\"www.torproject.org/projects/torbrowser.html\">Tor Browser</a> для доступа к SecureDrop. Допустимые адреса SecureDrop сайта заканчиваются на <code>.onion</code>. Корректный адрес этого сайта:"
 
 msgid "If you are already using Tor Browser, copy the address above and generate a new identity before you access SecureDrop."
-msgstr ""
+msgstr "Если вы уже используете Tor Browser, скопируйте указанный выше адрес и сгенерируйте новую личность перед тем, как перейти на сайт SecureDrop."
 
 msgid "If there is a reasonable risk of your Internet traffic being monitored, consider connecting from a different location or network."
-msgstr ""
+msgstr "Если существует реальный риск того, что ваш интернет-трафик будет отслеживаться, рассмотрите возможность подключения из другого места или сети."
 
 msgid "You Should Use Tor Browser"
 msgstr "Вы должны использовать Tor Browser"
