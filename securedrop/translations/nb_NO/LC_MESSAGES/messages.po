@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2022-02-11 19:04+0000\n"
+"PO-Revision-Date: 2022-03-25 16:02+0000\n"
 "Last-Translator: Øyvind Bye Skille <oyvind@byeskille.net>\n"
 "Language-Team: Norwegian Bokmål <https://weblate.securedrop.org/projects/securedrop/securedrop/nb_NO/>\n"
 "Language: nb_NO\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.6\n"
+"X-Generator: Weblate 4.11.2\n"
 "Generated-By: Babel 2.4.0\n"
 
 msgid "Name too long"
@@ -144,7 +144,7 @@ msgstr[0] "Kan ikke inneholde mer enn {num} tegn."
 msgstr[1] "Kan ikke inneholde mer enn {num} tegn."
 
 msgid "Please specify an integer value greater than 0."
-msgstr ""
+msgstr "Vennligst oppgi et heltall større enn 0."
 
 msgid "This field is required."
 msgstr "Dette feltet er påkrevd."
@@ -153,7 +153,7 @@ msgid "You cannot send an empty reply."
 msgstr "Du kan ikke sende et tomt svar."
 
 msgid "To configure a minimum message length, you must set the required number of characters."
-msgstr ""
+msgstr "For å sette opp minumum meldingslengde må du definere et påkrevd antall tegn."
 
 msgid "File required."
 msgstr "Fil påkrevd."
@@ -429,7 +429,7 @@ msgid "Navigation"
 msgstr "Navigasjon"
 
 msgid "Skip to main content"
-msgstr ""
+msgstr "Fortsett til hovedinnhold"
 
 msgid "Logged on as"
 msgstr "Innlogget som"
@@ -555,13 +555,13 @@ msgid "Prevent sources from uploading documents. Sources will still be able to s
 msgstr "Forhindre kilder i å laste opp filer. De vil fortsatt kunne sende inn meldinger."
 
 msgid "Prevent sources from sending initial messages shorter than the minimum required length:"
-msgstr ""
+msgstr "Forhindre kilder fra å sende første melding som er kortere enn minste påkrevd lengde:"
 
 msgid "Minimum number of characters."
-msgstr ""
+msgstr "Minimum antall tegn."
 
 msgid "Prevent sources from submitting their codename as an initial message."
-msgstr ""
+msgstr "Forhindre kilder fra å sende sitt eget kodenavn som den første meldingen."
 
 msgid "Update Submission Preferences"
 msgstr "Oppdater forsendelsesinnstillinger"
@@ -741,7 +741,7 @@ msgid "Large blocks of text must be uploaded as a file, not copied and pasted."
 msgstr "Store mengder tekst må lastes opp som fil, ikke klippes og limes inn."
 
 msgid "Your connection is not anonymous right now!"
-msgstr ""
+msgstr "Din tilkobling er ikke anonym nå!"
 
 msgid "You were redirected because you are already logged in. If you want to create a new account, you should log out first."
 msgstr "Du ble omdirigert fordi du allerede er logget inn. Om du ønsker å lage en ny konto må du først logge ut."
@@ -758,21 +758,14 @@ msgstr "Du må skrive inn en melding eller velge ei fil å sende inn."
 msgid "You must enter a message."
 msgstr "Du må skrive inn en melding."
 
-#, fuzzy
-#| msgid "Must be at least {num} character long."
-#| msgid_plural "Must be at least {num} characters long."
 msgid "Your first message must be at least {} characters long."
-msgstr "Må være minst {num} tegn langt."
+msgstr "Din første melding må være minst {} tegn lang."
 
-#, fuzzy
-#| msgid "Forgot your codename?"
 msgid "Please do not submit your codename!"
-msgstr "Glemt kodenavnet ditt?"
+msgstr "Vennligst ikke send inn kodenavnet ditt!"
 
-#, fuzzy
-#| msgid "If you have already submitted to journalists, log in here to check for responses."
 msgid "Keep your codename secret, and use it to log in later to check for replies."
-msgstr "Om du har sendt inn noe tidligere, logg inn her for å se etter svar og tilbakemeldinger."
+msgstr "Hold kodenavnet ditt hemmlig, og bruk det for å logge inn igjen senere for å se om du har fått svar."
 
 msgid "Thanks! We received your message."
 msgstr "Takk! Vi mottok meldingen din."
@@ -799,7 +792,7 @@ msgid "Protecting Journalists and Sources"
 msgstr "Sikkerhet for journalister og kilder"
 
 msgid "Skip to notification"
-msgstr ""
+msgstr "Hopp videre til varsling"
 
 msgid "We're sorry, our SecureDrop is currently offline."
 msgstr "Vi beklager, vår SecureDrop er for tiden ute av drift."
@@ -834,22 +827,20 @@ msgstr "Obs: Deling av sensitive dokumenter kan innebære risiko for deg, også 
 msgid "SecureDrop is a project of Freedom of the Press Foundation."
 msgstr "SecureDrop er et prosjekt drevet av Freedom of the Press Foundation."
 
-#, fuzzy
-#| msgid "Enter your codename"
 msgid "Get Your Codename"
-msgstr "Skriv inn ditt kodenavn"
+msgstr "Få ditt kodenavn"
 
 msgid "A <em>codename</em> in SecureDrop functions as both your username and your password."
-msgstr ""
+msgstr "Et <em>kodenavn</em> i SecureDrop fungerer både som ditt brukernavn og passord."
 
 msgid "You will need this codename to log into our SecureDrop later:"
-msgstr ""
+msgstr "Du vil trenge dette kodenavnet for å logge inn i SecureDrop senere:"
 
 msgid "<strong>Keep it secret.</strong> Do not share it with anyone."
-msgstr ""
+msgstr "<strong>Hold det hemmelig.</strong> Ikke del det med noen."
 
 msgid "<strong>Keep it safe.</strong> There is no account recovery option."
-msgstr ""
+msgstr "<strong>Ta godt vare på det.</strong> Det er ingen mulighet for å gjenopprette tilgangen."
 
 msgid "Continue"
 msgstr "Fortsett"
@@ -864,10 +855,10 @@ msgid "Click the <img src=\"{icon}\" alt=\"&quot;Security Level&quot; button\"> 
 msgstr "Klikk på <img src=\"{icon}\" alt=\"&quot;Sikkerhetsnivå&quot; button\"> i verktøylinjen ovenfor"
 
 msgid "Click <b>Change</b> to open Security Level preferences"
-msgstr ""
+msgstr "Klikk <b>Change</b> for å åpne Sikkerhetsnivå-innstillingene"
 
 msgid "Select <b>Safest</b> and close the preferences tab"
-msgstr ""
+msgstr "Velg <b>Tryggest</b> og lukk fanen med innstillinger"
 
 msgid "<a href=\"/\" aria-label=\"Follow these instructions, then refresh this page\">Refresh this page</a>, and you're done!"
 msgstr "<a href=\"/\" aria-label=\"Følg disse instruksjonene, deretter oppdater siden\">Last inn siden igjen</a>, og så er du ferdig!"
@@ -945,7 +936,7 @@ msgid "Submit"
 msgstr "Send inn"
 
 msgid "Anti-spam check. Do not fill this in!"
-msgstr ""
+msgstr "Anti-spam-sjekk. Ikke fyll inn her!"
 
 msgid "Read Replies"
 msgstr "Les svar"
@@ -957,7 +948,7 @@ msgid "Delete this reply"
 msgstr "Slett dette svaret"
 
 msgid "Delete reply from {timestamp}?"
-msgstr ""
+msgstr "Slett svar fra {timestamp}?"
 
 msgid "Delete this reply?"
 msgstr "Slett dette svaret?"
@@ -993,26 +984,22 @@ msgid "You were logged out due to inactivity. Click the <img src={icon} alt=\"\"
 msgstr "Du ble utlogget som følge av inaktivitet. Klikk på <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>Ny identitiet</b>-knappen i Tor-nettleserens verktøylinje før du fortsetter. Dette vil slette loggen over aktivitet i Tor-nettleseren på denne enheten."
 
 msgid "Proxy Service Detected"
-msgstr ""
+msgstr "Proxy-bruk oppdaget"
 
-#, fuzzy
-#| msgid "Using Tor2Web to connect to SecureDrop will not protect your anonymity."
 msgid "You appear to be using a Tor proxy service to access SecureDrop. Proxy services do not protect your anonymity."
-msgstr "Bruk av Tor2Web for å kommunisere med SecureDrop vil ikke beskytte din anonymitet."
+msgstr "Du virker å bruke en Tor proxy-tjeneste for å kommunisere med SecureDrop. Proxy-tjenester vil ikke beskytte din anonymitet."
 
-#, fuzzy
-#| msgid "It could be possible for anyone monitoring your Internet traffic (your government, your Internet provider), to identify you."
 msgid "Anyone monitoring your Internet traffic &mdash; including your government, your Internet provider, or the proxy operator &mdash; may be able to identify you."
-msgstr "Det er en mulighet for at alle som kan følge med på internettbruken din (myndigheter, internettilbyderen din) kan identifisere deg."
+msgstr "Om noen følger med på internettbruken din &mdash; som myndigheter, internettilbyderen din eller proxy-operatøren &mdash; kan identifisere deg."
 
 msgid "Always use <a href=\"www.torproject.org/projects/torbrowser.html\">Tor Browser</a> to access SecureDrop. Valid SecureDrop site addresses end with <code>.onion</code>. The correct address for this site is:"
-msgstr ""
+msgstr "Alltid bruk <a href=\"www.torproject.org/projects/torbrowser.html\">Tor-nettleseren</a> for å bruke SecureDrop. Riktige SecureDrop-addresser slutter på <code>.onion</code>. Den riktige adressen for denne SecureDrop-siden er:"
 
 msgid "If you are already using Tor Browser, copy the address above and generate a new identity before you access SecureDrop."
-msgstr ""
+msgstr "Om du allerede bruker Tor-nettleseren, kopier adressen over og generer en ny identitet før du besøker SecureDrop."
 
 msgid "If there is a reasonable risk of your Internet traffic being monitored, consider connecting from a different location or network."
-msgstr ""
+msgstr "Om det er grunn til å tro at det er risiko for at internett-trafikken din blir overvåket, vurder å koble til fra et annet sted eller et annet nettverk."
 
 msgid "You Should Use Tor Browser"
 msgstr "Du burde bruke Tor-nettleseren"
