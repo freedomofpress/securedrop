@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SecureDrop 0.6~rc2\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2022-02-10 17:04+0000\n"
+"PO-Revision-Date: 2022-03-17 04:11+0000\n"
 "Last-Translator: ff98sha <ff98sha@163.com>\n"
 "Language-Team: Chinese (Simplified) <https://weblate.securedrop.org/projects/securedrop/securedrop/zh_Hans/>\n"
 "Language: zh_Hans\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.6\n"
+"X-Generator: Weblate 4.11.2\n"
 "Generated-By: Babel 2.5.1\n"
 
 msgid "Name too long"
@@ -139,7 +139,7 @@ msgid_plural "Cannot be longer than {num} characters."
 msgstr[0] "字段长度需小于 {num} 个字符。"
 
 msgid "Please specify an integer value greater than 0."
-msgstr ""
+msgstr "请输入一个正整数。"
 
 msgid "This field is required."
 msgstr "这是必填项。"
@@ -148,7 +148,7 @@ msgid "You cannot send an empty reply."
 msgstr "回复内容不可空白。"
 
 msgid "To configure a minimum message length, you must set the required number of characters."
-msgstr ""
+msgstr "要设置最短消息程度，你需要先设置消息的最小字符长度。"
 
 msgid "File required."
 msgstr "该文件是必选项。"
@@ -418,7 +418,7 @@ msgid "Navigation"
 msgstr "导航"
 
 msgid "Skip to main content"
-msgstr ""
+msgstr "跳至主要内容"
 
 msgid "Logged on as"
 msgstr "以身份登录"
@@ -544,13 +544,13 @@ msgid "Prevent sources from uploading documents. Sources will still be able to s
 msgstr "阻止线人上传文件，其将仍可发送信息。"
 
 msgid "Prevent sources from sending initial messages shorter than the minimum required length:"
-msgstr ""
+msgstr "不允许线人发送小于最短长度的初始消息："
 
 msgid "Minimum number of characters."
-msgstr ""
+msgstr "需要的最少字符数。"
 
 msgid "Prevent sources from submitting their codename as an initial message."
-msgstr ""
+msgstr "不允许线人将自己的代号作为初始消息发送。"
 
 msgid "Update Submission Preferences"
 msgstr "更新提交设置"
@@ -730,7 +730,7 @@ msgid "Large blocks of text must be uploaded as a file, not copied and pasted."
 msgstr "大量的文本必须以文件方式上传，而不是复制粘贴。"
 
 msgid "Your connection is not anonymous right now!"
-msgstr ""
+msgstr "你的连接现在并非匿名！"
 
 msgid "You were redirected because you are already logged in. If you want to create a new account, you should log out first."
 msgstr "您由于已经登录而被重定向。若您想要创建新账户，请先登出。"
@@ -747,19 +747,14 @@ msgstr "您必须输入要提交的信息或选择要提交的文件。"
 msgid "You must enter a message."
 msgstr "您必须输入信息。"
 
-#, fuzzy
-#| msgid "Must be at least {num} character long."
-#| msgid_plural "Must be at least {num} characters long."
 msgid "Your first message must be at least {} characters long."
-msgstr "该字段需要至少 {num} 个字符。"
+msgstr "初始消息需要至少 {} 个字符。"
 
-#, fuzzy
-#| msgid "Forgot your codename?"
 msgid "Please do not submit your codename!"
-msgstr "忘记了您的代号？"
+msgstr "请不要发送您的代号！"
 
 msgid "Keep your codename secret, and use it to log in later to check for replies."
-msgstr ""
+msgstr "请保管好您的代号，之后可用来登录查看回复。"
 
 msgid "Thanks! We received your message."
 msgstr "万分感谢！我们收到了您的信息。"
@@ -786,7 +781,7 @@ msgid "Protecting Journalists and Sources"
 msgstr "庇护记者及线人"
 
 msgid "Skip to notification"
-msgstr ""
+msgstr "跳至通知"
 
 msgid "We're sorry, our SecureDrop is currently offline."
 msgstr "抱歉，SecureDrop目前不可用。"
@@ -821,22 +816,20 @@ msgstr "请注意：分享敏感文档可能会让您危在旦夕，即便您正
 msgid "SecureDrop is a project of Freedom of the Press Foundation."
 msgstr "SecureDrop 是媒体自由基金会的项目。"
 
-#, fuzzy
-#| msgid "Enter your codename"
 msgid "Get Your Codename"
-msgstr "输入您的代号"
+msgstr "获取您的代号"
 
 msgid "A <em>codename</em> in SecureDrop functions as both your username and your password."
-msgstr ""
+msgstr "SecureDrop 中的<em>代号</em>同时作为您的用户名和密码。"
 
 msgid "You will need this codename to log into our SecureDrop later:"
-msgstr ""
+msgstr "您需要使用此代号来登录 SecureDrop："
 
 msgid "<strong>Keep it secret.</strong> Do not share it with anyone."
-msgstr ""
+msgstr "<strong>妥善保管</strong>，不要向他人透露。"
 
 msgid "<strong>Keep it safe.</strong> There is no account recovery option."
-msgstr ""
+msgstr "<strong>请妥善保管</strong>，无法找回代号。"
 
 msgid "Continue"
 msgstr "继续"
@@ -851,10 +844,10 @@ msgid "Click the <img src=\"{icon}\" alt=\"&quot;Security Level&quot; button\"> 
 msgstr "点选上方工具栏的 <img src=\"{icon}\" alt=\"安全等级\">"
 
 msgid "Click <b>Change</b> to open Security Level preferences"
-msgstr ""
+msgstr "点击<b>更改</b>来打开安全等级设置"
 
 msgid "Select <b>Safest</b> and close the preferences tab"
-msgstr ""
+msgstr "选择<b>最安全</b>级别并关闭设置菜单"
 
 msgid "<a href=\"/\" aria-label=\"Follow these instructions, then refresh this page\">Refresh this page</a>, and you're done!"
 msgstr "<a href=\"/\" aria-label=\"根据指引操作后刷新页面\">刷新此页面</a>，大功告成！"
@@ -932,7 +925,7 @@ msgid "Submit"
 msgstr "提交"
 
 msgid "Anti-spam check. Do not fill this in!"
-msgstr ""
+msgstr "人机验证：请勿填写此文本框！"
 
 msgid "Read Replies"
 msgstr "阅读回复"
@@ -944,7 +937,7 @@ msgid "Delete this reply"
 msgstr "是否删除此回复"
 
 msgid "Delete reply from {timestamp}?"
-msgstr ""
+msgstr "删除 {timestamp} 的回复？"
 
 msgid "Delete this reply?"
 msgstr "是否删除此回复？"
@@ -980,26 +973,22 @@ msgid "You were logged out due to inactivity. Click the <img src={icon} alt=\"\"
 msgstr "您因为长时间无操作而被注销。再继续操作前，点击 Tor 浏览器工具栏上的<img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>新身份</b>按钮。这能清除此设备上 Tor 浏览器的活动记录。"
 
 msgid "Proxy Service Detected"
-msgstr ""
+msgstr "检测到代理服务"
 
-#, fuzzy
-#| msgid "Using Tor2Web to connect to SecureDrop will not protect your anonymity."
 msgid "You appear to be using a Tor proxy service to access SecureDrop. Proxy services do not protect your anonymity."
-msgstr "使用 Tor2Web 来连接至 SecureDrop 将无法保护您的匿名身份。"
+msgstr "您似乎在使用 Tor 代理来连接至 SecureDrop，这无法保护您的匿名身份。"
 
-#, fuzzy
-#| msgid "It could be possible for anyone monitoring your Internet traffic (your government, your Internet provider), to identify you."
 msgid "Anyone monitoring your Internet traffic &mdash; including your government, your Internet provider, or the proxy operator &mdash; may be able to identify you."
-msgstr "监听您网络流量的人（如您的政府、互联网提供商）将可以识别您的身份。"
+msgstr "监听您网络流量的人（如您的政府、互联网提供商、代理提供方）将可以识别您的身份。"
 
 msgid "Always use <a href=\"www.torproject.org/projects/torbrowser.html\">Tor Browser</a> to access SecureDrop. Valid SecureDrop site addresses end with <code>.onion</code>. The correct address for this site is:"
-msgstr ""
+msgstr "请使用 <a href=\"www.torproject.org/projects/torbrowser.html\">Tor 浏览器</a>来连接至 SecureDrop。SecureDrop 网站的地址都以 <code>.onion</code> 结尾。此站点的地址是 ："
 
 msgid "If you are already using Tor Browser, copy the address above and generate a new identity before you access SecureDrop."
-msgstr ""
+msgstr "如果您已经在使用 Tor 浏览器，请生成一个新的匿名身份，然后复制上方的地址来访问 SecureDrop。"
 
 msgid "If there is a reasonable risk of your Internet traffic being monitored, consider connecting from a different location or network."
-msgstr ""
+msgstr "如果你认为你的互联网连接可能被监听，请尝试连接到其他网络。"
 
 msgid "You Should Use Tor Browser"
 msgstr "您应该使用洋葱浏览器"
