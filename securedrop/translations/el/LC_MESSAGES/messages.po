@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SecureDrop 0.8.0~rc1\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2022-02-09 21:04+0000\n"
+"PO-Revision-Date: 2022-03-27 17:38+0000\n"
 "Last-Translator: Dimitris Maroulidis <dmaroulidis@dimitrismaroulidis.com>\n"
 "Language-Team: Greek <https://weblate.securedrop.org/projects/securedrop/securedrop/el/>\n"
 "Language: el\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.6\n"
+"X-Generator: Weblate 4.11.2\n"
 "Generated-By: Babel 2.5.1\n"
 
 msgid "Name too long"
@@ -143,7 +143,7 @@ msgstr[0] "Δεν μπορεί να περιέχει παραπάνω από {nu
 msgstr[1] "Δεν μπορεί να περιέχει παραπάνω από {num} χαρακτήρες."
 
 msgid "Please specify an integer value greater than 0."
-msgstr ""
+msgstr "Παρακαλώ ορίστε μια ακέραια τιμή μεγαλύτερη του 0."
 
 msgid "This field is required."
 msgstr "Αυτό το πεδίο είναι υποχρεωτικό."
@@ -152,7 +152,7 @@ msgid "You cannot send an empty reply."
 msgstr "Δεν μπορείτε να στείλετε κενή απάντηση."
 
 msgid "To configure a minimum message length, you must set the required number of characters."
-msgstr ""
+msgstr "Για να ορίσετε το ελάχιστο μήκος μηνύματος, πρέπει να ορίσετε τον αριθμό χαρακτήρων που απαιτείται."
 
 msgid "File required."
 msgstr "Απαιτείται αρχείο."
@@ -428,7 +428,7 @@ msgid "Navigation"
 msgstr "Πλοήγηση"
 
 msgid "Skip to main content"
-msgstr ""
+msgstr "Προχωρήστε στο κύριο περιεχόμενο"
 
 msgid "Logged on as"
 msgstr "Συνδεδεμένος/η ως"
@@ -554,13 +554,13 @@ msgid "Prevent sources from uploading documents. Sources will still be able to s
 msgstr "Να μην επιτρέπεται σε πηγές να ανεβάζουν έγγραφα. Οι πηγές θα μπορούν παρ' όλα αυτά να στέλνουν μηνύματα."
 
 msgid "Prevent sources from sending initial messages shorter than the minimum required length:"
-msgstr ""
+msgstr "Αποτρέψτε τις πηγές από την αποστολή μηνυμάτων μικρότερων του ελάχιστου απαιτούμενου μήκους:"
 
 msgid "Minimum number of characters."
-msgstr ""
+msgstr "Ελάχιστος αριθμός χαρακτήρων."
 
 msgid "Prevent sources from submitting their codename as an initial message."
-msgstr ""
+msgstr "Αποτρέψτε τις πηγές από την υποβολή του κωδικού τους ονόματος ως αρχικό μήνυμα."
 
 msgid "Update Submission Preferences"
 msgstr "Ενημέρωση ρυθμίσεων υποβολών"
@@ -740,7 +740,7 @@ msgid "Large blocks of text must be uploaded as a file, not copied and pasted."
 msgstr "Μεγάλα κείμενα πρέπει να ανεβαίνουν ως αρχεία, και όχι να αντιγράφονται και να επικολλούνται."
 
 msgid "Your connection is not anonymous right now!"
-msgstr ""
+msgstr "Η σύνδεσή σας δεν είναι ανώνυμη αυτήν την στιγμή!"
 
 msgid "You were redirected because you are already logged in. If you want to create a new account, you should log out first."
 msgstr "Ανακατευθυνθήκατε επειδή είστε ήδη συνδεδεμένος. Αν θέλετε να δημιουργήσετε έναν νέο λογαριασμό, πρέπει πρώτα να αποσυνδεθείτε."
@@ -757,21 +757,14 @@ msgstr "Πρέπει να πληκτρολογήσετε ένα μήνυμα ή 
 msgid "You must enter a message."
 msgstr "Πρέπει να πληκτρολογήσετε ένα μήνυμα."
 
-#, fuzzy
-#| msgid "Must be at least {num} character long."
-#| msgid_plural "Must be at least {num} characters long."
 msgid "Your first message must be at least {} characters long."
-msgstr "Πρέπει να έχει τουλάχιστον {num} χαρακτήρα."
+msgstr "Το πρώτο σας μήνυμα πρέπει να έχει τουλάχιστον {} χαρακτήρες."
 
-#, fuzzy
-#| msgid "Forgot your codename?"
 msgid "Please do not submit your codename!"
-msgstr "Ξεχάσατε το κωδικό όνομά σας;"
+msgstr "Παρακαλώ μην υποβάλλετε το κωδικό σας όνομα!"
 
-#, fuzzy
-#| msgid "If you have already submitted to journalists, log in here to check for responses."
 msgid "Keep your codename secret, and use it to log in later to check for replies."
-msgstr "Αν έχετε ήδη υποβάλλει κάτι στους δημοσιογράφους, συνδεθείτε για να ελέγξετε για απαντήσεις."
+msgstr "Κρατήστε το κωδικό σας όνομα μυστικό και χρησιμοποιήστε το αργότερα για να συνδεθείτε και να ελέγξετε για απαντήσεις."
 
 msgid "Thanks! We received your message."
 msgstr "Ευχαριστούμε! Λάβαμε το μήνυμά σας."
@@ -798,7 +791,7 @@ msgid "Protecting Journalists and Sources"
 msgstr "Προστατεύοντας δημοσιογράφους και πηγές"
 
 msgid "Skip to notification"
-msgstr ""
+msgstr "Προχωρήστε στην ειδοποίηση"
 
 msgid "We're sorry, our SecureDrop is currently offline."
 msgstr "Συγγνώμη, αυτή τη στιγμή το SecureDrop μας είναι εκτός σύνδεσης."
@@ -833,22 +826,20 @@ msgstr "Σημείωση: Η κοινοποίηση ευαίσθητων αρχ�
 msgid "SecureDrop is a project of Freedom of the Press Foundation."
 msgstr "Το SecureDrop είναι έργο του ιδρύματος Freedom of the Press."
 
-#, fuzzy
-#| msgid "Enter your codename"
 msgid "Get Your Codename"
-msgstr "Γράψτε το κωδικό όνομά σας"
+msgstr "Λάβετε το κωδικό σας όνομα"
 
 msgid "A <em>codename</em> in SecureDrop functions as both your username and your password."
-msgstr ""
+msgstr "Το <em>κωδικό όνομα</em> λειτουργεί ως όνομα χρήστη και ως κωδικό πρόσβασης στο SecureDrop."
 
 msgid "You will need this codename to log into our SecureDrop later:"
-msgstr ""
+msgstr "Θα χρειαστείτε αυτό το κωδικό όνομα για να συνδεθείτε στο SecureDrop μας αργότερα:"
 
 msgid "<strong>Keep it secret.</strong> Do not share it with anyone."
-msgstr ""
+msgstr "<strong>Κρατήστε το μυστικό.</strong> Μην το μοιραστείτε με κανέναν."
 
 msgid "<strong>Keep it safe.</strong> There is no account recovery option."
-msgstr ""
+msgstr "<strong>Κρατήστε το ασφαλές.</strong> Δεν υπάρχει δυνατότητα ανάκτησης λογαριασμού."
 
 msgid "Continue"
 msgstr "Συνέχεια"
@@ -863,10 +854,10 @@ msgid "Click the <img src=\"{icon}\" alt=\"&quot;Security Level&quot; button\"> 
 msgstr "Πατήστε το <img src=\"{icon}\" alt=\"κουμπί &quot;Επίπεδο ασφαλείας&quot;\">στη γραμμή εργαλειών παραπάνω"
 
 msgid "Click <b>Change</b> to open Security Level preferences"
-msgstr ""
+msgstr "Πατήστε <b>Αλλαγή</b> για να ανοίξετε τις προτιμήσεις Επιπέδου Ασφαλείας"
 
 msgid "Select <b>Safest</b> and close the preferences tab"
-msgstr ""
+msgstr "Επιλέξτε <b>Το πιο ασφαλές</b> και κλείστε την καρτέλα προτιμήσεων"
 
 msgid "<a href=\"/\" aria-label=\"Follow these instructions, then refresh this page\">Refresh this page</a>, and you're done!"
 msgstr "<a href=\"/\" aria-label=\"Ακολουθήστε αυτές τις οδηγίες, και μετά ανανεώστε τη σελίδα\">Ανανεώστε τη σελίδα</a> και τελειώσατε!"
@@ -944,7 +935,7 @@ msgid "Submit"
 msgstr "Υποβολή"
 
 msgid "Anti-spam check. Do not fill this in!"
-msgstr ""
+msgstr "Έλεγχος anti-spam. Μην το συμπληρώσετε!"
 
 msgid "Read Replies"
 msgstr "Ανάγνωση απαντήσεων"
@@ -956,7 +947,7 @@ msgid "Delete this reply"
 msgstr "Διαγραφή αυτής της απάντησης"
 
 msgid "Delete reply from {timestamp}?"
-msgstr ""
+msgstr "Διαγραφή απάντησης από {timestamp};"
 
 msgid "Delete this reply?"
 msgstr "Διαγραφή αυτής της απάντησης;"
@@ -992,26 +983,22 @@ msgid "You were logged out due to inactivity. Click the <img src={icon} alt=\"\"
 msgstr "Αποσυνδεθήκατε λόγω αδράνειας. Πατήστε το κουμπί <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>Νέα Ταυτότητα</b> στη γραμμή εργαλείων του Tor Browser σας πριν συνεχίσετε. Αυτό θα διαγράψει τα δεδομένα δραστηριότητας του Tor Browser σε αυτή τη συσκευή."
 
 msgid "Proxy Service Detected"
-msgstr ""
+msgstr "Εντοπίστηκε υπηρεσία proxy"
 
-#, fuzzy
-#| msgid "Using Tor2Web to connect to SecureDrop will not protect your anonymity."
 msgid "You appear to be using a Tor proxy service to access SecureDrop. Proxy services do not protect your anonymity."
-msgstr "Η χρήση του Tor2Web για να συνδεθείτε στο SecureDrop δεν θα προστατεύσει την ανωνυμία σας."
+msgstr "Φαίνεται πως χρησιμοποιείτε μια υπηρεσία Tor proxy για να επισκεφτείτε το SecureDrop. Οι υπηρεσίες proxy δεν προστατεύουν την ανωνυμία σας."
 
-#, fuzzy
-#| msgid "It could be possible for anyone monitoring your Internet traffic (your government, your Internet provider), to identify you."
 msgid "Anyone monitoring your Internet traffic &mdash; including your government, your Internet provider, or the proxy operator &mdash; may be able to identify you."
-msgstr "Είναι δυνατό να παρακολουθεί ο οποιοσδήποτε την κίνηση δικτύου σας (η κυβέρνηση, ο πάροχός σας) για να σας ταυτοποιήσει."
+msgstr "Οποιοσδήποτε παρακολουθεί την κίνηση δικτύου σας &mdash; συμπεριλαμβανομένων της κυβέρνησής σας, του παρόχου της σύνδεσης σας στο Διαδίκτυο, ή της υπηρεσίας proxy &mdash; υπάρχει περίπτωση να μπορεί να σας ταυτοποιήσει."
 
 msgid "Always use <a href=\"www.torproject.org/projects/torbrowser.html\">Tor Browser</a> to access SecureDrop. Valid SecureDrop site addresses end with <code>.onion</code>. The correct address for this site is:"
-msgstr ""
+msgstr "Χρησιμοποιείτε πάντα τον <a href=\"www.torproject.org/projects/torbrowser.html\">Περιηγητή Tor</a> για να επισκεφθείτε το SecureDrop. Οι έγκυρες διευθύνσεις SecureDrop τελειώνουν σε <code>.onion</code>. Η σωστή διεύθυνση για αυτόν τον ιστότοπο είναι η:"
 
 msgid "If you are already using Tor Browser, copy the address above and generate a new identity before you access SecureDrop."
-msgstr ""
+msgstr "Αν χρησιμοποιείτε ήδη τον περιηγητή Tor, αντιγράψτε την παραπάνω διεύθυνση και δημιουργήστε νέα ταυτότητα πριν επισκεφθείτε το SecureDrop."
 
 msgid "If there is a reasonable risk of your Internet traffic being monitored, consider connecting from a different location or network."
-msgstr ""
+msgstr "Αν υπάρχει σημαντικός κίνδυνος να παρακολουθείται η σύνδεσή σας στο Διαδίκτυο, τότε σκεφθείτε τη δυνατότητα σύνδεσης από άλλη τοποθεσία ή δίκτυο."
 
 msgid "You Should Use Tor Browser"
 msgstr "Καλό θα ήταν να χρησιμοποιήσετε τον Tor Browser"
