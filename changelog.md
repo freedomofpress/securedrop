@@ -1,6 +1,32 @@
 # Changelog
 
-## 2.3.0~rc1
+## 2.4.0~rc1
+
+## 2.3.0
+
+### Web Applications
+
+* Added optional message filtering to allow instances to set a minimum initial message length and block initial messages containing source codenames (#6306, #6340, #6345, #6368)
+* Added "skip to notification" link to allow screen-readers to navigate to flashed messages (#6336)
+* Updated /generate to improve and simplify instructions on use of the codename (#6330)
+* Fixed untranslated string in Read Replies widget (#6321, #6344)
+* Updated Source Interface browser security level widget to reflect current Tor Browser UI (#6320)
+* Added ARIA annotations for forms in Journalist Interface (#6240)
+* Added tor2web detection via URL mangling (#6304)
+* Removed unused bulk delete confirmation functionality (#6261)
+* Added "skip to main content link" Source Interface base template (#6237)
+* Added hidden antispam field to detect some automated submissions (#6302)
+* Updated application to redirect to a warning page on detection of a tor2web proxy (#6300, #6335)
+* Added Javascript check to detect use of non-torified proxy servers (#6303)
+* Added /robots.txt route and meta tags to disallow bots on the Source Interface (#6299)
+* Fixed text overflow issue in the "Read Replies" widget (#6301)
+* Updated data attributes in the codename widget to be translateable strings (#6288)
+* Added support for future user-agent strings  with a 3-digit Firefox version (#6309)
+
+### Development
+
+* Updated `make shellcheck` to optionally use podman instead of Docker (#6239)
+* Updated `make dev-tor` to set correct v3 address in Source Interface /metadata endpoint (#6308)
 
 ## 2.2.1
 
