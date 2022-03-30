@@ -133,7 +133,7 @@ def test_create_new_source(source_app):
         assert 'codenames' not in session
 
 
-def test_generate(source_app):
+def test_generate_as_post(source_app):
     with source_app.test_client() as app:
         resp = app.post(url_for('main.generate'), data=GENERATE_DATA)
         assert resp.status_code == 200
@@ -146,6 +146,21 @@ def test_generate(source_app):
     # codename is also stored in the session - make sure it matches the
     # codename displayed to the source
     assert codename == escape(session_codename)
+
+def test_generate_as_get(source_app):
+    with source_app.test_client() as app:
+        resp = app.get(url_for('main.generate'))
+        assert resp.status_code == 200
+        session_codename = next(iter(session['codenames'].values()))
+
+    text = resp.data.decode('utf-8')
+    assert "functions as both your username and your password" in text
+
+    codename = _find_codename(resp.data.decode('utf-8'))
+    # codename is also stored in the session - make sure it matches the
+    # codename displayed to the source
+    assert codename == escape(session_codename)
+
 
 
 def test_create_duplicate_codename_logged_in_not_in_session(source_app):

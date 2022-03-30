@@ -37,15 +37,17 @@ def make_blueprint(config: SDConfig) -> Blueprint:
     def index() -> str:
         return render_template('index.html')
 
-    @view.route('/generate', methods=('POST',))
+    @view.route('/generate', methods=('POST', 'GET'))
     def generate() -> Union[str, werkzeug.Response]:
-        # Try to detect Tor2Web usage by looking to see if tor2web_check got mangled
-        tor2web_check = request.form.get('tor2web_check')
-        if tor2web_check is None:
-            # Missing form field
-            abort(403)
-        elif tor2web_check != 'href="fake.onion"':
-            return redirect(url_for('info.tor2web_warning'))
+        if request.method == 'POST':
+            # Try to detect Tor2Web usage by looking to see if tor2web_check got mangled
+            tor2web_check = request.form.get('tor2web_check')
+            if tor2web_check is None:
+                # Missing form field
+                abort(403)
+            elif tor2web_check != 'href="fake.onion"':
+                return redirect(url_for('info.tor2web_warning'))
+
         if SessionManager.is_user_logged_in(db_session=db.session):
             flash(gettext(
                 "You were redirected because you are already logged in. "
