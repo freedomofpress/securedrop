@@ -30,7 +30,7 @@ from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.ui import WebDriverWait
 from sqlalchemy.exc import IntegrityError
 from tbselenium.tbdriver import TorBrowserDriver
-from tbselenium.utils import disable_js, set_security_level
+from tbselenium.utils import set_security_level
 from tbselenium.utils import SECURITY_LOW, SECURITY_MEDIUM, SECURITY_HIGH
 
 import journalist_app
@@ -166,10 +166,6 @@ class FunctionalTest(object):
             self.create_torbrowser_driver()
         self.driver = self.torbrowser_driver
         logging.info("Switched %s to TorBrowser driver: %s", self, self.driver)
-
-    def disable_js_torbrowser_driver(self):
-        if hasattr(self, 'torbrowser_driver'):
-            disable_js(self.torbrowser_driver)
 
     def start_source_server(self, source_port):
         from sdconfig import config
