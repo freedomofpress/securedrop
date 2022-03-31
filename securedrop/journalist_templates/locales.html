@@ -14,9 +14,9 @@
     <li class="menu__item" role="none">
       {% if locale != g.localeinfo.id %}
       {% set args = {} %}
-      {% set _ = args.update(request.args or {}) %}
-      {% set _ = args.update(request.view_args or {}) %}
-      {% set _ = args.update({'l': locale}) %}
+      {% do args.update(request.args or {}) %}
+      {% do args.update(request.view_args or {}) %}
+      {% do args.update({'l': locale}) %}
       {% set checked = 'false' %}
       {% set url = url_for(request.endpoint or 'main.index', **args) %}
       {% else %}
