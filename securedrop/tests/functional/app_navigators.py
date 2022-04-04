@@ -1,7 +1,12 @@
+import gzip
+import tempfile
 import time
 from contextlib import contextmanager
-from typing import Optional, Generator
 
+from typing import Optional, Dict, Iterable, Generator
+
+import pyotp
+import requests
 from selenium.webdriver.firefox.webdriver import WebDriver
 from selenium.webdriver.remote.webelement import WebElement
 
@@ -12,6 +17,10 @@ from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.ui import WebDriverWait
 
 from tests.functional.web_drivers import get_web_driver, WebDriverTypeEnum
+
+from encryption import EncryptionManager
+from tests.functional.tor_utils import proxies_for_url
+from tests.test_encryption import import_journalist_private_key
 
 
 # TODO(AD): This is intended to eventually replace the navigation/driver code in FunctionalTest
@@ -270,3 +279,120 @@ class SourceAppNagivator:
         notification = self.driver.find_element_by_css_selector(".notification")
         assert notification
         return notification
+
+
+# TODO(AD): This is intended to eventually replace the JournalistNavigationStepsMixin
+class JournalistAppNavigator:
+    def __init__(
+        self,
+        journalist_app_base_url: str,
+        web_driver: WebDriver,
+        accept_languages: Optional[str] = None,
+    ) -> None:
+        self._journalist_app_base_url = journalist_app_base_url
+        self.nav_helper = _NavigationHelper(web_driver)
+        self.driver = web_driver
+        self.accept_languages = accept_languages
+
+    def _is_on_journalist_homepage(self):
+        return self.nav_helper.wait_for(
+            lambda: self.driver.find_element_by_css_selector("div.journalist-view-all")
+        )
+
+    def journalist_logs_in(self, username: str, password: str, otp_secret: str) -> None:
+        otp = pyotp.TOTP(otp_secret)
+        token = str(otp.now())
+        for i in range(3):
+            # Submit the login form
+            self.driver.get(f"{self._journalist_app_base_url}/login")
+            self.nav_helper.safe_send_keys_by_css_selector('input[name="username"]', username)
+            self.nav_helper.safe_send_keys_by_css_selector('input[name="password"]', password)
+            self.nav_helper.safe_send_keys_by_css_selector('input[name="token"]', token)
+            self.nav_helper.safe_click_by_css_selector('button[type="submit"]')
+
+            # Successful login should redirect to the index
+            self.nav_helper.wait_for(lambda: self.driver.find_element_by_id("link-logout"))
+            if self.driver.current_url != self._journalist_app_base_url:
+                new_token = str(otp.now())
+                while token == new_token:
+                    time.sleep(1)
+                    new_token = str(otp.now())
+                token = new_token
+            else:
+                break
+
+        assert self._is_on_journalist_homepage()
+
+    def journalist_checks_messages(self):
+        self.driver.get(self._journalist_app_base_url)
+
+        # There should be 1 collection in the list of collections
+        code_names = self.driver.find_elements_by_class_name("code-name")
+        assert 0 != len(code_names), code_names
+        assert 1 <= len(code_names), code_names
+
+        if not self.accept_languages:
+            # There should be a "1 unread" span in the sole collection entry
+            unread_span = self.driver.find_element_by_css_selector("tr.unread")
+            assert "1 unread" in unread_span.text
+
+    @staticmethod
+    def _download_content_at_url(url: str, cookies: Dict[str, str]) -> bytes:
+        r = requests.get(url, cookies=cookies, proxies=proxies_for_url(url), stream=True)
+        if r.status_code != 200:
+            raise Exception("Failed to download the data.")
+        data = b""
+        for chunk in r.iter_content(1024):
+            data += chunk
+        return data
+
+    @staticmethod
+    def _unzip_content(raw_content: bytes) -> str:
+        with tempfile.TemporaryFile() as fp:
+            fp.write(raw_content)
+            fp.seek(0)
+
+            gzf = gzip.GzipFile(mode="rb", fileobj=fp)
+            content = gzf.read()
+
+        return content.decode("utf-8")
+
+    def journalist_downloads_first_message(
+        self, encryption_mgr_to_use_for_decryption: EncryptionManager
+    ) -> str:
+        # Select the first submission from the first source in the page
+        self._journalist_selects_the_first_source()
+        self.nav_helper.wait_for(
+            lambda: self.driver.find_element_by_css_selector("table#submissions")
+        )
+        submissions = self.driver.find_elements_by_css_selector("#submissions a")
+        assert 1 == len(submissions)
+        file_url = submissions[0].get_attribute("href")
+
+        # Downloading files with Selenium is tricky because it cannot automate
+        # the browser's file download dialog. We can directly request the file
+        # using requests, but we need to pass the cookies for logged in user
+        # for Flask to allow this.
+        def cookie_string_from_selenium_cookies(
+            cookies: Iterable[Dict[str, str]]
+        ) -> Dict[str, str]:
+            result = {}
+            for cookie in cookies:
+                result[cookie["name"]] = cookie["value"]
+            return result
+
+        cks = cookie_string_from_selenium_cookies(self.driver.get_cookies())
+        raw_content = self._download_content_at_url(file_url, cks)
+
+        with import_journalist_private_key(encryption_mgr_to_use_for_decryption):
+            decryption_result = encryption_mgr_to_use_for_decryption._gpg.decrypt(raw_content)
+
+        if file_url.endswith(".gz.gpg"):
+            decrypted_message = self._unzip_content(decryption_result.data)
+        else:
+            decrypted_message = decryption_result.data.decode("utf-8")
+
+        return decrypted_message
+
+    def _journalist_selects_the_first_source(self) -> None:
+        self.driver.find_element_by_css_selector("#un-starred-source-link-1").click()
