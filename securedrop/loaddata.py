@@ -8,6 +8,8 @@ Loads test data into the SecureDrop database.
 import argparse
 import datetime
 import io
+import time
+import subprocess
 from pathlib import Path
 
 import math
@@ -42,6 +44,10 @@ from store import Storage
 messages = cycle(strings)
 replies = cycle(strings)
 
+def check_entropy():
+    arg = ['cat', '/proc/sys/kernel/random/entropy_avail']
+    ps = subprocess.Popen(arg,stdout=subprocess.PIPE)
+    return int(ps.communicate()[0])
 
 def fraction(s: str) -> float:
     """
@@ -241,11 +247,19 @@ def add_reply(
     db.session.commit()
 
 
-def add_source() -> Tuple[Source, str]:
+def add_source(stats_file: Optional[argparse.FileType] = None) -> Tuple[Source, str]:
     """
     Adds a single source.
     """
+    if stats_file:
+        before_codename = time.perf_counter()
     codename = PassphraseGenerator.get_default().generate_passphrase()
+    if stats_file:
+       delta_codename = time.perf_counter() - before_codename
+
+
+    if stats_file:
+        before_db = time.perf_counter()
     source_user = create_source_user(
         db_session=db.session,
         source_passphrase=codename,
@@ -254,9 +268,22 @@ def add_source() -> Tuple[Source, str]:
     source = source_user.get_db_record()
     source.pending = False
     db.session.commit()
+    if stats_file:
+       delta_db = time.perf_counter() - before_db
 
     # Generate source key
+    if stats_file:
+        before_key = time.perf_counter()
+        before_entropy = check_entropy()
     EncryptionManager.get_default().generate_source_key_pair(source_user)
+    if stats_file:
+       delta_key = time.perf_counter() - before_key
+       stats_file.write('"{}",{},{},{},{}\n'.format(
+                                                    codename,
+                                                    delta_codename,
+                                                    delta_db,
+                                                    delta_key,
+                                                    before_entropy))
 
     return source, codename
 
@@ -329,7 +356,7 @@ def add_sources(args: argparse.Namespace, journalists: Tuple[Journalist, ...]) -
     )
 
     for i in range(1, args.source_count + 1):
-        source, codename = add_source()
+        source, codename = add_source(args.gen_stats)
 
         for _ in range(args.messages_per_source):
             submit_message(source, random.choice(journalists) if seen_message_count > 0 else None)
@@ -455,6 +482,7 @@ def parse_arguments() -> argparse.Namespace:
         "--seed",
         help=("Random number seed (for reproducible datasets)"),
     )
+    parser.add_argument("--gen-stats", type=argparse.FileType('w', encoding='UTF-8'))
     return parser.parse_args()
 
 
