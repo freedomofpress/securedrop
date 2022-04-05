@@ -2,6 +2,13 @@
 
 import typing
 from datetime import datetime, timedelta, timezone
+from pathlib import Path
+import datetime
+from flask import (Flask, session, redirect, url_for, flash, g, request,
+                   render_template, json, abort)
+from flask_assets import Environment
+from flask_babel import gettext
+from flask_wtf.csrf import CSRFProtect, CSRFError
 from os import path
 from pathlib import Path
 
@@ -19,6 +26,9 @@ from journalist_app.utils import (
     get_source,
     logged_in,
 )
+from journalist_app import account, admin, api, main, col
+from journalist_app.sessions import Session
+from journalist_app.utils import get_source, logged_in
 from models import InstanceConfig, Journalist
 from werkzeug.exceptions import default_exceptions
 
@@ -34,7 +44,8 @@ if typing.TYPE_CHECKING:
     from werkzeug import Response  # noqa: F401
     from werkzeug.exceptions import HTTPException  # noqa: F401
 
-_insecure_views = ["main.login", "static"]
+_insecure_views = ['main.login', 'static']
+_insecure_api_views = ['api.get_token']
 # Timezone-naive datetime format expected by SecureDrop Client
 API_DATETIME_FORMAT = "%Y-%m-%dT%H:%M:%S.%fZ"
 
@@ -63,8 +74,8 @@ def create_app(config: "SDConfig") -> Flask:
     )
 
     app.config.from_object(config.JOURNALIST_APP_FLASK_CONFIG_CLS)
-    app.session_interface = JournalistInterfaceSessionInterface()
 
+    Session(app)
     csrf = CSRFProtect(app)
 
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
@@ -86,10 +97,10 @@ def create_app(config: "SDConfig") -> Flask:
     @app.errorhandler(CSRFError)  # type: ignore
     def handle_csrf_error(e: CSRFError) -> "Response":
         app.logger.error("The CSRF token is invalid.")
-        session.clear()
-        msg = gettext("You have been logged out due to inactivity.")
-        flash(msg, "error")
-        return redirect(url_for("main.login"))
+        session.destroy()
+        msg = gettext('You have been logged out due to inactivity.')
+        flash(msg, 'error')
+        return redirect(url_for('main.login'))
 
     def _handle_http_exception(
         error: "HTTPException",
@@ -118,10 +129,6 @@ def create_app(config: "SDConfig") -> Flask:
     app.jinja_env.filters["html_datetime_format"] = template_filters.html_datetime_format
     app.jinja_env.add_extension("jinja2.ext.do")
 
-    @app.before_first_request
-    def expire_blacklisted_tokens() -> None:
-        cleanup_expired_revoked_tokens()
-
     @app.before_request
     def update_instance_config() -> None:
         InstanceConfig.get_default(refresh=True)
@@ -129,24 +136,12 @@ def create_app(config: "SDConfig") -> Flask:
     @app.before_request
     def setup_g() -> "Optional[Response]":
         """Store commonly used values in Flask's special g object"""
-        if "expires" in session and datetime.now(timezone.utc) >= session["expires"]:
-            session.clear()
-            flash(gettext("You have been logged out due to inactivity."), "error")
 
-        uid = session.get("uid", None)
-        if uid:
-            user = Journalist.query.get(uid)
-            if user and "nonce" in session and session["nonce"] != user.session_nonce:
-                session.clear()
-                flash(gettext("You have been logged out due to password change"), "error")
-
-        session["expires"] = datetime.now(timezone.utc) + timedelta(
-            minutes=getattr(config, "SESSION_EXPIRATION_MINUTES", 120)
-        )
-
-        uid = session.get("uid", None)
-        if uid:
-            g.user = Journalist.query.get(uid)  # pylint: disable=assigning-non-slot
+        if request.path.split('/')[1] != 'static':
+            uid = session.get('uid', None)
+            if uid:
+                g.uid = uid
+                g.user = Journalist.query.get(uid)  # pylint: disable=assigning-non-slot
 
         i18n.set_locale(config)
 
@@ -162,9 +157,10 @@ def create_app(config: "SDConfig") -> Flask:
         except FileNotFoundError:
             app.logger.error("Site logo not found.")
 
-        if request.path.split("/")[1] == "api":
-            pass  # We use the @token_required decorator for the API endpoints
-        else:  # We are not using the API
+        if request.path.split('/')[1] == 'api':
+            if request.endpoint not in _insecure_api_views and not logged_in():
+                abort(403)
+        else:
             if request.endpoint not in _insecure_views and not logged_in():
                 return redirect(url_for("main.login"))
 

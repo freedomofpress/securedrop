@@ -1,11 +1,17 @@
 # -*- coding: utf-8 -*-
 import binascii
 import os
-from datetime import datetime, timezone
-from typing import Any, List, Optional, Union
+from typing import Optional, List, Union
 
 import flask
 import werkzeug
+from flask import (g, flash, current_app, abort, send_file, redirect, url_for,
+                   Markup, escape)
+from flask.sessions import session_json_serializer
+from flask_babel import gettext, ngettext
+from sqlalchemy.exc import IntegrityError
+from redis import Redis
+
 from db import db
 from encryption import EncryptionManager
 from flask import (
@@ -33,7 +39,6 @@ from models import (
     LoginThrottledException,
     PasswordError,
     Reply,
-    RevokedToken,
     SeenFile,
     SeenMessage,
     SeenReply,
@@ -537,39 +542,17 @@ def serve_file_with_etag(db_obj: Union[Reply, Submission]) -> flask.Response:
     return response
 
 
-class JournalistInterfaceSessionInterface(sessions.SecureCookieSessionInterface):
-    """A custom session interface that skips storing sessions for api requests but
-    otherwise just uses the default behaviour."""
-
-    def save_session(self, app: flask.Flask, session: Any, response: flask.Response) -> None:
-        # If this is an api request do not save the session
-        if request.path.split("/")[1] == "api":
-            return
-        else:
-            super(JournalistInterfaceSessionInterface, self).save_session(app, session, response)
+def logout_user(uid: int) -> None:
+    redis = Redis()
+    for key in (redis.keys(current_app.config['SESSION_KEY_PREFIX'] + "*") +
+                redis.keys("api_" + current_app.config['SESSION_KEY_PREFIX'] + "*")):
+        sess = session_json_serializer.loads(redis.get(key))
+        if 'uid' in sess and sess['uid'] == uid:
+            redis.delete(key)
 
 
-def cleanup_expired_revoked_tokens() -> None:
-    """Remove tokens that have now expired from the revoked token table."""
-
-    revoked_tokens = db.session.query(RevokedToken).all()
-
-    for revoked_token in revoked_tokens:
-        if Journalist.validate_token_is_not_expired_or_invalid(revoked_token.token):
-            pass  # The token has not expired, we must keep in the revoked token table.
-        else:
-            # The token is no longer valid, remove from the revoked token table.
-            db.session.delete(revoked_token)
-
-    db.session.commit()
-
-
-def revoke_token(user: Journalist, auth_token: str) -> None:
-    try:
-        revoked_token = RevokedToken(token=auth_token, journalist_id=user.id)
-        db.session.add(revoked_token)
-        db.session.commit()
-    except IntegrityError as e:
-        db.session.rollback()
-        if "UNIQUE constraint failed: revoked_tokens.token" not in str(e):
-            raise e
+def logout_all() -> None:
+    redis = Redis()
+    for key in (redis.keys(current_app.config['SESSION_KEY_PREFIX'] + "*") +
+                redis.keys("api_" + current_app.config['SESSION_KEY_PREFIX'] + "*")):
+        redis.delete(key)

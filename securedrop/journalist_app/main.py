@@ -52,18 +52,16 @@ def make_blueprint(config: SDConfig) -> Blueprint:
                 db.session.add(user)
                 db.session.commit()
 
-                session["uid"] = user.id
-                session["nonce"] = user.session_nonce
-                return redirect(url_for("main.index"))
+                session['uid'] = user.id
+                session.regenerate()
+                return redirect(url_for('main.index'))
 
         return render_template("login.html")
 
     @view.route("/logout")
     def logout() -> werkzeug.Response:
-        session.pop("uid", None)
-        session.pop("expires", None)
-        session.pop("nonce", None)
-        return redirect(url_for("main.index"))
+        flash(session.destroy())
+        return redirect(url_for('main.index'))
 
     @view.route("/")
     def index() -> str:

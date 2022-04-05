@@ -19,21 +19,10 @@ from flask import (
 )
 from flask_babel import gettext
 from journalist_app.decorators import admin_required
-from journalist_app.forms import LogoForm, NewUserForm, OrgNameForm, SubmissionPreferencesForm
-from journalist_app.utils import (
-    commit_account_changes,
-    revoke_token,
-    set_diceware_password,
-    validate_hotp_secret,
-)
-from models import (
-    FirstOrLastNameError,
-    InstanceConfig,
-    InvalidUsernameException,
-    Journalist,
-    PasswordError,
-    Submission,
-)
+from journalist_app.utils import (commit_account_changes, set_diceware_password,
+                                  validate_hotp_secret, logout_user)
+from journalist_app.forms import LogoForm, NewUserForm, SubmissionPreferencesForm, OrgNameForm
+from sdconfig import SDConfig
 from passphrases import PassphraseGenerator
 from sdconfig import SDConfig
 from sqlalchemy.exc import IntegrityError
@@ -364,11 +353,9 @@ def make_blueprint(config: SDConfig) -> Blueprint:
         except NoResultFound:
             abort(404)
 
-        password = request.form.get("password")
+        password = request.form.get('password')
+        logout_user(user_id)
         if set_diceware_password(user, password) is not False:
-            if user.last_token is not None:
-                revoke_token(user, user.last_token)
-            user.session_nonce += 1
             db.session.commit()
         return redirect(url_for("admin.edit_user", user_id=user_id))
 

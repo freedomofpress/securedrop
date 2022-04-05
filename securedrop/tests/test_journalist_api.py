@@ -6,10 +6,13 @@ from uuid import UUID, uuid4
 
 from db import db
 from encryption import EncryptionManager
-from flask import url_for
-from itsdangerous import TimedJSONWebSignatureSerializer
-from models import Journalist, Reply, RevokedToken, Source, SourceStar, Submission
-from pyotp import TOTP
+from models import (
+    Journalist,
+    Reply,
+    Source,
+    SourceStar,
+    Submission,
+)
 
 from .utils.api_helper import get_api_headers
 
@@ -1087,24 +1090,6 @@ def test_reply_download_generates_checksum(
     assert fetched_reply.checksum
     # we don't want to recalculat this value
     assert not mock_add_checksum.called
-
-
-def test_revoke_token(journalist_app, test_journo, journalist_api_token):
-    with journalist_app.test_client() as app:
-        # without token 403's
-        resp = app.post(url_for("api.logout"))
-        assert resp.status_code == 403
-
-        resp = app.post(url_for("api.logout"), headers=get_api_headers(journalist_api_token))
-        assert resp.status_code == 200
-
-        revoked_token = RevokedToken.query.filter_by(token=journalist_api_token).one()
-        assert revoked_token.journalist_id == test_journo["id"]
-
-        resp = app.get(
-            url_for("api.get_all_sources"), headers=get_api_headers(journalist_api_token)
-        )
-        assert resp.status_code == 403
 
 
 def test_seen(journalist_app, journalist_api_token, test_files, test_journo, test_submissions):
