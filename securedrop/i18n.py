@@ -17,7 +17,7 @@
 #
 import collections
 
-from typing import Dict, List
+from typing import Dict, List, Set
 
 from babel.core import (
     Locale,
@@ -29,7 +29,7 @@ from babel.core import (
 from flask import Flask, g, request, session
 from flask_babel import Babel
 
-from sdconfig import SDConfig
+from sdconfig import SDConfig, FALLBACK_LOCALE
 
 
 class RequestLocaleInfo:
@@ -126,32 +126,46 @@ def configure_babel(config: SDConfig, app: Flask) -> Babel:
     return babel
 
 
+def parse_locale_set(codes: List[str]) -> Set[Locale]:
+    return {Locale.parse(code) for code in codes}
+
+
 def validate_locale_configuration(config: SDConfig, babel: Babel) -> None:
     """
-    Ensure that the configured locales are valid and translated.
+    Check that configured locales are available in the filesystem and therefore usable by
+    Babel.  Warn about configured locales that are not usable, unless we're left with
+    no usable default or fallback locale, in which case raise an exception.
     """
-    if config.DEFAULT_LOCALE not in config.SUPPORTED_LOCALES:
-        raise ValueError(
-            'The default locale "{}" is not included in the set of supported locales "{}"'.format(
-                config.DEFAULT_LOCALE, config.SUPPORTED_LOCALES
-            )
+    # These locales are available and loadable from the filesystem.
+    available = set(babel.list_translations())
+    available.add(Locale.parse(FALLBACK_LOCALE))
+
+    # These locales were configured via "securedrop-admin sdconfig", meaning
+    # they were present on the Admin Workstation at "securedrop-admin" runtime.
+    configured = parse_locale_set(config.SUPPORTED_LOCALES)
+
+    # The intersection of these sets is the set of locales usable by Babel.
+    usable = available & configured
+
+    missing = configured - usable
+    if missing:
+        babel.app.logger.error(
+            f'Configured locales {missing} are not in the set of usable locales {usable}'
         )
 
-    translations = babel.list_translations()
-    for locale in config.SUPPORTED_LOCALES:
-        if locale == "en_US":
-            continue
+    defaults = parse_locale_set([config.DEFAULT_LOCALE, FALLBACK_LOCALE])
+    if not defaults & usable:
+        raise ValueError(
+            f'None of the default locales {defaults} are in the set of usable locales {usable}'
+        )
 
-        parsed = Locale.parse(locale)
-        if parsed not in translations:
-            raise ValueError(
-                'Configured locale "{}" is not in the set of translated locales "{}"'.format(
-                    parsed, translations
-                )
-            )
+    global USABLE_LOCALES
+    USABLE_LOCALES = usable
 
 
+# TODO(#6420): avoid relying on and manipulating on this global state
 LOCALES = collections.OrderedDict()  # type: collections.OrderedDict[str, RequestLocaleInfo]
+USABLE_LOCALES = set()  # type: Set[Locale]
 
 
 def map_locale_display_names(config: SDConfig) -> None:
@@ -185,6 +199,28 @@ def configure(config: SDConfig, app: Flask) -> None:
     map_locale_display_names(config)
 
 
+def resolve_fallback_locale(config: SDConfig) -> str:
+    """
+    Return a *usable* fallback locale.  Namely:
+
+    1. Don't fall back to the configured `DEFAULT_LOCALE` if it isn't available.
+
+    2. Don't fall back to the hard-coded `FALLBACK_LOCALE` (`en_US`) if it isn't configured.
+
+    NB. If neither the default nor the fallback locale is usable, then we should have crashed
+    already in `validate_locale_configuration()`.
+    """
+
+    if Locale.parse(config.DEFAULT_LOCALE) in USABLE_LOCALES:
+        return config.DEFAULT_LOCALE
+
+    elif Locale.parse(FALLBACK_LOCALE) in USABLE_LOCALES:
+        return FALLBACK_LOCALE
+
+    else:
+        raise ValueError('No usable fallback locale')
+
+
 def get_locale(config: SDConfig) -> str:
     """
     Return the best supported locale for a request.
@@ -208,8 +244,8 @@ def get_locale(config: SDConfig) -> str:
     if not locale:
         locale = negotiate_locale(get_accepted_languages(), LOCALES.keys())
 
-    # Finally, fall back to the default locale if necessary.
-    return locale or config.DEFAULT_LOCALE
+    # Finally, if we can't negotiate a requested locale, resolve a fallback.
+    return locale or resolve_fallback_locale(config)
 
 
 def get_accepted_languages() -> List[str]:

@@ -32,11 +32,15 @@ from flask import render_template_string
 from flask import request
 from flask import session
 from flask_babel import gettext
-from sdconfig import SDConfig
+from i18n import parse_locale_set, resolve_fallback_locale
+from sdconfig import FALLBACK_LOCALE, SDConfig
 from sh import pybabel
 from sh import sed
 from .utils.env import TESTS_DIR
 from werkzeug.datastructures import Headers
+
+
+NEVER_LOCALE = 'eo'  # Esperanto
 
 
 def verify_i18n(app):
@@ -225,12 +229,79 @@ def test_i18n(journalist_app, config):
         verify_i18n(app)
 
 
-def test_supported_locales(config):
+def test_parse_locale_set():
+    assert parse_locale_set([FALLBACK_LOCALE]) == set([Locale.parse(FALLBACK_LOCALE)])
+
+
+def test_resolve_fallback_locale(config):
+    """
+    Only a usable default or fallback locale is returned.
+    """
+    i18n.USABLE_LOCALES = parse_locale_set([FALLBACK_LOCALE, 'es_ES'])
     fake_config = SDConfig()
 
-    # Check that an invalid locale raises an error during app
-    # configuration.
-    fake_config.SUPPORTED_LOCALES = ['en_US', 'yy_ZZ']
+    # The default locale is neither configured nor available.
+    fake_config.DEFAULT_LOCALE = NEVER_LOCALE
+    assert resolve_fallback_locale(fake_config) == FALLBACK_LOCALE
+
+    # The default locale is configured but not available.
+    fake_config.SUPPORTED_LOCALES = [FALLBACK_LOCALE, NEVER_LOCALE]
+    assert resolve_fallback_locale(fake_config) == FALLBACK_LOCALE
+
+    # The default locale is available but not configured.
+    fake_config.SUPPORTED_LOCALES = [FALLBACK_LOCALE]
+    fake_config.DEFAULT_LOCALE = NEVER_LOCALE
+    assert resolve_fallback_locale(fake_config) == FALLBACK_LOCALE
+
+    # Happy path: a non-fallback default locale is both available and configured.
+    fake_config.SUPPORTED_LOCALES = [FALLBACK_LOCALE, 'es_ES']
+    fake_config.DEFAULT_LOCALE = 'es_ES'
+    assert resolve_fallback_locale(fake_config) == 'es_ES'
+
+
+def test_no_usable_fallback_locale(journalist_app, config):
+    """
+    The apps fail if neither the default nor the fallback locale is usable.
+    """
+    fake_config = SDConfig()
+    fake_config.DEFAULT_LOCALE = NEVER_LOCALE
+    fake_config.SUPPORTED_LOCALES = [NEVER_LOCALE]
+    fake_config.TRANSLATION_DIRS = Path(config.TEMP_DIR)
+
+    i18n.USABLE_LOCALES = set()
+    with pytest.raises(ValueError, match='No usable fallback locale'):
+        resolve_fallback_locale(fake_config)
+
+    with pytest.raises(ValueError, match='in the set of usable locales'):
+        journalist_app_module.create_app(fake_config)
+
+    with pytest.raises(ValueError, match='in the set of usable locales'):
+        source_app.create_app(fake_config)
+
+
+def test_unusable_default_but_usable_fallback_locale(config, caplog):
+    """
+    The apps start even if the default locale is unusable, as along as the fallback locale is
+    usable, but log an error for OSSEC to pick up.
+    """
+    fake_config = SDConfig()
+    fake_config.DEFAULT_LOCALE = NEVER_LOCALE
+    fake_config.SUPPORTED_LOCALES = [NEVER_LOCALE, FALLBACK_LOCALE]
+    fake_config.TRANSLATION_DIRS = Path(config.TEMP_DIR)
+
+    for app in (journalist_app_module.create_app(fake_config),
+                source_app.create_app(fake_config)):
+        with app.app_context():
+            assert NEVER_LOCALE in caplog.text
+            assert 'not in the set of usable locales' in caplog.text
+
+
+def test_invalid_locales(config):
+    """
+    An invalid locale raises an error during app configuration.
+    """
+    fake_config = SDConfig()
+    fake_config.SUPPORTED_LOCALES = [FALLBACK_LOCALE, 'yy_ZZ']
     fake_config.TRANSLATION_DIRS = Path(config.TEMP_DIR)
 
     with pytest.raises(UnknownLocaleError):
@@ -239,16 +310,22 @@ def test_supported_locales(config):
     with pytest.raises(UnknownLocaleError):
         source_app.create_app(fake_config)
 
-    # Check that a valid but unsupported locale raises an error during
-    # app configuration.
-    fake_config.SUPPORTED_LOCALES = ['en_US', 'wae_CH']
+
+def test_valid_but_unusable_locales(config, caplog):
+    """
+    The apps start with one or more unusable, but still valid, locales, but log an error for
+    OSSEC to pick up.
+    """
+    fake_config = SDConfig()
+
+    fake_config.SUPPORTED_LOCALES = [FALLBACK_LOCALE, 'wae_CH']
     fake_config.TRANSLATION_DIRS = Path(config.TEMP_DIR)
 
-    with pytest.raises(ValueError, match="not in the set of translated locales"):
-        journalist_app_module.create_app(fake_config)
-
-    with pytest.raises(ValueError, match="not in the set of translated locales"):
-        source_app.create_app(fake_config)
+    for app in (journalist_app_module.create_app(fake_config),
+                source_app.create_app(fake_config)):
+        with app.app_context():
+            assert 'wae' in caplog.text
+            assert 'not in the set of usable locales' in caplog.text
 
 
 def test_language_tags():

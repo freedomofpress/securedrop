@@ -8,6 +8,9 @@ import config as _config
 from typing import Set
 
 
+FALLBACK_LOCALE = "en_US"
+
+
 class SDConfig:
     def __init__(self) -> None:
         try:
@@ -120,7 +123,7 @@ class SDConfig:
         # Config entries used by i18n.py
         # Use en_US as the default locale if the key is not defined in _config
         self.DEFAULT_LOCALE = getattr(
-            _config, "DEFAULT_LOCALE", "en_US"
+            _config, "DEFAULT_LOCALE", FALLBACK_LOCALE,
         )  # type: str
         supported_locales = set(getattr(
             _config, "SUPPORTED_LOCALES", [self.DEFAULT_LOCALE]
