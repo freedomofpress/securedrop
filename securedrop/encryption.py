@@ -2,7 +2,7 @@ import typing
 from distutils.version import StrictVersion
 from io import StringIO, BytesIO
 from pathlib import Path
-from typing import Optional, Dict, List
+from typing import Optional, Dict, List, FrozenSet
 
 import pretty_bad_protocol as gnupg
 import os
@@ -43,10 +43,26 @@ def _monkey_patch_delete_handle_status() -> None:
     gnupg._parsers.DeleteResult._handle_status = _updated_handle_status
 
 
+def _monkey_patch_options_allow_list() -> None:
+    # To fix: https://github.com/freedomofpress/securedrop/issues/6389
+    unpatched_get_options_group = gnupg._parsers._get_options_group
+
+    def _allow_no_auto_check_trustdb(group: Optional[str] = None) -> Optional[FrozenSet[str]]:
+        if group in ["none_options", "allowed"]:
+            options = list(unpatched_get_options_group(group))
+            options.append("--no-auto-check-trustdb")
+            return frozenset(options)
+        else:
+            return unpatched_get_options_group(group)
+
+    gnupg._parsers._get_options_group = _allow_no_auto_check_trustdb
+
+
 def _setup_monkey_patches_for_gnupg() -> None:
     _monkey_patch_username_in_env()
     _monkey_patch_unknown_status_message()
     _monkey_patch_delete_handle_status()
+    _monkey_patch_options_allow_list()
 
 
 _setup_monkey_patches_for_gnupg()
@@ -93,11 +109,17 @@ class EncryptionManager:
         self._redis = Redis(decode_responses=True)
 
         # Instantiate the "main" GPG binary
-        gpg = gnupg.GPG(binary="gpg2", homedir=str(self._gpg_key_dir))
+        gpg = gnupg.GPG(
+            binary="gpg2",
+            homedir=str(self._gpg_key_dir),
+            options=["--no-auto-check-trustdb"]
+        )
         if StrictVersion(gpg.binary_version) >= StrictVersion("2.1"):
             # --pinentry-mode, required for SecureDrop on GPG 2.1.x+, was added in GPG 2.1.
             self._gpg = gnupg.GPG(
-                binary="gpg2", homedir=str(gpg_key_dir), options=["--pinentry-mode loopback"]
+                binary="gpg2",
+                homedir=str(gpg_key_dir),
+                options=["--pinentry-mode loopback", "--no-auto-check-trustdb"]
             )
         else:
             self._gpg = gpg
@@ -106,7 +128,9 @@ class EncryptionManager:
         # invoking pinentry-mode=loopback
         # see: https://lists.gnupg.org/pipermail/gnupg-users/2016-May/055965.html
         self._gpg_for_key_deletion = gnupg.GPG(
-            binary="gpg2", homedir=str(self._gpg_key_dir), options=["--yes"]
+            binary="gpg2",
+            homedir=str(self._gpg_key_dir),
+            options=["--yes", "--no-auto-check-trustdb"]
         )
 
         # Ensure that the journalist public key has been previously imported in GPG
