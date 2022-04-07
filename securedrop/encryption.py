@@ -128,7 +128,9 @@ class EncryptionManager:
         # invoking pinentry-mode=loopback
         # see: https://lists.gnupg.org/pipermail/gnupg-users/2016-May/055965.html
         self._gpg_for_key_deletion = gnupg.GPG(
-            binary="gpg2", homedir=str(self._gpg_key_dir), options=["--yes"]
+            binary="gpg2",
+            homedir=str(self._gpg_key_dir),
+            options=["--yes", "--no-auto-check-trustdb"]
         )
 
         # Ensure that the journalist public key has been previously imported in GPG
