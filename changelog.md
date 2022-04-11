@@ -2,7 +2,7 @@
 
 ## 2.4.0~rc1
 
-## 2.3.1~rc1
+## 2.3.1
 
 * Bugfix: disabled GPG trustdb checks to prevent timeouts on operations with large keyrings (#6390)
 * Updated click test dependency from 7.1.2 to 8.1.2 (#6381)
