@@ -34,7 +34,7 @@ python-vagrant
 pyyaml>=5.4.1
 requests>=2.26.0
 ruamel.yaml>=0.16.10
-safety>=1.8.7
+safety>=1.9.0
 setuptools>=56.0.0
 testinfra>=5.3.1
 urllib3>=1.26.5

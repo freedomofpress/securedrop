@@ -256,9 +256,9 @@ docutils==0.14 \
     --hash=sha256:51e64ef2ebfb29cae1faa133b3710143496eca21c530f3f71424d77687764274 \
     --hash=sha256:7a4bd47eaf6596e1295ecb11361139febe29b084a87bf005bf899f9a42edc3c6
     # via botocore
-dparse==0.4.1 \
-    --hash=sha256:00a5fdfa900629e5159bf3600d44905b333f4059a3366f28e0dbd13eeab17b19 \
-    --hash=sha256:cef95156fa0adedaf042cd42f9990974bec76f25dfeca4dc01f381a243d5aa5b
+dparse==0.5.1 \
+    --hash=sha256:a1b5f169102e1c894f9a7d5ccf6f9402a836a5d24be80a986c7ce9eaed78f367 \
+    --hash=sha256:e953a25e44ebb60a5c6efc2add4420c177f1d8404509da88da9729202f306994
     # via safety
 entrypoints==0.3 \
     --hash=sha256:589f874b313739ad35be6e0cd7efde2a4e9b6fea91edcc34e58ecbb8dbe56d19 \
@@ -730,9 +730,9 @@ s3transfer==0.1.12 \
     --hash=sha256:10891b246296e0049071d56c32953af05cea614dca425a601e4c0be35990121e \
     --hash=sha256:23c156ca4d64b022476c92c44bf938bef71af9ce0dcd8fd6585e7bce52f66e47
     # via boto3
-safety==1.8.7 \
-    --hash=sha256:05f77773bbab834502328b29ed013677aa53ed0c22b6e330aef7d2a7e1dfd838 \
-    --hash=sha256:3016631e0dd17193d6cf12e8ed1af92df399585e8ee0e4b1300d9e7e32b54903
+safety==1.10.3 \
+    --hash=sha256:30e394d02a20ac49b7f65292d19d38fa927a8f9582cdfd3ad1adbbc66c641ad5 \
+    --hash=sha256:5f802ad5df5614f9622d8d71fedec2757099705c2356f862847c58c6dfe13e84
     # via -r requirements/python3/develop-requirements.in
 selinux==0.2.1 \
     --hash=sha256:820adcf1b4451c9cc7759848797703263ba0eb6a4cad76d73548a9e0d57b7926 \
@@ -760,7 +760,6 @@ six==1.15.0 \
     #   cfgv
     #   click-completion
     #   docker
-    #   dparse
     #   fasteners
     #   git-url-parse
     #   molecule
@@ -798,6 +797,7 @@ toml==0.10.0 \
     --hash=sha256:229f81c57791a41d65e399fc06bf0848bab550a9dfd5ed66df18ce5f05e73d5c \
     --hash=sha256:235682dd292d5899d361a811df37e04a8828a5b1da3115886b73cf81ebc9100e
     # via
+    #   dparse
     #   pep517
     #   pre-commit
     #   pylint
