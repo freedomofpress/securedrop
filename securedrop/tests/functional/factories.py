@@ -36,8 +36,8 @@ class SecureDropConfigFactory:
     ) -> SecureDropConfig:
         """Create a securedrop config suitable for the unit tests.
 
-        It will automatically create an initialized DB at SECUREDROP_DATA_ROOT/db.sqlite which will
-        be set as the DATABASE_FILE.
+        It will erase any existing file within SECUREDROP_DATA_ROOT and then create an initialized
+        DB at SECUREDROP_DATA_ROOT/db.sqlite which will be set as the DATABASE_FILE.
         """
         # Clear the data root directory
         if SECUREDROP_DATA_ROOT.exists():
