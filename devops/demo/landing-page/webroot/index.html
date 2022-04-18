@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>SecureDrop Demo Server</title>
+        <link rel="stylesheet" href="/assets/css/demo.css">
+    </head>
+    <body>
+        <img src="https://securedrop.org/static/images/_site_title.svg">
+        <h1>Demo Server</h1>
+        <p>This is a demonstration SecureDrop instance. It exists to:</p>
+        <ul>
+            <li>let anyone explore how SecureDrop works</li>
+            <li>support efforts to document and localize SecureDrop, letting contributors work with the user interface in its current form</li>
+        </ul>
+        <p><strong>The demo instance is reset every day. Anything you do here will be erased then.</strong></p>
+        <p>You can reach the source and journalist interfaces of the demo at:</p>
+        <ul>
+            <li><a href="https://demo-source.securedrop.org">Source Interface</a></li>
+            <li><a href="https://demo-journalist.securedrop.org">Journalist Interface</a></li>
+        </ul>
+        <p>You can access the demo using any browser. Real-world SecureDrop instances are only accessible through the Tor anonymity network, preferably using <a href="https://www.torproject.org/">Tor Browser</a>.</p>
+        <p>For the Journalist Interface, you will need to use one of the default test accounts, as described in our <a href="https://docs.securedrop.org/en/stable/development/setup_development.html">development documentation</a>. For convenience, the details are included here, but if you have trouble, check the official documentation to make sure these instructions have not diverged.</p>
+        <table>
+            <tbody>
+                <tr>
+                    <th>Username</th>
+                    <td>journalist</td>
+                </tr>
+
+                <tr>
+                    <th>Passphrase</th>
+                    <td>correct horse battery staple profanity oil chewy</td>
+                </tr>
+
+                <tr>
+                    <th>TOTP secret</th>
+                    <td>JHCOGO7VCER3EJ4L</td>
+                </tr>
+
+                <tr>
+                    <th>Current TOTP token</th>
+                    <td id="totp">
+                        <span id="totpvalue">......</span>
+                        <!-- Apache-licensed "content copy" icon from https://material.io/resources/icons/ -->
+                        <span id="totpcopy"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18px" height="18px"><path d="M0 0h24v24H0z" fill="none"/><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg></span>
+                        <span id="totpttl"></span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <script src="/assets/js/jsOTP.js"></script>
+        <script>
+            document.getElementById("totpcopy").addEventListener(
+                "click",
+                function(e) {
+                    navigator.clipboard.writeText(
+                        document.getElementById("totpvalue").textContent
+                    );
+                }
+            )
+            function updateOTP() {
+                let totp = new jsOTP.totp();
+                let token = totp.getOtp("JHCOGO7VCER3EJ4L");
+                document.getElementById("totpvalue").textContent = token;
+
+                let epoch = Math.round(new Date().getTime() / 1000.0);
+                let remaining = 30 - (epoch % 30);
+                let seconds = `${remaining}`.padStart(2, "0");
+                document.getElementById("totpttl").textContent = `(:${seconds} remaining)`;
+
+                    if (remaining < 10) {
+                        document.getElementById("totp").classList.add("expiring");
+                } else {
+                    document.getElementById("totp").classList.remove("expiring");
+                }
+            }
+            updateOTP();
+            setInterval(updateOTP, 1000);
+        </script>
+    </body>
+</html>
