@@ -68,7 +68,6 @@ def test_fit_codenames_into_cookie(config):
     ('Foo', False),
     ('codename', True),
     (' codename ', True),
-    ('Codename codename', True),
     ('foocodenamebar', False),
 ))
 def test_codename_detected(message, expected):

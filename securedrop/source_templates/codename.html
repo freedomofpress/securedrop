@@ -1,0 +1,20 @@
+{% if new_user_codename %}
+<section aria-labelledby="codename-reminder">
+  <p id="codename-reminder">{{ gettext('Remember, your codename is:') }}</p>
+{%- set codename = new_user_codename -%}
+{% else %}
+<section aria-labelledby="codename-heading">
+  <h2 id="codename-heading" hidden>{{ gettext('Codename') }}</h2>
+{% endif %}
+
+  <input id="codename-show-checkbox" type="checkbox" role="button"{% if not new_user_codename %} checked {% endif -%}
+      aria-label="{{ gettext('Show Codename') }}" aria-controls="codename">
+  <mark id="codename" lang="en-US" dir="ltr"{% if not new_user_codename %}
+    aria-describedby="codename-instructions codename-explanation"{% endif %}>
+    <span>{{ codename }}</span>
+  </mark>
+
+  <label for="codename-show-checkbox" id="codename-show">
+    {{ gettext('Show Codename') }}
+  </label>
+</section>

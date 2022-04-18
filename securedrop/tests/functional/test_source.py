@@ -9,7 +9,6 @@ from tests.functional import tor_utils
 class TestSourceAppCodenameHints:
 
     FIRST_SUBMISSION_TEXT = "Please check back later for replies"
-    SUBMISSION_ON_FIRST_LOGIN_TEXT = "Forgot your codename?"
 
     def test_no_codename_hint_on_second_login(self, sd_servers_v2, tor_browser_web_driver):
         navigator = SourceAppNagivator(
@@ -28,10 +27,10 @@ class TestSourceAppCodenameHints:
         assert source_codename
 
         # And they are able to close the codename hint UI
-        content = navigator.driver.find_element_by_css_selector("details#codename-hint")
-        assert content.get_attribute("open") is not None
-        navigator.nav_helper.safe_click_by_id("codename-hint")
-        assert content.get_attribute("open") is None
+        content = navigator.driver.find_element_by_id("codename-show-checkbox")
+        assert content.get_attribute("checked") is not None
+        navigator.nav_helper.safe_click_by_id("codename-show")
+        assert content.get_attribute("checked") is None
 
         # And on their second login
         navigator.source_logs_out()
@@ -40,7 +39,7 @@ class TestSourceAppCodenameHints:
         navigator.source_proceeds_to_login(codename=source_codename)
 
         # The codename hint UI is no longer present
-        codename = navigator.driver.find_elements_by_css_selector(".code-reminder")
+        codename = navigator.driver.find_elements_by_css_selector("#codename-reminder")
         assert len(codename) == 0
 
     def test_submission_notifications_on_first_login(self, sd_servers_v2, tor_browser_web_driver):
@@ -59,14 +58,12 @@ class TestSourceAppCodenameHints:
         confirmation_text_first_submission = navigator.source_submits_a_message()
 
         # And they see the expected confirmation messages for a first submission on first login
-        assert self.SUBMISSION_ON_FIRST_LOGIN_TEXT in confirmation_text_first_submission
         assert self.FIRST_SUBMISSION_TEXT in confirmation_text_first_submission
 
         # And when they submit a second message
         confirmation_text_second_submission = navigator.source_submits_a_message()
 
         # Then they don't see the messages since it's not their first submission
-        assert self.SUBMISSION_ON_FIRST_LOGIN_TEXT not in confirmation_text_second_submission
         assert self.FIRST_SUBMISSION_TEXT not in confirmation_text_second_submission
 
     def test_submission_notifications_on_second_login(self, sd_servers_v2, tor_browser_web_driver):
@@ -92,14 +89,12 @@ class TestSourceAppCodenameHints:
         confirmation_text_first_submission = navigator.source_submits_a_message()
 
         # And they see the expected confirmation messages for a first submission on second login
-        assert self.SUBMISSION_ON_FIRST_LOGIN_TEXT not in confirmation_text_first_submission
         assert self.FIRST_SUBMISSION_TEXT in confirmation_text_first_submission
 
         # And when they submit a second message
         confirmation_text_second_submission = navigator.source_submits_a_message()
 
         # Then they don't see the messages since it's not their first submission
-        assert self.SUBMISSION_ON_FIRST_LOGIN_TEXT not in confirmation_text_second_submission
         assert self.FIRST_SUBMISSION_TEXT not in confirmation_text_second_submission
 
 
@@ -122,7 +117,7 @@ class TestSourceAppCodenamesInMultipleTabs:
 
     @staticmethod
     def _extract_generated_codename(navigator: SourceAppNagivator) -> str:
-        codename = navigator.driver.find_element_by_css_selector("#codename").text
+        codename = navigator.driver.find_element_by_css_selector("#codename span").text
         assert codename
         return codename
 
@@ -212,7 +207,7 @@ class TestSourceAppCodenamesInMultipleTabs:
         # When they try to re-generate a codename in Tab B
         navigator.driver.switch_to.window(tab_b)
         navigator.source_visits_source_homepage()
-        navigator.nav_helper.safe_click_by_id("submit-documents-button")
+        navigator.nav_helper.safe_click_by_css_selector("#started-form button")
 
         # Then they get redirected to /lookup with the corresponding flash message
         self._assert_is_on_lookup_page(navigator)

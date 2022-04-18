@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+SPDX-License-Identifier: Apache-2.0
+Based on Material Icons Outlined: Alert -> Error Outline
+-->
+<svg width="24" height="24" fill="none" version="1.1" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<mask x="0" y="0" width="20" height="20" maskUnits="userSpaceOnUse">
+<path d="m0 0h20v20h-20z" clip-rule="evenodd" fill="#fff" fill-rule="evenodd"/>
+</mask>
+<path d="m12 20c-4.42 0-8-3.58-8-8 0-4.42 3.58-8 8-8 4.42 0 8 3.58 8 8 0 4.42-3.58 8-8 8zm-0.0102-18c-5.52 0-9.99 4.48-9.99 10 0 5.5192 4.47 10 9.99 10 5.53 0 10.01-4.4808 10.01-10 0-5.52-4.48-10-10.01-10zm-0.98965 11h2v-6h-2zm0 4h2v-2h-2z" clip-rule="evenodd" fill="#000" fill-rule="evenodd"/>
+</svg>

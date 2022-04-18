@@ -314,7 +314,7 @@ def _helper_test_reply(journalist_app, source_app, config, test_journo,
             assert test_reply in text, text
             soup = BeautifulSoup(text, 'html.parser')
             msgid = soup.select(
-                'form.message > input[name="reply_filename"]')[0]['value']
+                'form > input[name="reply_filename"]')[0]['value']
             resp = app.post('/delete', data=dict(
                 filesystem_id=filesystem_id,
                 reply_filename=msgid

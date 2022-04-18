@@ -8,7 +8,7 @@ from flask import render_template
 from flask import current_app
 from flask import url_for
 from flask.sessions import SessionMixin
-from markupsafe import Markup
+from markupsafe import Markup, escape
 from store import Storage
 from hmac import compare_digest
 from flask_babel import gettext
@@ -26,23 +26,46 @@ if typing.TYPE_CHECKING:
 def codename_detected(message: str, codename: str) -> bool:
     """
     Check for codenames in incoming messages. including case where user copy/pasted
-    from /generate and the visually-hidden codename heading was included
+    from /generate or the codename widget on the same page
     """
     message = message.strip()
-    localised_label = gettext("Codename")
-    if message.startswith(localised_label):
-        message = message[len(localised_label):]
 
     return compare_digest(message.strip(), codename)
 
 
+def flash_msg(
+    category: str,
+    declarative: 'Optional[str]',
+    *msg_contents: 'str',
+) -> None:
+    """
+    Render flash message with a (currently) optional declarative heading.
+    """
+    contents = Markup("<br>".join([escape(part) for part in msg_contents]))
+
+    msg = render_template(
+        'flash_message.html',
+        declarative=declarative,
+        msg_contents=contents,
+    )
+    flash(Markup(msg), category)
+
+
 def clear_session_and_redirect_to_logged_out_page(flask_session: SessionMixin) -> werkzeug.Response:
-    msg = render_template('session_timeout.html')
+    msg = render_template(
+        'flash_message.html',
+        declarative=gettext("Important"),
+        msg_contents=Markup(gettext(
+            'You were logged out due to inactivity. Click the <img src={icon} alt="" width="16" '
+            'height="16">&nbsp;<b>New Identity</b> button in your Tor Browser\'s toolbar before '
+            'moving on. This will clear your Tor Browser activity data on this device.')
+             .format(icon=url_for("static", filename="i/torbroom.png")))
+    )
 
     # Clear the session after we render the message so it's localized
     flask_session.clear()
 
-    flash(Markup(msg), "important")
+    flash(Markup(msg), "error")
     return redirect(url_for('main.index'))
 
 

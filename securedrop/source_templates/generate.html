@@ -10,13 +10,9 @@
   {{ gettext('You will need this codename to log into our SecureDrop later:') }}
 </p>
 
-<section class="code" aria-labelledby="codename-heading">
-  <h2 id="codename-heading" class="visually-hidden">{{ gettext('Codename') }}</h2>
-  <mark id="codename" class="codename"
-    aria-describedby="codename-instructions codename-explanation">{{ codename }}</mark>
-</section>
+{% include 'codename.html' %}
 
-<ul class="explanation">
+<ul>
   <li>{{ gettext('<strong>Keep it secret.</strong> Do not share it with anyone.') }}</li>
   <li>{{ gettext('<strong>Keep it safe.</strong> There is no account recovery option.') }}</li>
 </ul>
@@ -24,8 +20,7 @@
 <form id="create-form" method="post" action="/create" autocomplete="off">
   <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
   <input name="tab_id" type="hidden" value="{{ tab_id }}">
-  <button type="submit" class="btn--space pull-right" id="continue-button"
-    aria-label="{{ gettext('Continue') }}">
+  <button type="submit" aria-label="{{ gettext('Continue') }}">
     {{ gettext('CONTINUE') }}
   </button>
 </form>

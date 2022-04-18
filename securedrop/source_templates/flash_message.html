@@ -1,0 +1,4 @@
+{%- if declarative %}
+<h2>{{ declarative }}</h2>
+{% endif -%}
+<p {% if not declarative %} class="icon"{% endif %}>{{ msg_contents }}</p>

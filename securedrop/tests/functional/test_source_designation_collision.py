@@ -53,7 +53,7 @@ class TestSourceAppDesignationCollision:
         navigator.source_clicks_submit_documents_on_homepage()
 
         # Then the right error message is displayed
-        navigator.nav_helper.safe_click_by_id("continue-button")
+        navigator.nav_helper.safe_click_by_css_selector("#create-form button")
         navigator.nav_helper.wait_for(
             lambda: navigator.driver.find_element_by_css_selector(".error")
         )
