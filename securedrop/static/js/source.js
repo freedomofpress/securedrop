@@ -124,9 +124,9 @@ function suggestTor() {
 
 function checkClearnet() {
   let url = new URL(location.href);
-  // Allow localhost for development
-  let localhost = ["127.0.0.1", "localhost"];
-  if (localhost.indexOf(url.hostname) === -1 && !url.host.endsWith(".onion")) {
+  // Allow localhost for development, and official demo hostnames for demo
+  let allowed = ["127.0.0.1", "localhost", "demo-source.securedrop.org"];
+  if (allowed.indexOf(url.hostname) === -1 && !url.host.endsWith(".onion")) {
     location.href = "/tor2web-warning"
   }
 }
