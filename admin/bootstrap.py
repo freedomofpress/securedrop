@@ -138,7 +138,6 @@ def install_apt_dependencies(args: argparse.Namespace) -> None:
                    python3-virtualenv \
                    python3-yaml \
                    python3-pip \
-                   ccontrol \
                    virtualenv \
                    libffi-dev \
                    libssl-dev \

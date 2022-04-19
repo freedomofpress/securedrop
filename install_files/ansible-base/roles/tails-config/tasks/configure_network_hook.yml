@@ -22,4 +22,4 @@
 - name: Run SecureDrop network hook
   # Writes files to /etc, so elevated privileges are required.
   become: yes
-  command: python "{{ tails_config_securedrop_dotfiles }}/securedrop_init.py"
+  command: python3 "{{ tails_config_securedrop_dotfiles }}/securedrop_init.py"
