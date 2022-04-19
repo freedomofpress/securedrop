@@ -179,11 +179,17 @@ def map_locale_display_names(config: SDConfig) -> None:
     """
     language_locale_counts = collections.defaultdict(int)  # type: Dict[str, int]
     for l in sorted(config.SUPPORTED_LOCALES):
+        if Locale.parse(l) not in USABLE_LOCALES:
+            continue
+
         locale = RequestLocaleInfo(l)
         language_locale_counts[locale.language] += 1
 
     locale_map = collections.OrderedDict()
     for l in sorted(config.SUPPORTED_LOCALES):
+        if Locale.parse(l) not in USABLE_LOCALES:
+            continue
+
         locale = RequestLocaleInfo(l)
         if language_locale_counts[locale.language] > 1:
             locale.use_display_name = True
