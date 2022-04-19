@@ -68,7 +68,7 @@ class Source(db.Model):
     __tablename__ = 'sources'
     id = Column(Integer, primary_key=True)
     uuid = Column(String(36), unique=True, nullable=False)
-    filesystem_id = Column(String(96), unique=True)
+    filesystem_id = Column(String(96), unique=True, nullable=False)
     journalist_designation = Column(String(255), nullable=False)
     last_updated = Column(DateTime)
     star = relationship(
