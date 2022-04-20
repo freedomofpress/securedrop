@@ -27,7 +27,7 @@ branch_labels = None
 depends_on = None
 
 
-def upgrade():
+def upgrade() -> None:
     with op.batch_alter_table("replies", schema=None) as batch_op:
         batch_op.add_column(sa.Column("checksum", sa.String(length=255), nullable=True))
 
@@ -88,7 +88,7 @@ def upgrade():
             raise
 
 
-def downgrade():
+def downgrade() -> None:
     op.drop_table("revoked_tokens")
 
     with op.batch_alter_table("submissions", schema=None) as batch_op:

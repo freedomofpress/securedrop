@@ -20,3 +20,11 @@ selenium>=3.141.0
 tbselenium>=0.5.2
 pyvirtualdisplay
 urllib3>=1.26.5
+# mypy and co.
+mypy>=0.761
+sqlalchemy-stubs==0.4
+types-mock
+types-PyYAML
+types-redis
+types-requests
+types-setuptools

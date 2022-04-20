@@ -18,7 +18,7 @@ from itsdangerous import TimedJSONWebSignatureSerializer, BadData
 from markupsafe import Markup
 from passlib.hash import argon2
 from sqlalchemy import ForeignKey
-from sqlalchemy.orm import relationship, backref, Query, RelationshipProperty
+from sqlalchemy.orm import relationship, backref, Query
 from sqlalchemy import Column, Integer, String, Boolean, DateTime, LargeBinary
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
@@ -73,7 +73,7 @@ class Source(db.Model):
     last_updated = Column(DateTime)
     star = relationship(
         "SourceStar", uselist=False, backref="source"
-    )  # type: RelationshipProperty[SourceStar]
+    )
 
     # sources are "pending" and don't get displayed to journalists until they
     # submit something
@@ -183,7 +183,7 @@ class Submission(db.Model):
     source = relationship(
         "Source",
         backref=backref("submissions", order_by=id, cascade="delete")
-    )  # type: RelationshipProperty[Source]
+    )
 
     filename = Column(String(255), nullable=False)
     size = Column(Integer, nullable=False)
@@ -263,13 +263,13 @@ class Reply(db.Model):
         backref=backref(
             'replies',
             order_by=id)
-    )  # type: RelationshipProperty[Journalist]
+    )
 
     source_id = Column(Integer, ForeignKey('sources.id'))
     source = relationship(
         "Source",
         backref=backref("replies", order_by=id, cascade="delete")
-    )  # type: RelationshipProperty[Source]
+    )
 
     filename = Column(String(255), nullable=False)
     size = Column(Integer, nullable=False)
@@ -411,33 +411,33 @@ class Journalist(db.Model):
     username = Column(String(255), nullable=False, unique=True)
     first_name = Column(String(255), nullable=True)
     last_name = Column(String(255), nullable=True)
-    pw_salt = Column(LargeBinary(32), nullable=True)  # type: Column[Optional[bytes]]
-    pw_hash = Column(LargeBinary(256), nullable=True)  # type: Column[Optional[bytes]]
-    is_admin = Column(Boolean)  # type: Column[Optional[bool]]
+    pw_salt = Column(LargeBinary(32), nullable=True)
+    pw_hash = Column(LargeBinary(256), nullable=True)
+    is_admin = Column(Boolean)
     session_nonce = Column(Integer, nullable=False, default=0)
 
     otp_secret = Column(String(32), default=pyotp.random_base32)
-    is_totp = Column(Boolean, default=True)  # type: Column[Optional[bool]]
-    hotp_counter = Column(Integer, default=0)  # type: Column[Optional[int]]
+    is_totp = Column(Boolean, default=True)
+    hotp_counter = Column(Integer, default=0)
     last_token = Column(String(6))
 
     created_on = Column(
         DateTime,
         default=datetime.datetime.utcnow
-    )  # type: Column[Optional[datetime.datetime]]
-    last_access = Column(DateTime)  # type: Column[Optional[datetime.datetime]]
-    passphrase_hash = Column(String(256))  # type: Column[Optional[str]]
+    )
+    last_access = Column(DateTime)
+    passphrase_hash = Column(String(256))
 
     login_attempts = relationship(
         "JournalistLoginAttempt",
         backref="journalist",
         cascade="all, delete"
-    )  # type: RelationshipProperty[JournalistLoginAttempt]
+    )
     revoked_tokens = relationship(
         "RevokedToken",
         backref="journalist",
         cascade="all, delete"
-    )  # type: RelationshipProperty[RevokedToken]
+    )
 
     MIN_USERNAME_LEN = 3
     MIN_NAME_LEN = 0
@@ -863,10 +863,10 @@ class SeenFile(db.Model):
     journalist_id = Column(Integer, ForeignKey("journalists.id"), nullable=False)
     file = relationship(
         "Submission", backref=backref("seen_files", lazy="dynamic", cascade="all,delete")
-    )  # type: RelationshipProperty[Submission]
+    )
     journalist = relationship(
         "Journalist", backref=backref("seen_files")
-    )  # type: RelationshipProperty[Journalist]
+    )
 
 
 class SeenMessage(db.Model):
@@ -877,10 +877,10 @@ class SeenMessage(db.Model):
     journalist_id = Column(Integer, ForeignKey("journalists.id"), nullable=False)
     message = relationship(
         "Submission", backref=backref("seen_messages", lazy="dynamic", cascade="all,delete")
-    )  # type: RelationshipProperty[Submission]
+    )
     journalist = relationship(
         "Journalist", backref=backref("seen_messages")
-    )  # type: RelationshipProperty[Journalist]
+    )
 
 
 class SeenReply(db.Model):
@@ -891,10 +891,10 @@ class SeenReply(db.Model):
     journalist_id = Column(Integer, ForeignKey("journalists.id"), nullable=False)
     reply = relationship(
         "Reply", backref=backref("seen_replies", cascade="all,delete")
-    )  # type: RelationshipProperty[Reply]
+    )
     journalist = relationship(
         "Journalist", backref=backref("seen_replies")
-    )  # type: RelationshipProperty[Journalist]
+    )
 
 
 class JournalistLoginAttempt(db.Model):
@@ -907,7 +907,7 @@ class JournalistLoginAttempt(db.Model):
     timestamp = Column(
         DateTime,
         default=datetime.datetime.utcnow
-    )  # type: Column[Optional[datetime.datetime]]
+    )
     journalist_id = Column(Integer, ForeignKey('journalists.id'), nullable=False)
 
     def __init__(self, journalist: Journalist) -> None:

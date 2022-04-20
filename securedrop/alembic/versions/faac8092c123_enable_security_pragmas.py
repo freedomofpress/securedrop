@@ -16,11 +16,11 @@ branch_labels = None
 depends_on = None
 
 
-def upgrade():
+def upgrade() -> None:
     conn = op.get_bind()
     conn.execute(sa.text('PRAGMA secure_delete = ON'))
     conn.execute(sa.text('PRAGMA auto_vacuum = FULL'))
 
 
-def downgrade():
+def downgrade() -> None:
     pass

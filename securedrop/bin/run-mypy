@@ -1,0 +1,17 @@
+#!/bin/bash
+
+set -euo pipefail
+
+# Run from repository root
+REPOROOT=$(git rev-parse --show-toplevel)
+cd "${REPOROOT}"
+
+if [ "$(command -v mypy)" ]; then
+    mypy ./securedrop ./admin --namespace-packages --explicit-package-bases "$@"
+elif [ -d "/opt/venvs/securedrop-app-code/" ]; then
+    # Inside the dev container, but no mypy
+    echo "Could not find mypy"
+    exit 1
+else
+    ./securedrop/bin/dev-shell ./bin/run-mypy
+fi

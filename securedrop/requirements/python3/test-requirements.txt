@@ -103,6 +103,37 @@ mock==2.0.0 \
     --hash=sha256:5ce3c71c5545b472da17b72268978914d0252980348636840bd34a00b5cc96c1 \
     --hash=sha256:b158b6df76edd239b8208d481dc46b6afd45a846b7812ff0ce58971cf5bc8bba
     # via -r requirements/python3/test-requirements.in
+mypy-extensions==0.4.3 \
+    --hash=sha256:090fedd75945a69ae91ce1303b5824f428daf5a028d2f6ab8a299250a846f15d \
+    --hash=sha256:2d82818f5bb3e369420cb3c4060a7970edba416647068eb4c5343488a6c604a8
+    # via mypy
+mypy==0.942 \
+    --hash=sha256:0e2dd88410937423fba18e57147dd07cd8381291b93d5b1984626f173a26543e \
+    --hash=sha256:10daab80bc40f84e3f087d896cdb53dc811a9f04eae4b3f95779c26edee89d16 \
+    --hash=sha256:17e44649fec92e9f82102b48a3bf7b4a5510ad0cd22fa21a104826b5db4903e2 \
+    --hash=sha256:1a0459c333f00e6a11cbf6b468b870c2b99a906cb72d6eadf3d1d95d38c9352c \
+    --hash=sha256:246e1aa127d5b78488a4a0594bd95f6d6fb9d63cf08a66dafbff8595d8891f67 \
+    --hash=sha256:2b184db8c618c43c3a31b32ff00cd28195d39e9c24e7c3b401f3db7f6e5767f5 \
+    --hash=sha256:2bc249409a7168d37c658e062e1ab5173300984a2dada2589638568ddc1db02b \
+    --hash=sha256:3841b5433ff936bff2f4dc8d54cf2cdbfea5d8e88cedfac45c161368e5770ba6 \
+    --hash=sha256:4c3e497588afccfa4334a9986b56f703e75793133c4be3a02d06a3df16b67a58 \
+    --hash=sha256:5bf44840fb43ac4074636fd47ee476d73f0039f4f54e86d7265077dc199be24d \
+    --hash=sha256:64235137edc16bee6f095aba73be5334677d6f6bdb7fa03cfab90164fa294a17 \
+    --hash=sha256:6776e5fa22381cc761df53e7496a805801c1a751b27b99a9ff2f0ca848c7eca0 \
+    --hash=sha256:6ce34a118d1a898f47def970a2042b8af6bdcc01546454726c7dd2171aa6dfca \
+    --hash=sha256:6f6ad963172152e112b87cc7ec103ba0f2db2f1cd8997237827c052a3903eaa6 \
+    --hash=sha256:6f7106cbf9cc2f403693bf50ed7c9fa5bb3dfa9007b240db3c910929abe2a322 \
+    --hash=sha256:7742d2c4e46bb5017b51c810283a6a389296cda03df805a4f7869a6f41246534 \
+    --hash=sha256:9521c1265ccaaa1791d2c13582f06facf815f426cd8b07c3a485f486a8ffc1f3 \
+    --hash=sha256:a1b383fe99678d7402754fe90448d4037f9512ce70c21f8aee3b8bf48ffc51db \
+    --hash=sha256:b840cfe89c4ab6386c40300689cd8645fc8d2d5f20101c7f8bd23d15fca14904 \
+    --hash=sha256:d8d3ba77e56b84cd47a8ee45b62c84b6d80d32383928fe2548c9a124ea0a725c \
+    --hash=sha256:dcd955f36e0180258a96f880348fbca54ce092b40fbb4b37372ae3b25a0b0a46 \
+    --hash=sha256:e865fec858d75b78b4d63266c9aff770ecb6a39dfb6d6b56c47f7f8aba6baba8 \
+    --hash=sha256:edf7237137a1a9330046dbb14796963d734dd740a98d5e144a3eb1d267f5f9ee
+    # via
+    #   -r requirements/python3/test-requirements.in
+    #   sqlalchemy-stubs
 packaging==20.4 \
     --hash=sha256:4357f74f47b9c12db93624a82154e9b120fa8293699949152b22065d556079f8 \
     --hash=sha256:998416ba6962ae7fbd6596850b80e17859a5753ba17c32284f67bfff33784181
@@ -256,6 +287,10 @@ six==1.11.0 \
     #   mock
     #   packaging
     #   pathlib2
+sqlalchemy-stubs==0.4 \
+    --hash=sha256:5eec7aa110adf9b957b631799a72fef396b23ff99fe296df726645d01e312aa5 \
+    --hash=sha256:c665d6dd4482ef642f01027fa06c3d5e91befabb219dc71fc2a09e7d7695f7ae
+    # via -r requirements/python3/test-requirements.in
 tbselenium==0.5.2 \
     --hash=sha256:84dcc3f250b0c6bb4ce4bdb0d62de1d086343334019accb5469c21897afebb06
     # via -r requirements/python3/test-requirements.in
@@ -265,6 +300,40 @@ toml==0.10.1 \
     # via
     #   pep517
     #   pytest
+tomli==2.0.1 \
+    --hash=sha256:939de3e7a6161af0c887ef91b7d41a53e7c5a1ca976325f429cb46ea9bc30ecc \
+    --hash=sha256:de526c12914f0c550d15924c62d72abc48d6fe7364aa87328337a31007fe8a4f
+    # via mypy
+types-mock==4.0.12 \
+    --hash=sha256:81f98e66bddde1b2a8d96c15c084d5d3ed96cf6137bca9ba8aabc6b6865b9ca7 \
+    --hash=sha256:f8b1dbe128dc2d5aa038876a8b497dfd1a9405210a5eb3dc4b4757c2e254627c
+    # via -r requirements/python3/test-requirements.in
+types-pyyaml==6.0.5 \
+    --hash=sha256:2fd21310870addfd51db621ad9f3b373f33ee3cbb81681d70ef578760bd22d35 \
+    --hash=sha256:464e050914f3d1d83a8c038e1cf46da5cb96b7cd02eaa096bcaa03675edd8a2e
+    # via -r requirements/python3/test-requirements.in
+types-redis==4.1.18 \
+    --hash=sha256:93bc85db6fb4634e85eff8b64cb662d47a55141b532085f4a99c70b174e65e8d \
+    --hash=sha256:b00fc56074d8ef0d7f52f5dc3ebfa2cc2f1970b384c8c83733ebab940b1f985e
+    # via -r requirements/python3/test-requirements.in
+types-requests==2.27.15 \
+    --hash=sha256:2d371183c535208d2cc8fe7473d9b49c344c7077eb70302eb708638fb86086a8 \
+    --hash=sha256:77d09182a68e447e9e8b0ffc21abf54618b96f07689dffbb6a41cf0356542969
+    # via -r requirements/python3/test-requirements.in
+types-setuptools==57.4.11 \
+    --hash=sha256:262f7406e0c7d705ad6bb4526b5b761fa500bf99eab74de85ac3592187d62935 \
+    --hash=sha256:fbb0647569d6fb2f6bc472402265250c0ffa53e60180d2cbfee9e84f085921f0
+    # via -r requirements/python3/test-requirements.in
+types-urllib3==1.26.11 \
+    --hash=sha256:24d64e441168851eb05f1d022de18ae31558f5649c8f1117e384c2e85e31315b \
+    --hash=sha256:bd0abc01e9fb963e4fddd561a56d21cc371b988d1245662195c90379077139cd
+    # via types-requests
+typing-extensions==4.1.1 \
+    --hash=sha256:1a9462dcc3347a79b1f1c0271fbe79e844580bb598bafa1ed208b94da3cdcd42 \
+    --hash=sha256:21c85e0fe4b9a155d0799430b0ad741cdce7e359660ccbd8b530613e8df88ce2
+    # via
+    #   mypy
+    #   sqlalchemy-stubs
 urllib3==1.26.6 \
     --hash=sha256:39fb8672126159acb139a7718dd10806104dec1e2f0f6c88aab05d17df10c8d4 \
     --hash=sha256:f57b4c16c62fa2760b7e3d97c35b255512fb6b59a259730f36ba32ce9f8e342f

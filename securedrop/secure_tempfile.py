@@ -78,7 +78,7 @@ class SecureTemporaryFile(_TemporaryFileWrapper, object):
         self.encryptor = self.cipher.encryptor()
         self.decryptor = self.cipher.decryptor()
 
-    def write(self, data: Union[bytes, str]) -> None:
+    def write(self, data: Union[bytes, str]) -> int:
         """Write `data` to the secure temporary file. This method may be
         called any number of times following instance initialization,
         but after calling :meth:`read`, you cannot write to the file
@@ -93,7 +93,7 @@ class SecureTemporaryFile(_TemporaryFileWrapper, object):
         else:
             data_as_bytes = data
 
-        self.file.write(self.encryptor.update(data_as_bytes))
+        return self.file.write(self.encryptor.update(data_as_bytes))
 
     def read(self, count: Optional[int] = None) -> bytes:
         """Read `data` from the secure temporary file. This method may

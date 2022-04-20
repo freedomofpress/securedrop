@@ -17,7 +17,7 @@ branch_labels = None
 depends_on = None
 
 
-def upgrade():
+def upgrade() -> None:
     conn = op.get_bind()
     conn.execute("PRAGMA legacy_alter_table=ON")
     # Save existing journalist table.
@@ -72,6 +72,6 @@ def upgrade():
     op.drop_table("journalists_tmp")
 
 
-def downgrade():
+def downgrade() -> None:
     with op.batch_alter_table("journalists", schema=None) as batch_op:
         batch_op.drop_column("uuid")

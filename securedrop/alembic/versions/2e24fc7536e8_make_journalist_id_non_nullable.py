@@ -60,7 +60,7 @@ def create_deleted() -> int:
     return result[0][0]
 
 
-def migrate_nulls():
+def migrate_nulls() -> None:
     """migrate existing journalist_id=NULL over to deleted or delete them"""
     op.execute("DELETE FROM journalist_login_attempt WHERE journalist_id IS NULL;")
     op.execute("DELETE FROM revoked_tokens WHERE journalist_id IS NULL;")
@@ -90,7 +90,7 @@ def migrate_nulls():
         op.execute(f'DELETE FROM {table} WHERE journalist_id IS NULL')  # nosec
 
 
-def upgrade():
+def upgrade() -> None:
     migrate_nulls()
 
     with op.batch_alter_table('journalist_login_attempt', schema=None) as batch_op:
@@ -124,7 +124,7 @@ def upgrade():
                               nullable=False)
 
 
-def downgrade():
+def downgrade() -> None:
     # We do not un-migrate the data back to journalist_id=NULL
 
     with op.batch_alter_table('seen_replies', schema=None) as batch_op:

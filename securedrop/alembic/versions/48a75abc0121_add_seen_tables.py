@@ -16,7 +16,7 @@ branch_labels = None
 depends_on = None
 
 
-def upgrade():
+def upgrade() -> None:
     op.create_table(
         "seen_files",
         sa.Column("id", sa.Integer(), nullable=False),
@@ -51,7 +51,7 @@ def upgrade():
     )
 
 
-def downgrade():
+def downgrade() -> None:
     op.drop_table("seen_files")
     op.drop_table("seen_messages")
     op.drop_table("seen_replies")

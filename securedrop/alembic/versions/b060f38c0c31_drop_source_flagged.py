@@ -16,12 +16,12 @@ branch_labels = None
 depends_on = None
 
 
-def upgrade():
+def upgrade() -> None:
     with op.batch_alter_table("sources", schema=None) as batch_op:
         batch_op.drop_column("flagged")
 
 
-def downgrade():
+def downgrade() -> None:
     # You might be tempted to try Alembic's batch_ops for the
     # downgrade too. Don't. SQLite's unnamed check constraints require
     # kludges.
