@@ -1,7 +1,7 @@
 ---
 build_ossec_deb_pkg_dependencies:
   - "libpcre2-dev"
-  - "{{ 'libevent-dev' if securedrop_target_distribution == 'focal' else 'libevent1-dev' }}"
+  - "libevent-dev"
 
 ossec_server_hostname: ossec-server
 ossec_version: 3.6.0

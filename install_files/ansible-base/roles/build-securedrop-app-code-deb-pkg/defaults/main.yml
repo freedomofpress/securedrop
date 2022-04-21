@@ -44,5 +44,5 @@ securedrop_local_build: "../../build"
 # SecureDrop virtualenv location
 securedrop_venv: "/opt/venvs/securedrop-app-code"
 securedrop_venv_bin: "{{ securedrop_venv }}/bin"
-securedrop_python_version: "{{ '3.8' if securedrop_target_distribution == 'focal' else '3.5' }}"
+securedrop_python_version: "3.8"
 securedrop_venv_site_packages: "{{ securedrop_venv }}/lib/python{{ securedrop_python_version }}/site-packages"
