@@ -1,7 +1,7 @@
 import collections.abc
 import json
 from datetime import datetime, timezone
-from typing import Tuple, Set, Union
+from typing import Tuple, Set, Union, cast
 
 import flask
 import werkzeug
@@ -16,20 +16,11 @@ from uuid import UUID
 import flask
 import werkzeug
 from db import db
-from flask import Blueprint, abort, jsonify, request
-from journalist_app import utils
-from models import (
-    BadTokenException,
-    InvalidOTPSecretException,
-    InvalidUsernameException,
-    Journalist,
-    LoginThrottledException,
-    Reply,
-    SeenReply,
-    Source,
-    Submission,
-    WrongPasswordException,
-)
+from journalist_app import utils, sessions
+from models import (Journalist, Reply, SeenReply, Source, Submission,
+                    LoginThrottledException, InvalidUsernameException,
+                    BadTokenException, InvalidOTPSecretException,
+                    WrongPasswordException)
 from sdconfig import SDConfig
 from sqlalchemy import Column
 from sqlalchemy.exc import IntegrityError
@@ -100,9 +91,10 @@ def make_blueprint(config: SDConfig) -> Blueprint:
 
         try:
             journalist = Journalist.login(username, passphrase, one_time_code)
+            session2 = cast(sessions.ServerSideSession, session)
             response = jsonify({
-                'token': session.get_token(),
-                'expiration': session.get_lifetime(),
+                'token': session2.get_token(),
+                'expiration': session2.get_lifetime(),
                 'journalist_uuid': journalist.uuid,
                 'journalist_first_name': journalist.first_name,
                 'journalist_last_name': journalist.last_name,
@@ -113,7 +105,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
             db.session.add(journalist)
             db.session.commit()
 
-            session['uid'] = journalist.id
+            session2['uid'] = journalist.id
 
             return response, 200
         except (LoginThrottledException, InvalidUsernameException,
@@ -214,6 +206,8 @@ def make_blueprint(config: SDConfig) -> Blueprint:
             if "reply" not in request.json:
                 abort(400, "reply not found in request body")
 
+            user = Journalist.query.get(g.uid)
+
             data = request.json
             if not data["reply"]:
                 abort(400, "reply should not be empty")
@@ -232,7 +226,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
             # issue #3918
             filename = path.basename(filename)
 
-            reply = Reply(g.uid, source, filename, Storage.get_default())
+            reply = Reply(user, source, filename, Storage.get_default())
 
             reply_uuid = data.get("uuid", None)
             if reply_uuid is not None:
@@ -245,7 +239,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
 
             try:
                 db.session.add(reply)
-                seen_reply = SeenReply(reply=reply, journalist=g.uid)
+                seen_reply = SeenReply(reply=reply, journalist=user)
                 db.session.add(seen_reply)
                 db.session.add(source)
                 db.session.commit()
@@ -298,6 +292,8 @@ def make_blueprint(config: SDConfig) -> Blueprint:
         """
         Lists or marks the source conversation items that the journalist has seen.
         """
+        user = Journalist.query.get(g.uid)
+
         if request.method == "POST":
             if request.json is None or not isinstance(request.json, collections.abc.Mapping):
                 abort(400, "Please send requests in valid JSON.")
@@ -327,7 +323,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
                 targets.add(r)
 
             # now mark everything seen.
-            utils.mark_seen(list(targets), g.uid)
+            utils.mark_seen(list(targets), user)
 
             return jsonify({"message": "resources marked seen"}), 200
 
@@ -335,7 +331,8 @@ def make_blueprint(config: SDConfig) -> Blueprint:
 
     @api.route('/user', methods=['GET'])
     def get_current_user() -> Tuple[flask.Response, int]:
-        return jsonify(g.uid.to_json()), 200
+        user = Journalist.query.get(g.uid)
+        return jsonify(user.to_json()), 200
 
     @api.route('/users', methods=['GET'])
     def get_all_users() -> Tuple[flask.Response, int]:
@@ -344,7 +341,8 @@ def make_blueprint(config: SDConfig) -> Blueprint:
 
     @api.route('/logout', methods=['POST'])
     def logout() -> Tuple[flask.Response, int]:
-        session.destroy()
+        session2 = cast(sessions.ServerSideSession, session)
+        session2.destroy()
         return jsonify({'message': 'Your token has been revoked.'}), 200
 
     def _handle_api_http_exception(

@@ -354,8 +354,8 @@ def make_blueprint(config: SDConfig) -> Blueprint:
             abort(404)
 
         password = request.form.get('password')
-        logout_user(user_id)
         if set_diceware_password(user, password) is not False:
+            logout_user(user_id)
             db.session.commit()
         return redirect(url_for("admin.edit_user", user_id=user_id))
 

@@ -2,6 +2,8 @@
 import json
 import random
 from datetime import datetime
+from flask import url_for
+from pyotp import TOTP
 from uuid import UUID, uuid4
 
 from db import db
@@ -46,31 +48,25 @@ def test_unauthenticated_user_gets_all_endpoints(journalist_app):
 
 def test_valid_user_can_get_an_api_token(journalist_app, test_journo):
     with journalist_app.test_client() as app:
-        valid_token = TOTP(test_journo["otp_secret"]).now()
-        response = app.post(
-            url_for("api.get_token"),
-            data=json.dumps(
-                {
-                    "username": test_journo["username"],
-                    "passphrase": test_journo["password"],
-                    "one_time_code": valid_token,
-                }
-            ),
-            headers=get_api_headers(),
-        )
+        valid_token = TOTP(test_journo['otp_secret']).now()
+        response = app.post(url_for('api.get_token'),
+                            data=json.dumps(
+                                {'username': test_journo['username'],
+                                 'passphrase': test_journo['password'],
+                                 'one_time_code': valid_token}),
+                            headers=get_api_headers())
 
-        assert response.json["journalist_uuid"] == test_journo["uuid"]
-        assert (
-            isinstance(
-                Journalist.validate_api_token_and_get_user(response.json["token"]), Journalist
-            )
-            is True
-        )
+        assert response.json['journalist_uuid'] == test_journo['uuid']
         assert response.status_code == 200
         assert response.json["journalist_first_name"] == test_journo["first_name"]
         assert response.json["journalist_last_name"] == test_journo["last_name"]
 
         assert_valid_timestamp(response.json["expiration"])
+
+        response = app.get(url_for('api.get_current_user'),
+                           headers=get_api_headers(response.json['token']))
+        assert response.status_code == 200
+        assert response.json['uuid'] == test_journo['uuid']
 
 
 def test_user_cannot_get_an_api_token_with_wrong_password(journalist_app, test_journo):
@@ -223,22 +219,9 @@ def test_user_without_token_cannot_del_protected_endpoints(journalist_app, test_
             assert response.status_code == 403
 
 
-def test_attacker_cannot_create_valid_token_with_none_alg(journalist_app, test_source, test_journo):
-    with journalist_app.test_client() as app:
-        uuid = test_source["source"].uuid
-        s = TimedJSONWebSignatureSerializer("not the secret key", algorithm_name="none")
-        attacker_token = s.dumps({"id": test_journo["id"]}).decode("ascii")
-
-        response = app.delete(
-            url_for("api.single_source", source_uuid=uuid), headers=get_api_headers(attacker_token)
-        )
-
-        assert response.status_code == 403
-
-
-def test_attacker_cannot_use_token_after_admin_deletes(
-    journalist_app, test_source, journalist_api_token
-):
+def test_attacker_cannot_use_token_after_admin_deletes(journalist_app,
+                                                       test_source,
+                                                       journalist_api_token):
 
     with journalist_app.test_client() as app:
         uuid = test_source["source"].uuid
@@ -246,7 +229,10 @@ def test_attacker_cannot_use_token_after_admin_deletes(
         # In a scenario where an attacker compromises a journalist workstation
         # the admin should be able to delete the user and their token should
         # no longer be valid.
-        attacker = Journalist.validate_api_token_and_get_user(journalist_api_token)
+        attacker = app.get(url_for('api.get_current_user'),
+                           headers=get_api_headers(journalist_api_token)).json
+
+        attacker = Journalist.query.filter_by(uuid=attacker['uuid']).first()
 
         db.session.delete(attacker)
         db.session.commit()

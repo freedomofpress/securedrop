@@ -19,6 +19,8 @@ class JournalistInterfaceFlaskConfig(FlaskConfig):
     SESSION_COOKIE_NAME = "js"
     SESSION_SIGNER_SALT = "js_session"
     SESSION_KEY_PREFIX = "js_session:"
+    SESSION_LIFETIME = 2 * 60 * 60
+    SESSION_RENEW_COUNT = 5
 
 # These files are in the same directory as config.py. Use absolute paths to
 # avoid potential problems with the test runner - otherwise, you have to be in

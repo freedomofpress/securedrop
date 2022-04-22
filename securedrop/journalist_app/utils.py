@@ -546,9 +546,14 @@ def logout_user(uid: int) -> None:
     redis = Redis()
     for key in (redis.keys(current_app.config['SESSION_KEY_PREFIX'] + "*") +
                 redis.keys("api_" + current_app.config['SESSION_KEY_PREFIX'] + "*")):
-        sess = session_json_serializer.loads(redis.get(key))
-        if 'uid' in sess and sess['uid'] == uid:
-            redis.delete(key)
+        found = redis.get(key)
+        if found:
+            sess = session_json_serializer.loads(found.decode())
+            if 'uid' in sess and sess['uid'] == uid:
+                redis.delete(key)
+    if g.uid == uid:
+        g.uid = None  # pylint: disable=assigning-non-slot
+        g.user = None  # pylint: disable=assigning-non-slot
 
 
 def logout_all() -> None:
@@ -556,3 +561,5 @@ def logout_all() -> None:
     for key in (redis.keys(current_app.config['SESSION_KEY_PREFIX'] + "*") +
                 redis.keys("api_" + current_app.config['SESSION_KEY_PREFIX'] + "*")):
         redis.delete(key)
+    g.uid = None  # pylint: disable=assigning-non-slot
+    g.user = None  # pylint: disable=assigning-non-slot

@@ -3,7 +3,7 @@
 import typing
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
-import datetime
+from datetime import datetime
 from flask import (Flask, session, redirect, url_for, flash, g, request,
                    render_template, json, abort)
 from flask_assets import Environment
@@ -27,7 +27,7 @@ from journalist_app.utils import (
     logged_in,
 )
 from journalist_app import account, admin, api, main, col
-from journalist_app.sessions import Session
+from journalist_app.sessions import Session, ServerSideSession
 from journalist_app.utils import get_source, logged_in
 from models import InstanceConfig, Journalist
 from werkzeug.exceptions import default_exceptions
@@ -45,7 +45,7 @@ if typing.TYPE_CHECKING:
     from werkzeug.exceptions import HTTPException  # noqa: F401
 
 _insecure_views = ['main.login', 'static']
-_insecure_api_views = ['api.get_token']
+_insecure_api_views = ['api.get_token', 'api.get_endpoints']
 # Timezone-naive datetime format expected by SecureDrop Client
 API_DATETIME_FORMAT = "%Y-%m-%dT%H:%M:%S.%fZ"
 
@@ -97,7 +97,8 @@ def create_app(config: "SDConfig") -> Flask:
     @app.errorhandler(CSRFError)  # type: ignore
     def handle_csrf_error(e: CSRFError) -> "Response":
         app.logger.error("The CSRF token is invalid.")
-        session.destroy()
+        session2 = typing.cast(ServerSideSession, session)
+        session2.destroy()
         msg = gettext('You have been logged out due to inactivity.')
         flash(msg, 'error')
         return redirect(url_for('main.login'))
@@ -140,8 +141,11 @@ def create_app(config: "SDConfig") -> Flask:
         if request.path.split('/')[1] != 'static':
             uid = session.get('uid', None)
             if uid:
-                g.uid = uid
+                g.uid = uid  # pylint: disable=assigning-non-slot
                 g.user = Journalist.query.get(uid)  # pylint: disable=assigning-non-slot
+            else:
+                g.uid = None  # pylint: disable=assigning-non-slot
+                g.user = None  # pylint: disable=assigning-non-slot
 
         i18n.set_locale(config)
 

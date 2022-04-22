@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Union
+from typing import Union, cast
 
 import store
 import werkzeug
@@ -23,8 +23,9 @@ from flask import (
 )
 from flask_babel import gettext
 from journalist_app.forms import ReplyForm
-from journalist_app.utils import bulk_delete, download, get_source, validate_user
-from models import Reply, SeenReply, Source, SourceStar, Submission
+from journalist_app.sessions import ServerSideSession
+from journalist_app.utils import (validate_user, bulk_delete, download,
+                                  get_source)
 from sdconfig import SDConfig
 from sqlalchemy.orm import joinedload
 from sqlalchemy.sql import func
@@ -52,15 +53,17 @@ def make_blueprint(config: SDConfig) -> Blueprint:
                 db.session.add(user)
                 db.session.commit()
 
-                session['uid'] = user.id
-                session.regenerate()
+                session2 = cast(ServerSideSession, session)
+                session2['uid'] = user.id
+                session2.regenerate()
                 return redirect(url_for('main.index'))
 
         return render_template("login.html")
 
     @view.route("/logout")
     def logout() -> werkzeug.Response:
-        flash(session.destroy())
+        session2 = cast(ServerSideSession, session)
+        session2.destroy()
         return redirect(url_for('main.index'))
 
     @view.route("/")

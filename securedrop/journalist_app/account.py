@@ -1,16 +1,11 @@
 # -*- coding: utf-8 -*-
-from typing import Union
+from typing import Union, cast
 
 import werkzeug
 from db import db
-from flask import Blueprint, flash, g, redirect, render_template, request, session, url_for
-from flask_babel import gettext
-from journalist_app.utils import (
-    set_diceware_password,
-    set_name,
-    validate_hotp_secret,
-    validate_user,
-)
+from journalist_app import sessions
+from journalist_app.utils import (set_diceware_password, set_name, validate_user,
+                                  validate_hotp_secret)
 from passphrases import PassphraseGenerator
 from sdconfig import SDConfig
 
@@ -42,10 +37,10 @@ def make_blueprint(config: SDConfig) -> Blueprint:
         if validate_user(user.username, current_password, token, error_message):
             password = request.form.get("password")
             set_diceware_password(user, password)
-            session.pop("uid", None)
-            session.pop("expires", None)
-            return redirect(url_for("main.login"))
-        return redirect(url_for("account.edit"))
+            session2 = cast(sessions.ServerSideSession, session)
+            session2.destroy()
+            return redirect(url_for('main.login'))
+        return redirect(url_for('account.edit'))
 
     @view.route("/2fa", methods=("GET", "POST"))
     def new_two_factor() -> Union[str, werkzeug.Response]:

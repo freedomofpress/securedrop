@@ -3,6 +3,9 @@
 import base64
 import binascii
 import io
+import time
+
+from mock import call
 import os
 import random
 import zipfile
@@ -629,20 +632,6 @@ def test_admin_edits_user_password_session_invalidate(
                 resp_text = resp.data.decode("utf-8")
                 assert escape(gettext(msgids[0])) in resp_text
                 assert VALID_PASSWORD_2 in resp_text
-
-        # Now verify the password change error is flashed.
-        with InstrumentedApp(journalist_app) as ins:
-            resp = app.get(url_for("main.index", l=locale), follow_redirects=True)
-            msgids = ["You have been logged out due to password change"]
-            assert page_language(resp.data) == language_tag(locale)
-            with xfail_untranslated_messages(config, locale, msgids):
-                ins.assert_message_flashed(gettext(msgids[0]), "error")
-
-        # Also ensure that session is now invalid.
-        session.pop("expires", None)
-        session.pop("csrf_token", None)
-        session.pop("locale", None)
-        assert not session, session
 
 
 def test_admin_deletes_invalid_user_404(journalist_app, test_admin):
@@ -3184,8 +3173,8 @@ def test_single_source_is_successfully_unstarred(journalist_app, test_journo, te
 @flaky(rerun_filter=utils.flaky_filter_xfail)
 @pytest.mark.parametrize("locale", get_test_locales())
 def test_journalist_session_expiration(config, journalist_app, test_journo, locale):
-    # set the expiration to ensure we trigger an expiration
-    config.SESSION_EXPIRATION_MINUTES = -1
+    # set the expiration to be very short
+    journalist_app.session_interface.lifetime = 1
     with journalist_app.test_client() as app:
         with InstrumentedApp(journalist_app) as ins:
             login_data = {
@@ -3197,17 +3186,20 @@ def test_journalist_session_expiration(config, journalist_app, test_journo, loca
             ins.assert_redirects(resp, url_for("main.index"))
         assert "uid" in session
 
-        resp = app.get(url_for("account.edit", l=locale), follow_redirects=True)
+        # Wait 2s for the redis key to expire
+        time.sleep(2)
+        resp = app.get(url_for('account.edit'), follow_redirects=True)
         # because the session is being cleared when it expires, the
         # response should always be in English.
-        assert page_language(resp.data) == "en-US"
-        assert "You have been logged out due to inactivity." in resp.data.decode("utf-8")
+        assert page_language(resp.data) == 'en-US'
+        assert 'Login to access the journalist interface' in resp.data.decode('utf-8')
 
         # check that the session was cleared (apart from 'expires'
         # which is always present and 'csrf_token' which leaks no info)
-        session.pop("expires", None)
-        session.pop("csrf_token", None)
-        session.pop("locale", None)
+        session.pop('expires', None)
+        session.pop('csrf_token', None)
+        session.pop('locale', None)
+        session.pop('renew_count', None)
         assert not session, session
 
 
