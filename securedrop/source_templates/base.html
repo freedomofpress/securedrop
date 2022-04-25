@@ -24,9 +24,9 @@
         {% endif %}
         <a href="#main">{{ gettext('Skip to main content') }}</a>
         {% block header %}
-        <a href="{% if is_user_logged_in %}{{ url_for('main.lookup') }}{% else %}{{ url_for('main.index') }}{% endif %}">
+        <h1><a href="{% if is_user_logged_in %}{{ url_for('main.lookup') }}{% else %}{{ url_for('main.index') }}{% endif %}">
           <img src="{{ g.logo }}" alt="{{ g.organization_name }} logo">
-        </a>
+        </a></h1>
         {% include 'locales.html' %}
         {% endblock %}
       </header>
@@ -34,7 +34,7 @@
       <main id="main" tabindex="-1">
         {% if g.show_offline_message %}
         <section>
-          <h1>{{ gettext("We're sorry, our SecureDrop is currently offline.") }}</h1>
+          <h2>{{ gettext("We're sorry, our SecureDrop is currently offline.") }}</h2>
           <p>{{ gettext("Please try again later. Check our website for more information.") }}</p>
         </section>
         {% else %}

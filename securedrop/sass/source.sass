@@ -40,11 +40,8 @@ button
 h1, h2, h3, h4
   color: $heading_color
 
-h1
+h1, h2
   font-size: 24px
-
-h2
-  font-size: 16px
 
 #source-lookup h2
   font-size: 18px
@@ -258,19 +255,18 @@ header
       @include rtl
         border-left: 2px solid $index_middle_separator
 
-// TODO: remove !important declarations in the @media only sections
 @media only screen and (min-width: 769px) and (max-width: 850px)
-  #source-index header
-    margin-right: calc(20% - 180px) !important
+  html #source-index header
+    margin-right: calc(20% - 180px)
 
-  #source-index > .content > main
-    min-width: 575px !important
+  html #source-index > .content > main
+    min-width: 575px
 
     &> section
-      width: 45% !important
+      width: 45%
 
       &#return-visit
-        padding-left: 30px !important
+        padding-left: 30px
 
 @media only screen and (max-width: 768px)
   .content, #source-index .content
@@ -283,17 +279,23 @@ header
     // Odd quirk, padding here prevents jumping for the "Skip to …" a11y links
     padding-top: 1px
 
-  #source-index > .content > main
+  html mark > span::before
+    width: 81%
+
+  html #upload .attachment input
+    font-size: 130%
+
+  html #source-index > .content > main
     display: block
     width: 100%
 
     &> section
-      border: 0 !important
-      width: auto !important
-      margin: 0 !important
-      padding-left: 30px !important
-      padding-top: 0 !important
-      min-height: unset !important
+      border: 0
+      width: auto
+      margin: 0
+      padding-left: 30px
+      padding-top: 0
+      min-height: unset
 
     p
       width: auto
@@ -314,7 +316,7 @@ header
         width: auto
 
 // Logo is a simple anchor on all pages except index
-header h1, header > a
+header h1, header h1 a
   font-size: 13px
   display: block
   border: 0
@@ -325,6 +327,9 @@ header > a[href="#main"], header > a[href="#flashed"]
   display: block
   position: absolute
   top: -999rem
+  text-align: center
+  text-decoration: none
+  border: none
   @include ltr
     left: -999rem
   @include rtl
