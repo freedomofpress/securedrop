@@ -16,19 +16,13 @@ def test_app_iptables_rules(host):
 
     local = host.get_host("local://")
 
-    time_service_user = (
-        host.check_output("id -u systemd-timesync")
-        if securedrop_test_vars.securedrop_target_distribution == "focal"
-        else 0
-    )
-
     # Build a dict of variables to pass to jinja for iptables comparison
     kwargs = dict(
         mon_ip=os.environ.get('MON_IP', securedrop_test_vars.mon_ip),
         default_interface=host.check_output("ip r | head -n 1 | "
                                             "awk '{ print $5 }'"),
         tor_user_id=host.check_output("id -u debian-tor"),
-        time_service_user=time_service_user,
+        time_service_user=host.check_output("id -u systemd-timesync"),
         securedrop_user_id=host.check_output("id -u www-data"),
         ssh_group_gid=host.check_output("getent group ssh | cut -d: -f3"),
         dns_server=securedrop_test_vars.dns_server)
