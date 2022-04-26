@@ -3,9 +3,11 @@
 
 set -eu
 
-REPOROOT=$(git rev-parse --show-toplevel)
+export REPOROOT="${REPOROOT:-$(git rev-parse --show-toplevel)}"
+
 cd "${REPOROOT}/securedrop"
 
+source /opt/venvs/securedrop-app-code/bin/activate
 source "${BASH_SOURCE%/*}/dev-deps"
 
 run_redis &

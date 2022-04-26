@@ -1,0 +1,42 @@
+@font-face {
+    font-family: "Fira Sans";
+    font-weight: 400;
+    font-style: normal;
+    font-stretch: normal;
+    src: url(/assets/fonts/firasans-book-webfont.woff2) format("woff2"), url(/assets/fonts/firasans-book-webfont.woff) format("woff");
+}
+body {
+    background-color: #0056b2;
+    color: #fff;
+    font-family: "Fira Sans", Calibri, "Gil Sans", sans-serif;
+    max-width: 40em;
+    margin: auto;
+    padding: 2em 0;
+}
+a {
+    color: #fff;
+}
+th {
+    text-align: right;
+    vertical-align: top;
+}
+td {
+    padding-left: 1em;
+    vertical-align: top;
+}
+#totp {
+    font-family: monospace;
+    font-size: 1rem;
+    fill: currentColor;
+}
+#totp svg {
+    max-height: 1rem;
+    vertical-align: middle;
+}
+.expiring {
+    color: #f90
+}
+.warning {
+    font-weight: bold;
+    margin: 2em 0;
+}

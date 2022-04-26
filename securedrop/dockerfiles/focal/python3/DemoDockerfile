@@ -1,0 +1,33 @@
+# ubuntu 20.04 image from 2021-09-21
+FROM ubuntu@sha256:3555f4996aea6be945ae1532fa377c88f4b3b9e6d93531f47af5d78a7d5e3761
+
+RUN apt-get update && \
+    DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get -y install tzdata && \
+    apt-get install -y paxctl apache2-dev coreutils \
+                       python3-pip python3-all python3-venv virtualenv libpython3.8-dev libssl-dev \
+                       gnupg2 ruby redis-server git \
+                       enchant libffi-dev sqlite3 gettext sudo \
+                       libasound2 libdbus-glib-1-2 libgtk2.0-0 libfontconfig1 libxrender1 \
+                       libcairo-gobject2 libgtk-3-0 libstartup-notification0 basez
+
+RUN gem install sass -v 3.4.23
+
+COPY . /opt/securedrop
+RUN python3 -m venv /opt/venvs/securedrop-app-code && \
+    /opt/venvs/securedrop-app-code/bin/pip3 install --no-deps --require-hashes -r /opt/securedrop/securedrop/requirements/python3/docker-requirements.txt && \
+    /opt/venvs/securedrop-app-code/bin/pip3 install --no-deps --require-hashes -r /opt/securedrop/securedrop/requirements/python3/securedrop-app-code-requirements.txt
+
+RUN sed -i 's/"localhost"\];/"localhost", "demo-source.securedrop.org"];/' /opt/securedrop/securedrop/static/js/source.js
+
+RUN useradd --no-create-home --home-dir /tmp --uid 1000 demo && echo "demo ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers && \
+    chown -R demo:demo /opt/securedrop /opt/venvs/securedrop-app-code
+
+STOPSIGNAL SIGKILL
+
+EXPOSE 8080 8081
+
+ENV REPOROOT=/opt/securedrop
+
+USER demo
+WORKDIR /opt/securedrop/securedrop
+ENTRYPOINT [ "/opt/securedrop/securedrop/bin/run" ]
