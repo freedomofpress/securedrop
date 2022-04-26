@@ -307,11 +307,11 @@ around
 arousal
 arrange
 array
-arrest
 arrival
 arrive
 arrogance
 arrogant
+arrow
 art
 ascend
 ascension
@@ -402,7 +402,6 @@ axis
 babble
 babbling
 babied
-baboon
 backache
 backboard
 backboned
@@ -410,6 +409,7 @@ backdrop
 backed
 backer
 backfield
+backfire
 backhand
 backing
 backlands
@@ -1899,7 +1899,7 @@ dosage
 dose
 dotted
 doubling
-douche
+doubted
 dove
 down
 dowry
@@ -2875,7 +2875,7 @@ goofball
 goofiness
 goofy
 google
-goon
+goop
 gopher
 gore
 gorged
@@ -3038,7 +3038,6 @@ handcart
 handclap
 handclasp
 handcraft
-handcuff
 handed
 handful
 handgrip
@@ -3052,6 +3051,7 @@ handler
 handling
 handmade
 handoff
+handover
 handpick
 handprint
 handrail
@@ -3319,11 +3319,11 @@ important
 importer
 impose
 imposing
-impotence
-impotency
-impotent
 impound
 imprecise
+impress
+impressive
+impressing
 imprint
 impromptu
 improper
