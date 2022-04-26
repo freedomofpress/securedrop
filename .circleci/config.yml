@@ -288,7 +288,7 @@ jobs:
 
   deb-tests:
     docker:
-      - image: cimg/python:3.7
+      - image: cimg/python:3.8
     environment:
       LC_ALL: C.UTF-8
       LANG: C.UTF-8
