@@ -17,6 +17,8 @@ RUN python3 -m venv /opt/venvs/securedrop-app-code && \
     /opt/venvs/securedrop-app-code/bin/pip3 install --no-deps --require-hashes -r /opt/securedrop/securedrop/requirements/python3/docker-requirements.txt && \
     /opt/venvs/securedrop-app-code/bin/pip3 install --no-deps --require-hashes -r /opt/securedrop/securedrop/requirements/python3/securedrop-app-code-requirements.txt
 
+RUN sed -i 's/"localhost"\];/"localhost", "demo-source.securedrop.org"];/' /opt/securedrop/securedrop/static/js/source.js
+
 RUN useradd --no-create-home --home-dir /tmp --uid 1000 demo && echo "demo ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers && \
     chown -R demo:demo /opt/securedrop /opt/venvs/securedrop-app-code
 
