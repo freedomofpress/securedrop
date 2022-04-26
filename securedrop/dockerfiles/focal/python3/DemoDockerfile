@@ -6,7 +6,7 @@ RUN apt-get update && \
     apt-get install -y paxctl apache2-dev coreutils devscripts vim \
                        python3-pip python3-all python3-venv virtualenv libpython3.8-dev libssl-dev \
                        gnupg2 ruby redis-server git curl wget \
-                       gettext paxctl enchant libffi-dev sqlite3 gettext sudo \
+                       enchant libffi-dev sqlite3 gettext sudo \
                        libasound2 libdbus-glib-1-2 libgtk2.0-0 libfontconfig1 libxrender1 \
                        libcairo-gobject2 libgtk-3-0 libstartup-notification0 basez
 

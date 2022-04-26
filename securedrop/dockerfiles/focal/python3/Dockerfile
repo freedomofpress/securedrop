@@ -12,7 +12,7 @@ RUN apt-get update && apt-get install -y paxctl && \
     apt-get install -y apache2-dev coreutils devscripts vim \
                        python3-pip python3-all python3-venv virtualenv libpython3.8-dev libssl-dev \
                        gnupg2 ruby redis-server git xvfb curl wget \
-                       gettext paxctl x11vnc enchant libffi-dev sqlite3 gettext sudo \
+                       x11vnc enchant libffi-dev sqlite3 gettext sudo \
                        # For html5validator.  Used only in "app-page-layout-tests", but we can live
                        # with its being installed along with everything else since it will be
                        # cached along with everything else too.
