@@ -20,6 +20,9 @@ case "$1" in
     cp /opt/securedrop/50unattended-upgrades /etc/apt/apt.conf.d/
     cp /opt/securedrop/reboot-flag /etc/cron.d/
 
+    # Disable fwupd-refresh (#6204)
+    systemctl is-enabled fwupd-refresh.timer && systemctl disable fwupd-refresh.timer
+
     ;;
     abort-upgrade|abort-remove|abort-deconfigure)
     ;;
