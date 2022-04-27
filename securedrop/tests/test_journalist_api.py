@@ -26,7 +26,7 @@ random.seed('◔ ⌣ ◔')
 
 def assert_valid_timestamp(timestamp: str) -> None:
     """verify the timestamp is encoded in the format we want"""
-    dt_format = "%Y-%m-%dT%H:%M:%S.%fZ"
+    dt_format = "%Y-%m-%dT%H:%M:%S.%f+00:00"
     assert timestamp == datetime.strptime(timestamp, dt_format).strftime(dt_format)
 
 
