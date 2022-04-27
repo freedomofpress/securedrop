@@ -73,7 +73,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
     def create() -> werkzeug.Response:
         if SessionManager.is_user_logged_in(db_session=db.session):
             flash_msg("notification", None, gettext(
-                "You are already logged in. Please verify your codename above as it "
+                "You are already logged in. Please verify your codename as it "
                 "may differ from the one displayed on the previous page."))
         else:
             # Ensure the codenames have not expired

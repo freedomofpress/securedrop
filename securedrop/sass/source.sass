@@ -446,7 +446,7 @@ mark
 
   &> span
     display: inline-block
-    text-indent: -9999px
+    visibility: hidden // screen-reader should not read hidden codename
     overflow: hidden
     line-height: 15px // 14px makes WebKit cut off a bit of the text
 
@@ -454,17 +454,12 @@ mark
       content: ""
       display: block
       position: absolute
+      visibility: visible // Show "censored" blocks when codename is hidden
       text-indent: 0
       width: 85%
       height: 1em
       background: $passphrase_masked_color
       clip-path: polygon(0% 0%, 0% 100%, 20% 100%, 20% 0%, 23% 0%, 23% 100%, 32% 100%, 32% 0%, 35% 0%, 35% 100%, 42% 100%, 42% 0%, 45% 0%, 45% 100%, 64% 100%, 64% 0%, 67% 0%, 67% 100%, 74% 100%, 74% 0%, 77% 0%, 77% 100%, 90% 100%, 90% 0%, 93% 0%, 93% 100%, 100% 100%, 100% 0%)
-
-#codename-heading + mark > span
-  text-indent: initial
-
-  &::before
-    display: none
 
 #codename-reminder
   font-size: 18px
@@ -521,8 +516,8 @@ mark
   &:focus-visible ~ #codename-show
     box-shadow: 0 0 0 3px $focus_shadow
 
-  &:checked + mark > span
-    text-indent: 0
+  &:checked ~ mark > span
+    visibility: visible
 
     &::before
       display: none
@@ -1176,6 +1171,6 @@ body::after
   position: absolute
   width: 0
   height: 0
-  overflow: hidden
+  visibility: hidden
   z-index: -1
   content: url(/static/i/source.png) url(/static/i/info-small.png) url(/static/i/material/info.png) url(/static/i/material/error.png) url(/static/i/check.png) url(/static/i/checkbox.png)

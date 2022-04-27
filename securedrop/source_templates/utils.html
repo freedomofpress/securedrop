@@ -2,3 +2,26 @@
 <time title="{{ date|rel_datetime_format }}"
       datetime="{{ date|html_datetime_format }}">{{ date|rel_datetime_format(relative=True) }}</time>
 {%- endmacro -%}
+
+{%- macro codename(codename, new=False) -%}
+{% if new %}
+<section aria-labelledby="codename-reminder">
+  <p id="codename-reminder">{{ gettext('Remember, your codename is:') }}</p>
+{% else %}
+<section aria-labelledby="codename-heading">
+  <h2 id="codename-heading" hidden>{{ gettext('Codename') }}</h2>
+{% endif %}
+
+  <input id="codename-show-checkbox" type="checkbox" role="button"{% if not new %} checked {% endif -%}
+    aria-label="{{ gettext('Show Codename') }}" aria-controls="codename">
+
+  <mark id="codename" lang="en-US" dir="ltr"{% if not new %}
+    aria-describedby="codename-instructions codename-explanation"{% endif %}><span>{{ codename }}</span></mark>
+
+  <label for="codename-show-checkbox" id="codename-show"
+    aria-hidden="true">
+      {{ gettext('Show Codename') }}
+  </label>
+
+</section>
+{%- endmacro -%}

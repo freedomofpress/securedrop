@@ -5,7 +5,7 @@
 {% include 'flashed.html' %}
 
 {% if new_user_codename %}
-{% include 'codename.html' %}
+{{ utils.codename(new_user_codename, new=True) }}
 {% endif %}
 
 <section aria-labelledby="submit-heading">

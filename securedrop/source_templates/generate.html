@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% import 'utils.html' as utils %}
 
 {% block body %}
 <h2>{{ gettext('Get Your Codename') }}</h2>
@@ -10,9 +11,9 @@
   {{ gettext('You will need this codename to log into our SecureDrop later:') }}
 </p>
 
-{% include 'codename.html' %}
+{{ utils.codename(codename) }}
 
-<ul>
+<ul id="codename-instructions">
   <li>{{ gettext('<strong>Keep it secret.</strong> Do not share it with anyone.') }}</li>
   <li>{{ gettext('<strong>Keep it safe.</strong> There is no account recovery option.') }}</li>
 </ul>
