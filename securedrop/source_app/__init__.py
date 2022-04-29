@@ -21,7 +21,7 @@ from request_that_secures_file_uploads import RequestThatSecuresFileUploads
 from sdconfig import SDConfig
 from source_app import main, info, api
 from source_app.decorators import ignore_static
-from source_app.utils import clear_session_and_redirect_to_logged_out_page
+from source_app.utils import clear_session_and_redirect_to_logged_out_page, get_sri
 
 
 def get_logo_url(app: Flask) -> str:
@@ -78,6 +78,7 @@ def create_app(config: SDConfig) -> Flask:
     app.jinja_env.globals['version'] = version.__version__
     # Exported to source templates for being included in instructions
     app.jinja_env.globals['submission_key_fpr'] = config.JOURNALIST_KEY
+    app.jinja_env.globals['get_sri'] = get_sri
     app.jinja_env.filters['rel_datetime_format'] = \
         template_filters.rel_datetime_format
     app.jinja_env.filters['nl2br'] = template_filters.nl2br
@@ -104,6 +105,8 @@ def create_app(config: SDConfig) -> Flask:
             g.logo = get_logo_url(app)  # pylint: disable=assigning-non-slot
         except FileNotFoundError:
             app.logger.error("Site logo not found.")
+
+        g.sri_enabled = config.SRI_ENABLED  # pylint: disable=assigning-non-slot
 
         return None
 

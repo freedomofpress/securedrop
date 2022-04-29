@@ -14,9 +14,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex,nofollow">
 
-  {% assets filters="jsmin", output="gen/source.js", "js/source.js" %}
-  <script src="{{ ASSET_URL }}"></script>
-  {% endassets %}
+  <script src="{{ url_for('static', filename='js/source.js') }}"
+  {% if g.sri_enabled  %}
+      integrity="{{ get_sri(url_for('static', filename='js/source.js')) }}"
+      crossorigin="anonymous"
+  {% endif %}
+  ></script>
 </head>
 
 <body id="source-index">

@@ -114,7 +114,14 @@ class SDConfig:
         self.env = getattr(_config, 'env', 'prod')  # type: str
         if self.env == 'test':
             self.RQ_WORKER_NAME = 'test'  # type: str
+            self.SRI_ENABLED = False
         else:
+            if self.env == 'dev':
+                # should be switched to false once SRI generation moves to make build-debs
+                self.SRI_ENABLED = True
+            else:
+                self.SRI_ENABLED = True
+
             self.RQ_WORKER_NAME = 'default'
 
         # Config entries used by i18n.py
