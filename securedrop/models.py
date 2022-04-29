@@ -33,9 +33,9 @@ from pyotp import TOTP, HOTP
 from encryption import EncryptionManager, GpgKeyNotFoundError
 from passphrases import PassphraseGenerator
 from store import Storage
-
+#from flask import current_app as app
 _default_instance_config: Optional["InstanceConfig"] = None
-app = Flask(__name__)
+app = Flask(__name__, _default_instance_config)
 babel = Babel(app)
 
 LOGIN_HARDENING = True
