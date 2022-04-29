@@ -22,6 +22,7 @@ from source_user import SourceUser
 if typing.TYPE_CHECKING:
     from typing import Optional
 
+
 def get_sri(file_urlpath: str) -> typing.Optional[str]:
     # this should be a lookup function checking for a match in hashes
     # generated during the package build process, for now it's just the
@@ -29,6 +30,7 @@ def get_sri(file_urlpath: str) -> typing.Optional[str]:
     # shasum -b -a 384 source.js | awk '{ print $1 }' | xxd -r -p | base64
 
     return "sha384-5DNcUJMNMOXkl7IGiZyNq9rL2hzOBqSr9TRGbA41Pe2m1VK0npyDulacE6bKtgDz"
+
 
 def codename_detected(message: str, codename: str) -> bool:
     """
