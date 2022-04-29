@@ -12,8 +12,8 @@ from io import BytesIO
 
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives.kdf import scrypt
-from flask import current_app, url_for
-from flask_babel import gettext, ngettext
+from flask import url_for
+from flask_babel import ngettext
 from itsdangerous import TimedJSONWebSignatureSerializer, BadData
 from markupsafe import Markup
 from passlib.hash import argon2
@@ -33,7 +33,7 @@ from pyotp import TOTP, HOTP
 from encryption import EncryptionManager, GpgKeyNotFoundError
 from passphrases import PassphraseGenerator
 from store import Storage
-#from flask import current_app as app
+
 _default_instance_config: Optional["InstanceConfig"] = None
 app = Flask(__name__, _default_instance_config)
 babel = Babel(app)
