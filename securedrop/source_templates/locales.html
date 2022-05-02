@@ -1,17 +1,17 @@
 {% if g.locales|length > 1 %}
-<section class="menu" aria-labelledby="locale-menu-heading">
-  <h2 id="locale-menu-heading" hidden>
+<section id="locales-menu" aria-labelledby="locales-menu-heading">
+  <h2 id="locales-menu-heading" hidden>
     {{ gettext('Selected language')}}: {{ g.locales[g.localeinfo.id].display_name }}
   </h2>
-  <label id="locale-menu-trigger" for="menu-1-checkbox" class="menu__trigger" aria-hidden="true">
+  <input id="locales-menu-checkbox" type="checkbox" role="button"
+    aria-label="{{ gettext('Choose language') }}" aria-haspopup="menu" aria-controls="locales-menu-list" aria-pressed="true">
+  <label for="locales-menu-checkbox" aria-hidden="true">
     {{ g.locales[g.localeinfo.id].display_name }}
   </label>
-  <input id="menu-1-checkbox" class="menu__checkbox visually-hidden" type="checkbox" role="button"
-    aria-label="{{ gettext('Choose language') }}" aria-haspopup="menu" aria-controls="locales-menu" aria-pressed="true">
 
-  <ul id="locales-menu" class="menu__items" role="menu" aria-labelledby="menu-1-checkbox">
+  <ul id="locales-menu-list" role="menu" aria-labelledby="locales-menu-checkbox">
     {% for locale in g.locales.keys() %}
-    <li class="menu__item" role="none">
+    <li role="none">
       {% if locale != g.localeinfo.id %}
       {% set args = {} %}
       {% do args.update(request.args or {}) %}
@@ -23,7 +23,7 @@
       {% set url = '' %}
       {% set checked = 'true' %}
       {% endif %}
-      <a href="{{ url }}" rel="nofollow" class="no-bottom-border" lang="{{ g.locales[locale].language_tag }}" hreflang="{{ g.locales[locale].language_tag }}"
+      <a href="{{ url }}" rel="nofollow" lang="{{ g.locales[locale].language_tag }}" hreflang="{{ g.locales[locale].language_tag }}"
         role="menuitemradio" aria-checked="{{ checked }}">
         {{ g.locales[locale].display_name }}
       </a>

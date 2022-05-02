@@ -3,7 +3,7 @@
 <section id="flashed" role="alert">
   <ul>
     {% for category, message in messages %}
-    <li class="flash {{ category }}" aria-label="{{ gettext(category) }}">
+    <li class="{{ category }}" aria-label="{{ gettext(category) }}">
       {{ message }}
     </li>
     {% endfor %}

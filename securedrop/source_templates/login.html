@@ -3,19 +3,19 @@
 
 {% include 'flashed.html' %}
 
-<h1>{{ gettext('Enter Codename') }}</h1>
+<h2>{{ gettext('Enter Codename') }}</h2>
 
 <form method="post" action="{{ url_for('main.login') }}" autocomplete="off">
   <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
 
-  <div class="center">
+  <div>
     {% set aria_attributes = {'aria-label': gettext('Enter your codename'), 'aria-required': 'true'} %}
     {% if form.codename.errors %}
-    {% do aria_attributes.update({'aria-describedby': 'flashed login-with-existing-code-name-errors', 'aria-invalid': 'true'}) %}
+    {% do aria_attributes.update({'aria-describedby': 'flashed codename-errors', 'aria-invalid': 'true'}) %}
     {% endif %}
-    {{ form.codename(id='login-with-existing-codename', class='codename-box', autocomplete='off', placeholder=gettext('Enter your codename'), autofocus=True, **aria_attributes) }}
+    {{ form.codename(autocomplete='off', placeholder=gettext('Enter your codename'), autofocus=True, **aria_attributes) }}
     {% if form.codename.errors %}
-    <ul id="login-with-existing-code-name-errors" class="form-validation-error" role="alert">
+    <ul id="codename-errors" role="alert">
       {% for error in form.codename.errors %}
       <li>{{ error }}</li>
       {% endfor %}
@@ -23,12 +23,12 @@
     {% endif %}
   </div>
 
-  <div class="pull-right section-spacing">
-    <button type="submit" id="login" aria-label="{{ gettext('Continue') }}">
+  <div class="form-controls">
+    <a href="{{ url_for('main.index') }}" class="btn secondary" aria-label="{{ gettext('Cancel') }}">
+      {{ gettext('CANCEL') }}</a>
+    <button type="submit" aria-label="{{ gettext('Continue') }}">
       {{ gettext('CONTINUE') }}
     </button>
-    <a href="{{ url_for('main.index') }}" class="btn secondary" id="cancel" aria-label="{{ gettext('Cancel') }}">
-      {{ gettext('CANCEL') }}</a>
   </div>
 
 </form>

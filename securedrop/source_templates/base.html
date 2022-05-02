@@ -16,19 +16,17 @@
   {% block extrahead %}{% endblock %}
 </head>
 
-<body>
+<body id="source{{ request.path.replace('/', '-') }}">
   <div class="content">
-    <div class="container">
       <header>
         {% if get_flashed_messages() %}
-        <a href="#flashed" class="visually-hidden until-focus">{{ gettext('Skip to notification') }}</a>
+        <a href="#flashed">{{ gettext('Skip to notification') }}</a>
         {% endif %}
-        <a href="#main" class="visually-hidden until-focus">{{ gettext('Skip to main content') }}</a>
+        <a href="#main">{{ gettext('Skip to main content') }}</a>
         {% block header %}
-        <a href="{% if is_user_logged_in %}{{ url_for('main.lookup') }}{% else %}{{ url_for('main.index') }}{% endif %}"
-          class="no-bottom-border">
-          <img src="{{ g.logo }}" class="logo small" alt="{{ g.organization_name }} logo" width="250">
-        </a>
+        <h1><a href="{% if is_user_logged_in %}{{ url_for('main.lookup') }}{% else %}{{ url_for('main.index') }}{% endif %}">
+          <img src="{{ g.logo }}" alt="{{ g.organization_name }} logo">
+        </a></h1>
         {% include 'locales.html' %}
         {% endblock %}
       </header>
@@ -36,14 +34,14 @@
       <main id="main" tabindex="-1">
         {% if g.show_offline_message %}
         <section>
-          <h1>{{ gettext("We're sorry, our SecureDrop is currently offline.") }}</h1>
+          <h2>{{ gettext("We're sorry, our SecureDrop is currently offline.") }}</h2>
           <p>{{ gettext("Please try again later. Check our website for more information.") }}</p>
         </section>
         {% else %}
 
         {% if is_user_logged_in %}
         <nav>
-          <a href="{{ url_for('main.logout') }}" class="btn pull-right" id="logout"
+          <a href="{{ url_for('main.logout') }}" class="btn" id="logout"
             aria-label="{{ gettext('Log Out') }}">{{ gettext('LOG OUT') }}</a>
         </nav>
         {% endif %}
@@ -57,7 +55,6 @@
     {% block footer %}
     {% include 'footer.html' %}
     {% endblock %}
-  </div>
 </body>
 
 </html>

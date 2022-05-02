@@ -53,11 +53,12 @@ class TestSourceAppBrowserWarnings:
         navigator.source_visits_source_homepage()
 
         # Then they see a warning
-        warning_banner = navigator.driver.find_element_by_id("use-tor-browser")
+        warning_banner = navigator.driver.find_element_by_id("browser-tb")
+        assert warning_banner.is_displayed()
         assert "It is recommended to use Tor Browser" in warning_banner.text
 
         # And they are able to dismiss the warning
-        warning_dismiss_button = navigator.driver.find_element_by_id("use-tor-browser-close")
+        warning_dismiss_button = navigator.driver.find_element_by_id("browser-tb-close")
         warning_dismiss_button.click()
 
         def warning_banner_is_hidden():
@@ -77,11 +78,12 @@ class TestSourceAppBrowserWarnings:
         navigator.source_visits_source_homepage()
 
         # Then they see a warning
-        warning_banner = navigator.driver.find_element_by_id("orfox-browser")
+        warning_banner = navigator.driver.find_element_by_id("browser-android")
+        assert warning_banner.is_displayed()
         assert "use the desktop version of Tor Browser" in warning_banner.text
 
         # And they are able to dismiss the warning
-        warning_dismiss_button = navigator.driver.find_element_by_id("orfox-browser-close")
+        warning_dismiss_button = navigator.driver.find_element_by_id("browser-android-close")
         warning_dismiss_button.click()
 
         def warning_banner_is_hidden():
@@ -101,5 +103,6 @@ class TestSourceAppBrowserWarnings:
         navigator.source_visits_source_homepage()
 
         # Then they see a warning
-        banner = navigator.driver.find_element_by_id("js-warning")
-        assert "Security Slider to Safest", banner.text
+        banner = navigator.driver.find_element_by_id("browser-security-level")
+        assert banner.is_displayed()
+        assert "Security Level is too low" in banner.text

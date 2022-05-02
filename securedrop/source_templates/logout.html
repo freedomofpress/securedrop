@@ -1,13 +1,13 @@
 {% extends "base.html" %}
 {% block body %}
 <nav>
-  <a href="{{ url_for('main.login') }}" class="btn pull-right" aria-label="{{ gettext('Log In') }}">
+  <a href="{{ url_for('main.login') }}" class="btn" aria-label="{{ gettext('Log In') }}">
     {{ gettext('LOG IN') }}</a>
 </nav>
 <section>
-  <h1>{{ gettext('One more thing...') }}</h1>
-  <p id="click-new-identity-tor">
-    {{ gettext('Click the <img src={icon} alt="" width="16" height="16">&nbsp;<b>New Identity</b> button in your Tor Browser\'s toolbar. This will clear your Tor Browser activity data on this device.').format(icon=url_for('static', filename='i/torbroom-black.png'))  }}
+  <h2>{{ gettext('One more thing...') }}</h2>
+  <p>
+    {{ gettext('Click the <img src={icon} alt="" width="16" height="16">&nbsp;<b>New Identity</b> button in your Tor Browser\'s toolbar. This will clear your Tor Browser activity data on this device.').format(icon=url_for('static', filename='i/torbroom.png'))  }}
   </p>
 </section>
 {% endblock %}

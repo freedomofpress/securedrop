@@ -2,28 +2,21 @@
 {% import 'utils.html' as utils %}
 
 {% block body %}
-{% if new_user_codename %}
-<details class="code-reminder pull-left" id="codename-hint">
-  <summary data-show="{{ gettext('Show') }}" data-hide="{{ gettext('Hide') }}">
-   {{ gettext('Remember, your codename is:') }}
-  </summary>
-  <mark class="codename">{{ new_user_codename }}</mark>
-</details>
-{% endif %}
+{% include 'flashed.html' %}
 
-<div class="center">
-  {% include 'flashed.html' %}
-</div>
+{% if new_user_codename %}
+{{ utils.codename(new_user_codename, new=True) }}
+{% endif %}
 
 <section aria-labelledby="submit-heading">
   {% if allow_document_uploads %}
-  <h2 id="submit-heading" class="headline">{{ gettext('Submit Files or Messages') }}</h2>
-  <p class="explanation">{{ gettext('You can submit any kind of file, a message, or both.') }}</p>
+  <h2 id="submit-heading">{{ gettext('Submit Files or Messages') }}</h2>
+  <p>{{ gettext('You can submit any kind of file, a message, or both.') }}</p>
   {% else %}
-  <h2 id="submit-heading" class="headline">{{ gettext('Submit Messages') }}</h2>
+  <h2 id="submit-heading">{{ gettext('Submit Messages') }}</h2>
   {% endif %}
 
-  <p class="explanation extended-explanation">
+  <p>
     {% if allow_document_uploads %}
     {{ gettext('If you are already familiar with GPG, you can optionally encrypt your files and messages with our <a href="{url}" class="text-link">public key</a> before submission. Files are encrypted as they are received by SecureDrop.').format(url=url_for('info.download_public_key')) }}
     {% else %}
@@ -32,76 +25,75 @@
     {{ gettext('<a href="{url}" class="text-link">Learn more</a>.').format(url=url_for('info.why_download_public_key')) }}
   </p>
 
-  <form id="upload" class="section-spacing" method="post" action="{{ url_for('main.submit') }}"
-    enctype="multipart/form-data" autocomplete="off">
+  <form id="upload" method="post" action="{{ url_for('main.submit') }}" enctype="multipart/form-data" autocomplete="off">
     <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
-    <div class="snippet">
+    <div class="fields">
       {% if allow_document_uploads %}
-      <div class="attachment grid-item center">
-        <span class="fh">{{ form.fh(**{"aria-describedby": "max-file-size"}) }}</span>
-        <p class="center" id="max-file-size">{{ gettext('Maximum upload size: 500 MB') }}</p>
+      <div class="attachment">
+        {{ form.fh(**{"aria-describedby": "max-file-size"}) }}
+        <p id="max-file-size">{{ gettext('Maximum upload size: 500 MB') }}</p>
       </div>
       {% endif %}
-      <div class="message grid-item{% if not allow_document_uploads %} wide{% endif %}">
-        {{ form.msg(class="fill-parent") }}
-  {% if allow_document_uploads %}
-      {% if min_len > 0 %}
-         <p class="center" id="min-msg-length">{{ gettext('If you are only sending a message, it must be at least {} characters long.').format(min_len) }}</p>
-      {% endif %}
-  {% else %}
-      {% if min_len > 0 %}
-        <p class="center" id="min-msg-length">{{ gettext('Your first message must be at least {} characters long.').format(min_len) }}</p>
-      {% endif %}
-  {% endif %}
+      <div class="message">
+        {% if min_len > 0 %}
+        {{ form.msg(**{"aria-describedby": "min-char-length"}) }}
+        {% if allow_document_uploads %}
+        <p id="min-char-length">{{ gettext('If you are only sending a message, it must be at least {} characters long.').format(min_len) }}</p>
+        {% else %}
+        <p id="min-char-length">{{ gettext('Your first message must be at least {} characters long.').format(min_len) }}</p>
+        {% endif %}
+        {% else %}
+        {{ form.msg() }}
+        {% endif %}
+      </div>
+      <div>
+        <label for="text">{{ gettext('Anti-spam check. Do not fill this in!') }}</label>
+        {{ form.antispam() }}
       </div>
     </div>
 
-    <div class="pull-right section-spacing">
-      <button type="submit" id="submit-doc-button" aria-label="{{ gettext('Submit') }}">
-        {{ gettext('SUBMIT') }}
-      </button>
-
-      <a href="{{ url_for('main.lookup') }}" class="btn secondary" id="cancel" role="button"
+    <div class="form-controls">
+      <a href="{{ url_for('main.lookup') }}" class="btn secondary" role="button"
         aria-label="{{ gettext('Cancel') }}">
         {{ gettext('CANCEL') }}
       </a>
-    </div>
-    <div id="text-field">
-      <label for="text">{{ gettext('Anti-spam check. Do not fill this in!') }}</label>
-      {{ form.antispam() }}
+      <button type="submit" aria-label="{{ gettext('Submit') }}">
+        {{ gettext('SUBMIT') }}
+      </button>
     </div>
   </form>
 </section>
 
 <section aria-labelledby="replies-heading">
-  <h2 id="replies-heading" class="headline">{{ gettext('Read Replies') }}</h2>
+  <h2 id="replies-heading">{{ gettext('Read Replies') }}</h2>
 
   <div id="replies">
     {% if replies %}
-    <p class="aside">
+    <p class="info">
       {{ gettext("You have received a reply. To protect your identity in the unlikely event someone learns your codename, please delete all replies when you're done with them. This also lets us know that you are aware of our reply. You can respond by submitting new files and messages above.") }}
     </p>
     {% for reply in replies %}
     {%- set timestamp = utils.relative_time(reply.date) -%}
-    <article class="reply">
-      <h3 class="date">{{ timestamp }}</h3>
-      <form id="delete" class="message" method="post" action="{{ url_for('main.delete') }}" autocomplete="off">
+    <article id="reply-{{ reply.filename }}">
+      <h3>{{ timestamp }}</h3>
+      <a href="#confirm-delete-{{ reply.filename }}"
+         role="button" aria-label="{{ gettext('Delete this reply') }}">{{ gettext('Delete') }}</a>
+      <form method="post" action="{{ url_for('main.delete') }}" autocomplete="off">
         <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
         <input type="hidden" name="reply_filename" value="{{ reply.filename }}" autocomplete="off">
-        <a href="#confirm-delete-{{ reply.filename }}" id="delete-reply-{{ reply.filename }}" class="delete"
-          role="button" aria-label="{{ gettext('Delete this reply') }}">
-          <span>{{ gettext('Delete') }}</span>
-        </a>
-        <dialog open id="confirm-delete-{{ reply.filename }}" class="confirm-prompt"
+        <dialog open id="confirm-delete-{{ reply.filename }}"
           aria-labelledby="delete-heading-{{ reply.filename }}">
-          <h3 id="delete-heading-{{ reply.filename }}" hidden>
-            {{ gettext('Delete reply from {timestamp}?').format(timestamp=timestamp) }}
-          </h3>
-          <p>{{ gettext('Delete this reply?') }}
-            <a href="#delete" role="button">{{ gettext('Cancel') }}</a>
-            <button type="submit" class="danger" id="confirm-delete-reply-button-{{ reply.filename }}" role="button"
-              aria-label="{{ gettext('Delete') }}">{{ gettext('DELETE') }}</button>
-          </p>
+          <div>
+            <h4 id="delete-heading-{{ reply.filename }}">
+              {{ gettext('Delete reply from {timestamp}?').format(timestamp=timestamp) }}</h4>
+            <div class="form-controls">
+              <button type="submit" class="danger" role="button"
+                aria-label="{{ gettext('Delete') }}">{{ gettext('DELETE') }}</button>
+              <a href="#reply-{{ reply.filename }}" class="btn danger secondary" role="button"
+                 aria-label="{{ gettext('Cancel') }}">{{ gettext('CANCEL') }}</a>
+            </div>
+            <a href="#reply-{{ reply.filename }}" class="close" role="button">{{ gettext('Close') }}</a>
+          </div>
         </dialog>
       </form>
       <blockquote>{{ reply.decrypted | nl2br }}</blockquote>
@@ -111,14 +103,20 @@
       <a class="btn danger" href="#delete-all-confirm" role="button"
         aria-label="{{ gettext('Delete All Replies') }}">{{ gettext('DELETE ALL REPLIES') }}</a>
       <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
-      <dialog open id="delete-all-confirm" class="hidden-prompt" aria-labelledby="delete-all-heading">
-        <h3 id="delete-all-heading">{{ gettext('Are you finished with the replies?') }}</h3>
-        <button class="danger" type="submit">{{ gettext('YES, DELETE ALL REPLIES') }}</button>
-        <a class="btn" role="button" href="#delete-all">{{ gettext('NO, NOT YET') }}</a>
+      <dialog open id="delete-all-confirm" aria-labelledby="delete-all-heading">
+        <div>
+          <h3 id="delete-all-heading">{{ gettext('Are you finished with the replies?') }}</h3>
+          <div class="form-controls">
+            <button class="danger" type="submit">{{ gettext('YES, DELETE ALL REPLIES') }}</button>
+            <a class="btn danger secondary" role="button" href="#delete-all"
+               aria-label="{{ gettext('Cancel') }}">{{ gettext('CANCEL') }}</a>
+          </div>
+          <a href="#delete-all" class="close" role="button">{{ gettext('Close') }}</a>
+        </div>
       </dialog>
     </form>
     {% else %}
-    <p id="no-replies" class="explanation">{{ gettext('No Messages') }}</p>
+    <p id="no-replies">{{ gettext('No Messages') }}</p>
     {% endif %}
   </div>
 </section>

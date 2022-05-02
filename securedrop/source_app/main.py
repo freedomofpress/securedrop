@@ -7,8 +7,8 @@ from datetime import datetime, timedelta, timezone
 from typing import Union
 
 import werkzeug
-from flask import (Blueprint, render_template, flash, redirect, url_for, escape,
-                   session, current_app, request, Markup, abort, g, make_response)
+from flask import (Blueprint, render_template, redirect, url_for,
+                   session, current_app, request, abort, g, make_response)
 from flask_babel import gettext
 
 import store
@@ -24,7 +24,7 @@ from sdconfig import SDConfig
 from source_app.decorators import login_required
 from source_app.session_manager import SessionManager
 from source_app.utils import normalize_timestamps, fit_codenames_into_cookie, \
-    clear_session_and_redirect_to_logged_out_page, codename_detected
+    clear_session_and_redirect_to_logged_out_page, codename_detected, flash_msg
 from source_app.forms import LoginForm, SubmissionForm
 from source_user import InvalidPassphraseError, create_source_user, \
     SourcePassphraseCollisionError, SourceDesignationCollisionError, SourceUser
@@ -49,11 +49,9 @@ def make_blueprint(config: SDConfig) -> Blueprint:
                 return redirect(url_for('info.tor2web_warning'))
 
         if SessionManager.is_user_logged_in(db_session=db.session):
-            flash(gettext(
+            flash_msg("notification", None, gettext(
                 "You were redirected because you are already logged in. "
-                "If you want to create a new account, you should log out "
-                "first."),
-                  "notification")
+                "If you want to create a new account, you should log out first."))
             return redirect(url_for('.lookup'))
         codename = PassphraseGenerator.get_default().generate_passphrase(
             preferred_language=g.localeinfo.language
@@ -74,9 +72,9 @@ def make_blueprint(config: SDConfig) -> Blueprint:
     @view.route('/create', methods=['POST'])
     def create() -> werkzeug.Response:
         if SessionManager.is_user_logged_in(db_session=db.session):
-            flash(gettext("You are already logged in. Please verify your codename above as it " +
-                          "may differ from the one displayed on the previous page."),
-                  'notification')
+            flash_msg("notification", None, gettext(
+                "You are already logged in. Please verify your codename as it "
+                "may differ from the one displayed on the previous page."))
         else:
             # Ensure the codenames have not expired
             date_codenames_expire = session.get("codenames_expire")
@@ -96,12 +94,8 @@ def make_blueprint(config: SDConfig) -> Blueprint:
                 )
             except (SourcePassphraseCollisionError, SourceDesignationCollisionError) as e:
                 current_app.logger.error("Could not create a source: {}".format(e))
-                flash(
-                    gettext(
-                        "There was a temporary problem creating your account. Please try again."
-                    ),
-                    "error"
-                )
+                flash_msg("error", None, gettext(
+                    "There was a temporary problem creating your account. Please try again."))
                 return redirect(url_for('.index'))
 
             # All done - source user was successfully created
@@ -180,7 +174,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
         if not form.validate():
             for field, errors in form.errors.items():
                 for error in errors:
-                    flash(error, "error")
+                    flash_msg("error", None, error)
             return redirect(url_for('main.lookup'))
 
         msg = request.form['msg']
@@ -191,11 +185,11 @@ def make_blueprint(config: SDConfig) -> Blueprint:
         # Don't submit anything if it was an "empty" submission. #878
         if not (msg or fh):
             if allow_document_uploads:
-                flash(gettext(
-                    "You must enter a message or choose a file to submit."),
-                      "error")
+                html_contents = gettext("You must enter a message or choose a file to submit.")
             else:
-                flash(gettext("You must enter a message."), "error")
+                html_contents = gettext("You must enter a message.")
+
+            flash_msg("error", None, html_contents)
             return redirect(url_for('main.lookup'))
 
         fnames = []
@@ -205,9 +199,8 @@ def make_blueprint(config: SDConfig) -> Blueprint:
         if first_submission:
             min_len = InstanceConfig.get_default().initial_message_min_len
             if (min_len > 0) and (msg and not fh) and (len(msg) < min_len):
-                flash(gettext(
-                    "Your first message must be at least {} characters long.").format(min_len),
-                    "error")
+                flash_msg("error", None, gettext(
+                    "Your first message must be at least {} characters long.").format(min_len))
                 return redirect(url_for('main.lookup'))
 
             # if the new_user_codename key is not present in the session, this is
@@ -217,11 +210,9 @@ def make_blueprint(config: SDConfig) -> Blueprint:
             codenames_rejected = InstanceConfig.get_default().reject_message_with_codename
             if new_codename is not None:
                 if codenames_rejected and codename_detected(msg, new_codename):
-                    flash(Markup('{}<br>{}'.format(
-                        escape(gettext("Please do not submit your codename!")),
-                        escape(gettext("Keep your codename secret, and use it to log in later"
-                                       " to check for replies."))
-                        )), "error")
+                    flash_msg("error", None, gettext("Please do not submit your codename!"),
+                              gettext("Keep your codename secret, and use it to log in later to "
+                                      "check for replies."))
                     return redirect(url_for('main.lookup'))
 
         if not os.path.exists(Storage.get_default().path(logged_in_source.filesystem_id)):
@@ -247,27 +238,18 @@ def make_blueprint(config: SDConfig) -> Blueprint:
                     fh.filename,
                     fh.stream))
 
-        if first_submission:
-            flash_message = render_template(
-                'first_submission_flashed_message.html',
-                new_user_codename=session.get('new_user_codename', None),
-            )
-            flash(Markup(flash_message), "success")
-
-        else:
-            if msg and not fh:
-                html_contents = gettext('Thanks! We received your message.')
+        if first_submission or msg or fh:
+            if first_submission:
+                html_contents = gettext("Thank you for sending this information to us. Please "
+                                        "check back later for replies.")
+            elif msg and not fh:
+                html_contents = gettext("Thanks! We received your message.")
             elif fh and not msg:
-                html_contents = gettext('Thanks! We received your document.')
+                html_contents = gettext("Thanks! We received your document.")
             else:
-                html_contents = gettext('Thanks! We received your message and '
-                                        'document.')
+                html_contents = gettext("Thanks! We received your message and document.")
 
-            flash_message = render_template(
-                'next_submission_flashed_message.html',
-                html_contents=html_contents
-            )
-            flash(Markup(flash_message), "success")
+            flash_msg("success", gettext("Success!"), html_contents)
 
         new_submissions = []
         for fname in fnames:
@@ -302,7 +284,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
         db.session.add(reply)
         db.session.commit()
 
-        flash(gettext("Reply deleted"), "notification")
+        flash_msg("success", gettext("Success!"), gettext("Reply deleted"))
         return redirect(url_for('.lookup'))
 
     @view.route('/delete-all', methods=('POST',))
@@ -320,7 +302,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
             db.session.add(reply)
         db.session.commit()
 
-        flash(gettext("All replies have been deleted"), "notification")
+        flash_msg("success", gettext("Success!"), gettext("All replies have been deleted"))
         return redirect(url_for('.lookup'))
 
     @view.route('/login', methods=('GET', 'POST'))
@@ -334,7 +316,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
                 )
             except InvalidPassphraseError:
                 current_app.logger.info("Login failed for invalid codename")
-                flash(gettext("Sorry, that is not a recognized codename."), "error")
+                flash_msg("error", None, gettext("Sorry, that is not a recognized codename."))
             else:
                 # Success: a valid passphrase was supplied
                 return redirect(url_for('.lookup', from_login='1'))

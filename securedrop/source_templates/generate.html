@@ -1,7 +1,8 @@
 {% extends "base.html" %}
+{% import 'utils.html' as utils %}
 
 {% block body %}
-<h1>{{ gettext('Get Your Codename') }}</h1>
+<h2>{{ gettext('Get Your Codename') }}</h2>
 
 <p id="codename-explanation" class="explanation">
   {{ gettext('A <em>codename</em> in SecureDrop functions as both your username and your password.') }}
@@ -10,13 +11,9 @@
   {{ gettext('You will need this codename to log into our SecureDrop later:') }}
 </p>
 
-<section class="code" aria-labelledby="codename-heading">
-  <h2 id="codename-heading" class="visually-hidden">{{ gettext('Codename') }}</h2>
-  <mark id="codename" class="codename"
-    aria-describedby="codename-instructions codename-explanation">{{ codename }}</mark>
-</section>
+{{ utils.codename(codename) }}
 
-<ul class="explanation">
+<ul id="codename-instructions">
   <li>{{ gettext('<strong>Keep it secret.</strong> Do not share it with anyone.') }}</li>
   <li>{{ gettext('<strong>Keep it safe.</strong> There is no account recovery option.') }}</li>
 </ul>
@@ -24,8 +21,7 @@
 <form id="create-form" method="post" action="/create" autocomplete="off">
   <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
   <input name="tab_id" type="hidden" value="{{ tab_id }}">
-  <button type="submit" class="btn--space pull-right" id="continue-button"
-    aria-label="{{ gettext('Continue') }}">
+  <button type="submit" aria-label="{{ gettext('Continue') }}">
     {{ gettext('CONTINUE') }}
   </button>
 </form>

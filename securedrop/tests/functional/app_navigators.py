@@ -166,30 +166,30 @@ class SourceAppNagivator:
         assert self._is_on_source_homepage()
 
     def _is_on_generate_page(self) -> WebElement:
-        return self.nav_helper.wait_for(lambda: self.driver.find_element_by_id("create-form"))
+        return self.nav_helper.wait_for(lambda: self.driver.find_element_by_id("source-generate"))
 
     def source_clicks_submit_documents_on_homepage(self) -> None:
         # It's the source's first time visiting this SecureDrop site, so they
         # choose to "Submit Documents".
-        self.nav_helper.safe_click_by_id("submit-documents-button")
+        self.nav_helper.safe_click_by_css_selector("#started-form button")
 
         # The source should now be on the page where they are presented with
         # a diceware codename they can use for subsequent logins
         assert self._is_on_generate_page()
 
     def source_continues_to_submit_page(self) -> None:
-        self.nav_helper.safe_click_by_id("continue-button")
+        self.nav_helper.safe_click_by_css_selector("#create-form button")
 
         def submit_page_loaded() -> None:
             if not self.accept_languages:
-                headline = self.driver.find_element_by_class_name("headline")
+                headline = self.driver.find_element_by_id("submit-heading")
                 assert "Submit Files or Messages" == headline.text
 
         self.nav_helper.wait_for(submit_page_loaded)
 
     def _is_on_logout_page(self) -> WebElement:
         return self.nav_helper.wait_for(
-            lambda: self.driver.find_element_by_id("click-new-identity-tor")
+            lambda: self.driver.find_element_by_id("source-logout")
         )
 
     def source_logs_out(self) -> None:
@@ -197,29 +197,29 @@ class SourceAppNagivator:
         assert self._is_on_logout_page()
 
     def source_retrieves_codename_from_hint(self) -> str:
-        # The DETAILS element will be missing the OPEN attribute if it is
-        # closed, hiding its contents.
-        content = self.driver.find_element_by_css_selector("details#codename-hint")
-        assert content.get_attribute("open") is None
+        # We use inputs to change CSS states for subsequent elements in the DOM, if it is unchecked
+        # the codename is hidden
+        content = self.driver.find_element_by_id("codename-show-checkbox")
+        assert content.get_attribute("checked") is None
 
-        self.nav_helper.safe_click_by_id("codename-hint")
+        self.nav_helper.safe_click_by_id("codename-show")
 
-        assert content.get_attribute("open") is not None
-        content_content = self.driver.find_element_by_css_selector("details#codename-hint mark")
+        assert content.get_attribute("checked") is not None
+        content_content = self.driver.find_element_by_css_selector("#codename span")
         return content_content.text
 
     def source_chooses_to_login(self) -> None:
-        self.driver.find_element_by_id("login-button").click()
+        self.nav_helper.safe_click_by_css_selector("#return-visit a")
         self.nav_helper.wait_for(
-            lambda: self.driver.find_elements_by_id("login-with-existing-codename")
+            lambda: self.driver.find_elements_by_id("source-login")
         )
 
     def _is_logged_in(self) -> WebElement:
         return self.nav_helper.wait_for(lambda: self.driver.find_element_by_id("logout"))
 
     def source_proceeds_to_login(self, codename: str) -> None:
-        self.nav_helper.safe_send_keys_by_id("login-with-existing-codename", codename)
-        self.nav_helper.safe_click_by_id("login")
+        self.nav_helper.safe_send_keys_by_id("codename", codename)
+        self.nav_helper.safe_click_by_css_selector(".form-controls button")
 
         # Check that we've logged in
         assert self._is_logged_in()
@@ -232,8 +232,7 @@ class SourceAppNagivator:
         self.nav_helper.safe_send_keys_by_css_selector("[name=msg]", message)
 
         # Hit the submit button
-        submit_button = self.driver.find_element_by_id("submit-doc-button")
-        submit_button.click()
+        self.nav_helper.safe_click_by_css_selector(".form-controls button")
 
         # Wait for confirmation that the message was submitted
         def message_submitted():

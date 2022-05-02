@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block body %}
-<h1>{{ gettext("Why download the team's public key?") }}</h1>
+<h2>{{ gettext("Why download the team's public key?") }}</h2>
 <p>{{ gettext("SecureDrop encrypts files and messages after they are submitted. Encrypting messages and files before submission can provide an extra layer of security before your data reaches the SecureDrop server.") }}
 </p>
 <p>{{ gettext("If you are already familiar with the GPG encryption software, you may wish to encrypt your submissions yourself. To do so:") }}
@@ -28,6 +28,6 @@
 </p>
 
 <p>
-    <a href="/lookup" class="back-arrow">{{ gettext('Back to submission page') }}</a>
+    <a href="/lookup">{{ gettext('Back to submission page') }}</a>
 </p>
 {% endblock %}

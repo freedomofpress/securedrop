@@ -20,15 +20,13 @@
 </head>
 
 <body id="source-index">
-  <div id="js-warning" class="warning" role="alert">
-    <p>
-      {{ gettext('Your Tor Browser\'s <a id="disable-js" href=""><b>Security Level</b></a> is too low. Use the <img src="{icon}" alt="&quot;Security Level&quot;"> button in your browser’s toolbar to change it.').format(icon=url_for("static", filename="i/font-awesome/white/guard.svg")) }}
-    </p>
+  <div id="browser-security-level" class="warning" role="alert">
+    {{ gettext('Your Tor Browser\'s <a id="disable-js" href=""><b>Security Level</b></a> is too low. Use the <img src="{icon}" alt="&quot;Security Level&quot;"> button in your browser’s toolbar to change it.').format(icon=url_for("static", filename="i/font-awesome/white/guard.svg")) }}
   </div>
-  {# Warning bubble to help TB users disable JavaScript with NoScript.
+  {# Warning bubble to help TB users disable JavaScript with Tor Browser's Security Levels
     Included here so the images can preload while the user is first
     reading the page. Hidden by default. #}
-  <dialog open class="bubble info" id="security-setting-info" aria-labelledby="security-level-heading"
+  <dialog open id="security-level-info" aria-labelledby="security-level-heading"
     aria-describedby="security-level-instructions">
     <h2 id="security-level-heading" hidden>{{ gettext('How to change your security level') }}</h2>
     <ol id="security-level-instructions">
@@ -41,72 +39,47 @@
     <p>
       {{ gettext('<a href="/" aria-label="Follow these instructions, then refresh this page">Refresh this page</a>, and you\'re done!') }}
     </p>
-
   </dialog>
-  <div id="use-tor-browser" class="warning" role="alert">
+  <div id="browser-tb" class="warning" role="alert">
     {{ gettext('<strong>It is recommended to use Tor Browser to access SecureDrop:</strong> <a class="recommend-tor" href="{tor_browser_url}">Learn how to install it</a>, or ignore this warning to continue.').format(tor_browser_url=url_for('info.recommend_tor_browser')) }}
-    <img id="use-tor-browser-close" class="close"
-      src="{{ url_for('static', filename='i/font-awesome/times-white.png') }}" alt="{{ gettext('Close') }}" width="12"
-      height="12"></div>
-  <div id="orfox-browser" class="warning" role="alert">
+    <span id="browser-tb-close" aria-label="{{ gettext('Close') }}">×</span>
+  </div>
+  <div id="browser-android" class="warning" role="alert">
     {{ gettext('<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop version.</strong> <a class="recommend-tor" href="{tor_browser_url}">Learn how to install it</a>, or ignore this warning to continue.').format(tor_browser_url=url_for('info.recommend_tor_browser')) }}
-    <img id="orfox-browser-close" class="close" src="{{ url_for('static', filename='i/font-awesome/times-white.png') }}"
-      alt="{{ gettext('Close') }}" width="12" height="12"></div>
+    <span id="browser-android-close" aria-label="{{ gettext('Close') }}">×</span>
+  </div>
 
   <div class="content">
-    <div class="grid">
-      {% include 'flashed.html' %}
-      {# The div `index-wrap` MUST be ordered this way so that the flexbox works on large and small screens
-           See _source_index.sass for a more full understanding. #}
-      <div class="index-wrap">
-        <header class="header">
-          <h1><img src="{{ g.logo }}" alt="{{ gettext('{} logo'.format(g.organization_name)) }}" class="logo-image">
-          </h1>
-          <div id="index-locales">
-            {% include 'locales.html' %}
-          </div>
-        </header>
+    {% include 'flashed.html' %}
+    <header>
+      <h1><img src="{{ g.logo }}" alt="{{ gettext('{} logo').format(g.organization_name) }}"></h1>
+      {% include 'locales.html' %}
+    </header>
 
-        <main class="index-row">
-          <section class="index-column index-left" aria-labelledby="first-submission-heading">
-            <div class="index-column-top-container">
-              <h2 id="first-submission-heading" class="welcome-text">
-                {{ gettext('First submission') }}
-              </h2>
-              <p class="extended-welcome-text">{{ gettext('First time submitting to our SecureDrop? Start here.') }}</p>
-            </div>
-            <div class="index-column-bottom-container">
-              <form id="started-form" method="post" action="/generate" autocomplete="off">
-                <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
-                <input name="tor2web_check" type="hidden" value='href="fake.onion"'>
-                <button type="submit" class="btn alt" id="submit-documents-button"
-                  aria-label="{{ gettext('Get Started') }}">
-                  {{ gettext('GET STARTED') }}
-                </button>
-              </form>
-            </div>
-          </section>
-          <div id="middle-separator"></div>
-          <section class="index-column index-right" aria-labelledby="return-visit-heading">
-            <div class="index-column-top-container">
-              <h2 id="return-visit-heading" class="welcome-text">
-                {{ gettext('Return visit') }}
-              </h2>
-              <p class="extended-welcome-text">
-                {{ gettext('Already have a codename? Check for replies or submit something new.') }}</p>
-            </div>
-            <div class="index-column-bottom-container">
-              <a href="{{ url_for('main.login') }}" id="login-button" class="btn secondary"
-                aria-label="{{ gettext('Log In') }}">
-                {{ gettext('LOG IN') }}
-              </a>
-            </div>
-          </section>
-        </main>
-      </div>
-      {% include 'footer.html' %}
-    </div>
+    <main>
+      <section id="first-submission" aria-labelledby="first-submission-heading">
+        <h2 id="first-submission-heading">{{ gettext('First submission') }}</h2>
+        <p>{{ gettext('First time submitting to our SecureDrop? Start here.') }}</p>
+        <form id="started-form" method="post" action="/generate" autocomplete="off">
+          <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
+          <input name="tor2web_check" type="hidden" value='href="fake.onion"'>
+          <button type="submit" aria-label="{{ gettext('Get Started') }}">
+            {{ gettext('GET STARTED') }}
+          </button>
+        </form>
+      </section>
+
+      <section id="return-visit" aria-labelledby="return-visit-heading">
+          <h2 id="return-visit-heading">{{ gettext('Return visit') }}</h2>
+          <p>{{ gettext('Already have a codename? Check for replies or submit something new.') }}</p>
+          <a href="{{ url_for('main.login') }}" class="btn secondary"
+            aria-label="{{ gettext('Log In') }}">
+            {{ gettext('LOG IN') }}
+          </a>
+      </section>
+    </main>
   </div>
+  {% include 'footer.html' %}
 
 
 </body>
