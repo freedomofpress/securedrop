@@ -17,7 +17,7 @@
 #
 import collections
 
-from typing import Dict, List, Set
+from typing import List, Set
 
 from babel.core import (
     Locale,
@@ -177,22 +177,19 @@ def map_locale_display_names(config: SDConfig) -> None:
     to distinguish them. For languages with more than one translation,
     like Chinese, we do need the additional detail.
     """
-    language_locale_counts = collections.defaultdict(int)  # type: Dict[str, int]
-    for l in sorted(config.SUPPORTED_LOCALES):
-        if Locale.parse(l) not in USABLE_LOCALES:
-            continue
-
-        locale = RequestLocaleInfo(l)
-        language_locale_counts[locale.language] += 1
-
+    seen: Set[str] = set()
     locale_map = collections.OrderedDict()
     for l in sorted(config.SUPPORTED_LOCALES):
         if Locale.parse(l) not in USABLE_LOCALES:
             continue
 
         locale = RequestLocaleInfo(l)
-        if language_locale_counts[locale.language] > 1:
+        if locale.language in seen:
+            # Disambiguate translations for this language.
             locale.use_display_name = True
+        else:
+            seen.add(locale.language)
+
         locale_map[str(locale)] = locale
 
     global LOCALES
