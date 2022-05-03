@@ -81,14 +81,12 @@ def is_tails() -> bool:
     return id == 'Tails'
 
 
-def clean_up_tails3_venv(virtualenv_dir: str = VENV_DIR) -> None:
+def clean_up_old_tails_venv(virtualenv_dir: str = VENV_DIR) -> None:
     """
-    Tails 3.x, based on debian stretch uses libpython3.5, whereas Tails 4.x is
-    based on Debian Buster and uses libpython3.7. This means that the Tails 3.x
-    virtualenv will not work under Tails 4.x, and will need to be destroyed and
-    rebuilt. We can detect if the version of libpython is 3.5 in the
-    admin/.venv3/ folder, and delete it if that's the case. This will ensure a
-    smooth upgrade from Tails 3.x to Tails 4.x.
+    When upgrading major Tails versions, we need to rebuild the virtualenv
+    against the correct Python version. We can detect if the Tails
+    version matches the correct Python version - if not, delete the
+    venv, so it'll get recreated.
     """
     if is_tails():
         try:
@@ -97,20 +95,17 @@ def clean_up_tails3_venv(virtualenv_dir: str = VENV_DIR) -> None:
         except subprocess.CalledProcessError:
             return None
 
-        # tails4 is based on buster
-        if dist == b'buster':
-            python_lib_path = os.path.join(virtualenv_dir, "lib/python3.5")
-            if os.path.exists(os.path.join(python_lib_path)):
-                sdlog.info(
-                    "Tails 3 Python 3 virtualenv detected. "
-                    "Removing it."
-                )
+        # Tails 5 is based on bullseye / Python 3.9
+        if dist == b'bullseye':
+            python_lib_path = os.path.join(virtualenv_dir, "lib/python3.7")
+            if os.path.exists(python_lib_path):
+                sdlog.info("Tails 4 virtualenv detected. Removing it.")
                 shutil.rmtree(virtualenv_dir)
-                sdlog.info("Tails 3 Python 3 virtualenv deleted.")
+                sdlog.info("Tails 4 virtualenv deleted.")
 
 
 def checkenv(args: argparse.Namespace) -> None:
-    clean_up_tails3_venv(VENV_DIR)
+    clean_up_old_tails_venv(VENV_DIR)
     if not os.path.exists(os.path.join(VENV_DIR, "bin/activate")):
         sdlog.error('Please run "securedrop-admin setup".')
         sys.exit(1)
@@ -170,8 +165,8 @@ def envsetup(args: argparse.Namespace, virtualenv_dir: str = VENV_DIR) -> None:
     Ansible is available to the Admin on subsequent boots without requiring
     installation of packages again.
     """
-    # clean up Tails 3.x venv when migrating to Tails 4.x
-    clean_up_tails3_venv(virtualenv_dir)
+    # clean up old Tails venv on major upgrades
+    clean_up_old_tails_venv(virtualenv_dir)
 
     # virtualenv doesnt exist? Install dependencies and create
     if not os.path.exists(virtualenv_dir):
