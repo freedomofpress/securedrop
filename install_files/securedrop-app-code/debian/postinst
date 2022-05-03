@@ -234,8 +234,9 @@ case "$1" in
     # Restart apache so it loads with the apparmor profiles in enforce mode.
     service apache2 restart
 
-    # cleanup dynamically generated assets
-    rm -fr /var/www/securedrop/static/gen/*
+    # remove previously dynamically-generated assets
+    rm -fr /var/www/securedrop/static/gen/
+    rm -fr /var/www/securedrop/static/.webassets-cache/
 
     # Version migrations
 

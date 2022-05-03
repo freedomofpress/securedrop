@@ -5,7 +5,6 @@ from pathlib import Path
 
 from flask import (Flask, session, redirect, url_for, flash, g, request,
                    render_template, json)
-from flask_assets import Environment
 from flask_babel import gettext
 from flask_wtf.csrf import CSRFProtect, CSRFError
 from os import path
@@ -64,7 +63,6 @@ def create_app(config: 'SDConfig') -> Flask:
     app.session_interface = JournalistInterfaceSessionInterface()
 
     csrf = CSRFProtect(app)
-    Environment(app)
 
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['SQLALCHEMY_DATABASE_URI'] = config.DATABASE_URI

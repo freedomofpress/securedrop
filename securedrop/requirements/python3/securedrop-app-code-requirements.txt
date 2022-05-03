@@ -105,9 +105,6 @@ cryptography==3.4.7 \
     --hash=sha256:eb8cc2afe8b05acbd84a43905832ec78e7b3873fb124ca190f574dca7389a87d \
     --hash=sha256:ee77aa129f481be46f8d92a1a7db57269a2f23052d5f2433b4621bb457081cc9
     # via -r requirements/python3/securedrop-app-code-requirements.in
-flask-assets==0.12 \
-    --hash=sha256:6031527b89fb3509d1581d932affa5a79dd348cfffb58d0aef99a43461d47847
-    # via -r requirements/python3/securedrop-app-code-requirements.in
 flask-babel==2.0.0 \
     --hash=sha256:e6820a052a8d344e178cdd36dd4bb8aea09b4bda3d5f9fa9f008df2c7f2f5468 \
     --hash=sha256:f9faf45cdb2e1a32ea2ec14403587d4295108f35017a7821a2b1acb8cfd9257d
@@ -125,7 +122,6 @@ flask==2.0.2 \
     --hash=sha256:cb90f62f1d8e4dc4621f52106613488b5ba826b2e1e10a33eac92f723093ab6a
     # via
     #   -r requirements/python3/securedrop-app-code-requirements.in
-    #   flask-assets
     #   flask-babel
     #   flask-sqlalchemy
     #   flask-wtf
@@ -142,9 +138,6 @@ jinja2==3.0.2 \
     #   -r requirements/python3/securedrop-app-code-requirements.in
     #   flask
     #   flask-babel
-jsmin==2.2.2 \
-    --hash=sha256:b6df99b2cd1c75d9d342e4335b535789b8da9107ec748212706ef7bbe5c2553b
-    # via -r requirements/python3/securedrop-app-code-requirements.in
 mako==1.0.7 \
     --hash=sha256:4e02fde57bd4abb5ec400181e4c314f56ac3e49ba4fb8b0d50bba18cb27d25ae
     # via alembic
@@ -299,9 +292,6 @@ sqlalchemy==1.3.3 \
     #   -r requirements/python3/securedrop-app-code-requirements.in
     #   alembic
     #   flask-sqlalchemy
-webassets==0.12.1 \
-    --hash=sha256:e7d9c8887343123fd5b32309b33167428cb1318cdda97ece12d0907fd69d38db
-    # via flask-assets
 werkzeug==2.0.2 \
     --hash=sha256:63d3dc1cf60e7b7e35e97fa9861f7397283b75d765afcaefd993d6046899de8f \
     --hash=sha256:aa2bb6fc8dee8d6c504c0ac1e7f5f7dc5810a9903e793b6f715a9f015bdadb9a
