@@ -202,28 +202,6 @@ def configure(config: SDConfig, app: Flask) -> None:
     map_locale_display_names(config)
 
 
-def resolve_fallback_locale(config: SDConfig) -> str:
-    """
-    Return a *usable* fallback locale.  Namely:
-
-    1. Don't fall back to the configured `DEFAULT_LOCALE` if it isn't available.
-
-    2. Don't fall back to the hard-coded `FALLBACK_LOCALE` (`en_US`) if it isn't configured.
-
-    NB. If neither the default nor the fallback locale is usable, then we should have crashed
-    already in `validate_locale_configuration()`.
-    """
-
-    if Locale.parse(config.DEFAULT_LOCALE) in USABLE_LOCALES:
-        return config.DEFAULT_LOCALE
-
-    elif Locale.parse(FALLBACK_LOCALE) in USABLE_LOCALES:
-        return FALLBACK_LOCALE
-
-    else:
-        raise ValueError('No usable fallback locale')
-
-
 def get_locale(config: SDConfig) -> str:
     """
     Return the best supported locale for a request.
@@ -232,25 +210,24 @@ def get_locale(config: SDConfig) -> str:
     - l request argument or session['locale']
     - browser suggested locale, from the Accept-Languages header
     - config.DEFAULT_LOCALE
+    - config.FALLBACK_LOCALE
     """
-    # Default to any usable locale set in the session.
-    locale = session.get("locale")
-    if locale:
-        locale = negotiate_locale([locale], LOCALES.keys())
-
-    # A usable locale specified in request.args takes precedence.
+    preferences = []
+    if session.get("locale"):
+        preferences.append(session.get("locale"))
     if request.args.get("l"):
-        negotiated = negotiate_locale([request.args["l"]], LOCALES.keys())
-        if negotiated:
-            locale = negotiated
+        preferences.insert(0, request.args.get("l"))
+    if not preferences:
+        preferences.extend(get_accepted_languages())
+    preferences.append(config.DEFAULT_LOCALE)
+    preferences.append(FALLBACK_LOCALE)
 
-    # If the locale is not in the session or request.args, negotiate
-    # the best supported option from the browser's accepted languages.
-    if not locale:
-        locale = negotiate_locale(get_accepted_languages(), LOCALES.keys())
+    negotiated = negotiate_locale(preferences, LOCALES.keys())
 
-    # Finally, if we can't negotiate a requested locale, resolve a fallback.
-    return locale or resolve_fallback_locale(config)
+    if not negotiated:
+        raise ValueError("No usable locale")
+
+    return negotiated
 
 
 def get_accepted_languages() -> List[str]:

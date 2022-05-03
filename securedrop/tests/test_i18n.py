@@ -32,7 +32,7 @@ from flask import render_template_string
 from flask import request
 from flask import session
 from flask_babel import gettext
-from i18n import parse_locale_set, resolve_fallback_locale
+from i18n import parse_locale_set
 from sdconfig import FALLBACK_LOCALE, SDConfig
 from sh import pybabel
 from sh import sed
@@ -233,32 +233,6 @@ def test_parse_locale_set():
     assert parse_locale_set([FALLBACK_LOCALE]) == set([Locale.parse(FALLBACK_LOCALE)])
 
 
-def test_resolve_fallback_locale(config):
-    """
-    Only a usable default or fallback locale is returned.
-    """
-    i18n.USABLE_LOCALES = parse_locale_set([FALLBACK_LOCALE, 'es_ES'])
-    fake_config = SDConfig()
-
-    # The default locale is neither configured nor available.
-    fake_config.DEFAULT_LOCALE = NEVER_LOCALE
-    assert resolve_fallback_locale(fake_config) == FALLBACK_LOCALE
-
-    # The default locale is configured but not available.
-    fake_config.SUPPORTED_LOCALES = [FALLBACK_LOCALE, NEVER_LOCALE]
-    assert resolve_fallback_locale(fake_config) == FALLBACK_LOCALE
-
-    # The default locale is available but not configured.
-    fake_config.SUPPORTED_LOCALES = [FALLBACK_LOCALE]
-    fake_config.DEFAULT_LOCALE = NEVER_LOCALE
-    assert resolve_fallback_locale(fake_config) == FALLBACK_LOCALE
-
-    # Happy path: a non-fallback default locale is both available and configured.
-    fake_config.SUPPORTED_LOCALES = [FALLBACK_LOCALE, 'es_ES']
-    fake_config.DEFAULT_LOCALE = 'es_ES'
-    assert resolve_fallback_locale(fake_config) == 'es_ES'
-
-
 def test_no_usable_fallback_locale(journalist_app, config):
     """
     The apps fail if neither the default nor the fallback locale is usable.
@@ -269,8 +243,6 @@ def test_no_usable_fallback_locale(journalist_app, config):
     fake_config.TRANSLATION_DIRS = Path(config.TEMP_DIR)
 
     i18n.USABLE_LOCALES = set()
-    with pytest.raises(ValueError, match='No usable fallback locale'):
-        resolve_fallback_locale(fake_config)
 
     with pytest.raises(ValueError, match='in the set of usable locales'):
         journalist_app_module.create_app(fake_config)
