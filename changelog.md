@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.3.2~rc1
+
+* Added Tails 5.0 compatibility updates (#6408, #6424)
+
 ## 2.3.1
 
 * Bugfix: disabled GPG trustdb checks to prevent timeouts on operations with large keyrings (#6390)
