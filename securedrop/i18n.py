@@ -233,10 +233,12 @@ def get_locale(config: SDConfig) -> str:
     - browser suggested locale, from the Accept-Languages header
     - config.DEFAULT_LOCALE
     """
-    # Default to any locale set in the session.
+    # Default to any usable locale set in the session.
     locale = session.get("locale")
+    if locale:
+        locale = negotiate_locale([locale], LOCALES.keys())
 
-    # A valid locale specified in request.args takes precedence.
+    # A usable locale specified in request.args takes precedence.
     if request.args.get("l"):
         negotiated = negotiate_locale([request.args["l"]], LOCALES.keys())
         if negotiated:
