@@ -72,15 +72,21 @@ function docker_run() {
         echo "************************************************************"
     fi
 
-    # If this is a CI run, pass CodeCov settings into the container.
+    # If this is a CI run, pass CodeCov's required vars into the container.
     if [ -n "${CIRCLE_BRANCH:-}" ] ; then
-        tmpdir=$(mktemp -d -t codecov-XXXX)
-        curl -s https://codecov.io/bash > "$tmpdir"/codecov;
-        curl -s https://codecov.io/env > "$tmpdir"/env;
-        VERSION=$(grep -o 'VERSION=\"[0-9\.]*\"' "$tmpdir"/codecov | cut -d'"' -f2);
-        curl -s https://raw.githubusercontent.com/codecov/codecov-bash/"${VERSION}"/SHA256SUM > "$tmpdir"/codecov-hashes
-        pushd "$tmpdir" && shasum -a 256 -c codecov-hashes && popd
-        ci_env=$(/bin/bash "$tmpdir"/env)
+        ci_env="-e CI=true \
+                -e CIRCLECI=true \
+                -e CIRCLE_BRANCH=${CIRCLE_BRANCH:-} \
+                -e CIRCLE_SHA1=${CIRCLE_SHA1:-} \
+                -e CIRCLE_PROJECT_REPONAME=${CIRCLE_PROJECT_REPONAME:-} \
+                -e CIRCLE_PROJECT_USERNAME=${CIRCLE_PROJECT_USERNAME:-} \
+                -e CIRCLE_REPOSITORY_URL=${CIRCLE_REPOSITORY_URL:-} \
+                -e CIRCLE_BUILD_NUM=${CIRCLE_BUILD_NUM:-} \
+                -e CIRCLE_NODE_INDEX=${CIRCLE_NODE_INDEX:-} \
+                -e CIRCLE_PR_NUMBER=${CIRCLE_PULL_REQUEST##*/} \
+                -e CIRCLE_BUILD_URL=${CIRCLE_BUILD_URL:-} \
+               "
+
     else
         ci_env=""
     fi

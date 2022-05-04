@@ -34,13 +34,18 @@ if [ -n "${CIRCLE_BRANCH:-}" ] ; then
         sed -i 's/file="/file="tests\//g' "$JUNIT_XML"
 
         cp tests/log/firefox.log "$TEST_RESULTS"
-        tmpdir=$(mktemp -d -t codecov-XXXX)
-        curl -s https://codecov.io/bash > "$tmpdir"/codecov;
-        VERSION=$(grep -o 'VERSION=\"[0-9\.]*\"' "$tmpdir"/codecov | cut -d'"' -f2);
-        curl -s https://raw.githubusercontent.com/codecov/codecov-bash/"${VERSION}"/SHA256SUM > "$tmpdir"/codecov-hashes
-        pushd "$tmpdir" && shasum -a 256 -c --ignore-missing codecov-hashes && popd
-        chmod +x "$tmpdir"/codecov
-        /bin/bash "$tmpdir"/codecov
+
+        # download and validate codecov uploader
+        echo "   Validating codecov uploader..."
+        curl https://keybase.io/codecovsecurity/pgp_keys.asc | gpg --no-default-keyring --keyring trustedkeys.gpg --import
+        curl -Os https://uploader.codecov.io/latest/linux/codecov
+        curl -Os https://uploader.codecov.io/latest/linux/codecov.SHA256SUM
+        curl -Os https://uploader.codecov.io/latest/linux/codecov.SHA256SUM.sig
+        gpgv codecov.SHA256SUM.sig codecov.SHA256SUM
+        shasum -a 256 -c codecov.SHA256SUM
+        chmod +x codecov
+        echo "   Uploading coverage results to codecov..."
+        ./codecov
     }
     trap finish EXIT
 fi
@@ -50,7 +55,6 @@ mkdir -p "$TEST_RESULTS"
 : "${TEST_LOCALES:="ar en_US"}"
 export TEST_LOCALES
 export TOR_FORCE_NET_CONFIG=0
-
 
 pytest \
     --force-flaky --max-runs=3 \
