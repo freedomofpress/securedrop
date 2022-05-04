@@ -74,6 +74,7 @@ function docker_run() {
 
     # If this is a CI run, pass CodeCov's required vars into the container.
     if [ -n "${CIRCLE_BRANCH:-}" ] ; then
+        : "${CIRCLE_PULL_REQUEST:=}"
         ci_env="-e CI=true \
                 -e CIRCLECI=true \
                 -e CIRCLE_BRANCH=${CIRCLE_BRANCH:-} \
