@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import flask
-from flask import Blueprint, render_template, send_file, redirect, url_for, flash
+from flask import Blueprint, render_template, send_file, redirect, url_for
 from flask_babel import gettext
 import werkzeug
 
@@ -8,7 +8,7 @@ from io import BytesIO  # noqa
 
 from encryption import EncryptionManager
 from sdconfig import SDConfig
-from source_app.utils import get_sourcev3_url
+from source_app.utils import get_sourcev3_url, flash_msg
 
 
 def make_blueprint(config: SDConfig) -> Blueprint:
@@ -16,7 +16,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
 
     @view.route('/tor2web-warning')
     def tor2web_warning() -> flask.Response:
-        flash(gettext("Your connection is not anonymous right now!"), "error")
+        flash_msg("error", None, gettext("Your connection is not anonymous right now!"))
         return flask.Response(
             render_template("tor2web-warning.html", source_url=get_sourcev3_url()),
             403)
