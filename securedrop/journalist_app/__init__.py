@@ -10,6 +10,7 @@ from flask_babel import gettext
 from flask_wtf.csrf import CSRFProtect, CSRFError
 from os import path
 from werkzeug.exceptions import default_exceptions
+from werkzeug.middleware.proxy_fix import ProxyFix
 
 import i18n
 import template_filters
@@ -59,6 +60,8 @@ def create_app(config: 'SDConfig') -> Flask:
     app = Flask(__name__,
                 template_folder=config.JOURNALIST_TEMPLATES_DIR,
                 static_folder=path.join(config.SECUREDROP_ROOT, 'static'))
+
+    app.wsgi_app = ProxyFix(app.wsgi_app)  # type: ignore
 
     app.config.from_object(config.JOURNALIST_APP_FLASK_CONFIG_CLS)
     app.session_interface = JournalistInterfaceSessionInterface()
