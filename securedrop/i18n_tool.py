@@ -51,6 +51,7 @@ class I18NTool:
         'nb_NO': {'name': 'Norwegian', 'desktop': 'nb_NO', },
         'nl': {'name': 'Dutch', 'desktop': 'nl', },
         'pt_BR': {'name': 'Portuguese, Brasil', 'desktop': 'pt_BR', },
+        'pt_PT': {'name': 'Portuguese, Portuguese', 'desktop': 'pt_PT', },
         'ro': {'name': 'Romanian', 'desktop': 'ro', },
         'ru': {'name': 'Russian', 'desktop': 'ru', },
         'sk': {'name': 'Slovak', 'desktop': 'sk', },
