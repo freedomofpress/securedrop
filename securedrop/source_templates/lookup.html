@@ -64,6 +64,7 @@
   </form>
 </section>
 
+{% if is_user_logged_in %}
 <section aria-labelledby="replies-heading">
   <h2 id="replies-heading">{{ gettext('Read Replies') }}</h2>
 
@@ -120,5 +121,6 @@
     {% endif %}
   </div>
 </section>
+{% endif %}
 
 {% endblock %}

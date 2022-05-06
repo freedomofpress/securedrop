@@ -34,11 +34,14 @@ def make_blueprint(config: SDConfig) -> Blueprint:
     view = Blueprint('main', __name__)
 
     @view.route('/')
-    def index() -> str:
+    def index() -> Union[str, werkzeug.Response]:
+        # Behave like a webmail application
+        if SessionManager.is_user_logged_in(db_session=db.session):
+            return redirect(url_for('.lookup'))
         return render_template('index.html')
 
-    @view.route('/generate', methods=('POST', 'GET'))
-    def generate() -> Union[str, werkzeug.Response]:
+    @view.route('/lookup', methods=('POST', 'GET'))
+    def lookup() -> Union[str, werkzeug.Response]:
         if request.method == 'POST':
             # Try to detect Tor2Web usage by looking to see if tor2web_check got mangled
             tor2web_check = request.form.get('tor2web_check')
@@ -48,43 +51,72 @@ def make_blueprint(config: SDConfig) -> Blueprint:
             elif tor2web_check != 'href="fake.onion"':
                 return redirect(url_for('info.tor2web_warning'))
 
-        if SessionManager.is_user_logged_in(db_session=db.session):
-            flash_msg("notification", None, gettext(
-                "You were redirected because you are already logged in. "
-                "If you want to create a new account, you should log out first."))
-            return redirect(url_for('.lookup'))
-        codename = PassphraseGenerator.get_default().generate_passphrase(
-            preferred_language=g.localeinfo.language
-        )
+        is_user_logged_in = SessionManager.is_user_logged_in(db_session=db.session)
+        replies = []
+        if is_user_logged_in:
+            logged_in_source = SessionManager.get_logged_in_user(db_session=db.session)
+            logged_in_source_in_db = logged_in_source.get_db_record()
+            source_inbox = Reply.query.filter_by(
+                source_id=logged_in_source_in_db.id, deleted_by_source=False
+            ).all()
 
-        # Generate a unique id for each browser tab and associate the codename with this id.
-        # This will allow retrieval of the codename displayed in the tab from which the source has
-        # clicked to proceed to /generate (ref. issue #4458)
-        tab_id = urlsafe_b64encode(os.urandom(64)).decode()
-        codenames = session.get('codenames', {})
-        codenames[tab_id] = codename
-        session['codenames'] = fit_codenames_into_cookie(codenames)
-        session["codenames_expire"] = datetime.now(timezone.utc) + timedelta(
-            minutes=config.SESSION_EXPIRATION_MINUTES
-        )
-        return render_template('generate.html', codename=codename, tab_id=tab_id)
+            for reply in source_inbox:
+                reply_path = Storage.get_default().path(
+                    logged_in_source.filesystem_id,
+                    reply.filename,
+                )
+                try:
+                    with io.open(reply_path, "rb") as f:
+                        contents = f.read()
+                    decrypted_reply = EncryptionManager.get_default().decrypt_journalist_reply(
+                        for_source_user=logged_in_source,
+                        ciphertext_in=contents
+                    )
+                    reply.decrypted = decrypted_reply
+                except UnicodeDecodeError:
+                    current_app.logger.error("Could not decode reply %s" %
+                                             reply.filename)
+                except FileNotFoundError:
+                    current_app.logger.error("Reply file missing: %s" %
+                                             reply.filename)
+                else:
+                    reply.date = datetime.utcfromtimestamp(
+                        os.stat(reply_path).st_mtime)
+                    replies.append(reply)
 
-    @view.route('/create', methods=['POST'])
-    def create() -> werkzeug.Response:
-        if SessionManager.is_user_logged_in(db_session=db.session):
-            flash_msg("notification", None, gettext(
-                "You are already logged in. Please verify your codename as it "
-                "may differ from the one displayed on the previous page."))
+            # Sort the replies by date
+            replies.sort(key=operator.attrgetter('date'), reverse=True)
+
+            # If not done yet, generate a keypair to encrypt replies from the journalist
+            encryption_mgr = EncryptionManager.get_default()
+            try:
+                encryption_mgr.get_source_public_key(logged_in_source.filesystem_id)
+            except GpgKeyNotFoundError:
+                encryption_mgr.generate_source_key_pair(logged_in_source)
+
+            # If this user is logged in, they already submitted at least once
+            min_message_length = 0
         else:
-            # Ensure the codenames have not expired
-            date_codenames_expire = session.get("codenames_expire")
-            if not date_codenames_expire or datetime.now(timezone.utc) >= date_codenames_expire:
-                return clear_session_and_redirect_to_logged_out_page(flask_session=session)
+            min_message_length = InstanceConfig.get_default().initial_message_min_len
 
-            tab_id = request.form['tab_id']
-            codename = session['codenames'][tab_id]
-            del session['codenames']
+        return render_template(
+            'lookup.html',
+            is_user_logged_in=is_user_logged_in,
+            allow_document_uploads=InstanceConfig.get_default().allow_document_uploads,
+            replies=replies,
+            min_len=min_message_length,
+            new_user_codename=session.get('new_user_codename', None),
+            form=SubmissionForm(),
+        )
 
+    @view.route('/submit', methods=('POST',))
+    def submit() -> werkzeug.Response:
+        # Flow inversion: generate codename and create user before processing their submission
+        # rather than on the screen before
+        if not SessionManager.is_user_logged_in(db_session=db.session):
+            codename = PassphraseGenerator.get_default().generate_passphrase(
+                preferred_language=g.localeinfo.language
+            )
             try:
                 current_app.logger.info("Creating new source user...")
                 create_source_user(
@@ -100,75 +132,15 @@ def make_blueprint(config: SDConfig) -> Blueprint:
 
             # All done - source user was successfully created
             current_app.logger.info("New source user created")
+            # Track that this user was generated during this session
             session['new_user_codename'] = codename
-            SessionManager.log_user_in(db_session=db.session,
-                                       supplied_passphrase=DicewarePassphrase(codename))
-
-        return redirect(url_for('.lookup'))
-
-    @view.route('/lookup', methods=('GET',))
-    @login_required
-    def lookup(logged_in_source: SourceUser) -> str:
-        replies = []
-        logged_in_source_in_db = logged_in_source.get_db_record()
-        source_inbox = Reply.query.filter_by(
-            source_id=logged_in_source_in_db.id, deleted_by_source=False
-        ).all()
-
-        first_submission = logged_in_source_in_db.interaction_count == 0
-
-        if first_submission:
-            min_message_length = InstanceConfig.get_default().initial_message_min_len
-        else:
-            min_message_length = 0
-
-        for reply in source_inbox:
-            reply_path = Storage.get_default().path(
-                logged_in_source.filesystem_id,
-                reply.filename,
+            logged_in_source = SessionManager.log_user_in(
+                db_session=db.session,
+                supplied_passphrase=DicewarePassphrase(codename)
             )
-            try:
-                with io.open(reply_path, "rb") as f:
-                    contents = f.read()
-                decrypted_reply = EncryptionManager.get_default().decrypt_journalist_reply(
-                    for_source_user=logged_in_source,
-                    ciphertext_in=contents
-                )
-                reply.decrypted = decrypted_reply
-            except UnicodeDecodeError:
-                current_app.logger.error("Could not decode reply %s" %
-                                         reply.filename)
-            except FileNotFoundError:
-                current_app.logger.error("Reply file missing: %s" %
-                                         reply.filename)
-            else:
-                reply.date = datetime.utcfromtimestamp(
-                    os.stat(reply_path).st_mtime)
-                replies.append(reply)
+        else:
+            logged_in_source = SessionManager.get_logged_in_user(db_session=db.session)
 
-        # Sort the replies by date
-        replies.sort(key=operator.attrgetter('date'), reverse=True)
-
-        # If not done yet, generate a keypair to encrypt replies from the journalist
-        encryption_mgr = EncryptionManager.get_default()
-        try:
-            encryption_mgr.get_source_public_key(logged_in_source.filesystem_id)
-        except GpgKeyNotFoundError:
-            encryption_mgr.generate_source_key_pair(logged_in_source)
-
-        return render_template(
-            'lookup.html',
-            is_user_logged_in=True,
-            allow_document_uploads=InstanceConfig.get_default().allow_document_uploads,
-            replies=replies,
-            min_len=min_message_length,
-            new_user_codename=session.get('new_user_codename', None),
-            form=SubmissionForm(),
-        )
-
-    @view.route('/submit', methods=('POST',))
-    @login_required
-    def submit(logged_in_source: SourceUser) -> werkzeug.Response:
         allow_document_uploads = InstanceConfig.get_default().allow_document_uploads
         form = SubmissionForm()
         if not form.validate():
@@ -192,7 +164,6 @@ def make_blueprint(config: SDConfig) -> Blueprint:
             flash_msg("error", None, html_contents)
             return redirect(url_for('main.lookup'))
 
-        fnames = []
         logged_in_source_in_db = logged_in_source.get_db_record()
         first_submission = logged_in_source_in_db.interaction_count == 0
 
@@ -203,22 +174,24 @@ def make_blueprint(config: SDConfig) -> Blueprint:
                     "Your first message must be at least {} characters long.").format(min_len))
                 return redirect(url_for('main.lookup'))
 
-            # if the new_user_codename key is not present in the session, this is
-            # not a first session
-            new_codename = session.get('new_user_codename', None)
+        # if the new_user_codename key is not present in the session, this is
+        # not a first session - during the first session, the codename is displayed
+        # throughout but we want to discourage sources from sharing it
+        new_codename = session.get('new_user_codename', None)
+        codenames_rejected = InstanceConfig.get_default().reject_message_with_codename
 
-            codenames_rejected = InstanceConfig.get_default().reject_message_with_codename
-            if new_codename is not None:
-                if codenames_rejected and codename_detected(msg, new_codename):
-                    flash_msg("error", None, gettext("Please do not submit your codename!"),
-                              gettext("Keep your codename secret, and use it to log in later to "
-                                      "check for replies."))
-                    return redirect(url_for('main.lookup'))
+        if new_codename is not None and codenames_rejected and codename_detected(msg, new_codename):
+            flash_msg("error", None, gettext("Please do not submit your codename!"),
+                      gettext("Keep your codename secret, and use it to log in later to "
+                              "check for replies."))
+            return redirect(url_for('main.lookup'))
 
         if not os.path.exists(Storage.get_default().path(logged_in_source.filesystem_id)):
             current_app.logger.debug("Store directory not found for source '{}', creating one."
                                      .format(logged_in_source_in_db.journalist_designation))
             os.mkdir(Storage.get_default().path(logged_in_source.filesystem_id))
+
+        fnames = []
 
         if msg:
             logged_in_source_in_db.interaction_count += 1
@@ -252,6 +225,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
             flash_msg("success", gettext("Success!"), html_contents)
 
         new_submissions = []
+
         for fname in fnames:
             submission = Submission(logged_in_source_in_db, fname, Storage.get_default())
             db.session.add(submission)
