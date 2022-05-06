@@ -616,6 +616,9 @@ msgstr "用户的密碼將改成："
 msgid "Your password will be changed to:"
 msgstr "你的密碼將被改成："
 
+msgid "RESET PASSWORD"
+msgstr "重置密碼"
+
 msgid "Reset Two-Factor Authentication"
 msgstr "重置雙因素驗證授權"
 
@@ -736,7 +739,9 @@ msgstr "此刻您的連線非匿名狀態!"
 msgid "You were redirected because you are already logged in. If you want to create a new account, you should log out first."
 msgstr "你被重定向了， 因為已在登錄狀態。如果想創建一個新帳戶，請先登出。"
 
-msgid "You are already logged in. Please verify your codename above as it may differ from the one displayed on the previous page."
+#, fuzzy
+#| msgid "You are already logged in. Please verify your codename above as it may differ from the one displayed on the previous page."
+msgid "You are already logged in. Please verify your codename as it may differ from the one displayed on the previous page."
 msgstr "您已登入，請驗證上方代號其可能與不同於先前頁面顯示。"
 
 msgid "There was a temporary problem creating your account. Please try again."
@@ -757,6 +762,9 @@ msgstr "請勿傳送您的代號!"
 msgid "Keep your codename secret, and use it to log in later to check for replies."
 msgstr "妥善保存您的代號，以利用它來登入查閱回覆。"
 
+msgid "Thank you for sending this information to us. Please check back later for replies."
+msgstr "感谢你發送此一訊息給我們。請稍晚再來查看回覆。"
+
 msgid "Thanks! We received your message."
 msgstr "謝謝！我們已收到你的訊息。"
 
@@ -775,8 +783,11 @@ msgstr "所有的回覆都已被删除"
 msgid "Sorry, that is not a recognized codename."
 msgstr "對不起，無法識別這個代號。"
 
-msgid "Codename"
-msgstr "代號名稱"
+msgid "Important"
+msgstr "重要"
+
+msgid "You were logged out due to inactivity. Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
+msgstr "因聞置過久已遭系統登出，可先點擊 Tor 瀏覽器工具列<img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b>按鍵來清除此設備上的瀏覽記錄。"
 
 msgid "Protecting Journalists and Sources"
 msgstr "保護新聞記者與消息來源線人"
@@ -801,12 +812,6 @@ msgstr "對不起，網站出錯，未能完成您的請求。"
 
 msgid "Look up a codename..."
 msgstr "查詢代號..."
-
-msgid "Thank you for sending this information to us. Please check back later for replies."
-msgstr "感谢你發送此一訊息給我們。請稍晚再來查看回覆。"
-
-msgid "Forgot your codename?"
-msgstr "忘記你的代號？"
 
 msgid "Powered by"
 msgstr "使用版本"
@@ -859,6 +864,9 @@ msgstr "<strong>高度建議用 Tor 瀏覽器來訪問 SecureDrop :</strong> <a 
 msgid "<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop version.</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
 msgstr "<strong>高度建議使用桌面版本的 Tor 瀏覽器來訪問 SecureDrop， Orfox 的安全層級與匿名保護程度遠不如桌面版:</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\"> 學習如何安裝 Tor</a>，或忽略這則警告繼續操作。"
 
+msgid "{} logo"
+msgstr ""
+
 msgid "First submission"
 msgstr "首次提交"
 
@@ -892,15 +900,6 @@ msgstr "還有一件事...."
 msgid "Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar. This will clear your Tor Browser activity data on this device."
 msgstr "點擊 Tor 瀏覽器工具列 <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b>按鈕，將可清除此設備上的瀏覽資料記錄。"
 
-msgid "Show"
-msgstr "顯示"
-
-msgid "Hide"
-msgstr "隱藏"
-
-msgid "Remember, your codename is:"
-msgstr "記住，您的代號是："
-
 msgid "Submit Files or Messages"
 msgstr "提交檔案和訊息"
 
@@ -922,11 +921,16 @@ msgstr "<a href=\"{url}\" class=\"text-link\">了解更多</a>."
 msgid "Maximum upload size: 500 MB"
 msgstr "檔案上傳限制：500 MB"
 
-msgid "Submit"
-msgstr "提交"
+#, fuzzy
+#| msgid "Your first message must be at least {} characters long."
+msgid "If you are only sending a message, it must be at least {} characters long."
+msgstr "首次訊息须至少有 {} 個字符長度。"
 
 msgid "Anti-spam check. Do not fill this in!"
 msgstr "反垃圾檢查，請勿填入!"
+
+msgid "Submit"
+msgstr "提交"
 
 msgid "Read Replies"
 msgstr "閱讀回覆"
@@ -940,9 +944,6 @@ msgstr "刪除這條回覆"
 msgid "Delete reply from {timestamp}?"
 msgstr "刪除 {timestamp} 的回覆?"
 
-msgid "Delete this reply?"
-msgstr "刪除這條回覆嗎？"
-
 msgid "Delete All Replies"
 msgstr "刪除全部回覆"
 
@@ -955,9 +956,6 @@ msgstr "您已完成了這些回覆嗎？"
 msgid "YES, DELETE ALL REPLIES"
 msgstr "是的，删除所有回覆"
 
-msgid "NO, NOT YET"
-msgstr "不，尚未"
-
 msgid "No Messages"
 msgstr "無訊息"
 
@@ -966,12 +964,6 @@ msgstr "找不到網頁"
 
 msgid "Sorry, we couldn't locate what you requested."
 msgstr "對不起，未能處置您的請求。"
-
-msgid "Important"
-msgstr "重要"
-
-msgid "You were logged out due to inactivity. Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
-msgstr "因聞置過久已遭系統登出，可先點擊 Tor 瀏覽器工具列<img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b>按鍵來清除此設備上的瀏覽記錄。"
 
 msgid "Proxy Service Detected"
 msgstr "偵測到代理服務器"
@@ -982,7 +974,9 @@ msgstr "您好像使用 Tor 代理服務來連線至 SecureDrop，但代理服�
 msgid "Anyone monitoring your Internet traffic &mdash; including your government, your Internet provider, or the proxy operator &mdash; may be able to identify you."
 msgstr "任何網路流量監控者（如政府、網路服務業者、代理服務商）都有可能認出您。"
 
-msgid "Always use <a href=\"www.torproject.org/projects/torbrowser.html\">Tor Browser</a> to access SecureDrop. Valid SecureDrop site addresses end with <code>.onion</code>. The correct address for this site is:"
+#, fuzzy
+#| msgid "Always use <a href=\"www.torproject.org/projects/torbrowser.html\">Tor Browser</a> to access SecureDrop. Valid SecureDrop site addresses end with <code>.onion</code>. The correct address for this site is:"
+msgid "Always use Tor Browser (<code>{}</code>) to access SecureDrop. Valid SecureDrop site addresses end with <code>.onion</code>. The correct address for this site is:"
 msgstr "請使用 <a href=\"www.torproject.org/projects/torbrowser.html\">Tor 瀏覽器r</a> 來連線 SecureDrop，有效的 SecureDrop 網站其網址尾綴為 <code>.onion</code>，網站正確的網址為:"
 
 msgid "If you are already using Tor Browser, copy the address above and generate a new identity before you access SecureDrop."
@@ -1005,6 +999,17 @@ msgstr "複製並貼上以下的網址到您的瀏覽器，並依照指示下載
 
 msgid "If there is a chance that downloading Tor Browser raises suspicion and your mail provider is less likely to be monitored, you can send a mail to <kbd>gettor@torproject.org</kbd> and a bot will answer with instructions."
 msgstr "如果下載 Tor Browser 容易引發他人懷疑，而郵件服務商較不受到監控，則可以寄信到 <kbd>gettor@torproject.org</kbd>它利用機器人提供答案指示。"
+
+msgid "Remember, your codename is:"
+msgstr "記住，您的代號是："
+
+msgid "Codename"
+msgstr "代號名稱"
+
+#, fuzzy
+#| msgid "Codename"
+msgid "Show Codename"
+msgstr "代號名稱"
 
 msgid "Why download the team's public key?"
 msgstr "為什麼要下載本站團隊的公鑰？"
@@ -1045,6 +1050,21 @@ msgstr "<strong>重要：</strong>如果您希望保持匿名，<strong>請勿</
 
 msgid "Back to submission page"
 msgstr "返回提交文件頁面"
+
+#~ msgid "Forgot your codename?"
+#~ msgstr "忘記你的代號？"
+
+#~ msgid "Show"
+#~ msgstr "顯示"
+
+#~ msgid "Hide"
+#~ msgstr "隱藏"
+
+#~ msgid "Delete this reply?"
+#~ msgstr "刪除這條回覆嗎？"
+
+#~ msgid "NO, NOT YET"
+#~ msgstr "不，尚未"
 
 #~ msgid "The following file has been selected for <strong>permanent deletion</strong>:"
 #~ msgid_plural "The following {num} files have been selected for <strong>permanent deletion</strong>:"
@@ -1301,9 +1321,6 @@ msgstr "返回提交文件頁面"
 
 #~ msgid "RESET HARDWARE TOKEN"
 #~ msgstr "重設硬體令牌"
-
-#~ msgid "RESET PASSWORD"
-#~ msgstr "重置密碼"
 
 #~ msgid "Reset 2FA for mobile apps such as FreeOTP or Google Authenticator"
 #~ msgstr "重設手機上的 2FA 應用程式，例如 FreeOTP 或 Google Authenticator"

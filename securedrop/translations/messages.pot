@@ -6,7 +6,7 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: SecureDrop 2.3.0~rc1\n"
+"Project-Id-Version: SecureDrop 2.4.0~rc1\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
@@ -623,6 +623,9 @@ msgstr ""
 msgid "Your password will be changed to:"
 msgstr ""
 
+msgid "RESET PASSWORD"
+msgstr ""
+
 msgid "Reset Two-Factor Authentication"
 msgstr ""
 
@@ -743,7 +746,7 @@ msgstr ""
 msgid "You were redirected because you are already logged in. If you want to create a new account, you should log out first."
 msgstr ""
 
-msgid "You are already logged in. Please verify your codename above as it may differ from the one displayed on the previous page."
+msgid "You are already logged in. Please verify your codename as it may differ from the one displayed on the previous page."
 msgstr ""
 
 msgid "There was a temporary problem creating your account. Please try again."
@@ -764,6 +767,9 @@ msgstr ""
 msgid "Keep your codename secret, and use it to log in later to check for replies."
 msgstr ""
 
+msgid "Thank you for sending this information to us. Please check back later for replies."
+msgstr ""
+
 msgid "Thanks! We received your message."
 msgstr ""
 
@@ -782,7 +788,10 @@ msgstr ""
 msgid "Sorry, that is not a recognized codename."
 msgstr ""
 
-msgid "Codename"
+msgid "Important"
+msgstr ""
+
+msgid "You were logged out due to inactivity. Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
 msgstr ""
 
 msgid "Protecting Journalists and Sources"
@@ -807,12 +816,6 @@ msgid "Sorry, the website encountered an error and was unable to complete your r
 msgstr ""
 
 msgid "Look up a codename..."
-msgstr ""
-
-msgid "Thank you for sending this information to us. Please check back later for replies."
-msgstr ""
-
-msgid "Forgot your codename?"
 msgstr ""
 
 msgid "Powered by"
@@ -866,6 +869,9 @@ msgstr ""
 msgid "<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop version.</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
 msgstr ""
 
+msgid "{} logo"
+msgstr ""
+
 msgid "First submission"
 msgstr ""
 
@@ -899,15 +905,6 @@ msgstr ""
 msgid "Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar. This will clear your Tor Browser activity data on this device."
 msgstr ""
 
-msgid "Show"
-msgstr ""
-
-msgid "Hide"
-msgstr ""
-
-msgid "Remember, your codename is:"
-msgstr ""
-
 msgid "Submit Files or Messages"
 msgstr ""
 
@@ -929,10 +926,13 @@ msgstr ""
 msgid "Maximum upload size: 500 MB"
 msgstr ""
 
-msgid "Submit"
+msgid "If you are only sending a message, it must be at least {} characters long."
 msgstr ""
 
 msgid "Anti-spam check. Do not fill this in!"
+msgstr ""
+
+msgid "Submit"
 msgstr ""
 
 msgid "Read Replies"
@@ -947,9 +947,6 @@ msgstr ""
 msgid "Delete reply from {timestamp}?"
 msgstr ""
 
-msgid "Delete this reply?"
-msgstr ""
-
 msgid "Delete All Replies"
 msgstr ""
 
@@ -962,9 +959,6 @@ msgstr ""
 msgid "YES, DELETE ALL REPLIES"
 msgstr ""
 
-msgid "NO, NOT YET"
-msgstr ""
-
 msgid "No Messages"
 msgstr ""
 
@@ -972,12 +966,6 @@ msgid "Page not found"
 msgstr ""
 
 msgid "Sorry, we couldn't locate what you requested."
-msgstr ""
-
-msgid "Important"
-msgstr ""
-
-msgid "You were logged out due to inactivity. Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
 msgstr ""
 
 msgid "Proxy Service Detected"
@@ -989,7 +977,7 @@ msgstr ""
 msgid "Anyone monitoring your Internet traffic &mdash; including your government, your Internet provider, or the proxy operator &mdash; may be able to identify you."
 msgstr ""
 
-msgid "Always use <a href=\"www.torproject.org/projects/torbrowser.html\">Tor Browser</a> to access SecureDrop. Valid SecureDrop site addresses end with <code>.onion</code>. The correct address for this site is:"
+msgid "Always use Tor Browser (<code>{}</code>) to access SecureDrop. Valid SecureDrop site addresses end with <code>.onion</code>. The correct address for this site is:"
 msgstr ""
 
 msgid "If you are already using Tor Browser, copy the address above and generate a new identity before you access SecureDrop."
@@ -1011,6 +999,15 @@ msgid "Copy and paste the following address into your browser and follow the ins
 msgstr ""
 
 msgid "If there is a chance that downloading Tor Browser raises suspicion and your mail provider is less likely to be monitored, you can send a mail to <kbd>gettor@torproject.org</kbd> and a bot will answer with instructions."
+msgstr ""
+
+msgid "Remember, your codename is:"
+msgstr ""
+
+msgid "Codename"
+msgstr ""
+
+msgid "Show Codename"
 msgstr ""
 
 msgid "Why download the team's public key?"

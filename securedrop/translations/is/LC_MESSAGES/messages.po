@@ -625,6 +625,9 @@ msgstr "Lykilorð notandans verður breytt í:"
 msgid "Your password will be changed to:"
 msgstr "Lykilorðinu þínu verður breytt í:"
 
+msgid "RESET PASSWORD"
+msgstr "ENDURSTILLA LYKILORÐ"
+
 msgid "Reset Two-Factor Authentication"
 msgstr "Endurstilla tvíþátta auðkenningu"
 
@@ -745,7 +748,9 @@ msgstr "Tengingin þín er ekki nafnlaus í augnablikinu!"
 msgid "You were redirected because you are already logged in. If you want to create a new account, you should log out first."
 msgstr "Þér var endurbeint vegna þess að þú ert þegar með innskráningu í gangi. Ef þú ætlar að útbúa annan aðgang, ættirðu að skrá þig fyrst út."
 
-msgid "You are already logged in. Please verify your codename above as it may differ from the one displayed on the previous page."
+#, fuzzy
+#| msgid "You are already logged in. Please verify your codename above as it may differ from the one displayed on the previous page."
+msgid "You are already logged in. Please verify your codename as it may differ from the one displayed on the previous page."
 msgstr "Þú ert þegar skráð/ur inn. Yfirfarðu kóðanafnið þitt hér fyrir ofan þar sem það gæti verið öðruvísi en það sem birt var á fyrri síðu."
 
 msgid "There was a temporary problem creating your account. Please try again."
@@ -766,6 +771,9 @@ msgstr "Ekki senda inn kóðanafnið þitt!"
 msgid "Keep your codename secret, and use it to log in later to check for replies."
 msgstr "Haltu kóðanafninu þínu leyndu, notaðu það til að skrá þig inn síðar til að athuga með svör."
 
+msgid "Thank you for sending this information to us. Please check back later for replies."
+msgstr "Takk fyrir að senda þessar upplýsingar til okkar. Komdu svo aftur síðar til að athuga með svör."
+
 msgid "Thanks! We received your message."
 msgstr "Takk fyrir! Við fengum skilaboðin þín."
 
@@ -784,8 +792,11 @@ msgstr "Öllum svörum hefur verið eytt"
 msgid "Sorry, that is not a recognized codename."
 msgstr "Því miður, þetta er ekki þekkt kóðanafn."
 
-msgid "Codename"
-msgstr "Kóðanafn"
+msgid "Important"
+msgstr "Mikilvægt"
+
+msgid "You were logged out due to inactivity. Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
+msgstr "Þú varst skráð/ur út vegna ónógrar virkni. Smelltu á hnappinn <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>Nýtt auðkenni</b> í verkfærastiku Tor-vafrans áður en haldið er áfram. Það mun hreinsa út allar fyrri aðgerðir Tor-vafrans á þessu tæki."
 
 msgid "Protecting Journalists and Sources"
 msgstr "Verndum frétta- og heimildarmenn"
@@ -810,12 +821,6 @@ msgstr "Því miður, vefsvæðið rakst á villu og ekki náðist að afgreiða
 
 msgid "Look up a codename..."
 msgstr "Fletta upp kóðanafni..."
-
-msgid "Thank you for sending this information to us. Please check back later for replies."
-msgstr "Takk fyrir að senda þessar upplýsingar til okkar. Komdu svo aftur síðar til að athuga með svör."
-
-msgid "Forgot your codename?"
-msgstr "Gleymdirðu kóðanafninu þínu?"
 
 msgid "Powered by"
 msgstr "Keyrt með"
@@ -868,6 +873,9 @@ msgstr "<strong>Mælt er með því að nota Tor-vafrann til að fá aðkomu að
 msgid "<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop version.</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
 msgstr "<strong>Mælt er með því að nota skjáborðsútgáfu Tor-vafrans til aðgangs að SecureDrop, þar sem Orfox gefur ekki sama stig öryggis og nafnleyndar eins og skjáborðsútgáfurnar.</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Sjáðu hvernig á að setja upp Tor-vafrann</a>, eða hunsaðu þessa aðvörun til að halda áfram."
 
+msgid "{} logo"
+msgstr ""
+
 msgid "First submission"
 msgstr "Fyrsta innsending"
 
@@ -901,15 +909,6 @@ msgstr "Eitt í viðbót..."
 msgid "Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar. This will clear your Tor Browser activity data on this device."
 msgstr "Smelltu á hnappinn <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>Nýtt auðkenni</b> í verkfærastiku Tor-vafrans. Það mun hreinsa út allar fyrri aðgerðir Tor-vafrans á þessu tæki."
 
-msgid "Show"
-msgstr "Sýna"
-
-msgid "Hide"
-msgstr "Fela"
-
-msgid "Remember, your codename is:"
-msgstr "Mundu, kóðanafnið þitt er:"
-
 msgid "Submit Files or Messages"
 msgstr "Senda inn skrár eða skilaboð"
 
@@ -931,11 +930,16 @@ msgstr "<a href=\"{url}\" class=\"text-link\">Kanna nánar</a>."
 msgid "Maximum upload size: 500 MB"
 msgstr "Hámarksstærð innsendingar: 500 MB"
 
-msgid "Submit"
-msgstr "Senda inn"
+#, fuzzy
+#| msgid "Your first message must be at least {} characters long."
+msgid "If you are only sending a message, it must be at least {} characters long."
+msgstr "Fyrstu skilaboðin þín verða að vera a.m.k. {} stafa að löng."
 
 msgid "Anti-spam check. Do not fill this in!"
 msgstr "Athugun á ruslsendingu. Ekki fylla inn í þetta!"
+
+msgid "Submit"
+msgstr "Senda inn"
 
 msgid "Read Replies"
 msgstr "Lesa svör"
@@ -949,9 +953,6 @@ msgstr "Eyða þessu svari"
 msgid "Delete reply from {timestamp}?"
 msgstr "Eyða svari frá {timestamp}?"
 
-msgid "Delete this reply?"
-msgstr "Eyða þessu svari?"
-
 msgid "Delete All Replies"
 msgstr "Eyða öllum svörum"
 
@@ -964,9 +965,6 @@ msgstr "Hefurðu lokið að fara yfir svörin?"
 msgid "YES, DELETE ALL REPLIES"
 msgstr "JÁ, EYÐA ÖLLUM SVÖRUM"
 
-msgid "NO, NOT YET"
-msgstr "NEI, EKKI STRAX"
-
 msgid "No Messages"
 msgstr "Engin skilaboð"
 
@@ -975,12 +973,6 @@ msgstr "Síða fannst ekki"
 
 msgid "Sorry, we couldn't locate what you requested."
 msgstr "Því miður, við gátum ekki fundið það sem þú baðst um."
-
-msgid "Important"
-msgstr "Mikilvægt"
-
-msgid "You were logged out due to inactivity. Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
-msgstr "Þú varst skráð/ur út vegna ónógrar virkni. Smelltu á hnappinn <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>Nýtt auðkenni</b> í verkfærastiku Tor-vafrans áður en haldið er áfram. Það mun hreinsa út allar fyrri aðgerðir Tor-vafrans á þessu tæki."
 
 msgid "Proxy Service Detected"
 msgstr "Milliþjónn (proxy) fannst"
@@ -991,7 +983,9 @@ msgstr "Það lítur út eins og þú notir milliþjónustu Tor til að tengjast
 msgid "Anyone monitoring your Internet traffic &mdash; including your government, your Internet provider, or the proxy operator &mdash; may be able to identify you."
 msgstr "Það er hugsanlegt að hver sá sem fylgist með netumferðinni þinni &mdash; t.d. stjórnvöld, netþjónustan þín, o.fl. &mdash; geti greint hver þú ert."
 
-msgid "Always use <a href=\"www.torproject.org/projects/torbrowser.html\">Tor Browser</a> to access SecureDrop. Valid SecureDrop site addresses end with <code>.onion</code>. The correct address for this site is:"
+#, fuzzy
+#| msgid "Always use <a href=\"www.torproject.org/projects/torbrowser.html\">Tor Browser</a> to access SecureDrop. Valid SecureDrop site addresses end with <code>.onion</code>. The correct address for this site is:"
+msgid "Always use Tor Browser (<code>{}</code>) to access SecureDrop. Valid SecureDrop site addresses end with <code>.onion</code>. The correct address for this site is:"
 msgstr "Þú skalt alltaf nota <a href=\"www.torproject.org/projects/torbrowser.html\">Tor-vafrann</a> til að tengjast SecureDrop. Gildar slóðir á SecureDrop-vefsvæði enda á <code>.onion</code>. Rétta slóðin á þennan vef er:"
 
 msgid "If you are already using Tor Browser, copy the address above and generate a new identity before you access SecureDrop."
@@ -1014,6 +1008,17 @@ msgstr "Afritaðu og límdu eftirfarandi slóð inn í vafrann þinn og fylgdu s
 
 msgid "If there is a chance that downloading Tor Browser raises suspicion and your mail provider is less likely to be monitored, you can send a mail to <kbd>gettor@torproject.org</kbd> and a bot will answer with instructions."
 msgstr "Ef líkur eru á að það að sækja sér Tor-vafrann valdi grunsemdum og ef minni líkur eru á að fylgst sé með tölvupóstþjónustu þinni, þá geturðu sent tölvupóst á <kbd>gettor@torproject.org</kbd> og róbót síðan mun svara með viðeigandi leiðbeiningum."
+
+msgid "Remember, your codename is:"
+msgstr "Mundu, kóðanafnið þitt er:"
+
+msgid "Codename"
+msgstr "Kóðanafn"
+
+#, fuzzy
+#| msgid "Codename"
+msgid "Show Codename"
+msgstr "Kóðanafn"
 
 msgid "Why download the team's public key?"
 msgstr "Af hverju að ná í dreifilykil teymisins?"
@@ -1054,6 +1059,21 @@ msgstr "<strong>Mikilvægt:</strong> Ef þú óskar áframhaldandi nafnleyndar, 
 
 msgid "Back to submission page"
 msgstr "Til baka á innsendingasíðuna"
+
+#~ msgid "Forgot your codename?"
+#~ msgstr "Gleymdirðu kóðanafninu þínu?"
+
+#~ msgid "Show"
+#~ msgstr "Sýna"
+
+#~ msgid "Hide"
+#~ msgstr "Fela"
+
+#~ msgid "Delete this reply?"
+#~ msgstr "Eyða þessu svari?"
+
+#~ msgid "NO, NOT YET"
+#~ msgstr "NEI, EKKI STRAX"
 
 #~ msgid "The following file has been selected for <strong>permanent deletion</strong>:"
 #~ msgid_plural "The following {num} files have been selected for <strong>permanent deletion</strong>:"
@@ -1314,9 +1334,6 @@ msgstr "Til baka á innsendingasíðuna"
 
 #~ msgid "CHECK-IN"
 #~ msgstr "INNSKRÁNING"
-
-#~ msgid "RESET PASSWORD"
-#~ msgstr "ENDURSTILLA LYKILORÐ"
 
 #~ msgid "Reset 2FA for mobile apps such as FreeOTP or Google Authenticator"
 #~ msgstr "Endurstilla tvíþátta auðkenningu fyrir farsímaforrit á borð við FreeOTP eða Google Authenticator"

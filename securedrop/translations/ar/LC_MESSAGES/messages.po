@@ -666,6 +666,9 @@ msgstr "كلمة سر المستخدم ستصير:"
 msgid "Your password will be changed to:"
 msgstr "كلمة سرّك ستصير:"
 
+msgid "RESET PASSWORD"
+msgstr "صفِّر كلمة السر"
+
 msgid "Reset Two-Factor Authentication"
 msgstr "صفِّر وظيفة الاستيثاق في خطوتين"
 
@@ -786,7 +789,9 @@ msgstr "اتصالك ليس مجهولاً الآن!"
 msgid "You were redirected because you are already logged in. If you want to create a new account, you should log out first."
 msgstr "تمت إعادة توجيهك إلى حسابك لأنّك والج إليه بالفعل. إنَ كنت تريد إنشاء حساب جديد فعليك الخروج من هذا الحساب أوّلا."
 
-msgid "You are already logged in. Please verify your codename above as it may differ from the one displayed on the previous page."
+#, fuzzy
+#| msgid "You are already logged in. Please verify your codename above as it may differ from the one displayed on the previous page."
+msgid "You are already logged in. Please verify your codename as it may differ from the one displayed on the previous page."
 msgstr "أنت مسجّل أساساً. من فضلك تأكد من اسمك الرمزي أعلاه إذ قد يكون مختلف عن الإسم الظاهر على الصفحة السابقة."
 
 msgid "There was a temporary problem creating your account. Please try again."
@@ -807,6 +812,9 @@ msgstr "من فضلك لا ترسل الاسم الرمزي الخاص بك!"
 msgid "Keep your codename secret, and use it to log in later to check for replies."
 msgstr "حافظ على سرية اسمك الرمزي، واستخدمه لتسجيل الدخول لاحقًا للتحقق من الردود."
 
+msgid "Thank you for sending this information to us. Please check back later for replies."
+msgstr "شكرا لإرسالك هذه المعلومات إلينا. تَرَقّب ردًّا منّا."
+
 msgid "Thanks! We received your message."
 msgstr "شكرا! لقد تلقينا الرسالة."
 
@@ -825,8 +833,11 @@ msgstr "حُذِفَت كُلّ الردود"
 msgid "Sorry, that is not a recognized codename."
 msgstr "عذرًا، لا يمكن التعرف على الاسم الرمزي."
 
-msgid "Codename"
-msgstr "الاسم الرمزي"
+msgid "Important"
+msgstr "هام"
+
+msgid "You were logged out due to inactivity. Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
+msgstr "لقد تم إخراجك من الحساب نظراً لعدم نشاطك. اضغط على زر <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>هوية جديدة</b>في متصفحك تور. إن ذلك سيمسح أي نشاط لك على متصفح تور في هذا الجهاز."
 
 msgid "Protecting Journalists and Sources"
 msgstr "لحماية الصحافيين و&nbsp;المصادر"
@@ -851,12 +862,6 @@ msgstr "نأسف لوقوع عطل في الموقع و&nbsp;تعذُّر إتم
 
 msgid "Look up a codename..."
 msgstr "البحث عن اسم رمزي..."
-
-msgid "Thank you for sending this information to us. Please check back later for replies."
-msgstr "شكرا لإرسالك هذه المعلومات إلينا. تَرَقّب ردًّا منّا."
-
-msgid "Forgot your codename?"
-msgstr "هل نسيت اسمك الرمزي بك؟"
 
 msgid "Powered by"
 msgstr "تشغّله"
@@ -909,6 +914,9 @@ msgstr "<strong>نوصي باستخدام متصفح تور للنفاذ إلى 
 msgid "<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop version.</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
 msgstr "<strong>نوصي باستخدام متصفح تور للنفاذ إلى SecureDrop إذ أنّ Orfox لا يوفّر القدر ذاته من السرية و&nbsp;المجهوليّة اللتين يوفّرهما إصدار سطح المكتب :</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">طالع خطوات التثبيت</a> أو تجاهل هذا التحذير للمواصلة."
 
+msgid "{} logo"
+msgstr ""
+
 msgid "First submission"
 msgstr "الإيداع الأول"
 
@@ -942,15 +950,6 @@ msgstr "هناك أمرٌ آخر نود أن نلفت نظرك إليه..."
 msgid "Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar. This will clear your Tor Browser activity data on this device."
 msgstr "اضغط على الزر <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>هوية جديدة</b> في شريط متصفحك تور إذ أن ذلك من شأنه أن يمسح أي نشاط قمت به على متصفح تور من هذا الجهاز."
 
-msgid "Show"
-msgstr "أظهر"
-
-msgid "Hide"
-msgstr "اخفِ"
-
-msgid "Remember, your codename is:"
-msgstr "تذكر أنّ اسمك الرمزي:"
-
 msgid "Submit Files or Messages"
 msgstr "إيداع ملفات أو رسائل"
 
@@ -972,11 +971,16 @@ msgstr "<a href=\"{url}\" class=\"text-link\">لمعرفة المزيد</a>."
 msgid "Maximum upload size: 500 MB"
 msgstr "الحجم الأقصى الممكن رفعه: 500 ميجابايت"
 
-msgid "Submit"
-msgstr "إرسال"
+#, fuzzy
+#| msgid "Your first message must be at least {} characters long."
+msgid "If you are only sending a message, it must be at least {} characters long."
+msgstr "يجب أن تكون رسالتك الأولى على الأقل {} من الأحرف."
 
 msgid "Anti-spam check. Do not fill this in!"
 msgstr "فحص مكافحة البريد العشوائي. لا تملأ هذا!"
+
+msgid "Submit"
+msgstr "إرسال"
 
 msgid "Read Replies"
 msgstr "قراءة الردود"
@@ -990,9 +994,6 @@ msgstr "أتريد حذف هذا الرد"
 msgid "Delete reply from {timestamp}?"
 msgstr "حذف الرد من {timestamp}؟"
 
-msgid "Delete this reply?"
-msgstr "أتريد حذف هذا الرد؟"
-
 msgid "Delete All Replies"
 msgstr "حذف كل الردود"
 
@@ -1005,9 +1006,6 @@ msgstr "هل انتهيت من قراءة الردود؟"
 msgid "YES, DELETE ALL REPLIES"
 msgstr "نعم، احذف كُلّ الردود"
 
-msgid "NO, NOT YET"
-msgstr "لا، ليس بَعْد"
-
 msgid "No Messages"
 msgstr "لا توجد رسائل"
 
@@ -1016,12 +1014,6 @@ msgstr "الصفحة غير موجودة"
 
 msgid "Sorry, we couldn't locate what you requested."
 msgstr "عذرًا لم نتمكن من إيجاد المطلوب."
-
-msgid "Important"
-msgstr "هام"
-
-msgid "You were logged out due to inactivity. Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
-msgstr "لقد تم إخراجك من الحساب نظراً لعدم نشاطك. اضغط على زر <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>هوية جديدة</b>في متصفحك تور. إن ذلك سيمسح أي نشاط لك على متصفح تور في هذا الجهاز."
 
 msgid "Proxy Service Detected"
 msgstr "تم اكتشاف خدمة بروكسي"
@@ -1032,7 +1024,9 @@ msgstr "يبدو أنك تستخدم خدمة بروكسي Tor للوصول إل
 msgid "Anyone monitoring your Internet traffic &mdash; including your government, your Internet provider, or the proxy operator &mdash; may be able to identify you."
 msgstr "أي شخص يراقب حركة المرور الخاصة بك على الإنترنت, بما في ذلك حكومتك, أو مزود الإنترنت الخاص بك, أو المشغل البروكسي. و قد تكون قادرة على التعرف عليك."
 
-msgid "Always use <a href=\"www.torproject.org/projects/torbrowser.html\">Tor Browser</a> to access SecureDrop. Valid SecureDrop site addresses end with <code>.onion</code>. The correct address for this site is:"
+#, fuzzy
+#| msgid "Always use <a href=\"www.torproject.org/projects/torbrowser.html\">Tor Browser</a> to access SecureDrop. Valid SecureDrop site addresses end with <code>.onion</code>. The correct address for this site is:"
+msgid "Always use Tor Browser (<code>{}</code>) to access SecureDrop. Valid SecureDrop site addresses end with <code>.onion</code>. The correct address for this site is:"
 msgstr "استخدم دائمًا <a href=\"www.torproject.org/projects/torbrowser.html\">Tor Browser</a> للوصول إلى SecureDrop. تنتهي عناوين موقع SecureDrop الصالحة بـ <code>.onion</code>. العنوان الصحيح لهذا الموقع هو:"
 
 msgid "If you are already using Tor Browser, copy the address above and generate a new identity before you access SecureDrop."
@@ -1055,6 +1049,17 @@ msgstr "انسخ العنوان التالي و&nbsp;ألصقه في متصفح�
 
 msgid "If there is a chance that downloading Tor Browser raises suspicion and your mail provider is less likely to be monitored, you can send a mail to <kbd>gettor@torproject.org</kbd> and a bot will answer with instructions."
 msgstr "إذا كانت زيارة موقع تور لتنزيل المتصفح مثيرة للريبة و&nbsp;إذا كان الأرجح أنّ مقدّم خدمة البريد الإلكتروني لك غير مراقب فيمكنك إرسال رسالة إلى <kbd>gettor@torproject.org</kbd> و&nbsp;سوف تتلقى ردًّا فيه إرشادات لتنزيل متصفح تور بطريقة بديلة."
+
+msgid "Remember, your codename is:"
+msgstr "تذكر أنّ اسمك الرمزي:"
+
+msgid "Codename"
+msgstr "الاسم الرمزي"
+
+#, fuzzy
+#| msgid "Codename"
+msgid "Show Codename"
+msgstr "الاسم الرمزي"
 
 msgid "Why download the team's public key?"
 msgstr "ما أهمية تنزيل المفتاح العلني للفريق؟"
@@ -1095,6 +1100,21 @@ msgstr "<strong>هام:</strong> إذا كنت ترغب في البقاء مجه
 
 msgid "Back to submission page"
 msgstr "الرجوع إلى صفحة الإيداع"
+
+#~ msgid "Forgot your codename?"
+#~ msgstr "هل نسيت اسمك الرمزي بك؟"
+
+#~ msgid "Show"
+#~ msgstr "أظهر"
+
+#~ msgid "Hide"
+#~ msgstr "اخفِ"
+
+#~ msgid "Delete this reply?"
+#~ msgstr "أتريد حذف هذا الرد؟"
+
+#~ msgid "NO, NOT YET"
+#~ msgstr "لا، ليس بَعْد"
 
 #~ msgid "The following file has been selected for <strong>permanent deletion</strong>:"
 #~ msgid_plural "The following {num} files have been selected for <strong>permanent deletion</strong>:"
@@ -1364,9 +1384,6 @@ msgstr "الرجوع إلى صفحة الإيداع"
 
 #~ msgid "RESET HARDWARE TOKEN"
 #~ msgstr "تصفير أمارة عتادية"
-
-#~ msgid "RESET PASSWORD"
-#~ msgstr "صفِّر كلمة السر"
 
 #~ msgid "Reset 2FA for mobile apps such as FreeOTP or Google Authenticator"
 #~ msgstr "تصفير الاستيثاق ذي المعاملين (2FA) لتطبيقات المحمول مثل andOTP أو Google Authenticator"

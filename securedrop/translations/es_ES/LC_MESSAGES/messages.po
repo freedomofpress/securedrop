@@ -626,6 +626,9 @@ msgstr "La contraseña del usuario se cambiará a:"
 msgid "Your password will be changed to:"
 msgstr "Tu contraseña será cambiada a:"
 
+msgid "RESET PASSWORD"
+msgstr "RESTABLECER CONTRASEÑA"
+
 msgid "Reset Two-Factor Authentication"
 msgstr "Restablecer la Autenticación de Dos Factores"
 
@@ -746,7 +749,9 @@ msgstr "¡Tu conexión no es anónima en este momento!"
 msgid "You were redirected because you are already logged in. If you want to create a new account, you should log out first."
 msgstr "Fuiste redirigido porque ya tenías una sesión iniciada. Si deseas crear una cuenta nueva, debes cerrar la sesión primero."
 
-msgid "You are already logged in. Please verify your codename above as it may differ from the one displayed on the previous page."
+#, fuzzy
+#| msgid "You are already logged in. Please verify your codename above as it may differ from the one displayed on the previous page."
+msgid "You are already logged in. Please verify your codename as it may differ from the one displayed on the previous page."
 msgstr "Ya tienes una sesión iniciada. Por favor verifica arriba tu nombre clave, ya que pudiera diferir del mostrado en la página previa."
 
 msgid "There was a temporary problem creating your account. Please try again."
@@ -767,6 +772,9 @@ msgstr "¡Por favor, no envíes tu nombre clave!"
 msgid "Keep your codename secret, and use it to log in later to check for replies."
 msgstr "Mantén tu nombre clave secreto, y úsalo para iniciar sesión más tarde para comprobar si hay respuestas."
 
+msgid "Thank you for sending this information to us. Please check back later for replies."
+msgstr "Gracias por enviarnos esta información. Por favor, verifica más tarde por respuestas."
+
 msgid "Thanks! We received your message."
 msgstr "¡Gracias! Recibimos tu mensaje."
 
@@ -785,8 +793,11 @@ msgstr "Todas las repuestas han sido eliminadas"
 msgid "Sorry, that is not a recognized codename."
 msgstr "Lo sentimos, ese nombre clave no es reconocido."
 
-msgid "Codename"
-msgstr "Nombre Clave"
+msgid "Important"
+msgstr "Importante"
+
+msgid "You were logged out due to inactivity. Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
+msgstr "Tu sesión ha terminado debido a inactividad. Haz clic en el botón <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>Nueva identidad</b> en la barra de herramientas del Navegador Tor antes de proseguir. Esto borrará los datos de actividad del Navegador Tor en este dispositivo."
 
 msgid "Protecting Journalists and Sources"
 msgstr "Protegiendo a Periodistas y Fuentes"
@@ -811,12 +822,6 @@ msgstr "Lo sentimos, el sitio web encontró un error y no pudo completar tu soli
 
 msgid "Look up a codename..."
 msgstr "Buscar un nombre clave..."
-
-msgid "Thank you for sending this information to us. Please check back later for replies."
-msgstr "Gracias por enviarnos esta información. Por favor, verifica más tarde por respuestas."
-
-msgid "Forgot your codename?"
-msgstr "¿Olvidaste tu nombre clave?"
 
 msgid "Powered by"
 msgstr "Con tecnología de"
@@ -869,6 +874,9 @@ msgstr "<strong>Se recomienda que uses el Navegador Tor para acceder a SecureDro
 msgid "<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop version.</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
 msgstr "<strong>Se recomienda que uses la versión de escritorio del Navegador Tor para acceder a SecureDrop, ya que Orfox no proporciona el mismo nivel de seguridad y anonimato.</strong><a class=\"recommend-tor\" href=\"{tor_browser_url}\"> Aprende cómo instalarlo</a>, o ignora esta advertencia para continuar."
 
+msgid "{} logo"
+msgstr ""
+
 msgid "First submission"
 msgstr "Primer envío"
 
@@ -902,15 +910,6 @@ msgstr "Una cosa más..."
 msgid "Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar. This will clear your Tor Browser activity data on this device."
 msgstr "Haz clic en el botón <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>Nueva identidad</b> en la barra de herramientas del Navegador Tor. Esto borrará los datos de actividad del Navegador Tor en este dispositivo."
 
-msgid "Show"
-msgstr "Mostrar"
-
-msgid "Hide"
-msgstr "Esconder"
-
-msgid "Remember, your codename is:"
-msgstr "Recuerda que tu nombre clave es:"
-
 msgid "Submit Files or Messages"
 msgstr "Enviar Archivos o Mensajes"
 
@@ -932,11 +931,16 @@ msgstr "<a href=\"{url}\" class=\"text-link\">Aprende más</a>."
 msgid "Maximum upload size: 500 MB"
 msgstr "Tamaño máximo de carga: 500 MB"
 
-msgid "Submit"
-msgstr "Enviar"
+#, fuzzy
+#| msgid "Your first message must be at least {} characters long."
+msgid "If you are only sending a message, it must be at least {} characters long."
+msgstr "Tu primer mensaje debe tener al menos {} caracteres de longitud."
 
 msgid "Anti-spam check. Do not fill this in!"
 msgstr "Comprobación de contenido no solicitado. ¡No completes esto!"
+
+msgid "Submit"
+msgstr "Enviar"
 
 msgid "Read Replies"
 msgstr "Leer Respuestas"
@@ -950,9 +954,6 @@ msgstr "Eliminar esta respuesta"
 msgid "Delete reply from {timestamp}?"
 msgstr "¿Borrar respuesta de {timestamp}?"
 
-msgid "Delete this reply?"
-msgstr "¿Deseas eliminar esta respuesta?"
-
 msgid "Delete All Replies"
 msgstr "Eliminar todas las respuestas"
 
@@ -965,9 +966,6 @@ msgstr "¿Has terminado con las respuestas?"
 msgid "YES, DELETE ALL REPLIES"
 msgstr "SI, ELIMINAR TODAS LAS RESPUESTAS"
 
-msgid "NO, NOT YET"
-msgstr "NO, TODAVÍA NO"
-
 msgid "No Messages"
 msgstr "No hay mensajes"
 
@@ -976,12 +974,6 @@ msgstr "Página no encontrada"
 
 msgid "Sorry, we couldn't locate what you requested."
 msgstr "Lo sentimos, no pudimos localizar lo que pediste."
-
-msgid "Important"
-msgstr "Importante"
-
-msgid "You were logged out due to inactivity. Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
-msgstr "Tu sesión ha terminado debido a inactividad. Haz clic en el botón <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>Nueva identidad</b> en la barra de herramientas del Navegador Tor antes de proseguir. Esto borrará los datos de actividad del Navegador Tor en este dispositivo."
 
 msgid "Proxy Service Detected"
 msgstr "Servicio de proxy detectado"
@@ -992,7 +984,9 @@ msgstr "Parece que estás usando un servicio de proxy Tor para acceder a SecureD
 msgid "Anyone monitoring your Internet traffic &mdash; including your government, your Internet provider, or the proxy operator &mdash; may be able to identify you."
 msgstr "Cualquiera que esté monitoreando tu tráfico de Internet &mdash; incluyendo tu gobierno, tu proveedor de Internet o el operador del proxy &mdash; podría ser capaz de identificarte."
 
-msgid "Always use <a href=\"www.torproject.org/projects/torbrowser.html\">Tor Browser</a> to access SecureDrop. Valid SecureDrop site addresses end with <code>.onion</code>. The correct address for this site is:"
+#, fuzzy
+#| msgid "Always use <a href=\"www.torproject.org/projects/torbrowser.html\">Tor Browser</a> to access SecureDrop. Valid SecureDrop site addresses end with <code>.onion</code>. The correct address for this site is:"
+msgid "Always use Tor Browser (<code>{}</code>) to access SecureDrop. Valid SecureDrop site addresses end with <code>.onion</code>. The correct address for this site is:"
 msgstr "Usa siempre el <a href=\"www.torproject.org/projects/torbrowser.html\">Navegador Tor</a> para acceder a SecureDrop. Las direcciones válidas de sitios SecureDrop terminan en <code>.onion</code>. La dirección correcta para este sitio es:"
 
 msgid "If you are already using Tor Browser, copy the address above and generate a new identity before you access SecureDrop."
@@ -1015,6 +1009,17 @@ msgstr "Copia y pega la siguiente dirección en tu navegador y sigue las instruc
 
 msgid "If there is a chance that downloading Tor Browser raises suspicion and your mail provider is less likely to be monitored, you can send a mail to <kbd>gettor@torproject.org</kbd> and a bot will answer with instructions."
 msgstr "Si existe la posibilidad de que levantes sospechas al descargar el Navegador Tor y es menos probable que tu proveedor de correo electrónico sea supervisado, puedes enviar un correo a <kbd>gettor@torproject.org</kbd> y un sistema automático responderá con instrucciones."
+
+msgid "Remember, your codename is:"
+msgstr "Recuerda que tu nombre clave es:"
+
+msgid "Codename"
+msgstr "Nombre Clave"
+
+#, fuzzy
+#| msgid "Codename"
+msgid "Show Codename"
+msgstr "Nombre Clave"
 
 msgid "Why download the team's public key?"
 msgstr "¿Por qué descargar la llave pública del equipo?"
@@ -1055,6 +1060,21 @@ msgstr "<strong>Importante:</strong> Si deseas permanecer anónimo, <strong>no</
 
 msgid "Back to submission page"
 msgstr "Regresar a la página de envío"
+
+#~ msgid "Forgot your codename?"
+#~ msgstr "¿Olvidaste tu nombre clave?"
+
+#~ msgid "Show"
+#~ msgstr "Mostrar"
+
+#~ msgid "Hide"
+#~ msgstr "Esconder"
+
+#~ msgid "Delete this reply?"
+#~ msgstr "¿Deseas eliminar esta respuesta?"
+
+#~ msgid "NO, NOT YET"
+#~ msgstr "NO, TODAVÍA NO"
 
 #~ msgid "The following file has been selected for <strong>permanent deletion</strong>:"
 #~ msgid_plural "The following {num} files have been selected for <strong>permanent deletion</strong>:"
@@ -1318,9 +1338,6 @@ msgstr "Regresar a la página de envío"
 
 #~ msgid "CHECK-IN"
 #~ msgstr "REGISTRO"
-
-#~ msgid "RESET PASSWORD"
-#~ msgstr "RESTABLECER CONTRASEÑA"
 
 #~ msgid "Reset 2FA for mobile apps such as FreeOTP or Google Authenticator"
 #~ msgstr "Restablecer A2F para aplicaciones móviles tales como FreeOTP o Google Authenticator"
