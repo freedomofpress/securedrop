@@ -1,26 +1,17 @@
-import json
 import subprocess
+import re
+from hmac import compare_digest
+
+from typing import Optional
 
 import werkzeug
-from flask import flash
-from flask import redirect
-from flask import render_template
-from flask import current_app
-from flask import url_for
+from flask import flash, redirect, render_template, current_app, url_for
 from flask.sessions import SessionMixin
 from markupsafe import Markup, escape
-from store import Storage
-from hmac import compare_digest
 from flask_babel import gettext
-
-import typing
-
-import re
+from store import Storage
 
 from source_user import SourceUser
-
-if typing.TYPE_CHECKING:
-    from typing import Optional
 
 
 def codename_detected(message: str, codename: str) -> bool:
@@ -110,23 +101,3 @@ def check_url_file(path: str, regexp: str) -> 'Optional[str]':
 def get_sourcev3_url() -> 'Optional[str]':
     return check_url_file("/var/lib/securedrop/source_v3_url",
                           r"^[a-z0-9]{56}\.onion$")
-
-
-def fit_codenames_into_cookie(codenames: dict) -> dict:
-    """
-    If `codenames` will approach `werkzeug.Response.max_cookie_size` once
-    serialized, incrementally pop off the oldest codename until the remaining
-    (newer) ones will fit.
-    """
-
-    serialized = json.dumps(codenames).encode()
-    if len(codenames) > 1 and len(serialized) > 4000:  # werkzeug.Response.max_cookie_size = 4093
-        if current_app:
-            current_app.logger.warn(f"Popping oldest of {len(codenames)} "
-                                    f"codenames ({len(serialized)} bytes) to "
-                                    f"fit within maximum cookie size")
-        del codenames[list(codenames)[0]]  # FIFO
-
-        return fit_codenames_into_cookie(codenames)
-
-    return codenames

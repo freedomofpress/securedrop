@@ -1,10 +1,9 @@
 import operator
 import os
 import io
+from datetime import datetime, timezone
 
-from base64 import urlsafe_b64encode
-from datetime import datetime, timedelta, timezone
-from typing import Union
+from typing import Optional, Union
 
 import werkzeug
 from flask import (Blueprint, render_template, redirect, url_for,
@@ -21,10 +20,9 @@ from encryption import EncryptionManager, GpgKeyNotFoundError
 from models import Submission, Reply, get_one_or_else, InstanceConfig
 from passphrases import PassphraseGenerator, DicewarePassphrase
 from sdconfig import SDConfig
-from source_app.decorators import login_required
+from source_app.decorators import login_required, login_possible
 from source_app.session_manager import SessionManager
-from source_app.utils import normalize_timestamps, fit_codenames_into_cookie, \
-    clear_session_and_redirect_to_logged_out_page, codename_detected, flash_msg
+from source_app.utils import normalize_timestamps, codename_detected, flash_msg
 from source_app.forms import LoginForm, SubmissionForm
 from source_user import InvalidPassphraseError, create_source_user, \
     SourcePassphraseCollisionError, SourceDesignationCollisionError, SourceUser
@@ -41,7 +39,8 @@ def make_blueprint(config: SDConfig) -> Blueprint:
         return render_template('index.html')
 
     @view.route('/lookup', methods=('POST', 'GET'))
-    def lookup() -> Union[str, werkzeug.Response]:
+    @login_possible
+    def lookup(logged_in_source: 'Optional[SourceUser]') -> Union[str, werkzeug.Response]:
         if request.method == 'POST':
             # Try to detect Tor2Web usage by looking to see if tor2web_check got mangled
             tor2web_check = request.form.get('tor2web_check')
@@ -51,10 +50,8 @@ def make_blueprint(config: SDConfig) -> Blueprint:
             elif tor2web_check != 'href="fake.onion"':
                 return redirect(url_for('info.tor2web_warning'))
 
-        is_user_logged_in = SessionManager.is_user_logged_in(db_session=db.session)
         replies = []
-        if is_user_logged_in:
-            logged_in_source = SessionManager.get_logged_in_user(db_session=db.session)
+        if logged_in_source is not None:
             logged_in_source_in_db = logged_in_source.get_db_record()
             source_inbox = Reply.query.filter_by(
                 source_id=logged_in_source_in_db.id, deleted_by_source=False
@@ -94,26 +91,29 @@ def make_blueprint(config: SDConfig) -> Blueprint:
             except GpgKeyNotFoundError:
                 encryption_mgr.generate_source_key_pair(logged_in_source)
 
-            # If this user is logged in, they already submitted at least once
+            # If the source is logged in, they already submitted at least once
             min_message_length = 0
+            new_user_codename = session.get('new_user_codename', None)
         else:
             min_message_length = InstanceConfig.get_default().initial_message_min_len
+            new_user_codename = None
 
         return render_template(
             'lookup.html',
-            is_user_logged_in=is_user_logged_in,
+            is_user_logged_in=logged_in_source is not None,
             allow_document_uploads=InstanceConfig.get_default().allow_document_uploads,
             replies=replies,
             min_len=min_message_length,
-            new_user_codename=session.get('new_user_codename', None),
+            new_user_codename=new_user_codename,
             form=SubmissionForm(),
         )
 
     @view.route('/submit', methods=('POST',))
-    def submit() -> werkzeug.Response:
-        # Flow inversion: generate codename and create user before processing their submission
-        # rather than on the screen before
-        if not SessionManager.is_user_logged_in(db_session=db.session):
+    @login_possible
+    def submit(logged_in_source: 'Optional[SourceUser]') -> werkzeug.Response:
+        # Flow inversion: generate codename and create source user before processing their
+        # submission, rather than on a separate screen
+        if logged_in_source is None:
             codename = PassphraseGenerator.get_default().generate_passphrase(
                 preferred_language=g.localeinfo.language
             )
@@ -138,8 +138,6 @@ def make_blueprint(config: SDConfig) -> Blueprint:
                 db_session=db.session,
                 supplied_passphrase=DicewarePassphrase(codename)
             )
-        else:
-            logged_in_source = SessionManager.get_logged_in_user(db_session=db.session)
 
         allow_document_uploads = InstanceConfig.get_default().allow_document_uploads
         form = SubmissionForm()
