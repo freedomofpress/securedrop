@@ -1,5 +1,8 @@
 # Changelog
 
+## 2.4.0~rc1
+
+
 ## 2.3.2
 
 * Added Tails 5.0 compatibility updates (#6408, #6424)
