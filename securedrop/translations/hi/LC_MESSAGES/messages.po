@@ -659,6 +659,9 @@ msgstr "पयोगकर्ता का पासवर्ड इस मे�
 msgid "Your password will be changed to:"
 msgstr "आपका पासवर्ड इसमें बदल जाएगा:"
 
+msgid "RESET PASSWORD"
+msgstr "पासवर्ड रीसेट"
+
 msgid "Reset Two-Factor Authentication"
 msgstr "दो-फैक्टर प्रमाणीकरण रीसेट करें"
 
@@ -787,7 +790,9 @@ msgstr ""
 msgid "You were redirected because you are already logged in. If you want to create a new account, you should log out first."
 msgstr "आपको पुनर्निर्देशित किया गया था क्योंकि आप पहले ही लॉग इन हैं। यदि आप एक नया खाता बनाना चाहते हैं, तो आपको पहले लॉग आउट करना चाहिए।"
 
-msgid "You are already logged in. Please verify your codename above as it may differ from the one displayed on the previous page."
+#, fuzzy
+#| msgid "You are already logged in. Please verify your codename above as it may differ from the one displayed on the previous page."
+msgid "You are already logged in. Please verify your codename as it may differ from the one displayed on the previous page."
 msgstr "आप पहले से लॉग इन हैं। कृपया अपना संकेत नाम ऊपर सत्यापित करें क्योंकि यह पिछले पृष्ठ पर प्रदर्शित करे गए से भिन्न हो सकता है।"
 
 msgid "There was a temporary problem creating your account. Please try again."
@@ -815,6 +820,9 @@ msgstr "अपना संकेत नाम भूल गए?"
 msgid "Keep your codename secret, and use it to log in later to check for replies."
 msgstr "यदि आप पहले से ही पत्रकारों को जमा कर चुके हैं, तो प्रतिक्रियाओं की जांच के लिए यहां लॉग इन करें।"
 
+msgid "Thank you for sending this information to us. Please check back later for replies."
+msgstr "हमें यह जानकारी भेजने के लिए धन्यवाद। उत्तर के लिए बाद में जांच करें।"
+
 msgid "Thanks! We received your message."
 msgstr "धन्यवाद! हमें आपका संदेशा मिला|"
 
@@ -833,10 +841,11 @@ msgstr "सभी उत्तर हटा दिए गए हैं"
 msgid "Sorry, that is not a recognized codename."
 msgstr "क्षमा करें, वह एक मान्यता प्राप्त कोडनाम नहीं है |"
 
-#, fuzzy
-#| msgid "Enter Codename"
-msgid "Codename"
-msgstr "संकेत नाम दर्ज करें"
+msgid "Important"
+msgstr "जरूरी"
+
+msgid "You were logged out due to inactivity. Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
+msgstr "आप निष्क्रियता के कारण लॉग आउट हो गया. आगे बढ़ने से पहले अपने Tor ब्राउज़र के टूलबार में <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b> नई पहचान </b> बटन पर क्लिक करें."
 
 msgid "Protecting Journalists and Sources"
 msgstr "पत्रकारों और स्रोतों की रक्षा करते हुए"
@@ -861,12 +870,6 @@ msgstr "क्षमा करें, वेबसाइट को एक त्
 
 msgid "Look up a codename..."
 msgstr "एक कोडनाम खोजें..."
-
-msgid "Thank you for sending this information to us. Please check back later for replies."
-msgstr "हमें यह जानकारी भेजने के लिए धन्यवाद। उत्तर के लिए बाद में जांच करें।"
-
-msgid "Forgot your codename?"
-msgstr "अपना संकेत नाम भूल गए?"
 
 msgid "Powered by"
 msgstr "द्वारा संचालित"
@@ -923,6 +926,9 @@ msgstr "<strong>SecureDrop तक पहुंचने के लिए Tor ब
 msgid "<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop version.</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
 msgstr "<strong>यह अनुशंसा की जाती है कि आप SecureDrop तक पहुंचने के लिए Tor ब्राउजर के डेस्कटॉप संस्करण का उपयोग करें, क्योंकि Orfox समान स्तर की सुरक्षा और डेस्कटॉप संस्करण के जितना गुमनाम नहीं प्रदान करता है।</strong><a class=\"recommend-tor\" href=\"{tor_browser_url}\">इसे इंस्टॉल करने के बारे में जानें</a>, या जारी रखने के लिए इस चेतावनी को अनदेखा करें।"
 
+msgid "{} logo"
+msgstr ""
+
 msgid "First submission"
 msgstr "पहला सबमिशन"
 
@@ -956,15 +962,6 @@ msgstr "एक और चीज़..."
 msgid "Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar. This will clear your Tor Browser activity data on this device."
 msgstr "अपने Tor ब्राउज़र के टूलबार में <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>नई पहचान </b> बटन पर क्लिक करें. यह इस उपकरण पर आपके Tor ब्राउज़र गतिविधि डेटा को साफ़ कर देगा."
 
-msgid "Show"
-msgstr "दिखाएं"
-
-msgid "Hide"
-msgstr "छुपाएं"
-
-msgid "Remember, your codename is:"
-msgstr "याद रखें, आपका संकेत नाम है:"
-
 msgid "Submit Files or Messages"
 msgstr "फ़ाइलें या संदेश जमा करें"
 
@@ -986,10 +983,16 @@ msgstr "<a href=\"{url}\" class=\"text-link\">अधिक जानें</a>|"
 msgid "Maximum upload size: 500 MB"
 msgstr "अधिकतम अपलोड माप: 500 MB"
 
-msgid "Submit"
-msgstr ""
+#, fuzzy
+#| msgid "Must be at least {num} character long."
+#| msgid_plural "Must be at least {num} characters long."
+msgid "If you are only sending a message, it must be at least {} characters long."
+msgstr "कम से कम {num} वर्ण लंबा होना चाहिए।"
 
 msgid "Anti-spam check. Do not fill this in!"
+msgstr ""
+
+msgid "Submit"
 msgstr ""
 
 msgid "Read Replies"
@@ -1003,9 +1006,6 @@ msgstr "यह उत्तर हटाएं"
 
 msgid "Delete reply from {timestamp}?"
 msgstr ""
-
-msgid "Delete this reply?"
-msgstr "यह उत्तर हटाएं?"
 
 #, fuzzy
 #| msgid "Delete this reply?"
@@ -1021,9 +1021,6 @@ msgstr "क्या आपने सभी उत्तर पढ़ लिए?"
 msgid "YES, DELETE ALL REPLIES"
 msgstr "हाँ, सभी उत्तर हटाएं"
 
-msgid "NO, NOT YET"
-msgstr "नहीं, अभी तक नहीं"
-
 #, fuzzy
 #| msgid "Message"
 msgid "No Messages"
@@ -1034,12 +1031,6 @@ msgstr "पृष्ठ नहीं मिला"
 
 msgid "Sorry, we couldn't locate what you requested."
 msgstr "क्षमा करें, हम आपके द्वारा अनुरोध किए गए स्थान का पता नहीं लगा सके।"
-
-msgid "Important"
-msgstr "जरूरी"
-
-msgid "You were logged out due to inactivity. Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
-msgstr "आप निष्क्रियता के कारण लॉग आउट हो गया. आगे बढ़ने से पहले अपने Tor ब्राउज़र के टूलबार में <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b> नई पहचान </b> बटन पर क्लिक करें."
 
 msgid "Proxy Service Detected"
 msgstr ""
@@ -1054,7 +1045,7 @@ msgstr "SecureDrop से कनेक्ट करने के लिए Tor2W
 msgid "Anyone monitoring your Internet traffic &mdash; including your government, your Internet provider, or the proxy operator &mdash; may be able to identify you."
 msgstr "आपकी पहचान करने के लिए किसी भी व्यक्ति के लिए आपके इंटरनेट यातायात (आपकी सरकार, आपका इंटरनेट प्रदाता) की निगरानी करना संभव हो सकता है।"
 
-msgid "Always use <a href=\"www.torproject.org/projects/torbrowser.html\">Tor Browser</a> to access SecureDrop. Valid SecureDrop site addresses end with <code>.onion</code>. The correct address for this site is:"
+msgid "Always use Tor Browser (<code>{}</code>) to access SecureDrop. Valid SecureDrop site addresses end with <code>.onion</code>. The correct address for this site is:"
 msgstr ""
 
 msgid "If you are already using Tor Browser, copy the address above and generate a new identity before you access SecureDrop."
@@ -1077,6 +1068,19 @@ msgstr "निम्न एड्रेस को अपने ब्राउ�
 
 msgid "If there is a chance that downloading Tor Browser raises suspicion and your mail provider is less likely to be monitored, you can send a mail to <kbd>gettor@torproject.org</kbd> and a bot will answer with instructions."
 msgstr "यदि आशंका है कि Tor ब्राउज़र डाउनलोड करने से संदेह उठता है और आपके मेल प्रदाता पर नजर रखी जाने की संभावना कम है, तो आप एक मेल भेज सकते हैं इस पर <kbd>gettor@torproject.org</kbd> और एक बॉट निर्देशों के साथ जवाब देंगे|"
+
+msgid "Remember, your codename is:"
+msgstr "याद रखें, आपका संकेत नाम है:"
+
+#, fuzzy
+#| msgid "Enter Codename"
+msgid "Codename"
+msgstr "संकेत नाम दर्ज करें"
+
+#, fuzzy
+#| msgid "Enter Codename"
+msgid "Show Codename"
+msgstr "संकेत नाम दर्ज करें"
 
 msgid "Why download the team's public key?"
 msgstr "टीम की सार्वजनिक कुंजी क्यों डाउनलोड करें?"
@@ -1117,6 +1121,21 @@ msgstr "<strong>महत्वपूर्ण:</strong> यदि आप गु
 
 msgid "Back to submission page"
 msgstr "सबमिशन पृष्ठ पर वापस जाएं"
+
+#~ msgid "Forgot your codename?"
+#~ msgstr "अपना संकेत नाम भूल गए?"
+
+#~ msgid "Show"
+#~ msgstr "दिखाएं"
+
+#~ msgid "Hide"
+#~ msgstr "छुपाएं"
+
+#~ msgid "Delete this reply?"
+#~ msgstr "यह उत्तर हटाएं?"
+
+#~ msgid "NO, NOT YET"
+#~ msgstr "नहीं, अभी तक नहीं"
 
 #~ msgid "The following file has been selected for <strong>permanent deletion</strong>:"
 #~ msgid_plural "The following {num} files have been selected for <strong>permanent deletion</strong>:"
@@ -1358,9 +1377,6 @@ msgstr "सबमिशन पृष्ठ पर वापस जाएं"
 
 #~ msgid "RESET HARDWARE TOKEN"
 #~ msgstr "हार्डवेयर टोकन रीसेट  करें"
-
-#~ msgid "RESET PASSWORD"
-#~ msgstr "पासवर्ड रीसेट"
 
 #~ msgid "Reset 2FA for mobile apps such as FreeOTP or Google Authenticator"
 #~ msgstr "मोबाइल एप्लिकेशन जैसे कि (FreeOTP) या (Google Authenticator) के लिए दो-कारक प्रमाणीकरण को रीसेट करें"

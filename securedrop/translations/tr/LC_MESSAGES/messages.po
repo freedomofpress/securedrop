@@ -625,6 +625,9 @@ msgstr "Kullanıcının parolası şu şekilde değiştirilecek:"
 msgid "Your password will be changed to:"
 msgstr "Parolanız şu şekilde değiştirilecek:"
 
+msgid "RESET PASSWORD"
+msgstr "PAROLAYI SIFIRLA"
+
 msgid "Reset Two-Factor Authentication"
 msgstr "İki Aşamalı Kimlik Doğrulamayı Sıfırla"
 
@@ -745,7 +748,9 @@ msgstr "Bağlantınız şu anda anonim değil!"
 msgid "You were redirected because you are already logged in. If you want to create a new account, you should log out first."
 msgstr "Oturumunuz zaten açık olduğundan buraya yönlendirildiniz. Yeni bir hesap açmak istiyorsanız, önce oturumunuzu kapatmalısınız."
 
-msgid "You are already logged in. Please verify your codename above as it may differ from the one displayed on the previous page."
+#, fuzzy
+#| msgid "You are already logged in. Please verify your codename above as it may differ from the one displayed on the previous page."
+msgid "You are already logged in. Please verify your codename as it may differ from the one displayed on the previous page."
 msgstr "Zaten oturum açmışsınız. Lütfen yukarıdaki kod adınızın önceki sayfada görüntülenen ile aynı olup olmadığını denetleyin."
 
 msgid "There was a temporary problem creating your account. Please try again."
@@ -766,6 +771,9 @@ msgstr "Lütfen kod adınızı göndermeyin!"
 msgid "Keep your codename secret, and use it to log in later to check for replies."
 msgstr "Kod adınızı gizli tutun ve daha sonra yanıtları denetlemek için oturum açmakta kullanın."
 
+msgid "Thank you for sending this information to us. Please check back later for replies."
+msgstr "Bu bilgiyi bize gönderdiğiniz için teşekkür ederiz. Yanıtlar için buraya daha sonra yeniden bakın."
+
 msgid "Thanks! We received your message."
 msgstr "Teşekkürler! İletiniz alındı."
 
@@ -784,8 +792,11 @@ msgstr "Bütün yanıtlar silindi"
 msgid "Sorry, that is not a recognized codename."
 msgstr "Maalesef, kod adı anlaşılamadı."
 
-msgid "Codename"
-msgstr "Kod adı"
+msgid "Important"
+msgstr "Önemli"
+
+msgid "You were logged out due to inactivity. Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
+msgstr "Bir süredir işlem yapmadığınız için oturumunuz kapatıldı. İlerlemeden önce Tor Browser araç çubuğundan <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>Kimliği yenile</b> üzerine tıklayın. Bu işlem bu aygıttaki Tor Browser etkinlik bilgilerini siler."
 
 msgid "Protecting Journalists and Sources"
 msgstr "Gazetecileri ve Kaynakları Korumak"
@@ -810,12 +821,6 @@ msgstr "Maalesef web sitesinde bir sorun çıktığından isteğiniz karşılana
 
 msgid "Look up a codename..."
 msgstr "Bir kod adı ara..."
-
-msgid "Thank you for sending this information to us. Please check back later for replies."
-msgstr "Bu bilgiyi bize gönderdiğiniz için teşekkür ederiz. Yanıtlar için buraya daha sonra yeniden bakın."
-
-msgid "Forgot your codename?"
-msgstr "Kod adınızı mı unuttunuz?"
 
 msgid "Powered by"
 msgstr "Destekleyen"
@@ -868,6 +873,9 @@ msgstr "<strong>SecureDrop uygulamasına erişmek için Tor Browser kullanmanız
 msgid "<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop version.</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
 msgstr "<strong>SecureDrop uygulamasına erişmek için Tor Browser masaüstü sürümünü kullanmanız önerilir. Orfox masaüstü sürümlerle aynı güvenlik ve anonimlik düzeylerini sağlamaz</strong>.<a class=\"recommend-tor\" href=\"{tor_browser_url}\">Nasıl kuracağınızı öğrenin</a> ya da bu uyarıyı görmezden gelerek devam edin."
 
+msgid "{} logo"
+msgstr ""
+
 msgid "First submission"
 msgstr "İlk gönderim"
 
@@ -901,15 +909,6 @@ msgstr "Bir şey daha var..."
 msgid "Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar. This will clear your Tor Browser activity data on this device."
 msgstr "Tor Browser araç çubuğundan <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>Kimliği yenile</b> üzerine tıklayın. Bu işlem bu aygıt üzerindeki Tor Browser etkinliklerini siler."
 
-msgid "Show"
-msgstr "Göster"
-
-msgid "Hide"
-msgstr "Gizle"
-
-msgid "Remember, your codename is:"
-msgstr "Unutmayın, kod adınız:"
-
 msgid "Submit Files or Messages"
 msgstr "Dosya veya İleti Gönderin"
 
@@ -931,11 +930,16 @@ msgstr "<a href=\"{url}\" class=\"text-link\">Ayrıntılı bilgi alın</a>."
 msgid "Maximum upload size: 500 MB"
 msgstr "En büyük yükleme boyutu: 500 MB"
 
-msgid "Submit"
-msgstr "Gönder"
+#, fuzzy
+#| msgid "Your first message must be at least {} characters long."
+msgid "If you are only sending a message, it must be at least {} characters long."
+msgstr "İlk iletiniz en az {} karakter uzunluğunda olmalıdır."
 
 msgid "Anti-spam check. Do not fill this in!"
 msgstr "Anti-spam denetimi. Bunu doldurmayın!"
+
+msgid "Submit"
+msgstr "Gönder"
 
 msgid "Read Replies"
 msgstr "Yanıtları Okuyun"
@@ -949,9 +953,6 @@ msgstr "Bu yanıtı sil"
 msgid "Delete reply from {timestamp}?"
 msgstr "{timestamp} yanıtı silinsin mi?"
 
-msgid "Delete this reply?"
-msgstr "Bu yanıt silinsin mi?"
-
 msgid "Delete All Replies"
 msgstr "Tüm yanıtları sil"
 
@@ -964,9 +965,6 @@ msgstr "Yanıtlarla işiniz bitti mi?"
 msgid "YES, DELETE ALL REPLIES"
 msgstr "EVET, TÜM YANITLARI SİL"
 
-msgid "NO, NOT YET"
-msgstr "HAYIR, DAHA DEĞİL"
-
 msgid "No Messages"
 msgstr "Herhangi bir ileti yok"
 
@@ -975,12 +973,6 @@ msgstr "Sayfa bulunamadı"
 
 msgid "Sorry, we couldn't locate what you requested."
 msgstr "Maalesef, isteğinizi yerine getiremiyoruz."
-
-msgid "Important"
-msgstr "Önemli"
-
-msgid "You were logged out due to inactivity. Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
-msgstr "Bir süredir işlem yapmadığınız için oturumunuz kapatıldı. İlerlemeden önce Tor Browser araç çubuğundan <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>Kimliği yenile</b> üzerine tıklayın. Bu işlem bu aygıttaki Tor Browser etkinlik bilgilerini siler."
 
 msgid "Proxy Service Detected"
 msgstr "Vekil sunucu hizmeti algılandı"
@@ -991,7 +983,9 @@ msgstr "SecureDrop uygulamasına Tor vekil sunucu hizmetini kullanarak bağland�
 msgid "Anyone monitoring your Internet traffic &mdash; including your government, your Internet provider, or the proxy operator &mdash; may be able to identify you."
 msgstr "İnternet kullanımını gözetleyen herhangi birinin (hükümetiniz, İnternet hizmeti sağlayıcınız ya da vekil sunucu işletmecisiniz) sizin kim olduğunuzu belirleyebilir."
 
-msgid "Always use <a href=\"www.torproject.org/projects/torbrowser.html\">Tor Browser</a> to access SecureDrop. Valid SecureDrop site addresses end with <code>.onion</code>. The correct address for this site is:"
+#, fuzzy
+#| msgid "Always use <a href=\"www.torproject.org/projects/torbrowser.html\">Tor Browser</a> to access SecureDrop. Valid SecureDrop site addresses end with <code>.onion</code>. The correct address for this site is:"
+msgid "Always use Tor Browser (<code>{}</code>) to access SecureDrop. Valid SecureDrop site addresses end with <code>.onion</code>. The correct address for this site is:"
 msgstr "SecureDrop erişimi için her zaman <a href=\"www.torproject.org/projects/torbrowser.html\">Tor Browser</a> kullanın. Geçerli SecureDrop site adreslerinin sonunda <code>.onion</code> bulunur. Bu sitenin doğru adresi:"
 
 msgid "If you are already using Tor Browser, copy the address above and generate a new identity before you access SecureDrop."
@@ -1014,6 +1008,17 @@ msgstr "Tor Browser uygulamasını indirmek ve kurmak için aşağıdaki adresi 
 
 msgid "If there is a chance that downloading Tor Browser raises suspicion and your mail provider is less likely to be monitored, you can send a mail to <kbd>gettor@torproject.org</kbd> and a bot will answer with instructions."
 msgstr "Tor Browser uygulamasını indirmenizin şüphe uyandırma olasılığı varsa ve e-posta hizmeti sağlayıcınızın izlenme olasılığı daha düşük ise, <kbd>gettor@torproject.org</kbd> adresine bir e-posta atabilirsiniz. Bir bot yapmanız gerekenleri size yanıt olarak gönderir."
+
+msgid "Remember, your codename is:"
+msgstr "Unutmayın, kod adınız:"
+
+msgid "Codename"
+msgstr "Kod adı"
+
+#, fuzzy
+#| msgid "Codename"
+msgid "Show Codename"
+msgstr "Kod adı"
 
 msgid "Why download the team's public key?"
 msgstr "Neden takımın açık anahtarını indirmelisiniz?"
@@ -1054,6 +1059,21 @@ msgstr "<strong>Önemli:</strong> Anonim kalmak istiyorsanız, dosyanın GPG tar
 
 msgid "Back to submission page"
 msgstr "Gönderi sayfasına geri dön"
+
+#~ msgid "Forgot your codename?"
+#~ msgstr "Kod adınızı mı unuttunuz?"
+
+#~ msgid "Show"
+#~ msgstr "Göster"
+
+#~ msgid "Hide"
+#~ msgstr "Gizle"
+
+#~ msgid "Delete this reply?"
+#~ msgstr "Bu yanıt silinsin mi?"
+
+#~ msgid "NO, NOT YET"
+#~ msgstr "HAYIR, DAHA DEĞİL"
 
 #~ msgid "The following file has been selected for <strong>permanent deletion</strong>:"
 #~ msgid_plural "The following {num} files have been selected for <strong>permanent deletion</strong>:"
@@ -1317,9 +1337,6 @@ msgstr "Gönderi sayfasına geri dön"
 
 #~ msgid "CHECK-IN"
 #~ msgstr "GİRİŞ"
-
-#~ msgid "RESET PASSWORD"
-#~ msgstr "PAROLAYI SIFIRLA"
 
 #~ msgid "Reset 2FA for mobile apps such as FreeOTP or Google Authenticator"
 #~ msgstr "FreeOTP ya da Google Authenticator gibi mobil uygulamaların iki aşamalı kimlik doğrulamasını sıfırla"

@@ -626,6 +626,9 @@ msgstr "Het wachtwoord van de gebruiker zal gewijzigd worden in:"
 msgid "Your password will be changed to:"
 msgstr "Uw wachtwoord wordt gewijzigd naar:"
 
+msgid "RESET PASSWORD"
+msgstr "HERSTEL WACHTWOORD"
+
 msgid "Reset Two-Factor Authentication"
 msgstr "Herstel tweestapsauthenticatie"
 
@@ -746,7 +749,9 @@ msgstr ""
 msgid "You were redirected because you are already logged in. If you want to create a new account, you should log out first."
 msgstr "U bent omgeleid omdat u al ingelogd bent. Indien u een nieuw account wilt aanmaken, moet u eerst uitloggen."
 
-msgid "You are already logged in. Please verify your codename above as it may differ from the one displayed on the previous page."
+#, fuzzy
+#| msgid "You are already logged in. Please verify your codename above as it may differ from the one displayed on the previous page."
+msgid "You are already logged in. Please verify your codename as it may differ from the one displayed on the previous page."
 msgstr "U bent al ingelogd. Verifieer uw codenaam hierboven want die zou kunnen afwijken van de codenaam op de vorige pagina."
 
 msgid "There was a temporary problem creating your account. Please try again."
@@ -774,6 +779,9 @@ msgstr "Uw codenaam vergeten?"
 msgid "Keep your codename secret, and use it to log in later to check for replies."
 msgstr "Als u al eerder documenten heeft verstuurd, log dan hier in om te kijken of u reacties heeft."
 
+msgid "Thank you for sending this information to us. Please check back later for replies."
+msgstr "Bedankt voor het inzenden van deze informatie. Kom later terug om reacties te bekijken."
+
 msgid "Thanks! We received your message."
 msgstr "Bedankt! We hebben uw bericht ontvangen."
 
@@ -792,8 +800,11 @@ msgstr "Alle reacties zijn verwijderd"
 msgid "Sorry, that is not a recognized codename."
 msgstr "Helaas is dit een onbekende codenaam."
 
-msgid "Codename"
-msgstr "Codenaam"
+msgid "Important"
+msgstr "Belangrijk"
+
+msgid "You were logged out due to inactivity. Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
+msgstr "U bent uitgelogd vanwege inactiviteit. Klik op de <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>Nieuwe identiteit</b>-knop in de werkbalk van uw Tor Browser voordat u verder gaat. Hierdoor wordt uw Tor Browser geschiedenis van dit apparaat gewist."
 
 msgid "Protecting Journalists and Sources"
 msgstr "Journalisten en bronnen beschermen"
@@ -818,12 +829,6 @@ msgstr "Sorry, de website ondervond een fout en kon uw verzoek niet voltooien."
 
 msgid "Look up a codename..."
 msgstr "Zoek naar een codenaam..."
-
-msgid "Thank you for sending this information to us. Please check back later for replies."
-msgstr "Bedankt voor het inzenden van deze informatie. Kom later terug om reacties te bekijken."
-
-msgid "Forgot your codename?"
-msgstr "Uw codenaam vergeten?"
 
 msgid "Powered by"
 msgstr "Mogelijk gemaakt door"
@@ -878,6 +883,9 @@ msgstr "<strong>Het wordt aangeraden om de Tor Browser te gebruiken om SecureDro
 msgid "<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop version.</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
 msgstr "<strong>Het wordt aangeraden om de desktop-versie van de Tor Browser te gebruiken om SecureDrop te bezoeken, want Orfox biedt niet hetzelfde veiligheids- en anonimiteitsniveau als de desktop-versie.</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Leer hier hoe deze te installeren is</a> of negeer deze waarschuwing om door te gaan."
 
+msgid "{} logo"
+msgstr ""
+
 msgid "First submission"
 msgstr "Eerste inzending"
 
@@ -911,15 +919,6 @@ msgstr "Nog één ding…"
 msgid "Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar. This will clear your Tor Browser activity data on this device."
 msgstr "Klik op de <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>Nieuwe identiteit</b>-knop in de werkbalk van uw Tor Browser. Hierdoor wordt uw Tor Browser geschiedenis van dit apparaat gewist."
 
-msgid "Show"
-msgstr "Tonen"
-
-msgid "Hide"
-msgstr "Verbergen"
-
-msgid "Remember, your codename is:"
-msgstr "Vergeet niet, uw codenaam is:"
-
 msgid "Submit Files or Messages"
 msgstr "Verstuur bestanden of berichten"
 
@@ -941,11 +940,17 @@ msgstr "<a href=\"{url}\" class=\"text-link\">Lees meer</a>."
 msgid "Maximum upload size: 500 MB"
 msgstr "Maximale bestandsgrootte: 500 MB"
 
-msgid "Submit"
-msgstr "Versturen"
+#, fuzzy
+#| msgid "Must be at least {num} character long."
+#| msgid_plural "Must be at least {num} characters long."
+msgid "If you are only sending a message, it must be at least {} characters long."
+msgstr "Moet ten minste {num} teken lang zijn."
 
 msgid "Anti-spam check. Do not fill this in!"
 msgstr ""
+
+msgid "Submit"
+msgstr "Versturen"
 
 msgid "Read Replies"
 msgstr "Reacties lezen"
@@ -959,9 +964,6 @@ msgstr "Deze reactie verwijderen"
 msgid "Delete reply from {timestamp}?"
 msgstr ""
 
-msgid "Delete this reply?"
-msgstr "Deze reactie verwijderen?"
-
 msgid "Delete All Replies"
 msgstr "Alle reactie verwijderen?"
 
@@ -974,9 +976,6 @@ msgstr "Heeft u de reacties gelezen?"
 msgid "YES, DELETE ALL REPLIES"
 msgstr "JA, VERWIJDER ALLE REACTIES"
 
-msgid "NO, NOT YET"
-msgstr "NEE, NOG NIET"
-
 msgid "No Messages"
 msgstr "Geen berichten"
 
@@ -985,12 +984,6 @@ msgstr "Pagina niet gevonden"
 
 msgid "Sorry, we couldn't locate what you requested."
 msgstr "Sorry, we kunnen niet vinden wat u zoekt."
-
-msgid "Important"
-msgstr "Belangrijk"
-
-msgid "You were logged out due to inactivity. Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
-msgstr "U bent uitgelogd vanwege inactiviteit. Klik op de <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>Nieuwe identiteit</b>-knop in de werkbalk van uw Tor Browser voordat u verder gaat. Hierdoor wordt uw Tor Browser geschiedenis van dit apparaat gewist."
 
 msgid "Proxy Service Detected"
 msgstr ""
@@ -1005,7 +998,7 @@ msgstr "Het gebruik van Tor2Web om met SecureDrop te verbinden, zal uw anonimite
 msgid "Anyone monitoring your Internet traffic &mdash; including your government, your Internet provider, or the proxy operator &mdash; may be able to identify you."
 msgstr "Het is mogelijk voor iedereen die uw internetverkeer in de gaten houdt (uw overheid, uw internetprovider) om u te identificeren."
 
-msgid "Always use <a href=\"www.torproject.org/projects/torbrowser.html\">Tor Browser</a> to access SecureDrop. Valid SecureDrop site addresses end with <code>.onion</code>. The correct address for this site is:"
+msgid "Always use Tor Browser (<code>{}</code>) to access SecureDrop. Valid SecureDrop site addresses end with <code>.onion</code>. The correct address for this site is:"
 msgstr ""
 
 msgid "If you are already using Tor Browser, copy the address above and generate a new identity before you access SecureDrop."
@@ -1028,6 +1021,17 @@ msgstr "Kopieer en plak het volgende adres in uw browser en volg de instructies 
 
 msgid "If there is a chance that downloading Tor Browser raises suspicion and your mail provider is less likely to be monitored, you can send a mail to <kbd>gettor@torproject.org</kbd> and a bot will answer with instructions."
 msgstr "Als de kans bestaat dat het downloaden van de Tor Browser argwaan wekt en het minder waarschijnlijk is dat uw emailprovider in de gaten wordt gehouden, kan u een e-mail sturen naar <kbd>gettor@torproject.org</kbd> waarna een bot een email met instructies zals treun ."
+
+msgid "Remember, your codename is:"
+msgstr "Vergeet niet, uw codenaam is:"
+
+msgid "Codename"
+msgstr "Codenaam"
+
+#, fuzzy
+#| msgid "Codename"
+msgid "Show Codename"
+msgstr "Codenaam"
 
 msgid "Why download the team's public key?"
 msgstr "Waarom moet ik de publieke sleutel van het team downloaden?"
@@ -1068,6 +1072,21 @@ msgstr "<strong>Belangrijk:</strong> Als u anoniem wilt blijven, gebruik dan <st
 
 msgid "Back to submission page"
 msgstr "Terug naar inzendingenpagina"
+
+#~ msgid "Forgot your codename?"
+#~ msgstr "Uw codenaam vergeten?"
+
+#~ msgid "Show"
+#~ msgstr "Tonen"
+
+#~ msgid "Hide"
+#~ msgstr "Verbergen"
+
+#~ msgid "Delete this reply?"
+#~ msgstr "Deze reactie verwijderen?"
+
+#~ msgid "NO, NOT YET"
+#~ msgstr "NEE, NOG NIET"
 
 #~ msgid "The following file has been selected for <strong>permanent deletion</strong>:"
 #~ msgid_plural "The following {num} files have been selected for <strong>permanent deletion</strong>:"
@@ -1321,9 +1340,6 @@ msgstr "Terug naar inzendingenpagina"
 
 #~ msgid "RESET HARDWARE TOKEN"
 #~ msgstr "RESET HARDWARE-TOKEN"
-
-#~ msgid "RESET PASSWORD"
-#~ msgstr "HERSTEL WACHTWOORD"
 
 #~ msgid "Reset 2FA for mobile apps such as FreeOTP or Google Authenticator"
 #~ msgstr "Reset tweefactorauthenticatie voor mobiele apps zoals FreeOTP of Google Authenticator"

@@ -635,6 +635,9 @@ msgstr "Heslo používateľa bude zmenené na:"
 msgid "Your password will be changed to:"
 msgstr "Vaše heslo bude zmenené na:"
 
+msgid "RESET PASSWORD"
+msgstr "RESETOVAŤ HESLO"
+
 msgid "Reset Two-Factor Authentication"
 msgstr "Resetovať dvojfaktorovú autentifikáciu"
 
@@ -755,7 +758,9 @@ msgstr ""
 msgid "You were redirected because you are already logged in. If you want to create a new account, you should log out first."
 msgstr "Boli ste presmerovaní, pretože už ste prihlásení. Ak chcete vytvoriť nový účet, musíte sa najprv odhlásiť."
 
-msgid "You are already logged in. Please verify your codename above as it may differ from the one displayed on the previous page."
+#, fuzzy
+#| msgid "You are already logged in. Please verify your codename above as it may differ from the one displayed on the previous page."
+msgid "You are already logged in. Please verify your codename as it may differ from the one displayed on the previous page."
 msgstr "Už ste prihlásení. Hore si overte správnosť svojho krycieho mena, keďže sa môže líšiť od toho zobrazeného na predošlej stránke."
 
 msgid "There was a temporary problem creating your account. Please try again."
@@ -783,6 +788,9 @@ msgstr "Zabudli ste svoje krycie meno?"
 msgid "Keep your codename secret, and use it to log in later to check for replies."
 msgstr "Ak ste už niečo posielali žurnalistom, prihláste sa tu pre kontrolu odpovedí."
 
+msgid "Thank you for sending this information to us. Please check back later for replies."
+msgstr "Ďakujeme za zaslanie tejto informácie. Prosím vráťte sa neskôr skontrolovať odpovede."
+
 msgid "Thanks! We received your message."
 msgstr "Vďaka! Prijali sme vašu správu."
 
@@ -801,8 +809,11 @@ msgstr "Všetky odpovede boli zmazané"
 msgid "Sorry, that is not a recognized codename."
 msgstr "Prepáčte, toto krycie meno nie je používané."
 
-msgid "Codename"
-msgstr "Krycie meno"
+msgid "Important"
+msgstr "Dôležité"
+
+msgid "You were logged out due to inactivity. Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
+msgstr "Boli ste odhlásení z dôvodu nečinnosti. Skôr než budete pokračovať, kliknite na ikonu <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>Nová identita</b> na lište prehliadača Tor. Tým sa vymažú dáta o aktivite Tor prehliadača na tomto zariadení."
 
 msgid "Protecting Journalists and Sources"
 msgstr "Chránime novinárov a zdroje"
@@ -827,12 +838,6 @@ msgstr "Prepáčte, na webovej stránke sa vyskytla chyba."
 
 msgid "Look up a codename..."
 msgstr "Vyhľadať krycie meno..."
-
-msgid "Thank you for sending this information to us. Please check back later for replies."
-msgstr "Ďakujeme za zaslanie tejto informácie. Prosím vráťte sa neskôr skontrolovať odpovede."
-
-msgid "Forgot your codename?"
-msgstr "Zabudli ste svoje krycie meno?"
 
 msgid "Powered by"
 msgstr "Používa systém"
@@ -887,6 +892,9 @@ msgstr "<strong>Pre prístup k SecureDrop odporúčame použiť prehliadač Tor:
 msgid "<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop version.</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
 msgstr "<strong>Pre prístup k SecureDrop odporúčame používať desktopovú verziu prehliadača Tor, pretože Orfox neposkytuje rovnakú úroveň zabezpečenia a anonymitu ako desktopová verzia.</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Zistite ako ju nainštalovať</a>, alebo ignorujte toto upozornenie a pokračujte ďalej."
 
+msgid "{} logo"
+msgstr ""
+
 msgid "First submission"
 msgstr "Prvé podanie"
 
@@ -920,15 +928,6 @@ msgstr "Ešte posledná vec..."
 msgid "Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar. This will clear your Tor Browser activity data on this device."
 msgstr "Kliknite na ikonu <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>Nová identita</b> na lište vášho prehliadača Tor. Zmažete tým dáta o aktivite prehliadača Tor na tomto zariadení."
 
-msgid "Show"
-msgstr "Zobraziť"
-
-msgid "Hide"
-msgstr "Skryť"
-
-msgid "Remember, your codename is:"
-msgstr "Pamätajte, vaše krycie meno je:"
-
 msgid "Submit Files or Messages"
 msgstr "Odovzdať súbory alebo správy"
 
@@ -950,11 +949,17 @@ msgstr "<a href=\"{url}\" class=\"text-link\">Dozvedieť sa viac</a>."
 msgid "Maximum upload size: 500 MB"
 msgstr "Maximálna veľkosť uploadu: 500 MB"
 
-msgid "Submit"
-msgstr "Odoslať"
+#, fuzzy
+#| msgid "Must be at least {num} character long."
+#| msgid_plural "Must be at least {num} characters long."
+msgid "If you are only sending a message, it must be at least {} characters long."
+msgstr "Musí byť aspoň {num} znak dlhé."
 
 msgid "Anti-spam check. Do not fill this in!"
 msgstr ""
+
+msgid "Submit"
+msgstr "Odoslať"
 
 msgid "Read Replies"
 msgstr "Prečítať si odpovede"
@@ -968,9 +973,6 @@ msgstr "Zmazať túto odpoveď"
 msgid "Delete reply from {timestamp}?"
 msgstr ""
 
-msgid "Delete this reply?"
-msgstr "Zmazať túto odpoveď?"
-
 msgid "Delete All Replies"
 msgstr "Zmazať všetky odpovede"
 
@@ -983,9 +985,6 @@ msgstr "Máte odpovede prečítané?"
 msgid "YES, DELETE ALL REPLIES"
 msgstr "ÁNO, ZMAZAŤ VŠETKY ODPOVEDE"
 
-msgid "NO, NOT YET"
-msgstr "NIE, EŠTE NIE"
-
 msgid "No Messages"
 msgstr "Žiadne správy"
 
@@ -994,12 +993,6 @@ msgstr "Stránka nebola nájdená"
 
 msgid "Sorry, we couldn't locate what you requested."
 msgstr "Prepáčte, nemohli sme nájsť vašu požiadavku."
-
-msgid "Important"
-msgstr "Dôležité"
-
-msgid "You were logged out due to inactivity. Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
-msgstr "Boli ste odhlásení z dôvodu nečinnosti. Skôr než budete pokračovať, kliknite na ikonu <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>Nová identita</b> na lište prehliadača Tor. Tým sa vymažú dáta o aktivite Tor prehliadača na tomto zariadení."
 
 msgid "Proxy Service Detected"
 msgstr ""
@@ -1014,7 +1007,7 @@ msgstr "Používanie Tor2Web na pripojenie k SecureDrop neochráni vašu anonymi
 msgid "Anyone monitoring your Internet traffic &mdash; including your government, your Internet provider, or the proxy operator &mdash; may be able to identify you."
 msgstr "Ktokoľvek moniturujúci vašu internetovú komunikáciu (vláda, poskytovateľ pripojenia) vás môže identifikovať."
 
-msgid "Always use <a href=\"www.torproject.org/projects/torbrowser.html\">Tor Browser</a> to access SecureDrop. Valid SecureDrop site addresses end with <code>.onion</code>. The correct address for this site is:"
+msgid "Always use Tor Browser (<code>{}</code>) to access SecureDrop. Valid SecureDrop site addresses end with <code>.onion</code>. The correct address for this site is:"
 msgstr ""
 
 msgid "If you are already using Tor Browser, copy the address above and generate a new identity before you access SecureDrop."
@@ -1037,6 +1030,17 @@ msgstr "Skopírujte a vložte nasledujúcu adresu do svojho prehliadača a postu
 
 msgid "If there is a chance that downloading Tor Browser raises suspicion and your mail provider is less likely to be monitored, you can send a mail to <kbd>gettor@torproject.org</kbd> and a bot will answer with instructions."
 msgstr "Ak sa vyskytne možnosť, že sťahovaním prehliadača Tor vzbudíte podozrenie, a je pravdepodobné, že váš mailový poskytovateľ je menej monitorovaný, môžete poslať správu na adresu <kbd>gettor@torproject.org</kbd> a obdržíte automatickú odpoveď s inštrukciami."
+
+msgid "Remember, your codename is:"
+msgstr "Pamätajte, vaše krycie meno je:"
+
+msgid "Codename"
+msgstr "Krycie meno"
+
+#, fuzzy
+#| msgid "Codename"
+msgid "Show Codename"
+msgstr "Krycie meno"
 
 msgid "Why download the team's public key?"
 msgstr "Prečo si stiahnuť verejný kľúč tímu?"
@@ -1077,6 +1081,21 @@ msgstr "<strong>Dôležité:</strong> Ak chcete zostať v anonymite, <strong>nep
 
 msgid "Back to submission page"
 msgstr "Späť na stránku podania"
+
+#~ msgid "Forgot your codename?"
+#~ msgstr "Zabudli ste svoje krycie meno?"
+
+#~ msgid "Show"
+#~ msgstr "Zobraziť"
+
+#~ msgid "Hide"
+#~ msgstr "Skryť"
+
+#~ msgid "Delete this reply?"
+#~ msgstr "Zmazať túto odpoveď?"
+
+#~ msgid "NO, NOT YET"
+#~ msgstr "NIE, EŠTE NIE"
 
 #~ msgid "The following file has been selected for <strong>permanent deletion</strong>:"
 #~ msgid_plural "The following {num} files have been selected for <strong>permanent deletion</strong>:"
@@ -1337,9 +1356,6 @@ msgstr "Späť na stránku podania"
 
 #~ msgid "CHECK-IN"
 #~ msgstr "KONTROLA"
-
-#~ msgid "RESET PASSWORD"
-#~ msgstr "RESETOVAŤ HESLO"
 
 #~ msgid "Reset 2FA for mobile apps such as FreeOTP or Google Authenticator"
 #~ msgstr "Resetovať 2FA pre mobilné aplikácie ako FreeOTP alebo Google Authenticator"

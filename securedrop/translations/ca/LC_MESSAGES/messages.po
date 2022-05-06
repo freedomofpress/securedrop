@@ -625,6 +625,9 @@ msgstr "La contrasenya de l'usuari es canviarà a:"
 msgid "Your password will be changed to:"
 msgstr "La vostra contrasenya es canviarà a:"
 
+msgid "RESET PASSWORD"
+msgstr "CANVIA LA CONTRASENYA"
+
 msgid "Reset Two-Factor Authentication"
 msgstr "Restableix l'autenticació de factor doble"
 
@@ -745,7 +748,9 @@ msgstr "La vostra connexió actual no és anònima!"
 msgid "You were redirected because you are already logged in. If you want to create a new account, you should log out first."
 msgstr "Si us ha redirigit perquè ja teniu una sessió iniciada. Si voleu crear un compte nou, primer heu de tancar la sessió."
 
-msgid "You are already logged in. Please verify your codename above as it may differ from the one displayed on the previous page."
+#, fuzzy
+#| msgid "You are already logged in. Please verify your codename above as it may differ from the one displayed on the previous page."
+msgid "You are already logged in. Please verify your codename as it may differ from the one displayed on the previous page."
 msgstr "Ja teniu una sessió iniciada. Verifiqueu el nom en clau a sobre, ja que podria diferir del que s'ha mostrat en la pàgina anterior."
 
 msgid "There was a temporary problem creating your account. Please try again."
@@ -766,6 +771,9 @@ msgstr "No envieu el vostre nom en clau!"
 msgid "Keep your codename secret, and use it to log in later to check for replies."
 msgstr "Mantingueu secret el vostre nom en clau i utilitzeu-lo només en iniciar sessió per revisar si hi ha cap resposta."
 
+msgid "Thank you for sending this information to us. Please check back later for replies."
+msgstr "Gràcies per enviar-nos aquesta informació. Comproveu més endavant si hi ha cap resposta."
+
 msgid "Thanks! We received your message."
 msgstr "Gràcies! Hem rebut el missatge."
 
@@ -784,8 +792,11 @@ msgstr "S'han suprimit totes les respostes"
 msgid "Sorry, that is not a recognized codename."
 msgstr "No es reconeix aquest nom en clau."
 
-msgid "Codename"
-msgstr "Nom en clau"
+msgid "Important"
+msgstr "Important"
+
+msgid "You were logged out due to inactivity. Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
+msgstr "S'ha tancat la sessió per inactivitat. Feu clic en el botó <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>Identitat nova</b> en la barra d'eines del navegador Tor abans d'anar-vos-en. Això buidarà les dades d'activitat en el navegador Tor d'aquest aparell."
 
 msgid "Protecting Journalists and Sources"
 msgstr "Protegeix els periodistes i les fonts"
@@ -810,12 +821,6 @@ msgstr "El lloc web ha trobat un error i no ha pogut completar la vostra petici�
 
 msgid "Look up a codename..."
 msgstr "Cerca un nom en clau..."
-
-msgid "Thank you for sending this information to us. Please check back later for replies."
-msgstr "Gràcies per enviar-nos aquesta informació. Comproveu més endavant si hi ha cap resposta."
-
-msgid "Forgot your codename?"
-msgstr "Heu oblidat el vostre nom en clau?"
 
 msgid "Powered by"
 msgstr "Funciona amb"
@@ -868,6 +873,9 @@ msgstr "<strong>És recomanable l'ús del navegador Tor per accedir al SecureDro
 msgid "<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop version.</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
 msgstr "<strong>És recomanable que useu la versió d'escriptori del navegador Tor per a accedir al SecureDrop, atès que l'Orfox no proporciona el mateix nivell de seguretat i anonimat que la versió d'escriptori.</strong><a class=\"recommend-tor\" href=\"{tor_browser_url}\">Apreneu com instal·lar-lo</a> o ignoreu aquest avís per a continuar."
 
+msgid "{} logo"
+msgstr ""
+
 msgid "First submission"
 msgstr "Primer enviament"
 
@@ -901,15 +909,6 @@ msgstr "Una cosa més..."
 msgid "Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar. This will clear your Tor Browser activity data on this device."
 msgstr "Feu clic al botó <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>Identitat nova</b> de la barra d'eines del navegador Tor. Això buidarà les dades d'activitat en el navegador Tor en aquest aparell."
 
-msgid "Show"
-msgstr "Mostra"
-
-msgid "Hide"
-msgstr "Amaga"
-
-msgid "Remember, your codename is:"
-msgstr "Recordeu, el vostre nom en clau és:"
-
 msgid "Submit Files or Messages"
 msgstr "Envieu fitxers o missatges"
 
@@ -931,11 +930,16 @@ msgstr "<a href=\"{url}\" class=\"text-link\">Més informació</a>."
 msgid "Maximum upload size: 500 MB"
 msgstr "Mida màx. de pujada: 500 MB"
 
-msgid "Submit"
-msgstr "Envia"
+#, fuzzy
+#| msgid "Your first message must be at least {} characters long."
+msgid "If you are only sending a message, it must be at least {} characters long."
+msgstr "El primer missatge cal que tingui com a mínim {} caràcters."
 
 msgid "Anti-spam check. Do not fill this in!"
 msgstr "Comprovació de contingut brossa. Deixeu-ho sense emplenar!"
+
+msgid "Submit"
+msgstr "Envia"
 
 msgid "Read Replies"
 msgstr "Llegiu les respostes"
@@ -949,9 +953,6 @@ msgstr "Suprimeix aquesta resposta"
 msgid "Delete reply from {timestamp}?"
 msgstr "Voleu suprimir la resposta de {timestamp}?"
 
-msgid "Delete this reply?"
-msgstr "Voleu suprimir aquesta resposta?"
-
 msgid "Delete All Replies"
 msgstr "Suprimeix totes les respostes"
 
@@ -964,9 +965,6 @@ msgstr "Heu acabat amb les respostes?"
 msgid "YES, DELETE ALL REPLIES"
 msgstr "SÍ, SUPRIMEIX TOTES LES RESPOSTES"
 
-msgid "NO, NOT YET"
-msgstr "NO ENCARA"
-
 msgid "No Messages"
 msgstr "Cap missatge"
 
@@ -975,12 +973,6 @@ msgstr "No s'ha trobat la pàgina"
 
 msgid "Sorry, we couldn't locate what you requested."
 msgstr "No podem trobar el que demaneu."
-
-msgid "Important"
-msgstr "Important"
-
-msgid "You were logged out due to inactivity. Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
-msgstr "S'ha tancat la sessió per inactivitat. Feu clic en el botó <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>Identitat nova</b> en la barra d'eines del navegador Tor abans d'anar-vos-en. Això buidarà les dades d'activitat en el navegador Tor d'aquest aparell."
 
 msgid "Proxy Service Detected"
 msgstr "S'ha detectat un servidor intermediari"
@@ -991,7 +983,9 @@ msgstr "Sembla que utilitzeu el servei intermediari del Tor per accedir al Secur
 msgid "Anyone monitoring your Internet traffic &mdash; including your government, your Internet provider, or the proxy operator &mdash; may be able to identify you."
 msgstr "Qualsevol persona que faci seguiment del vostre trànsit d'Internet &mdash; inclòs al vostre proveïdor d'Internet, govern o l'operador del servidor intermediari &mdash; us pot identificar."
 
-msgid "Always use <a href=\"www.torproject.org/projects/torbrowser.html\">Tor Browser</a> to access SecureDrop. Valid SecureDrop site addresses end with <code>.onion</code>. The correct address for this site is:"
+#, fuzzy
+#| msgid "Always use <a href=\"www.torproject.org/projects/torbrowser.html\">Tor Browser</a> to access SecureDrop. Valid SecureDrop site addresses end with <code>.onion</code>. The correct address for this site is:"
+msgid "Always use Tor Browser (<code>{}</code>) to access SecureDrop. Valid SecureDrop site addresses end with <code>.onion</code>. The correct address for this site is:"
 msgstr "Utilitzeu sempre el <a href=\"www.torproject.org/projects/torbrowser.html\">Tor Browser</a> per accedir al SecureDrop. Les adreces vàlides de llocs del SecureDrop acaben en <code>.onion</code>. L'adreça correcta per a aquest lloc web és:"
 
 msgid "If you are already using Tor Browser, copy the address above and generate a new identity before you access SecureDrop."
@@ -1014,6 +1008,17 @@ msgstr "Copieu i enganxeu l'adreça següent en el vostre navegador i seguiu les
 
 msgid "If there is a chance that downloading Tor Browser raises suspicion and your mail provider is less likely to be monitored, you can send a mail to <kbd>gettor@torproject.org</kbd> and a bot will answer with instructions."
 msgstr "Si existeix la possibilitat que baixar el navegador Tor aixequi sospites i és menys probable que el vostre proveïdor de correu estigui sent monitorat, podeu enviar un correu a <kbd>gettor@torproject.org</kbd> i us respondrà un bot amb instruccions."
+
+msgid "Remember, your codename is:"
+msgstr "Recordeu, el vostre nom en clau és:"
+
+msgid "Codename"
+msgstr "Nom en clau"
+
+#, fuzzy
+#| msgid "Codename"
+msgid "Show Codename"
+msgstr "Nom en clau"
 
 msgid "Why download the team's public key?"
 msgstr "Per què cal baixar la clau pública de l'equip?"
@@ -1054,6 +1059,21 @@ msgstr "<strong>Important:</strong> si voleu romandre en l'anonimat, <strong>no<
 
 msgid "Back to submission page"
 msgstr "Torna a la pàgina d'enviaments"
+
+#~ msgid "Forgot your codename?"
+#~ msgstr "Heu oblidat el vostre nom en clau?"
+
+#~ msgid "Show"
+#~ msgstr "Mostra"
+
+#~ msgid "Hide"
+#~ msgstr "Amaga"
+
+#~ msgid "Delete this reply?"
+#~ msgstr "Voleu suprimir aquesta resposta?"
+
+#~ msgid "NO, NOT YET"
+#~ msgstr "NO ENCARA"
 
 #~ msgid "The following file has been selected for <strong>permanent deletion</strong>:"
 #~ msgid_plural "The following {num} files have been selected for <strong>permanent deletion</strong>:"
@@ -1311,9 +1331,6 @@ msgstr "Torna a la pàgina d'enviaments"
 
 #~ msgid "CHECK-IN"
 #~ msgstr "REGISTRE"
-
-#~ msgid "RESET PASSWORD"
-#~ msgstr "CANVIA LA CONTRASENYA"
 
 #~ msgid "Reset 2FA for mobile apps such as FreeOTP or Google Authenticator"
 #~ msgstr "Restableix l'autenticació de factor doble per a aplicacions mòbils com ara el FreeOTP o el Google Authenticator"
