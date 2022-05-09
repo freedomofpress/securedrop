@@ -2,6 +2,40 @@
 
 ## 2.4.0~rc1
 
+### Web Applications
+
+* Refactored application CSS and updated Source Interface design (#6322, #6362, #6315, #6419, #6429)
+* Updated code to remove Flask and Jinja2 deprecation warnings (#6245)
+* Fixed cases where string formatting was breaking translation lookups (#6368)
+* Simplified templates using jinja2 expression-statement extension (#6378)
+* Updated filesystem_id fields to be non-nullable (#6350)
+* Updated gnupg commands to use direct trust model (#6397)
+* Replaced potentially offensive terms in wordlists (#6402)
+* Added validation checks for configured vs. supported languages (#6406)
+
+### Journalist API
+
+* Updated datetime formatting to use custom encoder (#6260)
+
+### Operations
+
+* Added support for Tails 5.0 to Journalist and Admin Workstations (#6408, #6424)
+* Disabled fwupd timers (#6401)
+
+### Development
+
+* Fixed schema comparison tests (#6353)
+* Refactored functional test fixtures and updated tests to use them (#6307, #6361)
+* Updated safety dependency from 1.8.7 to 1.10.3 (#6396)
+* Updated mypy dependency from  0.761 to 0.942 and added sqlalchemy type checks (#6351)
+* Removed remaining support for Xenial in package build logic (#6409)
+* Added support for provisioning demo container and landing page (#6407, #6418, #6421)
+
+### CI
+
+* Removed logic to fetch Tor packages in nightly build (#6349)
+* Replaced codecov Bash uploader with binary uploader (#6416) 
+* Updated CircleCI to use Python 3.8 image, GCE to use Debian-11 base image (#6431)
 
 ## 2.3.2
 
