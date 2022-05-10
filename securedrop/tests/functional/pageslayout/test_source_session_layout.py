@@ -1,43 +1,66 @@
-#
-# SecureDrop whistleblower submission system
-# Copyright (C) 2017 Loic Dachary <loic@dachary.org>
-#
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU Affero General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU Affero General Public License for more details.
-#
-# You should have received a copy of the GNU Affero General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#
-from tests.functional import journalist_navigation_steps
-from tests.functional import source_navigation_steps
-from tests.functional.functional_test import TORBROWSER
-from . import functional_test
+import time
+from pathlib import Path
+
 import pytest
 
+from tests.functional.conftest import spawn_sd_servers
+from tests.functional.app_navigators import SourceAppNagivator
+from tests.functional.factories import SecureDropConfigFactory
 
+from tests.functional.pageslayout.functional_test import list_locales
+from tests.functional.pageslayout.screenshot_utils import save_screenshot_and_html
+
+
+# Very short session expiration time
+SESSION_EXPIRATION_SECONDS = 3
+
+
+@pytest.fixture(scope="session")
+def _sd_servers_with_short_timeout(setup_journalist_key_and_gpg_folder):
+    """Spawn the source and journalist apps as separate processes with a short session timeout."""
+    # Generate a securedrop config with a very short session timeout
+    config_with_short_timeout = SecureDropConfigFactory.create(
+        SESSION_EXPIRATION_MINUTES=SESSION_EXPIRATION_SECONDS / 60,
+        SECUREDROP_DATA_ROOT=Path("/tmp/sd-tests/functional-session-timeout"),
+    )
+
+    # Ensure the GPG settings match the one in the config to use, to ensure consistency
+    journalist_key_fingerprint, gpg_dir = setup_journalist_key_and_gpg_folder
+    assert Path(config_with_short_timeout.GPG_KEY_DIR) == gpg_dir
+    assert config_with_short_timeout.JOURNALIST_KEY == journalist_key_fingerprint
+
+    # Spawn the apps in separate processes
+    with spawn_sd_servers(config_to_use=config_with_short_timeout) as sd_servers_result:
+        yield sd_servers_result
+
+
+@pytest.mark.parametrize("locale", list_locales())
 @pytest.mark.pagelayout
-class TestSourceSessionLayout(
-        functional_test.FunctionalTest,
-        source_navigation_steps.SourceNavigationStepsMixin,
-        journalist_navigation_steps.JournalistNavigationStepsMixin):
-    default_driver_name = TORBROWSER
+class TestSourceAppSessionTimeout:
+    def test_source_session_timeout(self, locale, _sd_servers_with_short_timeout):
+        # Given a source user accessing the app from their browser
+        locale_with_commas = locale.replace("_", "-")
+        with SourceAppNagivator.using_tor_browser_web_driver(
+            source_app_base_url=_sd_servers_with_short_timeout.source_app_base_url,
+            accept_languages=locale_with_commas,
+        ) as navigator:
 
-    session_expiration = 5
+            # And they're logged in and are using the app
+            navigator.source_visits_source_homepage()
+            navigator.source_clicks_submit_documents_on_homepage()
+            navigator.source_continues_to_submit_page()
 
-    def test_source_session_timeout(self):
-        self.disable_js_torbrowser_driver()
-        self._source_visits_source_homepage()
-        self._source_clicks_submit_documents_on_homepage()
-        self._source_continues_to_submit_page()
-        self._source_waits_for_session_to_timeout()
-        self._source_enters_text_in_message_field()
-        self._source_visits_source_homepage()
-        self._screenshot('source-session_timeout.png')
-        self._save_html('source-session_timeout.html')
+            # And their session just expired
+            time.sleep(SESSION_EXPIRATION_SECONDS + 1)
+
+            # When the source user reloads the page
+            navigator.driver.refresh()
+
+            # Then the source user sees the "session expired" message
+            notification = navigator.driver.find_element_by_class_name("error")
+            assert notification.text
+            if locale == "en_US":
+                expected_text = "You were logged out due to inactivity."
+                assert expected_text in notification.text
+
+            save_screenshot_and_html(navigator.driver, locale, "source-session_timeout")

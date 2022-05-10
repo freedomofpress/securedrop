@@ -1,5 +1,6 @@
 import time
-from typing import Optional
+from contextlib import contextmanager
+from typing import Optional, Generator
 
 from selenium.webdriver.firefox.webdriver import WebDriver
 from selenium.webdriver.remote.webelement import WebElement
@@ -9,6 +10,8 @@ from selenium.common.exceptions import WebDriverException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.ui import WebDriverWait
+
+from tests.functional.web_drivers import get_web_driver, WebDriverTypeEnum
 
 
 # TODO(AD): This is intended to eventually replace the navigation/driver code in FunctionalTest
@@ -157,6 +160,24 @@ class SourceAppNagivator:
         self.nav_helper = _NavigationHelper(web_driver)
         self.driver = web_driver
         self.accept_languages = accept_languages
+
+    @classmethod
+    @contextmanager
+    def using_tor_browser_web_driver(
+        cls,
+        source_app_base_url: str,
+        accept_languages: Optional[str] = None,
+    ) -> Generator["SourceAppNagivator", None, None]:
+        """Convenience method for auto-creating the web driver to be used by the navigator."""
+        with get_web_driver(
+            web_driver_type=WebDriverTypeEnum.TOR_BROWSER,
+            accept_languages=accept_languages,
+        ) as tor_browser_web_driver:
+            yield cls(
+                source_app_base_url=source_app_base_url,
+                web_driver=tor_browser_web_driver,
+                accept_languages=accept_languages,
+            )
 
     def _is_on_source_homepage(self) -> WebElement:
         return self.nav_helper.wait_for(lambda: self.driver.find_element_by_id("source-index"))

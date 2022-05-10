@@ -56,11 +56,6 @@ class TestSourceLayout(
         self._screenshot('source-enter-codename-in-login.png')
         self._save_html('source-enter-codename-in-login.html')
 
-    def test_use_tor_browser(self):
-        self._source_visits_use_tor()
-        self._screenshot('source-use_tor_browser.png')
-        self._save_html('source-use_tor_browser.html')
-
     def test_generate(self):
         self._source_visits_source_homepage()
         self._source_chooses_to_submit_documents()
@@ -102,18 +97,3 @@ class TestSourceLayout(
         self._source_deletes_a_journalist_reply()
         self._screenshot('source-deletes_reply.png')
         self._save_html('source-deletes_reply.html')
-
-    def test_notfound(self):
-        self._source_not_found()
-        self._screenshot('source-notfound.png')
-        self._save_html('source-notfound.html')
-
-    def test_tor2web_warning(self):
-        self._source_tor2web_warning()
-        self._screenshot('source-tor2web_warning.png')
-        self._save_html('source-tor2web_warning.html')
-
-    def test_why_journalist_key(self):
-        self._source_why_journalist_key()
-        self._screenshot('source-why_journalist_key.png')
-        self._save_html('source-why_journalist_key.html')

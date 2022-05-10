@@ -213,30 +213,6 @@ class SourceNavigationStepsMixin:
         self.safe_click_by_id("logout")
         assert self._is_on_logout_page()
 
-    def _source_not_found(self):
-        self.driver.get(self.source_location + "/unlikely")
-        message = self.driver.find_element_by_id("page-not-found")
-        assert message.is_displayed()
-
-    def _source_visits_use_tor(self):
-        self.driver.get(self.source_location + "/use-tor")
-
-    def _source_tor2web_warning(self):
-        self.driver.get(self.source_location + "/tor2web-warning")
-
-    def _source_why_journalist_key(self):
-        self.driver.get(self.source_location + "/why-public-key")
-
-    def _source_waits_for_session_to_timeout(self):
-        time.sleep(self.session_expiration + 2)
-
-    def _source_sees_session_timeout_message(self):
-        notification = self.driver.find_element_by_class_name("error")
-
-        if not self.accept_languages:
-            expected_text = "You were logged out due to inactivity."
-            assert expected_text in notification.text
-
     def _source_sees_document_attachment_item(self):
         assert self.driver.find_element_by_class_name("attachment") is not None
 

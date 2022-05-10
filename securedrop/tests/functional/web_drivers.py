@@ -123,11 +123,12 @@ def _create_firefox_driver(
 @contextmanager
 def get_web_driver(
     web_driver_type: WebDriverTypeEnum = WebDriverTypeEnum.TOR_BROWSER,
+    accept_languages: Optional[str] = None,
 ) -> Generator[WebDriver, None, None]:
     if web_driver_type == WebDriverTypeEnum.TOR_BROWSER:
-        web_driver = _create_torbrowser_driver()
+        web_driver = _create_torbrowser_driver(accept_languages=accept_languages)
     elif web_driver_type == WebDriverTypeEnum.FIREFOX:
-        web_driver = _create_firefox_driver()
+        web_driver = _create_firefox_driver(accept_languages=accept_languages)
     else:
         raise ValueError(f"Unexpected value {web_driver_type}")
 
