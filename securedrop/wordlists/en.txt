@@ -19,6 +19,7 @@ absently
 absinthe
 absolute
 absolve
+absorb
 abstain
 abstract
 absurd
@@ -592,7 +593,6 @@ bonanza
 bonded
 bonding
 bondless
-boned
 bonehead
 boneless
 bonelike
@@ -606,14 +606,13 @@ boogeyman
 boogieman
 book
 boondocks
+boost
 booted
 booth
-bootie
 booting
 bootlace
 bootleg
 boots
-boozy
 borax
 boring
 borough
@@ -628,6 +627,7 @@ both
 bottle
 bottling
 bottom
+boulder
 bounce
 bouncing
 bouncy
@@ -640,6 +640,7 @@ boxer
 boxing
 boxlike
 boxy
+bracelet
 breach
 breath
 breeches
@@ -2716,6 +2717,7 @@ gainfully
 gaining
 gains
 gala
+galaxy
 gallantly
 galleria
 gallery
@@ -2799,7 +2801,6 @@ gigantic
 giggle
 giggling
 giggly
-gigolo
 gilled
 gills
 gimmick
@@ -2865,7 +2866,6 @@ goldmine
 goldsmith
 golf
 goliath
-gonad
 gondola
 gone
 gong
@@ -2886,6 +2886,7 @@ gossip
 gothic
 gotten
 gout
+govern
 gown
 grab
 graceful
@@ -2956,6 +2957,7 @@ grinning
 grip
 gristle
 grit
+grocery
 groggily
 groggy
 groin
@@ -2963,7 +2965,6 @@ groom
 groove
 grooving
 groovy
-grope
 ground
 grouped
 grout
@@ -3019,6 +3020,7 @@ hacksaw
 had
 haggler
 haiku
+hair
 half
 halogen
 halt
@@ -3081,7 +3083,6 @@ happiness
 happy
 harbor
 hardcopy
-hardcore
 hardcover
 harddisk
 hardened
@@ -3153,6 +3154,7 @@ headstand
 headstone
 headway
 headwear
+healer
 heap
 heat
 heave
@@ -3212,7 +3214,6 @@ humorist
 humorless
 humorous
 humpback
-humped
 humvee
 hunchback
 hundredth
@@ -3322,8 +3323,8 @@ imposing
 impound
 imprecise
 impress
-impressive
 impressing
+impressive
 imprint
 impromptu
 improper
@@ -3438,9 +3439,9 @@ jump
 junction
 juncture
 june
+jungle
 junior
 juniper
-junkie
 junkman
 junkyard
 jurist
@@ -4159,7 +4160,7 @@ operating
 operation
 operative
 operator
-opium
+opinion
 opossum
 opponent
 oppose
@@ -4223,7 +4224,6 @@ outward
 outweigh
 outwit
 oval
-ovary
 oven
 overact
 overall
@@ -4981,6 +4981,7 @@ reacquire
 reaction
 reactive
 reactor
+reader
 reaffirm
 ream
 reanalyze
@@ -5035,7 +5036,6 @@ recount
 recoup
 recovery
 recreate
-rectal
 rectangle
 rectified
 rectify
