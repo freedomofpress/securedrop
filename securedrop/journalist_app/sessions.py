@@ -1,3 +1,4 @@
+import typing
 from datetime import datetime, timedelta, timezone
 from secrets import token_urlsafe
 from flask import Flask, Request, Response
@@ -10,6 +11,8 @@ from redis import Redis
 from werkzeug.datastructures import CallbackDict
 from itsdangerous import URLSafeTimedSerializer, BadSignature
 
+from models import Journalist
+
 
 class ServerSideSession(CallbackDict, SessionMixin):
     """Baseclass for server-side based sessions."""
@@ -17,6 +20,9 @@ class ServerSideSession(CallbackDict, SessionMixin):
     def __init__(self, sid: str, token: str, lifetime: int = 0, initial: Any = None) -> None:
         def on_update(self: ServerSideSession) -> None:
             self.modified = True
+        if initial and 'uid' in initial:
+            self.set_uid(initial['uid'])
+            self.set_user()
         CallbackDict.__init__(self, initial, on_update)
         self.sid = sid
         self.token: str = token
@@ -26,13 +32,36 @@ class ServerSideSession(CallbackDict, SessionMixin):
         self.to_regenerate = False
         self.modified = False
 
+
     def get_token(self) -> Optional[str]:
         return self.token
 
     def get_lifetime(self) -> datetime:
         return datetime.now(timezone.utc) + timedelta(seconds=self.lifetime)
 
+    def set_user(self) -> None:
+        if hasattr(self, 'uid') and self.uid is not None:
+            self.user = Journalist.query.get(self.uid)
+
+    def get_user(self) -> Optional[Journalist]:
+        if hasattr(self, 'user'):
+            return self.user
+
+    def get_uid(self) -> Optional[int]:
+        if hasattr(self, 'uid'):
+            return self.uid
+
+    def set_uid(self, uid) -> None:
+        self.uid = uid
+
+    def logged_in(self) -> bool:
+        if hasattr(self, 'uid') and self.uid is not None:
+            return True
+        else:
+            return False
+
     def destroy(self) -> None:
+        self.uid = None
         self.to_destroy = True
 
     def regenerate(self) -> None:
@@ -115,6 +144,7 @@ class SessionInterface(FlaskSessionInterface):
         if val is not None:
             try:
                 data = self.serializer.loads(val.decode())
+
                 return self.session_class(sid=sid,
                                           token=self._get_signer(app).dumps(sid),  # type: ignore
                                           initial=data)
@@ -196,3 +226,8 @@ class Session(object):
             config['SESSION_SIGNER_SALT'], config['SESSION_HEADER_NAME'])
 
         return session_interface
+
+
+# Re-export flask.session, but with the correct type information for mypy.
+from flask import session  # noqa
+session = typing.cast(ServerSideSession, session)

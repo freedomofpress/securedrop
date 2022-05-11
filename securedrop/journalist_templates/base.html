@@ -17,12 +17,12 @@
 
 <body>
 
-  {% if g.user %}
+  {% if session.logged_in() %}
   <nav aria-label="{{ gettext('Navigation') }}">
     <a href="#main" class="visually-hidden until-focus">{{ gettext('Skip to main content') }}</a>
     {{ gettext('Logged on as') }}
-    <a href="{{ url_for('account.edit') }}" id="link-edit-account">{{ g.user.username }}</a> |
-    {% if g.user and g.user.is_admin %}
+    <a href="{{ url_for('account.edit') }}" id="link-edit-account">{{ session.get_user().username }}</a> |
+    {% if session.get_user() and session.get_user().is_admin %}
     <a href="{{ url_for('admin.index') }}" id="link-admin-index">{{ gettext('Admin') }}</a> |
     {% endif %}
     <a href="{{ url_for('main.logout') }}" id="link-logout">{{ gettext('Log Out') }}</a>

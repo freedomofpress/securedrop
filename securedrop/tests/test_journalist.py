@@ -67,7 +67,7 @@ def _login_user(app, username, password, otp_secret, success=True):
         follow_redirects=True,
     )
     assert resp.status_code == 200
-    assert success == hasattr(g, "user")  # check logged-in vs expected
+    assert username in resp.data.decode('utf-8')
 
 
 @pytest.mark.parametrize("otp_secret", ["", "GA", "GARBAGE", "JHCOGO7VCER3EJ4"])

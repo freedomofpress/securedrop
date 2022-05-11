@@ -5,6 +5,12 @@ import os
 from typing import Optional, Union
 
 import werkzeug
+from flask import (Blueprint, render_template, request, url_for, redirect, g,
+                   current_app, flash, abort, session)
+from flask_babel import gettext
+from sqlalchemy.exc import IntegrityError
+from sqlalchemy.orm.exc import NoResultFound
+
 from db import db
 from flask import (
     Blueprint,
@@ -319,27 +325,26 @@ def make_blueprint(config: SDConfig) -> Blueprint:
     @admin_required
     def delete_user(user_id: int) -> werkzeug.Response:
         user = Journalist.query.get(user_id)
-        if user_id == g.user.id:
+        if user_id == session.get_uid():
             # Do not flash because the interface already has safe guards.
             # It can only happen by manually crafting a POST request
-            current_app.logger.error("Admin {} tried to delete itself".format(g.user.username))
+            current_app.logger.error(
+                "Admin {} tried to delete itself".format(session.get_user().username))
             abort(403)
         elif not user:
             current_app.logger.error(
                 "Admin {} tried to delete nonexistent user with pk={}".format(
-                    g.user.username, user_id
-                )
-            )
+                    session.get_user().username, user_id))
             abort(404)
         elif user.is_deleted_user():
             # Do not flash because the interface does not expose this.
             # It can only happen by manually crafting a POST request
             current_app.logger.error(
-                'Admin {} tried to delete "deleted" user'.format(g.user.username)
-            )
+                "Admin {} tried to delete \"deleted\" user".format(session.get_user().username))
             abort(403)
         else:
             user.delete()
+            logout_user(user.id)
             db.session.commit()
             flash(gettext("Deleted user '{user}'.").format(user=user.username), "notification")
 
@@ -355,7 +360,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
 
         password = request.form.get('password')
         if set_diceware_password(user, password) is not False:
-            logout_user(user_id)
+            logout_user(user.id)
             db.session.commit()
         return redirect(url_for("admin.edit_user", user_id=user_id))
 

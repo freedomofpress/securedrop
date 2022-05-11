@@ -4,8 +4,8 @@ import typing
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from datetime import datetime
-from flask import (Flask, session, redirect, url_for, flash, g, request,
-                   render_template, json, abort)
+from flask import (Flask, redirect, url_for, flash, g, request,
+                   render_template, json, abort, session)
 from flask_assets import Environment
 from flask_babel import gettext
 from flask_wtf.csrf import CSRFProtect, CSRFError
@@ -27,8 +27,8 @@ from journalist_app.utils import (
     logged_in,
 )
 from journalist_app import account, admin, api, main, col
-from journalist_app.sessions import Session, ServerSideSession
-from journalist_app.utils import get_source, logged_in
+from journalist_app.sessions import Session, session
+from journalist_app.utils import get_source
 from models import InstanceConfig, Journalist
 from werkzeug.exceptions import default_exceptions
 
@@ -97,8 +97,7 @@ def create_app(config: "SDConfig") -> Flask:
     @app.errorhandler(CSRFError)  # type: ignore
     def handle_csrf_error(e: CSRFError) -> "Response":
         app.logger.error("The CSRF token is invalid.")
-        session2 = typing.cast(ServerSideSession, session)
-        session2.destroy()
+        session.destroy()
         msg = gettext('You have been logged out due to inactivity.')
         flash(msg, 'error')
         return redirect(url_for('main.login'))
@@ -138,15 +137,6 @@ def create_app(config: "SDConfig") -> Flask:
     def setup_g() -> "Optional[Response]":
         """Store commonly used values in Flask's special g object"""
 
-        if request.path.split('/')[1] != 'static':
-            uid = session.get('uid', None)
-            if uid:
-                g.uid = uid  # pylint: disable=assigning-non-slot
-                g.user = Journalist.query.get(uid)  # pylint: disable=assigning-non-slot
-            else:
-                g.uid = None  # pylint: disable=assigning-non-slot
-                g.user = None  # pylint: disable=assigning-non-slot
-
         i18n.set_locale(config)
 
         if InstanceConfig.get_default().organization_name:
@@ -162,11 +152,11 @@ def create_app(config: "SDConfig") -> Flask:
             app.logger.error("Site logo not found.")
 
         if request.path.split('/')[1] == 'api':
-            if request.endpoint not in _insecure_api_views and not logged_in():
+            if request.endpoint not in _insecure_api_views and not session.logged_in():
                 abort(403)
         else:
-            if request.endpoint not in _insecure_views and not logged_in():
-                return redirect(url_for("main.login"))
+            if request.endpoint not in _insecure_views and not session.logged_in():
+                return redirect(url_for('main.login'))
 
         if request.method == "POST":
             filesystem_id = request.form.get("filesystem_id")

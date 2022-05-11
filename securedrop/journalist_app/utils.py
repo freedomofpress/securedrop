@@ -6,7 +6,7 @@ from typing import Optional, List, Union
 import flask
 import werkzeug
 from flask import (g, flash, current_app, abort, send_file, redirect, url_for,
-                   Markup, escape)
+                   Markup, escape, session)
 from flask.sessions import session_json_serializer
 from flask_babel import gettext, ngettext
 from sqlalchemy.exc import IntegrityError
@@ -50,17 +50,6 @@ from models import (
 )
 from sqlalchemy.exc import IntegrityError
 from store import Storage, add_checksum_for_file
-
-
-def logged_in() -> bool:
-    # When a user is logged in, we push their user ID (database primary key)
-    # into the session. setup_g checks for this value, and if it finds it,
-    # stores a reference to the user's Journalist object in g.
-    #
-    # This check is good for the edge case where a user is deleted but still
-    # has an active session - we will not authenticate a user if they are not
-    # in the database.
-    return bool(g.get("user", None))
 
 
 def commit_account_changes(user: Journalist) -> None:
@@ -252,7 +241,7 @@ def download(
         zip_basename, datetime.now(timezone.utc).strftime("%Y-%m-%d--%H-%M-%S")
     )
 
-    mark_seen(submissions, g.user)
+    mark_seen(submissions, session.get_user())
 
     return send_file(
         zf.name,
@@ -551,9 +540,7 @@ def logout_user(uid: int) -> None:
             sess = session_json_serializer.loads(found.decode())
             if 'uid' in sess and sess['uid'] == uid:
                 redis.delete(key)
-    if g.uid == uid:
-        g.uid = None  # pylint: disable=assigning-non-slot
-        g.user = None  # pylint: disable=assigning-non-slot
+    session.pop('uid')
 
 
 def logout_all() -> None:
@@ -561,5 +548,3 @@ def logout_all() -> None:
     for key in (redis.keys(current_app.config['SESSION_KEY_PREFIX'] + "*") +
                 redis.keys("api_" + current_app.config['SESSION_KEY_PREFIX'] + "*")):
         redis.delete(key)
-    g.uid = None  # pylint: disable=assigning-non-slot
-    g.user = None  # pylint: disable=assigning-non-slot

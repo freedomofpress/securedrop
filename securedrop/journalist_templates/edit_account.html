@@ -39,10 +39,10 @@
     <div>
       <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
       <label for="first_name">{{ gettext('First name') }}</label>
-      {% set first_name = g.user.first_name or '' %}
+      {% set first_name = session.get_user().first_name or '' %}
       <input name="first_name" id="first_name" value="{{ first_name }}">
       <label for="last_name">{{ gettext('Last name') }}</label>
-      {% set last_name = g.user.last_name or '' %}
+      {% set last_name = session.get_user().last_name or '' %}
       <input name="last_name" id="last_name" value="{{ last_name }}">
     </div>
     <div class="section-spacing">
@@ -61,7 +61,7 @@
     {{ gettext('Your password will be changed immediately, so you will need to save it before pressing the "Reset Password" button.') }}
   </p>
 
-  {% if user and g.user != user %}
+  {% if user and session.get_user() != user %}
   {% set password_reset_url = url_for('admin.new_password', user_id=user.id) %}
   {% else %}
   {% set password_reset_url = url_for('account.new_password') %}
@@ -69,7 +69,7 @@
   {% endif %}
 
   <form action="{{ password_reset_url }}" method="post" id="new-password" class="login-form">
-    {% if not user or g.user == user %}
+    {% if not user or session.get_user() == user %}
     <fieldset>
       <legend>{{ legend }}</legend>
       <div>
@@ -129,7 +129,7 @@
   {% if user %}
   {% set username = user.username %}
   {% else %}
-  {% set username = g.user.username %}
+  {% set username = session.get_user().username %}
   {% endif %}
   <form method="post" action="{{ reset_url }}" id="reset-two-factor-{{ type }}" class="reset-two-factor"
     data-username="{{ username }}">

@@ -39,7 +39,7 @@ def _login_user(app, user_dict):
         follow_redirects=True,
     )
     assert resp.status_code == 200
-    assert hasattr(g, "user")  # ensure logged in
+    assert user_dict['username'] in resp.data.decode('utf-8')
 
 
 def test_submit_message(journalist_app, source_app, test_journo, app_storage):

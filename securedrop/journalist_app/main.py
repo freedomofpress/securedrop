@@ -1,7 +1,14 @@
 # -*- coding: utf-8 -*-
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Union, cast
+from typing import Union
+
+import werkzeug
+from flask import (Blueprint, request, current_app, url_for, redirect,
+                   render_template, g, flash, abort, Markup, escape)
+from flask_babel import gettext
+from sqlalchemy.orm import joinedload
+from sqlalchemy.sql import func
 
 import store
 import werkzeug
@@ -23,7 +30,7 @@ from flask import (
 )
 from flask_babel import gettext
 from journalist_app.forms import ReplyForm
-from journalist_app.sessions import ServerSideSession
+from journalist_app.sessions import session
 from journalist_app.utils import (validate_user, bulk_delete, download,
                                   get_source)
 from sdconfig import SDConfig
@@ -53,17 +60,15 @@ def make_blueprint(config: SDConfig) -> Blueprint:
                 db.session.add(user)
                 db.session.commit()
 
-                session2 = cast(ServerSideSession, session)
-                session2['uid'] = user.id
-                session2.regenerate()
+                session['uid'] = user.id
+                session.regenerate()
                 return redirect(url_for('main.index'))
 
         return render_template("login.html")
 
     @view.route("/logout")
     def logout() -> werkzeug.Response:
-        session2 = cast(ServerSideSession, session)
-        session2.destroy()
+        session.destroy()
         return redirect(url_for('main.index'))
 
     @view.route("/")
@@ -153,9 +158,9 @@ def make_blueprint(config: SDConfig) -> Blueprint:
         )
 
         try:
-            reply = Reply(g.user, g.source, filename, Storage.get_default())
+            reply = Reply(session.get_user(), g.source, filename, Storage.get_default())
             db.session.add(reply)
-            seen_reply = SeenReply(reply=reply, journalist=g.user)
+            seen_reply = SeenReply(reply=reply, journalist=session.get_user())
             db.session.add(seen_reply)
             db.session.commit()
             store.async_add_checksum_for_file(reply, Storage.get_default())
@@ -165,10 +170,9 @@ def make_blueprint(config: SDConfig) -> Blueprint:
             # with responses to sources. It's possible the exception message
             # could contain information we don't want to write to disk.
             current_app.logger.error(
-                "Reply from '{}' (ID {}) failed: {}!".format(
-                    g.user.username, g.user.id, exc.__class__
-                )
-            )
+                "Reply from '{}' (ID {}) failed: {}!".format(session.get_user().username,
+                                                             session.get_uid(),
+                                                             exc.__class__))
         else:
 
             flash(
