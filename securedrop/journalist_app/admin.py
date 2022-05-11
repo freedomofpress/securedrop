@@ -25,8 +25,9 @@ from flask import (
 )
 from flask_babel import gettext
 from journalist_app.decorators import admin_required
+from journalist_app.sessions import logout_user
 from journalist_app.utils import (commit_account_changes, set_diceware_password,
-                                  validate_hotp_secret, logout_user)
+                                  validate_hotp_secret)
 from journalist_app.forms import LogoForm, NewUserForm, SubmissionPreferencesForm, OrgNameForm
 from sdconfig import SDConfig
 from passphrases import PassphraseGenerator
@@ -344,7 +345,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
             abort(403)
         else:
             user.delete()
-            logout_user(user.id)
+            logout_user(user.id, is_current=False)
             db.session.commit()
             flash(gettext("Deleted user '{user}'.").format(user=user.username), "notification")
 
@@ -360,7 +361,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
 
         password = request.form.get('password')
         if set_diceware_password(user, password) is not False:
-            logout_user(user.id)
+            logout_user(user.id, is_current=False)
             db.session.commit()
         return redirect(url_for("admin.edit_user", user_id=user_id))
 

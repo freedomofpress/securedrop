@@ -8,6 +8,11 @@ import zipfile
 from base64 import b32encode
 from binascii import unhexlify
 from io import BytesIO
+import mock
+
+from bs4 import BeautifulSoup
+from flask import escape, session
+from pyotp import HOTP, TOTP
 
 import journalist_app as journalist_app_module
 import mock

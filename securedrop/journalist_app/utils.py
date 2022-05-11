@@ -5,12 +5,10 @@ from typing import Optional, List, Union
 
 import flask
 import werkzeug
-from flask import (g, flash, current_app, abort, send_file, redirect, url_for,
+from flask import (flash, current_app, abort, send_file, redirect, url_for,
                    Markup, escape, session)
-from flask.sessions import session_json_serializer
 from flask_babel import gettext, ngettext
 from sqlalchemy.exc import IntegrityError
-from redis import Redis
 
 from db import db
 from encryption import EncryptionManager
@@ -529,22 +527,3 @@ def serve_file_with_etag(db_obj: Union[Reply, Submission]) -> flask.Response:
     response.direct_passthrough = False
     response.headers["Etag"] = db_obj.checksum
     return response
-
-
-def logout_user(uid: int) -> None:
-    redis = Redis()
-    for key in (redis.keys(current_app.config['SESSION_KEY_PREFIX'] + "*") +
-                redis.keys("api_" + current_app.config['SESSION_KEY_PREFIX'] + "*")):
-        found = redis.get(key)
-        if found:
-            sess = session_json_serializer.loads(found.decode())
-            if 'uid' in sess and sess['uid'] == uid:
-                redis.delete(key)
-    session.pop('uid')
-
-
-def logout_all() -> None:
-    redis = Redis()
-    for key in (redis.keys(current_app.config['SESSION_KEY_PREFIX'] + "*") +
-                redis.keys("api_" + current_app.config['SESSION_KEY_PREFIX'] + "*")):
-        redis.delete(key)

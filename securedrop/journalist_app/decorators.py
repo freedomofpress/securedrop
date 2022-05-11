@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from typing import Any
 
-from flask import redirect, url_for, flash, g, session
+from flask import redirect, url_for, flash, session
 from flask_babel import gettext
 from functools import wraps
 from typing import Any, Callable

@@ -67,7 +67,7 @@ def _login_user(app, username, password, otp_secret, success=True):
         follow_redirects=True,
     )
     assert resp.status_code == 200
-    assert username in resp.data.decode('utf-8')
+    assert ((username in resp.data.decode('utf-8')) == success)
 
 
 @pytest.mark.parametrize("otp_secret", ["", "GA", "GARBAGE", "JHCOGO7VCER3EJ4"])
@@ -704,7 +704,6 @@ def test_user_edits_password_success_response(config, journalist_app, test_journ
                 follow_redirects=True,
             )
 
-            assert page_language(resp.data) == language_tag(locale)
             msgids = [
                 "Password updated. Don't forget to save it in your KeePassX database. New password:"
             ]
@@ -743,7 +742,7 @@ def test_user_edits_password_expires_session(journalist_app, test_journo):
                 ins.assert_redirects(resp, url_for("main.login"))
 
             # verify the session was expired after the password was changed
-            assert "uid" not in session
+            assert (session.uid is None and session.user is None)
     finally:
         models.LOGIN_HARDENING = original_hardening
 

@@ -5,7 +5,7 @@ from typing import Tuple, Set, Union
 
 import flask
 import werkzeug
-from flask import abort, Blueprint, jsonify, request, g
+from flask import abort, Blueprint, jsonify, request
 
 from sqlalchemy import Column
 from sqlalchemy.exc import IntegrityError

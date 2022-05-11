@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from flask import g
 from pyotp import TOTP
 
 from . import asynchronous  # noqa

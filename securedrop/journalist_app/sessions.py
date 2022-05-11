@@ -23,6 +23,9 @@ class ServerSideSession(CallbackDict, SessionMixin):
         if initial and 'uid' in initial:
             self.set_uid(initial['uid'])
             self.set_user()
+        else:
+            self.uid = None
+            self.user = None
         CallbackDict.__init__(self, initial, on_update)
         self.sid = sid
         self.token: str = token
@@ -32,7 +35,6 @@ class ServerSideSession(CallbackDict, SessionMixin):
         self.to_regenerate = False
         self.modified = False
 
-
     def get_token(self) -> Optional[str]:
         return self.token
 
@@ -40,28 +42,32 @@ class ServerSideSession(CallbackDict, SessionMixin):
         return datetime.now(timezone.utc) + timedelta(seconds=self.lifetime)
 
     def set_user(self) -> None:
-        if hasattr(self, 'uid') and self.uid is not None:
+        if self.uid is not None:
             self.user = Journalist.query.get(self.uid)
+        if self.user is None:
+            # The uid has no match in the database, and this should really not happen
+            self.uid = None
+            self.to_destroy = True
 
     def get_user(self) -> Optional[Journalist]:
-        if hasattr(self, 'user'):
-            return self.user
+        return self.user
 
     def get_uid(self) -> Optional[int]:
-        if hasattr(self, 'uid'):
-            return self.uid
+        return self.uid
 
-    def set_uid(self, uid) -> None:
+    def set_uid(self, uid: int) -> None:
+        self.user = None
         self.uid = uid
 
     def logged_in(self) -> bool:
-        if hasattr(self, 'uid') and self.uid is not None:
+        if self.uid is not None:
             return True
         else:
             return False
 
     def destroy(self) -> None:
         self.uid = None
+        self.user = None
         self.to_destroy = True
 
     def regenerate(self) -> None:
@@ -150,6 +156,8 @@ class SessionInterface(FlaskSessionInterface):
                                           initial=data)
             except (JSONDecodeError, NotImplementedError):
                 return self._new_session(is_api)
+        # signed session_id provided in cookie is valid, but the session is not on the server
+        # anymore so maybe here is the code path for a meaningful error message
         return self._new_session(is_api)
 
     def save_session(  # type: ignore[override] # noqa
@@ -188,9 +196,14 @@ class SessionInterface(FlaskSessionInterface):
             self.redis.delete(self.key_prefix + session.sid)
             session.sid = self._generate_sid()
             session.token = self._get_signer(app).dumps(session.sid)  # type: ignore
-        if session.modified or session.new:
+        if session.new or session.to_regenerate:
             self.redis.setex(name=self.key_prefix + session.sid, value=val,
                              time=expires)
+        elif session.modified:
+            # To prevent race conditions where session is delete by an admin in the middle of a req
+            # accept to save the session object if and only if alrady exists using the xx flag
+            self.redis.set(name=self.key_prefix + session.sid, value=val,
+                           ex=expires, xx=True)
         if not session.is_api and (session.new or session.to_regenerate):
             response.headers.add('Vary', 'Cookie')
             response.set_cookie(app.session_cookie_name, session.token,
@@ -227,6 +240,25 @@ class Session(object):
 
         return session_interface
 
+
+def logout_user(uid: int, is_current: bool = True) -> None:
+    redis = Redis()
+    for key in (redis.keys(app.config['SESSION_KEY_PREFIX'] + "*") +
+                redis.keys("api_" + app.config['SESSION_KEY_PREFIX'] + "*")):
+        found = redis.get(key)
+        if found:
+            sess = session_json_serializer.loads(found.decode())
+            if 'uid' in sess and sess['uid'] == uid:
+                redis.delete(key)
+    if is_current:
+        session.pop('uid')
+
+
+def logout_all() -> None:
+    redis = Redis()
+    for key in (redis.keys(app.config['SESSION_KEY_PREFIX'] + "*") +
+                redis.keys("api_" + app.config['SESSION_KEY_PREFIX'] + "*")):
+        redis.delete(key)
 
 # Re-export flask.session, but with the correct type information for mypy.
 from flask import session  # noqa

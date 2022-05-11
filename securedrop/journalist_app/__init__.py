@@ -5,7 +5,7 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from datetime import datetime
 from flask import (Flask, redirect, url_for, flash, g, request,
-                   render_template, json, abort, session)
+                   render_template, json, abort)
 from flask_assets import Environment
 from flask_babel import gettext
 from flask_wtf.csrf import CSRFProtect, CSRFError
@@ -29,8 +29,7 @@ from journalist_app.utils import (
 from journalist_app import account, admin, api, main, col
 from journalist_app.sessions import Session, session
 from journalist_app.utils import get_source
-from models import InstanceConfig, Journalist
-from werkzeug.exceptions import default_exceptions
+from models import InstanceConfig
 
 # https://www.python.org/dev/peps/pep-0484/#runtime-or-type-checking
 if typing.TYPE_CHECKING:

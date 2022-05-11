@@ -4,7 +4,7 @@ import json
 from datetime import datetime, timedelta, timezone
 import re
 
-from flask import url_for
+from flask import url_for, Response
 from flask.sessions import session_json_serializer
 from redis import Redis
 from pyotp import TOTP
@@ -282,3 +282,24 @@ def test_session_bad_signature(journalist_app, test_journo):
                        headers=get_api_headers(token))
         assert resp.status_code == 200
         assert resp.json['uuid'] == test_journo['uuid']
+
+
+def test_session_race_condition(mocker, journalist_app, test_journo):
+    with journalist_app.test_request_context() as app:
+        session = journalist_app.session_interface.open_session(journalist_app, app.request)
+        assert session.sid is not None
+        session['uid'] = test_journo['id']
+        app.response = Response()
+        journalist_app.session_interface.save_session(journalist_app, session, app.response)
+        assert redis.get(journalist_app.config['SESSION_KEY_PREFIX'] + session.sid) is not None
+        app.request.cookies = {journalist_app.config['SESSION_COOKIE_NAME']: session.token}
+        session2 = journalist_app.session_interface.open_session(journalist_app, app.request)
+        assert session2.sid == session.sid
+        assert session2['uid'] == test_journo['id']
+        # Force entering the redis set xx case
+        session.modified = True
+        session.new = False
+        session.to_regenerate = False
+        redis.delete(journalist_app.config['SESSION_KEY_PREFIX'] + session.sid)
+        journalist_app.session_interface.save_session(journalist_app, session, app.response)
+        assert redis.get(journalist_app.config['SESSION_KEY_PREFIX'] + session.sid) is None
