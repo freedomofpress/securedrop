@@ -297,8 +297,24 @@ header
       padding-top: 0
       min-height: unset
 
-    p
+    &> section:not(#locales-menu):not(#flashed)
+
+      width: 100%
+      padding-top: 10px
+      min-height: unset
+
+      &:first-child
+        @include ltr
+          border-right: 0
+        @include rtl
+          border-left: 0
+
+      &#return-visit
+        padding-left: 50px
+
+    p, hr
       width: auto
+      max-width: 500px
 
     button, .btn
       width: 80%
@@ -314,6 +330,10 @@ header
 
       div
         width: auto
+
+
+
+
 
 // Logo is a simple anchor on all pages except index
 header h1, header h1 a
