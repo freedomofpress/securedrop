@@ -264,6 +264,7 @@
   /var/www/securedrop/static/i/material/trash.png r,
   /var/www/securedrop/static/i/material/trash-outline.png r,
   /var/www/securedrop/static/i/info-small.png r,
+  /var/www/securedrop/static/i/modal-x-white.png r,
   /var/www/securedrop/static/i/source.png r,
   /var/www/securedrop/static/i/torbroom.png r,
   /var/www/securedrop/static/i/upload.png r,
