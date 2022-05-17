@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.4.0~rc2
+
+* Updated SecureDrop release public key to version with expiry date 2020-07-04 (#6448)
+
 ## 2.4.0~rc1
 
 ### Web Applications
