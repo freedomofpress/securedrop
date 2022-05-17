@@ -21,7 +21,7 @@
 
 <body id="source-index">
   <div id="browser-security-level" class="warning" role="alert">
-    {{ gettext('Your Tor Browser\'s <a id="disable-js" href=""><b>Security Level</b></a> is too low. Use the <img src="{icon}" alt="&quot;Security Level&quot;"> button in your browser’s toolbar to change it.').format(icon=url_for("static", filename="i/font-awesome/white/guard.svg")) }}
+    <p>{{ gettext('Your Tor Browser\'s <a id="disable-js" href=""><b>Security Level</b></a> is too low. Use the <img src="{icon}" alt="&quot;Security Level&quot;"> button in your browser’s toolbar to change it.').format(icon=url_for("static", filename="i/font-awesome/white/guard.svg")) }}</p>
   </div>
   {# Warning bubble to help TB users disable JavaScript with Tor Browser's Security Levels
     Included here so the images can preload while the user is first
@@ -41,12 +41,12 @@
     </p>
   </dialog>
   <div id="browser-tb" class="warning" role="alert">
-    {{ gettext('<strong>It is recommended to use Tor Browser to access SecureDrop:</strong> <a class="recommend-tor" href="{tor_browser_url}">Learn how to install it</a>, or ignore this warning to continue.').format(tor_browser_url=url_for('info.recommend_tor_browser')) }}
-    <span id="browser-tb-close" aria-label="{{ gettext('Close') }}">×</span>
+    <p>{{ gettext('<strong>It is recommended to use Tor Browser to access SecureDrop:</strong> <a class="recommend-tor" href="{tor_browser_url}">Learn how to install it</a>, or ignore this warning to continue.').format(tor_browser_url=url_for('info.recommend_tor_browser')) }}
+    <span id="browser-tb-close" aria-label="{{ gettext('Close') }}">×</span></p>
   </div>
   <div id="browser-android" class="warning" role="alert">
-    {{ gettext('<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop version.</strong> <a class="recommend-tor" href="{tor_browser_url}">Learn how to install it</a>, or ignore this warning to continue.').format(tor_browser_url=url_for('info.recommend_tor_browser')) }}
-    <span id="browser-android-close" aria-label="{{ gettext('Close') }}">×</span>
+    <p>{{ gettext('<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop version.</strong> <a class="recommend-tor" href="{tor_browser_url}">Learn how to install it</a>, or ignore this warning to continue.').format(tor_browser_url=url_for('info.recommend_tor_browser')) }}
+    <span id="browser-android-close" aria-label="{{ gettext('Close') }}">×</span></p>
   </div>
 
   <div class="content">
