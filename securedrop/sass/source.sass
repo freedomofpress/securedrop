@@ -285,20 +285,29 @@ header
   html #upload .attachment input
     font-size: 130%
 
-  html #source-index > .content > main
+  // no html selector here because we use the ltr/rtl includes here
+  #source-index > .content > main
     display: block
     width: 100%
 
-    &> section
-      border: 0
+    &> section:not(#locales-menu):not(#flashed)
       width: auto
       margin: 0
-      padding-left: 30px
       padding-top: 0
       min-height: unset
 
+      &:first-child
+        @include ltr
+          border-right: 0
+        @include rtl
+          border-left: 0
+
+      &#return-visit
+        padding-left: 45px
+
     p
       width: auto
+      max-width: 500px
 
     button, .btn
       width: 80%
