@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SecureDrop 0.14.0~rc1\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2022-03-29 11:38+0000\n"
-"Last-Translator: slrslr <adm@prnet.info>\n"
+"PO-Revision-Date: 2022-05-19 15:11+0000\n"
+"Last-Translator: michaela-bot <michaela.rybickova@gmail.com>\n"
 "Language-Team: Czech <https://weblate.securedrop.org/projects/securedrop/securedrop/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
@@ -758,10 +758,8 @@ msgstr "Vaše spojení není anonymní v tuto chvíli!"
 msgid "You were redirected because you are already logged in. If you want to create a new account, you should log out first."
 msgstr "Protože jste již přihlášen/a, byl/a jste přesměrován/a na tuto stránku. Pokud chcete vytvořit nový účet, nejprve se odhlaste."
 
-#, fuzzy
-#| msgid "You are already logged in. Please verify your codename above as it may differ from the one displayed on the previous page."
 msgid "You are already logged in. Please verify your codename as it may differ from the one displayed on the previous page."
-msgstr "Jste již přihlášen/a. Prosím, zkontrolujte zdali výše uvedené krycí jméno souhlasí, protože se může lišit od toho zobrazeného na předchozí stránce."
+msgstr "Jste již přihlášen/a. Prosím, zkontrolujte zdali uvedené krycí jméno souhlasí, protože se může lišit od toho zobrazeného na předchozí stránce."
 
 msgid "There was a temporary problem creating your account. Please try again."
 msgstr "Při ověřování dvoufaktorového kódu došlo k dočasnému problému. Zkuste to prosím znovu."
@@ -884,7 +882,7 @@ msgid "<strong>It is recommended you use the desktop version of Tor Browser to a
 msgstr "<strong>SecureDrop doporučujeme používat ve verzi prohlížeče Tor pro počítač, protože Orfox neposkytuje stejnou úroveň bezpečnosti a anonymity jako verze pro počítač.</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Zjistěte, jak ji nainstalovat</a>."
 
 msgid "{} logo"
-msgstr ""
+msgstr "{} logo"
 
 msgid "First submission"
 msgstr "První podání"
@@ -940,10 +938,8 @@ msgstr "<a href=\"{url}\" class=\"text-link\">Více informací</a>."
 msgid "Maximum upload size: 500 MB"
 msgstr "Maximální velikost uploadu: 500 MB"
 
-#, fuzzy
-#| msgid "Your first message must be at least {} characters long."
 msgid "If you are only sending a message, it must be at least {} characters long."
-msgstr "Vaše první zpráva musí mít délku alespoň {} znaků."
+msgstr "Vaše odchozí zpráva musí mít délku alespoň {} znaků."
 
 msgid "Anti-spam check. Do not fill this in!"
 msgstr "Ochrana proti SPAMu. Nevyplňujte!"
@@ -993,10 +989,8 @@ msgstr "Zdá se, že pro přístup k SecureDrop používáte Tor proxy službu. 
 msgid "Anyone monitoring your Internet traffic &mdash; including your government, your Internet provider, or the proxy operator &mdash; may be able to identify you."
 msgstr "Kdokoliv, kdo sleduje vaši aktivitu na internetu &mdash; včetně vlády nebo poskytovatele internetu &mdash; vás může identifikovat."
 
-#, fuzzy
-#| msgid "Always use <a href=\"www.torproject.org/projects/torbrowser.html\">Tor Browser</a> to access SecureDrop. Valid SecureDrop site addresses end with <code>.onion</code>. The correct address for this site is:"
 msgid "Always use Tor Browser (<code>{}</code>) to access SecureDrop. Valid SecureDrop site addresses end with <code>.onion</code>. The correct address for this site is:"
-msgstr "Vždy používejte <a href=\"www.torproject.org/projects/torbrowser.html\">Tor Browser</a> pro přístup k SecureDrop. Platná adresa SecureDrop stránky končí <code>.onion</code>. Správná adresa této stránky je:"
+msgstr "Vždy používejte Prohlížeč Tor (<code>{}</code>) pro přístup k SecureDrop. Platná adresa SecureDrop stránky končí <code>.onion</code>. Správná adresa této stránky je:"
 
 msgid "If you are already using Tor Browser, copy the address above and generate a new identity before you access SecureDrop."
 msgstr "Pokud již používáte Prohlížeč Tor, zkopírujte adresu výše a vygenerujte novou identitu před přístupem na SecureDrop."
@@ -1025,10 +1019,8 @@ msgstr "Pamatujte, vaše krycí jméno je:"
 msgid "Codename"
 msgstr "Krycí jméno"
 
-#, fuzzy
-#| msgid "Codename"
 msgid "Show Codename"
-msgstr "Krycí jméno"
+msgstr "Zobrazit Krycí jméno"
 
 msgid "Why download the team's public key?"
 msgstr "Proč si stáhnout veřejný klíč týmu?"
