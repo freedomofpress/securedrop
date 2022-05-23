@@ -767,7 +767,7 @@ def test_user_edits_password_error_response(config, journalist_app, test_journo,
             # to the database and this isolates the one we want to fail
             with patch.object(Journalist, 'verify_token', return_value=True):
                 with patch.object(db.session, 'commit',
-                                  side_effect=Exception()):
+                                  side_effect=[None, Exception()]):
                     with InstrumentedApp(journalist_app) as ins:
                         resp = app.post(
                             url_for('account.new_password', l=locale),

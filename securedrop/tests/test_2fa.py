@@ -44,7 +44,10 @@ def totp_window():
 
 
 def test_totp_reuse_protections(journalist_app, test_journo, hardening):
-    """Ensure that logging in twice with the same TOTP token fails."""
+    """Ensure that logging in twice with the same TOTP token fails.
+       Also, ensure that last_token is updated accordingly.
+    """
+
     with totp_window():
         token = TOTP(test_journo['otp_secret']).now()
 
@@ -53,11 +56,16 @@ def test_totp_reuse_protections(journalist_app, test_journo, hardening):
             resp = app.get(url_for('main.logout'), follow_redirects=True)
             assert resp.status_code == 200
 
+        with journalist_app.app_context():
+            journo = Journalist.query.get(test_journo['id'])
+            assert journo.last_token == token
+
         with journalist_app.test_client() as app:
             resp = app.post(url_for('main.login'),
                             data=dict(username=test_journo['username'],
                                       password=test_journo['password'],
                                       token=token))
+
             assert resp.status_code == 200
             text = resp.data.decode('utf-8')
             assert "Login failed" in text
@@ -75,6 +83,46 @@ def test_totp_reuse_protections2(journalist_app, test_journo, hardening):
             Journalist.login(test_journo['username'],
                              test_journo['password'],
                              token)
+            with pytest.raises(BadTokenException):
+                Journalist.login(test_journo['username'],
+                                 test_journo['password'],
+                                 token)
+
+
+def test_totp_reuse_protections3(journalist_app, test_journo, hardening):
+    """We want to ensure that padding has no effect on token reuse verification."""
+
+    with totp_window():
+        token = TOTP(test_journo['otp_secret']).now()
+
+        with journalist_app.app_context():
+            Journalist.login(test_journo['username'],
+                             test_journo['password'],
+                             token)
+            with pytest.raises(BadTokenException):
+                Journalist.login(test_journo['username'],
+                                 test_journo['password'],
+                                 token + " ")
+
+
+def test_totp_reuse_protections4(journalist_app, test_journo, hardening):
+    """More granular than the preceeding test, we want to make sure the right
+       exception is being raised in the right place.
+    """
+
+    invalid_token = '000000'
+
+    with totp_window():
+        token = TOTP(test_journo['otp_secret']).now()
+
+        with journalist_app.app_context():
+            Journalist.login(test_journo['username'],
+                             test_journo['password'],
+                             token)
+            with pytest.raises(BadTokenException):
+                Journalist.login(test_journo['username'],
+                                 test_journo['password'],
+                                 invalid_token)
             with pytest.raises(BadTokenException):
                 Journalist.login(test_journo['username'],
                                  test_journo['password'],
@@ -102,11 +150,6 @@ def test_bad_token_fails_to_verify_on_admin_new_user_two_factor_page(
                 ins.assert_message_flashed(
                     'There was a problem verifying the two-factor code. Please try again.',
                     'error')
-
-        # last_token should be set to the token we just tried to use
-        with journalist_app.app_context():
-            admin = Journalist.query.get(test_admin['id'])
-            assert admin.last_token == invalid_token
 
         with journalist_app.test_client() as app:
             login_user(app, test_admin)
@@ -141,11 +184,6 @@ def test_bad_token_fails_to_verify_on_new_user_two_factor_page(
                     'There was a problem verifying the two-factor code. Please try again.',
                     'error'
                 )
-
-        # last_token should be set to the token we just tried to use
-        with journalist_app.app_context():
-            journo = Journalist.query.get(test_journo['id'])
-            assert journo.last_token == invalid_token
 
         with journalist_app.test_client() as app:
             login_user(app, test_journo)

@@ -654,12 +654,6 @@ class Journalist(db.Model):
         if not token:
             return False
 
-        token = self._format_token(token)
-
-        # Store latest token to prevent OTP token reuse
-        self.last_token = token
-        db.session.commit()
-
         if self.is_totp:
             # Also check the given token against the previous and next
             # valid tokens, to compensate for potential time skew
@@ -717,6 +711,9 @@ class Journalist(db.Model):
         if len(user.otp_secret) < OTP_SECRET_MIN_ASCII_LENGTH:
             raise InvalidOTPSecretException(gettext("Invalid OTP secret"))
 
+        # From here to the return the order of statements is very important
+        token = user._format_token(token)
+
         if LOGIN_HARDENING:
             cls.throttle_login(user)
 
@@ -729,8 +726,14 @@ class Journalist(db.Model):
                                             "{}".format(token))
         if not user.verify_token(token):
             raise BadTokenException("invalid two-factor code")
+
+        # Store latest token to prevent OTP token reuse
+        user.last_token = token
+        db.session.commit()
+
         if not user.valid_password(password):
             raise WrongPasswordException("invalid password")
+
         return user
 
     def generate_api_token(self, expiration: int) -> str:
