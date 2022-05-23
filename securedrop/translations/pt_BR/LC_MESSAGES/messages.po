@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SecureDrop 0.4.3\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2022-03-15 18:11+0000\n"
-"Last-Translator: d fau <diegofauser@gmail.com>\n"
+"PO-Revision-Date: 2022-05-19 13:11+0000\n"
+"Last-Translator: Flávio José de Siqueira Cavalcanti Veras <flaviove@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://weblate.securedrop.org/projects/securedrop/securedrop/pt_BR/>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
@@ -748,10 +748,8 @@ msgstr "Sua conexão não é anônima no momento!"
 msgid "You were redirected because you are already logged in. If you want to create a new account, you should log out first."
 msgstr "Sessão já iniciada. Para criar uma nova conta, é preciso encerrar esta sessão."
 
-#, fuzzy
-#| msgid "You are already logged in. Please verify your codename above as it may differ from the one displayed on the previous page."
 msgid "You are already logged in. Please verify your codename as it may differ from the one displayed on the previous page."
-msgstr "A sua sessão já foi iniciada. Por favor, verifique seu codinome acima, porque ele pode ser diferente daquele exibido na página anterior."
+msgstr "Você já está conectado. Verifique seu codinome, pois pode ser diferente do exibido na página anterior."
 
 msgid "There was a temporary problem creating your account. Please try again."
 msgstr "Houve um problema temporário ao criar sua conta. Por favor, tente novamente."
@@ -874,7 +872,7 @@ msgid "<strong>It is recommended you use the desktop version of Tor Browser to a
 msgstr "<strong>Recomenda-se o uso da versão desktop do Navegador Tor para acessar o SecureDrop, já que o Orfox não oferece o mesmo nível de segurança e anonimato que a versão desktop.</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Veja como instalar o Tor</a> ou ignore este aviso e continue."
 
 msgid "{} logo"
-msgstr ""
+msgstr "{} logotipo"
 
 msgid "First submission"
 msgstr "Primeiro envio"
@@ -930,10 +928,8 @@ msgstr "<a href=\"{url}\" class=\"text-link\">Saiba mais</a>."
 msgid "Maximum upload size: 500 MB"
 msgstr "Tamanho máximo de envio: 500 MB"
 
-#, fuzzy
-#| msgid "Your first message must be at least {} characters long."
 msgid "If you are only sending a message, it must be at least {} characters long."
-msgstr "Deve conter pelo menos {} caracteres."
+msgstr "Se você estiver enviando apenas uma mensagem, ela deve ter pelo menos {} caracteres."
 
 msgid "Anti-spam check. Do not fill this in!"
 msgstr "Checagem Anti-spam. Não preencha este campo!"
@@ -983,10 +979,8 @@ msgstr "Parece que está usando um serviço de Tor proxy para acessar SecureDrop
 msgid "Anyone monitoring your Internet traffic &mdash; including your government, your Internet provider, or the proxy operator &mdash; may be able to identify you."
 msgstr "Qualquer um monitorando seu trafego na Internet &mdash; incluindo seu governo, provedor de Internet, ou operador de proxy &mdash; pode identificar você."
 
-#, fuzzy
-#| msgid "Always use <a href=\"www.torproject.org/projects/torbrowser.html\">Tor Browser</a> to access SecureDrop. Valid SecureDrop site addresses end with <code>.onion</code>. The correct address for this site is:"
 msgid "Always use Tor Browser (<code>{}</code>) to access SecureDrop. Valid SecureDrop site addresses end with <code>.onion</code>. The correct address for this site is:"
-msgstr "Sempre utilize <a href=\"www.torproject.org/projects/torbrowser.html\"> o navegador Tor</a> para acessar SecureDrop. Endereços válidos de SecureDrop acabam com <code>.onion</code>. O endereço correto para este site é:"
+msgstr "Sempre use o Navegador Tor (<code>{}</code>) para acessar o SecureDrop. Os endereços de site SecureDrop válidos terminam com <code>.onion</code>. O endereço correto deste site é:"
 
 msgid "If you are already using Tor Browser, copy the address above and generate a new identity before you access SecureDrop."
 msgstr "Caso já esteja utilizando o navegador Tor, copie o endereço acima e gere uma nova identificação antes de acessar SecureDrop."
@@ -1015,10 +1009,8 @@ msgstr "Lembre-se, o seu codinome é:"
 msgid "Codename"
 msgstr "Codinome"
 
-#, fuzzy
-#| msgid "Codename"
 msgid "Show Codename"
-msgstr "Codinome"
+msgstr "Mostrar codinome"
 
 msgid "Why download the team's public key?"
 msgstr "Por que baixar as chaves públicas da nossa equipe?"
