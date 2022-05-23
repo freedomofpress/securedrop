@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SecureDrop 0.12.0~rc1\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2022-03-14 18:11+0000\n"
-"Last-Translator: Sveinn í Felli <sv1@fellsnet.is>\n"
+"PO-Revision-Date: 2022-05-19 00:11+0000\n"
+"Last-Translator: Oktavia <oktaviahrund@gmail.com>\n"
 "Language-Team: Icelandic <https://weblate.securedrop.org/projects/securedrop/securedrop/is/>\n"
 "Language: is\n"
 "MIME-Version: 1.0\n"
@@ -748,10 +748,8 @@ msgstr "Tengingin þín er ekki nafnlaus í augnablikinu!"
 msgid "You were redirected because you are already logged in. If you want to create a new account, you should log out first."
 msgstr "Þér var endurbeint vegna þess að þú ert þegar með innskráningu í gangi. Ef þú ætlar að útbúa annan aðgang, ættirðu að skrá þig fyrst út."
 
-#, fuzzy
-#| msgid "You are already logged in. Please verify your codename above as it may differ from the one displayed on the previous page."
 msgid "You are already logged in. Please verify your codename as it may differ from the one displayed on the previous page."
-msgstr "Þú ert þegar skráð/ur inn. Yfirfarðu kóðanafnið þitt hér fyrir ofan þar sem það gæti verið öðruvísi en það sem birt var á fyrri síðu."
+msgstr "Þú ert þegar skráð/ur inn. Yfirfarðu kóðanafnið þitt þar sem það gæti verið öðruvísi en það sem birt var á fyrri síðu."
 
 msgid "There was a temporary problem creating your account. Please try again."
 msgstr "Það kom upp tímabundið vandamál við að útbúa notandaaðgang fyrir þig. Vinsamlegast reyndu aftur."
@@ -763,7 +761,7 @@ msgid "You must enter a message."
 msgstr "Þú verður að setja inn skilaboð."
 
 msgid "Your first message must be at least {} characters long."
-msgstr "Fyrstu skilaboðin þín verða að vera a.m.k. {} stafa að löng."
+msgstr "Fyrstu skilaboðin þín verða að vera a.m.k. {} stafa löng."
 
 msgid "Please do not submit your codename!"
 msgstr "Ekki senda inn kóðanafnið þitt!"
@@ -862,7 +860,7 @@ msgid "Click <b>Change</b> to open Security Level preferences"
 msgstr "Smelltu á <b>Breyta</b> til að opna stillingar á öryggisstigi"
 
 msgid "Select <b>Safest</b> and close the preferences tab"
-msgstr "Veldu <b>Öruggast</b> og lokaðu kjörstillingaflipanum"
+msgstr "Velja <b>Öruggast</b> og lokaðu kjörstillingaflipanum"
 
 msgid "<a href=\"/\" aria-label=\"Follow these instructions, then refresh this page\">Refresh this page</a>, and you're done!"
 msgstr "<a href=\"/\" aria-label=\"Farðu eftir þessum leiðbeiningum og endurlestu síðuna\">Endurlestu þessa síðu</a>, og þetta er komið!"
@@ -874,7 +872,7 @@ msgid "<strong>It is recommended you use the desktop version of Tor Browser to a
 msgstr "<strong>Mælt er með því að nota skjáborðsútgáfu Tor-vafrans til aðgangs að SecureDrop, þar sem Orfox gefur ekki sama stig öryggis og nafnleyndar eins og skjáborðsútgáfurnar.</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Sjáðu hvernig á að setja upp Tor-vafrann</a>, eða hunsaðu þessa aðvörun til að halda áfram."
 
 msgid "{} logo"
-msgstr ""
+msgstr "{} táknmerki"
 
 msgid "First submission"
 msgstr "Fyrsta innsending"
@@ -930,10 +928,8 @@ msgstr "<a href=\"{url}\" class=\"text-link\">Kanna nánar</a>."
 msgid "Maximum upload size: 500 MB"
 msgstr "Hámarksstærð innsendingar: 500 MB"
 
-#, fuzzy
-#| msgid "Your first message must be at least {} characters long."
 msgid "If you are only sending a message, it must be at least {} characters long."
-msgstr "Fyrstu skilaboðin þín verða að vera a.m.k. {} stafa að löng."
+msgstr "Ef þú ert aðeins að senda skilaboð, þurfa þau að vera að vera a.m.k. {} stafa að löng."
 
 msgid "Anti-spam check. Do not fill this in!"
 msgstr "Athugun á ruslsendingu. Ekki fylla inn í þetta!"
@@ -983,10 +979,8 @@ msgstr "Það lítur út eins og þú notir milliþjónustu Tor til að tengjast
 msgid "Anyone monitoring your Internet traffic &mdash; including your government, your Internet provider, or the proxy operator &mdash; may be able to identify you."
 msgstr "Það er hugsanlegt að hver sá sem fylgist með netumferðinni þinni &mdash; t.d. stjórnvöld, netþjónustan þín, o.fl. &mdash; geti greint hver þú ert."
 
-#, fuzzy
-#| msgid "Always use <a href=\"www.torproject.org/projects/torbrowser.html\">Tor Browser</a> to access SecureDrop. Valid SecureDrop site addresses end with <code>.onion</code>. The correct address for this site is:"
 msgid "Always use Tor Browser (<code>{}</code>) to access SecureDrop. Valid SecureDrop site addresses end with <code>.onion</code>. The correct address for this site is:"
-msgstr "Þú skalt alltaf nota <a href=\"www.torproject.org/projects/torbrowser.html\">Tor-vafrann</a> til að tengjast SecureDrop. Gildar slóðir á SecureDrop-vefsvæði enda á <code>.onion</code>. Rétta slóðin á þennan vef er:"
+msgstr "Þú skalt alltaf nota Tor-vafrann (<code>{}</code>) til að tengjast SecureDrop. Gildar slóðir á SecureDrop-vefsvæði enda á <code>.onion</code>. Rétta slóðin á þennan vef er:"
 
 msgid "If you are already using Tor Browser, copy the address above and generate a new identity before you access SecureDrop."
 msgstr "Ef þú ert þegar að nota Tor-vafrann, ættirðu að afrita vefslóðina hér fyrir ofan og útbúa nýtt auðkenni áður en þú tengist SecureDrop."
@@ -1015,10 +1009,8 @@ msgstr "Mundu, kóðanafnið þitt er:"
 msgid "Codename"
 msgstr "Kóðanafn"
 
-#, fuzzy
-#| msgid "Codename"
 msgid "Show Codename"
-msgstr "Kóðanafn"
+msgstr "Birta kóðanafn"
 
 msgid "Why download the team's public key?"
 msgstr "Af hverju að ná í dreifilykil teymisins?"
