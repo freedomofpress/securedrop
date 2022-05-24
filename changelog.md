@@ -1,37 +1,35 @@
 # Changelog
 
-## 2.4.0~rc2
-
-* Updated SecureDrop release public key to version with expiry date 2020-07-04 (#6448)
-
-## 2.4.0~rc1
+## 2.4.0
 
 ### Web Applications
 
 * Refactored application CSS and updated Source Interface design (#6322, #6362, #6315, #6419, #6429)
 * Updated code to remove Flask and Jinja2 deprecation warnings (#6245)
-* Fixed cases where string formatting was breaking translation lookups (#6368)
 * Simplified templates using jinja2 expression-statement extension (#6378)
 * Updated filesystem_id fields to be non-nullable (#6350)
 * Updated gnupg commands to use direct trust model (#6397)
 * Replaced potentially offensive terms in wordlists (#6402)
-* Added validation checks for configured vs. supported languages (#6406)
+* Gracefully emit errors when configured languages are unavailable (#6406)
+* Fixed broken link to download Tor Browser on Tor2Web interstitial (#6393, #6430)
+* Add locale for Portuguese (Portugal), with the language code `pt_PT` (#6156)
+* Improved 2FA token reuse protection (#6460)
 
 ### Journalist API
 
-* Updated datetime formatting to use custom encoder (#6260)
+* Use a custom encoder to consistently format datetime objects (#6260)
 
 ### Operations
 
-* Added support for Tails 5.0 to Journalist and Admin Workstations (#6408, #6424)
-* Disabled fwupd timers (#6401)
+* Disabled fwupd timers to suppress inactionable OSSEC notifications (#6401)
+* Updated SecureDrop release public key to version with expiry date 2020-07-04 (#6448)
 
 ### Development
 
 * Fixed schema comparison tests (#6353)
 * Refactored functional test fixtures and updated tests to use them (#6307, #6361)
 * Updated safety dependency from 1.8.7 to 1.10.3 (#6396)
-* Updated mypy dependency from  0.761 to 0.942 and added sqlalchemy type checks (#6351)
+* Updated mypy dependency from  0.761 to 0.942 and enabled SQLAlchemy plugin (#6351)
 * Removed remaining support for Xenial in package build logic (#6409)
 * Added support for provisioning demo container and landing page (#6407, #6418, #6421)
 
@@ -39,7 +37,7 @@
 
 * Removed logic to fetch Tor packages in nightly build (#6349)
 * Replaced codecov Bash uploader with binary uploader (#6416) 
-* Updated CircleCI to use Python 3.8 image, GCE to use Debian-11 base image (#6431)
+* Updated CircleCI to use Python 3.8 image, GCE to use Debian 11 (bullseye) base image (#6431)
 
 ## 2.3.2
 
