@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2022-03-25 16:02+0000\n"
-"Last-Translator: Malcolm <Bild96@pm.me>\n"
+"PO-Revision-Date: 2022-05-19 13:11+0000\n"
+"Last-Translator: Ahmed Essam <ahmedessamdev@gmail.com>\n"
 "Language-Team: Arabic <https://weblate.securedrop.org/projects/securedrop/securedrop/ar/>\n"
 "Language: ar\n"
 "MIME-Version: 1.0\n"
@@ -789,10 +789,8 @@ msgstr "اتصالك ليس مجهولاً الآن!"
 msgid "You were redirected because you are already logged in. If you want to create a new account, you should log out first."
 msgstr "تمت إعادة توجيهك إلى حسابك لأنّك والج إليه بالفعل. إنَ كنت تريد إنشاء حساب جديد فعليك الخروج من هذا الحساب أوّلا."
 
-#, fuzzy
-#| msgid "You are already logged in. Please verify your codename above as it may differ from the one displayed on the previous page."
 msgid "You are already logged in. Please verify your codename as it may differ from the one displayed on the previous page."
-msgstr "أنت مسجّل أساساً. من فضلك تأكد من اسمك الرمزي أعلاه إذ قد يكون مختلف عن الإسم الظاهر على الصفحة السابقة."
+msgstr "لقد قمت بتسجيل الدخول بالفعل. يرجى التحقق من الاسم الرمزي أعلاه لأنه قد يختلف عن الاسم المعروض في الصفحة السابقة."
 
 msgid "There was a temporary problem creating your account. Please try again."
 msgstr "طرأت مشكلة مؤقتة فيما يتعلّق بإنشاء حسابك. حاول مجددًا."
@@ -915,7 +913,7 @@ msgid "<strong>It is recommended you use the desktop version of Tor Browser to a
 msgstr "<strong>نوصي باستخدام متصفح تور للنفاذ إلى SecureDrop إذ أنّ Orfox لا يوفّر القدر ذاته من السرية و&nbsp;المجهوليّة اللتين يوفّرهما إصدار سطح المكتب :</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">طالع خطوات التثبيت</a> أو تجاهل هذا التحذير للمواصلة."
 
 msgid "{} logo"
-msgstr ""
+msgstr "{} شعار"
 
 msgid "First submission"
 msgstr "الإيداع الأول"
@@ -971,10 +969,8 @@ msgstr "<a href=\"{url}\" class=\"text-link\">لمعرفة المزيد</a>."
 msgid "Maximum upload size: 500 MB"
 msgstr "الحجم الأقصى الممكن رفعه: 500 ميجابايت"
 
-#, fuzzy
-#| msgid "Your first message must be at least {} characters long."
 msgid "If you are only sending a message, it must be at least {} characters long."
-msgstr "يجب أن تكون رسالتك الأولى على الأقل {} من الأحرف."
+msgstr "إذا كنت ترسل رسالة فقط، فيجب أن تتكون {} من الأحرف على الأقل."
 
 msgid "Anti-spam check. Do not fill this in!"
 msgstr "فحص مكافحة البريد العشوائي. لا تملأ هذا!"
@@ -1024,10 +1020,8 @@ msgstr "يبدو أنك تستخدم خدمة بروكسي Tor للوصول إل
 msgid "Anyone monitoring your Internet traffic &mdash; including your government, your Internet provider, or the proxy operator &mdash; may be able to identify you."
 msgstr "أي شخص يراقب حركة المرور الخاصة بك على الإنترنت, بما في ذلك حكومتك, أو مزود الإنترنت الخاص بك, أو المشغل البروكسي. و قد تكون قادرة على التعرف عليك."
 
-#, fuzzy
-#| msgid "Always use <a href=\"www.torproject.org/projects/torbrowser.html\">Tor Browser</a> to access SecureDrop. Valid SecureDrop site addresses end with <code>.onion</code>. The correct address for this site is:"
 msgid "Always use Tor Browser (<code>{}</code>) to access SecureDrop. Valid SecureDrop site addresses end with <code>.onion</code>. The correct address for this site is:"
-msgstr "استخدم دائمًا <a href=\"www.torproject.org/projects/torbrowser.html\">Tor Browser</a> للوصول إلى SecureDrop. تنتهي عناوين موقع SecureDrop الصالحة بـ <code>.onion</code>. العنوان الصحيح لهذا الموقع هو:"
+msgstr "استخدم دائمًا متصفح Tor (<code> {} </code>) للوصول إلى SecureDrop. تنتهي عناوين موقع SecureDrop الصالحة بـ <code> .onion </code>. العنوان الصحيح لهذا الموقع هو:"
 
 msgid "If you are already using Tor Browser, copy the address above and generate a new identity before you access SecureDrop."
 msgstr "إذا كنت تستخدم متصفح Tor بالفعل، فقم بنسخ العنوان أعلاه وإنشاء هوية جديدة قبل الوصول إلى SecureDrop."
@@ -1056,10 +1050,8 @@ msgstr "تذكر أنّ اسمك الرمزي:"
 msgid "Codename"
 msgstr "الاسم الرمزي"
 
-#, fuzzy
-#| msgid "Codename"
 msgid "Show Codename"
-msgstr "الاسم الرمزي"
+msgstr "إظهار الاسم الرمزي"
 
 msgid "Why download the team's public key?"
 msgstr "ما أهمية تنزيل المفتاح العلني للفريق؟"

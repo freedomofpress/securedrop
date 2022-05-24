@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SecureDrop 0.5-rc4\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2022-03-29 21:18+0000\n"
-"Last-Translator: Erik Moeller <eloquence@gmail.com>\n"
+"PO-Revision-Date: 2022-05-09 16:11+0000\n"
+"Last-Translator: Jonas Waga <jonas.waga@schibsted.com>\n"
 "Language-Team: Swedish <https://weblate.securedrop.org/projects/securedrop/securedrop/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
@@ -748,10 +748,8 @@ msgstr "Din anslutning är inte anonym just nu!"
 msgid "You were redirected because you are already logged in. If you want to create a new account, you should log out first."
 msgstr "Du omdirigerades eftersom du redan är inloggad. Ifall du vill skapa ett nytt konto, logga ut först."
 
-#, fuzzy
-#| msgid "You are already logged in. Please verify your codename above as it may differ from the one displayed on the previous page."
 msgid "You are already logged in. Please verify your codename as it may differ from the one displayed on the previous page."
-msgstr "Du är redan inloggad. Kontrollera ditt kodnamn ovan eftersom det kan skilja sig från det som visas på föregående sida."
+msgstr "Du är redan inloggad. Kontrollera ditt kodnamn eftersom det kan skilja sig från det som visas på föregående sida."
 
 msgid "There was a temporary problem creating your account. Please try again."
 msgstr "Det uppstod ett tillfälligt fel vid skapandet av ditt konto. Vänligen försök igen."
@@ -874,7 +872,7 @@ msgid "<strong>It is recommended you use the desktop version of Tor Browser to a
 msgstr "<strong> Det är rekommenderat att använda datorversionen av TorBrowser för att använda SecureDrop, då Orfox inte erbjuder samma nivå av säkerhet och anonymitet som datorversionen.</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\"> Lär dig hur den installeras</a> eller ignorera denna varning och fortsätt."
 
 msgid "{} logo"
-msgstr ""
+msgstr "{} logga"
 
 msgid "First submission"
 msgstr "Första inlämning"
@@ -930,10 +928,8 @@ msgstr "<a href=\"{url}\" class=\"text-link\">Fortsätt läsa</a>."
 msgid "Maximum upload size: 500 MB"
 msgstr "Maximal storlek för uppladdningar: 500 MB"
 
-#, fuzzy
-#| msgid "Your first message must be at least {} characters long."
 msgid "If you are only sending a message, it must be at least {} characters long."
-msgstr "Ditt första meddelande måste vara minst {} tecken långt."
+msgstr "Om du enbart skickar ett meddelande, så måste det vara minst {} tecken långt."
 
 msgid "Anti-spam check. Do not fill this in!"
 msgstr "Anti-spam-kontroll. Fyll inte i detta!"
@@ -983,10 +979,8 @@ msgstr "Du ser ut att använda en Tor proxytjänst för att ansluta till SecureD
 msgid "Anyone monitoring your Internet traffic &mdash; including your government, your Internet provider, or the proxy operator &mdash; may be able to identify you."
 msgstr "Om någon övervakar din internettrafik &mdash; inklusive dina myndigheter, din internetleverantör eller proxy-administratören &mdash; kan det ha möjlighet att identifiera dig."
 
-#, fuzzy
-#| msgid "Always use <a href=\"www.torproject.org/projects/torbrowser.html\">Tor Browser</a> to access SecureDrop. Valid SecureDrop site addresses end with <code>.onion</code>. The correct address for this site is:"
 msgid "Always use Tor Browser (<code>{}</code>) to access SecureDrop. Valid SecureDrop site addresses end with <code>.onion</code>. The correct address for this site is:"
-msgstr "Använd alltid <a href=\"www.torproject.org/projects/torbrowser.html\">Tor Browser</a> för att ansluta till SecureDrop. Riktiga SecureDrop-sidadresser slutar med <code>.onion</code>. Den korrekta adressen för den här sidan är:"
+msgstr "Använd alltid Tor Browser (<code>{}</code>) för att ansluta till SecureDrop. Riktiga SecureDrop-sidadresser slutar med <code>.onion</code>. Den korrekta adressen för den här sidan är:"
 
 msgid "If you are already using Tor Browser, copy the address above and generate a new identity before you access SecureDrop."
 msgstr "Om du redan använda Tor Browser, kopiera adressen ovan och generera en ny identitet innan du ansluter till SecureDrop."
@@ -1015,10 +1009,8 @@ msgstr "Kom ihåg, ditt kodnamn är:"
 msgid "Codename"
 msgstr "Kodnamn"
 
-#, fuzzy
-#| msgid "Codename"
 msgid "Show Codename"
-msgstr "Kodnamn"
+msgstr "Visa kodnamn"
 
 msgid "Why download the team's public key?"
 msgstr "Varför ska du ladda ner vårt teams publika nyckel?"

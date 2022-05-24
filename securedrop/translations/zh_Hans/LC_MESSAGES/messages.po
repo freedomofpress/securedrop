@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SecureDrop 0.6~rc2\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2022-03-17 04:11+0000\n"
+"PO-Revision-Date: 2022-05-06 21:11+0000\n"
 "Last-Translator: ff98sha <ff98sha@163.com>\n"
 "Language-Team: Chinese (Simplified) <https://weblate.securedrop.org/projects/securedrop/securedrop/zh_Hans/>\n"
 "Language: zh_Hans\n"
@@ -738,10 +738,8 @@ msgstr "你的连接现在并非匿名！"
 msgid "You were redirected because you are already logged in. If you want to create a new account, you should log out first."
 msgstr "您由于已经登录而被重定向。若您想要创建新账户，请先登出。"
 
-#, fuzzy
-#| msgid "You are already logged in. Please verify your codename above as it may differ from the one displayed on the previous page."
 msgid "You are already logged in. Please verify your codename as it may differ from the one displayed on the previous page."
-msgstr "您已登录。请验证上方的代号，它可能与上个页面的不同。"
+msgstr "您已登录。请验证代号，它可能与上个页面的不同。"
 
 msgid "There was a temporary problem creating your account. Please try again."
 msgstr "创建账户时出现问题。请稍后重试。"
@@ -864,7 +862,7 @@ msgid "<strong>It is recommended you use the desktop version of Tor Browser to a
 msgstr "<strong>我们推荐您使用桌面版 Tor 浏览器访问 SecureDrop，Orfox 相对桌面版而言无法提供相同水准的安全性和匿名性。</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">了解如何安装</a>，您也可以忽略此警告继续访问。"
 
 msgid "{} logo"
-msgstr ""
+msgstr "{} 图标"
 
 msgid "First submission"
 msgstr "首次提交"
@@ -920,10 +918,8 @@ msgstr "<a href=\"{url}\" class=\"text-link\">了解更多</a>。"
 msgid "Maximum upload size: 500 MB"
 msgstr "最大文件上传尺寸：500 MB"
 
-#, fuzzy
-#| msgid "Your first message must be at least {} characters long."
 msgid "If you are only sending a message, it must be at least {} characters long."
-msgstr "初始消息需要至少 {} 个字符。"
+msgstr "纯文本消息需要至少 {} 个字符。"
 
 msgid "Anti-spam check. Do not fill this in!"
 msgstr "人机验证：请勿填写此文本框！"
@@ -973,10 +969,8 @@ msgstr "您似乎在使用 Tor 代理来连接至 SecureDrop，这无法保护�
 msgid "Anyone monitoring your Internet traffic &mdash; including your government, your Internet provider, or the proxy operator &mdash; may be able to identify you."
 msgstr "监听您网络流量的人（如您的政府、互联网提供商、代理提供方）将可以识别您的身份。"
 
-#, fuzzy
-#| msgid "Always use <a href=\"www.torproject.org/projects/torbrowser.html\">Tor Browser</a> to access SecureDrop. Valid SecureDrop site addresses end with <code>.onion</code>. The correct address for this site is:"
 msgid "Always use Tor Browser (<code>{}</code>) to access SecureDrop. Valid SecureDrop site addresses end with <code>.onion</code>. The correct address for this site is:"
-msgstr "请使用 <a href=\"www.torproject.org/projects/torbrowser.html\">Tor 浏览器</a>来连接至 SecureDrop。SecureDrop 网站的地址都以 <code>.onion</code> 结尾。此站点的地址是 ："
+msgstr "请使用 Tor 浏览器(<code>{}</code>) 来连接至 SecureDrop。SecureDrop 网站的地址都以 <code>.onion</code> 结尾。此站点的地址是 ："
 
 msgid "If you are already using Tor Browser, copy the address above and generate a new identity before you access SecureDrop."
 msgstr "如果您已经在使用 Tor 浏览器，请生成一个新的匿名身份，然后复制上方的地址来访问 SecureDrop。"
@@ -1005,10 +999,8 @@ msgstr "请牢记您的代号："
 msgid "Codename"
 msgstr "代号"
 
-#, fuzzy
-#| msgid "Codename"
 msgid "Show Codename"
-msgstr "代号"
+msgstr "显示代号"
 
 msgid "Why download the team's public key?"
 msgstr "为何要下载团队的公钥？"

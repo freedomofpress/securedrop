@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SecureDrop 0.5-rc4\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2022-03-15 03:11+0000\n"
+"PO-Revision-Date: 2022-05-07 06:11+0000\n"
 "Last-Translator: Kaya Zeren <kayazeren@gmail.com>\n"
 "Language-Team: Turkish <https://weblate.securedrop.org/projects/securedrop/securedrop/tr/>\n"
 "Language: tr\n"
@@ -748,10 +748,8 @@ msgstr "Bağlantınız şu anda anonim değil!"
 msgid "You were redirected because you are already logged in. If you want to create a new account, you should log out first."
 msgstr "Oturumunuz zaten açık olduğundan buraya yönlendirildiniz. Yeni bir hesap açmak istiyorsanız, önce oturumunuzu kapatmalısınız."
 
-#, fuzzy
-#| msgid "You are already logged in. Please verify your codename above as it may differ from the one displayed on the previous page."
 msgid "You are already logged in. Please verify your codename as it may differ from the one displayed on the previous page."
-msgstr "Zaten oturum açmışsınız. Lütfen yukarıdaki kod adınızın önceki sayfada görüntülenen ile aynı olup olmadığını denetleyin."
+msgstr "Zaten oturum açmışsınız. Lütfen kod adınızın önceki sayfada görüntülenen ile aynı olup olmadığını denetleyin."
 
 msgid "There was a temporary problem creating your account. Please try again."
 msgstr "Hesabınızı oluştururken geçici bir sorun çıktı. Lütfen yeniden deneyin."
@@ -874,7 +872,7 @@ msgid "<strong>It is recommended you use the desktop version of Tor Browser to a
 msgstr "<strong>SecureDrop uygulamasına erişmek için Tor Browser masaüstü sürümünü kullanmanız önerilir. Orfox masaüstü sürümlerle aynı güvenlik ve anonimlik düzeylerini sağlamaz</strong>.<a class=\"recommend-tor\" href=\"{tor_browser_url}\">Nasıl kuracağınızı öğrenin</a> ya da bu uyarıyı görmezden gelerek devam edin."
 
 msgid "{} logo"
-msgstr ""
+msgstr "{} logosu"
 
 msgid "First submission"
 msgstr "İlk gönderim"
@@ -930,10 +928,8 @@ msgstr "<a href=\"{url}\" class=\"text-link\">Ayrıntılı bilgi alın</a>."
 msgid "Maximum upload size: 500 MB"
 msgstr "En büyük yükleme boyutu: 500 MB"
 
-#, fuzzy
-#| msgid "Your first message must be at least {} characters long."
 msgid "If you are only sending a message, it must be at least {} characters long."
-msgstr "İlk iletiniz en az {} karakter uzunluğunda olmalıdır."
+msgstr "Yalnızca bir ileti gönderiyorsanız en az {} karakter uzunluğunda olmalıdır."
 
 msgid "Anti-spam check. Do not fill this in!"
 msgstr "Anti-spam denetimi. Bunu doldurmayın!"
@@ -983,10 +979,8 @@ msgstr "SecureDrop uygulamasına Tor vekil sunucu hizmetini kullanarak bağland�
 msgid "Anyone monitoring your Internet traffic &mdash; including your government, your Internet provider, or the proxy operator &mdash; may be able to identify you."
 msgstr "İnternet kullanımını gözetleyen herhangi birinin (hükümetiniz, İnternet hizmeti sağlayıcınız ya da vekil sunucu işletmecisiniz) sizin kim olduğunuzu belirleyebilir."
 
-#, fuzzy
-#| msgid "Always use <a href=\"www.torproject.org/projects/torbrowser.html\">Tor Browser</a> to access SecureDrop. Valid SecureDrop site addresses end with <code>.onion</code>. The correct address for this site is:"
 msgid "Always use Tor Browser (<code>{}</code>) to access SecureDrop. Valid SecureDrop site addresses end with <code>.onion</code>. The correct address for this site is:"
-msgstr "SecureDrop erişimi için her zaman <a href=\"www.torproject.org/projects/torbrowser.html\">Tor Browser</a> kullanın. Geçerli SecureDrop site adreslerinin sonunda <code>.onion</code> bulunur. Bu sitenin doğru adresi:"
+msgstr "SecureDrop erişimi için her zaman Tor Browser (<code>{}</code>) kullanın. Geçerli SecureDrop site adreslerinin sonunda <code>.onion</code> bulunur. Bu sitenin doğru adresi:"
 
 msgid "If you are already using Tor Browser, copy the address above and generate a new identity before you access SecureDrop."
 msgstr "Zaten Tor Browser kullanıyorsanız, SecureDrop sitesine erişmeden önce kimliğinizi yenileyin ve yukarıdaki adresi kopyalayarak kullanın."
@@ -1015,10 +1009,8 @@ msgstr "Unutmayın, kod adınız:"
 msgid "Codename"
 msgstr "Kod adı"
 
-#, fuzzy
-#| msgid "Codename"
 msgid "Show Codename"
-msgstr "Kod adı"
+msgstr "Kod adını görüntüle"
 
 msgid "Why download the team's public key?"
 msgstr "Neden takımın açık anahtarını indirmelisiniz?"

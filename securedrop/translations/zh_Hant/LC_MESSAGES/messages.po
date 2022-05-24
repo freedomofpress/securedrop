@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2022-03-29 21:18+0000\n"
-"Last-Translator: Erik Moeller <eloquence@gmail.com>\n"
+"PO-Revision-Date: 2022-05-11 08:11+0000\n"
+"Last-Translator: Chi-Hsun Tsai <chihsun.tsai@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://weblate.securedrop.org/projects/securedrop/securedrop/zh_Hant/>\n"
 "Language: zh_Hant\n"
 "MIME-Version: 1.0\n"
@@ -140,7 +140,7 @@ msgid_plural "Cannot be longer than {num} characters."
 msgstr[0] "不可多於 {num} 字元。"
 
 msgid "Please specify an integer value greater than 0."
-msgstr "請指定任一個比 O大的整數"
+msgstr "請指定任一個大於 0 的整數。"
 
 msgid "This field is required."
 msgstr "這是必填項目。"
@@ -149,7 +149,7 @@ msgid "You cannot send an empty reply."
 msgstr "回覆內容不可空白。"
 
 msgid "To configure a minimum message length, you must set the required number of characters."
-msgstr "您必須先設定所要求的字符數才能設置最小的訊息長度"
+msgstr "您必須先設好字符數要求，才能設置訊息的最小長度。"
 
 msgid "File required."
 msgstr "檔案欄為必要。"
@@ -617,7 +617,7 @@ msgid "Your password will be changed to:"
 msgstr "你的密碼將被改成："
 
 msgid "RESET PASSWORD"
-msgstr "重置密碼"
+msgstr "重設密碼"
 
 msgid "Reset Two-Factor Authentication"
 msgstr "重置雙因素驗證授權"
@@ -739,10 +739,8 @@ msgstr "此刻您的連線非匿名狀態!"
 msgid "You were redirected because you are already logged in. If you want to create a new account, you should log out first."
 msgstr "你被重定向了， 因為已在登錄狀態。如果想創建一個新帳戶，請先登出。"
 
-#, fuzzy
-#| msgid "You are already logged in. Please verify your codename above as it may differ from the one displayed on the previous page."
 msgid "You are already logged in. Please verify your codename as it may differ from the one displayed on the previous page."
-msgstr "您已登入，請驗證上方代號其可能與不同於先前頁面顯示。"
+msgstr "您已登入。請驗證您的代號，它可能與上一頁所顯示的不同。"
 
 msgid "There was a temporary problem creating your account. Please try again."
 msgstr "創建新帳號發生問題。請再次嘗試。"
@@ -865,7 +863,7 @@ msgid "<strong>It is recommended you use the desktop version of Tor Browser to a
 msgstr "<strong>高度建議使用桌面版本的 Tor 瀏覽器來訪問 SecureDrop， Orfox 的安全層級與匿名保護程度遠不如桌面版:</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\"> 學習如何安裝 Tor</a>，或忽略這則警告繼續操作。"
 
 msgid "{} logo"
-msgstr ""
+msgstr "{} 圖示"
 
 msgid "First submission"
 msgstr "首次提交"
@@ -921,10 +919,8 @@ msgstr "<a href=\"{url}\" class=\"text-link\">了解更多</a>."
 msgid "Maximum upload size: 500 MB"
 msgstr "檔案上傳限制：500 MB"
 
-#, fuzzy
-#| msgid "Your first message must be at least {} characters long."
 msgid "If you are only sending a message, it must be at least {} characters long."
-msgstr "首次訊息须至少有 {} 個字符長度。"
+msgstr "如果您想發送訊息，必須至少輸入 {} 個字元。"
 
 msgid "Anti-spam check. Do not fill this in!"
 msgstr "反垃圾檢查，請勿填入!"
@@ -974,10 +970,8 @@ msgstr "您好像使用 Tor 代理服務來連線至 SecureDrop，但代理服�
 msgid "Anyone monitoring your Internet traffic &mdash; including your government, your Internet provider, or the proxy operator &mdash; may be able to identify you."
 msgstr "任何網路流量監控者（如政府、網路服務業者、代理服務商）都有可能認出您。"
 
-#, fuzzy
-#| msgid "Always use <a href=\"www.torproject.org/projects/torbrowser.html\">Tor Browser</a> to access SecureDrop. Valid SecureDrop site addresses end with <code>.onion</code>. The correct address for this site is:"
 msgid "Always use Tor Browser (<code>{}</code>) to access SecureDrop. Valid SecureDrop site addresses end with <code>.onion</code>. The correct address for this site is:"
-msgstr "請使用 <a href=\"www.torproject.org/projects/torbrowser.html\">Tor 瀏覽器r</a> 來連線 SecureDrop，有效的 SecureDrop 網站其網址尾綴為 <code>.onion</code>，網站正確的網址為:"
+msgstr "請永遠使用 Tor 瀏覽器 (<code>{}</code>) 來存取 SecureDrop。有效的 SecureDrop 網址都以 <code>.onion</code> 結尾。本網站正確的網址為："
 
 msgid "If you are already using Tor Browser, copy the address above and generate a new identity before you access SecureDrop."
 msgstr "若已使用 Tor 瀏覽器，請複製上方網址以自動產生新的身份連線到 SecureDrop 。"
@@ -1006,10 +1000,8 @@ msgstr "記住，您的代號是："
 msgid "Codename"
 msgstr "代號名稱"
 
-#, fuzzy
-#| msgid "Codename"
 msgid "Show Codename"
-msgstr "代號名稱"
+msgstr "顯示代號"
 
 msgid "Why download the team's public key?"
 msgstr "為什麼要下載本站團隊的公鑰？"

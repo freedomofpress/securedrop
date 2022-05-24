@@ -11,8 +11,8 @@ msgstr ""
 "Project-Id-Version: SecureDrop\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2022-03-29 21:18+0000\n"
-"Last-Translator: Erik Moeller <eloquence@gmail.com>\n"
+"PO-Revision-Date: 2022-05-17 13:11+0000\n"
+"Last-Translator: Claudio Arseni <claudio.arseni@ubuntu.com>\n"
 "Language-Team: Italian <https://weblate.securedrop.org/projects/securedrop/securedrop/it/>\n"
 "Language: it_IT\n"
 "MIME-Version: 1.0\n"
@@ -156,7 +156,7 @@ msgid "You cannot send an empty reply."
 msgstr "Non è possibile inviare una risposta vuota."
 
 msgid "To configure a minimum message length, you must set the required number of characters."
-msgstr "Per configurare una lunghezza minima del messaggio, devi impostare il numero richiesto di caratteri."
+msgstr "Per configurare una lunghezza minima del messaggio, è necessario impostare il numero richiesto di caratteri."
 
 msgid "File required."
 msgstr "File obbligatorio."
@@ -188,7 +188,7 @@ msgstr[0] "Attendere almeno {num} secondo prima di accedere nuovamente."
 msgstr[1] "Attendere almeno {num} secondi prima di accedere nuovamente."
 
 msgid "Your 2FA details are invalid - please contact an administrator to reset them."
-msgstr "Le tue credenziali per la 2FA sono invalide - per favore contatta un amministratore per eseguire il ripristino."
+msgstr "I dettagli per l'accesso con 2FA non sono validi - contatta un amministratore per eseguire il ripristino."
 
 msgid "Please wait for a new code from your two-factor mobile app or security key before trying again."
 msgstr "Attendere un nuovo codice a due fattori dall'applicazione mobile o dalla chiave di sicurezza prima di tentare nuovamente."
@@ -336,7 +336,7 @@ msgid "Admin Interface"
 msgstr "Interfaccia di amministrazione"
 
 msgid "Add User"
-msgstr "Aggiungi Utente"
+msgstr "Aggiungi utente"
 
 msgid "ADD USER"
 msgstr "AGGIUNGI UTENTE"
@@ -417,7 +417,7 @@ msgid "Change HOTP Secret"
 msgstr "Cambia il segreto HOTP"
 
 msgid "Enter a new HOTP secret formatted as a 40-digit hexadecimal string. Spaces will be ignored:"
-msgstr "Inserisci un nuovo segreto HOTP composta da una stringa di 40 caratteri esadecimali. Gli spazi saranno ignorati:"
+msgstr "Inserisci un nuovo segreto HOTP composto da una stringa di 40 caratteri esadecimali. Gli spazi saranno ignorati:"
 
 msgid "You're almost done! To finish adding this new user, have them follow the instructions below to set up two-factor authentication with FreeOTP. Once they've added an entry for this account in the app, have them enter one of the 6-digit codes from the app to confirm that two-factor authentication is set up correctly."
 msgstr "Hai quasi finito! Per completare l'aggiunta di questo nuovo utente, chiedere a quest'ultimo di seguire le istruzioni qui sotto per configurare l'autenticazione a due fattori con FreeOTP. Una volta che avrà inserito nell'applicazione i dati per questo account, chiedi all'utente di usare uno dei codici a sei cifre disponibili per confermare che l'autenticazione a due fattori è stata impostata correttamente."
@@ -447,7 +447,7 @@ msgid "Powered by <b>SecureDrop {version}</b>."
 msgstr "Offerto da <b>SecureDrop {version}</b>."
 
 msgid "You are here:"
-msgstr "Tu sei qui:"
+msgstr "Ti trovi qui:"
 
 msgid "All Sources"
 msgstr "Tutte le fonti"
@@ -465,7 +465,7 @@ msgid "Status"
 msgstr "Stato"
 
 msgid "Filename"
-msgstr "Nome File"
+msgstr "Nome file"
 
 msgid "Size"
 msgstr "Dimensione"
@@ -528,7 +528,7 @@ msgid "Set the organization name used on the SecureDrop web interfaces:"
 msgstr "Imposta il nome dell'organizzazione da utilizzare sull'interfaccia web di SecureDrop:"
 
 msgid "Set Organization Name"
-msgstr "Imposta Nome Organizzazione"
+msgstr "Imposta il nome dell'organizzazione"
 
 msgid "SET ORGANIZATION NAME"
 msgstr "IMPOSTA NOME ORGANIZZAZIONE"
@@ -540,13 +540,13 @@ msgid "Here you can update the image displayed on the SecureDrop web interfaces:
 msgstr "Qui è possibile caricare l'immagine che verrà mostrata nell'interfaccia web di SecureDrop:"
 
 msgid "Logo image:"
-msgstr "Immagine logo:"
+msgstr "Logo:"
 
 msgid "Recommended size: 500px * 450px"
 msgstr "Dimensione consigliata: 500px * 450px"
 
 msgid "Update Logo"
-msgstr "Aggiorna Logo"
+msgstr "Aggiorna logo"
 
 msgid "UPDATE LOGO"
 msgstr "AGGIORNA LOGO"
@@ -567,7 +567,7 @@ msgid "Prevent sources from submitting their codename as an initial message."
 msgstr "Impedisci alle fonti di inviare il proprio nome in codice come messaggio iniziale."
 
 msgid "Update Submission Preferences"
-msgstr "Aggiorna Preferenze di Invio"
+msgstr "Aggiorna preferenze di invio"
 
 msgid "UPDATE SUBMISSION PREFERENCES"
 msgstr "AGGIORNA PREFERENZE DI INVIO"
@@ -579,7 +579,7 @@ msgid "Send an encrypted email to verify if OSSEC alerts work correctly:"
 msgstr "Invia una email cifrata per verificare che gli avvisi OSSEC funzionino correttamente:"
 
 msgid "Send Test OSSEC Alert"
-msgstr "Invia Avviso OSSEC di Test"
+msgstr "Invia avviso OSSEC di prova"
 
 msgid "SEND TEST OSSEC ALERT"
 msgstr "INVIA AVVISO OSSEC DI PROVA"
@@ -591,7 +591,7 @@ msgid "Change Name and Admin Status"
 msgstr "Cambia nome e stato di amministratore"
 
 msgid "Update account"
-msgstr "Aggiorna il tuo account"
+msgstr "Aggiorna l'account"
 
 msgid "UPDATE"
 msgstr "AGGIORNA"
@@ -639,7 +639,7 @@ msgid "If a user's two-factor authentication credentials have been lost or compr
 msgstr "Se l'autenticazione a due fattori di un utente è stata persa o compromessa, è possibile reimpostarla qui. <em>Se lo fai, assicurati che l'utente sia presente e pronto a configurare il suo dispositivo con le nuove credenziali a due fattori, altrimenti, non potrà più accedere al suo account.</em>"
 
 msgid "If your two-factor authentication credentials have been lost or compromised, or you got a new device, you can reset your credentials here. <em>If you do this, make sure you are ready to set up your new device, otherwise you will be locked out of your account.</em>"
-msgstr "Se le tue credenziali per l'autenticazione a due fattori sono state perse o compromesse, o hai un nuovo dispositivo, puoi reimpostarle qui.<em>Se lo fai, assicurati di essere pronto a configurare il tuo nuovo dispositivo, altrimenti non potrai più accedere al tuo account.</em>"
+msgstr "Se le tue credenziali per l'autenticazione a due fattori sono state perse o compromesse, o hai un nuovo dispositivo, puoi reimpostarle qui. <em>Se lo fai, assicurati di essere pronto a configurare il tuo nuovo dispositivo, altrimenti non potrai più accedere al tuo account.</em>"
 
 msgid "To reset two-factor authentication for mobile apps such as FreeOTP, choose the first option. For security keys like the YubiKey, choose the second one."
 msgstr "Per ripristinare l'autenticazione a due fattori per le applicazioni mobili come FreeOTP, scegliere la prima opzione. Per le chiavi di sicurezza come YubiKey, scegliere la seconda."
@@ -651,7 +651,7 @@ msgid "RESET MOBILE APP CREDENTIALS"
 msgstr "RIPRISTINA CREDENZIALI APP MOBILE"
 
 msgid "Reset Mobile App Credentials"
-msgstr "Ripristina Credenziali App Mobile"
+msgstr "Ripristina credenziali dell'applicazione mobile"
 
 msgid "Reset two-factor authentication for security keys, like a YubiKey"
 msgstr "Ripristina l'autenticazione a due fattori per le chiavi di sicurezza, come YubiKey"
@@ -660,7 +660,7 @@ msgid "RESET SECURITY KEY CREDENTIALS"
 msgstr "RIPRISTINA CREDENZIALI CHIAVI DI SICUREZZA"
 
 msgid "Reset Security Key Credentials"
-msgstr "Ripristina Credenziali Chiavi di Sicurezza"
+msgstr "Ripristina credenziali della chiave di sicurezza"
 
 msgid "Download Unread"
 msgstr "Scarica non letti"
@@ -747,15 +747,13 @@ msgid "Large blocks of text must be uploaded as a file, not copied and pasted."
 msgstr "I blocchi di testo di grandi dimensioni devono essere caricati come file, non copiati e incollati."
 
 msgid "Your connection is not anonymous right now!"
-msgstr "In questo momento non sei collegato in modo anonimo!"
+msgstr "La connessione utilizzata in questo momento non è anonima!"
 
 msgid "You were redirected because you are already logged in. If you want to create a new account, you should log out first."
 msgstr "È stato eseguito il reindirizzamento perché era già stato eseguito l'accesso. Per creare un nuovo account bisogna prima terminare la sessione corrente."
 
-#, fuzzy
-#| msgid "You are already logged in. Please verify your codename above as it may differ from the one displayed on the previous page."
 msgid "You are already logged in. Please verify your codename as it may differ from the one displayed on the previous page."
-msgstr "È già stato eseguito l'accesso. Verificare il proprio nome in codice riportato sopra poiché potrebbe differire da quello visualizzato nella pagina precedente."
+msgstr "È già stato eseguito l'accesso. Verificare il proprio nome in codice in quanto potrebbe differire da quello visualizzato nella pagina precedente."
 
 msgid "There was a temporary problem creating your account. Please try again."
 msgstr "C'è stato un problema temporaneo nella creazione dell'account. Riprovare nuovamente."
@@ -836,19 +834,19 @@ msgid "SecureDrop is a project of Freedom of the Press Foundation."
 msgstr "SecureDrop è un progetto della Freedom of the Press Foundation."
 
 msgid "Get Your Codename"
-msgstr "Ottieni il Tuo Nome in Codice"
+msgstr "Ottieni il tuo nome in codice"
 
 msgid "A <em>codename</em> in SecureDrop functions as both your username and your password."
-msgstr "Un <em>nome in codice</em> in SecureDrop svolge la funzione sia del tuo nome utente che della tua password."
+msgstr "Un <em>nome in codice</em> in SecureDrop svolge la funzione sia da nome utente che da password."
 
 msgid "You will need this codename to log into our SecureDrop later:"
-msgstr "Questo nome in codice ti servirà per accedere al nostro SecureDrop in futuro:"
+msgstr "Questo nome in codice ti servirà per accedere in futuro al nostro SecureDrop:"
 
 msgid "<strong>Keep it secret.</strong> Do not share it with anyone."
 msgstr "<strong>Mantienilo segreto.</strong> Non condividerlo mai con nessuno."
 
 msgid "<strong>Keep it safe.</strong> There is no account recovery option."
-msgstr "<strong>Mantienilo sicuro</strong>. Non esiste la possibilità di recuperarlo."
+msgstr "<strong>Tienilo al sicuro</strong>. Non esiste la possibilità di recuperarlo."
 
 msgid "Continue"
 msgstr "Continua"
@@ -863,7 +861,7 @@ msgid "Click the <img src=\"{icon}\" alt=\"&quot;Security Level&quot; button\"> 
 msgstr "Fare clic su <img src=\"{icon}\" alt=\"Livello sicurezza\"> nella barra degli strumenti qui sopra"
 
 msgid "Click <b>Change</b> to open Security Level preferences"
-msgstr "Clicca <b>Cambia...</b> per aprire le impostazioni del Livello di Sicurezza"
+msgstr "Fare clic su <b>Cambia</b> per aprire le impostazioni del Livello di sicurezza"
 
 msgid "Select <b>Safest</b> and close the preferences tab"
 msgstr "Seleziona <b>Molto sicuro</b> e chiudi la scheda delle impostazioni"
@@ -875,10 +873,10 @@ msgid "<strong>It is recommended to use Tor Browser to access SecureDrop:</stron
 msgstr "<strong>Ti consigliamo di usare il Browser Tor per accedere a SecureDrop:</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Scopri come installarlo</a>, o ignora questo avviso per continuare."
 
 msgid "<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop version.</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
-msgstr "<strong>Ti consigliamo di usare la versione desktop del Browser Tor per accedere a SecureDrop, in quanto Orfox non garantisce lo stesso livello di sicurezza e anonimato della versione desktop. </strong><a class=\"recommend-tor\" href=\"{tor_browser_url}\">Scopri come installarlo</a>, o ignora questo avviso per continuare."
+msgstr "<strong>Ti consigliamo di usare la versione desktop del Browser Tor per accedere a SecureDrop, in quanto Orfox non garantisce lo stesso livello di sicurezza e anonimato della versione desktop.</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Scopri come installarlo</a>, o ignora questo avviso per continuare."
 
 msgid "{} logo"
-msgstr ""
+msgstr "{} logo"
 
 msgid "First submission"
 msgstr "Primo invio"
@@ -934,10 +932,8 @@ msgstr "<a href=\"{url}\" class=\"text-link\">Scopri di più</a>."
 msgid "Maximum upload size: 500 MB"
 msgstr "Dimensione massima di caricamento: 500 MB"
 
-#, fuzzy
-#| msgid "Your first message must be at least {} characters long."
 msgid "If you are only sending a message, it must be at least {} characters long."
-msgstr "Il tuo primo messaggio deve essere lungo almeno {} carattere."
+msgstr "Se stai solo inviando un messaggio, deve essere lungo almeno {} caratteri."
 
 msgid "Anti-spam check. Do not fill this in!"
 msgstr "Controllo anti-spam. Non inserire nulla in questo campo!"
@@ -955,7 +951,7 @@ msgid "Delete this reply"
 msgstr "Elimina questa risposta"
 
 msgid "Delete reply from {timestamp}?"
-msgstr "Cancellare la risposta da {timestamp}?"
+msgstr "Eliminare la risposta da {timestamp}?"
 
 msgid "Delete All Replies"
 msgstr "Elimina tutte le risposte"
@@ -987,10 +983,8 @@ msgstr "Sembra che tu stia usando un servizio proxy Tor per accedere a SecureDro
 msgid "Anyone monitoring your Internet traffic &mdash; including your government, your Internet provider, or the proxy operator &mdash; may be able to identify you."
 msgstr "Chiunque stia monitorando il traffico Internet come il tuo governo, il tuo provider internet, o il gestore del proxy potrebbe identificarti."
 
-#, fuzzy
-#| msgid "Always use <a href=\"www.torproject.org/projects/torbrowser.html\">Tor Browser</a> to access SecureDrop. Valid SecureDrop site addresses end with <code>.onion</code>. The correct address for this site is:"
 msgid "Always use Tor Browser (<code>{}</code>) to access SecureDrop. Valid SecureDrop site addresses end with <code>.onion</code>. The correct address for this site is:"
-msgstr "Usa sempre <a href=\"www.torproject.org/projects/torbrowser.html\">Tor Browser</a> per accedere a SecureDrop. Gli indirizzi validi per SecueDrop terminano sempre con <code>.onion</code>. L'indirizzo esatto di questo sito è:"
+msgstr "Usa sempre il browser Tor (<code>{}</code>) per accedere a SecureDrop. Gli indirizzi validi per SecueDrop terminano con <code>.onion</code>. L'indirizzo esatto di questo sito è:"
 
 msgid "If you are already using Tor Browser, copy the address above and generate a new identity before you access SecureDrop."
 msgstr "Se stai già usando Tor Browser, copia l'indirizzo mostrato sopra e genera una nuova identità prima di accedere a SecureDrop."
@@ -1008,10 +1002,10 @@ msgid "If you want to submit information to SecureDrop, we <strong>strongly advi
 msgstr "Se vuoi inviare informazioni a SecureDrop, ti <strong>raccomandiamo caldamente</strong> di installare il browser Tor e usarlo per accedere al nostro sito in maniera sicura e anonima."
 
 msgid "Copy and paste the following address into your browser and follow the instructions to download and install Tor Browser:"
-msgstr "Copia e incolla il seguente indirizzo nel tuo browser e segui le istruzioni per scaricare e installare Tor:"
+msgstr "Copia e incolla il seguente indirizzo nel tuo browser e segui le istruzioni per scaricare e installare il browser Tor:"
 
 msgid "If there is a chance that downloading Tor Browser raises suspicion and your mail provider is less likely to be monitored, you can send a mail to <kbd>gettor@torproject.org</kbd> and a bot will answer with instructions."
-msgstr "Se c'è la possibilità che scaricare Il Browser Tor possa destare sospetti e il fornitore di posta elettronica ha meno probabilità di essere monitorato, puoi inviare un messaggio all'indirizzo <kbd>gettor@torproject.org</kbd> e un bot ti risponderà con le istruzioni da seguire."
+msgstr "Se c'è la possibilità che scaricare il Browser Tor possa destare sospetti e il fornitore di posta elettronica ha meno probabilità di essere monitorato, puoi inviare un messaggio all'indirizzo <kbd>gettor@torproject.org</kbd> e un bot ti risponderà con le istruzioni da seguire."
 
 msgid "Remember, your codename is:"
 msgstr "Ricorda, il tuo nome in codice è:"
@@ -1019,10 +1013,8 @@ msgstr "Ricorda, il tuo nome in codice è:"
 msgid "Codename"
 msgstr "Nome in codice"
 
-#, fuzzy
-#| msgid "Codename"
 msgid "Show Codename"
-msgstr "Nome in codice"
+msgstr "Mostra il nome in codice"
 
 msgid "Why download the team's public key?"
 msgstr "Perché scaricare la chiave pubblica del gruppo?"
@@ -1047,7 +1039,7 @@ msgid "If you are using <a href=\"{url}\">Tails</a>, you can double-click the <c
 msgstr "Se stai usando <a href=\"{url}\">Tails</a>, puoi fare doppio-clic sul file <code>.asc</code> appena scaricato e verrà automaticamente importato nel tuo portachiavi."
 
 msgid "If you are using macOS or Linux, open the terminal. You can import the key with:<p><code>gpg --import /path/to/{submission_key_fpr_filename}</code></p>"
-msgstr "Se stai utilizzando Mac OS o Linux, apri il terminale. Puoi importare la chiave con: <p><code>gpg --import /percorso/file/{submission_key_fpr_filename}</code></p>"
+msgstr "Se stai utilizzando macOS o Linux, apri il terminale. Puoi importare la chiave con: <p><code>gpg --import /percorso/file/{submission_key_fpr_filename}</code></p>"
 
 msgid "Encrypt your submission. Open the terminal and enter this gpg command:"
 msgstr "Esegui la cifratura dell'invio. Apri il terminale e digita questo comando gpg:"
