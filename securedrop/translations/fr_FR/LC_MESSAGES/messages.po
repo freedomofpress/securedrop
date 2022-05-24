@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2022-03-16 15:11+0000\n"
+"PO-Revision-Date: 2022-05-10 17:11+0000\n"
 "Last-Translator: AO Localization Lab <ao@localizationlab.org>\n"
 "Language-Team: French <https://weblate.securedrop.org/projects/securedrop/securedrop/fr/>\n"
 "Language: fr_FR\n"
@@ -749,10 +749,8 @@ msgstr "Votre connexion n’est pas anonyme actuellement !"
 msgid "You were redirected because you are already logged in. If you want to create a new account, you should log out first."
 msgstr "Vous avez été redirigé, car vous êtes déjà connecté. Si vous souhaitez créer un nouveau compte, vous devriez d’abord vous déconnecter."
 
-#, fuzzy
-#| msgid "You are already logged in. Please verify your codename above as it may differ from the one displayed on the previous page."
 msgid "You are already logged in. Please verify your codename as it may differ from the one displayed on the previous page."
-msgstr "Vous êtes déjà connecté. Veuillez vérifier votre nom de code ci-dessus, car il pourrait être différent de celui affiché sur la page précédente."
+msgstr "Vous êtes déjà connecté. Veuillez vérifier votre nom de code, car il pourrait être différent de celui affiché sur la page précédente."
 
 msgid "There was a temporary problem creating your account. Please try again."
 msgstr "Un problème temporaire est survenu lors de la création de votre compte. Veuillez réessayer."
@@ -875,7 +873,7 @@ msgid "<strong>It is recommended you use the desktop version of Tor Browser to a
 msgstr "<strong>Il est recommandé d’utiliser la version pour ordinateur du Navigateur Tor pour accéder à SecureDrop, car Orfox n’offre pas le même niveau de sécurité et d’anonymat que la version pour ordinateur :</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Apprenez à l’installer</a> ou ignorez cet avertissement pour poursuivre."
 
 msgid "{} logo"
-msgstr ""
+msgstr "Logo de {}"
 
 msgid "First submission"
 msgstr "Premier envoi"
@@ -931,10 +929,8 @@ msgstr "<a href=\"{url}\" class=\"text-link\">En apprendre davantage</a>."
 msgid "Maximum upload size: 500 MB"
 msgstr "Taille maximale de téléversement : 500 Mo"
 
-#, fuzzy
-#| msgid "Your first message must be at least {} characters long."
 msgid "If you are only sending a message, it must be at least {} characters long."
-msgstr "Votre premier message doit comporter au moins {} caractères."
+msgstr "Si vous envoyez seulement un message, il doit comporter au moins {} caractères."
 
 msgid "Anti-spam check. Do not fill this in!"
 msgstr "Vérification antipollupostage. Ne pas remplir !"
@@ -984,10 +980,8 @@ msgstr "Il semble que vous utilisez un service mandataire Tor pour accéder à 
 msgid "Anyone monitoring your Internet traffic &mdash; including your government, your Internet provider, or the proxy operator &mdash; may be able to identify you."
 msgstr "Quiconque surveille votre trafic Internet (dont votre gouvernement, votre fournisseur d’accès Internet ou l’exploitant du mandataire) pourrait vous identifier."
 
-#, fuzzy
-#| msgid "Always use <a href=\"www.torproject.org/projects/torbrowser.html\">Tor Browser</a> to access SecureDrop. Valid SecureDrop site addresses end with <code>.onion</code>. The correct address for this site is:"
 msgid "Always use Tor Browser (<code>{}</code>) to access SecureDrop. Valid SecureDrop site addresses end with <code>.onion</code>. The correct address for this site is:"
-msgstr "Utilisez toujours le <a href=\"www.torproject.org/projects/torbrowser.html\">Navigateur Tor</a> pour accéder à SecureDrop. Les adresses SecureDrop valides se terminent par <code>.onion</code>. La bonne adresse pour ce site est :"
+msgstr "Utilisez toujours le Navigateur Tor (<code>{}</code>) pour accéder à SecureDrop. Les adresses de sites SecureDrop valides se terminent par <code>.onion</code>. La bonne adresse pour ce site est :"
 
 msgid "If you are already using Tor Browser, copy the address above and generate a new identity before you access SecureDrop."
 msgstr "Si vous utilisez déjà le Navigateur Tor, copiez l’adresse ci-dessus et générez une nouvelle identité avant d’accéder à SecureDrop."
@@ -1016,10 +1010,8 @@ msgstr "Souvenez-vous que votre nom de code est :"
 msgid "Codename"
 msgstr "Nom de code"
 
-#, fuzzy
-#| msgid "Codename"
 msgid "Show Codename"
-msgstr "Nom de code"
+msgstr "Afficher le nom de code"
 
 msgid "Why download the team's public key?"
 msgstr "Pourquoi télécharger la clé publique de l’équipe ?"

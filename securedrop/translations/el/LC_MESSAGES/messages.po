@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SecureDrop 0.8.0~rc1\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2022-03-27 17:38+0000\n"
+"PO-Revision-Date: 2022-05-17 13:11+0000\n"
 "Last-Translator: Dimitris Maroulidis <dmaroulidis@dimitrismaroulidis.com>\n"
 "Language-Team: Greek <https://weblate.securedrop.org/projects/securedrop/securedrop/el/>\n"
 "Language: el\n"
@@ -748,10 +748,8 @@ msgstr "Η σύνδεσή σας δεν είναι ανώνυμη αυτήν τ�
 msgid "You were redirected because you are already logged in. If you want to create a new account, you should log out first."
 msgstr "Ανακατευθυνθήκατε επειδή είστε ήδη συνδεδεμένος. Αν θέλετε να δημιουργήσετε έναν νέο λογαριασμό, πρέπει πρώτα να αποσυνδεθείτε."
 
-#, fuzzy
-#| msgid "You are already logged in. Please verify your codename above as it may differ from the one displayed on the previous page."
 msgid "You are already logged in. Please verify your codename as it may differ from the one displayed on the previous page."
-msgstr "Έχετε ήδη συνδεθεί. Παρακαλώ ελέγξτε το κωδικό όνομά σας παραπάνω, καθώς αυτό ενδέχεται να διαφέρει από αυτό που εμφανίστηκε στη προηγούμενη σελίδα."
+msgstr "Έχετε ήδη συνδεθεί. Παρακαλώ ελέγξτε το κωδικό σας όνομα, καθώς αυτό ενδέχεται να διαφέρει από αυτό που εμφανίστηκε στη προηγούμενη σελίδα."
 
 msgid "There was a temporary problem creating your account. Please try again."
 msgstr "Υπήρξε κάποιο προσωρινό πρόβλημα κατά την δημιουργία του λογαριασμού σας. Παρακαλώ δοκιμάστε ξανά."
@@ -874,7 +872,7 @@ msgid "<strong>It is recommended you use the desktop version of Tor Browser to a
 msgstr "<strong>Προτείνεται να χρησιμοποιήσετε την έκδοση για υπολογιστή του Tor browser για να επισκεφτείτε το SecureDrop, καθώς ο Orfox δεν παρέχει το ίδιο επίπεδο ασφάλειας και ανωνυμίας με την έκδοση για υπολογιστή.</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Μάθετε πώς να τον εγκαταστήσετε</a>, ή αγνοήστε αυτή την προειδοποίηση για να συνεχίσετε."
 
 msgid "{} logo"
-msgstr ""
+msgstr "Λογότυπο της/του {}"
 
 msgid "First submission"
 msgstr "Πρώτη υποβολή"
@@ -930,10 +928,8 @@ msgstr "<a href=\"{url}\" class=\"text-link\">Μάθετε περισσότερ�
 msgid "Maximum upload size: 500 MB"
 msgstr "Μέγιστο μέγεθος υποβολής: 500 MB"
 
-#, fuzzy
-#| msgid "Your first message must be at least {} characters long."
 msgid "If you are only sending a message, it must be at least {} characters long."
-msgstr "Το πρώτο σας μήνυμα πρέπει να έχει τουλάχιστον {} χαρακτήρες."
+msgstr "Αν στέλνετε μόνο ένα μήνυμα, αυτό πρέπει να αποτελείται από {} χαρακτήρες τουλάχιστον."
 
 msgid "Anti-spam check. Do not fill this in!"
 msgstr "Έλεγχος anti-spam. Μην το συμπληρώσετε!"
@@ -983,10 +979,8 @@ msgstr "Φαίνεται πως χρησιμοποιείτε μια υπηρεσ
 msgid "Anyone monitoring your Internet traffic &mdash; including your government, your Internet provider, or the proxy operator &mdash; may be able to identify you."
 msgstr "Οποιοσδήποτε παρακολουθεί την κίνηση δικτύου σας &mdash; συμπεριλαμβανομένων της κυβέρνησής σας, του παρόχου της σύνδεσης σας στο Διαδίκτυο, ή της υπηρεσίας proxy &mdash; υπάρχει περίπτωση να μπορεί να σας ταυτοποιήσει."
 
-#, fuzzy
-#| msgid "Always use <a href=\"www.torproject.org/projects/torbrowser.html\">Tor Browser</a> to access SecureDrop. Valid SecureDrop site addresses end with <code>.onion</code>. The correct address for this site is:"
 msgid "Always use Tor Browser (<code>{}</code>) to access SecureDrop. Valid SecureDrop site addresses end with <code>.onion</code>. The correct address for this site is:"
-msgstr "Χρησιμοποιείτε πάντα τον <a href=\"www.torproject.org/projects/torbrowser.html\">Περιηγητή Tor</a> για να επισκεφθείτε το SecureDrop. Οι έγκυρες διευθύνσεις SecureDrop τελειώνουν σε <code>.onion</code>. Η σωστή διεύθυνση για αυτόν τον ιστότοπο είναι η:"
+msgstr "Χρησιμοποιείτε πάντα τον Περιηγητή Tor (<code>{}</code>) για να επισκεφθείτε το SecureDrop. Οι έγκυρες διευθύνσεις SecureDrop τελειώνουν σε <code>.onion</code>. Η σωστή διεύθυνση για αυτόν τον ιστότοπο είναι η:"
 
 msgid "If you are already using Tor Browser, copy the address above and generate a new identity before you access SecureDrop."
 msgstr "Αν χρησιμοποιείτε ήδη τον περιηγητή Tor, αντιγράψτε την παραπάνω διεύθυνση και δημιουργήστε νέα ταυτότητα πριν επισκεφθείτε το SecureDrop."
@@ -1015,10 +1009,8 @@ msgstr "Θυμήσου, το κωδικό όνομά σου είναι:"
 msgid "Codename"
 msgstr "Κωδικό όνομα"
 
-#, fuzzy
-#| msgid "Codename"
 msgid "Show Codename"
-msgstr "Κωδικό όνομα"
+msgstr "Εμφάνιση κωδικού ονόματος"
 
 msgid "Why download the team's public key?"
 msgstr "Γιατί να κατεβάσω το δημόσιο κλειδί της ομάδας;"

@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2022-03-25 16:02+0000\n"
+"PO-Revision-Date: 2022-05-11 19:11+0000\n"
 "Last-Translator: Øyvind Bye Skille <oyvind@byeskille.net>\n"
 "Language-Team: Norwegian Bokmål <https://weblate.securedrop.org/projects/securedrop/securedrop/nb_NO/>\n"
 "Language: nb_NO\n"
@@ -749,10 +749,8 @@ msgstr "Din tilkobling er ikke anonym nå!"
 msgid "You were redirected because you are already logged in. If you want to create a new account, you should log out first."
 msgstr "Du ble omdirigert fordi du allerede er logget inn. Om du ønsker å lage en ny konto må du først logge ut."
 
-#, fuzzy
-#| msgid "You are already logged in. Please verify your codename above as it may differ from the one displayed on the previous page."
 msgid "You are already logged in. Please verify your codename as it may differ from the one displayed on the previous page."
-msgstr "Du er allerede logget inn. Vennligst verifiser kodenavnet over fordi det kan være annerledes enn det som ble vist på den forrige siden."
+msgstr "Du er allerede logget inn. Vennligst verifiser kodenavnet fordi det kan være annerledes enn det som ble vist på den forrige siden."
 
 msgid "There was a temporary problem creating your account. Please try again."
 msgstr "En midlertidig feil oppstod ved opprettelsen av kontoen din. Prøv igjen."
@@ -875,13 +873,13 @@ msgid "<strong>It is recommended you use the desktop version of Tor Browser to a
 msgstr "<strong>Det anbefales å bruke Tor-nettleseren på en datamaskin for å nå SecureDrop, fordi Orfox ikke gir det samme nivået av sikkerhet og anonymitet:</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Lær hvordan du installerer den</a>, eller se bort fra denne advarselen for å fortsette uten."
 
 msgid "{} logo"
-msgstr ""
+msgstr "{} logo"
 
 msgid "First submission"
 msgstr "Første innsendelse"
 
 msgid "First time submitting to our SecureDrop? Start here."
-msgstr "Førstegangsinnsendelse? Start her."
+msgstr "Hvis dette er første gang du sender informasjon til vår SecureDrop? Start her."
 
 msgid "Get Started"
 msgstr "Kom i gang"
@@ -931,10 +929,8 @@ msgstr "<a href=\"{url}\" class=\"text-link\">Lær mer</a>."
 msgid "Maximum upload size: 500 MB"
 msgstr "Maksimal opplastningsstørrelse: 500MB"
 
-#, fuzzy
-#| msgid "Your first message must be at least {} characters long."
 msgid "If you are only sending a message, it must be at least {} characters long."
-msgstr "Din første melding må være minst {} tegn lang."
+msgstr "Om du bare sender en melding, må den være minst {} tegn lang."
 
 msgid "Anti-spam check. Do not fill this in!"
 msgstr "Anti-spam-sjekk. Ikke fyll inn her!"
@@ -984,10 +980,8 @@ msgstr "Du virker å bruke en Tor proxy-tjeneste for å kommunisere med SecureDr
 msgid "Anyone monitoring your Internet traffic &mdash; including your government, your Internet provider, or the proxy operator &mdash; may be able to identify you."
 msgstr "Om noen følger med på internettbruken din &mdash; som myndigheter, internettilbyderen din eller proxy-operatøren &mdash; kan identifisere deg."
 
-#, fuzzy
-#| msgid "Always use <a href=\"www.torproject.org/projects/torbrowser.html\">Tor Browser</a> to access SecureDrop. Valid SecureDrop site addresses end with <code>.onion</code>. The correct address for this site is:"
 msgid "Always use Tor Browser (<code>{}</code>) to access SecureDrop. Valid SecureDrop site addresses end with <code>.onion</code>. The correct address for this site is:"
-msgstr "Alltid bruk <a href=\"www.torproject.org/projects/torbrowser.html\">Tor-nettleseren</a> for å bruke SecureDrop. Riktige SecureDrop-addresser slutter på <code>.onion</code>. Den riktige adressen for denne SecureDrop-siden er:"
+msgstr "Alltid bruk Tor-nettleseren(<code>{}</code>) for å bruke SecureDrop. Riktige SecureDrop-addresser slutter på <code>.onion</code>. Den riktige adressen for denne SecureDrop-siden er:"
 
 msgid "If you are already using Tor Browser, copy the address above and generate a new identity before you access SecureDrop."
 msgstr "Om du allerede bruker Tor-nettleseren, kopier adressen over og generer en ny identitet før du besøker SecureDrop."
@@ -1016,19 +1010,17 @@ msgstr "Husk, kodenavnet ditt er:"
 msgid "Codename"
 msgstr "Kodenavn"
 
-#, fuzzy
-#| msgid "Codename"
 msgid "Show Codename"
-msgstr "Kodenavn"
+msgstr "Vis kodenavn"
 
 msgid "Why download the team's public key?"
 msgstr "Hvorfor laste ned vår offentlige nøkkel?"
 
 msgid "SecureDrop encrypts files and messages after they are submitted. Encrypting messages and files before submission can provide an extra layer of security before your data reaches the SecureDrop server."
-msgstr "SecureDrop krypterer alle filer og meldinger når de kommer inn via systemet. Kryptering av filer eller meldinger de avhendes som innsendelse kan gi et ekstra lag beskyttelse for informasjonen før den når vår SecureDrop-tjener."
+msgstr "SecureDrop krypterer alle filer og meldinger når de kommer inn via systemet. Kryptering av filer eller meldinger før de sendes inn kan gi et ekstra lag beskyttelse for informasjonen før den når vår SecureDrop-tjener."
 
 msgid "If you are already familiar with the GPG encryption software, you may wish to encrypt your submissions yourself. To do so:"
-msgstr "Om du allerede er komfortabel med programvare for GPG-kryptering, kan du velge å kryptere din innsendelse selv. Gjør da følgende:"
+msgstr "Om du allerede er komfortabel med programvare for GPG-kryptering, kan du velge å kryptere filene du skal sende inn selv. Gjør da følgende:"
 
 msgid ""
 "<a href=\"{url}\">Download</a> the public key. It will be saved to a file called:\n"
@@ -1053,7 +1045,7 @@ msgid "<code>gpg --recipient '{submission_key_fpr}' --encrypt /path/to/submissio
 msgstr "<code>gpg --recipient '{submission_key_fpr}' --encrypt /plassering/på/disken/for/innsendelsen</code>"
 
 msgid "Upload your encrypted submission. It will have the same filename as the unencrypted file, with .gpg at the end (e.g. <code>internal_memo.pdf.gpg</code>)"
-msgstr "Last så opp din krypterte innsendelse. Det vil ha samme filnavnet som den ukrypterte filen, men med .gpg-filendelse (f.eks. <code>internt_notat.pdf.gpg</code>)"
+msgstr "Last så opp dine krypterte filer. Det vil ha samme filnavnet som den ukrypterte filen, men med .gpg-filendelse (f.eks. <code>internt_notat.pdf.gpg</code>)"
 
 msgid "<strong>Important:</strong> If you wish to remain anonymous, <strong>do not</strong> use GPG to sign the encrypted file (with the <code>--sign</code> or <code>-s</code> flag) as this will reveal your GPG identity to us."
 msgstr "<strong>Viktig:</strong> Om du ønsker å være helt anonym, <strong>ikke</strong> bruk GPG for å signere den krypterte filen (med <code>--sign</code> eller <code>-s</code> flagget på kommandolinjen) fordi dette vil avsløre din GPG-identitet."

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SecureDrop 0.4.3\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2022-03-15 20:11+0000\n"
+"PO-Revision-Date: 2022-05-07 16:11+0000\n"
 "Last-Translator: Andrey <andrey@mailbox.org>\n"
 "Language-Team: Russian <https://weblate.securedrop.org/projects/securedrop/securedrop/ru/>\n"
 "Language: ru\n"
@@ -570,7 +570,7 @@ msgid "Minimum number of characters."
 msgstr "Минимальное количество символов."
 
 msgid "Prevent sources from submitting their codename as an initial message."
-msgstr "Запретить источникам отправлять свое кодовое имя в качестве первичного сообщения."
+msgstr "Запретить источникам отправлять свой псевдоним в качестве начального сообщения."
 
 msgid "Update Submission Preferences"
 msgstr "Обновить настройки доставки"
@@ -758,10 +758,8 @@ msgstr "Ваше соединение в данный момент не явля
 msgid "You were redirected because you are already logged in. If you want to create a new account, you should log out first."
 msgstr "Вы были перенаправлены, так как уже выполнили вход в систему. Если вы хотите создать новый аккаунт, то сначала нужно выйти из системы."
 
-#, fuzzy
-#| msgid "You are already logged in. Please verify your codename above as it may differ from the one displayed on the previous page."
 msgid "You are already logged in. Please verify your codename as it may differ from the one displayed on the previous page."
-msgstr "Вы уже авторизованы. Пожалуйста, подтвердите свое кодовое имя выше, поскольку оно может отличаться от того, которое отображалось на предыдущей странице."
+msgstr "Вы уже авторизованы. Подтвердите свой псевдоним, поскольку он может отличаться от того, что отображался на предыдущей странице."
 
 msgid "There was a temporary problem creating your account. Please try again."
 msgstr "Возникла временная проблема с созданием аккаунта. Пожалуйста, попробуйте еще раз."
@@ -776,10 +774,10 @@ msgid "Your first message must be at least {} characters long."
 msgstr "Ваше первое сообщение должно быть длиной не менее {} символов."
 
 msgid "Please do not submit your codename!"
-msgstr "Пожалуйста, не указывайте свое кодовое имя!"
+msgstr "Пожалуйста, не указывайте свой псевдоним!"
 
 msgid "Keep your codename secret, and use it to log in later to check for replies."
-msgstr "Сохраняйте свое кодовое имя в тайне и используйте его позже для авторизации, чтобы проверить наличие ответов."
+msgstr "Сохраняйте свой псевдоним в тайне и используйте его позже для авторизации, чтобы проверить наличие ответов."
 
 msgid "Thank you for sending this information to us. Please check back later for replies."
 msgstr "Благодарим вас за отправку нам этой информации. Пожалуйста, зайдите позже, чтобы проверить ответы."
@@ -842,13 +840,13 @@ msgid "SecureDrop is a project of Freedom of the Press Foundation."
 msgstr "SecureDrop - Это проект Фонда поддержки свободы прессы."
 
 msgid "Get Your Codename"
-msgstr "Получение кодового имени"
+msgstr "Получение псевдонима"
 
 msgid "A <em>codename</em> in SecureDrop functions as both your username and your password."
-msgstr "<em>Кодовое имя</em> в SecureDrop одновременно является и вашим именем пользователя, и вашим паролем."
+msgstr "<em>Псевдоним</em> в SecureDrop одновременно является и вашим именем пользователя, и вашим паролем."
 
 msgid "You will need this codename to log into our SecureDrop later:"
-msgstr "Это кодовое имя понадобится вам позже для авторизации в SecureDrop:"
+msgstr "Этот псевдоним понадобится вам позже для авторизации в SecureDrop:"
 
 msgid "<strong>Keep it secret.</strong> Do not share it with anyone."
 msgstr "<strong>Сохраняйте его в тайне.</strong> Не делитесь им ни с кем."
@@ -884,7 +882,7 @@ msgid "<strong>It is recommended you use the desktop version of Tor Browser to a
 msgstr "<strong>Рекомендуется использовать настольную версию Tor Browser для доступа к SecureDrop, так как Orfox не обеспечивает необходимый уровень безопасности и анонимности в отличие от версии для компьютера.</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Узнайте, как его установить</a>, или проигнорируйте для продолжения."
 
 msgid "{} logo"
-msgstr ""
+msgstr "{} логотип"
 
 msgid "First submission"
 msgstr "Первая отправка"
@@ -940,10 +938,8 @@ msgstr "<a href=\"{url}\" class=\"text-link\">Подробнее</a>."
 msgid "Maximum upload size: 500 MB"
 msgstr "Максимальный размер для загрузки: 500МБ"
 
-#, fuzzy
-#| msgid "Your first message must be at least {} characters long."
 msgid "If you are only sending a message, it must be at least {} characters long."
-msgstr "Ваше первое сообщение должно быть длиной не менее {} символов."
+msgstr "Если вы отправляете только сообщение, оно должно содержать не менее {} символов."
 
 msgid "Anti-spam check. Do not fill this in!"
 msgstr "Проверка антиспама. Не заполняйте это поле!"
@@ -993,10 +989,8 @@ msgstr "Вероятно, вы используете прокси-сервис 
 msgid "Anyone monitoring your Internet traffic &mdash; including your government, your Internet provider, or the proxy operator &mdash; may be able to identify you."
 msgstr "Любой, кто контролирует ваш интернет-трафик (правительство, интернет-провайдер или владелец прокси-сервера) сможет идентифицировать вас."
 
-#, fuzzy
-#| msgid "Always use <a href=\"www.torproject.org/projects/torbrowser.html\">Tor Browser</a> to access SecureDrop. Valid SecureDrop site addresses end with <code>.onion</code>. The correct address for this site is:"
 msgid "Always use Tor Browser (<code>{}</code>) to access SecureDrop. Valid SecureDrop site addresses end with <code>.onion</code>. The correct address for this site is:"
-msgstr "Всегда используйте <a href=\"www.torproject.org/projects/torbrowser.html\">Tor Browser</a> для доступа к SecureDrop. Допустимые адреса SecureDrop сайта заканчиваются на <code>.onion</code>. Корректный адрес этого сайта:"
+msgstr "Всегда используйте Tor Browser (<code>{}</code>) для доступа к SecureDrop. Допустимые адреса сайта SecureDrop заканчиваются на <code>.onion</code>. Корректный адрес этого сайта:"
 
 msgid "If you are already using Tor Browser, copy the address above and generate a new identity before you access SecureDrop."
 msgstr "Если вы уже используете Tor Browser, скопируйте указанный выше адрес и сгенерируйте новую личность перед тем, как перейти на сайт SecureDrop."
@@ -1023,12 +1017,10 @@ msgid "Remember, your codename is:"
 msgstr "Запомните, что ваше кодовое имя:"
 
 msgid "Codename"
-msgstr "Кодовое название"
+msgstr "Псевдоним"
 
-#, fuzzy
-#| msgid "Codename"
 msgid "Show Codename"
-msgstr "Кодовое название"
+msgstr "Показать псевдоним"
 
 msgid "Why download the team's public key?"
 msgstr "Зачем загружать публичный ключ команды?"
