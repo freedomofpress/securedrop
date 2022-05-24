@@ -1,10 +1,6 @@
 # Changelog
 
-## 2.4.0~rc2
-
-* Updated SecureDrop release public key to version with expiry date 2020-07-04 (#6448)
-
-## 2.4.0~rc1
+## 2.4.0
 
 ### Web Applications
 
@@ -17,6 +13,7 @@
 * Gracefully emit errors when configured languages are unavailable (#6406)
 * Fixed broken link to download Tor Browser on Tor2Web interstitial (#6393, #6430)
 * Add locale for Portuguese (Portugal), with the language code `pt_PT` (#6156)
+* Improved 2FA token reuse protection (#6460)
 
 ### Journalist API
 
@@ -25,6 +22,7 @@
 ### Operations
 
 * Disabled fwupd timers to suppress inactionable OSSEC notifications (#6401)
+* Updated SecureDrop release public key to version with expiry date 2020-07-04 (#6448)
 
 ### Development
 
