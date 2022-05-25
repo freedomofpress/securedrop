@@ -48,7 +48,7 @@ def autocrop_btm(img, bottom_padding=12):
     bg = gray.getpixel((0, btm))
 
     # Move up until the full row is not of the background luminance
-    while all([gray.getpixel((col, btm)) == bg for col in range(gray.width)]):
+    while btm > 0 and all([gray.getpixel((col, btm)) == bg for col in range(gray.width)]):
         btm -= 1
 
     btm = min(btm + bottom_padding, img.height)
