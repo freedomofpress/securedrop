@@ -1,9 +1,10 @@
 import typing
 from datetime import datetime, timedelta, timezone
 from secrets import token_urlsafe
+from flask_babel import gettext
 from flask import Flask, Request, Response
 from flask import current_app as app
-from typing import Optional, Any
+from typing import Optional, Any, Dict, Tuple
 from flask.sessions import SessionInterface as FlaskSessionInterface
 from flask.sessions import SessionMixin, session_json_serializer
 from json.decoder import JSONDecodeError
@@ -24,7 +25,7 @@ class ServerSideSession(CallbackDict, SessionMixin):
             self.set_uid(initial['uid'])
             self.set_user()
         else:
-            self.uid = None
+            self.uid: Optional[int] = None
             self.user = None
         CallbackDict.__init__(self, initial, on_update)
         self.sid = sid
@@ -34,6 +35,8 @@ class ServerSideSession(CallbackDict, SessionMixin):
         self.to_destroy = False
         self.to_regenerate = False
         self.modified = False
+        self.flash: Optional[Tuple[str, str]] = None
+        self.locale: Optional[str] = None
 
     def get_token(self) -> Optional[str]:
         return self.token
@@ -65,7 +68,14 @@ class ServerSideSession(CallbackDict, SessionMixin):
         else:
             return False
 
-    def destroy(self) -> None:
+    def destroy(
+        self,
+        flash: Optional[Tuple[str, str]] = None,
+        locale: Optional[str] = None
+    ) -> None:
+        # The parameters are needed to pass the information to the new session
+        self.locale = locale
+        self.flash = flash
         self.uid = None
         self.user = None
         self.to_destroy = True
@@ -93,8 +103,6 @@ class SessionInterface(FlaskSessionInterface):
     :param header_name: if use_header, set the header name to parse
     """
 
-    session_class = ServerSideSession
-
     def __init__(self, lifetime: int, renew_count: int, redis: Optional[Redis],
                  key_prefix: str, salt: str, header_name: str) -> None:
         self.serializer = session_json_serializer
@@ -111,10 +119,13 @@ class SessionInterface(FlaskSessionInterface):
         self.new = False
         self.has_same_site_capability = hasattr(self, "get_cookie_samesite")
 
-    def _new_session(self, is_api: bool = False) -> ServerSideSession:
+    def _new_session(self, is_api: bool = False, initial: Any = None) -> ServerSideSession:
         sid = self._generate_sid()
-        token = self._get_signer(app).dumps(sid)
-        session = self.session_class(sid=sid, token=token, lifetime=self.lifetime)  # type: ignore
+        token: str = self._get_signer(app).dumps(sid)  # type: ignore
+        session = ServerSideSession(sid=sid,
+                                    token=token,
+                                    lifetime=self.lifetime,
+                                    initial=initial)
         session.new = True
         session.is_api = is_api
         return session
@@ -150,15 +161,14 @@ class SessionInterface(FlaskSessionInterface):
         if val is not None:
             try:
                 data = self.serializer.loads(val.decode())
-
-                return self.session_class(sid=sid,
-                                          token=self._get_signer(app).dumps(sid),  # type: ignore
-                                          initial=data)
+                token: str = self._get_signer(app).dumps(sid)  # type: ignore
+                return ServerSideSession(sid=sid, token=token, initial=data)
             except (JSONDecodeError, NotImplementedError):
                 return self._new_session(is_api)
         # signed session_id provided in cookie is valid, but the session is not on the server
         # anymore so maybe here is the code path for a meaningful error message
-        return self._new_session(is_api)
+        msg = gettext("You have been logged out due to inactivity.")
+        return self._new_session(is_api, initial={"_flashes": [("error", msg)]})
 
     def save_session(  # type: ignore[override] # noqa
         self,
@@ -172,11 +182,14 @@ class SessionInterface(FlaskSessionInterface):
         domain = self.get_cookie_domain(app)
         path = self.get_cookie_path(app)
         if session.to_destroy:
+            initial: Dict[str, Any] = {"locale": session.locale}
+            if session.flash:
+                initial["_flashes"] = [session.flash]
             self.redis.delete(self.key_prefix + session.sid)
             if not session.is_api:
-                response.delete_cookie(app.session_cookie_name,
-                                       domain=domain, path=path)
-            return
+                # Instead of deleting the cookie and send a new sid with the next request
+                # create the new session already, so we can pass along messages and locale
+                session = self._new_session(False, initial=initial)
         expires = self.redis.ttl(name=self.key_prefix + session.sid)
         if session.new:
             session['renew_count'] = self.renew_count

@@ -12,7 +12,6 @@ from flask import (
     current_app,
     escape,
     flash,
-    g,
     redirect,
     render_template,
     request,
@@ -21,20 +20,11 @@ from flask import (
 )
 from flask_babel import gettext
 from journalist_app.forms import ReplyForm
-from journalist_app.utils import (
-    col_delete,
-    col_delete_data,
-    col_download_all,
-    col_download_unread,
-    col_star,
-    col_un_star,
-    delete_collection,
-    get_source,
-    make_star_false,
-    make_star_true,
-    mark_seen,
-)
-from models import Reply, Submission
+from journalist_app.sessions import session
+from journalist_app.utils import (make_star_true, make_star_false, get_source,
+                                  delete_collection, col_download_unread,
+                                  col_download_all, col_star, col_un_star,
+                                  col_delete, col_delete_data, mark_seen)
 from sdconfig import SDConfig
 from sqlalchemy.orm.exc import NoResultFound
 from store import Storage
@@ -151,7 +141,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
 
         # mark as seen by the current user
         try:
-            journalist = g.get("user")
+            journalist = session.get_user()
             if fn.endswith("reply.gpg"):
                 reply = Reply.query.filter(Reply.filename == fn).one()
                 mark_seen([reply], journalist)

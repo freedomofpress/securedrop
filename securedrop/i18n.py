@@ -214,7 +214,7 @@ def get_locale(config: SDConfig) -> str:
     - config.FALLBACK_LOCALE
     """
     preferences = []
-    if session.get("locale"):
+    if session and session.get("locale"):
         preferences.append(session.get("locale"))
     if request.args.get("l"):
         preferences.insert(0, request.args.get("l"))

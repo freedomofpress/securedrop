@@ -38,11 +38,11 @@ def make_blueprint(config: SDConfig) -> Blueprint:
         token = request.form.get('token')
         error_message = gettext('Incorrect password or two-factor code.')
         # If the user is validated, change their password
-        if validate_user(user.username, current_password, token, error_message):
-            password = request.form.get("password")
-            set_diceware_password(user, password)
-            session.destroy()
-            return redirect(url_for('main.login'))
+        if validate_user(user.username, current_password, token,
+                         error_message):
+            password = request.form.get('password')
+            if set_diceware_password(user, password):
+                return redirect(url_for('main.login'))
         return redirect(url_for('account.edit'))
 
     @view.route("/2fa", methods=("GET", "POST"))

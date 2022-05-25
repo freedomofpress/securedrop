@@ -6,8 +6,9 @@ from typing import Optional, List, Union
 import flask
 import werkzeug
 from flask import (flash, current_app, abort, send_file, redirect, url_for,
-                   Markup, escape, session)
+                   Markup, escape)
 from flask_babel import gettext, ngettext
+from journalist_app.sessions import session
 from sqlalchemy.exc import IntegrityError
 
 from db import db
@@ -466,19 +467,22 @@ def set_diceware_password(user: Journalist, password: Optional[str]) -> bool:
         return False
 
     # using Markup so the HTML isn't escaped
-    flash(
-        Markup(
-            "<p>{message} <span><code>{password}</code></span></p>".format(
-                message=Markup.escape(
-                    gettext(
-                        "Password updated. Don't forget to save it in your KeePassX database. "
-                        "New password:"
-                    )
-                ),
-                password=Markup.escape("" if password is None else password),
+    session.destroy(
+        (
+            'success',
+            Markup(
+                "<p>{message} <span><code>{password}</code></span></p>".format(
+                    message=Markup.escape(
+                        gettext(
+                            "Password updated. Don't forget to save it in your KeePassX database. "
+                            "New password:"
+                        )
+                    ),
+                    password=Markup.escape("" if password is None else password)
+                )
             )
         ),
-        "success",
+        session.get('locale')
     )
     return True
 

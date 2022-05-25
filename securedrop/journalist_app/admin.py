@@ -6,7 +6,7 @@ from typing import Optional, Union
 
 import werkzeug
 from flask import (Blueprint, render_template, request, url_for, redirect, g,
-                   current_app, flash, abort, session)
+                   current_app, flash, abort)
 from flask_babel import gettext
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm.exc import NoResultFound
@@ -25,7 +25,7 @@ from flask import (
 )
 from flask_babel import gettext
 from journalist_app.decorators import admin_required
-from journalist_app.sessions import logout_user
+from journalist_app.sessions import logout_user, session
 from journalist_app.utils import (commit_account_changes, set_diceware_password,
                                   validate_hotp_secret)
 from journalist_app.forms import LogoForm, NewUserForm, SubmissionPreferencesForm, OrgNameForm

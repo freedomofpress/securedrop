@@ -4,7 +4,7 @@ import typing
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from datetime import datetime
-from flask import (Flask, redirect, url_for, flash, g, request,
+from flask import (Flask, redirect, url_for, g, request,
                    render_template, json, abort)
 from flask_assets import Environment
 from flask_babel import gettext
@@ -96,9 +96,8 @@ def create_app(config: "SDConfig") -> Flask:
     @app.errorhandler(CSRFError)  # type: ignore
     def handle_csrf_error(e: CSRFError) -> "Response":
         app.logger.error("The CSRF token is invalid.")
-        session.destroy()
         msg = gettext('You have been logged out due to inactivity.')
-        flash(msg, 'error')
+        session.destroy(('error', msg), session.get('locale'))
         return redirect(url_for('main.login'))
 
     def _handle_http_exception(

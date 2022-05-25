@@ -19,8 +19,18 @@ import pytest
 from db import db
 from encryption import EncryptionManager, GpgKeyNotFoundError
 from flaky import flaky
-from flask import current_app, escape, g, session, url_for
+from flask import current_app, escape, g, url_for
 from flask_babel import gettext, ngettext
+from mock import patch
+from pyotp import TOTP
+from sqlalchemy.exc import IntegrityError
+from sqlalchemy.orm.exc import StaleDataError
+from sqlalchemy.sql.expression import func
+from html import escape as htmlescape
+
+import journalist_app as journalist_app_module
+from encryption import EncryptionManager, GpgKeyNotFoundError
+from journalist_app.sessions import session
 from journalist_app.utils import mark_seen
 from mock import call, patch
 from models import (
@@ -67,7 +77,7 @@ def _login_user(app, username, password, otp_secret, success=True):
         follow_redirects=True,
     )
     assert resp.status_code == 200
-    assert ((username in resp.data.decode('utf-8')) == success)
+    assert ((session.get_user() is not None) == success)
 
 
 @pytest.mark.parametrize("otp_secret", ["", "GA", "GARBAGE", "JHCOGO7VCER3EJ4"])

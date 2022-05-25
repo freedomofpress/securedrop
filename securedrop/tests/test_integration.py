@@ -11,7 +11,7 @@ from io import BytesIO
 import mock
 
 from bs4 import BeautifulSoup
-from flask import escape, session
+from flask import escape
 from pyotp import HOTP, TOTP
 
 import journalist_app as journalist_app_module
@@ -19,8 +19,8 @@ import mock
 from bs4 import BeautifulSoup
 from db import db
 from encryption import EncryptionManager
-from flask import escape, g, session
-from pyotp import HOTP, TOTP
+from store import Storage
+from journalist_app.sessions import session
 from source_app.session_manager import SessionManager
 from store import Storage
 
@@ -44,7 +44,7 @@ def _login_user(app, user_dict):
         follow_redirects=True,
     )
     assert resp.status_code == 200
-    assert user_dict['username'] in resp.data.decode('utf-8')
+    assert session.get_user() is not None
 
 
 def test_submit_message(journalist_app, source_app, test_journo, app_storage):
