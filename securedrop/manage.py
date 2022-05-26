@@ -1,6 +1,8 @@
 #!/opt/venvs/securedrop-app-code/bin/python
 # -*- coding: utf-8 -*-
 
+# XXX: this commented added to force a CI run, please ignore
+
 import argparse
 import logging
 import os
