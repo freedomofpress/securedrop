@@ -200,7 +200,7 @@ jobs:
       - run:
           name: Run tests
           command: |
-            cd admin; make test
+            echo test; cd admin; make test
 
   updater-gui-tests:
     docker:
