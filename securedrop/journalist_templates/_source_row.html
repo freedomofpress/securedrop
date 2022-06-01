@@ -28,7 +28,8 @@
       {{ source.journalist_designation }}
     </a>
     {% endif %}
-    <input type="hidden" name="count-{{ source.journalist_designation|lower|replace(" ", "_") }}" <!-- nosemgrep: generic.html-templates.security.unquoted-attribute-var.unquoted-attribute-var -->
+    <!-- nosemgrep: generic.html-templates.security.unquoted-attribute-var.unquoted-attribute-var -->
+    <input type="hidden" name="count-{{ source.journalist_designation|lower|replace(" ", "_") }}"
       class="submission-count-element" value="{{ docs + msgs }}">
   </th>
   <td class="submission-count files">

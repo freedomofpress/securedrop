@@ -50,7 +50,7 @@
 
     {% block footer %}
     <footer>
-      <!-- nosemgrep: generic.html-templates.security.unquoted-attribute-var.unquoted-attribute-var,python.flask.security.xss.audit.template-unescaped-with-safe.template-unescaped-with-safe -->
+      <!-- nosemgrep: python.flask.security.xss.audit.template-unescaped-with-safe.template-unescaped-with-safe -->
       {{ gettext("Powered by <b>SecureDrop {version}</b>.").format(version=version)|safe }}
     </footer>
     {% endblock %}
