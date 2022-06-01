@@ -155,6 +155,16 @@ bandit: test-config ## Run bandit with medium level excluding test-related folde
 	@bandit -ll --skip B108 securedrop/config.py
 	@echo
 
+
+# Semgrep is a static code analysis tool to detect security vulnerabilities in Python applications
+# This configuration uses the public "p/r2c-security-audit" ruleset
+.PHONY: semgrep
+semgrep:
+	@command -v semgrep || (echo "Please run 'pip install -U semgrep'."; exit 1)
+	@echo "███ Running semgrep on securedrop/..."
+	@semgrep --exclude "securedrop/tests/" --error --strict --max-chars-per-line 220 --verbose --config "p/r2c-security-audit" securedrop
+	@echo
+
 #############
 #
 # Development
