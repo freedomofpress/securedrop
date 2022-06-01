@@ -217,7 +217,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
     @view.route('/reset-2fa-totp', methods=['POST'])
     @admin_required
     def reset_two_factor_totp() -> werkzeug.Response:
-        uid = request.form['uid']
+        uid = request.form['uid']   # nosemgrep: python.flask.security.open-redirect.open-redirect
         user = Journalist.query.get(uid)
         user.is_totp = True
         user.regenerate_totp_shared_secret()
@@ -227,7 +227,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
     @view.route('/reset-2fa-hotp', methods=['POST'])
     @admin_required
     def reset_two_factor_hotp() -> Union[str, werkzeug.Response]:
-        uid = request.form['uid']
+        uid = request.form['uid']   # nosemgrep: python.flask.security.open-redirect.open-redirect
         otp_secret = request.form.get('otp_secret', None)
         if otp_secret:
             user = Journalist.query.get(uid)

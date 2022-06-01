@@ -105,6 +105,7 @@ def reset(args: argparse.Namespace, context: Optional[AppContext] = None) -> int
                                           'alembic.ini'))
 
         # 3. Migrate it to 'head'
+        # nosemgrep: python.lang.security.audit.subprocess-shell-true.subprocess-shell-true
         subprocess.check_call('cd {} && alembic upgrade head'.format(ini_dir),
                               shell=True)  # nosec
 

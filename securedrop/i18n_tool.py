@@ -242,6 +242,7 @@ class I18NTool:
         cmd = ('git -C {d} config --get user.name > /dev/null && '
                'git -C {d} config --get user.email > /dev/null'.format(
                    d=git_dir))
+        # nosemgrep: python.lang.security.audit.subprocess-shell-true.subprocess-shell-true
         if subprocess.call(cmd, shell=True):  # nosec
             if u'docker' in io.open('/proc/1/cgroup').read():
                 log.error("remember ~/.gitconfig does not exist "
