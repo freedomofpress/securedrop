@@ -14,14 +14,14 @@ from store import Storage
 from source_user import SourceUser
 
 
-def codename_detected(message: str, codename: str) -> bool:
+def passphrase_detected(message: str, passphrase: str) -> bool:
     """
-    Check for codenames in incoming messages. including case where user copy/pasted
-    from /generate or the codename widget on the same page
+    Check for passphrases in incoming messages. including case where user copy/pasted
+    from the passphrase widget on the same page
     """
     message = message.strip()
 
-    return compare_digest(message.strip(), codename)
+    return compare_digest(message.strip(), passphrase)
 
 
 def flash_msg(

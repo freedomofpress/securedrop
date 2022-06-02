@@ -22,7 +22,7 @@ from passphrases import PassphraseGenerator, DicewarePassphrase
 from sdconfig import SDConfig
 from source_app.decorators import login_required, login_possible
 from source_app.session_manager import SessionManager
-from source_app.utils import normalize_timestamps, codename_detected, flash_msg
+from source_app.utils import normalize_timestamps, passphrase_detected, flash_msg
 from source_app.forms import LoginForm, SubmissionForm
 from source_user import InvalidPassphraseError, create_source_user, \
     SourcePassphraseCollisionError, SourceDesignationCollisionError, SourceUser
@@ -93,10 +93,10 @@ def make_blueprint(config: SDConfig) -> Blueprint:
 
             # If the source is logged in, they already submitted at least once
             min_message_length = 0
-            new_user_codename = session.get('new_user_codename', None)
+            new_user_passphrase = session.get('new_user_passphrase', None)
         else:
             min_message_length = InstanceConfig.get_default().initial_message_min_len
-            new_user_codename = None
+            new_user_passphrase = None
 
         return render_template(
             'lookup.html',
@@ -104,51 +104,21 @@ def make_blueprint(config: SDConfig) -> Blueprint:
             allow_document_uploads=InstanceConfig.get_default().allow_document_uploads,
             replies=replies,
             min_len=min_message_length,
-            new_user_codename=new_user_codename,
+            new_user_passphrase=new_user_passphrase,
             form=SubmissionForm(),
         )
 
     @view.route('/submit', methods=('POST',))
     @login_possible
     def submit(logged_in_source: 'Optional[SourceUser]') -> werkzeug.Response:
-        # Flow inversion: generate codename and create source user before processing their
+        # Flow inversion: generate passphrase create source user before processing their
         # submission, rather than on a separate screen
-        if logged_in_source is None:
-            codename = PassphraseGenerator.get_default().generate_passphrase(
-                preferred_language=g.localeinfo.language
-            )
-            try:
-                current_app.logger.info("Creating new source user...")
-                create_source_user(
-                    db_session=db.session,
-                    source_passphrase=codename,
-                    source_app_storage=Storage.get_default(),
-                )
-            except (SourcePassphraseCollisionError, SourceDesignationCollisionError) as e:
-                current_app.logger.error("Could not create a source: {}".format(e))
-                flash_msg("error", None, gettext(
-                    "There was a temporary problem creating your account. Please try again."))
-                return redirect(url_for('.index'))
 
-            # All done - source user was successfully created
-            current_app.logger.info("New source user created")
-            # Track that this user was generated during this session
-            session['new_user_codename'] = codename
-            logged_in_source = SessionManager.log_user_in(
-                db_session=db.session,
-                supplied_passphrase=DicewarePassphrase(codename)
-            )
-
-        allow_document_uploads = InstanceConfig.get_default().allow_document_uploads
-        form = SubmissionForm()
-        if not form.validate():
-            for field, errors in form.errors.items():
-                for error in errors:
-                    flash_msg("error", None, error)
-            return redirect(url_for('main.lookup'))
-
+        # Handle as much validation as possible upfront, as we only want to generate sources if
+        # necessary
         msg = request.form['msg']
         fh = None
+        allow_document_uploads = InstanceConfig.get_default().allow_document_uploads
         if allow_document_uploads and 'fh' in request.files:
             fh = request.files['fh']
 
@@ -162,27 +132,60 @@ def make_blueprint(config: SDConfig) -> Blueprint:
             flash_msg("error", None, html_contents)
             return redirect(url_for('main.lookup'))
 
-        logged_in_source_in_db = logged_in_source.get_db_record()
-        first_submission = logged_in_source_in_db.interaction_count == 0
+        form = SubmissionForm()
+        if not form.validate():
+            for field, errors in form.errors.items():
+                for error in errors:
+                    flash_msg("error", None, error)
+            return redirect(url_for('main.lookup'))
 
-        if first_submission:
+        if logged_in_source is None:
             min_len = InstanceConfig.get_default().initial_message_min_len
             if (min_len > 0) and (msg and not fh) and (len(msg) < min_len):
                 flash_msg("error", None, gettext(
                     "Your first message must be at least {} characters long.").format(min_len))
                 return redirect(url_for('main.lookup'))
 
-        # if the new_user_codename key is not present in the session, this is
-        # not a first session - during the first session, the codename is displayed
-        # throughout but we want to discourage sources from sharing it
-        new_codename = session.get('new_user_codename', None)
-        codenames_rejected = InstanceConfig.get_default().reject_message_with_codename
+            passphrase = PassphraseGenerator.get_default().generate_passphrase(
+                preferred_language=g.localeinfo.language
+            )
+            try:
+                current_app.logger.info("Creating new source user...")
+                create_source_user(
+                    db_session=db.session,
+                    source_passphrase=passphrase,
+                    source_app_storage=Storage.get_default(),
+                )
+            except (SourcePassphraseCollisionError, SourceDesignationCollisionError) as e:
+                current_app.logger.error("Could not create a source: {}".format(e))
+                flash_msg("error", None, gettext(
+                    "There was a temporary problem creating your account. Please try again."))
+                return redirect(url_for('.index'))
 
-        if new_codename is not None and codenames_rejected and codename_detected(msg, new_codename):
-            flash_msg("error", None, gettext("Please do not submit your codename!"),
-                      gettext("Keep your codename secret, and use it to log in later to "
+            # All done - source user was successfully created
+            current_app.logger.info("New source user created")
+            # Track that this user was generated during this session
+            session['new_user_passphrase'] = passphrase
+            logged_in_source = SessionManager.log_user_in(
+                db_session=db.session,
+                supplied_passphrase=DicewarePassphrase(passphrase)
+            )
+
+        # if the new_user_passphrase key is not present in the session, this is
+        # not a first session - during the first session, the passphrase is displayed
+        # throughout but we want to discourage sources from sharing it
+        new_passphrase = session.get('new_user_passphrase', None)
+        passphrases_rejected = InstanceConfig.get_default().reject_message_with_codename
+
+        if new_passphrase is not None \
+           and passphrases_rejected \
+           and passphrase_detected(msg, new_passphrase):
+            flash_msg("error", None, gettext("Please do not submit your passphrase!"),
+                      gettext("Keep your passphrase secret, and use it to log in later to "
                               "check for replies."))
             return redirect(url_for('main.lookup'))
+
+        logged_in_source_in_db = logged_in_source.get_db_record()
 
         if not os.path.exists(Storage.get_default().path(logged_in_source.filesystem_id)):
             current_app.logger.debug("Store directory not found for source '{}', creating one."
@@ -208,6 +211,8 @@ def make_blueprint(config: SDConfig) -> Blueprint:
                     logged_in_source_in_db.journalist_filename,
                     fh.filename,
                     fh.stream))
+
+        first_submission = logged_in_source_in_db.interaction_count == 0
 
         if first_submission or msg or fh:
             if first_submission:
@@ -284,11 +289,11 @@ def make_blueprint(config: SDConfig) -> Blueprint:
             try:
                 SessionManager.log_user_in(
                     db_session=db.session,
-                    supplied_passphrase=DicewarePassphrase(request.form['codename'].strip())
+                    supplied_passphrase=DicewarePassphrase(request.form['passphrase'].strip())
                 )
             except InvalidPassphraseError:
-                current_app.logger.info("Login failed for invalid codename")
-                flash_msg("error", None, gettext("Sorry, that is not a recognized codename."))
+                current_app.logger.info("Login failed for invalid passphrase")
+                flash_msg("error", None, gettext("Sorry, that is not a recognized passphrase."))
             else:
                 # Success: a valid passphrase was supplied
                 return redirect(url_for('.lookup', from_login='1'))

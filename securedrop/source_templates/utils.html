@@ -4,8 +4,8 @@
 {%- endmacro -%}
 
 {%- macro codename(codename, new=True) -%}
-<section aria-labelledby="codename-heading">
-  <h2 id="codename-heading" hidden>{{ gettext('Codename') }}</h2>
+<div aria-labelledby="codename-heading">
+  <h3 id="codename-heading" hidden>{{ gettext('Codename') }}</h3>
 
   <input id="codename-show-checkbox" type="checkbox" role="button"{% if new %} checked {% endif -%}
     aria-label="{{ gettext('Show Codename') }}" aria-controls="codename">
@@ -18,5 +18,5 @@
       {{ gettext('Show Codename') }}
   </label>
 
-</section>
+</div>
 {%- endmacro -%}

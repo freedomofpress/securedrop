@@ -43,9 +43,6 @@ h1, h2, h3, h4
 h1, h2
   font-size: 24px
 
-#source-lookup h2
-  font-size: 18px
-
 p
   margin: 0 0 12px 0
 
@@ -211,7 +208,7 @@ header
   width: 150px
   padding-top: 60px - 17px
   padding-bottom: 30px
-  margin: 0 30px 0 15px
+  margin: 0 30px 0 25px
 
 #source-index
   .content
@@ -944,17 +941,22 @@ header img, #locales-menu, #locales-menu-list
 
 main
   width: calc(100% - 210px)
-  border: 1px solid $main_border
-  padding: 50px 30px 24px 30px
+  padding: 50px 20px 0 15px
 
 section[aria-labelledby="submit-heading"]
   clear: both
+
+section[aria-labelledby="welcome-heading"]
+  margin-top: 50px
 
 section[aria-labelledby="codename-reminder"] + section h2
   padding-top: 26px
 
 #source-lookup main, #source-logout main
   padding-top: 22px
+
+#source-lookup #encrypt-before-sending
+  display: none
 
 #source-logout main nav + section
   margin-top: 44px
@@ -1142,7 +1144,7 @@ section[aria-labelledby="codename-reminder"] + section h2
   margin-top: 3em
 
 #source-lookup nav + section:not(#flashed)
-  margin-top: 53px
+  margin-top: 47px
 
 nav + section#flashed
   margin-top: -1em
