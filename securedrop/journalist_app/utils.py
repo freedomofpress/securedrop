@@ -1,32 +1,16 @@
 # -*- coding: utf-8 -*-
 import binascii
 import os
-from typing import Optional, List, Union
+from datetime import datetime, timezone
+from typing import List, Optional, Union
 
 import flask
 import werkzeug
-from flask import (flash, current_app, abort, send_file, redirect, url_for,
-                   Markup, escape)
-from flask_babel import gettext, ngettext
-from journalist_app.sessions import session
-from sqlalchemy.exc import IntegrityError
-
 from db import db
 from encryption import EncryptionManager
-from flask import (
-    Markup,
-    abort,
-    current_app,
-    escape,
-    flash,
-    g,
-    redirect,
-    request,
-    send_file,
-    sessions,
-    url_for,
-)
+from flask import Markup, abort, current_app, escape, flash, redirect, send_file, url_for
 from flask_babel import gettext, ngettext
+from journalist_app.sessions import session
 from models import (
     HOTP_SECRET_LENGTH,
     BadTokenException,
@@ -57,7 +41,10 @@ def commit_account_changes(user: Journalist) -> None:
             db.session.add(user)
             db.session.commit()
         except Exception as e:
-            flash(gettext("An unexpected error occurred! Please " "inform your admin."), "error")
+            flash(
+                gettext("An unexpected error occurred! Please " "inform your admin."),
+                "error",
+            )
             current_app.logger.error("Account changes for '{}' failed: {}".format(user, e))
             db.session.rollback()
         else:
@@ -170,7 +157,10 @@ def validate_hotp_secret(user: Journalist, otp_secret: str) -> bool:
             )
             return False
         else:
-            flash(gettext("An unexpected error occurred! " "Please inform your admin."), "error")
+            flash(
+                gettext("An unexpected error occurred! " "Please inform your admin."),
+                "error",
+            )
             current_app.logger.error(
                 "set_hotp_secret '{}' (id {}) failed: {}".format(otp_secret, user.id, e)
             )
@@ -444,12 +434,17 @@ def set_name(user: Journalist, first_name: Optional[str], last_name: Optional[st
         flash(gettext("Name not updated: {message}").format(message=e), "error")
 
 
-def set_diceware_password(user: Journalist, password: Optional[str]) -> bool:
+def set_diceware_password(
+    user: Journalist, password: Optional[str], admin: Optional[bool] = False
+) -> bool:
     try:
         # nosemgrep: python.django.security.audit.unvalidated-password.unvalidated-password
         user.set_password(password)
     except PasswordError:
-        flash(gettext("The password you submitted is invalid. Password not changed."), "error")
+        flash(
+            gettext("The password you submitted is invalid. Password not changed."),
+            "error",
+        )
         return False
 
     try:
@@ -467,9 +462,26 @@ def set_diceware_password(user: Journalist, password: Optional[str]) -> bool:
         return False
 
     # using Markup so the HTML isn't escaped
-    session.destroy(
-        (
-            'success',
+    if not admin:
+        session.destroy(
+            (
+                "success",
+                Markup(
+                    "<p>{message} <span><code>{password}</code></span></p>".format(
+                        message=Markup.escape(
+                            gettext(
+                                "Password updated. Don't forget to save it in your KeePassX database. "  # noqa: E501
+                                "New password:"
+                            )
+                        ),
+                        password=Markup.escape("" if password is None else password),
+                    )
+                ),
+            ),
+            session.get("locale"),
+        )
+    else:
+        flash(
             Markup(
                 "<p>{message} <span><code>{password}</code></span></p>".format(
                     message=Markup.escape(
@@ -478,12 +490,11 @@ def set_diceware_password(user: Journalist, password: Optional[str]) -> bool:
                             "New password:"
                         )
                     ),
-                    password=Markup.escape("" if password is None else password)
+                    password=Markup.escape("" if password is None else password),
                 )
-            )
-        ),
-        session.get('locale')
-    )
+            ),
+            "success",
+        )
     return True
 
 

@@ -19,6 +19,12 @@ class FlaskAppConfig:
     # This is recommended for performance, and also resolves #369
     USE_X_SENDFILE: bool = True
 
+    # additional config for JI Redis sessions
+    SESSION_SIGNER_SALT: str = "js_session"
+    SESSION_KEY_PREFIX: str = "js_session:"
+    SESSION_LIFETIME: int = 2 * 60 * 60
+    SESSION_RENEW_COUNT: int = 5
+
 
 DEFAULT_SECUREDROP_ROOT = Path(__file__).absolute().parent.parent.parent
 

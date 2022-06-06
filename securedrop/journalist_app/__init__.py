@@ -1,14 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import typing
-from datetime import datetime, timedelta, timezone
-from pathlib import Path
 from datetime import datetime
-from flask import (Flask, redirect, url_for, g, request,
-                   render_template, json, abort)
-from flask_assets import Environment
-from flask_babel import gettext
-from flask_wtf.csrf import CSRFProtect, CSRFError
 from os import path
 from pathlib import Path
 
@@ -16,20 +9,14 @@ import i18n
 import template_filters
 import version
 from db import db
-from flask import Flask, flash, g, json, redirect, render_template, request, session, url_for
+from flask import Flask, abort, g, json, redirect, render_template, request, url_for
 from flask_babel import gettext
 from flask_wtf.csrf import CSRFError, CSRFProtect
 from journalist_app import account, admin, api, col, main
-from journalist_app.utils import (
-    JournalistInterfaceSessionInterface,
-    cleanup_expired_revoked_tokens,
-    get_source,
-    logged_in,
-)
-from journalist_app import account, admin, api, main, col
 from journalist_app.sessions import Session, session
 from journalist_app.utils import get_source
 from models import InstanceConfig
+from werkzeug.exceptions import default_exceptions
 
 # https://www.python.org/dev/peps/pep-0484/#runtime-or-type-checking
 if typing.TYPE_CHECKING:
@@ -43,8 +30,8 @@ if typing.TYPE_CHECKING:
     from werkzeug import Response  # noqa: F401
     from werkzeug.exceptions import HTTPException  # noqa: F401
 
-_insecure_views = ['main.login', 'static']
-_insecure_api_views = ['api.get_token', 'api.get_endpoints']
+_insecure_views = ["main.login", "static"]
+_insecure_api_views = ["api.get_token", "api.get_endpoints"]
 # Timezone-naive datetime format expected by SecureDrop Client
 API_DATETIME_FORMAT = "%Y-%m-%dT%H:%M:%S.%fZ"
 
@@ -96,9 +83,9 @@ def create_app(config: "SDConfig") -> Flask:
     @app.errorhandler(CSRFError)  # type: ignore
     def handle_csrf_error(e: CSRFError) -> "Response":
         app.logger.error("The CSRF token is invalid.")
-        msg = gettext('You have been logged out due to inactivity.')
-        session.destroy(('error', msg), session.get('locale'))
-        return redirect(url_for('main.login'))
+        msg = gettext("You have been logged out due to inactivity.")
+        session.destroy(("error", msg), session.get("locale"))
+        return redirect(url_for("main.login"))
 
     def _handle_http_exception(
         error: "HTTPException",
@@ -149,12 +136,12 @@ def create_app(config: "SDConfig") -> Flask:
         except FileNotFoundError:
             app.logger.error("Site logo not found.")
 
-        if request.path.split('/')[1] == 'api':
+        if request.path.split("/")[1] == "api":
             if request.endpoint not in _insecure_api_views and not session.logged_in():
                 abort(403)
         else:
             if request.endpoint not in _insecure_views and not session.logged_in():
-                return redirect(url_for('main.login'))
+                return redirect(url_for("main.login"))
 
         if request.method == "POST":
             filesystem_id = request.form.get("filesystem_id")

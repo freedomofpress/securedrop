@@ -1,27 +1,28 @@
 import collections.abc
 import json
 from datetime import datetime, timezone
-from typing import Tuple, Set, Union
-
-import flask
-import werkzeug
-from flask import abort, Blueprint, jsonify, request
-
-from sqlalchemy import Column
-from sqlalchemy.exc import IntegrityError
 from os import path
-from typing import Any, Callable, Set, Tuple, Union
+from typing import Set, Tuple, Union
 from uuid import UUID
 
 import flask
 import werkzeug
 from db import db
+from flask import Blueprint, abort, jsonify, request
 from journalist_app import utils
 from journalist_app.sessions import session
-from models import (Journalist, Reply, SeenReply, Source, Submission,
-                    LoginThrottledException, InvalidUsernameException,
-                    BadTokenException, InvalidOTPSecretException,
-                    WrongPasswordException)
+from models import (
+    BadTokenException,
+    InvalidOTPSecretException,
+    InvalidUsernameException,
+    Journalist,
+    LoginThrottledException,
+    Reply,
+    SeenReply,
+    Source,
+    Submission,
+    WrongPasswordException,
+)
 from sdconfig import SDConfig
 from sqlalchemy import Column
 from sqlalchemy.exc import IntegrityError
@@ -93,32 +94,39 @@ def make_blueprint(config: SDConfig) -> Blueprint:
         try:
             journalist = Journalist.login(username, passphrase, one_time_code)
 
-            response = jsonify({
-                'token': session.get_token(),
-                'expiration': session.get_lifetime(),
-                'journalist_uuid': journalist.uuid,
-                'journalist_first_name': journalist.first_name,
-                'journalist_last_name': journalist.last_name,
-            })
+            response = jsonify(
+                {
+                    "token": session.get_token(),
+                    "expiration": session.get_lifetime(),
+                    "journalist_uuid": journalist.uuid,
+                    "journalist_first_name": journalist.first_name,
+                    "journalist_last_name": journalist.last_name,
+                }
+            )
 
             # Update access metadata
             journalist.last_access = datetime.now(timezone.utc)
             db.session.add(journalist)
             db.session.commit()
 
-            session['uid'] = journalist.id
+            session["uid"] = journalist.id
 
             return response, 200
-        except (LoginThrottledException, InvalidUsernameException,
-                BadTokenException, InvalidOTPSecretException, WrongPasswordException):
-            return abort(403, 'Token authentication failed.')
+        except (
+            LoginThrottledException,
+            InvalidUsernameException,
+            BadTokenException,
+            InvalidOTPSecretException,
+            WrongPasswordException,
+        ):
+            return abort(403, "Token authentication failed.")
 
-    @api.route('/sources', methods=['GET'])
+    @api.route("/sources", methods=["GET"])
     def get_all_sources() -> Tuple[flask.Response, int]:
         sources = Source.query.filter_by(pending=False, deleted_at=None).all()
         return jsonify({"sources": [source.to_json() for source in sources]}), 200
 
-    @api.route('/sources/<source_uuid>', methods=['GET', 'DELETE'])
+    @api.route("/sources/<source_uuid>", methods=["GET", "DELETE"])
     def single_source(source_uuid: str) -> Tuple[flask.Response, int]:
         if request.method == "GET":
             source = get_or_404(Source, source_uuid, column=Source.uuid)
@@ -130,25 +138,28 @@ def make_blueprint(config: SDConfig) -> Blueprint:
         else:
             abort(405)
 
-    @api.route('/sources/<source_uuid>/add_star', methods=['POST'])
+    @api.route("/sources/<source_uuid>/add_star", methods=["POST"])
     def add_star(source_uuid: str) -> Tuple[flask.Response, int]:
         source = get_or_404(Source, source_uuid, column=Source.uuid)
         utils.make_star_true(source.filesystem_id)
         db.session.commit()
         return jsonify({"message": "Star added"}), 201
 
-    @api.route('/sources/<source_uuid>/remove_star', methods=['DELETE'])
+    @api.route("/sources/<source_uuid>/remove_star", methods=["DELETE"])
     def remove_star(source_uuid: str) -> Tuple[flask.Response, int]:
         source = get_or_404(Source, source_uuid, column=Source.uuid)
         utils.make_star_false(source.filesystem_id)
         db.session.commit()
         return jsonify({"message": "Star removed"}), 200
 
-    @api.route('/sources/<source_uuid>/flag', methods=['POST'])
+    @api.route("/sources/<source_uuid>/flag", methods=["POST"])
     def flag(source_uuid: str) -> Tuple[flask.Response, int]:
-        return jsonify({"message": "Sources no longer need to be flagged for reply"}), 200
+        return (
+            jsonify({"message": "Sources no longer need to be flagged for reply"}),
+            200,
+        )
 
-    @api.route('/sources/<source_uuid>/conversation', methods=['DELETE'])
+    @api.route("/sources/<source_uuid>/conversation", methods=["DELETE"])
     def source_conversation(source_uuid: str) -> Tuple[flask.Response, int]:
         if request.method == "DELETE":
             source = get_or_404(Source, source_uuid, column=Source.uuid)
@@ -157,7 +168,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
         else:
             abort(405)
 
-    @api.route('/sources/<source_uuid>/submissions', methods=['GET'])
+    @api.route("/sources/<source_uuid>/submissions", methods=["GET"])
     def all_source_submissions(source_uuid: str) -> Tuple[flask.Response, int]:
         source = get_or_404(Source, source_uuid, column=Source.uuid)
         return (
@@ -171,16 +182,17 @@ def make_blueprint(config: SDConfig) -> Blueprint:
         submission = get_or_404(Submission, submission_uuid, column=Submission.uuid)
         return utils.serve_file_with_etag(submission)
 
-    @api.route('/sources/<source_uuid>/replies/<reply_uuid>/download',
-               methods=['GET'])
+    @api.route("/sources/<source_uuid>/replies/<reply_uuid>/download", methods=["GET"])
     def download_reply(source_uuid: str, reply_uuid: str) -> flask.Response:
         get_or_404(Source, source_uuid, column=Source.uuid)
         reply = get_or_404(Reply, reply_uuid, column=Reply.uuid)
 
         return utils.serve_file_with_etag(reply)
 
-    @api.route('/sources/<source_uuid>/submissions/<submission_uuid>',
-               methods=['GET', 'DELETE'])
+    @api.route(
+        "/sources/<source_uuid>/submissions/<submission_uuid>",
+        methods=["GET", "DELETE"],
+    )
     def single_submission(source_uuid: str, submission_uuid: str) -> Tuple[flask.Response, int]:
         if request.method == "GET":
             get_or_404(Source, source_uuid, column=Source.uuid)
@@ -194,11 +206,14 @@ def make_blueprint(config: SDConfig) -> Blueprint:
         else:
             abort(405)
 
-    @api.route('/sources/<source_uuid>/replies', methods=['GET', 'POST'])
+    @api.route("/sources/<source_uuid>/replies", methods=["GET", "POST"])
     def all_source_replies(source_uuid: str) -> Tuple[flask.Response, int]:
         if request.method == "GET":
             source = get_or_404(Source, source_uuid, column=Source.uuid)
-            return jsonify({"replies": [reply.to_json() for reply in source.replies]}), 200
+            return (
+                jsonify({"replies": [reply.to_json() for reply in source.replies]}),
+                200,
+            )
         elif request.method == "POST":
             source = get_or_404(Source, source_uuid, column=Source.uuid)
             if request.json is None:
@@ -262,8 +277,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
         else:
             abort(405)
 
-    @api.route('/sources/<source_uuid>/replies/<reply_uuid>',
-               methods=['GET', 'DELETE'])
+    @api.route("/sources/<source_uuid>/replies/<reply_uuid>", methods=["GET", "DELETE"])
     def single_reply(source_uuid: str, reply_uuid: str) -> Tuple[flask.Response, int]:
         get_or_404(Source, source_uuid, column=Source.uuid)
         reply = get_or_404(Reply, reply_uuid, column=Reply.uuid)
@@ -275,16 +289,27 @@ def make_blueprint(config: SDConfig) -> Blueprint:
         else:
             abort(405)
 
-    @api.route('/submissions', methods=['GET'])
+    @api.route("/submissions", methods=["GET"])
     def get_all_submissions() -> Tuple[flask.Response, int]:
         submissions = Submission.query.all()
-        return jsonify({'submissions': [submission.to_json() for
-                                        submission in submissions if submission.source]}), 200
+        return (
+            jsonify(
+                {
+                    "submissions": [
+                        submission.to_json() for submission in submissions if submission.source
+                    ]
+                }
+            ),
+            200,
+        )
 
-    @api.route('/replies', methods=['GET'])
+    @api.route("/replies", methods=["GET"])
     def get_all_replies() -> Tuple[flask.Response, int]:
         replies = Reply.query.all()
-        return jsonify({"replies": [reply.to_json() for reply in replies if reply.source]}), 200
+        return (
+            jsonify({"replies": [reply.to_json() for reply in replies if reply.source]}),
+            200,
+        )
 
     @api.route("/seen", methods=["POST"])
     def seen() -> Tuple[flask.Response, int]:
@@ -327,19 +352,19 @@ def make_blueprint(config: SDConfig) -> Blueprint:
 
         abort(405)
 
-    @api.route('/user', methods=['GET'])
+    @api.route("/user", methods=["GET"])
     def get_current_user() -> Tuple[flask.Response, int]:
         return jsonify(session.get_user().to_json()), 200
 
-    @api.route('/users', methods=['GET'])
+    @api.route("/users", methods=["GET"])
     def get_all_users() -> Tuple[flask.Response, int]:
         users = Journalist.query.all()
         return jsonify({"users": [user.to_json(all_info=False) for user in users]}), 200
 
-    @api.route('/logout', methods=['POST'])
+    @api.route("/logout", methods=["POST"])
     def logout() -> Tuple[flask.Response, int]:
         session.destroy()
-        return jsonify({'message': 'Your token has been revoked.'}), 200
+        return jsonify({"message": "Your token has been revoked."}), 200
 
     def _handle_api_http_exception(
         error: werkzeug.exceptions.HTTPException,

@@ -15,6 +15,8 @@ import qrcode
 import qrcode.image.svg
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives.kdf import scrypt
+from db import db
+from encryption import EncryptionManager, GpgKeyNotFoundError
 from flask import url_for
 from flask_babel import gettext, ngettext
 from markupsafe import Markup
@@ -150,7 +152,11 @@ class Source(db.Model):
             "is_starred": starred,
             "last_updated": last_updated,
             "interaction_count": self.interaction_count,
-            "key": {"type": "PGP", "public": self.public_key, "fingerprint": self.fingerprint},
+            "key": {
+                "type": "PGP",
+                "public": self.public_key,
+                "fingerprint": self.fingerprint,
+            },
             "number_of_documents": docs_msg_count["documents"],
             "number_of_messages": docs_msg_count["messages"],
             "submissions_url": url_for("api.all_source_submissions", source_uuid=self.uuid),
@@ -215,7 +221,9 @@ class Submission(db.Model):
             if self.source
             else None,
             "submission_url": url_for(
-                "api.single_submission", source_uuid=self.source.uuid, submission_uuid=self.uuid
+                "api.single_submission",
+                source_uuid=self.source.uuid,
+                submission_uuid=self.uuid,
             )
             if self.source
             else None,
@@ -226,7 +234,9 @@ class Submission(db.Model):
             "is_read": self.seen,
             "uuid": self.uuid,
             "download_url": url_for(
-                "api.download_submission", source_uuid=self.source.uuid, submission_uuid=self.uuid
+                "api.download_submission",
+                source_uuid=self.source.uuid,
+                submission_uuid=self.uuid,
             )
             if self.source
             else None,
@@ -411,9 +421,7 @@ class Journalist(db.Model):
     passphrase_hash = Column(String(256))
 
     login_attempts = relationship(
-        "JournalistLoginAttempt",
-        backref="journalist",
-        cascade="all, delete"
+        "JournalistLoginAttempt", backref="journalist", cascade="all, delete"
     )
 
     MIN_USERNAME_LEN = 3
@@ -709,8 +717,8 @@ class Journalist(db.Model):
 
     def to_json(self, all_info: bool = True) -> Dict[str, Any]:
         """Returns a JSON representation of the journalist user. If all_info is
-           False, potentially sensitive or extraneous fields are excluded. Note
-           that both representations do NOT include credentials."""
+        False, potentially sensitive or extraneous fields are excluded. Note
+        that both representations do NOT include credentials."""
         json_user = {
             "username": self.username,
             "uuid": self.uuid,
@@ -807,7 +815,8 @@ class SeenFile(db.Model):
     file_id = Column(Integer, ForeignKey("submissions.id"), nullable=False)
     journalist_id = Column(Integer, ForeignKey("journalists.id"), nullable=False)
     file = relationship(
-        "Submission", backref=backref("seen_files", lazy="dynamic", cascade="all,delete")
+        "Submission",
+        backref=backref("seen_files", lazy="dynamic", cascade="all,delete"),
     )
     journalist = relationship("Journalist", backref=backref("seen_files"))
 
@@ -819,7 +828,8 @@ class SeenMessage(db.Model):
     message_id = Column(Integer, ForeignKey("submissions.id"), nullable=False)
     journalist_id = Column(Integer, ForeignKey("journalists.id"), nullable=False)
     message = relationship(
-        "Submission", backref=backref("seen_messages", lazy="dynamic", cascade="all,delete")
+        "Submission",
+        backref=backref("seen_messages", lazy="dynamic", cascade="all,delete"),
     )
     journalist = relationship("Journalist", backref=backref("seen_messages"))
 
@@ -860,7 +870,10 @@ class InstanceConfig(db.Model):
     __tablename__ = "instance_config"
     version = Column(Integer, primary_key=True)
     valid_until = Column(
-        DateTime, default=datetime.datetime.fromtimestamp(0), nullable=False, unique=True
+        DateTime,
+        default=datetime.datetime.fromtimestamp(0),
+        nullable=False,
+        unique=True,
     )
     allow_document_uploads = Column(Boolean, default=True)
     organization_name = Column(String(255), nullable=True, default="SecureDrop")

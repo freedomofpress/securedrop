@@ -5,12 +5,6 @@ import os
 from typing import Optional, Union
 
 import werkzeug
-from flask import (Blueprint, render_template, request, url_for, redirect, g,
-                   current_app, flash, abort)
-from flask_babel import gettext
-from sqlalchemy.exc import IntegrityError
-from sqlalchemy.orm.exc import NoResultFound
-
 from db import db
 from flask import (
     Blueprint,
@@ -25,11 +19,17 @@ from flask import (
 )
 from flask_babel import gettext
 from journalist_app.decorators import admin_required
+from journalist_app.forms import LogoForm, NewUserForm, OrgNameForm, SubmissionPreferencesForm
 from journalist_app.sessions import logout_user, session
-from journalist_app.utils import (commit_account_changes, set_diceware_password,
-                                  validate_hotp_secret)
-from journalist_app.forms import LogoForm, NewUserForm, SubmissionPreferencesForm, OrgNameForm
-from sdconfig import SDConfig
+from journalist_app.utils import commit_account_changes, set_diceware_password, validate_hotp_secret
+from models import (
+    FirstOrLastNameError,
+    InstanceConfig,
+    InvalidUsernameException,
+    Journalist,
+    PasswordError,
+    Submission,
+)
 from passphrases import PassphraseGenerator
 from sdconfig import SDConfig
 from sqlalchemy.exc import IntegrityError
@@ -245,28 +245,26 @@ def make_blueprint(config: SDConfig) -> Blueprint:
     @view.route("/reset-2fa-totp", methods=["POST"])
     @admin_required
     def reset_two_factor_totp() -> werkzeug.Response:
-        # nosemgrep: python.flask.security.open-redirect.open-redirect
         uid = request.form["uid"]
         user = Journalist.query.get(uid)
         user.is_totp = True
         user.regenerate_totp_shared_secret()
         db.session.commit()
-        return redirect(url_for("admin.new_user_two_factor", uid=uid))
+        return redirect(url_for("admin.new_user_two_factor", uid=user.id))
 
     @view.route("/reset-2fa-hotp", methods=["POST"])
     @admin_required
     def reset_two_factor_hotp() -> Union[str, werkzeug.Response]:
-        # nosemgrep: python.flask.security.open-redirect.open-redirect
         uid = request.form["uid"]
+        user = Journalist.query.get(uid)
         otp_secret = request.form.get("otp_secret", None)
         if otp_secret:
-            user = Journalist.query.get(uid)
             if not validate_hotp_secret(user, otp_secret):
-                return render_template("admin_edit_hotp_secret.html", uid=uid)
+                return render_template("admin_edit_hotp_secret.html", uid=user.id)
             db.session.commit()
-            return redirect(url_for("admin.new_user_two_factor", uid=uid))
+            return redirect(url_for("admin.new_user_two_factor", uid=user.id))
         else:
-            return render_template("admin_edit_hotp_secret.html", uid=uid)
+            return render_template("admin_edit_hotp_secret.html", uid=user.id)
 
     @view.route("/edit/<int:user_id>", methods=("GET", "POST"))
     @admin_required
@@ -280,7 +278,10 @@ def make_blueprint(config: SDConfig) -> Blueprint:
                 try:
                     Journalist.check_username_acceptable(new_username)
                 except InvalidUsernameException as e:
-                    flash(gettext("Invalid username: {message}").format(message=e), "error")
+                    flash(
+                        gettext("Invalid username: {message}").format(message=e),
+                        "error",
+                    )
                     return redirect(url_for("admin.edit_user", user_id=user_id))
 
                 if new_username == user.username:
@@ -330,24 +331,31 @@ def make_blueprint(config: SDConfig) -> Blueprint:
             # Do not flash because the interface already has safe guards.
             # It can only happen by manually crafting a POST request
             current_app.logger.error(
-                "Admin {} tried to delete itself".format(session.get_user().username))
+                "Admin {} tried to delete itself".format(session.get_user().username)
+            )
             abort(403)
         elif not user:
             current_app.logger.error(
                 "Admin {} tried to delete nonexistent user with pk={}".format(
-                    session.get_user().username, user_id))
+                    session.get_user().username, user_id
+                )
+            )
             abort(404)
         elif user.is_deleted_user():
             # Do not flash because the interface does not expose this.
             # It can only happen by manually crafting a POST request
             current_app.logger.error(
-                "Admin {} tried to delete \"deleted\" user".format(session.get_user().username))
+                'Admin {} tried to delete "deleted" user'.format(session.get_user().username)
+            )
             abort(403)
         else:
             user.delete()
-            logout_user(user.id, is_current=False)
+            logout_user(user.id)
             db.session.commit()
-            flash(gettext("Deleted user '{user}'.").format(user=user.username), "notification")
+            flash(
+                gettext("Deleted user '{user}'.").format(user=user.username),
+                "notification",
+            )
 
         return redirect(url_for("admin.index"))
 
@@ -358,10 +366,9 @@ def make_blueprint(config: SDConfig) -> Blueprint:
             user = Journalist.query.get(user_id)
         except NoResultFound:
             abort(404)
-
-        password = request.form.get('password')
-        if set_diceware_password(user, password) is not False:
-            logout_user(user.id, is_current=False)
+        password = request.form.get("password")
+        if set_diceware_password(user, password, admin=True) is not False:
+            logout_user(user.id)
             db.session.commit()
         return redirect(url_for("admin.edit_user", user_id=user_id))
 
@@ -369,7 +376,10 @@ def make_blueprint(config: SDConfig) -> Blueprint:
     @admin_required
     def ossec_test() -> werkzeug.Response:
         current_app.logger.error("This is a test OSSEC alert")
-        flash(gettext("Test alert sent. Please check your email."), "testalert-notification")
+        flash(
+            gettext("Test alert sent. Please check your email."),
+            "testalert-notification",
+        )
         return redirect(url_for("admin.manage_config") + "#config-testalert")
 
     return view

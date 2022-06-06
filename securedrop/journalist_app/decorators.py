@@ -1,12 +1,10 @@
 # -*- coding: utf-8 -*-
-from typing import Any
-
-from flask import redirect, url_for, flash
-from flask_babel import gettext
 from functools import wraps
-from journalist_app.sessions import session
+from typing import Any, Callable
 
-from typing import Callable
+from flask import flash, redirect, url_for
+from flask_babel import gettext
+from journalist_app.sessions import session
 
 
 def admin_required(func: Callable) -> Callable:
