@@ -15,9 +15,6 @@ class SourceNavigationStepsMixin:
     def _is_on_lookup_page(self):
         return self.wait_for(lambda: self.driver.find_element_by_id("source-lookup"))
 
-    def _is_on_generate_page(self):
-        return self.wait_for(lambda: self.driver.find_element_by_id("source-generate"))
-
     def _is_on_logout_page(self):
         return self.wait_for(lambda: self.driver.find_element_by_id("source-logout"))
 
@@ -35,9 +32,9 @@ class SourceNavigationStepsMixin:
         self.safe_click_by_css_selector("#started-form button")
 
         if assert_success:
-            # The source should now be on the page where they are presented with
-            # a diceware codename they can use for subsequent logins
-            assert self._is_on_generate_page()
+            # The source should now be on the lookup page - codename is not
+            # yet visible
+            assert self._is_on_lookup_page()
 
     def _source_regenerates_codename(self):
         self._source_visits_source_homepage()
@@ -47,11 +44,8 @@ class SourceNavigationStepsMixin:
 
     def _source_chooses_to_submit_documents(self):
         self._source_clicks_submit_documents_on_homepage()
-
-        codename = self.driver.find_element_by_css_selector("#codename span")
-
-        assert len(codename.text) > 0
-        self.source_name = codename.text
+        submit_header = self.driver.find_element_by_css_selector("#welcome-heading")
+        assert len(submit_header.text) > 0
 
     def _source_shows_codename(self, verify_source_name=True):
         # We use inputs to change CSS states for subsequent elements in the DOM, if it is unchecked
@@ -141,19 +135,15 @@ class SourceNavigationStepsMixin:
             self.safe_send_keys_by_id("fh", filename)
 
             self.safe_click_by_css_selector(".form-controls button")
-            self.wait_for_source_key(self.source_name)
 
             def file_submitted():
                 if not self.accept_languages:
                     notification = self.driver.find_element_by_class_name("success")
-                    expected_notification = "Thank you for sending this information to us"
+                    expected_notification = "Success!\nThanks! We received your document."
                     assert expected_notification in notification.text
 
             # Allow extra time for file uploads
             self.wait_for(file_submitted, timeout=(self.timeout * 3))
-
-            # allow time for reply key to be generated
-            time.sleep(self.timeout)
 
     def _source_submits_a_message(
         self, verify_notification=False, first_submission=False, first_login=False
@@ -166,14 +156,21 @@ class SourceNavigationStepsMixin:
                 notification = self.driver.find_element_by_class_name("success")
                 assert "Thank" in notification.text
 
+                if first_submission:
+                    codename = self.driver.find_element_by_css_selector("#codename span")
+                    self.source_name = codename.text
+                    print("First sub, source is: {}".format(self.source_name))
+
                 if verify_notification:
                     first_submission_text = (
                         "Please check back later for replies." in notification.text
                     )
 
                     if first_submission:
+                        print("First sub, source is: {}".format(self.source_name))
                         assert first_submission_text
                     else:
+                        print("Not first sub, source is whaaat")
                         assert not first_submission_text
 
         self.wait_for(message_submitted)

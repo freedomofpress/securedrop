@@ -195,17 +195,17 @@ class SourceAppNagivator:
         self.driver.get(self._source_app_base_url)
         assert self._is_on_source_homepage()
 
-    def _is_on_generate_page(self) -> WebElement:
-        return self.nav_helper.wait_for(lambda: self.driver.find_element_by_id("source-generate"))
+    def _is_on_lookup_page(self) -> WebElement:
+        return self.nav_helper.wait_for(lambda: self.driver.find_element_by_id("source-lookup"))
 
     def source_clicks_submit_documents_on_homepage(self) -> None:
         # It's the source's first time visiting this SecureDrop site, so they
         # choose to "Submit Documents".
         self.nav_helper.safe_click_by_css_selector("#started-form button")
 
-        # The source should now be on the page where they are presented with
-        # a diceware codename they can use for subsequent logins
-        assert self._is_on_generate_page()
+        # The source should now be on the lookup page where they can submit
+        # docs/messages. They will get a passphrase after their first submission.
+        assert self._is_on_lookup_page()
 
     def source_continues_to_submit_page(self) -> None:
         self.nav_helper.safe_click_by_css_selector("#create-form button")

@@ -37,7 +37,6 @@ class TestJournalist(
         # This deletion button is displayed on the individual source page
         self._source_visits_source_homepage()
         self._source_chooses_to_submit_documents()
-        self._source_continues_to_submit_page()
         self._source_submits_a_file()
         self._source_logs_out()
         self._journalist_logs_in()
@@ -48,7 +47,6 @@ class TestJournalist(
         # This delete button is displayed on the individual source page
         self._source_visits_source_homepage()
         self._source_chooses_to_submit_documents()
-        self._source_continues_to_submit_page()
         self._source_submits_a_file()
         self._source_logs_out()
         self._journalist_logs_in()
@@ -59,7 +57,6 @@ class TestJournalist(
         # This deletion button is displayed on the index page
         self._source_visits_source_homepage()
         self._source_chooses_to_submit_documents()
-        self._source_continues_to_submit_page()
         self._source_submits_a_file()
         self._source_logs_out()
         self._journalist_logs_in()
@@ -69,7 +66,6 @@ class TestJournalist(
         # This deletion button is displayed on the index page
         self._source_visits_source_homepage()
         self._source_chooses_to_submit_documents()
-        self._source_continues_to_submit_page()
         self._source_submits_a_file()
         self._source_submits_a_message()
         self._source_logs_out()
@@ -77,14 +73,12 @@ class TestJournalist(
         self._journalist_uses_index_delete_files_button_confirmation()
         self._source_visits_source_homepage()
         self._source_chooses_to_submit_documents()
-        self._source_continues_to_submit_page()
         self._source_submits_a_message()
         self._source_logs_out()
 
     def test_journalist_interface_ui_with_modal(self):
         self._source_visits_source_homepage()
         self._source_chooses_to_submit_documents()
-        self._source_continues_to_submit_page()
         self._source_submits_a_file()
         self._source_logs_out()
 
@@ -113,8 +107,7 @@ class TestJournalistMissingFile(
         # Submit a message
         self._source_visits_source_homepage()
         self._source_chooses_to_submit_documents()
-        self._source_continues_to_submit_page()
-        self._source_submits_a_message()
+        self._source_submits_a_message(first_submission=True)
         self._source_logs_out()
 
         # Remove the message file from the store
