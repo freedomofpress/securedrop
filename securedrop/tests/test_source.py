@@ -106,126 +106,110 @@ def _find_codename(html):
     return codename_match.group('codename')
 
 
-def test_generate_already_logged_in(source_app):
+def test_index_already_logged_in(source_app):
     with source_app.test_client() as app:
         new_codename(app, session)
         # Make sure it redirects to /lookup when logged in
-        resp = app.post(url_for('main.generate'), data=GENERATE_DATA)
+        resp = app.get(url_for('main.index'))
         assert resp.status_code == 302
         # Make sure it flashes the message on the lookup page
-        resp = app.post(url_for('main.generate'), data=GENERATE_DATA, follow_redirects=True)
+        resp = app.get(url_for('main.index'), follow_redirects=True)
         # Should redirect to /lookup
         assert resp.status_code == 200
         text = resp.data.decode('utf-8')
-        assert "because you are already logged in." in text
+        assert "source-lookup" in text
 
 
-def test_create_new_source(source_app):
+def test_lookup_post_and_new_source(source_app):
     with source_app.test_client() as app:
-        resp = app.post(url_for('main.generate'), data=GENERATE_DATA)
+        # source is not created when /lookup is first hit
+        resp = app.post(url_for('main.lookup'), data=GENERATE_DATA)
         assert resp.status_code == 200
-        tab_id = next(iter(session['codenames'].keys()))
-        resp = app.post(url_for('main.create'), data={'tab_id': tab_id}, follow_redirects=True)
+        assert not SessionManager.is_user_logged_in(db_session=db.session)
+        text = resp.data.decode('utf-8')
+        assert "Welcome" in text
+        assert 'new_user_passphrase' not in session
+
+        # source is created on first_submission
+        resp = app.post(url_for('main.submit'), data={'msg': 'TEST MESSAGE"'}, follow_redirects=True)
+        text = resp.data.decode('utf-8')
+        assert "Keep In Touch" in text
+        assert resp.status_code == 200
         assert SessionManager.is_user_logged_in(db_session=db.session)
-        # should be redirected to /lookup
-        text = resp.data.decode('utf-8')
-        assert "Submit Files" in text
-        assert 'codenames' not in session
+        assert 'new_user_passphrase' in session
 
 
-def test_generate_as_post(source_app):
+def test_lookup_no_tor2web_check(source_app):
     with source_app.test_client() as app:
-        resp = app.post(url_for('main.generate'), data=GENERATE_DATA)
-        assert resp.status_code == 200
-        session_codename = next(iter(session['codenames'].values()))
+        resp = app.post(url_for('main.lookup'), follow_redirects=True)
+        assert resp.status_code == 403
 
-    text = resp.data.decode('utf-8')
-    assert "functions as both your username and your password" in text
 
-    codename = _find_codename(resp.data.decode('utf-8'))
-    # codename is also stored in the session - make sure it matches the
-    # codename displayed to the source
-    assert codename == escape(session_codename)
-
-def test_generate_as_get(source_app):
+def test_lookup_invalid_tor2web_check(source_app):
     with source_app.test_client() as app:
-        resp = app.get(url_for('main.generate'))
-        assert resp.status_code == 200
-        session_codename = next(iter(session['codenames'].values()))
+        resp = app.post(url_for('main.lookup'), data={'tor2web_check': 'href="fake.onion.ly"'}, follow_redirects=True)
+        assert resp.status_code == 403
 
-    text = resp.data.decode('utf-8')
-    assert "functions as both your username and your password" in text
-
-    codename = _find_codename(resp.data.decode('utf-8'))
-    # codename is also stored in the session - make sure it matches the
-    # codename displayed to the source
-    assert codename == escape(session_codename)
-
-
-
-def test_create_duplicate_codename_logged_in_not_in_session(source_app):
-    with patch.object(source_app.logger, 'error') as logger:
-        with source_app.test_client() as app:
-            resp = app.post(url_for('main.generate'), data=GENERATE_DATA)
-            assert resp.status_code == 200
-            tab_id, codename = next(iter(session['codenames'].items()))
-
-            # Create a source the first time
-            resp = app.post(url_for('main.create'), data={'tab_id': tab_id}, follow_redirects=True)
-            assert resp.status_code == 200
-
-        with source_app.test_client() as app:
-            # Attempt to add the same source
-            with app.session_transaction() as sess:
-                sess['codenames'] = {tab_id: codename}
-                sess["codenames_expire"] = datetime.utcnow() + timedelta(hours=1)
-            resp = app.post(url_for('main.create'), data={'tab_id': tab_id}, follow_redirects=True)
-            logger.assert_called_once()
-            assert "Could not create a source" in logger.call_args[0][0]
-            assert resp.status_code == 200
-            assert not SessionManager.is_user_logged_in(db_session=db.session)
-
-
-def test_create_duplicate_codename_logged_in_in_session(source_app):
+def test_lookup_as_get(source_app):
     with source_app.test_client() as app:
-        # Given a user who generated a codename in a browser tab
-        resp = app.post(url_for('main.generate'), data=GENERATE_DATA)
-        assert resp.status_code == 200
-        first_tab_id, first_codename = list(session['codenames'].items())[0]
-
-        # And then they opened a new browser tab to generate a second codename
-        resp = app.post(url_for('main.generate'), data=GENERATE_DATA)
-        assert resp.status_code == 200
-        second_tab_id, second_codename = list(session['codenames'].items())[1]
-        assert first_codename != second_codename
-
-        # And the user then completed the account creation flow in the first tab
-        resp = app.post(
-            url_for('main.create'), data={'tab_id': first_tab_id}, follow_redirects=True
-        )
-        assert resp.status_code == 200
-        first_tab_account = SessionManager.get_logged_in_user(db_session=db.session)
-
-        # When the user tries to complete the account creation flow again, in the second tab
-        resp = app.post(
-            url_for('main.create'), data={'tab_id': second_tab_id}, follow_redirects=True
-        )
-
-        # Then the user is shown the "already logged in" message
+        resp = app.get(url_for('main.lookup'))
         assert resp.status_code == 200
         text = resp.data.decode('utf-8')
-        assert "You are already logged in." in text
+        assert "Welcome" in text
+        assert 'new_user_passphrase' not in session
 
-        # And no new account was created
-        second_tab_account = SessionManager.get_logged_in_user(db_session=db.session)
-        assert second_tab_account.filesystem_id == first_tab_account.filesystem_id
+
+def test_passphrase_is_created_once_only(source_app):
+    with source_app.test_client() as app:
+        # Given a user who opened the /lookup page
+        resp = app.post(url_for('main.lookup'), data=GENERATE_DATA)
+        assert resp.status_code == 200
+        text = resp.data.decode('utf-8')
+        assert "Welcome" in text
+        assert 'new_user_passphrase' not in session
+
+        # And then they visited the homepage without submitting
+        resp = app.get(url_for('main.index'), follow_redirects=True)
+
+        # they should be on the homepage, not redirected.
+        assert resp.status_code == 200
+        text = resp.data.decode('utf-8')
+        assert "first-submission-heading" in text
+
+        # then when they visit /lookup again and submit a message
+        resp = app.post(url_for('main.lookup'), data=GENERATE_DATA)
+        assert resp.status_code == 200
+        text = resp.data.decode('utf-8')
+        assert "Welcome" in text
+        resp = app.post(url_for('main.submit'), data={'msg': 'TEST MESSAGE HEY'}, follow_redirects=True)
+
+        # they should see the post-submission lookup page
+        text = resp.data.decode('utf-8')
+        assert "Keep In Touch" in text
+        assert resp.status_code == 200
+        assert SessionManager.is_user_logged_in(db_session=db.session)
+        assert 'new_user_passphrase' in session
+
+        #  and they should see the passphrase available
+        passphrase = session.get('new_user_passphrase')
+        assert len(passphrase) > 0
+        assert passphrase in text
+
+        # And then when they visit the homepage again, they should be redirected
+        # to /lookup, with the passphrase still visible
+        resp = app.get(url_for('main.index'), follow_redirects=False)
+        assert resp.status_code == 302
+        resp = app.get(url_for('main.index'), follow_redirects=True)
+        assert resp.status_code == 200
+        assert "source-lookup" in text
+        assert passphrase in text
 
 
 def test_lookup(source_app):
     """Test various elements on the /lookup page."""
     with source_app.test_client() as app:
-        codename = new_codename(app, session)
-        resp = app.post(url_for('main.login'), data=dict(codename=codename),
+        passphrase = new_codename(app, session)
+        resp = app.post(url_for('main.login'), data=dict(passphrase=passphrase),
                         follow_redirects=True)
         # redirects to /lookup
         text = resp.data.decode('utf-8')
@@ -251,35 +235,35 @@ def test_login_and_logout(source_app):
         resp = app.get(url_for('main.login'))
         assert resp.status_code == 200
         text = resp.data.decode('utf-8')
-        assert "Enter Codename" in text
+        assert "Enter Passphrase" in text
 
-        codename = new_codename(app, session)
+        passphrase = new_codename(app, session)
         resp = app.post(url_for('main.login'),
-                        data=dict(codename=codename),
+                        data=dict(passphrase=passphrase),
                         follow_redirects=True)
         assert resp.status_code == 200
         text = resp.data.decode('utf-8')
-        assert "Submit Files" in text
+        assert "source-lookup" in text
         assert SessionManager.is_user_logged_in(db_session=db.session)
 
     with source_app.test_client() as app:
         resp = app.post(url_for('main.login'),
-                        data=dict(codename='invalid'),
+                        data=dict(passphrase='invalid'),
                         follow_redirects=True)
         assert resp.status_code == 200
         text = resp.data.decode('utf-8')
-        assert 'Sorry, that is not a recognized codename.' in text
+        assert 'Sorry, that is not a recognized passphrase.' in text
         assert not SessionManager.is_user_logged_in(db_session=db.session)
 
     with source_app.test_client() as app:
         resp = app.post(url_for('main.login'),
-                        data=dict(codename=codename),
+                        data=dict(passphrase=passphrase),
                         follow_redirects=True)
         assert resp.status_code == 200
         assert SessionManager.is_user_logged_in(db_session=db.session)
 
         resp = app.post(url_for('main.login'),
-                        data=dict(codename=codename),
+                        data=dict(passphrase=passphrase),
                         follow_redirects=True)
         assert resp.status_code == 200
         assert SessionManager.is_user_logged_in(db_session=db.session)
@@ -294,46 +278,37 @@ def test_login_and_logout(source_app):
         assert 'This will clear your Tor Browser activity data' in text
 
 
-def test_user_must_log_in_for_protected_views(source_app):
-    with source_app.test_client() as app:
-        resp = app.get(url_for('main.lookup'),
-                       follow_redirects=True)
-        assert resp.status_code == 200
-        text = resp.data.decode('utf-8')
-        assert "Enter Codename" in text
-
-
 def test_login_with_whitespace(source_app):
     """
     Test that codenames with leading or trailing whitespace still work
     """
 
-    def login_test(app, codename):
+    def login_test(app, passphrase):
         resp = app.get(url_for('main.login'))
         assert resp.status_code == 200
         text = resp.data.decode('utf-8')
-        assert "Enter Codename" in text
+        assert "Enter Passphrase" in text
 
         resp = app.post(url_for('main.login'),
-                        data=dict(codename=codename),
+                        data=dict(passphrase=passphrase),
                         follow_redirects=True)
         assert resp.status_code == 200
         text = resp.data.decode('utf-8')
-        assert "Submit Files" in text
+        assert "source-lookup" in text
         assert SessionManager.is_user_logged_in(db_session=db.session)
 
     with source_app.test_client() as app:
-        codename = new_codename(app, session)
+        passphrase = new_codename(app, session)
 
-    codenames = [
-        codename + ' ',
-        ' ' + codename + ' ',
-        ' ' + codename,
+    passphrases = [
+        passphrase + ' ',
+        ' ' + passphrase + ' ',
+        ' ' + passphrase,
     ]
 
-    for codename_ in codenames:
+    for p in passphrases:
         with source_app.test_client() as app:
-            login_test(app, codename_)
+            login_test(app, p)
 
 
 def test_login_with_missing_reply_files(source_app, app_storage):
@@ -341,7 +316,7 @@ def test_login_with_missing_reply_files(source_app, app_storage):
     Test that source can log in when replies are present in database but missing
     from storage.
     """
-    source, codename = utils.db_helper.init_source(app_storage)
+    source, passphrase = utils.db_helper.init_source(app_storage)
     journalist, _ = utils.db_helper.init_journalist()
     replies = utils.db_helper.reply(app_storage, journalist, source, 1)
     assert len(replies) > 0
@@ -354,14 +329,14 @@ def test_login_with_missing_reply_files(source_app, app_storage):
         resp = app.get(url_for('main.login'))
         assert resp.status_code == 200
         text = resp.data.decode('utf-8')
-        assert "Enter Codename" in text
+        assert "Enter Passphrase" in text
 
         resp = app.post(url_for('main.login'),
-                        data=dict(codename=codename),
+                        data=dict(passphrase=passphrase),
                         follow_redirects=True)
         assert resp.status_code == 200
         text = resp.data.decode('utf-8')
-        assert "Submit Files" in text
+        assert "New Message" in text
         assert SessionManager.is_user_logged_in(db_session=db.session)
 
 
@@ -381,15 +356,15 @@ def _dummy_submission(app):
 def test_initial_submission_notification(source_app):
     """
     Regardless of the type of submission (message, file, or both), the
-    first submission is always greeted with a notification
-    reminding sources to check back later for replies.
+    first submission is always greeted with a notification stemmed with
+    'Thanks! We received your"...
     """
     with source_app.test_client() as app:
         new_codename(app, session)
         resp = _dummy_submission(app)
         assert resp.status_code == 200
         text = resp.data.decode('utf-8')
-        assert "Thank you for sending this information to us." in text
+        assert "Please check back later" in text
 
 
 def test_submit_message(source_app):
