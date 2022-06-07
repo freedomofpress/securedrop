@@ -113,17 +113,19 @@ class SourceNavigationStepsMixin:
             assert "Submit Files or Messages" == heading.text
 
     def _source_continues_to_submit_page(self, files_allowed=True):
-        self.safe_click_by_css_selector("#create-form button")
-
         def submit_page_loaded():
-            if not self.accept_languages:
-                heading = self.driver.find_element_by_id("submit-heading")
-                if files_allowed:
-                    assert "Submit Files or Messages" == heading.text
-                else:
-                    assert "Submit Messages" == heading.text
+            def uploader_is_visible():
+                try:
+                    self.driver.find_element_by_class_name("attachment")
+                except NoSuchElementException:
+                    return False
+                return True
 
-        self.wait_for(submit_page_loaded)
+            if not self.accept_languages:
+                if files_allowed:
+                    assert uploader_is_visible()
+                else:
+                    assert not uploader_is_visible()
 
     def _source_submits_a_file(self):
         with tempfile.NamedTemporaryFile() as file:
