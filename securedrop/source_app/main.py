@@ -193,6 +193,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
             os.mkdir(Storage.get_default().path(logged_in_source.filesystem_id))
 
         fnames = []
+        first_submission = logged_in_source_in_db.interaction_count == 0
 
         if msg:
             logged_in_source_in_db.interaction_count += 1
@@ -211,8 +212,6 @@ def make_blueprint(config: SDConfig) -> Blueprint:
                     logged_in_source_in_db.journalist_filename,
                     fh.filename,
                     fh.stream))
-
-        first_submission = logged_in_source_in_db.interaction_count == 0
 
         if first_submission or msg or fh:
             if first_submission:
