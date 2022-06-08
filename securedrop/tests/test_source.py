@@ -419,7 +419,6 @@ def test_submit_initial_short_message(source_app):
     with source_app.test_client() as app:
         InstanceConfig.get_default().update_submission_prefs(
             allow_uploads=True, min_length=10, reject_codenames=False)
-        new_codename(app, session)
         resp = app.post(
             url_for('main.submit'),
             data=dict(msg="A" * 5, fh=(StringIO(''), '')),
@@ -488,21 +487,21 @@ def test_submit_antispam(source_app):
         assert resp.status_code == 403
 
 
-def test_submit_codename_second_login(source_app):
+def test_submit_passphrase_second_login(source_app):
     """
     Test codename submissions *not* prevented on second session
     """
     with source_app.test_client() as app:
         InstanceConfig.get_default().update_submission_prefs(
             allow_uploads=True, min_length=0, reject_codenames=True)
-        codename = new_codename(app, session)
+        passphrase = new_codename(app, session)
         resp = app.post(
             url_for('main.submit'),
-            data=dict(msg=codename, fh=(StringIO(''), '')),
+            data=dict(msg=passphrase, fh=(StringIO(''), '')),
             follow_redirects=True)
         assert resp.status_code == 200
         text = resp.data.decode('utf-8')
-        assert "Please do not submit your codename!" in text
+        assert "Please do not submit your passphrase!" in text
 
         resp = app.get(url_for('main.logout'),
                        follow_redirects=True)
@@ -511,57 +510,57 @@ def test_submit_codename_second_login(source_app):
         assert 'This will clear your Tor Browser activity data' in text
 
         resp = app.post(url_for('main.login'),
-                        data=dict(codename=codename),
+                        data=dict(passphrase=passphrase),
                         follow_redirects=True)
         assert resp.status_code == 200
         assert SessionManager.is_user_logged_in(db_session=db.session)
 
         resp = app.post(
             url_for('main.submit'),
-            data=dict(msg=codename, fh=(StringIO(''), '')),
+            data=dict(msg=passphrase, fh=(StringIO(''), '')),
             follow_redirects=True)
         assert resp.status_code == 200
         text = resp.data.decode('utf-8')
-        assert "Thank you for sending this information" in text
+        assert "Thanks! We received your message." in text
 
 
-def test_submit_codename(source_app):
+def test_submit_passphrase(source_app):
     """
     Test preventions against people submitting their codename.
     """
     with source_app.test_client() as app:
         InstanceConfig.get_default().update_submission_prefs(
             allow_uploads=True, min_length=0, reject_codenames=True)
-        codename = new_codename(app, session)
+        passphrase = new_codename(app, session)
         resp = app.post(
             url_for('main.submit'),
-            data=dict(msg=codename, fh=(StringIO(''), '')),
+            data=dict(msg=passphrase, fh=(StringIO(''), '')),
             follow_redirects=True)
         assert resp.status_code == 200
         text = resp.data.decode('utf-8')
-        assert "Please do not submit your codename!" in text
+        assert "Please do not submit your passphrase!" in text
         # Do a dummy submission
         _dummy_submission(app)
-        # Now resubmit the codename, should be accepted.
+        # Now resubmit the passphrase, should be rejected for the entire session
         resp = app.post(
             url_for('main.submit'),
-            data=dict(msg=codename, fh=(StringIO(''), '')),
+            data=dict(msg=passphrase, fh=(StringIO(''), '')),
             follow_redirects=True)
         assert resp.status_code == 200
         text = resp.data.decode('utf-8')
-        assert "Thanks! We received your message" in text
+        assert "Please do not submit your passphrase!" in text
 
 
 def test_delete_all_successfully_deletes_replies(source_app, app_storage):
     with source_app.app_context():
         journalist, _ = utils.db_helper.init_journalist()
-        source, codename = utils.db_helper.init_source(app_storage)
+        source, passphrase = utils.db_helper.init_source(app_storage)
         source_id = source.id
         utils.db_helper.reply(app_storage, journalist, source, 1)
 
     with source_app.test_client() as app:
         resp = app.post(url_for('main.login'),
-                        data=dict(codename=codename),
+                        data=dict(passphrase=passphrase),
                         follow_redirects=True)
         assert resp.status_code == 200
         resp = app.post(url_for('main.batch_delete'), follow_redirects=True)
@@ -581,7 +580,7 @@ def test_delete_all_replies_deleted_by_source_but_not_journalist(source_app, app
     replies may still exist in the replies table, but no longer be visible."""
     with source_app.app_context():
         journalist, _ = utils.db_helper.init_journalist()
-        source, codename = utils.db_helper.init_source(app_storage)
+        source, passphrase = utils.db_helper.init_source(app_storage)
         utils.db_helper.reply(app_storage, journalist, source, 1)
         replies = Reply.query.filter(Reply.source_id == source.id).all()
         for reply in replies:
@@ -592,7 +591,7 @@ def test_delete_all_replies_deleted_by_source_but_not_journalist(source_app, app
     with source_app.test_client() as app:
         with patch.object(source_app.logger, 'error') as logger:
             resp = app.post(url_for('main.login'),
-                            data=dict(codename=codename),
+                            data=dict(passphrase=passphrase),
                             follow_redirects=True)
             assert resp.status_code == 200
             resp = app.post(url_for('main.batch_delete'),
@@ -606,13 +605,13 @@ def test_delete_all_replies_deleted_by_source_but_not_journalist(source_app, app
 def test_delete_all_replies_already_deleted_by_journalists(source_app, app_storage):
     with source_app.app_context():
         journalist, _ = utils.db_helper.init_journalist()
-        source, codename = utils.db_helper.init_source(app_storage)
+        source, passphrase = utils.db_helper.init_source(app_storage)
         # Note that we are creating the source and no replies
 
     with source_app.test_client() as app:
         with patch.object(source_app.logger, 'error') as logger:
             resp = app.post(url_for('main.login'),
-                            data=dict(codename=codename),
+                            data=dict(passphrase=passphrase),
                             follow_redirects=True)
             assert resp.status_code == 200
             resp = app.post(url_for('main.batch_delete'),
@@ -644,7 +643,7 @@ def test_submit_sanitizes_filename(source_app):
                                         mtime=0)
 
 
-@pytest.mark.parametrize("test_url", ['main.index', 'main.create', 'main.submit'])
+@pytest.mark.parametrize("test_url", ['main.index', 'main.submit'])
 def test_redirect_when_tor2web(config, source_app, test_url):
     with source_app.test_client() as app:
         resp = app.get(
@@ -706,13 +705,13 @@ def test_metadata_v3_url(source_app):
             assert resp.json.get('v3_source_url') == onion_test_url
 
 
-def test_login_with_overly_long_codename(source_app):
+def test_login_with_overly_long_passphrase(source_app):
     """Attempting to login with an overly long codename should result in
     an error to avoid DoS."""
-    overly_long_codename = 'a' * (PassphraseGenerator.MAX_PASSPHRASE_LENGTH + 1)
+    overly_long_passphrase = 'a' * (PassphraseGenerator.MAX_PASSPHRASE_LENGTH + 1)
     with source_app.test_client() as app:
         resp = app.post(url_for('main.login'),
-                        data=dict(codename=overly_long_codename),
+                        data=dict(passphrase=overly_long_passphrase),
                         follow_redirects=True)
         assert resp.status_code == 200
         text = resp.data.decode('utf-8')
@@ -730,7 +729,7 @@ def test_normalize_timestamps(source_app, app_storage):
     """
     with source_app.test_client() as app:
         # create a source
-        source, codename = utils.db_helper.init_source(app_storage)
+        source, passphrase = utils.db_helper.init_source(app_storage)
 
         # create one submission
         first_submission = submit(app_storage, source, 1)[0]
@@ -744,11 +743,11 @@ def test_normalize_timestamps(source_app, app_storage):
 
         # log in as the source
         resp = app.post(url_for('main.login'),
-                        data=dict(codename=codename),
+                        data=dict(passphrase=passphrase),
                         follow_redirects=True)
         assert resp.status_code == 200
         text = resp.data.decode('utf-8')
-        assert "Submit Files" in text
+        assert "source-lookup" in text
         assert SessionManager.is_user_logged_in(db_session=db.session)
 
         # submit another message
@@ -792,10 +791,10 @@ def test_failed_normalize_timestamps_logs_warning(source_app):
     OSSEC alert)."""
 
     with patch.object(source_app.logger, 'warning') as logger:
-        with patch.object(subprocess, 'call', return_value=1):
-            with source_app.test_client() as app:
-                new_codename(app, session)
-                _dummy_submission(app)
+        with source_app.test_client() as app:
+            new_codename(app, session)
+            _dummy_submission(app)
+            with patch.object(subprocess, 'call', return_value=1):
                 resp = app.post(
                     url_for('main.submit'),
                     data=dict(
@@ -817,8 +816,8 @@ def test_source_is_deleted_while_logged_in(source_app):
     a NoResultFound will occur. The source should be redirected to the
     index when this happens, and a warning logged."""
     with source_app.test_client() as app:
-        codename = new_codename(app, session)
-        app.post('login', data=dict(codename=codename), follow_redirects=True)
+        passphrase = new_codename(app, session)
+        app.post('login', data=dict(passphrase=passphrase), follow_redirects=True)
 
         # Now that the source is logged in, the journalist deletes the source
         source_user = SessionManager.get_logged_in_user(db_session=db.session)
@@ -833,15 +832,15 @@ def test_source_is_deleted_while_logged_in(source_app):
         assert not SessionManager.is_user_logged_in(db_session=db.session)
 
 
-def test_login_with_invalid_codename(source_app):
+def test_login_with_invalid_passphrase(source_app):
     """Logging in with a codename with invalid characters should return
     an informative message to the user."""
 
-    invalid_codename = '[]'
+    invalid_passphrase = '[]'
 
     with source_app.test_client() as app:
         resp = app.post(url_for('main.login'),
-                        data=dict(codename=invalid_codename),
+                        data=dict(passphrase=invalid_passphrase),
                         follow_redirects=True)
         assert resp.status_code == 200
         text = resp.data.decode('utf-8')
@@ -851,9 +850,9 @@ def test_login_with_invalid_codename(source_app):
 def test_source_session_expiration(source_app):
     with source_app.test_client() as app:
         # Given a source user who logs in
-        codename = new_codename(app, session)
+        passphrase = new_codename(app, session)
         resp = app.post(url_for('main.login'),
-                        data=dict(codename=codename),
+                        data=dict(passphrase=passphrase),
                         follow_redirects=True)
         assert resp.status_code == 200
 
@@ -864,25 +863,6 @@ def test_source_session_expiration(source_app):
 
             # When they browse to an authenticated page
             resp = app.get(url_for('main.lookup'), follow_redirects=True)
-
-        # They get redirected to the index page with the "logged out" message
-        text = resp.data.decode('utf-8')
-        assert 'You were logged out due to inactivity' in text
-
-
-def test_source_session_expiration_create(source_app):
-    with source_app.test_client() as app:
-        # Given a source user who is in the middle of the account creation flow
-        resp = app.post(url_for('main.generate'), data=GENERATE_DATA)
-        assert resp.status_code == 200
-
-        # But we're now 6 hours later hence they did not finish the account creation flow in time
-        with mock.patch("source_app.main.datetime") as mock_datetime:
-            six_hours_later = datetime.now(timezone.utc) + timedelta(hours=6)
-            mock_datetime.now.return_value = six_hours_later
-
-            # When the user tries to complete the create flow
-            resp = app.post(url_for('main.create'), follow_redirects=True)
 
         # They get redirected to the index page with the "logged out" message
         text = resp.data.decode('utf-8')
@@ -912,10 +892,10 @@ def test_csrf_error_page(source_app):
     source_app.config['WTF_CSRF_ENABLED'] = True
     with source_app.test_client() as app:
         with InstrumentedApp(source_app) as ins:
-            resp = app.post(url_for('main.create'))
+            resp = app.post(url_for('main.lookup'), data=GENERATE_DATA)
             ins.assert_redirects(resp, url_for('main.index'))
 
-        resp = app.post(url_for('main.create'), follow_redirects=True)
+        resp = app.post(url_for('main.lookup'), data=GENERATE_DATA, follow_redirects=True)
         text = resp.data.decode('utf-8')
         assert 'You were logged out due to inactivity' in text
 
@@ -924,8 +904,8 @@ def test_source_can_only_delete_own_replies(source_app, app_storage):
     '''This test checks for a bug an authenticated source A could delete
        replies send to source B by "guessing" the filename.
     '''
-    source0, codename0 = utils.db_helper.init_source(app_storage)
-    source1, codename1 = utils.db_helper.init_source(app_storage)
+    source0, phrase0 = utils.db_helper.init_source(app_storage)
+    source1, phrase1 = utils.db_helper.init_source(app_storage)
     journalist, _ = utils.db_helper.init_journalist()
     replies = utils.db_helper.reply(app_storage, journalist, source0, 1)
     filename = replies[0].filename
@@ -933,7 +913,7 @@ def test_source_can_only_delete_own_replies(source_app, app_storage):
 
     with source_app.test_client() as app:
         resp = app.post(url_for('main.login'),
-                        data={'codename': codename1},
+                        data={'passphrase': phrase1},
                         follow_redirects=True)
         assert resp.status_code == 200
         assert SessionManager.get_logged_in_user(db_session=db.session).db_record_id == source1.id
@@ -949,7 +929,7 @@ def test_source_can_only_delete_own_replies(source_app, app_storage):
 
     with source_app.test_client() as app:
         resp = app.post(url_for('main.login'),
-                        data={'codename': codename0},
+                        data={'passphrase': phrase0},
                         follow_redirects=True)
         assert resp.status_code == 200
         assert SessionManager.get_logged_in_user(db_session=db.session).db_record_id == source0.id
