@@ -37,7 +37,7 @@ class SubmissionForm(FlaskForm):
             if InstanceConfig.get_default().allow_document_uploads:
                 err = "{} {}".format(err, gettext("If you need to submit large blocks of text, "
                                                   "you can upload them as a file."))
-            raise ValidationError(err, declarative=gettext("OP"), msg_data=field.data)
+            raise ValidationError(err)
 
     def validate_antispam(self, field: wtforms.Field) -> None:
         """If the antispam field has any contents, abort with a 403"""

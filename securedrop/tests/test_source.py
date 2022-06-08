@@ -30,6 +30,8 @@ from source_app import get_logo_url
 from .utils.db_helper import new_codename, submit
 from .utils.i18n import get_test_locales, language_tag, page_language, xfail_untranslated_messages
 from .utils.instrument import InstrumentedApp
+from wtforms.validators import ValidationError
+
 
 GENERATE_DATA = {'tor2web_check': 'href="fake.onion"'}
 
@@ -356,8 +358,9 @@ def _dummy_submission(app):
 def test_initial_submission_notification(source_app):
     """
     Regardless of the type of submission (message, file, or both), the
-    first submission is always greeted with a notification stemmed with
-    'Thanks! We received your"...
+    first submission is always greeted with a notification prompting
+    the source to check back for replies - subsequent messages don't
+    include the same prompt
     """
     with source_app.test_client() as app:
         new_codename(app, session)
@@ -406,7 +409,7 @@ def test_submit_big_message(source_app):
             follow_redirects=True)
         assert resp.status_code == 200
         text = resp.data.decode('utf-8')
-        assert "Message text too long." in text
+        assert "The message you submit can be" in text
 
 
 def test_submit_initial_short_message(source_app):
