@@ -45,17 +45,13 @@ def test_submit_message(journalist_app, source_app, test_journo, app_storage):
     test_msg = "This is a test message."
 
     with source_app.test_client() as app:
-        app.post('/generate', data=GENERATE_DATA)
-        tab_id = next(iter(session['codenames'].keys()))
-        app.post('/create', data={'tab_id': tab_id}, follow_redirects=True)
-        source_user = SessionManager.get_logged_in_user(db_session=db.session)
-        filesystem_id = source_user.filesystem_id
-
-        # redirected to submission form
+        # on first submission, a user account should be created
         resp = app.post('/submit', data=dict(
             msg=test_msg,
             fh=(BytesIO(b''), ''),
         ), follow_redirects=True)
+        source_user = SessionManager.get_logged_in_user(db_session=db.session)
+        filesystem_id = source_user.filesystem_id
         assert resp.status_code == 200
         app.get('/logout')
 
@@ -134,18 +130,14 @@ def test_submit_file(journalist_app, source_app, test_journo, app_storage):
     test_filename = "test.txt"
 
     with source_app.test_client() as app:
-        app.post('/generate', data=GENERATE_DATA)
-        tab_id = next(iter(session['codenames'].keys()))
-        app.post('/create', data={'tab_id': tab_id}, follow_redirects=True)
-        source_user = SessionManager.get_logged_in_user(db_session=db.session)
-        filesystem_id = source_user.filesystem_id
-
-        # redirected to submission form
+        # account is created after first submission
         resp = app.post('/submit', data=dict(
             msg="",
             fh=(BytesIO(test_file_contents), test_filename),
         ), follow_redirects=True)
         assert resp.status_code == 200
+        source_user = SessionManager.get_logged_in_user(db_session=db.session)
+        filesystem_id = source_user.filesystem_id
         app.get('/logout')
 
     with journalist_app.test_client() as app:
@@ -226,15 +218,13 @@ def _helper_test_reply(journalist_app, source_app, config, test_journo,
     test_msg = "This is a test message."
 
     with source_app.test_client() as app:
-        app.post('/generate', data=GENERATE_DATA)
-        tab_id, codename = next(iter(session['codenames'].items()))
-        app.post('/create', data={'tab_id': tab_id}, follow_redirects=True)
-        # redirected to submission form
+        # user created after first submission
         resp = app.post('/submit', data=dict(
             msg=test_msg,
             fh=(BytesIO(b''), ''),
         ), follow_redirects=True)
         assert resp.status_code == 200
+        passphrase = session.get("new_user_passphrase")
         source_user = SessionManager.get_logged_in_user(db_session=db.session)
         filesystem_id = source_user.filesystem_id
         app.get('/logout')
@@ -298,7 +288,7 @@ def _helper_test_reply(journalist_app, source_app, config, test_journo,
     _helper_filenames_delete(app, soup, last_reply_number)
 
     with source_app.test_client() as app:
-        resp = app.post('/login', data=dict(codename=codename),
+        resp = app.post('/login', data=dict(passphrase=passphrase),
                         follow_redirects=True)
         assert resp.status_code == 200
         resp = app.get('/lookup')
@@ -406,9 +396,6 @@ def test_delete_collection(mocker, source_app, journalist_app, test_journo):
 
     # first, add a source
     with source_app.test_client() as app:
-        app.post('/generate', data=GENERATE_DATA)
-        tab_id = next(iter(session['codenames'].keys()))
-        app.post('/create', data={'tab_id': tab_id})
         resp = app.post('/submit', data=dict(
             msg="This is a test.",
             fh=(BytesIO(b''), ''),
@@ -456,9 +443,6 @@ def test_delete_collections(mocker, journalist_app, source_app, test_journo):
     with source_app.test_client() as app:
         num_sources = 2
         for i in range(num_sources):
-            app.post('/generate', data=GENERATE_DATA)
-            tab_id = next(iter(session['codenames'].keys()))
-            app.post('/create', data={'tab_id': tab_id})
             app.post('/submit', data=dict(
                 msg="This is a test " + str(i) + ".",
                 fh=(BytesIO(b''), ''),
@@ -494,6 +478,7 @@ def test_delete_collections(mocker, journalist_app, source_app, test_journo):
 
 
 def _helper_filenames_submit(app):
+    # if source account does not exist yet, this submission will create it
     app.post('/submit', data=dict(
         msg="This is a test.",
         fh=(BytesIO(b''), ''),
@@ -513,9 +498,6 @@ def test_filenames(source_app, journalist_app, test_journo):
     and files"""
     # add a source and submit stuff
     with source_app.test_client() as app:
-        app.post('/generate', data=GENERATE_DATA)
-        tab_id = next(iter(session['codenames'].keys()))
-        app.post('/create', data={'tab_id': tab_id})
         _helper_filenames_submit(app)
 
     # navigate to the collection page
@@ -540,9 +522,6 @@ def test_filenames_delete(journalist_app, source_app, test_journo):
     """Test pretty, sequential filenames when journalist deletes files"""
     # add a source and submit stuff
     with source_app.test_client() as app:
-        app.post('/generate', data=GENERATE_DATA)
-        tab_id = next(iter(session['codenames'].keys()))
-        app.post('/create', data={'tab_id': tab_id})
         _helper_filenames_submit(app)
 
     # navigate to the collection page
@@ -653,14 +632,12 @@ def test_prevent_document_uploads(source_app, journalist_app, test_admin):
 
     # Check that the source interface accepts only messages:
     with source_app.test_client() as app:
-        app.post('/generate', data=GENERATE_DATA)
-        tab_id = next(iter(session['codenames'].keys()))
-        resp = app.post('/create', data={'tab_id': tab_id}, follow_redirects=True)
+        resp = app.post('/lookup', data=GENERATE_DATA)
         assert resp.status_code == 200
 
         text = resp.data.decode('utf-8')
         soup = BeautifulSoup(text, 'html.parser')
-        assert 'Submit Messages' in text
+        assert 'Welcome' in text
         assert len(soup.select('input[type="file"]')) == 0
 
 
@@ -683,12 +660,10 @@ def test_no_prevent_document_uploads(source_app, journalist_app, test_admin):
 
     # Check that the source interface accepts both files and messages:
     with source_app.test_client() as app:
-        app.post('/generate', data=GENERATE_DATA)
-        tab_id = next(iter(session['codenames'].keys()))
-        resp = app.post('/create', data={'tab_id': tab_id}, follow_redirects=True)
+        resp = app.post('/lookup', data=GENERATE_DATA)
         assert resp.status_code == 200
 
         text = resp.data.decode('utf-8')
         soup = BeautifulSoup(text, 'html.parser')
-        assert 'Submit Files or Messages' in text
+        assert 'Welcome' in text
         assert len(soup.select('input[type="file"]')) == 1
