@@ -91,7 +91,7 @@ class SourceNavigationStepsMixin:
         assert self._is_on_source_homepage()
 
     def _source_proceeds_to_login(self):
-        self.safe_send_keys_by_id("codename", self.source_name)
+        self.safe_send_keys_by_id("passphrase", self.source_name)
         self.safe_click_by_css_selector(".form-controls button")
 
         # Check that we've logged in
@@ -109,8 +109,8 @@ class SourceNavigationStepsMixin:
         self.safe_click_by_css_selector(".form-controls a")
 
         if not self.accept_languages:
-            heading = self.driver.find_element_by_id("submit-heading")
-            assert "Submit Files or Messages" == heading.text
+            heading = self.driver.find_element_by_id("welcome-heading")
+            assert "Welcome!" == heading.text
 
     def _source_continues_to_submit_page(self, files_allowed=True):
         def submit_page_loaded():
@@ -127,7 +127,7 @@ class SourceNavigationStepsMixin:
                 else:
                     assert not uploader_is_visible()
 
-    def _source_submits_a_file(self):
+    def _source_submits_a_file(self, first_submission=False):
         with tempfile.NamedTemporaryFile() as file:
             file.write(self.secret_message.encode("utf-8"))
             file.seek(0)
@@ -138,14 +138,21 @@ class SourceNavigationStepsMixin:
 
             self.safe_click_by_css_selector(".form-controls button")
 
-            def file_submitted():
+            def file_submitted(first_submission=False):
                 if not self.accept_languages:
                     notification = self.driver.find_element_by_class_name("success")
-                    expected_notification = "Success!\nThanks! We received your document."
+                    if first_submission:
+                        expected_notification = "Please check back later for replies."
+                    else:
+                        expected_notification = "Success!\nThanks! We received your document."
                     assert expected_notification in notification.text
 
             # Allow extra time for file uploads
-            self.wait_for(file_submitted, timeout=(self.timeout * 3))
+            self.wait_for(lambda: file_submitted(first_submission), timeout=(self.timeout * 3))
+
+            if first_submission:
+                codename = self.driver.find_element_by_css_selector("#codename span")
+                self.source_name = codename.text
 
     def _source_submits_a_message(
         self, verify_notification=False, first_submission=False, first_login=False
@@ -161,7 +168,6 @@ class SourceNavigationStepsMixin:
                 if first_submission:
                     codename = self.driver.find_element_by_css_selector("#codename span")
                     self.source_name = codename.text
-                    print("First sub, source is: {}".format(self.source_name))
 
                 if verify_notification:
                     first_submission_text = (
@@ -169,10 +175,8 @@ class SourceNavigationStepsMixin:
                     )
 
                     if first_submission:
-                        print("First sub, source is: {}".format(self.source_name))
                         assert first_submission_text
                     else:
-                        print("Not first sub, source is whaaat")
                         assert not first_submission_text
 
         self.wait_for(message_submitted)
