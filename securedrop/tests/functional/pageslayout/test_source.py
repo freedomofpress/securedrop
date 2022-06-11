@@ -79,6 +79,7 @@ class TestSourceLayout(
         self._screenshot('source-next_submission_flashed_message.png')
         self._save_html('source-next_submission_flashed_message.html')
 
+    # TODO(AD): This should be merged with test_submit_and_retrieve_happy_path()
     def test_source_checks_for_reply(self):
         self._source_visits_source_homepage()
         self._source_chooses_to_submit_documents()

@@ -89,13 +89,6 @@ class SourceNavigationStepsMixin:
 
         self.wait_for(lambda: self.driver.find_elements_by_id("source-login"))
 
-    def _source_hits_cancel_at_login_page(self):
-        self.safe_click_by_css_selector(".form-controls a")
-
-        self.driver.get(self.source_location)
-
-        assert self._is_on_source_homepage()
-
     def _source_proceeds_to_login(self):
         self.safe_send_keys_by_id("codename", self.source_name)
         self.safe_click_by_css_selector(".form-controls button")
@@ -110,13 +103,6 @@ class SourceNavigationStepsMixin:
         self.safe_send_keys_by_id(
             "codename", "ascension hypertext concert synopses"
         )
-
-    def _source_hits_cancel_at_submit_page(self):
-        self.safe_click_by_css_selector(".form-controls a")
-
-        if not self.accept_languages:
-            heading = self.driver.find_element_by_id("submit-heading")
-            assert "Submit Files or Messages" == heading.text
 
     def _source_continues_to_submit_page(self, files_allowed=True):
         self.safe_click_by_css_selector("#create-form button")

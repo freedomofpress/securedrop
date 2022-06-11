@@ -8,18 +8,19 @@ class TestSubmitAndRetrieveMessage:
     def test_submit_and_retrieve_happy_path(
         self, sd_servers_v2_with_clean_state, tor_browser_web_driver, firefox_web_driver
     ):
+        # Given a source user accessing the app from their browser
         source_app_nav = SourceAppNagivator(
             source_app_base_url=sd_servers_v2_with_clean_state.source_app_base_url,
             web_driver=tor_browser_web_driver,
         )
 
-        # Given a source user who created an account
+        # And they created an account
         source_app_nav.source_visits_source_homepage()
         source_app_nav.source_clicks_submit_documents_on_homepage()
         source_app_nav.source_continues_to_submit_page()
 
         # And the source user submitted a message
-        submitted_message = "Confidential information"
+        submitted_message = "Confidential message with some international characters: éèö"
         source_app_nav.source_submits_a_message(message=submitted_message)
         source_app_nav.source_logs_out()
 

@@ -121,6 +121,12 @@ class TestSourceAppCodenamesInMultipleTabs:
         assert codename
         return codename
 
+    @staticmethod
+    def _extract_flash_message_content(navigator: SourceAppNagivator) -> str:
+        notification = navigator.driver.find_element_by_css_selector(".notification").text
+        assert notification
+        return notification
+
     def test_generate_codenames_in_multiple_tabs(self, sd_servers_v2, tor_browser_web_driver):
         navigator = SourceAppNagivator(
             source_app_base_url=sd_servers_v2.source_app_base_url,
@@ -158,9 +164,9 @@ class TestSourceAppCodenamesInMultipleTabs:
 
         # Then the submission fails and the user sees the corresponding flash message in Tab B
         self._assert_is_on_lookup_page(navigator)
-        notification = navigator.source_sees_flash_message()
+        notification = self._extract_flash_message_content(navigator)
         if not navigator.accept_languages:
-            assert "You are already logged in." in notification.text
+            assert "You are already logged in." in notification
 
         # And the user's actual codename is the one initially generated in Tab A
         assert navigator.source_retrieves_codename_from_hint() == codename_a
@@ -211,9 +217,9 @@ class TestSourceAppCodenamesInMultipleTabs:
 
         # Then they get redirected to /lookup with the corresponding flash message
         self._assert_is_on_lookup_page(navigator)
-        notification = navigator.source_sees_flash_message()
+        notification = self._extract_flash_message_content(navigator)
         if not navigator.accept_languages:
-            assert "You were redirected because you are already logged in." in notification.text
+            assert "You were redirected because you are already logged in." in notification
 
         # And the user's actual codename is the expected one
         assert navigator.source_retrieves_codename_from_hint() == codename_a2
