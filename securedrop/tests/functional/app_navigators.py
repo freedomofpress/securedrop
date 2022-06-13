@@ -208,12 +208,11 @@ class SourceAppNagivator:
         assert self._is_on_lookup_page()
 
     def source_continues_to_submit_page(self) -> None:
-        self.nav_helper.safe_click_by_css_selector("#create-form button")
 
         def submit_page_loaded() -> None:
             if not self.accept_languages:
-                headline = self.driver.find_element_by_id("submit-heading")
-                assert "Submit Files or Messages" == headline.text
+                headline = self.driver.find_element_by_id("welcome-heading")
+                assert "Welcome!" == headline.text
 
         self.nav_helper.wait_for(submit_page_loaded)
 
@@ -228,11 +227,11 @@ class SourceAppNagivator:
 
     def source_retrieves_codename_from_hint(self) -> str:
         # We use inputs to change CSS states for subsequent elements in the DOM, if it is unchecked
-        # the codename is hidden
         content = self.driver.find_element_by_id("codename-show-checkbox")
-        assert content.get_attribute("checked") is None
 
-        self.nav_helper.safe_click_by_id("codename-show")
+        # TODO: should the codename be hidden by default under inverted flow?
+        # assert content.get_attribute("checked") is None
+        # self.nav_helper.safe_click_by_id("codename-show")
 
         assert content.get_attribute("checked") is not None
         content_content = self.driver.find_element_by_css_selector("#codename span")
@@ -248,7 +247,7 @@ class SourceAppNagivator:
         return self.nav_helper.wait_for(lambda: self.driver.find_element_by_id("logout"))
 
     def source_proceeds_to_login(self, codename: str) -> None:
-        self.nav_helper.safe_send_keys_by_id("codename", codename)
+        self.nav_helper.safe_send_keys_by_id("passphrase", codename)
         self.nav_helper.safe_click_by_css_selector(".form-controls button")
 
         # Check that we've logged in

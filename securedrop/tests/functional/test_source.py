@@ -1,8 +1,6 @@
 import requests
-import werkzeug
 
 from tests.functional.app_navigators import SourceAppNagivator
-from ..test_journalist import VALID_PASSWORD
 from tests.functional import tor_utils
 
 
@@ -17,10 +15,11 @@ class TestSourceAppCodenameHints:
         )
 
         # Given a source user who creates an account
-        # When they first login
+        # When they first submit a message
         navigator.source_visits_source_homepage()
         navigator.source_clicks_submit_documents_on_homepage()
         navigator.source_continues_to_submit_page()
+        navigator.source_submits_a_message("they're here")
 
         # Then they are able to retrieve their codename from the UI
         source_codename = navigator.source_retrieves_codename_from_hint()
@@ -72,10 +71,16 @@ class TestSourceAppCodenameHints:
             web_driver=tor_browser_web_driver,
         )
 
-        # Given a source user who creates an account
+        # Given a source user who creates an account by submitting a
+        # message on first login
         navigator.source_visits_source_homepage()
         navigator.source_clicks_submit_documents_on_homepage()
         navigator.source_continues_to_submit_page()
+        confirmation_text_first_submission = navigator.source_submits_a_message()
+
+        # And they see the expected confirmation messages for a first submission on second login
+        assert self.FIRST_SUBMISSION_TEXT in confirmation_text_first_submission
+
         source_codename = navigator.source_retrieves_codename_from_hint()
         assert source_codename
 
@@ -84,12 +89,6 @@ class TestSourceAppCodenameHints:
         navigator.source_visits_source_homepage()
         navigator.source_chooses_to_login()
         navigator.source_proceeds_to_login(codename=source_codename)
-
-        # Then it succeeds
-        confirmation_text_first_submission = navigator.source_submits_a_message()
-
-        # And they see the expected confirmation messages for a first submission on second login
-        assert self.FIRST_SUBMISSION_TEXT in confirmation_text_first_submission
 
         # And when they submit a second message
         confirmation_text_second_submission = navigator.source_submits_a_message()
@@ -127,11 +126,11 @@ class TestSourceAppCodenamesInMultipleTabs:
             web_driver=tor_browser_web_driver,
         )
 
-        # Given a user who generated a codename in Tab A
+        # Given a user who opens /lookup in tab A
         tab_a = navigator.driver.window_handles[0]
         navigator.source_visits_source_homepage()
         navigator.source_clicks_submit_documents_on_homepage()
-        codename_a = self._extract_generated_codename(navigator)
+        navigator.source_continues_to_submit_page()
 
         # And they then opened a new tab, Tab B
         navigator.driver.execute_script("window.open('about:blank', '_blank')")
@@ -139,98 +138,25 @@ class TestSourceAppCodenamesInMultipleTabs:
         navigator.driver.switch_to.window(tab_b)
         assert tab_a != tab_b
 
-        # And they also generated another codename in Tab B
+        # And they also opened /lookup in Tab B
         navigator.source_visits_source_homepage()
         navigator.source_clicks_submit_documents_on_homepage()
-        codename_b = self._extract_generated_codename(navigator)
-        assert codename_a != codename_b
+        navigator.source_continues_to_submit_page()
 
         # And they ended up creating their account and submitting documents in Tab A
         navigator.driver.switch_to.window(tab_a)
         navigator.source_continues_to_submit_page()
         self._assert_is_on_lookup_page(navigator)
-        assert navigator.source_retrieves_codename_from_hint() == codename_a
         navigator.source_submits_a_message()
+        passphrase_a = navigator.source_retrieves_codename_from_hint()
 
         # When the user tries to create an account and submit documents in Tab B
         navigator.driver.switch_to.window(tab_b)
-        navigator.source_continues_to_submit_page()
+        navigator.source_submits_a_message()
+        passphrase_b = navigator.source_retrieves_codename_from_hint()
 
-        # Then the submission fails and the user sees the corresponding flash message in Tab B
+        # Then the submission succeeds
         self._assert_is_on_lookup_page(navigator)
-        notification = navigator.source_sees_flash_message()
-        if not navigator.accept_languages:
-            assert "You are already logged in." in notification.text
 
         # And the user's actual codename is the one initially generated in Tab A
-        assert navigator.source_retrieves_codename_from_hint() == codename_a
-
-    def test_generate_and_refresh_codenames_in_multiple_tabs(
-        self, sd_servers_v2, tor_browser_web_driver
-    ):
-        navigator = SourceAppNagivator(
-            source_app_base_url=sd_servers_v2.source_app_base_url,
-            web_driver=tor_browser_web_driver,
-        )
-
-        # Given a user who generated a codename in Tab A
-        tab_a = navigator.driver.window_handles[0]
-        navigator.source_visits_source_homepage()
-        navigator.source_clicks_submit_documents_on_homepage()
-        codename_a1 = self._extract_generated_codename(navigator)
-
-        # And they then re-generated their codename in Tab
-        navigator.source_visits_source_homepage()
-        navigator.source_clicks_submit_documents_on_homepage()
-        codename_a2 = self._extract_generated_codename(navigator)
-        assert codename_a1 != codename_a2
-
-        # And they then opened a new tab, Tab B
-        navigator.driver.execute_script("window.open('about:blank', '_blank')")
-        tab_b = navigator.driver.window_handles[1]
-        navigator.driver.switch_to.window(tab_b)
-        assert tab_a != tab_b
-
-        # And they also generated another codename in Tab B
-        navigator.source_visits_source_homepage()
-        navigator.source_clicks_submit_documents_on_homepage()
-        codename_b = self._extract_generated_codename(navigator)
-        assert codename_a2 != codename_b
-
-        # And they ended up creating their account and submitting documents in Tab A
-        navigator.driver.switch_to.window(tab_a)
-        navigator.source_continues_to_submit_page()
-        self._assert_is_on_lookup_page(navigator)
-        assert navigator.source_retrieves_codename_from_hint() == codename_a2
-        navigator.source_submits_a_message()
-
-        # When they try to re-generate a codename in Tab B
-        navigator.driver.switch_to.window(tab_b)
-        navigator.source_visits_source_homepage()
-        navigator.nav_helper.safe_click_by_css_selector("#started-form button")
-
-        # Then they get redirected to /lookup with the corresponding flash message
-        self._assert_is_on_lookup_page(navigator)
-        notification = navigator.source_sees_flash_message()
-        if not navigator.accept_languages:
-            assert "You were redirected because you are already logged in." in notification.text
-
-        # And the user's actual codename is the expected one
-        assert navigator.source_retrieves_codename_from_hint() == codename_a2
-
-    # TODO(AD): This test takes ~50s ; we could refactor it to speed it up
-    def test_codenames_exceed_max_cookie_size(self, sd_servers_v2, tor_browser_web_driver):
-        """Test generation of enough codenames that the resulting cookie exceeds the recommended
-        `werkzeug.Response.max_cookie_size` = 4093 bytes. (#6043)
-        """
-        navigator = SourceAppNagivator(
-            source_app_base_url=sd_servers_v2.source_app_base_url,
-            web_driver=tor_browser_web_driver,
-        )
-
-        too_many = 2 * (werkzeug.Response.max_cookie_size // len(VALID_PASSWORD))
-        for _ in range(too_many):
-            navigator.source_visits_source_homepage()
-            navigator.source_clicks_submit_documents_on_homepage()
-
-        navigator.source_continues_to_submit_page()
+        assert passphrase_b == passphrase_a
