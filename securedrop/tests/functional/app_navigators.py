@@ -256,7 +256,11 @@ class SourceAppNagivator:
         replies = self.driver.find_elements_by_id("replies")
         assert len(replies) == 1
 
-    def source_submits_a_message(self, message: str = "S3cr3t m3ss4ge") -> str:
+    def source_submits_a_message(
+                                 self,
+                                 message: str = "S3cr3t m3ss4ge",
+                                 will_succeed: bool = True
+                                 ) -> str:
         # Write the message to submit
         self.nav_helper.safe_send_keys_by_css_selector("[name=msg]", message)
 
@@ -270,9 +274,21 @@ class SourceAppNagivator:
                 assert "Thank" in notification.text
                 return notification.text
 
+        # If it's expected that the submission will fail, wait for an error
+        # notificaition
+        def message_failed():
+            if not self.accept_languages:
+                notification = self.driver.find_element_by_css_selector(".error")
+                assert len(notification.text) > 0
+                return notification.text
+
         # Return the confirmation notification
-        notification_text = self.nav_helper.wait_for(message_submitted)
-        return notification_text
+        if will_succeed:
+            notification_text = self.nav_helper.wait_for(message_submitted)
+            return notification_text
+        else:
+            notification_text = self.nav_helper.wait_for(message_failed)
+            return notification_text
 
     def source_sees_flash_message(self) -> str:
         notification = self.driver.find_element_by_css_selector(".notification")

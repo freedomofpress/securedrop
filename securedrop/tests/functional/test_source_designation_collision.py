@@ -46,14 +46,16 @@ class TestSourceAppDesignationCollision:
         navigator.source_visits_source_homepage()
         navigator.source_clicks_submit_documents_on_homepage()
         navigator.source_continues_to_submit_page()
+        navigator.source_submits_a_message()
         navigator.source_logs_out()
 
         # When another source user creates an account but gets the same journalist designation
         navigator.source_visits_source_homepage()
         navigator.source_clicks_submit_documents_on_homepage()
+        navigator.source_continues_to_submit_page()
+        navigator.source_submits_a_message(will_succeed=False)
 
         # Then the right error message is displayed
-        navigator.nav_helper.safe_click_by_css_selector("#create-form button")
         navigator.nav_helper.wait_for(
             lambda: navigator.driver.find_element_by_css_selector(".error")
         )
