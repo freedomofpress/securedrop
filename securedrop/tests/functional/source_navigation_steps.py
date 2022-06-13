@@ -51,13 +51,8 @@ class SourceNavigationStepsMixin:
         # We use inputs to change CSS states for subsequent elements in the DOM, if it is unchecked
         # the codename is hidden
         content = self.driver.find_element_by_id("codename-show-checkbox")
-        assert content.get_attribute("checked") is None
-
-        # In the UI, the label is actually the element that is being clicked, altering the state
-        # of the input
-        self.safe_click_by_id("codename-show")
-
         assert content.get_attribute("checked") is not None
+
         content_content = self.driver.find_element_by_css_selector("#codename span")
         if verify_source_name:
             assert content_content.text == self.source_name
@@ -102,7 +97,7 @@ class SourceNavigationStepsMixin:
 
     def _source_enters_codename_in_login_form(self):
         self.safe_send_keys_by_id(
-            "codename", "ascension hypertext concert synopses"
+            "passphrase", "ascension hypertext concert synopses"
         )
 
     def _source_hits_cancel_at_submit_page(self):
@@ -160,14 +155,11 @@ class SourceNavigationStepsMixin:
         self._source_enters_text_in_message_field()
         self.safe_click_by_css_selector(".form-controls button")
 
-        def message_submitted():
+        def message_submitted(first_submission=False, verify_notification=False):
+
             if not self.accept_languages:
                 notification = self.driver.find_element_by_class_name("success")
                 assert "Thank" in notification.text
-
-                if first_submission:
-                    codename = self.driver.find_element_by_css_selector("#codename span")
-                    self.source_name = codename.text
 
                 if verify_notification:
                     first_submission_text = (
@@ -179,8 +171,15 @@ class SourceNavigationStepsMixin:
                     else:
                         assert not first_submission_text
 
-        self.wait_for(message_submitted)
+        self.wait_for(lambda: message_submitted(
+                                                verify_notification=verify_notification,
+                                                first_submission=first_submission
+                                                ))
 
+        # passphrase is only available on submission in first session
+        if first_submission:
+            codename = self.driver.find_element_by_css_selector("#codename span")
+            self.source_name = codename.text
         # allow time for reply key to be generated
         time.sleep(self.timeout)
 
