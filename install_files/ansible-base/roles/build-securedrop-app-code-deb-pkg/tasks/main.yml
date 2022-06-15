@@ -104,8 +104,6 @@
     state: directory
     dest: "{{ item }}"
   with_items:
-    - "{{ securedrop_app_code_deb_dir }}/var/www/securedrop/static/gen"
-    - "{{ securedrop_app_code_deb_dir }}/var/www/securedrop/static/.webassets-cache"
     - "{{ securedrop_app_code_deb_dir }}/var/www/securedrop/.well-known/pki-validation"
 
 - name: Build securedrop-app-code Debian package

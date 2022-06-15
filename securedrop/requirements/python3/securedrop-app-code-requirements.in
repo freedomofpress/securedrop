@@ -6,13 +6,11 @@ cffi>=1.14.2
 # This version needs Rust for compilation.
 cryptography>=3.4.7
 
-Flask-Assets
 Flask-Babel>=1.0.0
 Flask-SQLAlchemy
 Flask-WTF>=1.0.0
 Flask>=2.0.2
 Jinja2>=3.0.0
-jsmin
 markupsafe>=2.0
 mod_wsgi
 passlib

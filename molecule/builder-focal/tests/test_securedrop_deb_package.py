@@ -266,37 +266,25 @@ def test_securedrop_app_code_contains_mo_files(
 def test_deb_package_contains_no_generated_assets(securedrop_app_code_contents: str):
     """
     Ensures the `securedrop-app-code` package does not ship minified
-    static assets, which are built automatically via Flask-Assets, and
-    may be present in the source directory used to build from.
+    static assets previously built at runtime via Flask-Assets under /gen, and
+    which may be present in the source directory used to build from.
     """
-    # static/gen/ directory should exist
-    assert re.search(
+    # static/gen/ directory not should exist
+    assert not re.search(
         r"^.*\./var/www/securedrop" "/static/gen/$", securedrop_app_code_contents, re.M
     )
-    # static/gen/ directory should be empty
-    assert not re.search(
-        r"^.*\./var/www/securedrop" "/static/gen/.+$",
-        securedrop_app_code_contents,
-        re.M,
-    )
 
-    # static/.webassets-cache/ directory should exist
-    assert re.search(
+    # static/.webassets-cache/ directory should not exist
+    assert not re.search(
         r"^.*\./var/www/securedrop" "/static/.webassets-cache/$",
         securedrop_app_code_contents,
         re.M,
     )
-    # static/.webassets-cache/ directory should be empty
-    assert not re.search(
-        r"^.*\./var/www/securedrop" "/static/.webassets-cache/.+$",
-        securedrop_app_code_contents,
-        re.M,
-    )
 
-    # no SASS files should exist; only the generated CSS files.
+    # no SASS files should exist.
     assert not re.search("^.*sass$", securedrop_app_code_contents, re.M)
 
-    # no .map files should exist; only the generated CSS files.
+    # no .map files should exist.
     assert not re.search("^.*css.map$", securedrop_app_code_contents, re.M)
 
 

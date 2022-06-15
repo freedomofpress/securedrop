@@ -6,7 +6,6 @@ import time
 import werkzeug
 from flask import (Flask, render_template, request, g, session, redirect, url_for)
 from flask_babel import gettext
-from flask_assets import Environment
 from flask_wtf.csrf import CSRFProtect, CSRFError
 from os import path
 from typing import Tuple
@@ -69,9 +68,6 @@ def create_app(config: SDConfig) -> Flask:
     @app.errorhandler(CSRFError)  # type: ignore
     def handle_csrf_error(e: CSRFError) -> werkzeug.Response:
         return clear_session_and_redirect_to_logged_out_page(flask_session=session)
-
-    assets = Environment(app)
-    app.config['assets'] = assets
 
     app.jinja_env.trim_blocks = True
     app.jinja_env.lstrip_blocks = True
