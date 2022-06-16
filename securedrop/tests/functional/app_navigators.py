@@ -3,7 +3,7 @@ import tempfile
 import time
 from contextlib import contextmanager
 
-from typing import Optional, Dict, Iterable, Generator
+from typing import Optional, Dict, Iterable, Generator, List
 
 import pyotp
 import requests
@@ -45,7 +45,7 @@ class _NavigationHelper:
         # one more try, which will raise any errors if they are outstanding
         return function_with_assertion()
 
-    def safe_click_by_id(self, element_id):
+    def safe_click_by_id(self, element_id: str) -> WebElement:
         """
         Clicks the element with the given ID attribute.
 
@@ -63,7 +63,7 @@ class _NavigationHelper:
         el.click()
         return el
 
-    def safe_click_by_css_selector(self, selector):
+    def safe_click_by_css_selector(self, selector: str) -> WebElement:
         """
         Clicks the first element with the given CSS selector.
 
@@ -80,7 +80,7 @@ class _NavigationHelper:
         el.click()
         return el
 
-    def safe_click_all_by_css_selector(self, selector, root=None):
+    def safe_click_all_by_css_selector(self, selector: str) -> List[WebElement]:
         """
         Clicks each element that matches the given CSS selector.
 
@@ -91,9 +91,7 @@ class _NavigationHelper:
             selenium.common.exceptions.TimeoutException: If the element cannot be found in time.
 
         """
-        if root is None:
-            root = self.driver
-        els = self.wait_for(lambda: root.find_elements_by_css_selector(selector))
+        els = self.wait_for(lambda: self.driver.find_elements_by_css_selector(selector))
         for el in els:
             clickable_el = WebDriverWait(self.driver, self._TIMEOUT, self._POLL_FREQUENCY).until(
                 expected_conditions.element_to_be_clickable((By.CSS_SELECTOR, selector))
@@ -101,7 +99,7 @@ class _NavigationHelper:
             clickable_el.click()
         return els
 
-    def safe_send_keys_by_id(self, element_id, text):
+    def safe_send_keys_by_id(self, element_id: str, text: str) -> WebElement:
         """
         Sends the given text to the element with the specified ID.
 
@@ -118,7 +116,7 @@ class _NavigationHelper:
         el.send_keys(text)
         return el
 
-    def safe_send_keys_by_css_selector(self, selector, text):
+    def safe_send_keys_by_css_selector(self, selector: str, text: str) -> WebElement:
         """
         Sends the given text to the first element with the given CSS selector.
 
@@ -135,12 +133,12 @@ class _NavigationHelper:
         el.send_keys(text)
         return el
 
-    def alert_wait(self, timeout=_TIMEOUT * 10):
+    def alert_wait(self, timeout: int = _TIMEOUT * 10) -> None:
         WebDriverWait(self.driver, timeout, self._POLL_FREQUENCY).until(
             expected_conditions.alert_is_present(), "Timed out waiting for confirmation popup."
         )
 
-    def alert_accept(self):
+    def alert_accept(self) -> None:
         # adapted from https://stackoverflow.com/a/34795883/837471
         def alert_is_not_present(object):
             """Expect an alert to not be present."""
@@ -218,9 +216,7 @@ class SourceAppNagivator:
         self.nav_helper.wait_for(submit_page_loaded)
 
     def _is_on_logout_page(self) -> WebElement:
-        return self.nav_helper.wait_for(
-            lambda: self.driver.find_element_by_id("source-logout")
-        )
+        return self.nav_helper.wait_for(lambda: self.driver.find_element_by_id("source-logout"))
 
     def source_logs_out(self) -> None:
         self.nav_helper.safe_click_by_id("logout")
@@ -240,9 +236,7 @@ class SourceAppNagivator:
 
     def source_chooses_to_login(self) -> None:
         self.nav_helper.safe_click_by_css_selector("#return-visit a")
-        self.nav_helper.wait_for(
-            lambda: self.driver.find_elements_by_id("source-login")
-        )
+        self.nav_helper.wait_for(lambda: self.driver.find_elements_by_id("source-login"))
 
     def _is_logged_in(self) -> WebElement:
         return self.nav_helper.wait_for(lambda: self.driver.find_element_by_id("logout"))
@@ -286,7 +280,7 @@ class SourceAppNagivator:
             self.nav_helper.safe_send_keys_by_id("fh", filename)
             self.nav_helper.safe_click_by_css_selector(".form-controls button")
 
-            def file_submitted():
+            def file_submitted() -> None:
                 if not self.accept_languages:
                     notification = self.driver.find_element_by_css_selector(".success")
                     expected_notification = "Thank you for sending this information to us"
@@ -312,7 +306,7 @@ class JournalistAppNavigator:
         self.driver = web_driver
         self.accept_languages = accept_languages
 
-    def _is_on_journalist_homepage(self):
+    def is_on_journalist_homepage(self) -> WebElement:
         return self.nav_helper.wait_for(
             lambda: self.driver.find_element_by_css_selector("div.journalist-view-all")
         )
@@ -339,15 +333,14 @@ class JournalistAppNavigator:
             else:
                 break
 
-        assert self._is_on_journalist_homepage()
+        assert self.is_on_journalist_homepage()
 
-    def journalist_checks_messages(self):
+    def journalist_checks_messages(self) -> None:
         self.driver.get(self._journalist_app_base_url)
 
         # There should be 1 collection in the list of collections
-        code_names = self.driver.find_elements_by_class_name("code-name")
-        assert 0 != len(code_names), code_names
-        assert 1 <= len(code_names), code_names
+        collections_count = self.count_sources_on_index_page()
+        assert collections_count == 1
 
         if not self.accept_languages:
             # There should be a "1 unread" span in the sole collection entry
@@ -379,7 +372,7 @@ class JournalistAppNavigator:
         self, encryption_mgr_to_use_for_decryption: EncryptionManager
     ) -> str:
         # Select the first submission from the first source in the page
-        self._journalist_selects_the_first_source()
+        self.journalist_selects_the_first_source()
         self.nav_helper.wait_for(
             lambda: self.driver.find_element_by_css_selector("table#submissions")
         )
@@ -412,7 +405,7 @@ class JournalistAppNavigator:
 
         return decrypted_message
 
-    def _journalist_selects_the_first_source(self) -> None:
+    def journalist_selects_the_first_source(self) -> None:
         self.driver.find_element_by_css_selector("#un-starred-source-link-1").click()
 
     def journalist_sends_reply_to_source(
@@ -423,8 +416,53 @@ class JournalistAppNavigator:
 
         self.driver.find_element_by_id("reply-button").click()
 
-        def reply_stored():
+        def reply_stored() -> None:
             if not self.accept_languages:
                 assert "The source will receive your reply" in self.driver.page_source
 
         self.nav_helper.wait_for(reply_stored)
+
+    def journalist_visits_col(self) -> None:
+        self.nav_helper.wait_for(
+            lambda: self.driver.find_element_by_css_selector("table#collections")
+        )
+        self.nav_helper.safe_click_by_id("un-starred-source-link-1")
+        self.nav_helper.wait_for(
+            lambda: self.driver.find_element_by_css_selector("table#submissions")
+        )
+
+    def journalist_selects_first_doc(self) -> None:
+        self.nav_helper.safe_click_by_css_selector(
+            'input[type="checkbox"][name="doc_names_selected"]'
+        )
+
+        self.nav_helper.wait_for(
+            lambda: expected_conditions.element_located_to_be_selected(
+                (By.CSS_SELECTOR, 'input[type="checkbox"][name="doc_names_selected"]')
+            )
+        )
+
+        assert self.driver.find_element_by_css_selector(
+            'input[type="checkbox"][name="doc_names_selected"]'
+        ).is_selected()
+
+    def journalist_clicks_delete_selected_link(self) -> None:
+        self.nav_helper.safe_click_by_css_selector("a#delete-selected-link")
+        self.nav_helper.wait_for(
+            lambda: self.driver.find_element_by_id("delete-selected-confirmation-modal")
+        )
+
+    def get_submission_checkboxes_on_current_page(self):
+        checkboxes = self.driver.find_elements_by_name("doc_names_selected")
+        return checkboxes
+
+    def count_submissions_on_current_page(self) -> int:
+        return len(self.get_submission_checkboxes_on_current_page())
+
+    def get_sources_on_index_page(self):
+        assert self.is_on_journalist_homepage()
+        sources = self.driver.find_elements_by_class_name("code-name")
+        return sources
+
+    def count_sources_on_index_page(self) -> int:
+        return len(self.get_sources_on_index_page())

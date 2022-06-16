@@ -142,53 +142,8 @@ class JournalistNavigationStepsMixin:
     def _journalist_clicks_on_modal(self, click_id):
         self.safe_click_by_id(click_id)
 
-    def _journalist_clicks_delete_collections_cancel_on_first_modal(self):
-        self._journalist_clicks_on_modal("delete-menu-dialog-cancel")
-
-    def _journalist_clicks_delete_collections_cancel_on_second_modal(self):
-        self._journalist_clicks_on_modal("cancel-collections-deletions")
-
     def _journalist_clicks_delete_collections_cancel_on_modal(self):
         self._journalist_clicks_on_modal("cancel-collections-deletions")
-
-    def _journalist_clicks_delete_selected_cancel_on_modal(self):
-        self._journalist_clicks_on_modal("cancel-selected-deletions")
-
-    def _journalist_clicks_delete_collection_cancel_on_modal(self):
-        self._journalist_clicks_on_modal("cancel-collection-deletions")
-
-    def _journalist_clicks_delete_files_on_first_modal(self):
-        self._journalist_clicks_on_modal("delete-files-and-messages")
-
-    def _journalist_clicks_delete_collections_on_first_modal(self):
-        self._journalist_clicks_on_modal("delete-collections")
-
-        self.wait_for(lambda: self.driver.find_element_by_id("delete-collections-confirm"))
-
-    def _journalist_clicks_delete_collections_on_second_modal(self):
-        self._journalist_clicks_on_modal("delete-collections-confirm")
-
-        def collection_deleted():
-            if not self.accept_languages:
-                flash_msg = self.driver.find_element_by_css_selector(".flash")
-                assert (
-                    "The account and all data for the source have been deleted." in flash_msg.text
-                )
-
-        self.wait_for(collection_deleted)
-
-    def _journalist_clicks_delete_selected_on_modal(self):
-        self._journalist_clicks_on_modal("delete-selected")
-
-        def submission_deleted():
-            if not self.accept_languages:
-                flash_msg = self.driver.find_element_by_css_selector(".flash")
-                assert "The item has been deleted." in flash_msg.text
-
-        self.wait_for(submission_deleted)
-
-    def _journalist_clicks_delete_collection_on_modal(self):
-        self._journalist_clicks_on_modal("delete-collection-button")
 
     def _journalist_clicks_delete_link(self, click_id, displayed_id):
         self.safe_click_by_id(click_id)
@@ -197,111 +152,6 @@ class JournalistNavigationStepsMixin:
     def _journalist_clicks_delete_selected_link(self):
         self.safe_click_by_css_selector("a#delete-selected-link")
         self.wait_for(lambda: self.driver.find_element_by_id("delete-selected-confirmation-modal"))
-
-    def _journalist_clicks_delete_collections_link(self):
-        self._journalist_clicks_delete_link("delete-collections-link", "delete-sources-modal")
-
-    def _journalist_clicks_delete_collection_link(self):
-        self._journalist_clicks_delete_link(
-            "delete-collection-link", "delete-collection-confirmation-modal"
-        )
-
-    def _journalist_uses_delete_selected_button_confirmation(self):
-        selected_count = len(self.driver.find_elements_by_name("doc_names_selected"))
-        assert selected_count > 0
-
-        self._journalist_selects_first_doc()
-        self._journalist_clicks_delete_selected_link()
-        self._journalist_clicks_delete_selected_cancel_on_modal()
-        assert selected_count == len(self.driver.find_elements_by_name("doc_names_selected"))
-
-        self._journalist_clicks_delete_selected_link()
-        self._journalist_clicks_delete_selected_on_modal()
-
-        def docs_deleted():
-            assert selected_count > len(self.driver.find_elements_by_name("doc_names_selected"))
-
-        self.wait_for(docs_deleted)
-
-    def _journalist_uses_delete_collection_button_confirmation(self):
-        self._journalist_clicks_delete_collection_link()
-        self._journalist_clicks_delete_collection_cancel_on_modal()
-        self._journalist_clicks_delete_collection_link()
-        self._journalist_clicks_delete_collection_on_modal()
-
-        # Now we should be redirected to the index.
-        assert self._is_on_journalist_homepage()
-
-    def _journalist_uses_delete_collections_button_confirmation(self):
-        sources = self.driver.find_elements_by_class_name("code-name")
-        assert len(sources) > 0
-
-        try:
-            # If JavaScript is enabled, use the select_all button.
-            self.driver.find_element_by_id("select_all")
-            self.safe_click_by_id("select_all")
-        except NoSuchElementException:
-            self.safe_click_all_by_css_selector('input[type="checkbox"][name="cols_selected"]')
-
-        self._journalist_clicks_delete_collections_link()
-        self._journalist_clicks_delete_collections_cancel_on_first_modal()
-
-        sources = self.driver.find_elements_by_class_name("code-name")
-        assert len(sources) > 0
-
-        self._journalist_clicks_delete_collections_link()
-        self._journalist_clicks_delete_collections_on_first_modal()
-        self._journalist_clicks_delete_collections_cancel_on_second_modal()
-
-        self._journalist_clicks_delete_collections_link()
-        self._journalist_clicks_delete_collections_on_first_modal()
-        self._journalist_clicks_delete_collections_on_second_modal()
-
-        # We should be redirected to the index without those boxes selected.
-        def no_sources():
-            assert len(self.driver.find_elements_by_class_name("code-name")) == 0
-
-        self.wait_for(no_sources)
-
-    def _journalist_uses_index_delete_files_button_confirmation(self):
-        sources = self.driver.find_elements_by_class_name("code-name")
-        assert len(sources) > 0
-
-        try:
-            # If JavaScript is enabled, use the select_all button.
-            self.driver.find_element_by_id("select_all")
-            self.safe_click_by_id("select_all")
-        except NoSuchElementException:
-            self.safe_click_all_by_css_selector('input[type="checkbox"][name="cols_selected"]')
-
-        self._journalist_clicks_delete_collections_link()
-        time.sleep(5)
-        self._journalist_clicks_delete_collections_cancel_on_first_modal()
-        time.sleep(5)
-
-        sources = self.driver.find_elements_by_class_name("code-name")
-        assert len(sources) > 0
-
-        self._journalist_clicks_delete_collections_link()
-        time.sleep(5)
-        self._journalist_clicks_delete_files_on_first_modal()
-        time.sleep(5)
-
-        # We should be redirected to the index with the source present, files
-        # and messages zeroed, and a success flash message present
-
-        def one_source_no_files():
-            assert len(self.driver.find_elements_by_class_name("code-name")) == 1
-            if not self.accept_languages:
-                flash_msg = self.driver.find_element_by_css_selector(".flash")
-                assert "The files and messages have been deleted" in flash_msg.text
-            if not self.accept_languages:
-                counts = self.driver.find_elements_by_css_selector(".submission-count")
-                assert "0 docs" in counts[0].text
-                assert "0 messages" in counts[1].text
-
-        self.wait_for(one_source_no_files)
-        time.sleep(5)
 
     def _admin_logs_in(self):
         self.admin = self.admin_user["name"]
@@ -775,17 +625,6 @@ class JournalistNavigationStepsMixin:
 
         self.wait_for(message_unstarred)
 
-    def _journalist_selects_all_sources_then_selects_none(self):
-        self.driver.find_element_by_id("select_all").click()
-        checkboxes = self.driver.find_elements_by_id("checkbox")
-        for checkbox in checkboxes:
-            assert checkbox.is_selected()
-
-        self.driver.find_element_by_id("select_none").click()
-        checkboxes = self.driver.find_elements_by_id("checkbox")
-        for checkbox in checkboxes:
-            assert checkbox.is_selected() is False
-
     def _journalist_selects_the_first_source(self):
         self.driver.find_element_by_css_selector("#un-starred-source-link-1").click()
 
@@ -1083,103 +922,6 @@ class JournalistNavigationStepsMixin:
         self.safe_send_keys_by_css_selector('input[name="username"]', username)
         self.safe_send_keys_by_css_selector('input[name="otp_secret"]', hotp_secret)
         self.safe_click_by_css_selector('input[name="is_hotp"]')
-
-    def _journalist_uses_js_filter_by_sources(self):
-        filter_box = self.safe_send_keys_by_id("filter", "thiswordisnotinthewordlist")
-        sources = self.driver.find_elements_by_class_name("code-name")
-        assert len(sources) > 0
-        for source in sources:
-            assert source.is_displayed() is False
-        filter_box.clear()
-        filter_box.send_keys(Keys.RETURN)
-
-        for source in sources:
-            assert source.is_displayed() is True
-
-    def _journalist_source_selection_honors_filter(self):
-        """Check that select all/none honors the filter in effect."""
-
-        self.wait_for(lambda: self.driver.find_element_by_id("filter"), 60)
-
-        # make sure the list is not filtered
-        filter_box = self.driver.find_element_by_id("filter")
-        filter_box.clear()
-        filter_box.send_keys(Keys.RETURN)
-
-        # get the journalist designation of the first source
-        sources = self.driver.find_elements_by_class_name("code-name")
-        assert len(sources) > 0
-        first_source_designation = sources[0].text
-
-        # filter the source list so only the first is visible
-        filter_box.send_keys(first_source_designation)
-        for source in sources:
-            assert source.text == first_source_designation or source.is_displayed() is False
-
-        # clicking "select all" should only select the visible source
-        select_all = self.driver.find_element_by_id("select_all")
-        select_all.click()
-
-        source_rows = self.driver.find_elements_by_css_selector("#cols li.source")
-        for source_row in source_rows:
-            source_designation = source_row.get_attribute("data-source-designation")
-            checkbox = source_row.find_element_by_css_selector("input[type=checkbox]")
-            if source_designation == first_source_designation:
-                assert checkbox.is_selected()
-            else:
-                assert not checkbox.is_selected()
-
-        # clear the filter
-        filter_box.clear()
-        filter_box.send_keys(Keys.RETURN)
-
-        # select all sources
-        select_all.click()
-        for source_row in source_rows:
-            checkbox = source_row.find_element_by_css_selector("input[type=checkbox]")
-            assert checkbox.is_selected()
-
-        # now filter again
-        filter_box.send_keys(first_source_designation)
-
-        # clicking "select none" should only deselect the visible source
-        select_none = self.driver.find_element_by_id("select_none")
-        select_none.click()
-        for source_row in source_rows:
-            source_designation = source_row.get_attribute("data-source-designation")
-            checkbox = source_row.find_element_by_css_selector("input[type=checkbox]")
-            if source_designation == first_source_designation:
-                assert not checkbox.is_selected()
-            else:
-                assert checkbox.is_selected()
-
-        # clear the filter and leave none selected
-        filter_box.clear()
-        filter_box.send_keys(Keys.RETURN)
-        select_none.click()
-
-        for source_row in source_rows:
-            assert source_row.is_displayed()
-            checkbox = source_row.find_element_by_css_selector("input[type=checkbox]")
-            assert not checkbox.is_selected()
-
-    def _journalist_uses_js_buttons_to_download_unread(self):
-        self.driver.find_element_by_id("select_all").click()
-        checkboxes = self.driver.find_elements_by_name("doc_names_selected")
-        assert len(checkboxes) > 0
-        for checkbox in checkboxes:
-            assert checkbox.is_selected()
-
-        self.driver.find_element_by_id("select_none").click()
-        checkboxes = self.driver.find_elements_by_name("doc_names_selected")
-        for checkbox in checkboxes:
-            assert checkbox.is_selected() is False
-
-        self.driver.find_element_by_id("select_unread").click()
-        checkboxes = self.driver.find_elements_by_name("doc_names_selected")
-        for checkbox in checkboxes:
-            classes = checkbox.get_attribute("class")
-            assert "unread-cb" in classes
 
     def _journalist_sees_missing_file_error_message(self, single_file=False):
         notification = self.driver.find_element_by_css_selector(".error")

@@ -24,6 +24,7 @@ from tests.functional import source_navigation_steps
 import tests.functional.pageslayout.functional_test as pft
 
 
+# TODO(AD): This should be merged with TestJournalist
 @pytest.mark.pagelayout
 class TestJournalistLayoutDelete(
         pft.FunctionalTest,
@@ -44,6 +45,8 @@ class TestJournalistLayoutDelete(
         self._screenshot('journalist-delete_none.png')
         self._save_html('journalist-delete_none.html')
 
+    # TODO(AD): This should be merged with
+    #  test_journalist_verifies_deletion_of_one_submission_modal()
     def test_delete_one_confirmation(self):
         self._source_visits_source_homepage()
         self._source_chooses_to_submit_documents()
@@ -59,6 +62,7 @@ class TestJournalistLayoutDelete(
         self._screenshot('journalist-delete_one_confirmation.png')
         self._save_html('journalist-delete_one_confirmation.html')
 
+    # TODO(AD): This should be merged with test_journalist_interface_ui_with_modal()
     def test_delete_all_confirmation(self):
         self._source_visits_source_homepage()
         self._source_chooses_to_submit_documents()

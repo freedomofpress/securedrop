@@ -18,15 +18,13 @@
 import pytest
 
 from tests.functional import journalist_navigation_steps
-from tests.functional import source_navigation_steps
 import tests.functional.pageslayout.functional_test as pft
 
 
 @pytest.mark.pagelayout
 class TestJournalistLayoutAdmin(
-        pft.FunctionalTest,
-        source_navigation_steps.SourceNavigationStepsMixin,
-        journalist_navigation_steps.JournalistNavigationStepsMixin):
+    pft.FunctionalTest, journalist_navigation_steps.JournalistNavigationStepsMixin
+):
 
     def test_admin_add_user_hotp(self):
         self._admin_logs_in()
