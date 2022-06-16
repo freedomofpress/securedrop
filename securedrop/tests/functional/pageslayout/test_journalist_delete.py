@@ -15,62 +15,88 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
+import time
+
 import pytest
 
 from tests.functional import journalist_navigation_steps
 from tests.functional import source_navigation_steps
-import tests.pageslayout.functional_test as pft
+import tests.functional.pageslayout.functional_test as pft
 
 
 @pytest.mark.pagelayout
-class TestJournalistLayoutCol(
+class TestJournalistLayoutDelete(
         pft.FunctionalTest,
         source_navigation_steps.SourceNavigationStepsMixin,
         journalist_navigation_steps.JournalistNavigationStepsMixin):
 
-    def test_col_no_documents(self):
+    def test_delete_none(self):
         self._source_visits_source_homepage()
         self._source_chooses_to_submit_documents()
         self._source_continues_to_submit_page()
         self._source_submits_a_file()
+        self._source_submits_a_message()
+        self._source_logs_out()
+        self._journalist_logs_in()
+        self._journalist_visits_col()
+        self._journalist_clicks_delete_selected_link()
+        self._journalist_confirm_delete_selected()
+        self._screenshot('journalist-delete_none.png')
+        self._save_html('journalist-delete_none.html')
+
+    def test_delete_one_confirmation(self):
+        self._source_visits_source_homepage()
+        self._source_chooses_to_submit_documents()
+        self._source_continues_to_submit_page()
+        self._source_submits_a_file()
+        self._source_submits_a_message()
+        self._source_logs_out()
+        self._journalist_logs_in()
+        self._journalist_visits_col()
+        self._journalist_selects_first_doc()
+        self._journalist_clicks_delete_selected_link()
+        time.sleep(1)
+        self._screenshot('journalist-delete_one_confirmation.png')
+        self._save_html('journalist-delete_one_confirmation.html')
+
+    def test_delete_all_confirmation(self):
+        self._source_visits_source_homepage()
+        self._source_chooses_to_submit_documents()
+        self._source_continues_to_submit_page()
+        self._source_submits_a_file()
+        self._source_submits_a_message()
+        self._source_logs_out()
+        self._journalist_logs_in()
+        self._journalist_visits_col()
+        self._journalist_delete_all_confirmation()
+        time.sleep(1)
+        self._screenshot('journalist-delete_all_confirmation.png')
+        self._save_html('journalist-delete_all_confirmation.html')
+
+    def test_delete_one(self):
+        self._source_visits_source_homepage()
+        self._source_chooses_to_submit_documents()
+        self._source_continues_to_submit_page()
+        self._source_submits_a_file()
+        self._source_submits_a_message()
+        self._source_logs_out()
+        self._journalist_logs_in()
+        self._journalist_visits_col()
+        self._journalist_delete_one()
+        self._journalist_confirm_delete_selected()
+        self._screenshot('journalist-delete_one.png')
+        self._save_html('journalist-delete_one.html')
+
+    def test_delete_all(self):
+        self._source_visits_source_homepage()
+        self._source_chooses_to_submit_documents()
+        self._source_continues_to_submit_page()
+        self._source_submits_a_file()
+        self._source_submits_a_message()
         self._source_logs_out()
         self._journalist_logs_in()
         self._journalist_visits_col()
         self._journalist_delete_all()
         self._journalist_confirm_delete_selected()
-        self._screenshot('journalist-col_no_document.png')
-        self._save_html('journalist-col_no_document.html')
-
-    def test_col_has_no_key(self):
-        self._source_visits_source_homepage()
-        self._source_chooses_to_submit_documents()
-        self._source_continues_to_submit_page()
-        self._source_submits_a_file()
-        self._source_logs_out()
-        self._journalist_logs_in()
-        self._source_delete_key()
-        self._journalist_visits_col()
-        self._screenshot('journalist-col_has_no_key.png')
-        self._save_html('journalist-col_has_no_key.html')
-
-    def test_col(self):
-        self._source_visits_source_homepage()
-        self._source_chooses_to_submit_documents()
-        self._source_continues_to_submit_page()
-        self._source_submits_a_file()
-        self._source_logs_out()
-        self._journalist_logs_in()
-        self._journalist_visits_col()
-        self._screenshot('journalist-col.png')
-        self._save_html('journalist-col.html')
-
-    def test_col_javascript(self):
-        self._source_visits_source_homepage()
-        self._source_chooses_to_submit_documents()
-        self._source_continues_to_submit_page()
-        self._source_submits_a_file()
-        self._source_logs_out()
-        self._journalist_logs_in()
-        self._journalist_visits_col()
-        self._screenshot('journalist-col_javascript.png')
-        self._save_html('journalist-col_javascript.html')
+        self._screenshot('journalist-delete_all.png')
+        self._save_html('journalist-delete_all.html')

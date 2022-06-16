@@ -19,7 +19,7 @@ DEFAULT_BASE_URL = "https://weblate.securedrop.org"
 
 # Where we look for screenshots: the page layout test results in English
 SCREENSHOTS_DIRECTORY = os.path.abspath(
-    os.path.join(os.path.dirname(__file__), "tests/pageslayout/screenshots/en_US")
+    os.path.join(os.path.dirname(__file__), "tests/functional/pageslayout/screenshots/en_US")
 )
 
 # What pattern we expect them to match
