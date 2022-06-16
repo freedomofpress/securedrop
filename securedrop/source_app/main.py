@@ -7,7 +7,7 @@ from typing import Union
 import store
 import werkzeug
 from db import db
-from encryption import EncryptionManager, GpgKeyNotFoundError
+from encryption import EncryptionManager
 from flask import (
     Blueprint,
     abort,
@@ -161,7 +161,9 @@ def make_blueprint(config: SecureDropConfig) -> Blueprint:
                 with open(reply_path, "rb") as f:
                     contents = f.read()
                 decrypted_reply = EncryptionManager.get_default().decrypt_journalist_reply(
-                    for_source_user=logged_in_source, ciphertext_in=contents
+                    source_user=logged_in_source,
+                    source=logged_in_source_in_db,
+                    ciphertext_in=contents,
                 )
                 reply.decrypted = decrypted_reply
             except UnicodeDecodeError:

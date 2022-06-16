@@ -1,27 +1,9 @@
-from encryption import EncryptionManager, GpgKeyNotFoundError
-from execution import asynchronous
 from journalist_app import create_app
-from models import Source
 from sdconfig import SecureDropConfig
 
 config = SecureDropConfig.get_current()
 # app is imported by journalist.wsgi
 app = create_app(config)
-
-
-@asynchronous
-def prime_keycache() -> None:
-    """Pre-load the source public keys into Redis."""
-    with app.app_context():
-        encryption_mgr = EncryptionManager.get_default()
-        for source in Source.query.filter_by(pending=False, deleted_at=None).all():
-            try:
-                encryption_mgr.get_source_public_key(source.filesystem_id)
-            except GpgKeyNotFoundError:
-                pass
-
-
-prime_keycache()
 
 
 if __name__ == "__main__":  # pragma: no cover

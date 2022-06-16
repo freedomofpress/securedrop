@@ -346,9 +346,8 @@ class Storage:
                     if not buf:
                         break
                     gzf.write(buf)
-
             EncryptionManager.get_default().encrypt_source_file(
-                file_in=stf,
+                filename=Path(stf.filepath),
                 encrypted_file_path_out=Path(encrypted_file_path),
             )
 

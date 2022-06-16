@@ -15,7 +15,6 @@ from unittest.mock import call, patch
 import journalist_app as journalist_app_module
 import pytest
 from db import db
-from encryption import EncryptionManager, GpgKeyNotFoundError
 from flaky import flaky
 from flask import escape, g, url_for
 from flask_babel import gettext, ngettext
@@ -2866,28 +2865,6 @@ def test_delete_collection_updates_db(journalist_app, test_journo, test_source, 
                 reply_id=reply.id, journalist_id=journo.id
             ).one_or_none()
             assert not seen_reply
-
-
-def test_delete_source_deletes_source_key(journalist_app, test_source, test_journo, app_storage):
-    """Verify that when a source is deleted, the PGP key that corresponds
-    to them is also deleted."""
-
-    with journalist_app.app_context():
-        source = Source.query.get(test_source["id"])
-        journo = Journalist.query.get(test_journo["id"])
-
-        utils.db_helper.submit(app_storage, source, 2)
-        utils.db_helper.reply(app_storage, journo, source, 2)
-
-        # Source key exists
-        encryption_mgr = EncryptionManager.get_default()
-        assert encryption_mgr.get_source_key_fingerprint(test_source["filesystem_id"])
-
-        journalist_app_module.utils.delete_collection(test_source["filesystem_id"])
-
-        # Source key no longer exists
-        with pytest.raises(GpgKeyNotFoundError):
-            encryption_mgr.get_source_key_fingerprint(test_source["filesystem_id"])
 
 
 def test_delete_source_deletes_docs_on_disk(

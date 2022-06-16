@@ -74,7 +74,7 @@ def reply(storage, journalist, source, num_replies):
         fname = f"{source.interaction_count}-{source.journalist_filename}-reply.gpg"
 
         EncryptionManager.get_default().encrypt_journalist_reply(
-            for_source_with_filesystem_id=source.filesystem_id,
+            source=source,
             reply_in=str(os.urandom(1)),
             encrypted_reply_path_out=storage.path(source.filesystem_id, fname),
         )
@@ -104,7 +104,6 @@ def init_source(storage):
         source_passphrase=passphrase,
         source_app_storage=storage,
     )
-    EncryptionManager.get_default().generate_source_key_pair(source_user)
     return source_user.get_db_record(), passphrase
 
 

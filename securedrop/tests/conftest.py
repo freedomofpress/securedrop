@@ -236,7 +236,6 @@ def test_source(journalist_app: Flask, app_storage: Storage) -> Dict[str, Any]:
             source_passphrase=passphrase,
             source_app_storage=app_storage,
         )
-        EncryptionManager.get_default().generate_source_key_pair(source_user)
         source = source_user.get_db_record()
         return {
             "source_user": source_user,

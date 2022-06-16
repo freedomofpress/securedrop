@@ -203,19 +203,17 @@ class TestEncryptionManager:
 
         # And a file to be submitted by a source - we use this python file
         file_to_encrypt_path = Path(__file__)
-        with file_to_encrypt_path.open() as file_to_encrypt:
+        # When the source tries to encrypt the file
+        # It succeeds
+        encrypted_file_path = tmp_path / "file.gpg"
+        encryption_mgr.encrypt_source_file(
+            filename=file_to_encrypt_path,
+            encrypted_file_path_out=encrypted_file_path,
+        )
 
-            # When the source tries to encrypt the file
-            # It succeeds
-            encrypted_file_path = tmp_path / "file.gpg"
-            encryption_mgr.encrypt_source_file(
-                file_in=file_to_encrypt,
-                encrypted_file_path_out=encrypted_file_path,
-            )
-
-            # And the output file contains the encrypted data
-            encrypted_file = encrypted_file_path.read_bytes()
-            assert encrypted_file
+        # And the output file contains the encrypted data
+        encrypted_file = encrypted_file_path.read_bytes()
+        assert encrypted_file
 
         # And the journalist is able to decrypt the file
         with import_journalist_private_key(encryption_mgr):
@@ -231,6 +229,7 @@ class TestEncryptionManager:
     ):
         # Given a source user with a key pair in the default encryption manager
         source_user1 = test_source["source_user"]
+        source1 = test_source["source"]
         encryption_mgr = EncryptionManager.get_default()
 
         # And another source with a key pair in the default encryption manager
@@ -247,7 +246,7 @@ class TestEncryptionManager:
         journalist_reply = "s3cr3t message"
         encrypted_reply_path = tmp_path / "reply.gpg"
         encryption_mgr.encrypt_journalist_reply(
-            for_source_with_filesystem_id=source_user1.filesystem_id,
+            source=source1,
             reply_in=journalist_reply,
             encrypted_reply_path_out=encrypted_reply_path,
         )
@@ -258,7 +257,7 @@ class TestEncryptionManager:
 
         # And source1 is able to decrypt the reply
         decrypted_reply = encryption_mgr.decrypt_journalist_reply(
-            for_source_user=source_user1, ciphertext_in=encrypted_reply
+            source_user=source_user1, source=source1, ciphertext_in=encrypted_reply
         )
         assert decrypted_reply
         assert decrypted_reply == journalist_reply
@@ -266,7 +265,9 @@ class TestEncryptionManager:
         # And source2 is NOT able to decrypt the reply
         with pytest.raises(GpgDecryptError):
             encryption_mgr.decrypt_journalist_reply(
-                for_source_user=source_user2, ciphertext_in=encrypted_reply
+                source_user=source_user2,
+                source=source_user2.get_db_record(),
+                ciphertext_in=encrypted_reply,
             )
 
         # Amd the reply can't be decrypted without providing the source1's gpg secret

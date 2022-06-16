@@ -2,7 +2,6 @@ from pathlib import Path
 
 import werkzeug
 from db import db
-from encryption import EncryptionManager, GpgKeyNotFoundError
 from flask import (
     Blueprint,
     Markup,
@@ -56,23 +55,13 @@ def make_blueprint() -> Blueprint:
     def col(filesystem_id: str) -> str:
         form = ReplyForm()
         source = get_source(filesystem_id)
-        try:
-            EncryptionManager.get_default().get_source_public_key(filesystem_id)
-            source.has_key = True
-        except GpgKeyNotFoundError:
-            source.has_key = False
-
         return render_template("col.html", filesystem_id=filesystem_id, source=source, form=form)
 
     @view.route("/delete/<filesystem_id>", methods=("POST",))
     def delete_single(filesystem_id: str) -> werkzeug.Response:
         """deleting a single collection from its /col page"""
         source = get_source(filesystem_id)
-        try:
-            delete_collection(filesystem_id)
-        except GpgKeyNotFoundError as e:
-            current_app.logger.error("error deleting collection: %s", e)
-            abort(500)
+        delete_collection(filesystem_id)
 
         flash(
             Markup(

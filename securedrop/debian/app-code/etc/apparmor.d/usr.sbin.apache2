@@ -165,7 +165,6 @@
   /var/www/securedrop/dictionaries/adjectives.txt r,
   /var/www/securedrop/dictionaries/nouns.txt r,
   /var/www/securedrop/encryption.py r,
-  /var/www/securedrop/execution.py r,
   /var/www/securedrop/i18n.py r,
   /var/www/securedrop/journalist.py r,
   /var/www/securedrop/journalist_app/ r,
