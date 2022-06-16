@@ -134,7 +134,7 @@ jobs:
       - run:
           name: Run tests
           command: |
-            JOB_TESTFILES=$(cd securedrop; circleci tests glob 'tests/pageslayout/test*py')
+            JOB_TESTFILES=$(cd securedrop; circleci tests glob 'tests/functional/pageslayout/test*py')
             echo "JOB_TESTFILES: ${JOB_TESTFILES}"
             RUN_TESTFILES=$(echo "$JOB_TESTFILES" |circleci tests split --split-by=timings)
             echo "RUN_TESTFILES: ${RUN_TESTFILES}"
