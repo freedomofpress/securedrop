@@ -2,7 +2,9 @@ import multiprocessing
 from contextlib import contextmanager
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Generator
+from typing import Generator, Tuple
+from uuid import uuid4
+
 import requests
 from selenium.webdriver.firefox.webdriver import WebDriver
 
@@ -75,6 +77,14 @@ class SdServersFixtureResult:
     source_app_base_url: str
     journalist_app_base_url: str
 
+    # The config that's being used by the source app and journalist app
+    config_in_use: SecureDropConfig
+
+    # Credentials to log into the journalist app as a journalist/admin
+    journalist_username: str
+    journalist_password: str
+    journalist_otp_secret: str
+
 
 @contextmanager
 def spawn_sd_servers(
@@ -88,12 +98,15 @@ def spawn_sd_servers(
         with get_database_session(
             database_uri=config_to_use.DATABASE_URI
         ) as db_session_for_sd_servers:
+            journalist_password = "correct horse battery staple profanity oil chewy"
+            journalist_username = "journalist"
+            journalist_otp_secret = "JHCOGO7VCER3EJ4L"
             journalist = Journalist(
-                username="journalist",
-                password="correct horse battery staple profanity oil chewy",
+                username=journalist_username,
+                password=journalist_password,
                 is_admin=True,
             )
-            journalist.otp_secret = "JHCOGO7VCER3EJ4L"
+            journalist.otp_secret = journalist_otp_secret
             db_session_for_sd_servers.add(journalist)
             db_session_for_sd_servers.commit()
 
@@ -140,6 +153,10 @@ def spawn_sd_servers(
         yield SdServersFixtureResult(
             source_app_base_url=source_app_base_url,
             journalist_app_base_url=journalist_app_base_url,
+            config_in_use=config_to_use,
+            journalist_username=journalist_username,
+            journalist_password=journalist_password,
+            journalist_otp_secret=journalist_otp_secret,
         )
 
     # Clean everything up
@@ -154,10 +171,37 @@ def spawn_sd_servers(
 
 # TODO(AD): This is intended to eventually replace the sd_servers fixture
 @pytest.fixture(scope="session")
-def sd_servers_v2(setup_journalist_key_and_gpg_folder):
-    """Spawn the source and journalist apps as separate processes with a default config."""
+def sd_servers_v2(
+    setup_journalist_key_and_gpg_folder: Tuple[str, Path]
+) -> Generator[SdServersFixtureResult, None, None]:
+    """Spawn the source and journalist apps as separate processes with a default config.
+
+    This fixture is session-scoped so the apps are only spawned once during the test session, and
+    shared between the different unit tests. If your test needs to modify the state of the apps
+    (example: a source submits a message), use the sd_servers_v2_with_clean_state fixture, which is
+    slower.
+    """
     default_config = SecureDropConfigFactory.create(
         SECUREDROP_DATA_ROOT=Path("/tmp/sd-tests/functional"),
+    )
+
+    # Ensure the GPG settings match the one in the config to use, to ensure consistency
+    journalist_key_fingerprint, gpg_dir = setup_journalist_key_and_gpg_folder
+    assert Path(default_config.GPG_KEY_DIR) == gpg_dir
+    assert default_config.JOURNALIST_KEY == journalist_key_fingerprint
+
+    # Spawn the apps in separate processes
+    with spawn_sd_servers(config_to_use=default_config) as sd_servers_result:
+        yield sd_servers_result
+
+
+@pytest.fixture(scope="function")
+def sd_servers_v2_with_clean_state(
+    setup_journalist_key_and_gpg_folder: Tuple[str, Path]
+) -> Generator[SdServersFixtureResult, None, None]:
+    """Slower than sd_servers_v2 as it is function-scoped."""
+    default_config = SecureDropConfigFactory.create(
+        SECUREDROP_DATA_ROOT=Path(f"/tmp/sd-tests/functional-clean-state-{uuid4()}"),
     )
 
     # Ensure the GPG settings match the one in the config to use, to ensure consistency
