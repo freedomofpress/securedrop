@@ -16,32 +16,35 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 import pytest
+from tbselenium.utils import disable_js
 
-from tests.functional import journalist_navigation_steps
-from tests.functional import source_navigation_steps
-from tests.functional.functional_test import TORBROWSER
-from . import functional_test
+from tests.functional.app_navigators import SourceAppNagivator
+from tests.functional.pageslayout.functional_test import list_locales
+from tests.functional.pageslayout.screenshot_utils import save_screenshot_and_html
 
 
+@pytest.mark.parametrize("locale", list_locales())
 @pytest.mark.pagelayout
-class TestSourceLayoutTorbrowser(
-        functional_test.FunctionalTest,
-        source_navigation_steps.SourceNavigationStepsMixin,
-        journalist_navigation_steps.JournalistNavigationStepsMixin):
-    default_driver_name = TORBROWSER
+class TestSourceLayoutTorBrowser:
 
-    def test_index(self):
-        self.disable_js_torbrowser_driver()
-        self._source_visits_source_homepage()
-        self._screenshot('source-index.png')
-        self._save_html('source-index.html')
+    def test_index_and_logout(self, locale, sd_servers_v2):
+        # Given a source user accessing the app from their browser
+        locale_with_commas = locale.replace("_", "-")
+        with SourceAppNagivator.using_tor_browser_web_driver(
+            source_app_base_url=sd_servers_v2.source_app_base_url,
+            accept_languages=locale_with_commas,
+        ) as navigator:
 
-    def test_logout(self):
-        self.disable_js_torbrowser_driver()
-        self._source_visits_source_homepage()
-        self._source_chooses_to_submit_documents()
-        self._source_continues_to_submit_page()
-        self._source_submits_a_file()
-        self._source_logs_out()
-        self._screenshot('source-logout_page.png')
-        self._save_html('source-logout_page.html')
+            # And they have disabled JS in their browser
+            disable_js(navigator.driver)
+
+            # When they first login, it succeeds
+            navigator.source_visits_source_homepage()
+            save_screenshot_and_html(navigator.driver, locale, "source-index")
+
+            navigator.source_clicks_submit_documents_on_homepage()
+            navigator.source_continues_to_submit_page()
+
+            # And when they logout, it succeeds
+            navigator.source_logs_out()
+            save_screenshot_and_html(navigator.driver, locale, "source-logout_page")
