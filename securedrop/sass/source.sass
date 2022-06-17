@@ -470,18 +470,18 @@ mark
       background: $passphrase_masked_color
       clip-path: polygon(0% 0%, 0% 100%, 20% 100%, 20% 0%, 23% 0%, 23% 100%, 32% 100%, 32% 0%, 35% 0%, 35% 100%, 42% 100%, 42% 0%, 45% 0%, 45% 100%, 64% 100%, 64% 0%, 67% 0%, 67% 100%, 74% 100%, 74% 0%, 77% 0%, 77% 100%, 90% 100%, 90% 0%, 93% 0%, 93% 100%, 100% 100%, 100% 0%)
 
-#codename-reminder
+#passphrase-reminder
   font-size: 18px
   color: $heading_alt_color
 
-#codename-show-checkbox
+#passphrase-show-checkbox
   position: absolute
   @include ltr
     left: -999rem
   @include rtl
     right: -999rem
 
-  &~ #codename-show
+  &~ #passphrase-show
     font-size: 11px
     line-height: 14px
     margin-top: -2px
@@ -498,7 +498,7 @@ mark
       border-color: $checkbox_hover_border
       box-shadow: inset 0 0 0 1px $checkbox_hover_border_inside
 
-    @mixin codename-show-checkbox
+    @mixin passphrase-show-checkbox
       content: ""
       background: $body_bg
       display: block
@@ -508,10 +508,10 @@ mark
 
     &::before
       @include ltr
-        @include codename-show-checkbox
+        @include passphrase-show-checkbox
     &::after
       @include rtl
-        @include codename-show-checkbox
+        @include passphrase-show-checkbox
 
     &::before
       @include ltr
@@ -522,7 +522,7 @@ mark
         margin-left: 12px
         float: right
 
-  &:focus-visible ~ #codename-show
+  &:focus-visible ~ #passphrase-show
     box-shadow: 0 0 0 3px $focus_shadow
 
   &:checked ~ mark > span
@@ -540,14 +540,14 @@ mark
     height: 13px
     border: 0
 
-  &:checked ~ #codename-show::before
+  &:checked ~ #passphrase-show::before
     @include ltr
       @include checked
-  &:checked ~ #codename-show::after
+  &:checked ~ #passphrase-show::after
     @include rtl
       @include checked
 
-#codename-show
+#passphrase-show
   display: block
 
 #upload
@@ -949,7 +949,7 @@ section[aria-labelledby="submit-heading"]
 section[aria-labelledby="welcome-heading"]
   margin-top: 50px
 
-section[aria-labelledby="codename-reminder"] + section h2
+section[aria-labelledby="passphrase-reminder"] + section h2
   padding-top: 26px
 
 #source-lookup main, #source-logout main
@@ -1140,7 +1140,7 @@ section[aria-labelledby="codename-reminder"] + section h2
 .info
   padding: 9px
 
-#flashed + section, #codename-hint + section:not(#flashed)
+#flashed + section, #passphrase-hint + section:not(#flashed)
   margin-top: 3em
 
 #source-lookup nav + section:not(#flashed)

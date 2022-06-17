@@ -20,12 +20,12 @@
 <section aria-labelledby="keep-in-touch-heading">
   <h2 id="keep-in-touch-heading">{{ gettext('Keep In Touch') }}</h2>
 
-  <p id="codename-explanation">{{ gettext('A <em>codename</em> in SecureDrop functions as both your username and your password.') }}</p>
-  <p>{{ gettext('You will need this codename to log into our SecureDrop later:') }}</p>
+  <p id="passphrase-explanation">{{ gettext('A <em>passphrase</em> in SecureDrop functions as both your username and your password.') }}</p>
+  <p>{{ gettext('You will need this passphrase to log into our SecureDrop later:') }}</p>
 
-  {{ utils.codename(new_user_passphrase) }}
+  {{ utils.passphrase(new_user_passphrase) }}
 
-  <ul id="codename-instructions">
+  <ul id="passphrase-instructions">
     <li>{{ gettext('<strong>Keep it secret.</strong> Do not share it with anyone.') }}</li>
     <li>{{ gettext('<strong>Keep it safe.</strong> There is no account recovery option.') }}</li>
   </ul>
@@ -38,7 +38,7 @@
   <div id="replies">
     {% if replies %}
     <p class="info">
-      {{ gettext("You have received a reply. To protect your identity in the unlikely event someone learns your codename, please delete all replies when you're done with them. This also lets us know that you are aware of our reply. You can respond by submitting new files and messages above.") }}
+      {{ gettext("You have received a reply. To protect your identity in the unlikely event someone learns your passphrase, please delete all replies when you're done with them. This also lets us know that you are aware of our reply. You can respond by submitting new files and messages above.") }}
     </p>
     {% for reply in replies %}
     {%- set timestamp = utils.relative_time(reply.date) -%}
