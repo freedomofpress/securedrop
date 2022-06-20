@@ -95,6 +95,7 @@ function docker_run() {
     # The --shm-size argument sets up dedicated shared memory for the
     # container. Our tests can fail with the default of 64m.
     $DOCKER_BIN run $ci_env \
+           --platform linux/amd64 \
            --shm-size 2g \
            --rm \
            -p "127.0.0.1:${SD_HOSTPORT_VNC}:5909" \
