@@ -50,27 +50,27 @@ class SourceNavigationStepsMixin:
     def _source_shows_codename(self, verify_source_name=True):
         # We use inputs to change CSS states for subsequent elements in the DOM, if it is unchecked
         # the codename is hidden
-        content = self.driver.find_element_by_id("codename-show-checkbox")
+        content = self.driver.find_element_by_id("passphrase-show-checkbox")
         assert content.get_attribute("checked") is not None
 
-        content_content = self.driver.find_element_by_css_selector("#codename span")
+        content_content = self.driver.find_element_by_css_selector("#passphrase span")
         if verify_source_name:
             assert content_content.text == self.source_name
 
     def _source_hides_codename(self):
         # We use inputs to change CSS states for subsequent elements in the DOM, if it is checked
         # the codename is visible
-        content = self.driver.find_element_by_id("codename-show-checkbox")
+        content = self.driver.find_element_by_id("passphrase-show-checkbox")
         assert content.get_attribute("checked") is not None
 
         # In the UI, the label is actually the element that is being clicked, altering the state
         # of the input
-        self.safe_click_by_id("codename-show")
+        self.safe_click_by_id("passphrase-show")
 
         assert content.get_attribute("checked") is None
 
     def _source_sees_no_codename(self):
-        codename = self.driver.find_elements_by_css_selector("#codename span")
+        codename = self.driver.find_elements_by_css_selector("#passphrase span")
         assert len(codename) == 0
 
     def _source_chooses_to_login(self):
@@ -146,7 +146,7 @@ class SourceNavigationStepsMixin:
             self.wait_for(lambda: file_submitted(first_submission), timeout=(self.timeout * 3))
 
             if first_submission:
-                codename = self.driver.find_element_by_css_selector("#codename span")
+                codename = self.driver.find_element_by_css_selector("#passphrase span")
                 self.source_name = codename.text
 
     def _source_submits_a_message(
@@ -178,7 +178,7 @@ class SourceNavigationStepsMixin:
 
         # passphrase is only available on submission in first session
         if first_submission:
-            codename = self.driver.find_element_by_css_selector("#codename span")
+            codename = self.driver.find_element_by_css_selector("#passphrase span")
             self.source_name = codename.text
         # allow time for reply key to be generated
         time.sleep(self.timeout)

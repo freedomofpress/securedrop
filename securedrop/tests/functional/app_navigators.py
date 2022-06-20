@@ -227,14 +227,14 @@ class SourceAppNagivator:
 
     def source_retrieves_codename_from_hint(self) -> str:
         # We use inputs to change CSS states for subsequent elements in the DOM, if it is unchecked
-        content = self.driver.find_element_by_id("codename-show-checkbox")
+        content = self.driver.find_element_by_id("passphrase-show-checkbox")
 
         # TODO: should the codename be hidden by default under inverted flow?
         # assert content.get_attribute("checked") is None
         # self.nav_helper.safe_click_by_id("codename-show")
 
         assert content.get_attribute("checked") is not None
-        content_content = self.driver.find_element_by_css_selector("#codename span")
+        content_content = self.driver.find_element_by_css_selector("#passphrase span")
         return content_content.text
 
     def source_chooses_to_login(self) -> None:

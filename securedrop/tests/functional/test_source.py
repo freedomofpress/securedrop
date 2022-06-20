@@ -26,9 +26,9 @@ class TestSourceAppCodenameHints:
         assert source_codename
 
         # And they are able to close the codename hint UI
-        content = navigator.driver.find_element_by_id("codename-show-checkbox")
+        content = navigator.driver.find_element_by_id("passphrase-show-checkbox")
         assert content.get_attribute("checked") is not None
-        navigator.nav_helper.safe_click_by_id("codename-show")
+        navigator.nav_helper.safe_click_by_id("passphrase-show")
         assert content.get_attribute("checked") is None
 
         # And on their second login
@@ -38,7 +38,7 @@ class TestSourceAppCodenameHints:
         navigator.source_proceeds_to_login(codename=source_codename)
 
         # The codename hint UI is no longer present
-        codename = navigator.driver.find_elements_by_css_selector("#codename-reminder")
+        codename = navigator.driver.find_elements_by_css_selector("#passphrase-reminder")
         assert len(codename) == 0
 
     def test_submission_notifications_on_first_login(self, sd_servers_v2, tor_browser_web_driver):
