@@ -30,7 +30,7 @@ class SessionManager:
     """Helper to manage the user's session cookie accessible via flask.session."""
 
     # The keys in flask.session for the user's passphrase and expiration date
-    _SESSION_COOKIE_KEY_FOR_CODENAME = "codename"
+    _SESSION_COOKIE_KEY_FOR_CODENAME = "passphrase"
     _SESSION_COOKIE_KEY_FOR_EXPIRATION_DATE = "expires"
 
     @classmethod

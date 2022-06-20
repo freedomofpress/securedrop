@@ -58,7 +58,7 @@
       <section id="first-submission" aria-labelledby="first-submission-heading">
         <h2 id="first-submission-heading">{{ gettext('First submission') }}</h2>
         <p>{{ gettext('First time submitting to our SecureDrop? Start here.') }}</p>
-        <form id="started-form" method="post" action="/generate" autocomplete="off">
+        <form id="started-form" method="post" action="{{ url_for('main.lookup') }}" autocomplete="off">
           <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
           <input name="tor2web_check" type="hidden" value='href="fake.onion"'>
           <button type="submit" aria-label="{{ gettext('Get Started') }}">
@@ -69,7 +69,7 @@
 
       <section id="return-visit" aria-labelledby="return-visit-heading">
           <h2 id="return-visit-heading">{{ gettext('Return visit') }}</h2>
-          <p>{{ gettext('Already have a codename? Check for replies or submit something new.') }}</p>
+          <p>{{ gettext('Already have a passphrase? Check for replies or submit something new.') }}</p>
           <a href="{{ url_for('main.login') }}" class="btn secondary"
             aria-label="{{ gettext('Log In') }}">
             {{ gettext('LOG IN') }}

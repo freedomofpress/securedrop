@@ -3,25 +3,20 @@
       datetime="{{ date|html_datetime_format }}">{{ date|rel_datetime_format(relative=True) }}</time>
 {%- endmacro -%}
 
-{%- macro codename(codename, new=False) -%}
-{% if new %}
-<section aria-labelledby="codename-reminder">
-  <p id="codename-reminder">{{ gettext('Remember, your codename is:') }}</p>
-{% else %}
-<section aria-labelledby="codename-heading">
-  <h2 id="codename-heading" hidden>{{ gettext('Codename') }}</h2>
-{% endif %}
+{%- macro passphrase(passphrase, new=True) -%}
+<div aria-labelledby="passphrase-heading">
+  <h3 id="passphrase-heading" hidden>{{ gettext('Passphrase') }}</h3>
 
-  <input id="codename-show-checkbox" type="checkbox" role="button"{% if not new %} checked {% endif -%}
-    aria-label="{{ gettext('Show Codename') }}" aria-controls="codename">
+  <input id="passphrase-show-checkbox" type="checkbox" role="button"{% if new %} checked {% endif -%}
+    aria-label="{{ gettext('Show Passphrase') }}" aria-controls="passphrase">
 
-  <mark id="codename" lang="en-US" dir="ltr"{% if not new %}
-    aria-describedby="codename-instructions codename-explanation"{% endif %}><span>{{ codename }}</span></mark>
+  <mark id="passphrase" lang="en-US" dir="ltr"
+    aria-describedby="passphrase-instructions passphrase-explanation"><span>{{ passphrase }}</span></mark>
 
-  <label for="codename-show-checkbox" id="codename-show"
+  <label for="passphrase-show-checkbox" id="passphrase-show"
     aria-hidden="true">
-      {{ gettext('Show Codename') }}
+      {{ gettext('Show Passphrase') }}
   </label>
 
-</section>
+</div>
 {%- endmacro -%}

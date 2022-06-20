@@ -195,25 +195,24 @@ class SourceAppNagivator:
         self.driver.get(self._source_app_base_url)
         assert self._is_on_source_homepage()
 
-    def _is_on_generate_page(self) -> WebElement:
-        return self.nav_helper.wait_for(lambda: self.driver.find_element_by_id("source-generate"))
+    def _is_on_lookup_page(self) -> WebElement:
+        return self.nav_helper.wait_for(lambda: self.driver.find_element_by_id("source-lookup"))
 
     def source_clicks_submit_documents_on_homepage(self) -> None:
         # It's the source's first time visiting this SecureDrop site, so they
         # choose to "Submit Documents".
         self.nav_helper.safe_click_by_css_selector("#started-form button")
 
-        # The source should now be on the page where they are presented with
-        # a diceware codename they can use for subsequent logins
-        assert self._is_on_generate_page()
+        # The source should now be on the lookup page where they can submit
+        # docs/messages. They will get a passphrase after their first submission.
+        assert self._is_on_lookup_page()
 
     def source_continues_to_submit_page(self) -> None:
-        self.nav_helper.safe_click_by_css_selector("#create-form button")
 
         def submit_page_loaded() -> None:
             if not self.accept_languages:
-                headline = self.driver.find_element_by_id("submit-heading")
-                assert "Submit Files or Messages" == headline.text
+                headline = self.driver.find_element_by_id("welcome-heading")
+                assert "Welcome!" == headline.text
 
         self.nav_helper.wait_for(submit_page_loaded)
 
@@ -228,14 +227,14 @@ class SourceAppNagivator:
 
     def source_retrieves_codename_from_hint(self) -> str:
         # We use inputs to change CSS states for subsequent elements in the DOM, if it is unchecked
-        # the codename is hidden
-        content = self.driver.find_element_by_id("codename-show-checkbox")
-        assert content.get_attribute("checked") is None
+        content = self.driver.find_element_by_id("passphrase-show-checkbox")
 
-        self.nav_helper.safe_click_by_id("codename-show")
+        # TODO: should the codename be hidden by default under inverted flow?
+        # assert content.get_attribute("checked") is None
+        # self.nav_helper.safe_click_by_id("codename-show")
 
         assert content.get_attribute("checked") is not None
-        content_content = self.driver.find_element_by_css_selector("#codename span")
+        content_content = self.driver.find_element_by_css_selector("#passphrase span")
         return content_content.text
 
     def source_chooses_to_login(self) -> None:
@@ -248,7 +247,7 @@ class SourceAppNagivator:
         return self.nav_helper.wait_for(lambda: self.driver.find_element_by_id("logout"))
 
     def source_proceeds_to_login(self, codename: str) -> None:
-        self.nav_helper.safe_send_keys_by_id("codename", codename)
+        self.nav_helper.safe_send_keys_by_id("passphrase", codename)
         self.nav_helper.safe_click_by_css_selector(".form-controls button")
 
         # Check that we've logged in
@@ -257,7 +256,11 @@ class SourceAppNagivator:
         replies = self.driver.find_elements_by_id("replies")
         assert len(replies) == 1
 
-    def source_submits_a_message(self, message: str = "S3cr3t m3ss4ge") -> str:
+    def source_submits_a_message(
+                                 self,
+                                 message: str = "S3cr3t m3ss4ge",
+                                 will_succeed: bool = True
+                                 ) -> str:
         # Write the message to submit
         self.nav_helper.safe_send_keys_by_css_selector("[name=msg]", message)
 
@@ -271,9 +274,21 @@ class SourceAppNagivator:
                 assert "Thank" in notification.text
                 return notification.text
 
+        # If it's expected that the submission will fail, wait for an error
+        # notificaition
+        def message_failed():
+            if not self.accept_languages:
+                notification = self.driver.find_element_by_css_selector(".error")
+                assert len(notification.text) > 0
+                return notification.text
+
         # Return the confirmation notification
-        notification_text = self.nav_helper.wait_for(message_submitted)
-        return notification_text
+        if will_succeed:
+            notification_text = self.nav_helper.wait_for(message_submitted)
+            return notification_text
+        else:
+            notification_text = self.nav_helper.wait_for(message_failed)
+            return notification_text
 
     def source_sees_flash_message(self) -> str:
         notification = self.driver.find_element_by_css_selector(".notification")

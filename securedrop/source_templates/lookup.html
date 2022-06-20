@@ -4,73 +4,41 @@
 {% block body %}
 {% include 'flashed.html' %}
 
-{% if new_user_codename %}
-{{ utils.codename(new_user_codename, new=True) }}
+{% if not is_user_logged_in %}
+<section aria-labelledby="welcome-heading">
+  <h2 id="welcome-heading">{{ gettext('Welcome!') }}</h2>
+
+  {% if allow_document_uploads %}
+  <p>{{ gettext('You may send us any kind of file, a message, or both.') }}</p>
+  <p>{{ gettext('After you submit, we will let you know how to keep in touch.') }}</p>
+  {% else %}
+  <p>{{ gettext('After you submit your message, we will let you know how to keep in touch.') }}</p>
+  {% endif %}
+</section>
+{% else %}
+{% if new_user_passphrase %}
+<section aria-labelledby="keep-in-touch-heading">
+  <h2 id="keep-in-touch-heading">{{ gettext('Keep In Touch') }}</h2>
+
+  <p id="passphrase-explanation">{{ gettext('A <em>passphrase</em> in SecureDrop functions as both your username and your password.') }}</p>
+  <p>{{ gettext('You will need this passphrase to log into our SecureDrop later:') }}</p>
+
+  {{ utils.passphrase(new_user_passphrase) }}
+
+  <ul id="passphrase-instructions">
+    <li>{{ gettext('<strong>Keep it secret.</strong> Do not share it with anyone.') }}</li>
+    <li>{{ gettext('<strong>Keep it safe.</strong> There is no account recovery option.') }}</li>
+  </ul>
+</section>
 {% endif %}
 
-<section aria-labelledby="submit-heading">
-  {% if allow_document_uploads %}
-  <h2 id="submit-heading">{{ gettext('Submit Files or Messages') }}</h2>
-  <p>{{ gettext('You can submit any kind of file, a message, or both.') }}</p>
-  {% else %}
-  <h2 id="submit-heading">{{ gettext('Submit Messages') }}</h2>
-  {% endif %}
-
-  <p>
-    {% if allow_document_uploads %}
-    {{ gettext('If you are already familiar with GPG, you can optionally encrypt your files and messages with our <a href="{url}" class="text-link">public key</a> before submission. Files are encrypted as they are received by SecureDrop.').format(url=url_for('info.download_public_key')) }}
-    {% else %}
-    {{ gettext('If you are already familiar with GPG, you can optionally encrypt your messages with our <a href="{url}" class="text-link">public key</a> before submission.').format(url=url_for('info.download_public_key')) }}
-    {% endif %}
-    {{ gettext('<a href="{url}" class="text-link">Learn more</a>.').format(url=url_for('info.why_download_public_key')) }}
-  </p>
-
-  <form id="upload" method="post" action="{{ url_for('main.submit') }}" enctype="multipart/form-data" autocomplete="off">
-    <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
-    <div class="fields">
-      {% if allow_document_uploads %}
-      <div class="attachment">
-        {{ form.fh(**{"aria-describedby": "max-file-size"}) }}
-        <p id="max-file-size">{{ gettext('Maximum upload size: 500 MB') }}</p>
-      </div>
-      {% endif %}
-      <div class="message">
-        {% if min_len > 0 %}
-        {{ form.msg(**{"aria-describedby": "min-char-length"}) }}
-        {% if allow_document_uploads %}
-        <p id="min-char-length">{{ gettext('If you are only sending a message, it must be at least {} characters long.').format(min_len) }}</p>
-        {% else %}
-        <p id="min-char-length">{{ gettext('Your first message must be at least {} characters long.').format(min_len) }}</p>
-        {% endif %}
-        {% else %}
-        {{ form.msg() }}
-        {% endif %}
-      </div>
-      <div>
-        <label for="text">{{ gettext('Anti-spam check. Do not fill this in!') }}</label>
-        {{ form.antispam() }}
-      </div>
-    </div>
-
-    <div class="form-controls">
-      <a href="{{ url_for('main.lookup') }}" class="btn secondary" role="button"
-        aria-label="{{ gettext('Cancel') }}">
-        {{ gettext('CANCEL') }}
-      </a>
-      <button type="submit" aria-label="{{ gettext('Submit') }}">
-        {{ gettext('SUBMIT') }}
-      </button>
-    </div>
-  </form>
-</section>
-
 <section aria-labelledby="replies-heading">
-  <h2 id="replies-heading">{{ gettext('Read Replies') }}</h2>
+  <h2 id="replies-heading">{{ gettext('Replies') }}</h2>
 
   <div id="replies">
     {% if replies %}
     <p class="info">
-      {{ gettext("You have received a reply. To protect your identity in the unlikely event someone learns your codename, please delete all replies when you're done with them. This also lets us know that you are aware of our reply. You can respond by submitting new files and messages above.") }}
+      {{ gettext("You have received a reply. To protect your identity in the unlikely event someone learns your passphrase, please delete all replies when you're done with them. This also lets us know that you are aware of our reply. You can respond by submitting new files and messages above.") }}
     </p>
     {% for reply in replies %}
     {%- set timestamp = utils.relative_time(reply.date) -%}
@@ -120,5 +88,56 @@
     {% endif %}
   </div>
 </section>
+{% endif %}
 
+<section aria-labelledby="new-message-heading">
+  <h2 id="new-message-heading">{{ gettext('New Message') }}</h2>
+
+  <p>
+    {% if allow_document_uploads %}
+    {{ gettext('If you are already familiar with GPG, you can optionally encrypt your files and messages with our <a href="{url}" class="text-link">public key</a> before submission. Files are encrypted as they are received by SecureDrop.').format(url=url_for('info.download_public_key')) }}
+    {% else %}
+    {{ gettext('If you are already familiar with GPG, you can optionally encrypt your messages with our <a href="{url}" class="text-link">public key</a> before submission.').format(url=url_for('info.download_public_key')) }}
+    {% endif %}
+    {{ gettext('<a href="{url}" class="text-link">Learn more</a>.').format(url=url_for('info.why_download_public_key')) }}
+  </p>
+
+  <form id="upload" method="post" action="{{ url_for('main.submit') }}" enctype="multipart/form-data" autocomplete="off">
+    <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
+    <div class="fields">
+      <div class="message">
+        {% if min_len > 0 %}
+        {{ form.msg(**{"aria-describedby": "min-char-length"}) }}
+        {% if allow_document_uploads %}
+        <p id="min-char-length">{{ gettext('If you are only sending a message, it must be at least {} characters long.').format(min_len) }}</p>
+        {% else %}
+        <p id="min-char-length">{{ gettext('Your first message must be at least {} characters long.').format(min_len) }}</p>
+        {% endif %}
+        {% else %}
+        {{ form.msg() }}
+        {% endif %}
+      </div>
+      {% if allow_document_uploads %}
+      <div class="attachment">
+        {{ form.fh(**{"aria-describedby": "max-file-size"}) }}
+        <p id="max-file-size">{{ gettext('Maximum upload size: 500 MB') }}</p>
+      </div>
+      {% endif %}
+      <div>
+        <label for="text">{{ gettext('Anti-spam check. Do not fill this in!') }}</label>
+        {{ form.antispam() }}
+      </div>
+    </div>
+
+    <div class="form-controls">
+      <a href="{{ url_for('main.lookup') }}" class="btn secondary" role="button"
+        aria-label="{{ gettext('Cancel') }}">
+        {{ gettext('CANCEL') }}
+      </a>
+      <button type="submit" aria-label="{{ gettext('Submit') }}">
+        {{ gettext('SUBMIT') }}
+      </button>
+    </div>
+  </form>
+</section>
 {% endblock %}

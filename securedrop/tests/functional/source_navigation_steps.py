@@ -15,9 +15,6 @@ class SourceNavigationStepsMixin:
     def _is_on_lookup_page(self):
         return self.wait_for(lambda: self.driver.find_element_by_id("source-lookup"))
 
-    def _is_on_generate_page(self):
-        return self.wait_for(lambda: self.driver.find_element_by_id("source-generate"))
-
     def _is_on_logout_page(self):
         return self.wait_for(lambda: self.driver.find_element_by_id("source-logout"))
 
@@ -35,9 +32,9 @@ class SourceNavigationStepsMixin:
         self.safe_click_by_css_selector("#started-form button")
 
         if assert_success:
-            # The source should now be on the page where they are presented with
-            # a diceware codename they can use for subsequent logins
-            assert self._is_on_generate_page()
+            # The source should now be on the lookup page - codename is not
+            # yet visible
+            assert self._is_on_lookup_page()
 
     def _source_regenerates_codename(self):
         self._source_visits_source_homepage()
@@ -47,41 +44,33 @@ class SourceNavigationStepsMixin:
 
     def _source_chooses_to_submit_documents(self):
         self._source_clicks_submit_documents_on_homepage()
-
-        codename = self.driver.find_element_by_css_selector("#codename span")
-
-        assert len(codename.text) > 0
-        self.source_name = codename.text
+        submit_header = self.driver.find_element_by_css_selector("#welcome-heading")
+        assert len(submit_header.text) > 0
 
     def _source_shows_codename(self, verify_source_name=True):
         # We use inputs to change CSS states for subsequent elements in the DOM, if it is unchecked
         # the codename is hidden
-        content = self.driver.find_element_by_id("codename-show-checkbox")
-        assert content.get_attribute("checked") is None
-
-        # In the UI, the label is actually the element that is being clicked, altering the state
-        # of the input
-        self.safe_click_by_id("codename-show")
-
+        content = self.driver.find_element_by_id("passphrase-show-checkbox")
         assert content.get_attribute("checked") is not None
-        content_content = self.driver.find_element_by_css_selector("#codename span")
+
+        content_content = self.driver.find_element_by_css_selector("#passphrase span")
         if verify_source_name:
             assert content_content.text == self.source_name
 
     def _source_hides_codename(self):
         # We use inputs to change CSS states for subsequent elements in the DOM, if it is checked
         # the codename is visible
-        content = self.driver.find_element_by_id("codename-show-checkbox")
+        content = self.driver.find_element_by_id("passphrase-show-checkbox")
         assert content.get_attribute("checked") is not None
 
         # In the UI, the label is actually the element that is being clicked, altering the state
         # of the input
-        self.safe_click_by_id("codename-show")
+        self.safe_click_by_id("passphrase-show")
 
         assert content.get_attribute("checked") is None
 
     def _source_sees_no_codename(self):
-        codename = self.driver.find_elements_by_css_selector("#codename span")
+        codename = self.driver.find_elements_by_css_selector("#passphrase span")
         assert len(codename) == 0
 
     def _source_chooses_to_login(self):
@@ -97,7 +86,7 @@ class SourceNavigationStepsMixin:
         assert self._is_on_source_homepage()
 
     def _source_proceeds_to_login(self):
-        self.safe_send_keys_by_id("codename", self.source_name)
+        self.safe_send_keys_by_id("passphrase", self.source_name)
         self.safe_click_by_css_selector(".form-controls button")
 
         # Check that we've logged in
@@ -108,30 +97,32 @@ class SourceNavigationStepsMixin:
 
     def _source_enters_codename_in_login_form(self):
         self.safe_send_keys_by_id(
-            "codename", "ascension hypertext concert synopses"
+            "passphrase", "ascension hypertext concert synopses"
         )
 
     def _source_hits_cancel_at_submit_page(self):
         self.safe_click_by_css_selector(".form-controls a")
 
         if not self.accept_languages:
-            heading = self.driver.find_element_by_id("submit-heading")
-            assert "Submit Files or Messages" == heading.text
+            heading = self.driver.find_element_by_id("welcome-heading")
+            assert "Welcome!" == heading.text
 
     def _source_continues_to_submit_page(self, files_allowed=True):
-        self.safe_click_by_css_selector("#create-form button")
-
         def submit_page_loaded():
+            def uploader_is_visible():
+                try:
+                    self.driver.find_element_by_class_name("attachment")
+                except NoSuchElementException:
+                    return False
+                return True
+
             if not self.accept_languages:
-                heading = self.driver.find_element_by_id("submit-heading")
                 if files_allowed:
-                    assert "Submit Files or Messages" == heading.text
+                    assert uploader_is_visible()
                 else:
-                    assert "Submit Messages" == heading.text
+                    assert not uploader_is_visible()
 
-        self.wait_for(submit_page_loaded)
-
-    def _source_submits_a_file(self):
+    def _source_submits_a_file(self, first_submission=False):
         with tempfile.NamedTemporaryFile() as file:
             file.write(self.secret_message.encode("utf-8"))
             file.seek(0)
@@ -141,19 +132,22 @@ class SourceNavigationStepsMixin:
             self.safe_send_keys_by_id("fh", filename)
 
             self.safe_click_by_css_selector(".form-controls button")
-            self.wait_for_source_key(self.source_name)
 
-            def file_submitted():
+            def file_submitted(first_submission=False):
                 if not self.accept_languages:
                     notification = self.driver.find_element_by_class_name("success")
-                    expected_notification = "Thank you for sending this information to us"
+                    if first_submission:
+                        expected_notification = "Please check back later for replies."
+                    else:
+                        expected_notification = "Success!\nThanks! We received your document."
                     assert expected_notification in notification.text
 
             # Allow extra time for file uploads
-            self.wait_for(file_submitted, timeout=(self.timeout * 3))
+            self.wait_for(lambda: file_submitted(first_submission), timeout=(self.timeout * 3))
 
-            # allow time for reply key to be generated
-            time.sleep(self.timeout)
+            if first_submission:
+                codename = self.driver.find_element_by_css_selector("#passphrase span")
+                self.source_name = codename.text
 
     def _source_submits_a_message(
         self, verify_notification=False, first_submission=False, first_login=False
@@ -161,7 +155,8 @@ class SourceNavigationStepsMixin:
         self._source_enters_text_in_message_field()
         self.safe_click_by_css_selector(".form-controls button")
 
-        def message_submitted():
+        def message_submitted(first_submission=False, verify_notification=False):
+
             if not self.accept_languages:
                 notification = self.driver.find_element_by_class_name("success")
                 assert "Thank" in notification.text
@@ -176,8 +171,15 @@ class SourceNavigationStepsMixin:
                     else:
                         assert not first_submission_text
 
-        self.wait_for(message_submitted)
+        self.wait_for(lambda: message_submitted(
+                                                verify_notification=verify_notification,
+                                                first_submission=first_submission
+                                                ))
 
+        # passphrase is only available on submission in first session
+        if first_submission:
+            codename = self.driver.find_element_by_css_selector("#passphrase span")
+            self.source_name = codename.text
         # allow time for reply key to be generated
         time.sleep(self.timeout)
 

@@ -186,9 +186,9 @@ def submit(storage, source, num_submissions, submission_type="message"):
 def new_codename(client, session):
     """Helper function to go through the "generate codename" flow.
     """
-    client.post('/generate', data={'tor2web_check': 'href="fake.onion"'})
-    tab_id, codename = next(iter(session['codenames'].items()))
-    client.post('/create', data={'tab_id': tab_id})
+    client.post('/lookup', data={'tor2web_check': 'href="fake.onion"'})
+    client.post('/submit', data={'msg': 'TEST MESSAGE"'})
+    codename = session.get('new_user_passphrase')
     return codename
 
 

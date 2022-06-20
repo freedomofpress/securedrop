@@ -12,7 +12,7 @@ class TestSubmitAndRetrieveFile(
         self._source_visits_source_homepage()
         self._source_chooses_to_submit_documents()
         self._source_continues_to_submit_page()
-        self._source_submits_a_file()
+        self._source_submits_a_file(first_submission=True)
         self._source_logs_out()
         try:
             self.switch_to_firefox_driver()

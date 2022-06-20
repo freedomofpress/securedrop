@@ -1,12 +1,7 @@
 # -*- coding: utf-8 -*-
-import json
 import os
 
-import pytest
-import werkzeug
-
-from source_app.utils import check_url_file, codename_detected, fit_codenames_into_cookie
-from .test_journalist import VALID_PASSWORD
+from source_app.utils import check_url_file
 
 
 def test_check_url_file(config):
@@ -33,42 +28,3 @@ def test_check_url_file(config):
     finally:
         if os.path.exists(url_path):
             os.unlink(url_path)
-
-
-def test_fit_codenames_into_cookie(config):
-    # A single codename should never be truncated.
-    codenames = {'a': VALID_PASSWORD}
-    assert(fit_codenames_into_cookie(codenames) == codenames)
-
-    # A reasonable number of codenames should never be truncated.
-    codenames = {
-        'a': VALID_PASSWORD,
-        'b': VALID_PASSWORD,
-        'c': VALID_PASSWORD,
-    }
-    assert(fit_codenames_into_cookie(codenames) == codenames)
-
-    # A single gargantuan codename is undefined behavior---but also should not
-    # be truncated.
-    codenames = {'a': werkzeug.Response.max_cookie_size*VALID_PASSWORD}
-    assert(fit_codenames_into_cookie(codenames) == codenames)
-
-    # Too many codenames of the expected length should be truncated.
-    codenames = {}
-    too_many = 2*(werkzeug.Response.max_cookie_size // len(VALID_PASSWORD))
-    for i in range(too_many):
-        codenames[i] = VALID_PASSWORD
-    serialized = json.dumps(codenames).encode()
-    assert(len(serialized) > werkzeug.Response.max_cookie_size)
-    serialized = json.dumps(fit_codenames_into_cookie(codenames)).encode()
-    assert(len(serialized) < werkzeug.Response.max_cookie_size)
-
-
-@pytest.mark.parametrize('message,expected', (
-    ('Foo', False),
-    ('codename', True),
-    (' codename ', True),
-    ('foocodenamebar', False),
-))
-def test_codename_detected(message, expected):
-    assert codename_detected(message, 'codename') is expected
