@@ -20,7 +20,7 @@ def _sd_servers_with_short_timeout(setup_journalist_key_and_gpg_folder):
     """Spawn the source and journalist apps as separate processes with a short session timeout."""
     # Generate a securedrop config with a very short session timeout
     config_with_short_timeout = SecureDropConfigFactory.create(
-        SESSION_EXPIRATION_MINUTES=SESSION_EXPIRATION_SECONDS / 60,
+        SESSION_EXPIRATION_MINUTES=SESSION_EXPIRATION_SECONDS / 60.0,
         SECUREDROP_DATA_ROOT=Path("/tmp/sd-tests/functional-session-timeout"),
     )
 
@@ -49,6 +49,7 @@ class TestSourceAppSessionTimeout:
             navigator.source_visits_source_homepage()
             navigator.source_clicks_submit_documents_on_homepage()
             navigator.source_continues_to_submit_page()
+            navigator.source_submits_a_message()
 
             # And their session just expired
             time.sleep(SESSION_EXPIRATION_SECONDS + 1)

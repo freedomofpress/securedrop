@@ -38,12 +38,13 @@ class TestSourceLayoutTorBrowser:
             # And they have disabled JS in their browser
             disable_js(navigator.driver)
 
-            # When they first login, it succeeds
+            # When they first submit a file, it succeeds and creates their account
             navigator.source_visits_source_homepage()
             save_screenshot_and_html(navigator.driver, locale, "source-index")
 
             navigator.source_clicks_submit_documents_on_homepage()
             navigator.source_continues_to_submit_page()
+            navigator.source_submits_a_message()
 
             # And when they logout, it succeeds
             navigator.source_logs_out()
