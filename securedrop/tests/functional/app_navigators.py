@@ -259,7 +259,7 @@ class SourceAppNagivator:
 
     def source_submits_a_message(self, message: str = "S3cr3t m3ss4ge") -> str:
         # Write the message to submit
-        self.nav_helper.safe_send_keys_by_css_selector("[name=msg]", message)
+        self.nav_helper.safe_send_keys_by_id("msg", message)
 
         # Hit the submit button
         self.nav_helper.safe_click_by_css_selector(".form-controls button")
@@ -275,10 +275,28 @@ class SourceAppNagivator:
         notification_text = self.nav_helper.wait_for(message_submitted)
         return notification_text
 
-    def source_sees_flash_message(self) -> str:
-        notification = self.driver.find_element_by_css_selector(".notification")
-        assert notification
-        return notification
+    def source_submits_a_file(self, file_content: str = "S3cr3t f1l3") -> None:
+        # Write the content to a file
+        with tempfile.NamedTemporaryFile() as file:
+            file.write(file_content.encode("utf-8"))
+            file.seek(0)
+            filename = file.name
+
+            # Submit the file
+            self.nav_helper.safe_send_keys_by_id("fh", filename)
+            self.nav_helper.safe_click_by_css_selector(".form-controls button")
+
+            def file_submitted():
+                if not self.accept_languages:
+                    notification = self.driver.find_element_by_css_selector(".success")
+                    expected_notification = "Thank you for sending this information to us"
+                    assert expected_notification in notification.text
+
+            # Allow extra time for file uploads
+            self.nav_helper.wait_for(file_submitted, timeout=15)
+
+            # allow time for reply key to be generated
+            time.sleep(3)
 
 
 # TODO(AD): This is intended to eventually replace the JournalistNavigationStepsMixin
@@ -396,3 +414,17 @@ class JournalistAppNavigator:
 
     def _journalist_selects_the_first_source(self) -> None:
         self.driver.find_element_by_css_selector("#un-starred-source-link-1").click()
+
+    def journalist_sends_reply_to_source(
+        self, reply_content: str = "Thanks for the documents. Can you submit more? éè"
+    ) -> None:
+        self.nav_helper.wait_for(lambda: self.driver.find_element_by_id("reply-text-field"))
+        self.nav_helper.safe_send_keys_by_id("reply-text-field", reply_content)
+
+        self.driver.find_element_by_id("reply-button").click()
+
+        def reply_stored():
+            if not self.accept_languages:
+                assert "The source will receive your reply" in self.driver.page_source
+
+        self.nav_helper.wait_for(reply_stored)
