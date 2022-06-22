@@ -61,6 +61,42 @@ update-pip-requirements: update-admin-pip-requirements update-python3-requiremen
 #
 #################
 
+.PHONY: check-black
+check-black: ## Check Python source code formatting with black
+	@echo "███ Running black check..."
+	@black --check --diff setup.py securedrop \
+                install_files \
+                journalist_gui \
+                molecule \
+                admin
+	@echo
+
+.PHONY: black
+black: ## Update Python source code formatting with black
+	@black setup.py securedrop \
+                install_files \
+                journalist_gui \
+                molecule \
+                admin
+
+.PHONY: check-isort
+check-isort: ## Check Python import organization with isort
+	@echo "███ Running isort check..."
+	@isort --check-only --diff setup.py securedrop \
+                install_files \
+                journalist_gui \
+                molecule \
+                admin
+	@echo
+
+.PHONY: isort
+isort: ## Update Python import organization with isort
+	@isort setup.py securedrop \
+                install_files \
+                journalist_gui \
+                molecule \
+                admin
+
 .PHONY: ansible-config-lint
 ansible-config-lint: ## Run custom Ansible linting tasks.
 	@echo "███ Linting Ansible configuration..."
@@ -123,7 +159,7 @@ yamllint:  ## Lint YAML files (does not validate syntax!).
 	@echo
 
 .PHONY: lint
-lint: ansible-config-lint app-lint flake8 html-lint shellcheck typelint yamllint ## Runs all lint checks
+lint: ansible-config-lint app-lint check-black check-isort flake8 html-lint shellcheck typelint yamllint ## Runs all lint checks
 
 .PHONY: safety
 safety:  ## Run `safety check` to check python dependencies for vulnerabilities.
