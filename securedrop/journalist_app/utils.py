@@ -425,6 +425,7 @@ def set_name(user: Journalist, first_name: Optional[str], last_name: Optional[st
 
 def set_diceware_password(user: Journalist, password: Optional[str]) -> bool:
     try:
+        # nosemgrep: python.django.security.audit.unvalidated-password.unvalidated-password
         user.set_password(password)
     except PasswordError:
         flash(gettext(

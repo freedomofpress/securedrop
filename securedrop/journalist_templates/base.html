@@ -10,6 +10,7 @@
 
   <link rel="icon" type="image/png" href="/static/i/favicon.png">
 
+  <!-- nosemgrep: generic.html-templates.security.unquoted-attribute-var.unquoted-attribute-var -->
   <script src="{{ url_for("static", filename="js/journalist.js") }}"></script>
   {% block extrahead %}{% endblock %}
 </head>
@@ -50,6 +51,7 @@
 
     {% block footer %}
     <footer>
+      <!-- nosemgrep: python.flask.security.xss.audit.template-unescaped-with-safe.template-unescaped-with-safe -->
       {{ gettext("Powered by <b>SecureDrop {version}</b>.").format(version=version)|safe }}
     </footer>
     {% endblock %}

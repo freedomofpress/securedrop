@@ -23,6 +23,7 @@
       {% set url = '' %}
       {% set checked = 'true' %}
       {% endif %}
+      <!-- nosemgrep: generic.html-templates.security.var-in-href.var-in-href -->
       <a href="{{ url }}" rel="nofollow" lang="{{ g.locales[locale].language_tag }}" hreflang="{{ g.locales[locale].language_tag }}"
         role="menuitemradio" aria-checked="{{ checked }}">
         {{ g.locales[locale].display_name }}

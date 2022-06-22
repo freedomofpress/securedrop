@@ -460,6 +460,7 @@ class Journalist(db.Model):
         if last_name:
             self.check_name_acceptable(last_name)
             self.last_name = last_name
+        # nosemgrep: python.django.security.audit.unvalidated-password.unvalidated-password
         self.set_password(password)
         self.is_admin = is_admin
         self.uuid = str(uuid.uuid4())
