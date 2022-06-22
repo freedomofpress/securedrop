@@ -15,86 +15,67 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-from tests.functional import journalist_navigation_steps
-from tests.functional import source_navigation_steps
-from . import functional_test
 import pytest
 
+from tests.functional.app_navigators import SourceAppNagivator
+from tests.functional.pageslayout.functional_test import list_locales
+from tests.functional.pageslayout.screenshot_utils import save_screenshot_and_html
 
+
+@pytest.mark.parametrize("locale", list_locales())
 @pytest.mark.pagelayout
-class TestSourceLayout(
-        functional_test.FunctionalTest,
-        source_navigation_steps.SourceNavigationStepsMixin,
-        journalist_navigation_steps.JournalistNavigationStepsMixin):
+class TestSourceLayout:
+    def test(self, locale, sd_servers_v2_with_clean_state, tor_browser_web_driver):
+        # Given a source user accessing the app from their browser
+        locale_with_commas = locale.replace("_", "-")
+        source_app_nav = SourceAppNagivator(
+            source_app_base_url=sd_servers_v2_with_clean_state.source_app_base_url,
+            web_driver=tor_browser_web_driver,
+            accept_languages=locale_with_commas,
+        )
 
-    def test_lookup(self):
-        self._source_visits_source_homepage()
-        self._source_chooses_to_submit_documents()
-        self._source_continues_to_submit_page()
-        self._source_submits_a_file()
-        self._screenshot('source-lookup.png')
-        self._save_html('source-lookup.html')
+        # And they created an account
+        source_app_nav.source_visits_source_homepage()
 
-    def test_lookup_shows_codename(self):
-        self._source_visits_source_homepage()
-        self._source_chooses_to_submit_documents()
-        self._source_continues_to_submit_page()
-        self._source_shows_codename()
-        self._screenshot('source-lookup-shows-codename.png')
-        self._save_html('source-lookup-shows-codename.html')
+        # Take a screenshot of the "account created" page
+        source_app_nav.source_clicks_submit_documents_on_homepage()
+        save_screenshot_and_html(source_app_nav.driver, locale, "source-generate")
 
-    def test_login(self):
-        self._source_visits_source_homepage()
-        self._source_chooses_to_login()
-        self._screenshot('source-login.png')
-        self._save_html('source-login.html')
+        # Take a screenshot of showing the codename hint
+        source_app_nav.source_continues_to_submit_page()
+        source_app_nav.source_retrieves_codename_from_hint()
+        save_screenshot_and_html(source_app_nav.driver, locale, "source-lookup-shows-codename")
 
-    def test_enters_text_in_login_form(self):
-        self._source_visits_source_homepage()
-        self._source_chooses_to_login()
-        self._source_enters_codename_in_login_form()
-        self._screenshot('source-enter-codename-in-login.png')
-        self._save_html('source-enter-codename-in-login.html')
+        # Take a screenshot of entering text in the message field
+        source_app_nav.nav_helper.safe_send_keys_by_id("msg", "Secret message éè")
+        save_screenshot_and_html(source_app_nav.driver, locale, "source-submission_entered_text")
 
-    def test_generate(self):
-        self._source_visits_source_homepage()
-        self._source_chooses_to_submit_documents()
-        self._screenshot('source-generate.png')
-        self._save_html('source-generate.html')
+        # Take a screenshot of submitting a file
+        source_app_nav.source_submits_a_file()
+        save_screenshot_and_html(source_app_nav.driver, locale, "source-lookup")
 
-    def test_submission_entered_text(self):
-        self._source_visits_source_homepage()
-        self._source_chooses_to_submit_documents()
-        self._source_continues_to_submit_page()
-        self._source_enters_text_in_message_field()
-        self._screenshot('source-submission_entered_text.png')
-        self._save_html('source-submission_entered_text.html')
+        # Take a screenshot of doing a second submission
+        source_app_nav.source_submits_a_message()
+        save_screenshot_and_html(
+            source_app_nav.driver, locale, "source-next_submission_flashed_message"
+        )
 
-    def test_next_submission_flashed_message(self):
-        self._source_visits_source_homepage()
-        self._source_chooses_to_submit_documents()
-        self._source_continues_to_submit_page()
-        self._source_submits_a_file()
-        self._source_submits_a_message()
-        self._screenshot('source-next_submission_flashed_message.png')
-        self._save_html('source-next_submission_flashed_message.html')
+    def test_login(self, locale, sd_servers_v2_with_clean_state, tor_browser_web_driver):
+        # Given a source user accessing the app from their browser
+        source_app_nav = SourceAppNagivator(
+            source_app_base_url=sd_servers_v2_with_clean_state.source_app_base_url,
+            web_driver=tor_browser_web_driver,
+        )
 
-    # TODO(AD): This should be merged with test_submit_and_retrieve_happy_path()
-    def test_source_checks_for_reply(self):
-        self._source_visits_source_homepage()
-        self._source_chooses_to_submit_documents()
-        self._source_continues_to_submit_page()
-        self._source_submits_a_file()
-        self._source_logs_out()
-        self._journalist_logs_in()
-        self._journalist_checks_messages()
-        self._journalist_downloads_message()
-        self._journalist_sends_reply_to_source()
-        self._source_visits_source_homepage()
-        self._source_chooses_to_login()
-        self._source_proceeds_to_login()
-        self._screenshot('source-checks_for_reply.png')
-        self._save_html('source-checks_for_reply.html')
-        self._source_deletes_a_journalist_reply()
-        self._screenshot('source-deletes_reply.png')
-        self._save_html('source-deletes_reply.html')
+        # And they created an account
+        source_app_nav.source_visits_source_homepage()
+
+        # Take a screenshot of the login page
+        source_app_nav.source_chooses_to_login()
+        save_screenshot_and_html(source_app_nav.driver, locale, "source-login")
+
+        # Take a screenshot of entering text in the login form
+        source_app_nav.nav_helper.safe_send_keys_by_id(
+            "codename", "ascension hypertext concert synopses"
+        )
+        save_screenshot_and_html(source_app_nav.driver, locale, "source-enter-codename-in-login")

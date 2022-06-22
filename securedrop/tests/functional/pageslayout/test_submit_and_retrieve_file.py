@@ -5,41 +5,23 @@ from selenium.common.exceptions import NoSuchElementException
 
 from encryption import EncryptionManager
 from tests.functional.app_navigators import SourceAppNagivator, JournalistAppNavigator
+from tests.functional.pageslayout.functional_test import list_locales
+from tests.functional.pageslayout.screenshot_utils import save_screenshot_and_html
 
 
+@pytest.mark.parametrize("locale", list_locales())
+@pytest.mark.pagelayout
 class TestSubmitAndRetrieveFile:
 
-    @staticmethod
-    def _journalist_stars_and_unstars_single_message(journ_app_nav: JournalistAppNavigator) -> None:
-        # Message begins unstarred
-        with pytest.raises(NoSuchElementException):
-            journ_app_nav.driver.find_element_by_id("starred-source-link-1")
-
-        # Journalist stars the message
-        journ_app_nav.driver.find_element_by_class_name("button-star").click()
-
-        def message_starred():
-            starred = journ_app_nav.driver.find_elements_by_id("starred-source-link-1")
-            assert 1 == len(starred)
-
-        journ_app_nav.nav_helper.wait_for(message_starred)
-
-        # Journalist unstars the message
-        journ_app_nav.driver.find_element_by_class_name("button-star").click()
-
-        def message_unstarred():
-            with pytest.raises(NoSuchElementException):
-                journ_app_nav.driver.find_element_by_id("starred-source-link-1")
-
-        journ_app_nav.nav_helper.wait_for(message_unstarred)
-
     def test_submit_and_retrieve_happy_path(
-        self, sd_servers_v2_with_clean_state, tor_browser_web_driver, firefox_web_driver
+        self, locale, sd_servers_v2_with_clean_state, tor_browser_web_driver, firefox_web_driver
     ):
         # Given a source user accessing the app from their browser
+        locale_with_commas = locale.replace("_", "-")
         source_app_nav = SourceAppNagivator(
             source_app_base_url=sd_servers_v2_with_clean_state.source_app_base_url,
             web_driver=tor_browser_web_driver,
+            accept_languages=locale_with_commas,
         )
 
         # And they created an account
@@ -86,9 +68,11 @@ class TestSubmitAndRetrieveFile:
         source_app_nav.source_visits_source_homepage()
         source_app_nav.source_chooses_to_login()
         source_app_nav.source_proceeds_to_login(codename=source_codename)
+        save_screenshot_and_html(source_app_nav.driver, locale, 'source-checks_for_reply')
 
         # When they delete the journalist's reply, it succeeds
         self._source_deletes_journalist_reply(source_app_nav)
+        save_screenshot_and_html(source_app_nav.driver, locale, 'source-deletes_reply')
 
     @staticmethod
     def _source_deletes_journalist_reply(navigator: SourceAppNagivator) -> None:
@@ -117,3 +101,27 @@ class TestSubmitAndRetrieveFile:
                 assert "Reply deleted" in notification.text
 
         navigator.nav_helper.wait_for(reply_deleted)
+
+    @staticmethod
+    def _journalist_stars_and_unstars_single_message(journ_app_nav: JournalistAppNavigator) -> None:
+        # Message begins unstarred
+        with pytest.raises(NoSuchElementException):
+            journ_app_nav.driver.find_element_by_id("starred-source-link-1")
+
+        # Journalist stars the message
+        journ_app_nav.driver.find_element_by_class_name("button-star").click()
+
+        def message_starred():
+            starred = journ_app_nav.driver.find_elements_by_id("starred-source-link-1")
+            assert 1 == len(starred)
+
+        journ_app_nav.nav_helper.wait_for(message_starred)
+
+        # Journalist unstars the message
+        journ_app_nav.driver.find_element_by_class_name("button-star").click()
+
+        def message_unstarred():
+            with pytest.raises(NoSuchElementException):
+                journ_app_nav.driver.find_element_by_id("starred-source-link-1")
+
+        journ_app_nav.nav_helper.wait_for(message_unstarred)
