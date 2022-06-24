@@ -1,5 +1,6 @@
 [tool.black]
 line-length = 100
+exclude = "securedrop/config.py"
 
 [tool.isort]
 line_length = 100

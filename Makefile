@@ -222,6 +222,15 @@ securedrop/config.py: ## Generate the test SecureDrop application config.
 	@echo "SUPPORTED_LOCALES = $$(if test -f /opt/venvs/securedrop-app-code/bin/python3; then ./securedrop/i18n_tool.py list-locales --python; else DOCKER_BUILD_VERBOSE=false $(DEVSHELL) ./i18n_tool.py list-locales --python; fi)" | sed 's/\r//' >> securedrop/config.py
 	@echo
 
+.PHONY: setup-dev-env
+setup-dev-env: venv add-hooks ## Set up tools and hooks for local development
+
+.PHONY: add-hooks
+add-hooks:  ## copy precommit hooks into place
+	@echo "███ copying git hooks..."
+	@mkdir -p .git/hooks
+	@cp .githooks/* .git/hooks
+
 .PHONY: test-config
 test-config: securedrop/config.py
 

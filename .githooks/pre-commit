@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+# shellcheck disable=SC2086
+
+PY_FILES=$(git diff --name-only --cached --diff-filter=ACMR | grep ".py$")
+
+set -eo pipefail
+
+if [[ -n "$PY_FILES" ]]; then
+    # set up the virtualenv if it's not already available
+    if [[ ! -v VIRTUAL_ENV ]]; then
+        make venv && source .venv/bin/activate
+    fi
+    echo "Checking:"
+    echo "$PY_FILES"
+    # Run black against changed python files for this commit
+    black --check --diff ${PY_FILES//$'\n'/ }
+    # Run flake8 against changed python files for this commit
+    flake8 ${PY_FILES//$'\n'/ } && echo "flake8 passed!"
+else
+    exit 0
+fi
+
+exit 0
