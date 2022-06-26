@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from datetime import datetime, timezone
 from io import BytesIO
 from pathlib import Path
-from typing import Generator, Tuple, Optional, Callable
+from typing import Generator, Tuple, Optional, Callable, Any
 from uuid import uuid4
 
 import requests
@@ -99,7 +99,7 @@ class SdServersFixtureResult:
 @contextmanager
 def spawn_sd_servers(
     config_to_use: SecureDropConfig,
-    journalist_app_setup_callback: Optional[Callable[[SecureDropConfig], None]] = None,
+    journalist_app_setup_callback: Optional[Callable[[SecureDropConfig], Any]] = None,
 ) -> Generator[SdServersFixtureResult, None, None]:
     """Spawn the source and journalist apps as separate processes with the supplied config.
 
@@ -257,7 +257,7 @@ def sd_servers_v2_with_submitted_file(
         yield sd_servers_result
 
 
-def _create_source_and_submission(config_in_use: SecureDropConfig) -> None:
+def _create_source_and_submission(config_in_use: SecureDropConfig) -> Path:
     """Directly create a source and a submission within the app.
 
     Some tests for the journalist app require a submission to already be present, and this
@@ -302,8 +302,11 @@ def _create_source_and_submission(config_in_use: SecureDropConfig) -> None:
         source_db_record.last_updated = datetime.now(timezone.utc)
         db_session.commit()
 
+        submission_file_path = app_storage.path(source_user.filesystem_id, submission.filename)
         add_checksum_for_file(
             session=db_session,
             db_obj=submission,
-            file_path=app_storage.path(source_user.filesystem_id, submission.filename),
+            file_path=submission_file_path,
         )
+
+        return Path(submission_file_path)
