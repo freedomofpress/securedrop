@@ -312,27 +312,16 @@ class JournalistAppNavigator:
         )
 
     def journalist_logs_in(self, username: str, password: str, otp_secret: str) -> None:
+        # Submit the login form
+        self.driver.get(f"{self._journalist_app_base_url}/login")
+        self.nav_helper.safe_send_keys_by_css_selector('input[name="username"]', username)
+        self.nav_helper.safe_send_keys_by_css_selector('input[name="password"]', password)
         otp = pyotp.TOTP(otp_secret)
-        token = str(otp.now())
-        for i in range(3):
-            # Submit the login form
-            self.driver.get(f"{self._journalist_app_base_url}/login")
-            self.nav_helper.safe_send_keys_by_css_selector('input[name="username"]', username)
-            self.nav_helper.safe_send_keys_by_css_selector('input[name="password"]', password)
-            self.nav_helper.safe_send_keys_by_css_selector('input[name="token"]', token)
-            self.nav_helper.safe_click_by_css_selector('button[type="submit"]')
+        self.nav_helper.safe_send_keys_by_css_selector('input[name="token"]', str(otp.now()))
+        self.nav_helper.safe_click_by_css_selector('button[type="submit"]')
 
-            # Successful login should redirect to the index
-            self.nav_helper.wait_for(lambda: self.driver.find_element_by_id("link-logout"))
-            if self.driver.current_url != self._journalist_app_base_url:
-                new_token = str(otp.now())
-                while token == new_token:
-                    time.sleep(1)
-                    new_token = str(otp.now())
-                token = new_token
-            else:
-                break
-
+        # Successful login should redirect to the index
+        self.nav_helper.wait_for(lambda: self.driver.find_element_by_id("link-logout"))
         assert self.is_on_journalist_homepage()
 
     def journalist_checks_messages(self) -> None:
