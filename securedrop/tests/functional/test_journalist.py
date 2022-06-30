@@ -16,19 +16,22 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 from pathlib import Path
+from typing import Generator, Tuple
+from uuid import uuid4
 
 import pytest
-
-from source_user import _SourceScryptManager
-from tests.functional import functional_test as ft
-from tests.functional import journalist_navigation_steps
-from tests.functional import source_navigation_steps
-from store import Storage
 
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.keys import Keys
 
 from tests.functional.app_navigators import JournalistAppNavigator
+from tests.functional.conftest import (
+    _create_source_and_submission,
+    SdServersFixtureResult,
+    spawn_sd_servers,
+)
+from tests.functional.factories import SecureDropConfigFactory
+from tests.functional.sd_config_v2 import SecureDropConfig
 
 
 class TestJournalist:
@@ -374,77 +377,180 @@ class TestJournalist:
         journ_app_nav.nav_helper.wait_for(one_source_no_files)
 
 
-class TestJournalistMissingFile(
-    ft.FunctionalTest,
-    source_navigation_steps.SourceNavigationStepsMixin,
-    journalist_navigation_steps.JournalistNavigationStepsMixin
-):
+@pytest.fixture(scope="function")
+def _sd_servers_v2_with_missing_file(
+    setup_journalist_key_and_gpg_folder: Tuple[str, Path]
+) -> Generator[SdServersFixtureResult, None, None]:
+    """Same as sd_servers_v2 but spawns the apps with a submission whose file has been deleted."""
+    default_config = SecureDropConfigFactory.create(
+        SECUREDROP_DATA_ROOT=Path(f"/tmp/sd-tests/functional-with-missing-file-{uuid4()}"),
+    )
+
+    # Ensure the GPG settings match the one in the config to use, to ensure consistency
+    journalist_key_fingerprint, gpg_dir = setup_journalist_key_and_gpg_folder
+    assert Path(default_config.GPG_KEY_DIR) == gpg_dir
+    assert default_config.JOURNALIST_KEY == journalist_key_fingerprint
+
+    # Spawn the apps in separate processes with a callback have a submission with a missing file
+    with spawn_sd_servers(
+        config_to_use=default_config,
+        journalist_app_setup_callback=_create_submission_with_missing_file,
+    ) as sd_servers_result:
+        yield sd_servers_result
+
+
+def _create_submission_with_missing_file(config_in_use: SecureDropConfig) -> None:
+    submission_file_path = _create_source_and_submission(config_in_use)
+    submission_file_path.unlink()
+
+
+class TestJournalistMissingFile:
     """Test error handling when a message file has been deleted from disk but remains in the
     database. Ref #4787."""
 
-    @pytest.fixture(scope="function")
-    def missing_msg_file(self):
-        """Fixture to setup the message with missing file used in the following tests."""
-        # Submit a message
-        self._source_visits_source_homepage()
-        self._source_chooses_to_submit_documents()
-        self._source_continues_to_submit_page()
-        self._source_submits_a_message()
-        self._source_logs_out()
-
-        # Remove the message file from the store
-        filesystem_id = _SourceScryptManager.get_default().derive_source_filesystem_id(
-            self.source_name
+    def test_download_source_unread(self, _sd_servers_v2_with_missing_file, firefox_web_driver):
+        # Given an SD server with a submission whose file was deleted from disk
+        # And a journalist logged into the journalist interface
+        journ_app_nav = JournalistAppNavigator(
+            journalist_app_base_url=_sd_servers_v2_with_missing_file.journalist_app_base_url,
+            web_driver=firefox_web_driver,
         )
-        storage_path = Path(Storage.get_default().storage_path) / filesystem_id
-        msg_files = [p for p in storage_path.glob("*-msg.gpg")]
-        assert len(msg_files) == 1
-        msg_files[0].unlink()
+        journ_app_nav.journalist_logs_in(
+            username=_sd_servers_v2_with_missing_file.journalist_username,
+            password=_sd_servers_v2_with_missing_file.journalist_password,
+            otp_secret=_sd_servers_v2_with_missing_file.journalist_otp_secret,
+        )
 
-        self.switch_to_firefox_driver()
+        # When the journalist clicks on the source's "n unread" button
+        journ_app_nav.driver.find_element_by_css_selector(
+            "table#collections tr.source > td.unread a"
+        ).click()
 
-        yield
+        # Then they see the expected error message
+        self._journalist_sees_missing_file_error_message(journ_app_nav)
+        journ_app_nav.is_on_journalist_homepage()
 
-        self.switch_to_torbrowser_driver()
+    @staticmethod
+    def _journalist_sees_missing_file_error_message(journ_app_nav: JournalistAppNavigator) -> None:
+        notification = journ_app_nav.driver.find_element_by_css_selector(".error")
 
-    def test_download_source_unread(self, missing_msg_file):
-        """Test behavior when the journalist clicks on the source's "n unread" button from the
-        journalist home page."""
-        self._journalist_logs_in()
-        self._journalist_clicks_source_unread()
-        self._journalist_sees_missing_file_error_message(single_file=True)
-        self._is_on_journalist_homepage()
+        # We use a definite article ("the" instead of "a") if a single file
+        # is downloaded directly.
+        error_msg = (
+            "Your download failed because the file could not be found. An admin can find "
+            + "more information in the system and monitoring logs."
+        )
 
-    def test_select_source_and_download_all(self, missing_msg_file):
-        """Test behavior when the journalist selects the source then clicks the "Download" button
-        from the journalist home page."""
-        self._journalist_logs_in()
-        self._journalist_selects_first_source_then_download_all()
-        self._journalist_sees_missing_file_error_message(single_file=True)
-        self._is_on_journalist_homepage()
+        assert notification.text in error_msg
 
-    def test_select_source_and_download_unread(self, missing_msg_file):
-        """Test behavior when the journalist selects the source then clicks the "Download Unread"
-        button from the journalist home page."""
-        self._journalist_logs_in()
-        self._journalist_selects_first_source_then_download_unread()
-        self._journalist_sees_missing_file_error_message(single_file=True)
-        self._is_on_journalist_homepage()
+    def test_select_source_and_download_all(
+        self, _sd_servers_v2_with_missing_file, firefox_web_driver
+    ):
+        # Given an SD server with a submission whose file was deleted from disk
+        # And a journalist logged into the journalist interface
+        journ_app_nav = JournalistAppNavigator(
+            journalist_app_base_url=_sd_servers_v2_with_missing_file.journalist_app_base_url,
+            web_driver=firefox_web_driver,
+        )
+        journ_app_nav.journalist_logs_in(
+            username=_sd_servers_v2_with_missing_file.journalist_username,
+            password=_sd_servers_v2_with_missing_file.journalist_password,
+            otp_secret=_sd_servers_v2_with_missing_file.journalist_otp_secret,
+        )
 
-    def test_download_message(self, missing_msg_file):
-        """Test behavior when the journalist clicks on the individual message from the source page.
-        """
-        self._journalist_logs_in()
-        self._journalist_checks_messages()
-        self._journalist_downloads_message_missing_file()
-        self._journalist_sees_missing_file_error_message(single_file=True)
-        self._journalist_is_on_collection_page()
+        # When the journalist selects the source and then clicks the "Download" button
+        checkboxes = journ_app_nav.driver.find_elements_by_name("cols_selected")
+        assert len(checkboxes) == 1
+        checkboxes[0].click()
+        journ_app_nav.driver.find_element_by_xpath("//button[@value='download-all']").click()
 
-    def test_select_message_and_download_selected(self, missing_msg_file):
-        """Test behavior when the journalist selects the individual message from the source page
-        then clicks "Download Selected"."""
-        self._journalist_logs_in()
-        self._journalist_selects_the_first_source()
-        self._journalist_selects_message_then_download_selected()
-        self._journalist_sees_missing_file_error_message(single_file=True)
-        self._journalist_is_on_collection_page()
+        # Then they see the expected error message
+        self._journalist_sees_missing_file_error_message(journ_app_nav)
+        journ_app_nav.is_on_journalist_homepage()
+
+    def test_select_source_and_download_unread(
+        self, _sd_servers_v2_with_missing_file, firefox_web_driver
+    ):
+        # Given an SD server with a submission whose file was deleted from disk
+        # And a journalist logged into the journalist interface
+        journ_app_nav = JournalistAppNavigator(
+            journalist_app_base_url=_sd_servers_v2_with_missing_file.journalist_app_base_url,
+            web_driver=firefox_web_driver,
+        )
+        journ_app_nav.journalist_logs_in(
+            username=_sd_servers_v2_with_missing_file.journalist_username,
+            password=_sd_servers_v2_with_missing_file.journalist_password,
+            otp_secret=_sd_servers_v2_with_missing_file.journalist_otp_secret,
+        )
+
+        # When the journalist selects the source then clicks the "Download Unread" button
+        checkboxes = journ_app_nav.driver.find_elements_by_name("cols_selected")
+        assert len(checkboxes) == 1
+        checkboxes[0].click()
+        journ_app_nav.driver.find_element_by_xpath("//button[@value='download-unread']").click()
+
+        # Then they see the expected error message
+        self._journalist_sees_missing_file_error_message(journ_app_nav)
+        journ_app_nav.is_on_journalist_homepage()
+
+    def test_download_message(self, _sd_servers_v2_with_missing_file, firefox_web_driver):
+        # Given an SD server with a submission whose file was deleted from disk
+        # And a journalist logged into the journalist interface
+        journ_app_nav = JournalistAppNavigator(
+            journalist_app_base_url=_sd_servers_v2_with_missing_file.journalist_app_base_url,
+            web_driver=firefox_web_driver,
+        )
+        journ_app_nav.journalist_logs_in(
+            username=_sd_servers_v2_with_missing_file.journalist_username,
+            password=_sd_servers_v2_with_missing_file.journalist_password,
+            otp_secret=_sd_servers_v2_with_missing_file.journalist_otp_secret,
+        )
+
+        # When the journalist clicks on the individual message from the source page
+        journ_app_nav.journalist_checks_messages()
+        journ_app_nav.journalist_selects_the_first_source()
+
+        journ_app_nav.nav_helper.wait_for(
+            lambda: journ_app_nav.driver.find_element_by_css_selector("table#submissions")
+        )
+        submissions = journ_app_nav.driver.find_elements_by_css_selector("#submissions a")
+        assert 1 == len(submissions)
+
+        file_link = submissions[0]
+        file_link.click()
+
+        # Then they see the expected error message
+        self._journalist_sees_missing_file_error_message(journ_app_nav)
+        self._journalist_is_on_collection_page(journ_app_nav)
+
+    @staticmethod
+    def _journalist_is_on_collection_page(journ_app_nav: JournalistAppNavigator) -> None:
+        return journ_app_nav.nav_helper.wait_for(
+            lambda: journ_app_nav.driver.find_element_by_css_selector("div.journalist-view-single")
+        )
+
+    def test_select_message_and_download_selected(
+        self, _sd_servers_v2_with_missing_file, firefox_web_driver
+    ):
+        # Given an SD server with a submission whose file was deleted from disk
+        # And a journalist logged into the journalist interface
+        journ_app_nav = JournalistAppNavigator(
+            journalist_app_base_url=_sd_servers_v2_with_missing_file.journalist_app_base_url,
+            web_driver=firefox_web_driver,
+        )
+        journ_app_nav.journalist_logs_in(
+            username=_sd_servers_v2_with_missing_file.journalist_username,
+            password=_sd_servers_v2_with_missing_file.journalist_password,
+            otp_secret=_sd_servers_v2_with_missing_file.journalist_otp_secret,
+        )
+        # When the journalist selects the individual message from the source page
+        # and clicks "Download Selected"
+        journ_app_nav.journalist_selects_the_first_source()
+        checkboxes = journ_app_nav.driver.find_elements_by_name("doc_names_selected")
+        assert len(checkboxes) == 1
+        checkboxes[0].click()
+        journ_app_nav.driver.find_element_by_xpath("//button[@value='download']").click()
+
+        # Then they see the expected error message
+        self._journalist_sees_missing_file_error_message(journ_app_nav)
+        self._journalist_is_on_collection_page(journ_app_nav)

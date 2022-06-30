@@ -665,17 +665,6 @@ class JournalistNavigationStepsMixin:
 
         assert self.secret_message == submission
 
-    def _journalist_downloads_message_missing_file(self):
-        self._journalist_selects_the_first_source()
-
-        self.wait_for(lambda: self.driver.find_element_by_css_selector("table#submissions"))
-
-        submissions = self.driver.find_elements_by_css_selector("#submissions a")
-        assert 1 == len(submissions)
-
-        file_link = submissions[0]
-        file_link.click()
-
     def _journalist_composes_reply(self):
         reply_text = (
             "Thanks for the documents. Can you submit more " "information about the main program?"
@@ -922,53 +911,3 @@ class JournalistNavigationStepsMixin:
         self.safe_send_keys_by_css_selector('input[name="username"]', username)
         self.safe_send_keys_by_css_selector('input[name="otp_secret"]', hotp_secret)
         self.safe_click_by_css_selector('input[name="is_hotp"]')
-
-    def _journalist_sees_missing_file_error_message(self, single_file=False):
-        notification = self.driver.find_element_by_css_selector(".error")
-
-        # We use a definite article ("the" instead of "a") if a single file
-        # is downloaded directly.
-        if single_file:
-            error_msg = (
-                "Your download failed because the file could not be found. An admin can find "
-                + "more information in the system and monitoring logs."
-            )
-        else:
-            error_msg = (
-                "Your download failed because a file could not be found. An admin can find "
-                + "more information in the system and monitoring logs."
-            )
-
-        if self.accept_languages is None:
-            assert notification.text in error_msg
-
-    def _journalist_is_on_collection_page(self):
-        return self.wait_for(
-            lambda: self.driver.find_element_by_css_selector("div.journalist-view-single")
-        )
-
-    def _journalist_clicks_source_unread(self):
-        self.driver.find_element_by_css_selector(
-            "table#collections tr.source > td.unread a"
-            ).click()
-
-    def _journalist_selects_first_source_then_download_all(self):
-        checkboxes = self.driver.find_elements_by_name("cols_selected")
-        assert len(checkboxes) == 1
-        checkboxes[0].click()
-
-        self.driver.find_element_by_xpath("//button[@value='download-all']").click()
-
-    def _journalist_selects_first_source_then_download_unread(self):
-        checkboxes = self.driver.find_elements_by_name("cols_selected")
-        assert len(checkboxes) == 1
-        checkboxes[0].click()
-
-        self.driver.find_element_by_xpath("//button[@value='download-unread']").click()
-
-    def _journalist_selects_message_then_download_selected(self):
-        checkboxes = self.driver.find_elements_by_name("doc_names_selected")
-        assert len(checkboxes) == 1
-        checkboxes[0].click()
-
-        self.driver.find_element_by_xpath("//button[@value='download']").click()
