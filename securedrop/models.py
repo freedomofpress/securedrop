@@ -12,8 +12,8 @@ from io import BytesIO
 
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives.kdf import scrypt
-from flask import current_app, url_for
-from flask_babel import gettext, ngettext
+from flask import url_for
+from flask_babel import ngettext
 from itsdangerous import TimedJSONWebSignatureSerializer, BadData
 from markupsafe import Markup
 from passlib.hash import argon2
@@ -22,7 +22,8 @@ from sqlalchemy.orm import relationship, backref, Query
 from sqlalchemy import Column, Integer, String, Boolean, DateTime, LargeBinary
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
-
+from flask import Flask, current_app
+from flask_babel import Babel, gettext
 from db import db
 
 from typing import Callable, Optional, Union, Dict, List, Any
@@ -34,6 +35,8 @@ from passphrases import PassphraseGenerator
 from store import Storage
 
 _default_instance_config: Optional["InstanceConfig"] = None
+app = Flask(__name__, _default_instance_config)
+babel = Babel(app)
 
 LOGIN_HARDENING = True
 if os.environ.get('SECUREDROP_ENV') == 'test':
@@ -520,20 +523,22 @@ class Journalist(db.Model):
     @classmethod
     def check_username_acceptable(cls, username: str) -> None:
         if len(username) < cls.MIN_USERNAME_LEN:
-            raise InvalidUsernameException(
-                ngettext(
-                    'Must be at least {num} character long.',
-                    'Must be at least {num} characters long.',
-                    cls.MIN_USERNAME_LEN
-                ).format(num=cls.MIN_USERNAME_LEN)
-            )
-        if username in cls.INVALID_USERNAMES:
-            raise InvalidUsernameException(
-                gettext(
-                    "This username is invalid because it is reserved "
-                    "for internal use by the software."
+            with app.app_context():
+                raise InvalidUsernameException(
+                    ngettext(
+                        'Must be at least {num} character long.',
+                        'Must be at least {num} characters long.',
+                        cls.MIN_USERNAME_LEN
+                    ).format(num=cls.MIN_USERNAME_LEN)
                 )
-            )
+        if username in cls.INVALID_USERNAMES:
+            with app.app_context():
+                raise InvalidUsernameException(
+                    gettext(
+                        "This username is invalid because it is reserved "
+                        "for internal use by the software."
+                    )
+                )
 
     @classmethod
     def check_name_acceptable(cls, name: str) -> None:
