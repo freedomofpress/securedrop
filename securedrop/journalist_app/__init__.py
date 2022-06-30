@@ -34,8 +34,6 @@ if typing.TYPE_CHECKING:
     from werkzeug.exceptions import HTTPException  # noqa: F401
 
 _insecure_views = ['main.login', 'static']
-# Timezone-naive datetime format expected by SecureDrop Client
-API_DATETIME_FORMAT = "%Y-%m-%dT%H:%M:%S.%fZ"
 
 
 def get_logo_url(app: Flask) -> str:
@@ -73,7 +71,7 @@ def create_app(config: 'SDConfig') -> Flask:
 
         def default(self, obj: 'Any') -> 'Any':
             if isinstance(obj, datetime):
-                return obj.strftime(API_DATETIME_FORMAT)
+                return obj.isoformat()
             super(JSONEncoder, self).default(obj)
 
     app.json_encoder = JSONEncoder
