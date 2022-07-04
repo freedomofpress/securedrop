@@ -159,7 +159,7 @@ def spawn_sd_servers(
                 response_journalist = requests.get(journalist_app_base_url, timeout=1)
                 response_journalist_status_code = response_journalist.status_code
                 break
-            except requests.ConnectionError:
+            except (requests.ConnectionError, requests.Timeout):
                 time.sleep(0.25)
         assert response_source_status_code == 200
         assert response_journalist_status_code == 200
