@@ -71,9 +71,9 @@ def migrate_nulls() -> None:
     needs_migration = []
     conn = op.get_bind()
     for table in tables:
-        result = conn.execute(
+        result = conn.execute(  # nosec
             f"SELECT 1 FROM {table} WHERE journalist_id IS NULL;"
-        ).first()  # nosec
+        ).first()
         if result is not None:
             needs_migration.append(table)
 

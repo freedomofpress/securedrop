@@ -88,9 +88,9 @@ def create_app(config: SDConfig) -> Flask:
     @ignore_static
     def setup_g() -> Optional[werkzeug.Response]:
         if InstanceConfig.get_default(refresh=True).organization_name:
-            g.organization_name = (
+            g.organization_name = (  # pylint: disable=assigning-non-slot
                 InstanceConfig.get_default().organization_name
-            )  # pylint: disable=assigning-non-slot
+            )
         else:
             g.organization_name = gettext("SecureDrop")  # pylint: disable=assigning-non-slot
 
