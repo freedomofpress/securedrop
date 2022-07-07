@@ -7,11 +7,8 @@ import pytest
 import yaml
 from testinfra.host import Host
 
-
 SECUREDROP_TARGET_DISTRIBUTION = os.environ.get("SECUREDROP_TARGET_DISTRIBUTION")
-testinfra_hosts = [
-    "docker://{}-sd-dpkg-verification".format(SECUREDROP_TARGET_DISTRIBUTION)
-]
+testinfra_hosts = ["docker://{}-sd-dpkg-verification".format(SECUREDROP_TARGET_DISTRIBUTION)]
 
 
 def extract_package_name_from_filepath(filepath: str) -> str:
@@ -43,9 +40,7 @@ def load_securedrop_test_vars() -> Dict[str, Any]:
     test_vars = yaml.safe_load(open(filepath))
 
     # Tack on target OS for use in tests
-    test_vars["securedrop_target_distribution"] = os.environ.get(
-        "SECUREDROP_TARGET_DISTRIBUTION"
-    )
+    test_vars["securedrop_target_distribution"] = os.environ.get("SECUREDROP_TARGET_DISTRIBUTION")
 
     return test_vars
 
@@ -63,8 +58,7 @@ def make_deb_paths() -> Dict[str, Path]:
     """
 
     grsec_version = "{}+{}".format(
-        securedrop_test_vars["grsec_version_focal"],
-        SECUREDROP_TARGET_DISTRIBUTION
+        securedrop_test_vars["grsec_version_focal"], SECUREDROP_TARGET_DISTRIBUTION
     )
 
     substitutions = dict(
@@ -131,15 +125,11 @@ def get_static_asset_paths(securedrop_root: Path, pattern: str) -> List[Path]:
     Returns static assets matching the pattern.
     """
     static_dir = securedrop_root / "securedrop/static"
-    skip = [
-        re.compile(p) for p in [r"\.map$", r"\.webassets-cache$", "custom_logo.png$"]
-    ]
+    skip = [re.compile(p) for p in [r"\.map$", r"\.webassets-cache$", "custom_logo.png$"]]
     return get_source_paths(static_dir, pattern, skip)
 
 
-def verify_static_assets(
-    securedrop_app_code_contents: str, securedrop_root: Path, pattern
-) -> None:
+def verify_static_assets(securedrop_app_code_contents: str, securedrop_root: Path, pattern) -> None:
     """
     Verifies that the securedrop-app-code package contains the given static assets.
 
@@ -181,10 +171,7 @@ def test_deb_packages_appear_installable(host: Host, deb: Path) -> None:
     # sudo is required to call `dpkg --install`, even as dry-run.
     with host.sudo():
         c = host.run("dpkg --install --dry-run {}".format(deb))
-        assert (
-            "Selecting previously unselected package {}".format(package_name)
-            in c.stdout
-        )
+        assert "Selecting previously unselected package {}".format(package_name) in c.stdout
         regex = "Preparing to unpack [./]+{} ...".format(re.escape(deb.name))
         assert re.search(regex, c.stdout, re.M)
         assert c.rc == 0
@@ -230,9 +217,7 @@ def test_securedrop_app_code_contains_no_config_file(securedrop_app_code_content
     Ensures the `securedrop-app-code` package does not ship a `config.py`
     file. Doing so would clobber the site-specific changes made via Ansible.
     """
-    assert not re.search(
-        r"^ ./var/www/securedrop/config.py$", securedrop_app_code_contents, re.M
-    )
+    assert not re.search(r"^ ./var/www/securedrop/config.py$", securedrop_app_code_contents, re.M)
 
 
 def test_securedrop_app_code_contains_pot_file(securedrop_app_code_contents: str):

@@ -1,15 +1,17 @@
 import pytest
-
 import testutils
 
 securedrop_test_vars = testutils.securedrop_test_vars
 testinfra_hosts = [securedrop_test_vars.app_hostname]
 
 
-@pytest.mark.parametrize("apache_site", [
-    "source",
-    "journalist",
-])
+@pytest.mark.parametrize(
+    "apache_site",
+    [
+        "source",
+        "journalist",
+    ],
+)
 def test_apache_enabled_sites(host, apache_site):
     """
     Ensure the Source and Journalist interfaces are enabled.
@@ -20,9 +22,12 @@ def test_apache_enabled_sites(host, apache_site):
         assert c.rc == 0
 
 
-@pytest.mark.parametrize("apache_site", [
-    "000-default",
-])
+@pytest.mark.parametrize(
+    "apache_site",
+    [
+        "000-default",
+    ],
+)
 def test_apache_disabled_sites(host, apache_site):
     """
     Ensure the default HTML document root is disabled.
@@ -54,10 +59,13 @@ def test_apache_user(host):
     assert u.shell == "/usr/sbin/nologin"
 
 
-@pytest.mark.parametrize("port", [
-    "80",
-    "8080",
-])
+@pytest.mark.parametrize(
+    "port",
+    [
+        "80",
+        "8080",
+    ],
+)
 def test_apache_listening(host, port):
     """
     Ensure Apache is listening on proper ports and interfaces.
@@ -66,6 +74,5 @@ def test_apache_listening(host, port):
     """
     # sudo is necessary to read from /proc/net/tcp.
     with host.sudo():
-        s = host.socket("tcp://{}:{}".format(
-            securedrop_test_vars.apache_listening_address, port))
+        s = host.socket("tcp://{}:{}".format(securedrop_test_vars.apache_listening_address, port))
         assert s.is_listening

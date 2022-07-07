@@ -2,14 +2,13 @@ from datetime import datetime, timedelta, timezone
 from unittest import mock
 
 import pytest
-
 from db import db
 from passphrases import PassphraseGenerator
 from source_app.session_manager import (
     SessionManager,
+    UserHasBeenDeleted,
     UserNotLoggedIn,
     UserSessionExpired,
-    UserHasBeenDeleted,
 )
 from source_user import create_source_user
 

@@ -5,12 +5,12 @@ import uuid
 from typing import Any, Dict
 
 import pytest
+from db import db
+from journalist_app import create_app
 from sqlalchemy import text
 from sqlalchemy.exc import OperationalError
 
-from db import db
-from journalist_app import create_app
-from .helpers import random_chars, random_datetime, bool_or_none
+from .helpers import bool_or_none, random_chars, random_datetime
 
 random.seed("ᕕ( ᐛ )ᕗ")
 
@@ -22,7 +22,7 @@ def add_submission(source_id):
         "filename": random_chars(50),
         "size": random.randint(0, 1024 * 1024 * 500),
         "downloaded": bool_or_none(),
-        "checksum": random_chars(255, chars="0123456789abcdef")
+        "checksum": random_chars(255, chars="0123456789abcdef"),
     }
     sql = """
     INSERT INTO submissions (uuid, source_id, filename, size, downloaded, checksum)

@@ -3,10 +3,10 @@
 import random
 from uuid import uuid4
 
+import pytest
+import sqlalchemy
 from db import db
 from journalist_app import create_app
-import sqlalchemy
-import pytest
 
 from .helpers import bool_or_none, random_bool, random_chars, random_datetime
 
@@ -76,8 +76,6 @@ class DowngradeTester:
         with self.app.app_context():
             with pytest.raises(sqlalchemy.exc.OperationalError):
                 sources = db.engine.execute(
-                    sqlalchemy.text(
-                        "SELECT * FROM sources WHERE deleted_at IS NOT NULL"
-                    )
+                    sqlalchemy.text("SELECT * FROM sources WHERE deleted_at IS NOT NULL")
                 ).fetchall()
                 assert len(sources) == 0

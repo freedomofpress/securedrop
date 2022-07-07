@@ -1,16 +1,14 @@
-import typing
-from distutils.version import StrictVersion
-from io import StringIO, BytesIO
-from pathlib import Path
-from typing import Optional, Dict, List
-
-import pretty_bad_protocol as gnupg
 import os
 import re
-
+import typing
 from datetime import date
-from redis import Redis
+from distutils.version import StrictVersion
+from io import BytesIO, StringIO
+from pathlib import Path
+from typing import Dict, List, Optional
 
+import pretty_bad_protocol as gnupg
+from redis import Redis
 
 if typing.TYPE_CHECKING:
     from source_user import SourceUser
@@ -94,16 +92,14 @@ class EncryptionManager:
 
         # Instantiate the "main" GPG binary
         gpg = gnupg.GPG(
-            binary="gpg2",
-            homedir=str(self._gpg_key_dir),
-            options=["--trust-model direct"]
+            binary="gpg2", homedir=str(self._gpg_key_dir), options=["--trust-model direct"]
         )
         if StrictVersion(gpg.binary_version) >= StrictVersion("2.1"):
             # --pinentry-mode, required for SecureDrop on GPG 2.1.x+, was added in GPG 2.1.
             self._gpg = gnupg.GPG(
                 binary="gpg2",
                 homedir=str(gpg_key_dir),
-                options=["--pinentry-mode loopback", "--trust-model direct"]
+                options=["--pinentry-mode loopback", "--trust-model direct"],
             )
         else:
             self._gpg = gpg
@@ -112,9 +108,7 @@ class EncryptionManager:
         # invoking pinentry-mode=loopback
         # see: https://lists.gnupg.org/pipermail/gnupg-users/2016-May/055965.html
         self._gpg_for_key_deletion = gnupg.GPG(
-            binary="gpg2",
-            homedir=str(self._gpg_key_dir),
-            options=["--yes", "--trust-model direct"]
+            binary="gpg2", homedir=str(self._gpg_key_dir), options=["--yes", "--trust-model direct"]
         )
 
         # Ensure that the journalist public key has been previously imported in GPG

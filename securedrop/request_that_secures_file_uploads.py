@@ -1,14 +1,12 @@
 from io import BytesIO
-from typing import Optional, IO
+from typing import IO, Optional
 
 from flask import wrappers
-from werkzeug.formparser import FormDataParser
-
 from secure_tempfile import SecureTemporaryFile
+from werkzeug.formparser import FormDataParser
 
 
 class RequestThatSecuresFileUploads(wrappers.Request):
-
     def _secure_file_stream(
         self,
         total_content_length: Optional[int],
@@ -31,13 +29,15 @@ class RequestThatSecuresFileUploads(wrappers.Request):
             # note in `config.py` for more info. Instead, we just use
             # `/tmp`, which has the additional benefit of being
             # automatically cleared on reboot.
-            return SecureTemporaryFile('/tmp')  # nosec
+            return SecureTemporaryFile("/tmp")  # nosec
         return BytesIO()
 
     def make_form_data_parser(self) -> FormDataParser:
-        return self.form_data_parser_class(self._secure_file_stream,
-                                           self.charset,
-                                           self.encoding_errors,
-                                           self.max_form_memory_size,
-                                           self.max_content_length,
-                                           self.parameter_storage_class)
+        return self.form_data_parser_class(
+            self._secure_file_stream,
+            self.charset,
+            self.encoding_errors,
+            self.max_form_memory_size,
+            self.max_content_length,
+            self.parameter_storage_class,
+        )

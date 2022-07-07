@@ -2,13 +2,13 @@
 
 import random
 import string
+from uuid import uuid4
 
 import pytest
 from db import db
 from journalist_app import create_app
 from sqlalchemy import text
 from sqlalchemy.exc import IntegrityError
-from uuid import uuid4
 
 from .helpers import (
     bool_or_none,
@@ -23,12 +23,11 @@ random.seed("ᕕ( ᐛ )ᕗ")
 
 
 class Helper:
-
     @staticmethod
     def add_source():
         filesystem_id = random_chars(96) if random_bool() else None
         params = {
-            'uuid': str(uuid4()),
+            "uuid": str(uuid4()),
             "filesystem_id": filesystem_id,
             "journalist_designation": random_chars(50),
             "flagged": bool_or_none(),
@@ -127,7 +126,7 @@ class Helper:
             "source_id": source_id,
             "filename": random_chars(50),
             "size": random.randint(0, 1024 * 1024 * 500),
-            "deleted_by_source": 0
+            "deleted_by_source": 0,
         }
         sql = """
         INSERT INTO replies (uuid, journalist_id, source_id, filename, size, deleted_by_source)
@@ -142,7 +141,7 @@ class Helper:
             "source_id": source_id,
             "filename": random_chars(50) + "-msg.gpg",
             "size": random.randint(0, 1024 * 1024 * 500),
-            "downloaded": random.choice([True, False])
+            "downloaded": random.choice([True, False]),
         }
         sql = """
         INSERT INTO submissions (uuid, source_id, filename, size, downloaded)
@@ -158,7 +157,7 @@ class Helper:
             "filename": random_chars(50) + "-doc.gz.gpg",
             "size": random.randint(0, 1024 * 1024 * 500),
             "downloaded": random.choice([True, False]),
-            "checksum": "sha256:" + random_chars(64)
+            "checksum": "sha256:" + random_chars(64),
         }
         sql = """
         INSERT INTO submissions (uuid, source_id, filename, size, downloaded, checksum)
@@ -258,7 +257,7 @@ class UpgradeTester(Helper):
             # Now seen tables exist, so you should be able to mark some files, messages, and replies
             # as seen
             for submission in submissions:
-                if submission.filename.endswith('-doc.gz.gpg') and random.choice([0, 1]):
+                if submission.filename.endswith("-doc.gz.gpg") and random.choice([0, 1]):
                     selected_journo_id = random.randint(0, self.JOURNO_NUM)
                     self.mark_file_as_seen(submission.id, selected_journo_id)
                 elif random.choice([0, 1]):
@@ -339,7 +338,7 @@ class DowngradeTester(Helper):
             sql = "SELECT * FROM submissions"
             submissions = db.engine.execute(text(sql)).fetchall()
             for submission in submissions:
-                if submission.filename.endswith('-doc.gz.gpg') and random.choice([0, 1]):
+                if submission.filename.endswith("-doc.gz.gpg") and random.choice([0, 1]):
                     selected_journo_id = random.randint(0, self.JOURNO_NUM)
                     self.mark_file_as_seen(submission.id, selected_journo_id)
                 elif random.choice([0, 1]):
@@ -355,7 +354,7 @@ class DowngradeTester(Helper):
 
             # Mark some files, messages, and replies as seen
             for submission in submissions:
-                if submission.filename.endswith('-doc.gz.gpg') and random.choice([0, 1]):
+                if submission.filename.endswith("-doc.gz.gpg") and random.choice([0, 1]):
                     selected_journo_id = random.randint(0, self.JOURNO_NUM)
                     self.mark_file_as_seen(submission.id, selected_journo_id)
                 elif random.choice([0, 1]):

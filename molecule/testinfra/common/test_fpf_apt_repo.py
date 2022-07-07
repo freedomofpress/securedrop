@@ -1,7 +1,6 @@
-import pytest
 import re
 
-
+import pytest
 import testutils
 
 test_vars = testutils.securedrop_test_vars
@@ -26,12 +25,12 @@ def test_fpf_apt_repo_present(host):
     # If the var fpf_apt_repo_url test var is apt-test, validate that the
     # apt repository is configured on the host
     if test_vars.fpf_apt_repo_url == "https://apt-test.freedom.press":
-        f = host.file('/etc/apt/sources.list.d/apt_test_freedom_press.list')
+        f = host.file("/etc/apt/sources.list.d/apt_test_freedom_press.list")
     else:
-        f = host.file('/etc/apt/sources.list.d/apt_freedom_press.list')
-    repo_regex = r'^deb \[arch=amd64\] {} {} main$'.format(
-                      re.escape(test_vars.fpf_apt_repo_url),
-                      re.escape(host.system_info.codename))
+        f = host.file("/etc/apt/sources.list.d/apt_freedom_press.list")
+    repo_regex = r"^deb \[arch=amd64\] {} {} main$".format(
+        re.escape(test_vars.fpf_apt_repo_url), re.escape(host.system_info.codename)
+    )
     assert f.contains(repo_regex)
 
 
@@ -47,7 +46,7 @@ def test_fpf_apt_repo_fingerprint(host):
     returned.
     """
 
-    c = host.run('apt-key finger')
+    c = host.run("apt-key finger")
 
     fpf_gpg_pub_key_info_old = "2224 5C81 E3BA EB41 38B3  6061 310F 5612 00F4 AD77"
     fpf_gpg_pub_key_info_new = "2359 E653 8C06 13E6 5295  5E6C 188E DD3B 7B22 E6A3"
@@ -57,14 +56,17 @@ def test_fpf_apt_repo_fingerprint(host):
     assert fpf_gpg_pub_key_info_new in c.stdout
 
 
-@pytest.mark.parametrize('old_pubkey', [
-    'pub   4096R/FC9F6818 2014-10-26 [expired: 2016-10-27]',
-    'pub   4096R/00F4AD77 2016-10-20 [expired: 2017-10-20]',
-    'pub   4096R/00F4AD77 2016-10-20 [expired: 2017-10-20]',
-    'pub   4096R/7B22E6A3 2021-05-10 [expired: 2022-07-04]',
-    'uid                  Freedom of the Press Foundation Master Signing Key',
-    'B89A 29DB 2128 160B 8E4B  1B4C BADD E0C7 FC9F 6818',
-])
+@pytest.mark.parametrize(
+    "old_pubkey",
+    [
+        "pub   4096R/FC9F6818 2014-10-26 [expired: 2016-10-27]",
+        "pub   4096R/00F4AD77 2016-10-20 [expired: 2017-10-20]",
+        "pub   4096R/00F4AD77 2016-10-20 [expired: 2017-10-20]",
+        "pub   4096R/7B22E6A3 2021-05-10 [expired: 2022-07-04]",
+        "uid                  Freedom of the Press Foundation Master Signing Key",
+        "B89A 29DB 2128 160B 8E4B  1B4C BADD E0C7 FC9F 6818",
+    ],
+)
 def test_fpf_apt_repo_old_pubkeys_absent(host, old_pubkey):
     """
     Ensure that expired (or about-to-expire) public keys for the FPF
@@ -72,5 +74,5 @@ def test_fpf_apt_repo_old_pubkeys_absent(host, old_pubkey):
     should enforce clobbering of old pubkeys, and this check will confirm
     absence.
     """
-    c = host.run('apt-key finger')
+    c = host.run("apt-key finger")
     assert old_pubkey not in c.stdout

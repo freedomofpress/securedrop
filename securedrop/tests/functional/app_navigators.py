@@ -2,24 +2,19 @@ import gzip
 import tempfile
 import time
 from contextlib import contextmanager
-
-from typing import Optional, Dict, Iterable, Generator, List
+from typing import Dict, Generator, Iterable, List, Optional
 
 import pyotp
 import requests
+from encryption import EncryptionManager
+from selenium.common.exceptions import NoAlertPresentException, WebDriverException
+from selenium.webdriver.common.by import By
 from selenium.webdriver.firefox.webdriver import WebDriver
 from selenium.webdriver.remote.webelement import WebElement
-
-from selenium.common.exceptions import NoAlertPresentException
-from selenium.common.exceptions import WebDriverException
-from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.ui import WebDriverWait
-
-from tests.functional.web_drivers import get_web_driver, WebDriverTypeEnum
-
-from encryption import EncryptionManager
 from tests.functional.tor_utils import proxies_for_url
+from tests.functional.web_drivers import WebDriverTypeEnum, get_web_driver
 from tests.test_encryption import import_journalist_private_key
 
 

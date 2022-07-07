@@ -1,11 +1,9 @@
 import pytest
 import requests
-
 from tests.functional import tor_utils
 from tests.functional.pageslayout.functional_test import list_locales
 from tests.functional.pageslayout.screenshot_utils import save_screenshot_and_html
-from tests.functional.web_drivers import get_web_driver, WebDriverTypeEnum
-
+from tests.functional.web_drivers import WebDriverTypeEnum, get_web_driver
 from version import __version__
 
 

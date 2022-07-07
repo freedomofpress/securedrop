@@ -1,18 +1,21 @@
-import os
 import io
+import os
+
 import pytest
 import yaml
 
-
 # Lots of parent directories to dig out of the Molecule test dir.
 # Could also inspect the Molecule env vars and go from there.
-REPO_ROOT = os.path.abspath(os.path.join(__file__,
-                                         os.path.pardir,
-                                         os.path.pardir,
-                                         os.path.pardir,
-                                         os.path.pardir,
-                                         ))
-ANSIBLE_BASE = os.path.join(REPO_ROOT, 'install_files', 'ansible-base')
+REPO_ROOT = os.path.abspath(
+    os.path.join(
+        __file__,
+        os.path.pardir,
+        os.path.pardir,
+        os.path.pardir,
+        os.path.pardir,
+    )
+)
+ANSIBLE_BASE = os.path.join(REPO_ROOT, "install_files", "ansible-base")
 
 
 def find_ansible_playbooks():
@@ -36,7 +39,7 @@ def find_ansible_playbooks():
     return playbooks
 
 
-@pytest.mark.parametrize('playbook', find_ansible_playbooks())
+@pytest.mark.parametrize("playbook", find_ansible_playbooks())
 def test_max_fail_percentage(host, playbook):
     """
     All SecureDrop playbooks should set `max_fail_percentage` to "0"
@@ -55,15 +58,15 @@ def test_max_fail_percentage(host, playbook):
     the parameter, but we'll play it safe and require it everywhere,
     to avoid mistakes down the road.
     """
-    with io.open(playbook, 'r') as f:
+    with io.open(playbook, "r") as f:
         playbook_yaml = yaml.safe_load(f)
         # Descend into playbook list structure to validate play attributes.
         for play in playbook_yaml:
-            assert 'max_fail_percentage' in play
-            assert play['max_fail_percentage'] == 0
+            assert "max_fail_percentage" in play
+            assert play["max_fail_percentage"] == 0
 
 
-@pytest.mark.parametrize('playbook', find_ansible_playbooks())
+@pytest.mark.parametrize("playbook", find_ansible_playbooks())
 def test_any_errors_fatal(host, playbook):
     """
     All SecureDrop playbooks should set `any_errors_fatal` to "yes"
@@ -71,23 +74,23 @@ def test_any_errors_fatal(host, playbook):
     to "0", doing so ensures that any errors will cause an immediate failure
     on the playbook.
     """
-    with io.open(playbook, 'r') as f:
+    with io.open(playbook, "r") as f:
         playbook_yaml = yaml.safe_load(f)
         # Descend into playbook list structure to validate play attributes.
         for play in playbook_yaml:
-            assert 'any_errors_fatal' in play
+            assert "any_errors_fatal" in play
             # Ansible coerces booleans, so bare assert is sufficient
-            assert play['any_errors_fatal']
+            assert play["any_errors_fatal"]
 
 
-@pytest.mark.parametrize('playbook', find_ansible_playbooks())
+@pytest.mark.parametrize("playbook", find_ansible_playbooks())
 def test_locale(host, playbook):
     """
     The securedrop-prod and securedrop-staging playbooks should
     control the locale in the host environment by setting LC_ALL=C.
     """
-    with io.open(os.path.join(ANSIBLE_BASE, playbook), 'r') as f:
+    with io.open(os.path.join(ANSIBLE_BASE, playbook), "r") as f:
         playbook_yaml = yaml.safe_load(f)
         for play in playbook_yaml:
-            assert 'environment' in play
-            assert play['environment']['LC_ALL'] == 'C'
+            assert "environment" in play
+            assert play["environment"]["LC_ALL"] == "C"

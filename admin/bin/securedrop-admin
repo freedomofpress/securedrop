@@ -17,6 +17,7 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 import sys
+
 from securedrop_admin import main
 
 main(sys.argv[1:])

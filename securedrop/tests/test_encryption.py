@@ -1,12 +1,11 @@
 import typing
 from contextlib import contextmanager
+from datetime import datetime
 from pathlib import Path
 
 import pytest as pytest
-
 from db import db
-from encryption import EncryptionManager, GpgKeyNotFoundError, GpgEncryptError, GpgDecryptError
-from datetime import datetime
+from encryption import EncryptionManager, GpgDecryptError, GpgEncryptError, GpgKeyNotFoundError
 from passphrases import PassphraseGenerator
 from source_user import create_source_user
 
@@ -17,8 +16,9 @@ class TestEncryptionManager:
         assert encryption_mgr
         assert encryption_mgr.get_journalist_public_key()
 
-    def test_generate_source_key_pair(self, setup_journalist_key_and_gpg_folder,
-                                      source_app, app_storage):
+    def test_generate_source_key_pair(
+        self, setup_journalist_key_and_gpg_folder, source_app, app_storage
+    ):
         # Given a source user
         with source_app.app_context():
             source_user = create_source_user(
@@ -226,8 +226,9 @@ class TestEncryptionManager:
         # For GPG 2.1+, a non-null passphrase _must_ be passed to decrypt()
         assert not encryption_mgr._gpg.decrypt(encrypted_file, passphrase="test 123").ok
 
-    def test_encrypt_and_decrypt_journalist_reply(self, source_app, test_source,
-                                                  tmp_path, app_storage):
+    def test_encrypt_and_decrypt_journalist_reply(
+        self, source_app, test_source, tmp_path, app_storage
+    ):
         # Given a source user with a key pair in the default encryption manager
         source_user1 = test_source["source_user"]
         encryption_mgr = EncryptionManager.get_default()

@@ -1,7 +1,7 @@
 from pathlib import Path
 
 from encryption import EncryptionManager
-from tests.functional.app_navigators import SourceAppNagivator, JournalistAppNavigator
+from tests.functional.app_navigators import JournalistAppNavigator, SourceAppNagivator
 
 
 class TestSubmitAndRetrieveMessage:

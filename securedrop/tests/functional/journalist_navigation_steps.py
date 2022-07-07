@@ -11,19 +11,17 @@ from os.path import dirname
 
 import pytest
 import requests
-from selenium.common.exceptions import NoSuchElementException
-from selenium.common.exceptions import TimeoutException
+
+# Number of times to try flaky clicks.
+from encryption import EncryptionManager
+from selenium.common.exceptions import NoSuchElementException, TimeoutException
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.ui import WebDriverWait
-
-
-# Number of times to try flaky clicks.
-from encryption import EncryptionManager
-from tests.functional.tor_utils import proxies_for_url
 from source_user import _SourceScryptManager
+from tests.functional.tor_utils import proxies_for_url
 from tests.test_encryption import import_journalist_private_key
 
 CLICK_ATTEMPTS = 15
@@ -203,6 +201,7 @@ class JournalistNavigationStepsMixin:
         def preferences_saved():
             flash_msg = self.driver.find_element_by_css_selector(".flash")
             assert "Preferences saved." in flash_msg.text
+
         self.wait_for(preferences_saved, timeout=self.timeout * 6)
 
     def _admin_allows_document_uploads(self):
@@ -213,11 +212,12 @@ class JournalistNavigationStepsMixin:
         def preferences_saved():
             flash_msg = self.driver.find_element_by_css_selector(".flash")
             assert "Preferences saved." in flash_msg.text
+
         self.wait_for(preferences_saved, timeout=self.timeout * 6)
 
     def _admin_sets_organization_name(self):
         assert self.orgname_default == self.driver.title
-        self.driver.find_element_by_id('organization_name').clear()
+        self.driver.find_element_by_id("organization_name").clear()
         self.safe_send_keys_by_id("organization_name", self.orgname_new)
         self.safe_click_by_id("submit-update-org-name")
 
@@ -258,7 +258,7 @@ class JournalistNavigationStepsMixin:
             btns = self.driver.find_elements_by_tag_name("button")
             assert "ADD USER" in [el.text for el in btns]
 
-        invalid_username = 'deleted'
+        invalid_username = "deleted"
 
         self.safe_send_keys_by_css_selector('input[name="username"]', invalid_username)
 
@@ -267,8 +267,10 @@ class JournalistNavigationStepsMixin:
         self.wait_for(lambda: self.driver.find_element_by_css_selector(".form-validation-error"))
 
         error_msg = self.driver.find_element_by_css_selector(".form-validation-error")
-        assert "This username is invalid because it is reserved for internal use " \
-               "by the software." in error_msg.text
+        assert (
+            "This username is invalid because it is reserved for internal use "
+            "by the software." in error_msg.text
+        )
 
     def _admin_adds_a_user(self, is_admin=False, new_username=""):
         self.safe_click_by_id("add-user")
@@ -284,11 +286,13 @@ class JournalistNavigationStepsMixin:
 
         if not new_username:
             new_username = next(journalist_usernames)
-        self.new_user = dict(username=new_username, first_name='', last_name='', password=password)
-        self._add_user(self.new_user["username"],
-                       first_name=self.new_user['first_name'],
-                       last_name=self.new_user['last_name'],
-                       is_admin=is_admin)
+        self.new_user = dict(username=new_username, first_name="", last_name="", password=password)
+        self._add_user(
+            self.new_user["username"],
+            first_name=self.new_user["first_name"],
+            last_name=self.new_user["last_name"],
+            is_admin=is_admin,
+        )
 
         if not self.accept_languages:
             # Clicking submit on the add user form should redirect to
@@ -310,7 +314,7 @@ class JournalistNavigationStepsMixin:
                 # Successfully verifying the code should redirect to the admin
                 # interface, and flash a message indicating success
                 flash_msg = self.driver.find_elements_by_css_selector(".flash")
-                assert "The two-factor code for user \"{}\" was verified successfully.".format(
+                assert 'The two-factor code for user "{}" was verified successfully.'.format(
                     self.new_user["username"]
                 ) in [el.text for el in flash_msg]
 
@@ -685,13 +689,14 @@ class JournalistNavigationStepsMixin:
     def _visit_edit_account(self):
         self.safe_click_by_id("link-edit-account")
 
-    def _visit_edit_secret(self, otp_type, tooltip_text=''):
+    def _visit_edit_secret(self, otp_type, tooltip_text=""):
         reset_form = self.wait_for(
             lambda: self.driver.find_element_by_id("reset-two-factor-" + otp_type)
         )
         assert "/account/reset-2fa-" + otp_type in reset_form.get_attribute("action")
         reset_button = self.driver.find_elements_by_css_selector(
-            "#button-reset-two-factor-" + otp_type)[0]
+            "#button-reset-two-factor-" + otp_type
+        )[0]
 
         # 2FA reset buttons show a tooltip with explanatory text on hover.
         # Also, confirm the text on the tooltip is the correct one.
@@ -722,13 +727,12 @@ class JournalistNavigationStepsMixin:
 
     def _visit_edit_hotp_secret(self):
         self._visit_edit_secret(
-            "hotp",
-            "Reset two-factor authentication for security keys, like a YubiKey")
+            "hotp", "Reset two-factor authentication for security keys, like a YubiKey"
+        )
 
     def _visit_edit_totp_secret(self):
         self._visit_edit_secret(
-            "totp",
-            "Reset two-factor authentication for mobile apps, such as FreeOTP"
+            "totp", "Reset two-factor authentication for mobile apps, such as FreeOTP"
         )
 
     def _admin_visits_add_user(self):
@@ -757,8 +761,7 @@ class JournalistNavigationStepsMixin:
             try:
                 try:
                     # This is the button we click to trigger the alert.
-                    self.wait_for(lambda: self.driver.find_elements_by_id(
-                        button_to_click)[0])
+                    self.wait_for(lambda: self.driver.find_elements_by_id(button_to_click)[0])
                 except IndexError:
                     # If the button isn't there, then the alert is up from the last
                     # time we attempted to run this test. Switch to it and accept it.
@@ -781,17 +784,18 @@ class JournalistNavigationStepsMixin:
         def _admin_visits_reset_2fa_hotp_step():
             # 2FA reset buttons show a tooltip with explanatory text on hover.
             # Also, confirm the text on the tooltip is the correct one.
-            hotp_reset_button = self.driver.find_elements_by_id(
-                "reset-two-factor-hotp")[0]
+            hotp_reset_button = self.driver.find_elements_by_id("reset-two-factor-hotp")[0]
             hotp_reset_button.location_once_scrolled_into_view
             ActionChains(self.driver).move_to_element(hotp_reset_button).perform()
 
             time.sleep(1)
 
             tip_opacity = self.driver.find_elements_by_css_selector(
-                "#button-reset-two-factor-hotp span.tooltip")[0].value_of_css_property('opacity')
+                "#button-reset-two-factor-hotp span.tooltip"
+            )[0].value_of_css_property("opacity")
             tip_text = self.driver.find_elements_by_css_selector(
-                "#button-reset-two-factor-hotp span.tooltip")[0].text
+                "#button-reset-two-factor-hotp span.tooltip"
+            )[0].text
 
             assert tip_opacity == "1"
 
@@ -815,22 +819,23 @@ class JournalistNavigationStepsMixin:
             # 2FA reset buttons show a tooltip with explanatory text on hover.
             # Also, confirm the text on the tooltip is the correct one.
             totp_reset_button = self.driver.find_elements_by_css_selector(
-                "#button-reset-two-factor-totp")[0]
+                "#button-reset-two-factor-totp"
+            )[0]
             totp_reset_button.location_once_scrolled_into_view
             ActionChains(self.driver).move_to_element(totp_reset_button).perform()
 
             time.sleep(1)
 
             tip_opacity = self.driver.find_elements_by_css_selector(
-                "#button-reset-two-factor-totp span.tooltip")[0].value_of_css_property('opacity')
+                "#button-reset-two-factor-totp span.tooltip"
+            )[0].value_of_css_property("opacity")
             tip_text = self.driver.find_elements_by_css_selector(
-                "#button-reset-two-factor-totp span.tooltip")[0].text
+                "#button-reset-two-factor-totp span.tooltip"
+            )[0].text
 
             assert tip_opacity == "1"
             if not self.accept_languages:
-                expected_text = (
-                    "Reset two-factor authentication for mobile apps, such as FreeOTP"
-                )
+                expected_text = "Reset two-factor authentication for mobile apps, such as FreeOTP"
                 assert tip_text == expected_text
 
             self.safe_click_by_id("button-reset-two-factor-totp")
@@ -841,15 +846,16 @@ class JournalistNavigationStepsMixin:
     def _admin_creates_a_user(self, hotp):
         self.safe_click_by_id("add-user")
         self.wait_for(lambda: self.driver.find_element_by_id("username"))
-        self.new_user = dict(username="dellsberg",
-                             first_name='',
-                             last_name='',
-                             password="pentagonpapers")
-        self._add_user(self.new_user["username"],
-                       first_name=self.new_user['first_name'],
-                       last_name=self.new_user['last_name'],
-                       is_admin=False,
-                       hotp=hotp)
+        self.new_user = dict(
+            username="dellsberg", first_name="", last_name="", password="pentagonpapers"
+        )
+        self._add_user(
+            self.new_user["username"],
+            first_name=self.new_user["first_name"],
+            last_name=self.new_user["last_name"],
+            is_admin=False,
+            hotp=hotp,
+        )
 
     def _journalist_delete_all(self):
         for checkbox in self.driver.find_elements_by_name("doc_names_selected"):

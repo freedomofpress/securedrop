@@ -23,9 +23,7 @@ import os
 import shutil
 import subprocess
 import sys
-from typing import Iterator
-
-from typing import List
+from typing import Iterator, List
 
 sdlog = logging.getLogger(__name__)
 
@@ -34,13 +32,13 @@ VENV_DIR = os.path.join(DIR, ".venv3")
 
 
 def setup_logger(verbose: bool = False) -> None:
-    """ Configure logging handler """
+    """Configure logging handler"""
     # Set default level on parent
     sdlog.setLevel(logging.DEBUG)
     level = logging.DEBUG if verbose else logging.INFO
 
     stdout = logging.StreamHandler(sys.stdout)
-    stdout.setFormatter(logging.Formatter('%(levelname)s: %(message)s'))
+    stdout.setFormatter(logging.Formatter("%(levelname)s: %(message)s"))
     stdout.setLevel(level)
     sdlog.addHandler(stdout)
 
@@ -53,9 +51,7 @@ def run_command(command: List[str]) -> Iterator[bytes]:
     Yields a list of the stdout from the `command`, and raises a
     CalledProcessError if `command` returns non-zero.
     """
-    popen = subprocess.Popen(command,
-                             stdout=subprocess.PIPE,
-                             stderr=subprocess.STDOUT)
+    popen = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     if popen.stdout is None:
         raise EnvironmentError("Could not run command: None stdout")
     for stdout_line in iter(popen.stdout.readline, b""):
@@ -68,17 +64,16 @@ def run_command(command: List[str]) -> Iterator[bytes]:
 
 def is_tails() -> bool:
     try:
-        id = subprocess.check_output('lsb_release --id --short',
-                                     shell=True).decode('utf-8').strip()
+        id = subprocess.check_output("lsb_release --id --short", shell=True).decode("utf-8").strip()
     except subprocess.CalledProcessError:
         return False
 
     # dirty hack to unreliably detect Tails 4.0~beta2
-    if id == 'Debian':
-        if os.uname()[1] == 'amnesia':
-            id = 'Tails'
+    if id == "Debian":
+        if os.uname()[1] == "amnesia":
+            id = "Tails"
 
-    return id == 'Tails'
+    return id == "Tails"
 
 
 def clean_up_old_tails_venv(virtualenv_dir: str = VENV_DIR) -> None:
@@ -90,13 +85,12 @@ def clean_up_old_tails_venv(virtualenv_dir: str = VENV_DIR) -> None:
     """
     if is_tails():
         try:
-            dist = subprocess.check_output('lsb_release --codename --short',
-                                           shell=True).strip()
+            dist = subprocess.check_output("lsb_release --codename --short", shell=True).strip()
         except subprocess.CalledProcessError:
             return None
 
         # Tails 5 is based on bullseye / Python 3.9
-        if dist == b'bullseye':
+        if dist == b"bullseye":
             python_lib_path = os.path.join(virtualenv_dir, "lib/python3.7")
             if os.path.exists(python_lib_path):
                 sdlog.info("Tails 4 virtualenv detected. Removing it.")
@@ -113,7 +107,7 @@ def checkenv(args: argparse.Namespace) -> None:
 
 def maybe_torify() -> List[str]:
     if is_tails():
-        return ['torify']
+        return ["torify"]
     else:
         return []
 
@@ -124,11 +118,18 @@ def install_apt_dependencies(args: argparse.Namespace) -> None:
     a virtualenv, first there are a number of Python prerequisites.
     """
     sdlog.info("Installing SecureDrop Admin dependencies")
-    sdlog.info(("You'll be prompted for the temporary Tails admin password,"
-                " which was set on Tails login screen"))
+    sdlog.info(
+        (
+            "You'll be prompted for the temporary Tails admin password,"
+            " which was set on Tails login screen"
+        )
+    )
 
-    apt_command = ['sudo', 'su', '-c',
-                   "apt-get update && \
+    apt_command = [
+        "sudo",
+        "su",
+        "-c",
+        "apt-get update && \
                    apt-get -q -o=Dpkg::Use-Pty=0 install -y \
                    python3-virtualenv \
                    python3-yaml \
@@ -137,19 +138,20 @@ def install_apt_dependencies(args: argparse.Namespace) -> None:
                    libffi-dev \
                    libssl-dev \
                    libpython3-dev",
-                   ]
+    ]
 
     try:
         # Print command results in real-time, to keep Admin apprised
         # of progress during long-running command.
         for output_line in run_command(apt_command):
-            print(output_line.decode('utf-8').rstrip())
+            print(output_line.decode("utf-8").rstrip())
     except subprocess.CalledProcessError:
         # Tails supports apt persistence, which was used by SecureDrop
         # under Tails 2.x. If updates are being applied, don't try to pile
         # on with more apt requests.
-        sdlog.error(("Failed to install apt dependencies. Check network"
-                     " connection and try again."))
+        sdlog.error(
+            ("Failed to install apt dependencies. Check network" " connection and try again.")
+        )
         raise
 
 
@@ -179,16 +181,15 @@ def envsetup(args: argparse.Namespace, virtualenv_dir: str = VENV_DIR) -> None:
         # the effort here.
         sdlog.info("Setting up virtualenv")
         try:
-            sdlog.debug(subprocess.check_output(
-                maybe_torify() + ['virtualenv',
-                                  '--python=python3',
-                                  virtualenv_dir
-                                  ],
-                stderr=subprocess.STDOUT))
+            sdlog.debug(
+                subprocess.check_output(
+                    maybe_torify() + ["virtualenv", "--python=python3", virtualenv_dir],
+                    stderr=subprocess.STDOUT,
+                )
+            )
         except subprocess.CalledProcessError as e:
             sdlog.debug(e.output)
-            sdlog.error(("Unable to create virtualenv. Check network settings"
-                         " and try again."))
+            sdlog.error(("Unable to create virtualenv. Check network settings" " and try again."))
             sdlog.debug("Cleaning up virtualenv")
             if os.path.exists(virtualenv_dir):
                 shutil.rmtree(virtualenv_dir)
@@ -199,26 +200,22 @@ def envsetup(args: argparse.Namespace, virtualenv_dir: str = VENV_DIR) -> None:
     if args.t:
         install_pip_dependencies(
             args,
-            requirements_file='requirements-testinfra.txt',
-            desc="dependencies with verification support"
+            requirements_file="requirements-testinfra.txt",
+            desc="dependencies with verification support",
         )
     else:
         install_pip_dependencies(args)
 
-    if os.path.exists(os.path.join(DIR, 'setup.py')):
+    if os.path.exists(os.path.join(DIR, "setup.py")):
         install_pip_self(args)
 
     sdlog.info("Finished installing SecureDrop dependencies")
 
 
 def install_pip_self(args: argparse.Namespace) -> None:
-    pip_install_cmd = [
-        os.path.join(VENV_DIR, 'bin', 'pip3'),
-        'install', '-e', DIR
-    ]
+    pip_install_cmd = [os.path.join(VENV_DIR, "bin", "pip3"), "install", "-e", DIR]
     try:
-        subprocess.check_output(maybe_torify() + pip_install_cmd,
-                                stderr=subprocess.STDOUT)
+        subprocess.check_output(maybe_torify() + pip_install_cmd, stderr=subprocess.STDOUT)
     except subprocess.CalledProcessError as e:
         sdlog.debug(e.output)
         sdlog.error("Unable to install self, run with -v for more information")
@@ -234,22 +231,27 @@ def install_pip_dependencies(
     Install Python dependencies via pip into virtualenv.
     """
     pip_install_cmd = [
-        os.path.join(VENV_DIR, 'bin', 'pip3'),
-        'install',
-        '--no-deps',
-        '-r', os.path.join(DIR, requirements_file),
-        '--require-hashes',
-        '-U', '--upgrade-strategy', 'only-if-needed',
+        os.path.join(VENV_DIR, "bin", "pip3"),
+        "install",
+        "--no-deps",
+        "-r",
+        os.path.join(DIR, requirements_file),
+        "--require-hashes",
+        "-U",
+        "--upgrade-strategy",
+        "only-if-needed",
     ]
 
     sdlog.info("Checking {} for securedrop-admin".format(desc))
     try:
-        pip_output = subprocess.check_output(maybe_torify() + pip_install_cmd,
-                                             stderr=subprocess.STDOUT)
+        pip_output = subprocess.check_output(
+            maybe_torify() + pip_install_cmd, stderr=subprocess.STDOUT
+        )
     except subprocess.CalledProcessError as e:
         sdlog.debug(e.output)
-        sdlog.error(("Failed to install {}. Check network"
-                     " connection and try again.".format(desc)))
+        sdlog.error(
+            ("Failed to install {}. Check network" " connection and try again.".format(desc))
+        )
         raise
 
     sdlog.debug(pip_output)
@@ -261,23 +263,21 @@ def install_pip_dependencies(
 
 def parse_argv(argv: List[str]) -> argparse.Namespace:
     parser = argparse.ArgumentParser()
-    parser.add_argument('-v', action='store_true', default=False,
-                        help="Increase verbosity on output")
-    parser.add_argument('-t', action='store_true', default=False,
-                        help="Install additional test dependencies")
+    parser.add_argument(
+        "-v", action="store_true", default=False, help="Increase verbosity on output"
+    )
+    parser.add_argument(
+        "-t", action="store_true", default=False, help="Install additional test dependencies"
+    )
     parser.set_defaults(func=envsetup)
 
     subparsers = parser.add_subparsers()
 
-    envsetup_parser = subparsers.add_parser(
-        'envsetup',
-        help='Set up the admin virtualenv.'
-    )
+    envsetup_parser = subparsers.add_parser("envsetup", help="Set up the admin virtualenv.")
     envsetup_parser.set_defaults(func=envsetup)
 
     checkenv_parser = subparsers.add_parser(
-        'checkenv',
-        help='Check that the admin virtualenv is properly set up.'
+        "checkenv", help="Check that the admin virtualenv is properly set up."
     )
     checkenv_parser.set_defaults(func=checkenv)
 

@@ -1,18 +1,18 @@
 from unittest import mock
 
 import pytest
-
 import source_user
 from db import db
 from passphrases import PassphraseGenerator
-
-from source_user import InvalidPassphraseError, _DesignationGenerator
-from source_user import SourceDesignationCollisionError
-from source_user import SourcePassphraseCollisionError
-from source_user import _SourceScryptManager
-from source_user import authenticate_source_user
-from source_user import create_source_user
-
+from source_user import (
+    InvalidPassphraseError,
+    SourceDesignationCollisionError,
+    SourcePassphraseCollisionError,
+    _DesignationGenerator,
+    _SourceScryptManager,
+    authenticate_source_user,
+    create_source_user,
+)
 
 TEST_SALT_GPG_SECRET = "YrPAwKMyWN66Y2WNSt+FS1KwfysMHwPISG0wmpb717k="
 TEST_SALT_FOR_FILESYSTEM_ID = "mEFXIwvxoBqjyxc/JypLdvgMRNRjApoaM0OBNrxJM2E="
@@ -62,7 +62,7 @@ class TestSourceUser:
         with mock.patch.object(
             source_user._DesignationGenerator,
             "generate_journalist_designation",
-            return_value=existing_designation
+            return_value=existing_designation,
         ):
             # When trying to create another source, it fails, because the designation is the same
             with pytest.raises(SourceDesignationCollisionError):
@@ -113,7 +113,7 @@ class TestSourceScryptManager:
         scrypt_mgr = _SourceScryptManager(
             salt_for_gpg_secret=TEST_SALT_GPG_SECRET.encode(),
             salt_for_filesystem_id=TEST_SALT_FOR_FILESYSTEM_ID.encode(),
-            scrypt_n=2 ** 1,
+            scrypt_n=2**1,
             scrypt_r=1,
             scrypt_p=1,
         )
@@ -133,7 +133,6 @@ class TestSourceScryptManager:
 
 
 class TestDesignationGenerator:
-
     def test(self):
         # Given a designation generator
         nouns = ["ability", "accent", "academia"]

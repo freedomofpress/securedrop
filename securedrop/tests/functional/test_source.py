@@ -1,9 +1,9 @@
 import requests
 import werkzeug
-
-from tests.functional.app_navigators import SourceAppNagivator
-from ..test_journalist import VALID_PASSWORD
 from tests.functional import tor_utils
+from tests.functional.app_navigators import SourceAppNagivator
+
+from ..test_journalist import VALID_PASSWORD
 
 
 class TestSourceAppCodenameHints:

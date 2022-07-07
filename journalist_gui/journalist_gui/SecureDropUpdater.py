@@ -1,26 +1,26 @@
 #!/usr/bin/python
-from PyQt5 import QtGui, QtWidgets
-from PyQt5.QtCore import QThread, pyqtSignal
-import subprocess
 import os
 import re
-import pexpect
 import socket
+import subprocess
 import sys
 import syslog as log
 
-from journalist_gui import updaterUI, strings, resources_rc  # noqa
+import pexpect
+from PyQt5 import QtGui, QtWidgets
+from PyQt5.QtCore import QThread, pyqtSignal
 
+from journalist_gui import resources_rc, strings, updaterUI  # noqa
 
 FLAG_LOCATION = "/home/amnesia/Persistent/.securedrop/securedrop_update.flag"  # noqa
-ESCAPE_POD = re.compile(r'\x1B\[[0-?]*[ -/]*[@-~]')
+ESCAPE_POD = re.compile(r"\x1B\[[0-?]*[ -/]*[@-~]")
 
 
 def password_is_set():
 
-    pwd_flag = subprocess.check_output(['passwd', '--status']).decode('utf-8').split()[1]
+    pwd_flag = subprocess.check_output(["passwd", "--status"]).decode("utf-8").split()[1]
 
-    if pwd_flag == 'NP':
+    if pwd_flag == "NP":
         return False
     return True
 
@@ -28,7 +28,7 @@ def password_is_set():
 def prevent_second_instance(app: QtWidgets.QApplication, name: str) -> None:  # noqa
 
     # Null byte triggers abstract namespace
-    IDENTIFIER = '\0' + name
+    IDENTIFIER = "\0" + name
     ALREADY_BOUND_ERRNO = 98
 
     app.instance_binding = socket.socket(socket.AF_UNIX, socket.SOCK_DGRAM)
@@ -43,7 +43,7 @@ def prevent_second_instance(app: QtWidgets.QApplication, name: str) -> None:  # 
 
 
 class SetupThread(QThread):
-    signal = pyqtSignal('PyQt_PyObject')
+    signal = pyqtSignal("PyQt_PyObject")
 
     def __init__(self):
         QThread.__init__(self)
@@ -52,36 +52,38 @@ class SetupThread(QThread):
         self.failure_reason = ""
 
     def run(self):
-        sdadmin_path = '/home/amnesia/Persistent/securedrop/securedrop-admin'
-        update_command = [sdadmin_path, 'setup']
+        sdadmin_path = "/home/amnesia/Persistent/securedrop/securedrop-admin"
+        update_command = [sdadmin_path, "setup"]
 
         # Create flag file to indicate we should resume failed updates on
         # reboot. Don't create the flag if it already exists.
         if not os.path.exists(FLAG_LOCATION):
-            open(FLAG_LOCATION, 'a').close()
+            open(FLAG_LOCATION, "a").close()
 
         try:
-            self.output = subprocess.check_output(
-                update_command,
-                stderr=subprocess.STDOUT).decode('utf-8')
-            if 'Failed to install' in self.output:
+            self.output = subprocess.check_output(update_command, stderr=subprocess.STDOUT).decode(
+                "utf-8"
+            )
+            if "Failed to install" in self.output:
                 self.update_success = False
                 self.failure_reason = strings.update_failed_generic_reason
             else:
                 self.update_success = True
         except subprocess.CalledProcessError as e:
-            self.output += e.output.decode('utf-8')
+            self.output += e.output.decode("utf-8")
             self.update_success = False
             self.failure_reason = strings.update_failed_generic_reason
-        result = {'status': self.update_success,
-                  'output': self.output,
-                  'failure_reason': self.failure_reason}
+        result = {
+            "status": self.update_success,
+            "output": self.output,
+            "failure_reason": self.failure_reason,
+        }
         self.signal.emit(result)
 
 
 # This thread will handle the ./securedrop-admin update command
 class UpdateThread(QThread):
-    signal = pyqtSignal('PyQt_PyObject')
+    signal = pyqtSignal("PyQt_PyObject")
 
     def __init__(self):
         QThread.__init__(self)
@@ -90,32 +92,34 @@ class UpdateThread(QThread):
         self.failure_reason = ""
 
     def run(self):
-        sdadmin_path = '/home/amnesia/Persistent/securedrop/securedrop-admin'
-        update_command = [sdadmin_path, 'update']
+        sdadmin_path = "/home/amnesia/Persistent/securedrop/securedrop-admin"
+        update_command = [sdadmin_path, "update"]
         try:
-            self.output = subprocess.check_output(
-                update_command,
-                stderr=subprocess.STDOUT).decode('utf-8')
+            self.output = subprocess.check_output(update_command, stderr=subprocess.STDOUT).decode(
+                "utf-8"
+            )
             if "Signature verification successful" in self.output:
                 self.update_success = True
             else:
                 self.failure_reason = strings.update_failed_generic_reason
         except subprocess.CalledProcessError as e:
             self.update_success = False
-            self.output += e.output.decode('utf-8')
-            if 'Signature verification failed' in self.output:
+            self.output += e.output.decode("utf-8")
+            if "Signature verification failed" in self.output:
                 self.failure_reason = strings.update_failed_sig_failure
             else:
                 self.failure_reason = strings.update_failed_generic_reason
-        result = {'status': self.update_success,
-                  'output': self.output,
-                  'failure_reason': self.failure_reason}
+        result = {
+            "status": self.update_success,
+            "output": self.output,
+            "failure_reason": self.failure_reason,
+        }
         self.signal.emit(result)
 
 
 # This thread will handle the ./securedrop-admin tailsconfig command
 class TailsconfigThread(QThread):
-    signal = pyqtSignal('PyQt_PyObject')
+    signal = pyqtSignal("PyQt_PyObject")
 
     def __init__(self):
         QThread.__init__(self)
@@ -125,17 +129,17 @@ class TailsconfigThread(QThread):
         self.sudo_password = ""
 
     def run(self):
-        tailsconfig_command = ("/home/amnesia/Persistent/"
-                               "securedrop/securedrop-admin "
-                               "tailsconfig")
+        tailsconfig_command = (
+            "/home/amnesia/Persistent/" "securedrop/securedrop-admin " "tailsconfig"
+        )
         self.failure_reason = ""
         try:
             child = pexpect.spawn(tailsconfig_command)
-            child.expect('SUDO password:')
-            self.output += child.before.decode('utf-8')
+            child.expect("SUDO password:")
+            self.output += child.before.decode("utf-8")
             child.sendline(self.sudo_password)
             child.expect(pexpect.EOF, timeout=120)
-            self.output += child.before.decode('utf-8')
+            self.output += child.before.decode("utf-8")
             child.close()
 
             # For Tailsconfig to be considered a success, we expect no
@@ -154,14 +158,15 @@ class TailsconfigThread(QThread):
         except subprocess.CalledProcessError:
             self.update_success = False
             self.failure_reason = strings.tailsconfig_failed_generic_reason
-        result = {'status': self.update_success,
-                  'output': ESCAPE_POD.sub('', self.output),
-                  'failure_reason': self.failure_reason}
+        result = {
+            "status": self.update_success,
+            "output": ESCAPE_POD.sub("", self.output),
+            "failure_reason": self.failure_reason,
+        }
         self.signal.emit(result)
 
 
 class UpdaterApp(QtWidgets.QMainWindow, updaterUI.Ui_MainWindow):
-
     def __init__(self, parent=None):
         super(UpdaterApp, self).__init__(parent)
         self.setupUi(self)
@@ -176,24 +181,26 @@ class UpdaterApp(QtWidgets.QMainWindow, updaterUI.Ui_MainWindow):
 
         self.progressBar.setProperty("value", 0)
         self.setWindowTitle(strings.window_title)
-        self.setWindowIcon(QtGui.QIcon(':/images/static/securedrop_icon.png'))
+        self.setWindowIcon(QtGui.QIcon(":/images/static/securedrop_icon.png"))
         self.label.setText(strings.update_in_progress)
 
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab),
-                                  strings.main_tab)
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2),
-                                  strings.output_tab)
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), strings.main_tab)
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), strings.output_tab)
 
         # Connect buttons to their functions.
         self.pushButton.setText(strings.install_later_button)
-        self.pushButton.setStyleSheet("""background-color: lightgrey;
+        self.pushButton.setStyleSheet(
+            """background-color: lightgrey;
                                       min-height: 2em;
-                                      border-radius: 10px""")
+                                      border-radius: 10px"""
+        )
         self.pushButton.clicked.connect(self.close)
         self.pushButton_2.setText(strings.install_update_button)
-        self.pushButton_2.setStyleSheet("""background-color: #E6FFEB;
+        self.pushButton_2.setStyleSheet(
+            """background-color: #E6FFEB;
                                         min-height: 2em;
-                                        border-radius: 10px;""")
+                                        border-radius: 10px;"""
+        )
         self.pushButton_2.clicked.connect(self.update_securedrop)
         self.update_thread = UpdateThread()
         self.update_thread.signal.connect(self.update_status)
@@ -206,9 +213,9 @@ class UpdaterApp(QtWidgets.QMainWindow, updaterUI.Ui_MainWindow):
     # A new slot will handle tailsconfig output
     def setup_status(self, result):
         "This is the slot for setup thread"
-        self.output += result['output']
-        self.update_success = result['status']
-        self.failure_reason = result['failure_reason']
+        self.output += result["output"]
+        self.update_success = result["status"]
+        self.failure_reason = result["failure_reason"]
         self.progressBar.setProperty("value", 60)
         self.plainTextEdit.setPlainText(self.output)
         self.plainTextEdit.setReadOnly = True
@@ -225,9 +232,9 @@ class UpdaterApp(QtWidgets.QMainWindow, updaterUI.Ui_MainWindow):
     # This will update the output text after the git commands.
     def update_status(self, result):
         "This is the slot for update thread"
-        self.output += result['output']
-        self.update_success = result['status']
-        self.failure_reason = result['failure_reason']
+        self.output += result["output"]
+        self.update_success = result["status"]
+        self.failure_reason = result["failure_reason"]
         self.progressBar.setProperty("value", 40)
         self.plainTextEdit.setPlainText(self.output)
         self.plainTextEdit.setReadOnly = True
@@ -246,7 +253,7 @@ class UpdaterApp(QtWidgets.QMainWindow, updaterUI.Ui_MainWindow):
         """This method updates the status bar and the output window with the
         status_message."""
         self.statusbar.showMessage(status_message)
-        self.output += status_message + '\n'
+        self.output += status_message + "\n"
         self.plainTextEdit.setPlainText(self.output)
 
     def call_tailsconfig(self):
@@ -260,7 +267,7 @@ class UpdaterApp(QtWidgets.QMainWindow, updaterUI.Ui_MainWindow):
                 self.failure_reason = strings.missing_sudo_password
                 self.on_failure()
                 return
-            self.tails_thread.sudo_password = sudo_password + '\n'
+            self.tails_thread.sudo_password = sudo_password + "\n"
             self.update_status_bar_and_output(strings.updating_tails_env)
             self.tails_thread.start()
         else:
@@ -268,9 +275,9 @@ class UpdaterApp(QtWidgets.QMainWindow, updaterUI.Ui_MainWindow):
 
     def tails_status(self, result):
         "This is the slot for Tailsconfig thread"
-        self.output += result['output']
-        self.update_success = result['status']
-        self.failure_reason = result['failure_reason']
+        self.output += result["output"]
+        self.update_success = result["status"]
+        self.failure_reason = result["failure_reason"]
         self.plainTextEdit.setPlainText(self.output)
         self.progressBar.setProperty("value", 80)
         if self.update_success:
@@ -319,8 +326,12 @@ class UpdaterApp(QtWidgets.QMainWindow, updaterUI.Ui_MainWindow):
 
     def get_sudo_password(self):
         sudo_password, ok_is_pressed = QtWidgets.QInputDialog.getText(
-            self, "Tails Administrator password", strings.sudo_password_text,
-            QtWidgets.QLineEdit.Password, "")
+            self,
+            "Tails Administrator password",
+            strings.sudo_password_text,
+            QtWidgets.QLineEdit.Password,
+            "",
+        )
         if ok_is_pressed and sudo_password:
             return sudo_password
         else:

@@ -1,9 +1,7 @@
-from sqlalchemy import text
-from sqlalchemy.exc import OperationalError
-
 from db import db
 from journalist_app import create_app
-
+from sqlalchemy import text
+from sqlalchemy.exc import OperationalError
 
 instance_config_sql = "SELECT * FROM instance_config"
 

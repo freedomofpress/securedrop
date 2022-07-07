@@ -16,22 +16,20 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 import pytest
-
-from tests.functional import journalist_navigation_steps
-from tests.functional import source_navigation_steps
 import tests.functional.pageslayout.functional_test as pft
+from tests.functional import journalist_navigation_steps, source_navigation_steps
 
 
 @pytest.mark.pagelayout
 class TestJournalistLayout(
-        pft.FunctionalTest,
-        source_navigation_steps.SourceNavigationStepsMixin,
-        journalist_navigation_steps.JournalistNavigationStepsMixin):
-
+    pft.FunctionalTest,
+    source_navigation_steps.SourceNavigationStepsMixin,
+    journalist_navigation_steps.JournalistNavigationStepsMixin,
+):
     def test_login(self):
         self.driver.get(self.journalist_location + "/login")
-        self._screenshot('journalist-login.png')
-        self._save_html('journalist-login.html')
+        self._screenshot("journalist-login.png")
+        self._save_html("journalist-login.html")
 
     def test_journalist_composes_reply(self):
         self._source_visits_source_homepage()
@@ -43,24 +41,24 @@ class TestJournalistLayout(
         self._journalist_checks_messages()
         self._journalist_downloads_message()
         self._journalist_composes_reply()
-        self._screenshot('journalist-composes_reply.png')
-        self._save_html('journalist-composes_reply.html')
+        self._screenshot("journalist-composes_reply.png")
+        self._save_html("journalist-composes_reply.html")
 
     def test_edit_account_user(self):
         self._journalist_logs_in()
         self._visit_edit_account()
-        self._screenshot('journalist-edit_account_user.png')
-        self._save_html('journalist-edit_account_user.html')
+        self._screenshot("journalist-edit_account_user.png")
+        self._save_html("journalist-edit_account_user.html")
 
     def test_index_no_documents_admin(self):
         self._admin_logs_in()
-        self._screenshot('journalist-admin_index_no_documents.png')
-        self._save_html('journalist-admin_index_no_documents.html')
+        self._screenshot("journalist-admin_index_no_documents.png")
+        self._save_html("journalist-admin_index_no_documents.html")
 
     def test_index_no_documents(self):
         self._journalist_logs_in()
-        self._screenshot('journalist-index_no_documents.png')
-        self._save_html('journalist-index_no_documents.html')
+        self._screenshot("journalist-index_no_documents.png")
+        self._save_html("journalist-index_no_documents.html")
 
     def test_index(self):
         self._source_visits_source_homepage()
@@ -70,8 +68,8 @@ class TestJournalistLayout(
         self._source_submits_a_message()
         self._source_logs_out()
         self._journalist_logs_in()
-        self._screenshot('journalist-index.png')
-        self._save_html('journalist-index.html')
+        self._screenshot("journalist-index.png")
+        self._save_html("journalist-index.html")
 
     def test_index_javascript(self):
         self._source_visits_source_homepage()
@@ -81,34 +79,29 @@ class TestJournalistLayout(
         self._source_submits_a_message()
         self._source_logs_out()
         self._journalist_logs_in()
-        self._screenshot('journalist-index_javascript.png')
-        self._save_html('journalist-index_javascript.html')
+        self._screenshot("journalist-index_javascript.png")
+        self._save_html("journalist-index_javascript.html")
         self._journalist_selects_the_first_source()
         self._journalist_selects_all_documents()
-        self._screenshot(
-            'journalist-clicks_on_source_and_selects_documents.png'
-        )
-        self._save_html(
-            'journalist-clicks_on_source_and_selects_documents.html'
-        )
+        self._screenshot("journalist-clicks_on_source_and_selects_documents.png")
+        self._save_html("journalist-clicks_on_source_and_selects_documents.html")
 
     def test_index_entered_text(self):
-        self._input_text_in_login_form('jane_doe', 'my password is long',
-                                       '117264')
-        self._screenshot('journalist-index_with_text.png')
-        self._save_html('journalist-index_with_text.html')
+        self._input_text_in_login_form("jane_doe", "my password is long", "117264")
+        self._screenshot("journalist-index_with_text.png")
+        self._save_html("journalist-index_with_text.html")
 
     def test_fail_to_visit_admin(self):
         self._journalist_visits_admin()
-        self._screenshot('journalist-code-fail_to_visit_admin.png')
-        self._save_html('journalist-code-fail_to_visit_admin.html')
+        self._screenshot("journalist-code-fail_to_visit_admin.png")
+        self._save_html("journalist-code-fail_to_visit_admin.html")
 
     def test_fail_login(self, hardening):
         self._journalist_fail_login()
-        self._screenshot('journalist-code-fail_login.png')
-        self._save_html('journalist-code-fail_login.html')
+        self._screenshot("journalist-code-fail_login.png")
+        self._save_html("journalist-code-fail_login.html")
 
     def test_fail_login_many(self, hardening):
         self._journalist_fail_login_many()
-        self._screenshot('journalist-code-fail_login_many.png')
-        self._save_html('journalist-code-fail_login_many.html')
+        self._screenshot("journalist-code-fail_login_many.png")
+        self._save_html("journalist-code-fail_login_many.html")

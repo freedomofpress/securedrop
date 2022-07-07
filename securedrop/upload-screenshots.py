@@ -1,19 +1,15 @@
 #!/usr/bin/env python3
 
-from glob import glob
-from urllib.parse import urljoin
-
 import os
 import re
-import requests
 import sys
+from glob import glob
 
 # Used to generate URLs for API endpoints and links; exposed as argument
-from typing import List
+from typing import Dict, List, Tuple
+from urllib.parse import urljoin
 
-from typing import Tuple
-
-from typing import Dict
+import requests
 
 DEFAULT_BASE_URL = "https://weblate.securedrop.org"
 
@@ -55,9 +51,7 @@ def main() -> None:
 
     screenshot_files = glob(os.path.join(SCREENSHOTS_DIRECTORY, SCREENSHOTS_GLOB))
     if len(screenshot_files) == 0:
-        print(
-            "Page layout test results not found. Run this command from the SecureDrop"
-        )
+        print("Page layout test results not found. Run this command from the SecureDrop")
         print("base directory to generate the English language screenshots:\n")
         print("  LOCALES=en_US make translation-test")
         print("\nThis will take several minutes to complete.")
@@ -136,9 +130,7 @@ class WeblateUploader:
             screenshots += screenshots_page["results"]
             request_count += 1
             if request_count >= self.request_limit:
-                msg = "Request limit of {} exceeded. Aborting.".format(
-                    self.request_limit
-                )
+                msg = "Request limit of {} exceeded. Aborting.".format(self.request_limit)
                 raise RequestLimitError(msg)
         return screenshots
 
@@ -186,9 +178,7 @@ class WeblateUploader:
                     "component_slug": "securedrop",
                 }
                 print("Uploading new screenshot {}".format(basename))
-                response = self.session.post(
-                    self.screenshots_endpoint, files=image, data=fields
-                )
+                response = self.session.post(self.screenshots_endpoint, files=image, data=fields)
                 response.raise_for_status()
 
         result_url = urljoin(
@@ -199,9 +189,7 @@ class WeblateUploader:
 
 class BadOrMissingTokenError(Exception):
     def __init__(self, reason: str, base_url: str) -> None:
-        reason += " Obtain token via {}".format(
-            urljoin(base_url, "accounts/profile/#api")
-        )
+        reason += " Obtain token via {}".format(urljoin(base_url, "accounts/profile/#api"))
         super().__init__(reason)
 
 

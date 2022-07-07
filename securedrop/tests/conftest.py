@@ -1,47 +1,37 @@
 # -*- coding: utf-8 -*-
 
 import configparser
-from pathlib import Path
-from tempfile import TemporaryDirectory
-
-from typing import Any, Generator, Tuple
-
-from unittest import mock
-from unittest.mock import PropertyMock
-
-import pretty_bad_protocol as gnupg
-import logging
-
-from flask import Flask
-from hypothesis import settings
-import os
 import json
-import psutil
-import pytest
+import logging
+import os
 import shutil
 import signal
 import subprocess
+from os import path
+from pathlib import Path
+from tempfile import TemporaryDirectory
+from typing import Any, Dict, Generator, Tuple
+from unittest import mock
+from unittest.mock import PropertyMock
 
-from flask import url_for
-from pyotp import TOTP
-from typing import Dict
-
+import models
+import pretty_bad_protocol as gnupg
+import psutil
+import pytest
 import sdconfig
+from db import db
 from encryption import EncryptionManager
-
+from flask import Flask, url_for
+from hypothesis import settings
+from journalist_app import create_app as create_journalist_app
 from passphrases import PassphraseGenerator
+from pyotp import TOTP
+from sdconfig import SDConfig
+from sdconfig import config as original_config
+from source_app import create_app as create_source_app
 from source_user import _SourceScryptManager, create_source_user
-
-from sdconfig import SDConfig, config as original_config
-
 from store import Storage
 
-from os import path
-
-from db import db
-from journalist_app import create_app as create_journalist_app
-import models
-from source_app import create_app as create_source_app
 from . import utils
 from .utils import i18n
 
@@ -49,10 +39,10 @@ from .utils import i18n
 # Ideally this constant would be provided by a test harness.
 # It has been intentionally omitted from `config.py.example`
 # in order to isolate the test vars from prod vars.
-TEST_WORKER_PIDFILE = '/tmp/securedrop_test_worker.pid'
+TEST_WORKER_PIDFILE = "/tmp/securedrop_test_worker.pid"
 
 # Quiet down gnupg output. (See Issue #2595)
-GNUPG_LOG_LEVEL = os.environ.get('GNUPG_LOG_LEVEL', "ERROR")
+GNUPG_LOG_LEVEL = os.environ.get("GNUPG_LOG_LEVEL", "ERROR")
 gnupg._util.log.setLevel(getattr(logging, GNUPG_LOG_LEVEL, logging.ERROR))
 
 # `hypothesis` sets a default deadline of 200 milliseconds before failing tests,
@@ -62,8 +52,9 @@ settings.load_profile("securedrop")
 
 
 def pytest_addoption(parser):
-    parser.addoption("--page-layout", action="store_true",
-                     default=False, help="run page layout tests")
+    parser.addoption(
+        "--page-layout", action="store_true", default=False, help="run page layout tests"
+    )
 
 
 def pytest_configure(config):
@@ -73,9 +64,7 @@ def pytest_configure(config):
 def pytest_collection_modifyitems(config, items):
     if config.getoption("--page-layout"):
         return
-    skip_page_layout = pytest.mark.skip(
-        reason="need --page-layout option to run page layout tests"
-    )
+    skip_page_layout = pytest.mark.skip(reason="need --page-layout option to run page layout tests")
     for item in items:
         if "pagelayout" in item.keywords:
             item.add_marker(skip_page_layout)
@@ -87,12 +76,13 @@ def hardening(request):
 
     def finalizer():
         models.LOGIN_HARDENING = hardening
+
     request.addfinalizer(finalizer)
     models.LOGIN_HARDENING = True
     return None
 
 
-@pytest.fixture(scope='session')
+@pytest.fixture(scope="session")
 def setUpTearDown():
     _start_test_rqworker(original_config)
     yield
@@ -106,7 +96,7 @@ def insecure_scrypt() -> Generator[None, None, None]:
         salt_for_gpg_secret=b"abcd",
         salt_for_filesystem_id=b"1234",
         # Insecure but fast
-        scrypt_n=2 ** 1,
+        scrypt_n=2**1,
         scrypt_r=1,
         scrypt_p=1,
     )
@@ -185,29 +175,29 @@ def config(
             yield config
 
 
-@pytest.fixture(scope='function')
+@pytest.fixture(scope="function")
 def alembic_config(config: SDConfig) -> str:
-    base_dir = path.join(path.dirname(__file__), '..')
-    migrations_dir = path.join(base_dir, 'alembic')
+    base_dir = path.join(path.dirname(__file__), "..")
+    migrations_dir = path.join(base_dir, "alembic")
     ini = configparser.ConfigParser()
-    ini.read(path.join(base_dir, 'alembic.ini'))
+    ini.read(path.join(base_dir, "alembic.ini"))
 
-    ini.set('alembic', 'script_location', path.join(migrations_dir))
-    ini.set('alembic', 'sqlalchemy.url', config.DATABASE_URI)
+    ini.set("alembic", "script_location", path.join(migrations_dir))
+    ini.set("alembic", "sqlalchemy.url", config.DATABASE_URI)
 
-    alembic_path = path.join(config.SECUREDROP_DATA_ROOT, 'alembic.ini')
-    with open(alembic_path, 'w') as f:
+    alembic_path = path.join(config.SECUREDROP_DATA_ROOT, "alembic.ini")
+    with open(alembic_path, "w") as f:
         ini.write(f)
 
     return alembic_path
 
 
-@pytest.fixture(scope='function')
-def app_storage(config: SDConfig) -> 'Storage':
+@pytest.fixture(scope="function")
+def app_storage(config: SDConfig) -> "Storage":
     return Storage(config.STORE_DIR, config.TEMP_DIR)
 
 
-@pytest.fixture(scope='function')
+@pytest.fixture(scope="function")
 def source_app(config: SDConfig, app_storage: Storage) -> Generator[Flask, None, None]:
     config.SOURCE_APP_FLASK_CONFIG_CLS.TESTING = True
     config.SOURCE_APP_FLASK_CONFIG_CLS.USE_X_SENDFILE = False
@@ -218,7 +208,7 @@ def source_app(config: SDConfig, app_storage: Storage) -> Generator[Flask, None,
     with mock.patch("store.Storage.get_default") as mock_storage_global:
         mock_storage_global.return_value = app_storage
         app = create_source_app(config)
-        app.config['SERVER_NAME'] = 'localhost.localdomain'
+        app.config["SERVER_NAME"] = "localhost.localdomain"
         with app.app_context():
             db.create_all()
             try:
@@ -228,7 +218,7 @@ def source_app(config: SDConfig, app_storage: Storage) -> Generator[Flask, None,
                 db.drop_all()
 
 
-@pytest.fixture(scope='function')
+@pytest.fixture(scope="function")
 def journalist_app(config: SDConfig, app_storage: Storage) -> Generator[Flask, None, None]:
     config.JOURNALIST_APP_FLASK_CONFIG_CLS.TESTING = True
     config.JOURNALIST_APP_FLASK_CONFIG_CLS.USE_X_SENDFILE = False
@@ -239,7 +229,7 @@ def journalist_app(config: SDConfig, app_storage: Storage) -> Generator[Flask, N
     with mock.patch("store.Storage.get_default") as mock_storage_global:
         mock_storage_global.return_value = app_storage
         app = create_journalist_app(config)
-        app.config['SERVER_NAME'] = 'localhost.localdomain'
+        app.config["SERVER_NAME"] = "localhost.localdomain"
         with app.app_context():
             db.create_all()
             try:
@@ -249,36 +239,40 @@ def journalist_app(config: SDConfig, app_storage: Storage) -> Generator[Flask, N
                 db.drop_all()
 
 
-@pytest.fixture(scope='function')
+@pytest.fixture(scope="function")
 def test_journo(journalist_app: Flask) -> Dict[str, Any]:
     with journalist_app.app_context():
         user, password = utils.db_helper.init_journalist(is_admin=False)
         username = user.username
         otp_secret = user.otp_secret
-        return {'journalist': user,
-                'username': username,
-                'password': password,
-                'otp_secret': otp_secret,
-                'id': user.id,
-                'uuid': user.uuid,
-                'first_name': user.first_name,
-                'last_name': user.last_name}
+        return {
+            "journalist": user,
+            "username": username,
+            "password": password,
+            "otp_secret": otp_secret,
+            "id": user.id,
+            "uuid": user.uuid,
+            "first_name": user.first_name,
+            "last_name": user.last_name,
+        }
 
 
-@pytest.fixture(scope='function')
+@pytest.fixture(scope="function")
 def test_admin(journalist_app: Flask) -> Dict[str, Any]:
     with journalist_app.app_context():
         user, password = utils.db_helper.init_journalist(is_admin=True)
         username = user.username
         otp_secret = user.otp_secret
-        return {'admin': user,
-                'username': username,
-                'password': password,
-                'otp_secret': otp_secret,
-                'id': user.id}
+        return {
+            "admin": user,
+            "username": username,
+            "password": password,
+            "otp_secret": otp_secret,
+            "id": user.id,
+        }
 
 
-@pytest.fixture(scope='function')
+@pytest.fixture(scope="function")
 def test_source(journalist_app: Flask, app_storage: Storage) -> Dict[str, Any]:
     with journalist_app.app_context():
         passphrase = PassphraseGenerator.get_default().generate_passphrase()
@@ -289,81 +283,102 @@ def test_source(journalist_app: Flask, app_storage: Storage) -> Dict[str, Any]:
         )
         EncryptionManager.get_default().generate_source_key_pair(source_user)
         source = source_user.get_db_record()
-        return {'source_user': source_user,
-                # TODO(AD): Eventually the next keys could be removed as they are in source_user
-                'source': source,
-                'codename': passphrase,
-                'filesystem_id': source_user.filesystem_id,
-                'uuid': source.uuid,
-                'id': source.id}
+        return {
+            "source_user": source_user,
+            # TODO(AD): Eventually the next keys could be removed as they are in source_user
+            "source": source,
+            "codename": passphrase,
+            "filesystem_id": source_user.filesystem_id,
+            "uuid": source.uuid,
+            "id": source.id,
+        }
 
 
-@pytest.fixture(scope='function')
+@pytest.fixture(scope="function")
 def test_submissions(journalist_app: Flask, app_storage: Storage) -> Dict[str, Any]:
     with journalist_app.app_context():
         source, codename = utils.db_helper.init_source(app_storage)
         utils.db_helper.submit(app_storage, source, 2)
-        return {'source': source,
-                'codename': codename,
-                'filesystem_id': source.filesystem_id,
-                'uuid': source.uuid,
-                'submissions': source.submissions}
+        return {
+            "source": source,
+            "codename": codename,
+            "filesystem_id": source.filesystem_id,
+            "uuid": source.uuid,
+            "submissions": source.submissions,
+        }
 
 
-@pytest.fixture(scope='function')
+@pytest.fixture(scope="function")
 def test_files(journalist_app, test_journo, app_storage):
     with journalist_app.app_context():
         source, codename = utils.db_helper.init_source(app_storage)
         utils.db_helper.submit(app_storage, source, 2, submission_type="file")
-        utils.db_helper.reply(app_storage, test_journo['journalist'], source, 1)
-        return {'source': source,
-                'codename': codename,
-                'filesystem_id': source.filesystem_id,
-                'uuid': source.uuid,
-                'submissions': source.submissions,
-                'replies': source.replies}
+        utils.db_helper.reply(app_storage, test_journo["journalist"], source, 1)
+        return {
+            "source": source,
+            "codename": codename,
+            "filesystem_id": source.filesystem_id,
+            "uuid": source.uuid,
+            "submissions": source.submissions,
+            "replies": source.replies,
+        }
 
 
-@pytest.fixture(scope='function')
+@pytest.fixture(scope="function")
 def test_files_deleted_journalist(journalist_app, test_journo, app_storage):
     with journalist_app.app_context():
         source, codename = utils.db_helper.init_source(app_storage)
         utils.db_helper.submit(app_storage, source, 2)
-        test_journo['journalist']
+        test_journo["journalist"]
         juser, _ = utils.db_helper.init_journalist("f", "l", is_admin=False)
         utils.db_helper.reply(app_storage, juser, source, 1)
         utils.db_helper.delete_journalist(juser)
-        return {'source': source,
-                'codename': codename,
-                'filesystem_id': source.filesystem_id,
-                'uuid': source.uuid,
-                'submissions': source.submissions,
-                'replies': source.replies}
+        return {
+            "source": source,
+            "codename": codename,
+            "filesystem_id": source.filesystem_id,
+            "uuid": source.uuid,
+            "submissions": source.submissions,
+            "replies": source.replies,
+        }
 
 
-@pytest.fixture(scope='function')
+@pytest.fixture(scope="function")
 def journalist_api_token(journalist_app, test_journo):
     with journalist_app.test_client() as app:
-        valid_token = TOTP(test_journo['otp_secret']).now()
-        response = app.post(url_for('api.get_token'),
-                            data=json.dumps(
-                                {'username': test_journo['username'],
-                                 'passphrase': test_journo['password'],
-                                 'one_time_code': valid_token}),
-                            headers=utils.api_helper.get_api_headers())
-        return response.json['token']
+        valid_token = TOTP(test_journo["otp_secret"]).now()
+        response = app.post(
+            url_for("api.get_token"),
+            data=json.dumps(
+                {
+                    "username": test_journo["username"],
+                    "passphrase": test_journo["password"],
+                    "one_time_code": valid_token,
+                }
+            ),
+            headers=utils.api_helper.get_api_headers(),
+        )
+        return response.json["token"]
 
 
 def _start_test_rqworker(config: SDConfig) -> None:
     if not psutil.pid_exists(_get_pid_from_file(TEST_WORKER_PIDFILE)):
-        tmp_logfile = open('/tmp/test_rqworker.log', 'w')
-        subprocess.Popen(['rqworker', config.RQ_WORKER_NAME,
-                          '-P', config.SECUREDROP_ROOT,
-                          '--pid', TEST_WORKER_PIDFILE,
-                          '--logging_level', 'DEBUG',
-                          '-v'],
-                         stdout=tmp_logfile,
-                         stderr=subprocess.STDOUT)
+        tmp_logfile = open("/tmp/test_rqworker.log", "w")
+        subprocess.Popen(
+            [
+                "rqworker",
+                config.RQ_WORKER_NAME,
+                "-P",
+                config.SECUREDROP_ROOT,
+                "--pid",
+                TEST_WORKER_PIDFILE,
+                "--logging_level",
+                "DEBUG",
+                "-v",
+            ],
+            stdout=tmp_logfile,
+            stderr=subprocess.STDOUT,
+        )
 
 
 def _stop_test_rqworker() -> None:

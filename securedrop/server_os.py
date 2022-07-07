@@ -10,5 +10,5 @@ def get_os_release() -> str:
         ["/usr/bin/lsb_release", "--release", "--short"],
         check=True,
         stdout=subprocess.PIPE,
-        universal_newlines=True
+        universal_newlines=True,
     ).stdout.strip()

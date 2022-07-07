@@ -2,7 +2,6 @@ from tests.functional.app_navigators import SourceAppNagivator
 
 
 class TestSourceUserCancels:
-
     def test_source_cancels_at_login_page(self, sd_servers_v2, tor_browser_web_driver):
         # Given a source user who goes to the login page
         source_app_nav = SourceAppNagivator(

@@ -16,18 +16,16 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 import pytest
-
-from tests.functional import journalist_navigation_steps
-from tests.functional import source_navigation_steps
 import tests.functional.pageslayout.functional_test as pft
+from tests.functional import journalist_navigation_steps, source_navigation_steps
 
 
 @pytest.mark.pagelayout
 class TestJournalistLayoutCol(
-        pft.FunctionalTest,
-        source_navigation_steps.SourceNavigationStepsMixin,
-        journalist_navigation_steps.JournalistNavigationStepsMixin):
-
+    pft.FunctionalTest,
+    source_navigation_steps.SourceNavigationStepsMixin,
+    journalist_navigation_steps.JournalistNavigationStepsMixin,
+):
     def test_col_no_documents(self):
         self._source_visits_source_homepage()
         self._source_chooses_to_submit_documents()
@@ -38,8 +36,8 @@ class TestJournalistLayoutCol(
         self._journalist_visits_col()
         self._journalist_delete_all()
         self._journalist_confirm_delete_selected()
-        self._screenshot('journalist-col_no_document.png')
-        self._save_html('journalist-col_no_document.html')
+        self._screenshot("journalist-col_no_document.png")
+        self._save_html("journalist-col_no_document.html")
 
     def test_col_has_no_key(self):
         self._source_visits_source_homepage()
@@ -50,8 +48,8 @@ class TestJournalistLayoutCol(
         self._journalist_logs_in()
         self._source_delete_key()
         self._journalist_visits_col()
-        self._screenshot('journalist-col_has_no_key.png')
-        self._save_html('journalist-col_has_no_key.html')
+        self._screenshot("journalist-col_has_no_key.png")
+        self._save_html("journalist-col_has_no_key.html")
 
     def test_col(self):
         self._source_visits_source_homepage()
@@ -61,8 +59,8 @@ class TestJournalistLayoutCol(
         self._source_logs_out()
         self._journalist_logs_in()
         self._journalist_visits_col()
-        self._screenshot('journalist-col.png')
-        self._save_html('journalist-col.html')
+        self._screenshot("journalist-col.png")
+        self._save_html("journalist-col.html")
 
     def test_col_javascript(self):
         self._source_visits_source_homepage()
@@ -72,5 +70,5 @@ class TestJournalistLayoutCol(
         self._source_logs_out()
         self._journalist_logs_in()
         self._journalist_visits_col()
-        self._screenshot('journalist-col_javascript.png')
-        self._save_html('journalist-col_javascript.html')
+        self._screenshot("journalist-col_javascript.png")
+        self._save_html("journalist-col_javascript.html")

@@ -4,22 +4,16 @@
 import os
 import shutil
 import threading
+from os.path import abspath, dirname, isdir, join, realpath
 from pathlib import Path
-from os.path import abspath
-from os.path import dirname
-from os.path import isdir
-from os.path import join
-from os.path import realpath
 
 from db import db
 
-
-TESTS_DIR = abspath(join(dirname(realpath(__file__)), '..'))
+TESTS_DIR = abspath(join(dirname(realpath(__file__)), ".."))
 
 
 def create_directories(config):
-    """Create directories for the file store.
-    """
+    """Create directories for the file store."""
     # config.SECUREDROP_DATA_ROOT and config.GPG_KEY_DIR already get created by the
     # setup_journalist_key_and_gpg_folder fixture
     for d in [config.STORE_DIR, config.TEMP_DIR]:

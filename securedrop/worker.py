@@ -1,13 +1,12 @@
 import logging
 import os
-from typing import Optional, List
+from typing import List, Optional
 
 from redis import Redis
-from rq.queue import Queue
-from rq.worker import Worker, WorkerStatus
 from rq.exceptions import InvalidJobOperation, NoSuchJobError
+from rq.queue import Queue
 from rq.registry import StartedJobRegistry
-
+from rq.worker import Worker, WorkerStatus
 from sdconfig import config
 
 
@@ -91,9 +90,7 @@ def requeue_interrupted_jobs(queue_name: Optional[str] = None) -> None:
         try:
             job = started_job_registry.job_class.fetch(job_id, started_job_registry.connection)
         except NoSuchJobError as e:
-            logging.error(
-                "Could not find details for job %s: %s", job_id, e
-            )
+            logging.error("Could not find details for job %s: %s", job_id, e)
             continue
 
         logging.debug(

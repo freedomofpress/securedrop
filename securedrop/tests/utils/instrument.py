@@ -9,14 +9,12 @@ Flask unittest integration.
 """
 
 
-from urllib.parse import urlparse, urljoin
+from urllib.parse import urljoin, urlparse
 
 import pytest
+from flask import message_flashed, template_rendered
 
-from flask import template_rendered, message_flashed
-
-
-__all__ = ['InstrumentedApp']
+__all__ = ["InstrumentedApp"]
 
 
 class ContextVariableDoesNotExist(Exception):
@@ -24,7 +22,6 @@ class ContextVariableDoesNotExist(Exception):
 
 
 class InstrumentedApp:
-
     def __init__(self, app):
         self.app = app
 
@@ -36,7 +33,7 @@ class InstrumentedApp:
         return self
 
     def __exit__(self, *nargs):
-        if getattr(self, 'app', None) is not None:
+        if getattr(self, "app", None) is not None:
             del self.app
 
         del self.templates[:]
@@ -53,7 +50,7 @@ class InstrumentedApp:
             self.templates = []
         self.templates.append((template, context))
 
-    def assert_message_flashed(self, message, category='message'):
+    def assert_message_flashed(self, message, category="message"):
         """
         Checks if a given message was flashed.
 
@@ -64,10 +61,11 @@ class InstrumentedApp:
             if _message == message and _category == category:
                 return True
 
-        raise AssertionError("Message '{}' in category '{}' wasn't flashed"
-                             .format(message, category))
+        raise AssertionError(
+            "Message '{}' in category '{}' wasn't flashed".format(message, category)
+        )
 
-    def assert_template_used(self, name, tmpl_name_attribute='name'):
+    def assert_template_used(self, name, tmpl_name_attribute="name"):
         """
         Checks if a given template is used in the request. If the template
         engine used is not Jinja2, provide ``tmpl_name_attribute`` with a
@@ -85,8 +83,11 @@ class InstrumentedApp:
 
             used_templates.append(template)
 
-        raise AssertionError("Template {} not used. Templates were used: {}"
-                             .format(name, ' '.join(repr(used_templates))))
+        raise AssertionError(
+            "Template {} not used. Templates were used: {}".format(
+                name, " ".join(repr(used_templates))
+            )
+        )
 
     def get_context_variable(self, name):
         """
@@ -115,8 +116,7 @@ class InstrumentedApp:
         try:
             assert self.get_context_variable(name) == value, message
         except ContextVariableDoesNotExist:
-            pytest.fail(message or
-                        "Context variable does not exist: {}".format(name))
+            pytest.fail(message or "Context variable does not exist: {}".format(name))
 
     def assert_redirects(self, response, location, message=None):
         """
@@ -131,14 +131,13 @@ class InstrumentedApp:
         if parts.netloc:
             expected_location = location
         else:
-            server_name = self.app.config.get('SERVER_NAME') or 'localhost.localdomain'
+            server_name = self.app.config.get("SERVER_NAME") or "localhost.localdomain"
             expected_location = urljoin("http://%s" % server_name, location)
 
         valid_status_codes = (301, 302, 303, 305, 307)
-        valid_status_code_str = ', '.join([str(code)
-                                           for code in valid_status_codes])
-        not_redirect = "HTTP Status {} expected but got {}" \
-                       .format(valid_status_code_str, response.status_code)
-        assert (response.status_code in (valid_status_codes, message)
-                or not_redirect)
+        valid_status_code_str = ", ".join([str(code) for code in valid_status_codes])
+        not_redirect = "HTTP Status {} expected but got {}".format(
+            valid_status_code_str, response.status_code
+        )
+        assert response.status_code in (valid_status_codes, message) or not_redirect
         assert response.location == expected_location, message

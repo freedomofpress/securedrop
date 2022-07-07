@@ -1,28 +1,31 @@
-import pytest
 import re
 
+import pytest
 import testutils
 
 sdvars = testutils.securedrop_test_vars
 testinfra_hosts = [sdvars.app_hostname, sdvars.monitor_hostname]
 
 
-@pytest.mark.parametrize('sysctl_opt', [
-  ('net.ipv4.conf.all.accept_redirects', 0),
-  ('net.ipv4.conf.all.accept_source_route', 0),
-  ('net.ipv4.conf.all.rp_filter', 1),
-  ('net.ipv4.conf.all.secure_redirects', 0),
-  ('net.ipv4.conf.all.send_redirects', 0),
-  ('net.ipv4.conf.default.accept_redirects', 0),
-  ('net.ipv4.conf.default.accept_source_route', 0),
-  ('net.ipv4.conf.default.rp_filter', 1),
-  ('net.ipv4.conf.default.secure_redirects', 0),
-  ('net.ipv4.conf.default.send_redirects', 0),
-  ('net.ipv4.icmp_echo_ignore_broadcasts', 1),
-  ('net.ipv4.ip_forward', 0),
-  ('net.ipv4.tcp_max_syn_backlog', 4096),
-  ('net.ipv4.tcp_syncookies', 1),
-])
+@pytest.mark.parametrize(
+    "sysctl_opt",
+    [
+        ("net.ipv4.conf.all.accept_redirects", 0),
+        ("net.ipv4.conf.all.accept_source_route", 0),
+        ("net.ipv4.conf.all.rp_filter", 1),
+        ("net.ipv4.conf.all.secure_redirects", 0),
+        ("net.ipv4.conf.all.send_redirects", 0),
+        ("net.ipv4.conf.default.accept_redirects", 0),
+        ("net.ipv4.conf.default.accept_source_route", 0),
+        ("net.ipv4.conf.default.rp_filter", 1),
+        ("net.ipv4.conf.default.secure_redirects", 0),
+        ("net.ipv4.conf.default.send_redirects", 0),
+        ("net.ipv4.icmp_echo_ignore_broadcasts", 1),
+        ("net.ipv4.ip_forward", 0),
+        ("net.ipv4.tcp_max_syn_backlog", 4096),
+        ("net.ipv4.tcp_syncookies", 1),
+    ],
+)
 def test_sysctl_options(host, sysctl_opt):
     """
     Ensure sysctl flags are set correctly. Most of these checks
@@ -41,13 +44,16 @@ def test_dns_setting(host):
     assert f.user == "root"
     assert f.group == "root"
     assert f.mode == 0o644
-    assert f.contains(r'^nameserver 8\.8\.8\.8$')
+    assert f.contains(r"^nameserver 8\.8\.8\.8$")
 
 
-@pytest.mark.parametrize('kernel_module', [
-    'bluetooth',
-    'iwlwifi',
-])
+@pytest.mark.parametrize(
+    "kernel_module",
+    [
+        "bluetooth",
+        "iwlwifi",
+    ],
+)
 def test_blacklisted_kernel_modules(host, kernel_module):
     """
     Test that unwanted kernel modules are blacklisted on the system.
@@ -67,13 +73,13 @@ def test_swap_disabled(host):
     Ensure swap space is disabled. Prohibit writing memory to swapfiles
     to reduce the threat of forensic analysis leaking any sensitive info.
     """
-    hostname = host.check_output('hostname')
+    hostname = host.check_output("hostname")
 
     # Mon doesn't have swap disabled yet
-    if hostname.startswith('mon'):
+    if hostname.startswith("mon"):
         return True
 
-    c = host.check_output('swapon --summary')
+    c = host.check_output("swapon --summary")
     # A leading slash will indicate full path to a swapfile.
     assert not re.search("^/", c, re.M)
 
@@ -96,18 +102,21 @@ def test_twofactor_disabled_on_tty(host):
     assert "pam_ecryptfs.so unwrap" not in pam_auth_file
 
 
-@pytest.mark.parametrize('sshd_opts', [
-  ('UsePAM', 'no'),
-  ('ChallengeResponseAuthentication', 'no'),
-  ('PasswordAuthentication', 'no'),
-  ('PubkeyAuthentication', 'yes'),
-  ('RSAAuthentication', 'yes'),
-  ('AllowGroups', 'ssh'),
-  ('AllowTcpForwarding', 'no'),
-  ('AllowAgentForwarding', 'no'),
-  ('PermitTunnel', 'no'),
-  ('X11Forwarding', 'no'),
-])
+@pytest.mark.parametrize(
+    "sshd_opts",
+    [
+        ("UsePAM", "no"),
+        ("ChallengeResponseAuthentication", "no"),
+        ("PasswordAuthentication", "no"),
+        ("PubkeyAuthentication", "yes"),
+        ("RSAAuthentication", "yes"),
+        ("AllowGroups", "ssh"),
+        ("AllowTcpForwarding", "no"),
+        ("AllowAgentForwarding", "no"),
+        ("PermitTunnel", "no"),
+        ("X11Forwarding", "no"),
+    ],
+)
 def test_sshd_config(host, sshd_opts):
     """
     Let's ensure sshd does not fall back to password-based authentication
@@ -119,10 +128,13 @@ def test_sshd_config(host, sshd_opts):
     assert line in sshd_config_file
 
 
-@pytest.mark.parametrize('logfile', [
-    '/var/log/auth.log',
-    '/var/log/syslog',
-])
+@pytest.mark.parametrize(
+    "logfile",
+    [
+        "/var/log/auth.log",
+        "/var/log/syslog",
+    ],
+)
 def test_no_ecrypt_messages_in_logs(host, logfile):
     """
     Ensure pam_ecryptfs is removed from /etc/pam.d/common-auth : not only is
@@ -137,18 +149,21 @@ def test_no_ecrypt_messages_in_logs(host, logfile):
         assert error_message not in f.content_string
 
 
-@pytest.mark.parametrize('package', [
-    'aptitude',
-    'cloud-init',
-    'libiw30',
-    'python-is-python2',
-    'snapd',
-    'torsocks',
-    'wireless-tools',
-    'wpasupplicant',
-])
+@pytest.mark.parametrize(
+    "package",
+    [
+        "aptitude",
+        "cloud-init",
+        "libiw30",
+        "python-is-python2",
+        "snapd",
+        "torsocks",
+        "wireless-tools",
+        "wpasupplicant",
+    ],
+)
 def test_unused_packages_are_removed(host, package):
-    """ Check if unused package is present """
+    """Check if unused package is present"""
     assert not host.package(package).is_installed
 
 

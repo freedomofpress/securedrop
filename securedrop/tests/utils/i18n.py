@@ -5,15 +5,11 @@ import os
 from typing import Dict, Generator, Iterable, List, Optional, Tuple
 
 import pytest
-from babel.core import (
-    get_locale_identifier,
-    parse_locale,
-)
+from babel.core import get_locale_identifier, parse_locale
 from babel.messages.catalog import Catalog
 from babel.messages.pofile import read_po
 from bs4 import BeautifulSoup
 from flask_babel import force_locale
-
 from sdconfig import SDConfig
 
 
@@ -96,11 +92,7 @@ def xfail_untranslated_messages(config: SDConfig, locale: str, msgids: Iterable[
             for msgid in msgids:
                 m = catalog.get(msgid)
                 if not m:
-                    pytest.xfail(
-                        "locale {} message catalog lacks msgid: {}".format(locale, msgid)
-                    )
+                    pytest.xfail("locale {} message catalog lacks msgid: {}".format(locale, msgid))
                 if not m.string:
-                    pytest.xfail(
-                        "locale {} has no translation for msgid: {}".format(locale, msgid)
-                    )
+                    pytest.xfail("locale {} has no translation for msgid: {}".format(locale, msgid))
         yield

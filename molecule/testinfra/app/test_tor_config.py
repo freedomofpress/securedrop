@@ -1,15 +1,18 @@
-import pytest
 import re
 
+import pytest
 import testutils
 
 sdvars = testutils.securedrop_test_vars
 testinfra_hosts = [sdvars.app_hostname]
 
 
-@pytest.mark.parametrize('package', [
-    'tor',
-])
+@pytest.mark.parametrize(
+    "package",
+    [
+        "tor",
+    ],
+)
 def test_tor_packages(host, package):
     """
     Ensure Tor packages are installed. Does not include the Tor keyring
@@ -29,11 +32,14 @@ def test_tor_service_running(host):
     assert s.is_enabled
 
 
-@pytest.mark.parametrize('torrc_option', [
-    'SocksPort 0',
-    'SafeLogging 1',
-    'RunAsDaemon 1',
-])
+@pytest.mark.parametrize(
+    "torrc_option",
+    [
+        "SocksPort 0",
+        "SafeLogging 1",
+        "RunAsDaemon 1",
+    ],
+)
 def test_tor_torrc_options(host, torrc_option):
     """
     Check for required options in the system Tor config file.

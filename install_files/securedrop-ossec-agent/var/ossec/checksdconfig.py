@@ -5,10 +5,7 @@ import argparse
 import subprocess
 import sys
 
-
-IPTABLES_RULES_UNCONFIGURED = {
-    "all": ["-P INPUT ACCEPT", "-P FORWARD ACCEPT", "-P OUTPUT ACCEPT"]
-}
+IPTABLES_RULES_UNCONFIGURED = {"all": ["-P INPUT ACCEPT", "-P FORWARD ACCEPT", "-P OUTPUT ACCEPT"]}
 
 
 IPTABLES_RULES_DEFAULT_DROP = {
@@ -31,14 +28,12 @@ IPTABLES_RULES_DEFAULT_DROP = {
         "-A LOGNDROP -p udp -m limit --limit 5/min -j LOG --log-ip-options --log-uid",
         "-A LOGNDROP -p icmp -m limit --limit 5/min -j LOG --log-ip-options --log-uid",
         "-A LOGNDROP -j DROP",
-    ]
+    ],
 }
 
 
 def list_iptables_rules():
-    result = subprocess.run(
-        ["iptables", "-S"], stdout=subprocess.PIPE, stderr=subprocess.PIPE
-    )
+    result = subprocess.run(["iptables", "-S"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     rules = result.stdout.decode("utf-8").splitlines()
     policies = [r for r in rules if r.startswith("-P")]
     input_rules = [r for r in rules if r.startswith("-A INPUT")]
@@ -84,7 +79,7 @@ def check_system_configuration(args):
     print("System configuration checks were successful.")
 
 
-if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description='SecureDrop server configuration check')
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="SecureDrop server configuration check")
     args = parser.parse_args()
     check_system_configuration(args)

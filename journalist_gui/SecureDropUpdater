@@ -1,8 +1,10 @@
 #!/usr/bin/python
-from PyQt5 import QtWidgets
 import sys
 
+from PyQt5 import QtWidgets
+
 from journalist_gui.SecureDropUpdater import UpdaterApp, prevent_second_instance
+
 
 def main():
     app = QtWidgets.QApplication(sys.argv)

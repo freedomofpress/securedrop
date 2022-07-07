@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
+import io
 import logging
 import os
-import io
-import pytest
 import re
 import stat
 import zipfile
@@ -10,21 +9,20 @@ from pathlib import Path
 from tempfile import TemporaryDirectory
 from typing import Generator
 
+import pytest
+import store
+from db import db
+from journalist_app import create_app
+from models import Reply, Submission
 from passphrases import PassphraseGenerator
 from source_user import create_source_user
+from store import Storage, async_add_checksum_for_file, queued_add_checksum_for_file
 
 from . import utils
 
-from db import db
-from journalist_app import create_app
-from models import Submission, Reply
-import store
-from store import Storage, queued_add_checksum_for_file, async_add_checksum_for_file
-
 
 @pytest.fixture(scope="function")
-def test_storage(
-) -> Generator[Storage, None, None]:
+def test_storage() -> Generator[Storage, None, None]:
     # Setup the filesystem for the storage object
     with TemporaryDirectory() as data_dir_name:
         data_dir = Path(data_dir_name)
@@ -40,12 +38,11 @@ def test_storage(
 
 def create_file_in_source_dir(base_dir, filesystem_id, filename):
     """Helper function for simulating files"""
-    source_directory = os.path.join(base_dir,
-                                    filesystem_id)
+    source_directory = os.path.join(base_dir, filesystem_id)
     os.makedirs(source_directory)
 
     file_path = os.path.join(source_directory, filename)
-    with io.open(file_path, 'a'):
+    with io.open(file_path, "a"):
         os.utime(file_path, None)
 
     return source_directory, file_path
@@ -53,9 +50,9 @@ def create_file_in_source_dir(base_dir, filesystem_id, filename):
 
 def test_path_returns_filename_of_folder(test_storage):
     """`Storage.path` is called in this way in
-        journalist.delete_collection
+    journalist.delete_collection
     """
-    filesystem_id = 'example'
+    filesystem_id = "example"
     generated_absolute_path = test_storage.path(filesystem_id)
 
     expected_absolute_path = os.path.join(test_storage.storage_path, filesystem_id)
@@ -64,38 +61,35 @@ def test_path_returns_filename_of_folder(test_storage):
 
 def test_path_returns_filename_of_items_within_folder(test_storage):
     """`Storage.path` is called in this  way in journalist.bulk_delete"""
-    filesystem_id = 'example'
-    item_filename = '1-quintuple_cant-msg.gpg'
+    filesystem_id = "example"
+    item_filename = "1-quintuple_cant-msg.gpg"
     generated_absolute_path = test_storage.path(filesystem_id, item_filename)
 
-    expected_absolute_path = os.path.join(test_storage.storage_path,
-                                          filesystem_id, item_filename)
+    expected_absolute_path = os.path.join(test_storage.storage_path, filesystem_id, item_filename)
     assert generated_absolute_path == expected_absolute_path
 
 
 def test_path_without_filesystem_id(test_storage):
-    filesystem_id = 'example'
-    item_filename = '1-quintuple_cant-msg.gpg'
+    filesystem_id = "example"
+    item_filename = "1-quintuple_cant-msg.gpg"
 
     basedir = os.path.join(test_storage.storage_path, filesystem_id)
     os.makedirs(basedir)
 
     path_to_file = os.path.join(basedir, item_filename)
-    with open(path_to_file, 'a'):
+    with open(path_to_file, "a"):
         os.utime(path_to_file, None)
 
-    generated_absolute_path = \
-        test_storage.path_without_filesystem_id(item_filename)
+    generated_absolute_path = test_storage.path_without_filesystem_id(item_filename)
 
-    expected_absolute_path = os.path.join(test_storage.storage_path,
-                                          filesystem_id, item_filename)
+    expected_absolute_path = os.path.join(test_storage.storage_path, filesystem_id, item_filename)
     assert generated_absolute_path == expected_absolute_path
 
 
 def test_path_without_filesystem_id_duplicate_files(test_storage):
-    filesystem_id = 'example'
-    filesystem_id_duplicate = 'example2'
-    item_filename = '1-quintuple_cant-msg.gpg'
+    filesystem_id = "example"
+    filesystem_id_duplicate = "example2"
+    item_filename = "1-quintuple_cant-msg.gpg"
 
     basedir = os.path.join(test_storage.storage_path, filesystem_id)
     duplicate_basedir = os.path.join(test_storage.storage_path, filesystem_id_duplicate)
@@ -103,7 +97,7 @@ def test_path_without_filesystem_id_duplicate_files(test_storage):
     for directory in [basedir, duplicate_basedir]:
         os.makedirs(directory)
         path_to_file = os.path.join(directory, item_filename)
-        with open(path_to_file, 'a'):
+        with open(path_to_file, "a"):
             os.utime(path_to_file, None)
 
     with pytest.raises(store.TooManyFilesException):
@@ -111,15 +105,14 @@ def test_path_without_filesystem_id_duplicate_files(test_storage):
 
 
 def test_path_without_filesystem_id_no_file(test_storage):
-    item_filename = 'not there'
+    item_filename = "not there"
     with pytest.raises(store.NoFileFoundException):
         test_storage.path_without_filesystem_id(item_filename)
 
 
 def test_verify_path_not_absolute(test_storage):
     with pytest.raises(store.PathException):
-        test_storage.verify(
-            os.path.join(test_storage.storage_path, '..', 'etc', 'passwd'))
+        test_storage.verify(os.path.join(test_storage.storage_path, "..", "etc", "passwd"))
 
 
 def test_verify_in_store_dir(test_storage):
@@ -131,7 +124,7 @@ def test_verify_in_store_dir(test_storage):
 
 def test_verify_store_path_not_absolute(test_storage):
     with pytest.raises(store.PathException) as e:
-        test_storage.verify('..')
+        test_storage.verify("..")
         assert e.message == "Path not valid in store: .."
 
 
@@ -151,18 +144,18 @@ def test_verify_rejects_symlinks(test_storage):
 
 def test_verify_store_dir_not_absolute():
     with pytest.raises(store.PathException) as exc_info:
-        Storage('..', '/')
+        Storage("..", "/")
 
     msg = str(exc_info.value)
-    assert re.compile('storage_path.*is not absolute').match(msg)
+    assert re.compile("storage_path.*is not absolute").match(msg)
 
 
 def test_verify_store_temp_dir_not_absolute():
     with pytest.raises(store.PathException) as exc_info:
-        Storage('/', '..')
+        Storage("/", "..")
 
     msg = str(exc_info.value)
-    assert re.compile('temp_dir.*is not absolute').match(msg)
+    assert re.compile("temp_dir.*is not absolute").match(msg)
 
 
 def test_verify_regular_submission_in_sourcedir_returns_true(test_storage):
@@ -173,7 +166,7 @@ def test_verify_regular_submission_in_sourcedir_returns_true(test_storage):
     naming scheme of submissions.
     """
     source_directory, file_path = create_file_in_source_dir(
-        test_storage.storage_path, 'example-filesystem-id', '1-regular-doc.gz.gpg'
+        test_storage.storage_path, "example-filesystem-id", "1-regular-doc.gz.gpg"
     )
 
     assert test_storage.verify(file_path)
@@ -182,55 +175,53 @@ def test_verify_regular_submission_in_sourcedir_returns_true(test_storage):
 def test_verify_invalid_file_extension_in_sourcedir_raises_exception(test_storage):
 
     source_directory, file_path = create_file_in_source_dir(
-        test_storage.storage_path, 'example-filesystem-id', 'not_valid.txt'
+        test_storage.storage_path, "example-filesystem-id", "not_valid.txt"
     )
 
     with pytest.raises(store.PathException) as e:
         test_storage.verify(file_path)
 
-    assert 'Path not valid in store: {}'.format(file_path) in str(e)
+    assert "Path not valid in store: {}".format(file_path) in str(e)
 
 
 def test_verify_invalid_filename_in_sourcedir_raises_exception(test_storage):
 
     source_directory, file_path = create_file_in_source_dir(
-        test_storage.storage_path, 'example-filesystem-id', 'NOTVALID.gpg'
+        test_storage.storage_path, "example-filesystem-id", "NOTVALID.gpg"
     )
 
     with pytest.raises(store.PathException) as e:
         test_storage.verify(file_path)
-        assert e.message == 'Path not valid in store: {}'.format(file_path)
+        assert e.message == "Path not valid in store: {}".format(file_path)
 
 
 def test_get_zip(journalist_app, test_source, app_storage, config):
     with journalist_app.app_context():
-        submissions = utils.db_helper.submit(
-            app_storage, test_source['source'], 2)
-        filenames = [os.path.join(config.STORE_DIR,
-                                  test_source['filesystem_id'],
-                                  submission.filename)
-                     for submission in submissions]
+        submissions = utils.db_helper.submit(app_storage, test_source["source"], 2)
+        filenames = [
+            os.path.join(config.STORE_DIR, test_source["filesystem_id"], submission.filename)
+            for submission in submissions
+        ]
 
-        archive = zipfile.ZipFile(
-            app_storage.get_bulk_archive(submissions))
+        archive = zipfile.ZipFile(app_storage.get_bulk_archive(submissions))
         archivefile_contents = archive.namelist()
 
     for archived_file, actual_file in zip(archivefile_contents, filenames):
-        with io.open(actual_file, 'rb') as f:
+        with io.open(actual_file, "rb") as f:
             actual_file_content = f.read()
         zipped_file_content = archive.read(archived_file)
         assert zipped_file_content == actual_file_content
 
 
-@pytest.mark.parametrize('db_model', [Submission, Reply])
+@pytest.mark.parametrize("db_model", [Submission, Reply])
 def test_add_checksum_for_file(config, app_storage, db_model):
-    '''
+    """
     Check that when we execute the `add_checksum_for_file` function, the database object is
     correctly updated with the actual hash of the file.
 
     We have to create our own app in order to have more control over the SQLAlchemy sessions. The
     fixture pushes a single app context that forces us to work within a single transaction.
-    '''
+    """
     app = create_app(config)
 
     test_storage = app_storage
@@ -243,11 +234,11 @@ def test_add_checksum_for_file(config, app_storage, db_model):
             source_app_storage=test_storage,
         )
         source = source_user.get_db_record()
-        target_file_path = test_storage.path(source.filesystem_id, '1-foo-msg.gpg')
-        test_message = b'hash me!'
-        expected_hash = 'f1df4a6d8659471333f7f6470d593e0911b4d487856d88c83d2d187afa195927'
+        target_file_path = test_storage.path(source.filesystem_id, "1-foo-msg.gpg")
+        test_message = b"hash me!"
+        expected_hash = "f1df4a6d8659471333f7f6470d593e0911b4d487856d88c83d2d187afa195927"
 
-        with open(target_file_path, 'wb') as f:
+        with open(target_file_path, "wb") as f:
             f.write(test_message)
 
         if db_model == Submission:
@@ -260,26 +251,25 @@ def test_add_checksum_for_file(config, app_storage, db_model):
         db.session.commit()
         db_obj_id = db_obj.id
 
-    queued_add_checksum_for_file(db_model,
-                                 db_obj_id,
-                                 target_file_path,
-                                 app.config['SQLALCHEMY_DATABASE_URI'])
+    queued_add_checksum_for_file(
+        db_model, db_obj_id, target_file_path, app.config["SQLALCHEMY_DATABASE_URI"]
+    )
 
     with app.app_context():
         # requery to get a new object
         db_obj = db_model.query.filter_by(id=db_obj_id).one()
-        assert db_obj.checksum == 'sha256:' + expected_hash
+        assert db_obj.checksum == "sha256:" + expected_hash
 
 
-@pytest.mark.parametrize('db_model', [Submission, Reply])
+@pytest.mark.parametrize("db_model", [Submission, Reply])
 def test_async_add_checksum_for_file(config, app_storage, db_model):
-    '''
+    """
     Check that when we execute the `add_checksum_for_file` function, the database object is
     correctly updated with the actual hash of the file.
 
     We have to create our own app in order to have more control over the SQLAlchemy sessions. The
     fixture pushes a single app context that forces us to work within a single transaction.
-    '''
+    """
     app = create_app(config)
 
     with app.app_context():
@@ -290,11 +280,11 @@ def test_async_add_checksum_for_file(config, app_storage, db_model):
             source_app_storage=app_storage,
         )
         source = source_user.get_db_record()
-        target_file_path = app_storage.path(source.filesystem_id, '1-foo-msg.gpg')
-        test_message = b'hash me!'
-        expected_hash = 'f1df4a6d8659471333f7f6470d593e0911b4d487856d88c83d2d187afa195927'
+        target_file_path = app_storage.path(source.filesystem_id, "1-foo-msg.gpg")
+        test_message = b"hash me!"
+        expected_hash = "f1df4a6d8659471333f7f6470d593e0911b4d487856d88c83d2d187afa195927"
 
-        with open(target_file_path, 'wb') as f:
+        with open(target_file_path, "wb") as f:
             f.write(test_message)
 
         if db_model == Submission:
@@ -314,7 +304,7 @@ def test_async_add_checksum_for_file(config, app_storage, db_model):
     with app.app_context():
         # requery to get a new object
         db_obj = db_model.query.filter_by(id=db_obj_id).one()
-        assert db_obj.checksum == 'sha256:' + expected_hash
+        assert db_obj.checksum == "sha256:" + expected_hash
 
 
 def test_path_configuration_is_immutable(test_storage):

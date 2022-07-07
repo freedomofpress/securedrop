@@ -1,6 +1,6 @@
-import pytest
 import re
 
+import pytest
 import testutils
 
 test_vars = testutils.securedrop_test_vars
@@ -27,33 +27,34 @@ def test_cron_apt_config(host):
     Ensure custom cron-apt config is absent, as of Focal
     """
     assert not host.file("/etc/cron-apt/config").exists
-    assert not host.file('/etc/cron-apt/action.d/0-update').exists
-    assert not host.file('/etc/cron-apt/action.d/5-security').exists
-    assert not host.file('/etc/cron-apt/action.d/9-remove').exists
-    assert not host.file('/etc/cron.d/cron-apt').exists
+    assert not host.file("/etc/cron-apt/action.d/0-update").exists
+    assert not host.file("/etc/cron-apt/action.d/5-security").exists
+    assert not host.file("/etc/cron-apt/action.d/9-remove").exists
+    assert not host.file("/etc/cron.d/cron-apt").exists
     assert not host.file("/etc/apt/security.list").exists
     assert not host.file("/etc/cron-apt/action.d/3-download").exists
 
 
-@pytest.mark.parametrize('repo', [
-  'deb http://security.ubuntu.com/ubuntu {securedrop_target_platform}-security main',
-  'deb http://security.ubuntu.com/ubuntu {securedrop_target_platform}-security universe',
-  'deb http://archive.ubuntu.com/ubuntu/ {securedrop_target_platform}-updates main',
-  'deb http://archive.ubuntu.com/ubuntu/ {securedrop_target_platform} main'
-])
+@pytest.mark.parametrize(
+    "repo",
+    [
+        "deb http://security.ubuntu.com/ubuntu {securedrop_target_platform}-security main",
+        "deb http://security.ubuntu.com/ubuntu {securedrop_target_platform}-security universe",
+        "deb http://archive.ubuntu.com/ubuntu/ {securedrop_target_platform}-updates main",
+        "deb http://archive.ubuntu.com/ubuntu/ {securedrop_target_platform} main",
+    ],
+)
 def test_sources_list(host, repo):
     """
     Ensure the correct apt repositories are specified
     in the sources.list for apt.
     """
-    repo_config = repo.format(
-        securedrop_target_platform=host.system_info.codename
-    )
-    f = host.file('/etc/apt/sources.list')
+    repo_config = repo.format(securedrop_target_platform=host.system_info.codename)
+    f = host.file("/etc/apt/sources.list")
     assert f.is_file
     assert f.user == "root"
     assert f.mode == 0o644
-    repo_regex = '^{}$'.format(re.escape(repo_config))
+    repo_regex = "^{}$".format(re.escape(repo_config))
     assert f.contains(repo_regex)
 
 
@@ -103,7 +104,7 @@ def test_unattended_securedrop_specific(host):
     it will include unattended-upgrade settings. Under all hosts,
     it will disable installing 'recommended' packages.
     """
-    f = host.file('/etc/apt/apt.conf.d/80securedrop')
+    f = host.file("/etc/apt/apt.conf.d/80securedrop")
     assert f.is_file
     assert f.user == "root"
     assert f.mode == 0o644
@@ -116,7 +117,7 @@ def test_unattended_upgrades_functional(host):
     Ensure unatteded-upgrades completes successfully and ensures all packages
     are up-to-date.
     """
-    c = host.run('sudo unattended-upgrades --dry-run --debug')
+    c = host.run("sudo unattended-upgrades --dry-run --debug")
     assert c.rc == 0
     expected_origins = (
         "Allowed origins are: origin=Ubuntu,archive=focal, origin=Ubuntu,archive=focal-security"
@@ -130,12 +131,15 @@ def test_unattended_upgrades_functional(host):
     assert expected_result in c.stdout
 
 
-@pytest.mark.parametrize('service', [
-  'apt-daily',
-  'apt-daily.timer',
-  'apt-daily-upgrade',
-  'apt-daily-upgrade.timer',
- ])
+@pytest.mark.parametrize(
+    "service",
+    [
+        "apt-daily",
+        "apt-daily.timer",
+        "apt-daily-upgrade",
+        "apt-daily-upgrade.timer",
+    ],
+)
 def test_apt_daily_services_and_timers_enabled(host, service):
     """
     Ensure the services and timers used for unattended upgrades are enabled
@@ -176,12 +180,12 @@ def test_reboot_required_cron(host):
     Here, we ensure that reboot-required flag is dropped twice daily to ensure the system
     is rebooted every day at the scheduled time.
     """
-    f = host.file('/etc/cron.d/reboot-flag')
+    f = host.file("/etc/cron.d/reboot-flag")
     assert f.is_file
     assert f.user == "root"
     assert f.mode == 0o644
 
-    line = '^{}$'.format(re.escape("0 */12 * * * root touch /var/run/reboot-required"))
+    line = "^{}$".format(re.escape("0 */12 * * * root touch /var/run/reboot-required"))
     assert f.contains(line)
 
 
@@ -194,7 +198,7 @@ def test_all_packages_updated(host):
     for use with Selenium. Therefore apt will report it's possible to upgrade
     Firefox, which we'll need to mark as "OK" in terms of the tests.
     """
-    c = host.run('apt-get dist-upgrade --simulate')
+    c = host.run("apt-get dist-upgrade --simulate")
     assert c.rc == 0
     # Staging hosts will have locally built deb packages, marked as held.
     # Staging and development will have a version-locked Firefox pinned for

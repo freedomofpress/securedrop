@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
+import pytest
+import sqlalchemy
 from db import db
 from journalist_app import create_app
-import sqlalchemy
-import pytest
 
 from .helpers import random_bool, random_datetime
 

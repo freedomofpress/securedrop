@@ -1,11 +1,11 @@
-import pytest
-import warnings
-import io
 import difflib
+import io
 import os
-from jinja2 import Template
+import warnings
 
+import pytest
 import testutils
+from jinja2 import Template
 
 sdvars = testutils.securedrop_test_vars
 testinfra_hosts = [sdvars.app_hostname, sdvars.monitor_hostname]
@@ -21,10 +21,13 @@ def test_ssh_motd_disabled(host):
     assert not f.contains(r"pam\.motd")
 
 
-@pytest.mark.parametrize("package", [
-    'linux-image-{}-grsec-securedrop',
-    'securedrop-grsec',
-])
+@pytest.mark.parametrize(
+    "package",
+    [
+        "linux-image-{}-grsec-securedrop",
+        "securedrop-grsec",
+    ],
+)
 def test_grsecurity_apt_packages(host, package):
     """
     Ensure the grsecurity-related apt packages are present on the system.
@@ -37,14 +40,17 @@ def test_grsecurity_apt_packages(host, package):
     assert host.package(package).is_installed
 
 
-@pytest.mark.parametrize("package", [
-    'linux-signed-image-generic-lts-utopic',
-    'linux-signed-image-generic',
-    'linux-signed-generic-lts-utopic',
-    'linux-signed-generic',
-    '^linux-image-.*generic$',
-    '^linux-headers-.*',
-])
+@pytest.mark.parametrize(
+    "package",
+    [
+        "linux-signed-image-generic-lts-utopic",
+        "linux-signed-image-generic",
+        "linux-signed-generic-lts-utopic",
+        "linux-signed-generic",
+        "^linux-image-.*generic$",
+        "^linux-headers-.*",
+    ],
+)
 def test_generic_kernels_absent(host, package):
     """
     Ensure the default Ubuntu-provided kernel packages are absent.
@@ -78,16 +84,19 @@ def test_grsecurity_kernel_is_running(host):
     Make sure the currently running kernel is specific grsec kernel.
     """
     KERNEL_VERSION = sdvars.grsec_version_focal
-    c = host.run('uname -r')
-    assert c.stdout.strip().endswith('-grsec-securedrop')
-    assert c.stdout.strip() == '{}-grsec-securedrop'.format(KERNEL_VERSION)
+    c = host.run("uname -r")
+    assert c.stdout.strip().endswith("-grsec-securedrop")
+    assert c.stdout.strip() == "{}-grsec-securedrop".format(KERNEL_VERSION)
 
 
-@pytest.mark.parametrize('sysctl_opt', [
-  ('kernel.grsecurity.grsec_lock', 1),
-  ('kernel.grsecurity.rwxmap_logging', 0),
-  ('vm.heap_stack_gap', 1048576),
-])
+@pytest.mark.parametrize(
+    "sysctl_opt",
+    [
+        ("kernel.grsecurity.grsec_lock", 1),
+        ("kernel.grsecurity.rwxmap_logging", 0),
+        ("vm.heap_stack_gap", 1048576),
+    ],
+)
 def test_grsecurity_sysctl_options(host, sysctl_opt):
     """
     Check that the grsecurity-related sysctl options are set correctly.
@@ -118,7 +127,8 @@ def test_grsecurity_paxtest(host):
             paxtest_results = host.check_output(paxtest_cmd)
 
         paxtest_template_path = "{}/paxtest_results.j2".format(
-            os.path.dirname(os.path.abspath(__file__)))
+            os.path.dirname(os.path.abspath(__file__))
+        )
 
         memcpy_result = "Killed"
         # Versions of paxtest newer than 0.9.12 or so will report
@@ -126,13 +136,14 @@ def test_grsecurity_paxtest(host):
         # https://github.com/freedomofpress/securedrop/issues/1039
         if host.system_info.codename == "focal":
             memcpy_result = "Vulnerable"
-        with io.open(paxtest_template_path, 'r') as f:
+        with io.open(paxtest_template_path, "r") as f:
             paxtest_template = Template(f.read().rstrip())
             paxtest_expected = paxtest_template.render(memcpy_result=memcpy_result)
 
         # The stdout prints here will only be displayed if the test fails
-        for paxtest_diff in difflib.context_diff(paxtest_expected.split('\n'),
-                                                 paxtest_results.split('\n')):
+        for paxtest_diff in difflib.context_diff(
+            paxtest_expected.split("\n"), paxtest_results.split("\n")
+        ):
             print(paxtest_diff)
         assert paxtest_results == paxtest_expected
     finally:
@@ -144,7 +155,7 @@ def test_apt_autoremove(host):
     """
     Ensure old packages have been autoremoved.
     """
-    c = host.run('apt-get --dry-run autoremove')
+    c = host.run("apt-get --dry-run autoremove")
     assert c.rc == 0
     assert "The following packages will be REMOVED" not in c.stdout
 
@@ -175,8 +186,8 @@ def test_paxctld_focal(host):
     # out of /opt/ to ensure the file is always clobbered on changes.
     assert host.file("/opt/securedrop/paxctld.conf").is_file
 
-    hostname = host.check_output('hostname -s')
-    assert (("app" in hostname) or ("mon" in hostname))
+    hostname = host.check_output("hostname -s")
+    assert ("app" in hostname) or ("mon" in hostname)
 
     # Under Focal, apache2 pax flags managed by securedrop-grsec metapackage.
     # Both hosts, app & mon, should have the same exemptions. Check precedence
@@ -185,15 +196,18 @@ def test_paxctld_focal(host):
         assert f.contains("^/usr/sbin/apache2\tm")
 
 
-@pytest.mark.parametrize('kernel_opts', [
-  'WLAN',
-  'NFC',
-  'WIMAX',
-  'WIRELESS',
-  'HAMRADIO',
-  'IRDA',
-  'BT',
-])
+@pytest.mark.parametrize(
+    "kernel_opts",
+    [
+        "WLAN",
+        "NFC",
+        "WIMAX",
+        "WIRELESS",
+        "HAMRADIO",
+        "IRDA",
+        "BT",
+    ],
+)
 def test_wireless_disabled_in_kernel_config(host, kernel_opts):
     """
     Kernel modules for wireless are blacklisted, but we go one step further and
@@ -209,11 +223,14 @@ def test_wireless_disabled_in_kernel_config(host, kernel_opts):
         assert line in kernel_config or kernel_opts not in kernel_config
 
 
-@pytest.mark.parametrize('kernel_opts', [
-  'CONFIG_X86_INTEL_TSX_MODE_OFF',
-  'CONFIG_PAX',
-  'CONFIG_GRKERNSEC',
-])
+@pytest.mark.parametrize(
+    "kernel_opts",
+    [
+        "CONFIG_X86_INTEL_TSX_MODE_OFF",
+        "CONFIG_PAX",
+        "CONFIG_GRKERNSEC",
+    ],
+)
 def test_kernel_options_enabled_config(host, kernel_opts):
     """
     Tests kernel config for options that should be enabled

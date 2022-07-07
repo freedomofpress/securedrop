@@ -1,6 +1,6 @@
-import pytest
 import re
 
+import pytest
 import testutils
 
 securedrop_test_vars = testutils.securedrop_test_vars
@@ -19,30 +19,33 @@ def test_apache_headers_journalist_interface(host, header, value):
     assert f.mode == 0o644
     header_unset = "Header onsuccess unset {}".format(header)
     assert f.contains(header_unset)
-    header_set = "Header always set {} \"{}\"".format(header, value)
+    header_set = 'Header always set {} "{}"'.format(header, value)
     assert f.contains(header_set)
 
 
 # declare journalist-specific Apache configs
-@pytest.mark.parametrize("apache_opt", [
-  "<VirtualHost {}:8080>".format(
-      securedrop_test_vars.apache_listening_address),
-  "WSGIDaemonProcess journalist processes=2 threads=30 display-name=%{{GROUP}} python-path={}".format(  # noqa
-      securedrop_test_vars.securedrop_code),
-  (
-      'WSGIScriptAlias / /var/www/journalist.wsgi '
-      'process-group=journalist application-group=journalist'
-  ),
-  'WSGIPassAuthorization On',
-  'Header set Cache-Control "no-store"',
-  "Alias /static {}/static".format(securedrop_test_vars.securedrop_code),
-  'XSendFile        On',
-  'LimitRequestBody 524288000',
-  'XSendFilePath    /var/lib/securedrop/store/',
-  'XSendFilePath    /var/lib/securedrop/tmp/',
-  'ErrorLog /var/log/apache2/journalist-error.log',
-  'CustomLog /var/log/apache2/journalist-access.log combined',
-])
+@pytest.mark.parametrize(
+    "apache_opt",
+    [
+        "<VirtualHost {}:8080>".format(securedrop_test_vars.apache_listening_address),
+        "WSGIDaemonProcess journalist processes=2 threads=30 display-name=%{{GROUP}} python-path={}".format(  # noqa
+            securedrop_test_vars.securedrop_code
+        ),
+        (
+            "WSGIScriptAlias / /var/www/journalist.wsgi "
+            "process-group=journalist application-group=journalist"
+        ),
+        "WSGIPassAuthorization On",
+        'Header set Cache-Control "no-store"',
+        "Alias /static {}/static".format(securedrop_test_vars.securedrop_code),
+        "XSendFile        On",
+        "LimitRequestBody 524288000",
+        "XSendFilePath    /var/lib/securedrop/store/",
+        "XSendFilePath    /var/lib/securedrop/tmp/",
+        "ErrorLog /var/log/apache2/journalist-error.log",
+        "CustomLog /var/log/apache2/journalist-access.log combined",
+    ],
+)
 def test_apache_config_journalist_interface(host, apache_opt):
     """
     Ensure the necessary Apache settings for serving the application
@@ -68,9 +71,9 @@ def test_apache_config_journalist_interface_headers_per_distro(host):
     f = host.file("/etc/apache2/sites-available/journalist.conf")
     assert f.contains("Header onsuccess unset X-Frame-Options")
     assert f.contains('Header always set X-Frame-Options "DENY"')
-    assert f.contains('Header onsuccess unset Referrer-Policy')
+    assert f.contains("Header onsuccess unset Referrer-Policy")
     assert f.contains('Header always set Referrer-Policy "no-referrer"')
-    assert f.contains('Header edit Set-Cookie ^(.*)$ $1;HttpOnly')
+    assert f.contains("Header edit Set-Cookie ^(.*)$ $1;HttpOnly")
 
 
 def test_apache_logging_journalist_interface(host):
@@ -99,22 +102,30 @@ def test_apache_logging_journalist_interface(host):
         assert f.contains("GET")
 
 
-@pytest.mark.parametrize("apache_opt", [
-    """
+@pytest.mark.parametrize(
+    "apache_opt",
+    [
+        """
 <Directory />
   Options None
   AllowOverride None
   Require all denied
 </Directory>
-""".strip('\n'),
-    """
+""".strip(
+            "\n"
+        ),
+        """
 <Directory {}/static>
   Require all granted
   # Cache static resources for 1 hour
   Header set Cache-Control "max-age=3600"
 </Directory>
-""".strip('\n').format(securedrop_test_vars.securedrop_code),
-    """
+""".strip(
+            "\n"
+        ).format(
+            securedrop_test_vars.securedrop_code
+        ),
+        """
 <Directory {}>
   Options None
   AllowOverride None
@@ -125,8 +136,13 @@ def test_apache_logging_journalist_interface(host):
     Require all denied
   </LimitExcept>
 </Directory>
-""".strip('\n').format(securedrop_test_vars.securedrop_code),
-])
+""".strip(
+            "\n"
+        ).format(
+            securedrop_test_vars.securedrop_code
+        ),
+    ],
+)
 def test_apache_config_journalist_interface_access_control(host, apache_opt):
     """
     Verifies the access control directives for the Journalist Interface.

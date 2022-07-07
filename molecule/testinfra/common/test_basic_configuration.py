@@ -1,7 +1,5 @@
-from testinfra.host import Host
-
 import testutils
-
+from testinfra.host import Host
 
 test_vars = testutils.securedrop_test_vars
 testinfra_hosts = [test_vars.app_hostname, test_vars.monitor_hostname]

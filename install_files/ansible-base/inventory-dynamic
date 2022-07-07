@@ -3,12 +3,12 @@
 Dynamic inventory script for connecting to a Tor onion service
 for SSH. The THS must already be provisioned on the target host.
 """
+import io
 import json
 import os
-import io
 import subprocess
-import yaml
 
+import yaml
 
 # Constant for storing SSH connection. This is reused for all hosts,
 # but it's trivial to store the info in the primary dict to support

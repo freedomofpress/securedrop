@@ -1,24 +1,18 @@
-from contextlib import contextmanager
 import logging
 import os
-from pathlib import Path
-from enum import Enum
 import time
+from contextlib import contextmanager
 from datetime import datetime
-from os.path import abspath
-from os.path import dirname
-from os.path import expanduser
-from os.path import join
-from os.path import realpath
+from enum import Enum
+from os.path import abspath, dirname, expanduser, join, realpath
+from pathlib import Path
 from typing import Generator, Optional
-
-from selenium.webdriver.firefox.webdriver import WebDriver
 
 import tbselenium.common as cm
 from selenium import webdriver
+from selenium.webdriver.firefox.webdriver import WebDriver
 from selenium.webdriver.remote.remote_connection import LOGGER
 from tbselenium.tbdriver import TorBrowserDriver
-
 
 _LOGFILE_PATH = abspath(join(dirname(realpath(__file__)), "../log/driver.log"))
 _FIREFOX_PATH = "/usr/bin/firefox/firefox"

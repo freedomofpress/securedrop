@@ -1,7 +1,7 @@
 strings = [
     """This is a test message without markup!""",
-    """This is a test message with markup and characters such as \, \\, \', \" and ". """ +  # noqa: W605, E501
-    """<strong>This text should not be bold</strong>!""",
+    """This is a test message with markup and characters such as \, \\, \', \" and ". """
+    + """<strong>This text should not be bold</strong>!""",  # noqa: W605, E501
     """~!@#$%^&*()_+{}|:"<>?~!@#$%^&*()_+{}|:"<>?~!@#$%^&*()_+{}|:"<>?~!@#$%""",
     """Ω≈ç√∫˜µ≤≥÷
 åß∂ƒ©˙∆˚¬…æ
@@ -12,9 +12,7 @@ strings = [
 Œ„´‰ˇÁ¨ˆØ∏”""",
     """!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!$""",  # noqa: W605, E501
     """............................................................................................................................							.""",  # noqa: W605,    E501
-
     """thisisalongwordwithoutspacesordashesthisisalongwordwithoutspacesordashesthisisalongwordwithoutspacesordashesthisisalongwordwithoutspacesordashesthisisalongwordwithoutspacesordashesthisisalongwordwithoutspacesordashesthisisalongwordwithoutspacesordashesthisisalongwordwithoutspacesordashesthisisalongwordwithoutspacesordashesthisisalongwordwithoutspacesordashesthisisalongwordwithoutspacesordashesthisisalongwordwithoutspacesordashesthisisalongwordwithoutspacesordashesthisisalongwordwithoutspacesordashesthisisalongwordwit💩houtspacesordashes""",  # noqa: W605, E501
-
     """😍😍😍😍🔥🔥🔥🔥🔥🖧Thelastwas3networkedcomuters📟📸longwordwit💩houtspacesordashes""",  # noqa: W605, E501
     """WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW""",
     """.................................................................................................................................""",  # noqa: W605, E501
@@ -129,8 +127,7 @@ Nunc gravida, lorem ut volutpat malesuada, neque mi sodales massa, ut malesuada 
 社會科學院語學研究所
 울란바토르
 𠜎𠜱𠝹𠱓𠱸𠲖𠳏
-""",   # noqa: W605, E501
-
+""",  # noqa: W605, E501
     """𐐜 𐐔𐐇𐐝𐐀𐐡𐐇𐐓 𐐙𐐊𐐡𐐝𐐓/𐐝𐐇𐐗𐐊𐐤𐐔 𐐒𐐋𐐗 𐐒𐐌 𐐜 𐐡𐐀𐐖𐐇𐐤𐐓𐐝 𐐱𐑂 𐑄 𐐔𐐇𐐝𐐀𐐡𐐇𐐓 𐐏𐐆𐐅𐐤𐐆𐐚𐐊𐐡𐐝𐐆𐐓𐐆""",  # noqa: W605, E501
     """
 Ｔｈｅ ｑｕｉｃｋ ｂｒｏｗｎ ｆｏｘ ｊｕｍｐｓ ｏｖｅｒ ｔｈｅ ｌａｚｙ ｄｏｇ

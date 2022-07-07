@@ -1,23 +1,22 @@
 import multiprocessing
+import socket
+import time
 from contextlib import contextmanager
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from io import BytesIO
 from pathlib import Path
-from typing import Generator, Tuple, Optional, Callable, Any
+from typing import Any, Callable, Generator, Optional, Tuple
 from uuid import uuid4
 
-import requests
-from selenium.webdriver.firefox.webdriver import WebDriver
-
 import pytest
+import requests
 from models import Journalist
+from selenium.webdriver.firefox.webdriver import WebDriver
 from tests.functional.db_session import get_database_session
 from tests.functional.factories import SecureDropConfigFactory
 from tests.functional.sd_config_v2 import SecureDropConfig
 from tests.functional.web_drivers import WebDriverTypeEnum, get_web_driver
-import socket
-import time
 
 
 # Function-scoped so that tests can be run in parallel if needed
@@ -268,12 +267,12 @@ def _create_source_and_submission(config_in_use: SecureDropConfig) -> Path:
     """
     # This function will be called in a separate Process that runs the app
     # Hence the late imports
-    from store import Storage, add_checksum_for_file
-    from source_user import create_source_user
-    from tests.functional.db_session import get_database_session
-    from passphrases import PassphraseGenerator
-    from models import Submission
     from encryption import EncryptionManager
+    from models import Submission
+    from passphrases import PassphraseGenerator
+    from source_user import create_source_user
+    from store import Storage, add_checksum_for_file
+    from tests.functional.db_session import get_database_session
 
     # Create a source
     passphrase = PassphraseGenerator.get_default().generate_passphrase()

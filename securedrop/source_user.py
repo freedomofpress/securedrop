@@ -1,18 +1,15 @@
 import os
-
 from base64 import b32encode
 from functools import lru_cache
 from pathlib import Path
 from random import SystemRandom
-from typing import Optional, List
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, List, Optional
 
+import models
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives.kdf import scrypt
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
-
-import models
 
 if TYPE_CHECKING:
     from passphrases import DicewarePassphrase
@@ -87,9 +84,11 @@ def create_source_user(
         new_designation = designation_generator.generate_journalist_designation()
 
         # Check to see if it's already used by an existing source
-        existing_source_with_same_designation = db_session.query(
-            models.Source
-        ).filter_by(journalist_designation=new_designation).one_or_none()
+        existing_source_with_same_designation = (
+            db_session.query(models.Source)
+            .filter_by(journalist_designation=new_designation)
+            .one_or_none()
+        )
         if not existing_source_with_same_designation:
             # The designation is not already used - good to go
             valid_designation = new_designation
@@ -189,7 +188,6 @@ _default_designation_generator: Optional["_DesignationGenerator"] = None
 
 
 class _DesignationGenerator:
-
     def __init__(self, nouns: List[str], adjectives: List[str]):
         self._random_generator = SystemRandom()
 

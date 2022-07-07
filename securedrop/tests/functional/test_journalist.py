@@ -20,14 +20,12 @@ from typing import Generator, Tuple
 from uuid import uuid4
 
 import pytest
-
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.keys import Keys
-
 from tests.functional.app_navigators import JournalistAppNavigator
 from tests.functional.conftest import (
-    _create_source_and_submission,
     SdServersFixtureResult,
+    _create_source_and_submission,
     spawn_sd_servers,
 )
 from tests.functional.factories import SecureDropConfigFactory

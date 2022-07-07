@@ -1,12 +1,9 @@
 from io import BytesIO
-
 from pathlib import Path
 
-from selenium.webdriver.firefox.webdriver import WebDriver
 from PIL import Image
-
+from selenium.webdriver.firefox.webdriver import WebDriver
 from tests.functional.pageslayout.functional_test import autocrop_btm
-
 
 _SCREENSHOTS_DIR = (Path(__file__).parent / "screenshots").absolute()
 _HTML_DIR = (Path(__file__).parent / "html").absolute()

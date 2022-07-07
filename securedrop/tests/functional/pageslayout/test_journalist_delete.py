@@ -18,19 +18,17 @@
 import time
 
 import pytest
-
-from tests.functional import journalist_navigation_steps
-from tests.functional import source_navigation_steps
 import tests.functional.pageslayout.functional_test as pft
+from tests.functional import journalist_navigation_steps, source_navigation_steps
 
 
 # TODO(AD): This should be merged with TestJournalist
 @pytest.mark.pagelayout
 class TestJournalistLayoutDelete(
-        pft.FunctionalTest,
-        source_navigation_steps.SourceNavigationStepsMixin,
-        journalist_navigation_steps.JournalistNavigationStepsMixin):
-
+    pft.FunctionalTest,
+    source_navigation_steps.SourceNavigationStepsMixin,
+    journalist_navigation_steps.JournalistNavigationStepsMixin,
+):
     def test_delete_none(self):
         self._source_visits_source_homepage()
         self._source_chooses_to_submit_documents()
@@ -42,8 +40,8 @@ class TestJournalistLayoutDelete(
         self._journalist_visits_col()
         self._journalist_clicks_delete_selected_link()
         self._journalist_confirm_delete_selected()
-        self._screenshot('journalist-delete_none.png')
-        self._save_html('journalist-delete_none.html')
+        self._screenshot("journalist-delete_none.png")
+        self._save_html("journalist-delete_none.html")
 
     # TODO(AD): This should be merged with
     #  test_journalist_verifies_deletion_of_one_submission_modal()
@@ -59,8 +57,8 @@ class TestJournalistLayoutDelete(
         self._journalist_selects_first_doc()
         self._journalist_clicks_delete_selected_link()
         time.sleep(1)
-        self._screenshot('journalist-delete_one_confirmation.png')
-        self._save_html('journalist-delete_one_confirmation.html')
+        self._screenshot("journalist-delete_one_confirmation.png")
+        self._save_html("journalist-delete_one_confirmation.html")
 
     # TODO(AD): This should be merged with test_journalist_interface_ui_with_modal()
     def test_delete_all_confirmation(self):
@@ -74,8 +72,8 @@ class TestJournalistLayoutDelete(
         self._journalist_visits_col()
         self._journalist_delete_all_confirmation()
         time.sleep(1)
-        self._screenshot('journalist-delete_all_confirmation.png')
-        self._save_html('journalist-delete_all_confirmation.html')
+        self._screenshot("journalist-delete_all_confirmation.png")
+        self._save_html("journalist-delete_all_confirmation.html")
 
     def test_delete_one(self):
         self._source_visits_source_homepage()
@@ -88,8 +86,8 @@ class TestJournalistLayoutDelete(
         self._journalist_visits_col()
         self._journalist_delete_one()
         self._journalist_confirm_delete_selected()
-        self._screenshot('journalist-delete_one.png')
-        self._save_html('journalist-delete_one.html')
+        self._screenshot("journalist-delete_one.png")
+        self._save_html("journalist-delete_one.html")
 
     def test_delete_all(self):
         self._source_visits_source_homepage()
@@ -102,5 +100,5 @@ class TestJournalistLayoutDelete(
         self._journalist_visits_col()
         self._journalist_delete_all()
         self._journalist_confirm_delete_selected()
-        self._screenshot('journalist-delete_all.png')
-        self._save_html('journalist-delete_all.html')
+        self._screenshot("journalist-delete_all.png")
+        self._save_html("journalist-delete_all.html")

@@ -16,34 +16,32 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 import pytest
-
-from tests.functional import journalist_navigation_steps
 import tests.functional.pageslayout.functional_test as pft
+from tests.functional import journalist_navigation_steps
 
 
 @pytest.mark.pagelayout
 class TestJournalistLayoutAccount(
     pft.FunctionalTest, journalist_navigation_steps.JournalistNavigationStepsMixin
 ):
-
     def test_account_edit_hotp_secret(self):
         self._journalist_logs_in()
         self._visit_edit_account()
         self._visit_edit_hotp_secret()
-        self._screenshot('journalist-account_edit_hotp_secret.png')
-        self._save_html('journalist-account_edit_hotp_secret.html')
+        self._screenshot("journalist-account_edit_hotp_secret.png")
+        self._save_html("journalist-account_edit_hotp_secret.html")
 
     def test_account_new_two_factor_hotp(self):
         self._journalist_logs_in()
         self._visit_edit_account()
         self._visit_edit_hotp_secret()
         self._set_hotp_secret()
-        self._screenshot('journalist-account_new_two_factor_hotp.png')
-        self._save_html('journalist-account_new_two_factor_hotp.html')
+        self._screenshot("journalist-account_new_two_factor_hotp.png")
+        self._save_html("journalist-account_new_two_factor_hotp.html")
 
     def test_account_new_two_factor_totp(self):
         self._journalist_logs_in()
         self._visit_edit_account()
         self._visit_edit_totp_secret()
-        self._screenshot('journalist-account_new_two_factor_totp.png')
-        self._save_html('journalist-account_new_two_factor_totp.html')
+        self._screenshot("journalist-account_new_two_factor_totp.png")
+        self._save_html("journalist-account_new_two_factor_totp.html")

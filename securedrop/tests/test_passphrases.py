@@ -1,8 +1,7 @@
 from unittest import mock
 
 import pytest
-
-from passphrases import PassphraseGenerator, InvalidWordListError
+from passphrases import InvalidWordListError, PassphraseGenerator
 
 # pylint: disable=unsupported-membership-test
 # False positive https://github.com/PyCQA/pylint/issues/3045
