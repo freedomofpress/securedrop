@@ -378,8 +378,8 @@ class I18NTool:
             # Add changes to web .po files
             #
             path = "securedrop/translations/{l}/LC_MESSAGES/messages.po".format(
-                l=code
-            )  # noqa: E741
+                l=code  # noqa: E741
+            )
             if need_update(path):
                 add(path)
                 updated = True
@@ -389,8 +389,8 @@ class I18NTool:
             desktop_code = info["desktop"]
             path = join(
                 "install_files/ansible-base/roles",
-                "tails-config/templates/{l}.po".format(l=desktop_code),
-            )  # noqa: E741
+                "tails-config/templates/{l}.po".format(l=desktop_code),  # noqa: E741
+            )
             if need_update(path):
                 add(path)
                 updated = True
