@@ -1,4 +1,5 @@
 [flake8]
+extend-ignore = E203, E231, W503
 max-line-length = 100
 exclude =
     config.py,

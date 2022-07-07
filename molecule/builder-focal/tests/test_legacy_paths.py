@@ -1,14 +1,17 @@
 import pytest
 
 
-@pytest.mark.parametrize('build_path', [
-    '/tmp/build-',
-    '/tmp/rsync-filter',
-    '/tmp/src_install_files',
-    '/tmp/build-securedrop-keyring',
-    '/tmp/build-securedrop-ossec-agent',
-    '/tmp/build-securedrop-ossec-server',
-])
+@pytest.mark.parametrize(
+    "build_path",
+    [
+        "/tmp/build-",
+        "/tmp/rsync-filter",
+        "/tmp/src_install_files",
+        "/tmp/build-securedrop-keyring",
+        "/tmp/build-securedrop-ossec-agent",
+        "/tmp/build-securedrop-ossec-server",
+    ],
+)
 def test_build_ossec_apt_dependencies(host, build_path):
     """
     Ensure that unwanted build paths are absent. Most of these were created

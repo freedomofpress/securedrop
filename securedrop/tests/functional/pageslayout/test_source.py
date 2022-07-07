@@ -16,7 +16,6 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 import pytest
-
 from tests.functional.app_navigators import SourceAppNagivator
 from tests.functional.pageslayout.functional_test import list_locales
 from tests.functional.pageslayout.screenshot_utils import save_screenshot_and_html

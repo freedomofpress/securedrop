@@ -18,15 +18,11 @@
 import io
 import logging
 import os
-from os.path import abspath
-from os.path import dirname
-from os.path import realpath
+from os.path import abspath, dirname, realpath
 
 import pytest
-
-from tests.functional import functional_test
-
 from PIL import Image
+from tests.functional import functional_test
 
 
 def list_locales():
@@ -40,7 +36,7 @@ def list_locales():
 def autocrop_btm(img, bottom_padding=12):
     """Automatically crop the bottom of a screenshot."""
     # Get the grayscale of img
-    gray = img.convert('L')
+    gray = img.convert("L")
     # We start one row above the bottom since the "modal" windows screenshots
     # have a bottom line color different than the background
     btm = img.height - 2
@@ -71,9 +67,7 @@ class FunctionalTest(functional_test.FunctionalTest):
         # revert the HTTP Accept-Language format
         locale = self.accept_languages.replace("-", "_")
 
-        log_dir = abspath(
-            os.path.join(dirname(realpath(__file__)), "screenshots", locale)
-        )
+        log_dir = abspath(os.path.join(dirname(realpath(__file__)), "screenshots", locale))
         if not os.path.exists(log_dir):
             os.makedirs(log_dir)
 
@@ -85,12 +79,10 @@ class FunctionalTest(functional_test.FunctionalTest):
         # revert the HTTP Accept-Language format
         locale = self.accept_languages.replace("-", "_")
 
-        html_dir = abspath(
-            os.path.join(dirname(realpath(__file__)), "html", locale)
-        )
+        html_dir = abspath(os.path.join(dirname(realpath(__file__)), "html", locale))
         if not os.path.exists(html_dir):
             os.makedirs(html_dir)
 
         html = self.driver.page_source
-        with open(os.path.join(html_dir, filename), 'w') as f:
+        with open(os.path.join(html_dir, filename), "w") as f:
             f.write(html)

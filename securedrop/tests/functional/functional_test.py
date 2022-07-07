@@ -10,37 +10,29 @@ import time
 import traceback
 from datetime import datetime
 from multiprocessing import Process
-from os.path import abspath
-from os.path import dirname
-from os.path import expanduser
-from os.path import join
-from os.path import realpath
+from os.path import abspath, dirname, expanduser, join, realpath
 
+import journalist_app
 import mock
 import pyotp
 import pytest
 import requests
-import tbselenium.common as cm
-from selenium import webdriver
-from selenium.common.exceptions import NoAlertPresentException
-from selenium.common.exceptions import WebDriverException
-from selenium.webdriver.common.by import By
-from selenium.webdriver.remote.remote_connection import LOGGER
-from selenium.webdriver.support import expected_conditions
-from selenium.webdriver.support.ui import WebDriverWait
-from sqlalchemy.exc import IntegrityError
-from tbselenium.tbdriver import TorBrowserDriver
-from tbselenium.utils import set_security_level
-from tbselenium.utils import SECURITY_LOW, SECURITY_MEDIUM, SECURITY_HIGH
-
-import journalist_app
 import source_app
+import tbselenium.common as cm
 import tests.utils.env as env
 from db import db
 from encryption import EncryptionManager
 from models import Journalist
+from selenium import webdriver
+from selenium.common.exceptions import NoAlertPresentException, WebDriverException
+from selenium.webdriver.common.by import By
+from selenium.webdriver.remote.remote_connection import LOGGER
+from selenium.webdriver.support import expected_conditions
+from selenium.webdriver.support.ui import WebDriverWait
 from source_user import _SourceScryptManager
-
+from sqlalchemy.exc import IntegrityError
+from tbselenium.tbdriver import TorBrowserDriver
+from tbselenium.utils import SECURITY_HIGH, SECURITY_LOW, SECURITY_MEDIUM, set_security_level
 
 LOGFILE_PATH = abspath(join(dirname(realpath(__file__)), "../log/driver.log"))
 FIREFOX_PATH = "/usr/bin/firefox/firefox"
@@ -89,7 +81,7 @@ class FunctionalTest(object):
 
         if level not in {SECURITY_HIGH, SECURITY_MEDIUM, SECURITY_LOW}:
             raise ValueError("Invalid Tor Browser security setting: " + str(level))
-        if hasattr(self, 'torbrowser_driver'):
+        if hasattr(self, "torbrowser_driver"):
             set_security_level(self.torbrowser_driver, level)
 
     def create_torbrowser_driver(self):
@@ -169,6 +161,7 @@ class FunctionalTest(object):
 
     def start_source_server(self, source_port):
         from sdconfig import config
+
         config.SESSION_EXPIRATION_MINUTES = self.session_expiration / 60.0
 
         self.source_app.run(port=source_port, debug=True, use_reloader=False, threaded=True)
@@ -214,6 +207,7 @@ class FunctionalTest(object):
                 self.journalist_location = "http://127.0.0.1:%d" % journalist_port
 
                 from sdconfig import config
+
                 self.source_app = source_app.create_app(config)
                 self.journalist_app = journalist_app.create_app(config)
                 self.journalist_app.config["WTF_CSRF_ENABLED"] = True
@@ -227,9 +221,7 @@ class FunctionalTest(object):
                 # Add our test user
                 try:
                     valid_password = "correct horse battery staple profanity oil chewy"
-                    user = Journalist(
-                        username="journalist", password=valid_password, is_admin=True
-                    )
+                    user = Journalist(username="journalist", password=valid_password, is_admin=True)
                     user.otp_secret = "JHCOGO7VCER3EJ4L"
                     db.session.add(user)
                     db.session.commit()
@@ -249,9 +241,7 @@ class FunctionalTest(object):
                 def start_journalist_server(app):
                     app.run(port=journalist_port, debug=True, use_reloader=False, threaded=True)
 
-                self.source_process = Process(
-                    target=lambda: self.start_source_server(source_port)
-                )
+                self.source_process = Process(target=lambda: self.start_source_server(source_port))
 
                 self.journalist_process = Process(
                     target=lambda: start_journalist_server(self.journalist_app)
@@ -416,7 +406,7 @@ class FunctionalTest(object):
     def alert_accept(self):
         # adapted from https://stackoverflow.com/a/34795883/837471
         def alert_is_not_present(object):
-            """ Expect an alert to not be present."""
+            """Expect an alert to not be present."""
             try:
                 alert = self.driver.switch_to.alert
                 alert.text

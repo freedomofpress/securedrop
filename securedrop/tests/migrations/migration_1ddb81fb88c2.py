@@ -1,10 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from sqlalchemy import text
-
 from db import db
 from journalist_app import create_app
-
+from sqlalchemy import text
 
 index_definition = (
     "index",

@@ -1,10 +1,9 @@
 from pathlib import Path
 
 import pytest
-from selenium.common.exceptions import NoSuchElementException
-
 from encryption import EncryptionManager
-from tests.functional.app_navigators import SourceAppNagivator, JournalistAppNavigator
+from selenium.common.exceptions import NoSuchElementException
+from tests.functional.app_navigators import JournalistAppNavigator, SourceAppNagivator
 from tests.functional.pageslayout.functional_test import list_locales
 from tests.functional.pageslayout.screenshot_utils import save_screenshot_and_html
 
@@ -12,7 +11,6 @@ from tests.functional.pageslayout.screenshot_utils import save_screenshot_and_ht
 @pytest.mark.parametrize("locale", list_locales())
 @pytest.mark.pagelayout
 class TestSubmitAndRetrieveFile:
-
     def test_submit_and_retrieve_happy_path(
         self, locale, sd_servers_v2_with_clean_state, tor_browser_web_driver, firefox_web_driver
     ):
@@ -68,11 +66,11 @@ class TestSubmitAndRetrieveFile:
         source_app_nav.source_visits_source_homepage()
         source_app_nav.source_chooses_to_login()
         source_app_nav.source_proceeds_to_login(codename=source_codename)
-        save_screenshot_and_html(source_app_nav.driver, locale, 'source-checks_for_reply')
+        save_screenshot_and_html(source_app_nav.driver, locale, "source-checks_for_reply")
 
         # When they delete the journalist's reply, it succeeds
         self._source_deletes_journalist_reply(source_app_nav)
-        save_screenshot_and_html(source_app_nav.driver, locale, 'source-deletes_reply')
+        save_screenshot_and_html(source_app_nav.driver, locale, "source-deletes_reply")
 
     @staticmethod
     def _source_deletes_journalist_reply(navigator: SourceAppNagivator) -> None:

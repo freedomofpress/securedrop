@@ -4,7 +4,6 @@ Test secure deletion utilities in securedrop/rm.py
 import os
 
 import pytest
-
 import rm
 
 

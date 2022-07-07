@@ -1,9 +1,6 @@
 from pathlib import Path
 from random import SystemRandom
-from typing import Optional, NewType, Set
-
-from typing import Dict
-from typing import List
+from typing import Dict, List, NewType, Optional, Set
 
 from sdconfig import config
 

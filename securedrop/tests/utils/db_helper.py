@@ -3,14 +3,13 @@
 filesystem) interaction.
 """
 import datetime
-import math
 import io
+import math
 import os
 import random
 from typing import Dict, List
 
 import mock
-
 from db import db
 from encryption import EncryptionManager
 from journalist_app.utils import mark_seen
@@ -37,7 +36,7 @@ def init_journalist(first_name=None, last_name=None, is_admin=False):
         password=user_pw,
         first_name=first_name,
         last_name=last_name,
-        is_admin=is_admin
+        is_admin=is_admin,
     )
     db.session.add(user)
     db.session.commit()
@@ -72,8 +71,7 @@ def reply(storage, journalist, source, num_replies):
     replies = []
     for _ in range(num_replies):
         source.interaction_count += 1
-        fname = "{}-{}-reply.gpg".format(source.interaction_count,
-                                         source.journalist_filename)
+        fname = "{}-{}-reply.gpg".format(source.interaction_count, source.journalist_filename)
 
         EncryptionManager.get_default().encrypt_journalist_reply(
             for_source_with_filesystem_id=source.filesystem_id,
@@ -98,7 +96,7 @@ def mock_verify_token(testcase):
     :param unittest.TestCase testcase: The test case for which to patch
                                        TOTP verification.
     """
-    patcher = mock.patch('Journalist.verify_token')
+    patcher = mock.patch("Journalist.verify_token")
     testcase.addCleanup(patcher.stop)
     testcase.mock_journalist_verify_token = patcher.start()
     testcase.mock_journalist_verify_token.return_value = True
@@ -165,14 +163,14 @@ def submit(storage, source, num_submissions, submission_type="message"):
                 source.interaction_count,
                 source.journalist_filename,
                 "pipe.txt",
-                io.BytesIO(b"Ceci n'est pas une pipe.")
+                io.BytesIO(b"Ceci n'est pas une pipe."),
             )
         else:
             fpath = storage.save_message_submission(
                 source.filesystem_id,
                 source.interaction_count,
                 source.journalist_filename,
-                str(os.urandom(1))
+                str(os.urandom(1)),
             )
         submission = Submission(source, fpath, storage)
         submissions.append(submission)
@@ -184,11 +182,10 @@ def submit(storage, source, num_submissions, submission_type="message"):
 
 
 def new_codename(client, session):
-    """Helper function to go through the "generate codename" flow.
-    """
-    client.post('/generate', data={'tor2web_check': 'href="fake.onion"'})
-    tab_id, codename = next(iter(session['codenames'].items()))
-    client.post('/create', data={'tab_id': tab_id})
+    """Helper function to go through the "generate codename" flow."""
+    client.post("/generate", data={"tor2web_check": 'href="fake.onion"'})
+    tab_id, codename = next(iter(session["codenames"].items()))
+    client.post("/create", data={"tab_id": tab_id})
     return codename
 
 
@@ -224,14 +221,14 @@ def bulk_setup_for_seen_only(journo: Journalist, storage: Storage) -> List[Dict]
         unseen_replies = list(set(replies).difference(set(seen_replies)))
         not_downloaded = list(set(files + messages).difference(set(seen_files + seen_messages)))
 
-        collection['source'] = source
-        collection['seen_files'] = seen_files
-        collection['seen_messages'] = seen_messages
-        collection['seen_replies'] = seen_replies
-        collection['unseen_files'] = unseen_files
-        collection['unseen_messages'] = unseen_messages
-        collection['unseen_replies'] = unseen_replies
-        collection['not_downloaded'] = not_downloaded
+        collection["source"] = source
+        collection["seen_files"] = seen_files
+        collection["seen_messages"] = seen_messages
+        collection["seen_replies"] = seen_replies
+        collection["unseen_files"] = unseen_files
+        collection["unseen_messages"] = unseen_messages
+        collection["unseen_replies"] = unseen_replies
+        collection["not_downloaded"] = not_downloaded
 
         setup_collection.append(collection)
 

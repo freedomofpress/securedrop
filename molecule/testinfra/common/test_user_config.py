@@ -1,8 +1,7 @@
 import re
 import textwrap
+
 import pytest
-
-
 import testutils
 
 sdvars = testutils.securedrop_test_vars
@@ -27,15 +26,17 @@ def test_sudoers_config(host):
 
     # Using re.search rather than `f.contains` since the basic grep
     # matching doesn't support PCRE, so `\s` won't work.
-    assert re.search(r'^Defaults\s+env_reset$', sudoers_config, re.M)
-    assert re.search(r'^Defaults\s+env_reset$', sudoers_config, re.M)
-    assert re.search(r'^Defaults\s+mail_badpass$', sudoers_config, re.M)
-    assert re.search(r'Defaults\s+secure_path="/usr/local/sbin:'
-                     r'/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"',
-                     sudoers_config, re.M)
-    assert re.search(r'^%sudo\s+ALL=\(ALL\)\s+NOPASSWD:\s+ALL$',
-                     sudoers_config, re.M)
-    assert re.search(r'Defaults:%sudo\s+!requiretty', sudoers_config, re.M)
+    assert re.search(r"^Defaults\s+env_reset$", sudoers_config, re.M)
+    assert re.search(r"^Defaults\s+env_reset$", sudoers_config, re.M)
+    assert re.search(r"^Defaults\s+mail_badpass$", sudoers_config, re.M)
+    assert re.search(
+        r'Defaults\s+secure_path="/usr/local/sbin:'
+        r'/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"',
+        sudoers_config,
+        re.M,
+    )
+    assert re.search(r"^%sudo\s+ALL=\(ALL\)\s+NOPASSWD:\s+ALL$", sudoers_config, re.M)
+    assert re.search(r"Defaults:%sudo\s+!requiretty", sudoers_config, re.M)
 
 
 def test_sudoers_tmux_env(host):
@@ -46,7 +47,7 @@ def test_sudoers_tmux_env(host):
     the corresponding settings there.
     """
 
-    host_file = host.file('/etc/profile.d/securedrop_additions.sh')
+    host_file = host.file("/etc/profile.d/securedrop_additions.sh")
     expected_content = textwrap.dedent(
         """\
         [[ $- != *i* ]] && return

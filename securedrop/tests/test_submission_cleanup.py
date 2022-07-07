@@ -4,7 +4,6 @@ import os
 from db import db
 from management import submissions
 from models import Submission
-
 from tests import utils
 
 

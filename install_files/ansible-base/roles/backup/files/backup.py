@@ -8,26 +8,25 @@ Admin Workstation by the playbook, and removed on the server. For further
 information and limitations, see https://docs.securedrop.org/en/stable/backup_and_restore.html
 """
 
-from datetime import datetime
 import os
 import tarfile
+from datetime import datetime
 
 
 def main():
-    backup_filename = 'sd-backup-{}.tar.gz'.format(
-        datetime.utcnow().strftime("%Y-%m-%d--%H-%M-%S"))
+    backup_filename = "sd-backup-{}.tar.gz".format(datetime.utcnow().strftime("%Y-%m-%d--%H-%M-%S"))
 
     # This code assumes everything is in the default locations.
-    sd_data = '/var/lib/securedrop'
+    sd_data = "/var/lib/securedrop"
 
-    sd_code = '/var/www/securedrop'
+    sd_code = "/var/www/securedrop"
     sd_config = os.path.join(sd_code, "config.py")
     sd_custom_logo = os.path.join(sd_code, "static/i/custom_logo.png")
 
     tor_hidden_services = "/var/lib/tor/services"
     torrc = "/etc/tor/torrc"
 
-    with tarfile.open(backup_filename, 'w:gz') as backup:
+    with tarfile.open(backup_filename, "w:gz") as backup:
         backup.add(sd_config)
 
         # If no custom logo has been configured, the file will not exist

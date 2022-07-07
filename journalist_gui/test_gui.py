@@ -1,23 +1,28 @@
-import unittest
 import subprocess
-import pexpect
-import pytest
+import unittest
 from unittest import mock
 from unittest.mock import MagicMock
+
+import pexpect
+import pytest
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import (QApplication, QSizePolicy, QInputDialog)
 from PyQt5.QtTest import QTest
+from PyQt5.QtWidgets import QApplication, QInputDialog, QSizePolicy
 
-from journalist_gui.SecureDropUpdater import UpdaterApp, strings, FLAG_LOCATION
-from journalist_gui.SecureDropUpdater import prevent_second_instance
+from journalist_gui.SecureDropUpdater import (
+    FLAG_LOCATION,
+    UpdaterApp,
+    prevent_second_instance,
+    strings,
+)
 
 
-@mock.patch('journalist_gui.SecureDropUpdater.sys.exit')
-@mock.patch('syslog.syslog')
+@mock.patch("journalist_gui.SecureDropUpdater.sys.exit")
+@mock.patch("syslog.syslog")
 class TestSecondInstancePrevention(unittest.TestCase):
     def setUp(self):
         self.mock_app = mock.MagicMock()
-        self.mock_app.applicationName = mock.MagicMock(return_value='sd')
+        self.mock_app.applicationName = mock.MagicMock(return_value="sd")
 
     @staticmethod
     def socket_mock_generator(already_bound_errno=98):
@@ -37,33 +42,33 @@ class TestSecondInstancePrevention(unittest.TestCase):
 
     def test_diff_name(self, mock_msgbox, mock_exit):
         mock_socket = self.socket_mock_generator()
-        with mock.patch('journalist_gui.SecureDropUpdater.socket', new=mock_socket):
-            prevent_second_instance(self.mock_app, 'name1')
-            prevent_second_instance(self.mock_app, 'name2')
+        with mock.patch("journalist_gui.SecureDropUpdater.socket", new=mock_socket):
+            prevent_second_instance(self.mock_app, "name1")
+            prevent_second_instance(self.mock_app, "name2")
 
             mock_exit.assert_not_called()
 
     def test_same_name(self, mock_msgbox, mock_exit):
         mock_socket = self.socket_mock_generator()
-        with mock.patch('journalist_gui.SecureDropUpdater.socket', new=mock_socket):
-            prevent_second_instance(self.mock_app, 'name1')
-            prevent_second_instance(self.mock_app, 'name1')
+        with mock.patch("journalist_gui.SecureDropUpdater.socket", new=mock_socket):
+            prevent_second_instance(self.mock_app, "name1")
+            prevent_second_instance(self.mock_app, "name1")
 
             mock_exit.assert_any_call()
 
     def test_unknown_kernel_error(self, mock_msgbox, mock_exit):
         mock_socket = self.socket_mock_generator(131)  # crazy unexpected error
-        with mock.patch('journalist_gui.SecureDropUpdater.socket', new=mock_socket):
+        with mock.patch("journalist_gui.SecureDropUpdater.socket", new=mock_socket):
             with pytest.raises(OSError):
-                prevent_second_instance(self.mock_app, 'name1')
-                prevent_second_instance(self.mock_app, 'name1')
+                prevent_second_instance(self.mock_app, "name1")
+                prevent_second_instance(self.mock_app, "name1")
 
 
 class AppTestCase(unittest.TestCase):
     def setUp(self):
         qApp = QApplication.instance()
         if qApp is None:
-            self.app = QApplication([''])
+            self.app = QApplication([""])
         else:
             self.app = qApp
 
@@ -99,71 +104,62 @@ class WindowTestCase(AppTestCase):
 
         tab = self.window.tabWidget.tabBar()
         QTest.mouseClick(tab, Qt.LeftButton)
-        self.assertEqual(self.window.tabWidget.currentIndex(),
-                         self.window.tabWidget.indexOf(self.window.tab_2))
+        self.assertEqual(
+            self.window.tabWidget.currentIndex(), self.window.tabWidget.indexOf(self.window.tab_2)
+        )
 
-    @mock.patch('subprocess.check_output',
-                return_value=b'Python dependencies for securedrop-admin')
+    @mock.patch("subprocess.check_output", return_value=b"Python dependencies for securedrop-admin")
     def test_setupThread(self, check_output):
-        with mock.patch.object(self.window, "call_tailsconfig",
-                               return_value=MagicMock()):
-            with mock.patch('builtins.open') as mock_open:
+        with mock.patch.object(self.window, "call_tailsconfig", return_value=MagicMock()):
+            with mock.patch("builtins.open") as mock_open:
                 self.window.setup_thread.run()  # Call run directly
 
-            mock_open.assert_called_once_with(FLAG_LOCATION, 'a')
+            mock_open.assert_called_once_with(FLAG_LOCATION, "a")
             self.assertEqual(self.window.update_success, True)
             self.assertEqual(self.window.progressBar.value(), 70)
 
-    @mock.patch('subprocess.check_output',
-                return_value=b'Failed to install pip dependencies')
+    @mock.patch("subprocess.check_output", return_value=b"Failed to install pip dependencies")
     def test_setupThread_failure(self, check_output):
-        with mock.patch.object(self.window, "call_tailsconfig",
-                               return_value=MagicMock()):
-            with mock.patch('builtins.open') as mock_open:
+        with mock.patch.object(self.window, "call_tailsconfig", return_value=MagicMock()):
+            with mock.patch("builtins.open") as mock_open:
                 self.window.setup_thread.run()  # Call run directly
 
-            mock_open.assert_called_once_with(FLAG_LOCATION, 'a')
+            mock_open.assert_called_once_with(FLAG_LOCATION, "a")
             self.assertEqual(self.window.update_success, False)
             self.assertEqual(self.window.progressBar.value(), 0)
-            self.assertEqual(self.window.failure_reason,
-                             strings.update_failed_generic_reason)
+            self.assertEqual(self.window.failure_reason, strings.update_failed_generic_reason)
 
-    @mock.patch('subprocess.check_output',
-                return_value=b'Signature verification successful')
+    @mock.patch("subprocess.check_output", return_value=b"Signature verification successful")
     def test_updateThread(self, check_output):
-        with mock.patch.object(self.window, "setup_thread",
-                               return_value=MagicMock()):
+        with mock.patch.object(self.window, "setup_thread", return_value=MagicMock()):
             self.window.update_thread.run()  # Call run directly
             self.assertEqual(self.window.update_success, True)
             self.assertEqual(self.window.progressBar.value(), 50)
 
-    @mock.patch('subprocess.check_output',
-                side_effect=subprocess.CalledProcessError(
-                    1, 'cmd', b'Signature verification failed'))
+    @mock.patch(
+        "subprocess.check_output",
+        side_effect=subprocess.CalledProcessError(1, "cmd", b"Signature verification failed"),
+    )
     def test_updateThread_failure(self, check_output):
-        with mock.patch.object(self.window, "setup_thread",
-                               return_value=MagicMock()):
+        with mock.patch.object(self.window, "setup_thread", return_value=MagicMock()):
             self.window.update_thread.run()  # Call run directly
             self.assertEqual(self.window.update_success, False)
-            self.assertEqual(self.window.failure_reason,
-                             strings.update_failed_sig_failure)
+            self.assertEqual(self.window.failure_reason, strings.update_failed_sig_failure)
 
-    @mock.patch('subprocess.check_output',
-                side_effect=subprocess.CalledProcessError(
-                    1, 'cmd', b'Generic other failure'))
+    @mock.patch(
+        "subprocess.check_output",
+        side_effect=subprocess.CalledProcessError(1, "cmd", b"Generic other failure"),
+    )
     def test_updateThread_generic_failure(self, check_output):
-        with mock.patch.object(self.window, "setup_thread",
-                               return_value=MagicMock()):
+        with mock.patch.object(self.window, "setup_thread", return_value=MagicMock()):
             self.window.update_thread.run()  # Call run directly
             self.assertEqual(self.window.update_success, False)
-            self.assertEqual(self.window.failure_reason,
-                             strings.update_failed_generic_reason)
+            self.assertEqual(self.window.failure_reason, strings.update_failed_generic_reason)
 
     def test_get_sudo_password_when_password_provided(self):
         expected_password = "password"
 
-        with mock.patch.object(QInputDialog, 'getText',
-                               return_value=[expected_password, True]):
+        with mock.patch.object(QInputDialog, "getText", return_value=[expected_password, True]):
             sudo_password = self.window.get_sudo_password()
 
         self.assertEqual(sudo_password, expected_password)
@@ -171,11 +167,10 @@ class WindowTestCase(AppTestCase):
     def test_get_sudo_password_when_password_not_provided(self):
         test_password = ""
 
-        with mock.patch.object(QInputDialog, 'getText',
-                               return_value=[test_password, False]):
+        with mock.patch.object(QInputDialog, "getText", return_value=[test_password, False]):
             self.assertIsNone(self.window.get_sudo_password())
 
-    @mock.patch('pexpect.spawn')
+    @mock.patch("pexpect.spawn")
     def test_tailsconfigThread_no_failures(self, pt):
         child = pt()
         before = MagicMock()
@@ -183,14 +178,14 @@ class WindowTestCase(AppTestCase):
         before.decode.side_effect = ["SUDO: ", "Update successful. failed=0"]
         child.before = before
         child.exitstatus = 0
-        with mock.patch('os.remove') as mock_remove:
+        with mock.patch("os.remove") as mock_remove:
             self.window.tails_thread.run()
 
         mock_remove.assert_called_once_with(FLAG_LOCATION)
         self.assertIn("failed=0", self.window.output)
         self.assertEqual(self.window.update_success, True)
 
-    @mock.patch('pexpect.spawn')
+    @mock.patch("pexpect.spawn")
     def test_tailsconfigThread_generic_failure(self, pt):
         child = pt()
         before = MagicMock()
@@ -199,10 +194,9 @@ class WindowTestCase(AppTestCase):
         self.window.tails_thread.run()
         self.assertNotIn("failed=0", self.window.output)
         self.assertEqual(self.window.update_success, False)
-        self.assertEqual(self.window.failure_reason,
-                         strings.tailsconfig_failed_generic_reason)
+        self.assertEqual(self.window.failure_reason, strings.tailsconfig_failed_generic_reason)
 
-    @mock.patch('pexpect.spawn')
+    @mock.patch("pexpect.spawn")
     def test_tailsconfigThread_sudo_password_is_wrong(self, pt):
         child = pt()
         before = MagicMock()
@@ -211,40 +205,36 @@ class WindowTestCase(AppTestCase):
         self.window.tails_thread.run()
         self.assertNotIn("failed=0", self.window.output)
         self.assertEqual(self.window.update_success, False)
-        self.assertEqual(self.window.failure_reason,
-                         strings.tailsconfig_failed_sudo_password)
+        self.assertEqual(self.window.failure_reason, strings.tailsconfig_failed_sudo_password)
 
-    @mock.patch('pexpect.spawn')
+    @mock.patch("pexpect.spawn")
     def test_tailsconfigThread_timeout(self, pt):
         child = pt()
         before = MagicMock()
-        before.decode.side_effect = ["some data",
-                                     pexpect.exceptions.TIMEOUT(1)]
+        before.decode.side_effect = ["some data", pexpect.exceptions.TIMEOUT(1)]
         child.before = before
         self.window.tails_thread.run()
         self.assertNotIn("failed=0", self.window.output)
         self.assertEqual(self.window.update_success, False)
-        self.assertEqual(self.window.failure_reason,
-                         strings.tailsconfig_failed_timeout)
+        self.assertEqual(self.window.failure_reason, strings.tailsconfig_failed_timeout)
 
-    @mock.patch('pexpect.spawn')
+    @mock.patch("pexpect.spawn")
     def test_tailsconfigThread_some_other_subprocess_error(self, pt):
         child = pt()
         before = MagicMock()
         before.decode.side_effect = subprocess.CalledProcessError(
-                                       1, 'cmd', b'Generic other failure')
+            1, "cmd", b"Generic other failure"
+        )
         child.before = before
         self.window.tails_thread.run()
         self.assertNotIn("failed=0", self.window.output)
         self.assertEqual(self.window.update_success, False)
-        self.assertEqual(self.window.failure_reason,
-                         strings.tailsconfig_failed_generic_reason)
+        self.assertEqual(self.window.failure_reason, strings.tailsconfig_failed_generic_reason)
 
     def test_tails_status_success(self):
-        result = {'status': True, "output": "successful.",
-                  'failure_reason': ''}
+        result = {"status": True, "output": "successful.", "failure_reason": ""}
 
-        with mock.patch('os.remove') as mock_remove:
+        with mock.patch("os.remove") as mock_remove:
             self.window.tails_status(result)
 
         # We do remove the flag file if the update does finish
@@ -252,24 +242,22 @@ class WindowTestCase(AppTestCase):
         self.assertEqual(self.window.progressBar.value(), 100)
 
     def test_tails_status_failure(self):
-        result = {'status': False, "output": "successful.",
-                  'failure_reason': '42'}
+        result = {"status": False, "output": "successful.", "failure_reason": "42"}
 
-        with mock.patch('os.remove') as mock_remove:
+        with mock.patch("os.remove") as mock_remove:
             self.window.tails_status(result)
 
         # We do not remove the flag file if the update does not finish
         mock_remove.assert_not_called()
         self.assertEqual(self.window.progressBar.value(), 0)
 
-    @mock.patch('journalist_gui.SecureDropUpdater.QtWidgets.QMessageBox')
+    @mock.patch("journalist_gui.SecureDropUpdater.QtWidgets.QMessageBox")
     def test_no_update_without_password(self, mock_msgbox):
-        with mock.patch('journalist_gui.SecureDropUpdater.password_is_set',
-                        return_value=False):
+        with mock.patch("journalist_gui.SecureDropUpdater.password_is_set", return_value=False):
             self.window.update_securedrop()
         self.assertEqual(self.window.pushButton.isEnabled(), True)
         self.assertEqual(self.window.pushButton_2.isEnabled(), False)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

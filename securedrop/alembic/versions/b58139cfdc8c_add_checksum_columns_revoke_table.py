@@ -4,17 +4,18 @@ Revises: f2833ac34bb6
 Create Date: 2019-04-02 10:45:05.178481
 """
 import os
-from alembic import op
+
 import sqlalchemy as sa
+from alembic import op
 
 # raise the errors if we're not in production
 raise_errors = os.environ.get("SECUREDROP_ENV", "prod") != "prod"
 
 try:
     from journalist_app import create_app
-    from models import Submission, Reply
+    from models import Reply, Submission
     from sdconfig import config
-    from store import queued_add_checksum_for_file, Storage
+    from store import Storage, queued_add_checksum_for_file
     from worker import create_queue
 except:  # noqa
     if raise_errors:

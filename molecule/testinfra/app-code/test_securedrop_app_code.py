@@ -1,6 +1,4 @@
 import pytest
-
-
 import testutils
 
 securedrop_test_vars = testutils.securedrop_test_vars
@@ -14,23 +12,26 @@ def test_apache_default_docroot_is_absent(host):
     under Debian, has been removed. Leaving it in place can be a privacy
     leak, as it displays version information by default.
     """
-    assert not host.file('/var/www/html').exists
+    assert not host.file("/var/www/html").exists
 
 
-@pytest.mark.parametrize('package', [
-    'apache2',
-    'apparmor-utils',
-    'coreutils',
-    'gnupg2',
-    'libapache2-mod-xsendfile',
-    'libpython{}'.format(python_version),
-    'paxctld',
-    'python3',
-    'redis-server',
-    'securedrop-config',
-    'securedrop-keyring',
-    'sqlite3',
-])
+@pytest.mark.parametrize(
+    "package",
+    [
+        "apache2",
+        "apparmor-utils",
+        "coreutils",
+        "gnupg2",
+        "libapache2-mod-xsendfile",
+        "libpython{}".format(python_version),
+        "paxctld",
+        "python3",
+        "redis-server",
+        "securedrop-config",
+        "securedrop-keyring",
+        "sqlite3",
+    ],
+)
 def test_securedrop_application_apt_dependencies(host, package):
     """
     Ensure apt dependencies required to install `securedrop-app-code`
@@ -40,14 +41,9 @@ def test_securedrop_application_apt_dependencies(host, package):
     assert host.package(package).is_installed
 
 
-@pytest.mark.parametrize('package', [
-    'cron-apt',
-    'haveged',
-    'libapache2-mod-wsgi',
-    'ntp',
-    'ntpdate',
-    'supervisor'
-])
+@pytest.mark.parametrize(
+    "package", ["cron-apt", "haveged", "libapache2-mod-wsgi", "ntp", "ntpdate", "supervisor"]
+)
 def test_unwanted_packages_absent(host, package):
     """
     Ensure packages that conflict with `securedrop-app-code`
@@ -61,8 +57,7 @@ def test_securedrop_application_test_locale(host):
     """
     Ensure both SecureDrop DEFAULT_LOCALE and SUPPORTED_LOCALES are present.
     """
-    securedrop_config = host.file("{}/config.py".format(
-        securedrop_test_vars.securedrop_code))
+    securedrop_config = host.file("{}/config.py".format(securedrop_test_vars.securedrop_code))
     with host.sudo():
         assert securedrop_config.is_file
         assert securedrop_config.contains("^DEFAULT_LOCALE")
@@ -77,8 +72,9 @@ def test_securedrop_application_test_journalist_key(host):
     Ensure the SecureDrop Application GPG public key file is present.
     This is a test-only pubkey provided in the repository strictly for testing.
     """
-    pubkey_file = host.file("{}/test_journalist_key.pub".format(
-        securedrop_test_vars.securedrop_data))
+    pubkey_file = host.file(
+        "{}/test_journalist_key.pub".format(securedrop_test_vars.securedrop_data)
+    )
     # sudo is only necessary when testing against app hosts, since the
     # permissions are tighter. Let's elevate privileges so we're sure
     # we can read the correct file attributes and test them.
@@ -90,17 +86,15 @@ def test_securedrop_application_test_journalist_key(host):
 
     # Let's make sure the corresponding fingerprint is specified
     # in the SecureDrop app configuration.
-    securedrop_config = host.file("{}/config.py".format(
-        securedrop_test_vars.securedrop_code))
+    securedrop_config = host.file("{}/config.py".format(securedrop_test_vars.securedrop_code))
     with host.sudo():
         assert securedrop_config.is_file
-        assert securedrop_config.user == \
-            securedrop_test_vars.securedrop_user
-        assert securedrop_config.group == \
-            securedrop_test_vars.securedrop_user
+        assert securedrop_config.user == securedrop_test_vars.securedrop_user
+        assert securedrop_config.group == securedrop_test_vars.securedrop_user
         assert securedrop_config.mode == 0o600
         assert securedrop_config.contains(
-            "^JOURNALIST_KEY = '65A1B5FF195B56353CC63DFFCC40EF1228271441'$")
+            "^JOURNALIST_KEY = '65A1B5FF195B56353CC63DFFCC40EF1228271441'$"
+        )
 
 
 def test_securedrop_application_sqlite_db(host):

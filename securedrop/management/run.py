@@ -5,14 +5,9 @@ import signal
 import subprocess
 import sys
 
-__all__ = ['run']
+__all__ = ["run"]
 
-from typing import Any
-
-from typing import List
-from typing import TextIO
-
-from typing import Callable
+from typing import Any, Callable, List, TextIO
 
 
 def colorize(s: str, color: str, bold: bool = False) -> str:
@@ -22,36 +17,35 @@ def colorize(s: str, color: str, bold: bool = False) -> str:
     """
     # List of shell colors from https://www.siafoo.net/snippet/88
     shell_colors = {
-        'gray': '30',
-        'red': '31',
-        'green': '32',
-        'yellow': '33',
-        'blue': '34',
-        'magenta': '35',
-        'cyan': '36',
-        'white': '37',
-        'crimson': '38',
-        'highlighted_red': '41',
-        'highlighted_green': '42',
-        'highlighted_brown': '43',
-        'highlighted_blue': '44',
-        'highlighted_magenta': '45',
-        'highlighted_cyan': '46',
-        'highlighted_gray': '47',
-        'highlighted_crimson': '48'
+        "gray": "30",
+        "red": "31",
+        "green": "32",
+        "yellow": "33",
+        "blue": "34",
+        "magenta": "35",
+        "cyan": "36",
+        "white": "37",
+        "crimson": "38",
+        "highlighted_red": "41",
+        "highlighted_green": "42",
+        "highlighted_brown": "43",
+        "highlighted_blue": "44",
+        "highlighted_magenta": "45",
+        "highlighted_cyan": "46",
+        "highlighted_gray": "47",
+        "highlighted_crimson": "48",
     }
 
     # Based on http://stackoverflow.com/a/2330297/1093000
     attrs = []
     attrs.append(shell_colors[color])
     if bold:
-        attrs.append('1')
+        attrs.append("1")
 
-    return '\x1b[{}m{}\x1b[0m'.format(';'.join(attrs), s)
+    return "\x1b[{}m{}\x1b[0m".format(";".join(attrs), s)
 
 
 class DevServerProcess(subprocess.Popen):  # pragma: no cover
-
     def __init__(self, label: str, cmd: List[str], color: str) -> None:
         self.label = label
         self.cmd = cmd
@@ -62,7 +56,8 @@ class DevServerProcess(subprocess.Popen):  # pragma: no cover
             stdin=subprocess.PIPE,
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
-            preexec_fn=os.setsid)
+            preexec_fn=os.setsid,
+        )
 
     def print_label(self, to: TextIO) -> None:
         label = "\n => {} <= \n\n".format(self.label)
@@ -86,7 +81,6 @@ class DevServerProcess(subprocess.Popen):  # pragma: no cover
 
 
 class DevServerProcessMonitor:  # pragma: no cover
-
     def __init__(self, proc_funcs: List[Callable]) -> None:
         self.procs = []
         self.last_proc = None
@@ -108,19 +102,23 @@ class DevServerProcessMonitor:  # pragma: no cover
                     self.last_proc = proc
 
                 line = proc.stdout.readline()
-                sys.stdout.write(line.decode('utf-8'))
+                sys.stdout.write(line.decode("utf-8"))
                 sys.stdout.flush()
 
             if any(proc.poll() is not None for proc in self.procs):
                 # If any of the processes terminates (for example, due to
                 # a syntax error causing a reload to fail), kill them all
                 # so we don't get stuck.
-                sys.stdout.write(colorize(
-                    "\nOne of the development servers exited unexpectedly. "
-                    "See the traceback above for details.\n"
-                    "Once you have resolved the issue, you can re-run "
-                    "'./manage.py run' to continue developing.\n\n",
-                    "red", True))
+                sys.stdout.write(
+                    colorize(
+                        "\nOne of the development servers exited unexpectedly. "
+                        "See the traceback above for details.\n"
+                        "Once you have resolved the issue, you can re-run "
+                        "'./manage.py run' to continue developing.\n\n",
+                        "red",
+                        True,
+                    )
+                )
                 self.cleanup()
                 break
 
@@ -152,28 +150,26 @@ def run(args: Any) -> None:  # pragma: no cover
     * https://stackoverflow.com/q/22565606/837471
 
     """
-    print("""
- ____                                        ____                           
-/\\  _`\\                                     /\\  _`\\                         
-\\ \\,\\L\\_\\     __    ___   __  __  _ __    __\\ \\ \\/\\ \\  _ __   ___   _____   
- \\/_\\__ \\   /'__`\\ /'___\\/\\ \\/\\ \\/\\`'__\\/'__`\\ \\ \\ \\ \\/\\`'__\\/ __`\\/\\ '__`\\ 
-   /\\ \\L\\ \\/\\  __//\\ \\__/\\ \\ \\_\\ \\ \\ \\//\\  __/\\ \\ \\_\\ \\ \\ \\//\\ \\L\\ \\ \\ \\L\\ \\
+    print(
+        """
+ ____                                        ____
+/\\  _`\\                                     /\\  _`\\
+\\ \\,\\L\\_\\     __    ___   __  __  _ __    __\\ \\ \\/\\ \\  _ __   ___   _____
+ \\/_\\__ \\   /'__`\\ /'___\\/\\ \\/\\ \\/\\`'__\\/'__`\\ \\ \\ \\ \\/\\`'__\\/ __`\\/\\ '__`\\
+   /\\ \\L\\ \\/\\  __//\\ \\__/\\ \\ \\_\\ \\ \\ \\//\\  __/\\ \\ \\_\\ \\ \\ \\//\\ \\L\\ \\ \\ \\L\\ \\  # noqa: E501
    \\ `\\____\\ \\____\\ \\____\\\\ \\____/\\ \\_\\\\ \\____\\\\ \\____/\\ \\_\\\\ \\____/\\ \\ ,__/
-    \\/_____/\\/____/\\/____/ \\/___/  \\/_/ \\/____/ \\/___/  \\/_/ \\/___/  \\ \\ \\/ 
-                                                                      \\ \\_\\ 
-                                                                       \\/_/ 
-""")  # noqa
+    \\/_____/\\/____/\\/____/ \\/___/  \\/_/ \\/____/ \\/___/  \\/_/ \\/___/  \\ \\ \\/
+                                                                      \\ \\_\\
+                                                                       \\/_/
+"""
+    )  # noqa
 
     procs = [
-        lambda: DevServerProcess('Source Interface',
-                                 ['python', 'source.py'],
-                                 'blue'),
-        lambda: DevServerProcess('Journalist Interface',
-                                 ['python', 'journalist.py'],
-                                 'cyan'),
-        lambda: DevServerProcess('SASS Compiler',
-                                 ['sass', '--watch', 'sass:static/css'],
-                                 'magenta'),
+        lambda: DevServerProcess("Source Interface", ["python", "source.py"], "blue"),
+        lambda: DevServerProcess("Journalist Interface", ["python", "journalist.py"], "cyan"),
+        lambda: DevServerProcess(
+            "SASS Compiler", ["sass", "--watch", "sass:static/css"], "magenta"
+        ),
     ]
 
     monitor = DevServerProcessMonitor(procs)

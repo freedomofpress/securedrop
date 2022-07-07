@@ -1,15 +1,14 @@
-from . import functional_test as ft
-from . import journalist_navigation_steps
-from . import source_navigation_steps
-
 from tbselenium.utils import SECURITY_LOW
+
+from . import functional_test as ft
+from . import journalist_navigation_steps, source_navigation_steps
 
 
 class TestAdminInterface(
-        ft.FunctionalTest,
-        journalist_navigation_steps.JournalistNavigationStepsMixin,
-        source_navigation_steps.SourceNavigationStepsMixin):
-
+    ft.FunctionalTest,
+    journalist_navigation_steps.JournalistNavigationStepsMixin,
+    source_navigation_steps.SourceNavigationStepsMixin,
+):
     def test_admin_interface(self):
         self._admin_logs_in()
         self._admin_visits_admin_interface()

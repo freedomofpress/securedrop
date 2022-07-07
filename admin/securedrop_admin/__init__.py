@@ -24,42 +24,25 @@ instances.
 """
 
 import argparse
+import base64
 import functools
+import io
 import ipaddress
+import json
 import logging
 import os
-import io
 import re
 import subprocess
 import sys
-import json
-import base64
-from typing import Any
-from typing import Optional
-from typing import TypeVar
-from typing import Union
+from typing import Any, Callable, Dict, List, Optional, Set, Tuple, Type, TypeVar, Union, cast
 
 import prompt_toolkit
-from prompt_toolkit.document import Document
-from prompt_toolkit.validation import Validator, ValidationError
 import yaml
-from pkg_resources import parse_version
 from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.asymmetric import x25519
-
-from typing import cast
-
-from typing import List
-
-from typing import Set
-
-from typing import Dict
-
-from typing import Tuple
-
-from typing import Callable
-
-from typing import Type
+from pkg_resources import parse_version
+from prompt_toolkit.document import Document
+from prompt_toolkit.validation import ValidationError, Validator
 
 sdlog = logging.getLogger(__name__)
 
@@ -67,12 +50,12 @@ sdlog = logging.getLogger(__name__)
 # to provide a transition window during key rotation. On or around v2.0.0,
 # we can remove the older of the two keys and only trust the newer going forward.
 RELEASE_KEYS = [
-    '22245C81E3BAEB4138B36061310F561200F4AD77',
-    '2359E6538C0613E652955E6C188EDD3B7B22E6A3',
+    "22245C81E3BAEB4138B36061310F561200F4AD77",
+    "2359E6538C0613E652955E6C188EDD3B7B22E6A3",
 ]
-DEFAULT_KEYSERVER = 'hkps://keys.openpgp.org'
-SUPPORT_ONION_URL = 'http://sup6h5iyiyenvjkfxbgrjynm5wsgijjoatvnvdgyyi7je3xqm4kh6uqd.onion'
-SUPPORT_URL = 'https://support.freedom.press'
+DEFAULT_KEYSERVER = "hkps://keys.openpgp.org"
+SUPPORT_ONION_URL = "http://sup6h5iyiyenvjkfxbgrjynm5wsgijjoatvnvdgyyi7je3xqm4kh6uqd.onion"
+SUPPORT_URL = "https://support.freedom.press"
 EXIT_SUCCESS = 0
 EXIT_SUBPROCESS_ERROR = 1
 EXIT_INTERRUPT = 2
@@ -90,11 +73,11 @@ class JournalistAlertEmailException(Exception):
 
 
 # The type of each entry within SiteConfig.desc
-_T = TypeVar('_T', bound=Union[int, str, bool])
+_T = TypeVar("_T", bound=Union[int, str, bool])
 
 # The function type used for the @update_check_required decorator; see
 # https://mypy.readthedocs.io/en/stable/generics.html#declaring-decorators
-_FuncT = TypeVar('_FuncT', bound=Callable[..., Any])
+_FuncT = TypeVar("_FuncT", bound=Callable[..., Any])
 
 # Configuration description tuples drive the CLI user experience and the
 # validation logic of the  securedrop-admin tool. A tuple is in the following
@@ -117,28 +100,24 @@ _DescEntryType = Tuple[str, _T, Type[_T], str, Optional[Validator], Optional[Cal
 
 
 class SiteConfig:
-
     class ValidateNotEmpty(Validator):
         def validate(self, document: Document) -> bool:
-            if document.text != '':
+            if document.text != "":
                 return True
-            raise ValidationError(
-                message="Must not be an empty string")
+            raise ValidationError(message="Must not be an empty string")
 
     class ValidateTime(Validator):
         def validate(self, document: Document) -> bool:
             if document.text.isdigit() and int(document.text) in range(0, 24):
                 return True
-            raise ValidationError(
-                message="Must be an integer between 0 and 23")
+            raise ValidationError(message="Must be an integer between 0 and 23")
 
     class ValidateUser(Validator):
         def validate(self, document: Document) -> bool:
             text = document.text
-            if text != '' and text != 'root' and text != 'amnesia':
+            if text != "" and text != "root" and text != "amnesia":
                 return True
-            raise ValidationError(
-                message="Must not be root, amnesia or an empty string")
+            raise ValidationError(message="Must not be root, amnesia or an empty string")
 
     class ValidateIP(Validator):
         def validate(self, document: Document) -> bool:
@@ -177,65 +156,57 @@ class SiteConfig:
             super(SiteConfig.ValidatePath, self).__init__()
 
         def validate(self, document: Document) -> bool:
-            if document.text == '':
-                raise ValidationError(
-                    message='an existing file name is required')
+            if document.text == "":
+                raise ValidationError(message="an existing file name is required")
             path = os.path.join(self.basedir, document.text)
             if os.path.exists(path):
                 return True
-            raise ValidationError(
-                message=path + ' file does not exist')
+            raise ValidationError(message=path + " file does not exist")
 
     class ValidateOptionalPath(ValidatePath):
         def validate(self, document: Document) -> bool:
-            if document.text == '':
+            if document.text == "":
                 return True
-            return super(SiteConfig.ValidateOptionalPath, self).validate(
-                document)
+            return super(SiteConfig.ValidateOptionalPath, self).validate(document)
 
     class ValidateYesNo(Validator):
         def validate(self, document: Document) -> bool:
             text = document.text.lower()
-            if text == 'yes' or text == 'no':
+            if text == "yes" or text == "no":
                 return True
             raise ValidationError(message="Must be either yes or no")
 
     class ValidateFingerprint(Validator):
         def validate(self, document: Document) -> bool:
-            text = document.text.replace(' ', '')
-            if text == '65A1B5FF195B56353CC63DFFCC40EF1228271441':
-                raise ValidationError(
-                    message='This is the TEST journalist fingerprint')
-            if text == '600BC6D5142C68F35DDBCEA87B597104EDDDC102':
-                raise ValidationError(
-                    message='This is the TEST admin fingerprint')
-            if not re.match('[a-fA-F0-9]{40}$', text):
-                raise ValidationError(
-                    message='fingerprints must be 40 hexadecimal characters')
+            text = document.text.replace(" ", "")
+            if text == "65A1B5FF195B56353CC63DFFCC40EF1228271441":
+                raise ValidationError(message="This is the TEST journalist fingerprint")
+            if text == "600BC6D5142C68F35DDBCEA87B597104EDDDC102":
+                raise ValidationError(message="This is the TEST admin fingerprint")
+            if not re.match("[a-fA-F0-9]{40}$", text):
+                raise ValidationError(message="fingerprints must be 40 hexadecimal characters")
             return True
 
     class ValidateOptionalFingerprint(ValidateFingerprint):
         def validate(self, document: Document) -> bool:
-            if document.text == '':
+            if document.text == "":
                 return True
-            return super(SiteConfig.ValidateOptionalFingerprint,
-                         self).validate(document)
+            return super(SiteConfig.ValidateOptionalFingerprint, self).validate(document)
 
     class ValidateInt(Validator):
         def validate(self, document: Document) -> bool:
-            if re.match(r'\d+$', document.text):
+            if re.match(r"\d+$", document.text):
                 return True
             raise ValidationError(message="Must be an integer")
 
     class Locales(object):
         def __init__(self, appdir: str) -> None:
-            self.translation_dir = os.path.realpath(
-                os.path.join(appdir, 'translations'))
+            self.translation_dir = os.path.realpath(os.path.join(appdir, "translations"))
 
         def get_translations(self) -> Set[str]:
-            translations = set(['en_US'])
+            translations = set(["en_US"])
             for dirname in os.listdir(self.translation_dir):
-                if dirname != 'messages.pot':
+                if dirname != "messages.pot":
                     translations.add(dirname)
             return translations
 
@@ -250,53 +221,46 @@ class SiteConfig:
             missing = set(desired) - set(existing)
             if not missing:
                 return True
-            raise ValidationError(
-                message="The following locales do not exist " + " ".join(
-                    missing))
+            raise ValidationError(message="The following locales do not exist " + " ".join(missing))
 
     class ValidateOSSECUsername(Validator):
         def validate(self, document: Document) -> bool:
             text = document.text
-            if text and '@' not in text and 'test' != text:
+            if text and "@" not in text and "test" != text:
                 return True
-            raise ValidationError(
-                message="The SASL username should not include the domain name")
+            raise ValidationError(message="The SASL username should not include the domain name")
 
     class ValidateOSSECPassword(Validator):
         def validate(self, document: Document) -> bool:
             text = document.text
-            if len(text) >= 8 and 'password123' != text:
+            if len(text) >= 8 and "password123" != text:
                 return True
-            raise ValidationError(
-                message="Password for OSSEC email account must be strong")
+            raise ValidationError(message="Password for OSSEC email account must be strong")
 
     class ValidateEmail(Validator):
         def validate(self, document: Document) -> bool:
             text = document.text
-            if text == '':
-                raise ValidationError(
-                    message=("Must not be empty"))
-            if '@' not in text:
-                raise ValidationError(
-                    message=("Must contain a @"))
+            if text == "":
+                raise ValidationError(message=("Must not be empty"))
+            if "@" not in text:
+                raise ValidationError(message=("Must contain a @"))
             return True
 
     class ValidateOSSECEmail(ValidateEmail):
         def validate(self, document: Document) -> bool:
             super(SiteConfig.ValidateOSSECEmail, self).validate(document)
             text = document.text
-            if 'ossec@ossec.test' != text:
+            if "ossec@ossec.test" != text:
                 return True
             raise ValidationError(
-                message=("Must be set to something other than "
-                         "ossec@ossec.test"))
+                message=("Must be set to something other than " "ossec@ossec.test")
+            )
 
     class ValidateOptionalEmail(ValidateEmail):
         def validate(self, document: Document) -> bool:
-            if document.text == '':
+            if document.text == "":
                 return True
-            return super(SiteConfig.ValidateOptionalEmail, self).validate(
-                document)
+            return super(SiteConfig.ValidateOptionalEmail, self).validate(document)
 
     def __init__(self, args: argparse.Namespace) -> None:
         self.args = args
@@ -304,149 +268,246 @@ class SiteConfig:
         # Hold runtime configuration before save, to support
         # referencing other responses during validation
         self._config_in_progress = {}  # type: Dict
-        translations = SiteConfig.Locales(
-            self.args.app_path).get_translations()
+        translations = SiteConfig.Locales(self.args.app_path).get_translations()
         translations_as_str = " ".join(translations)
 
         self.desc = [
-            ('ssh_users', 'sd', str,
-             'Username for SSH access to the servers',
-             SiteConfig.ValidateUser(),
-             None,
-             lambda config: True),
-            ('daily_reboot_time', 4, int,
-             'Daily reboot time of the server (24-hour clock)',
-             SiteConfig.ValidateTime(),
-             int,
-             lambda config: True),
-            ('app_ip', '10.20.2.2', str,
-             'Local IPv4 address for the Application Server',
-             SiteConfig.ValidateIP(),
-             None,
-             lambda config: True),
-            ('monitor_ip', '10.20.3.2', str,
-             'Local IPv4 address for the Monitor Server',
-             SiteConfig.ValidateIP(),
-             None,
-             lambda config: True),
-            ('app_hostname', 'app', str,
-             'Hostname for Application Server',
-             SiteConfig.ValidateNotEmpty(),
-             None,
-             lambda config: True),
-            ('monitor_hostname', 'mon', str,
-             'Hostname for Monitor Server',
-             SiteConfig.ValidateNotEmpty(),
-             None,
-             lambda config: True),
-            ('dns_server', ['8.8.8.8', '8.8.4.4'], list,
-             'DNS server(s)',
-             SiteConfig.ValidateNameservers(),
-             SiteConfig.split_list,
-             lambda config: True),
-            ('securedrop_app_gpg_public_key', 'SecureDrop.asc', str,
-             'Local filepath to public key for ' +
-             'SecureDrop Application GPG public key',
-             SiteConfig.ValidatePath(self.args.ansible_path),
-             None,
-             lambda config: True),
-            ('securedrop_app_https_on_source_interface', False, bool,
-             'Whether HTTPS should be enabled on ' +
-             'Source Interface (requires EV cert)',
-             SiteConfig.ValidateYesNo(),
-             lambda x: x.lower() == 'yes',
-             lambda config: True),
-            ('securedrop_app_https_certificate_cert_src', '', str,
-             'Local filepath to HTTPS certificate',
-             SiteConfig.ValidateOptionalPath(self.args.ansible_path),
-             None,
-             lambda config: config.get(
-                'securedrop_app_https_on_source_interface')),
-            ('securedrop_app_https_certificate_key_src', '', str,
-             'Local filepath to HTTPS certificate key',
-             SiteConfig.ValidateOptionalPath(self.args.ansible_path),
-             None,
-             lambda config: config.get(
-                'securedrop_app_https_on_source_interface')),
-            ('securedrop_app_https_certificate_chain_src', '', str,
-             'Local filepath to HTTPS certificate chain file',
-             SiteConfig.ValidateOptionalPath(self.args.ansible_path),
-             None,
-             lambda config: config.get(
-                'securedrop_app_https_on_source_interface')),
-            ('securedrop_app_gpg_fingerprint', '', str,
-             'Full fingerprint for the SecureDrop Application GPG Key',
-             SiteConfig.ValidateFingerprint(),
-             self.sanitize_fingerprint,
-             lambda config: True),
-            ('ossec_alert_gpg_public_key', 'ossec.pub', str,
-             'Local filepath to OSSEC alerts GPG public key',
-             SiteConfig.ValidatePath(self.args.ansible_path),
-             None,
-             lambda config: True),
-            ('ossec_gpg_fpr', '', str,
-             'Full fingerprint for the OSSEC alerts GPG public key',
-             SiteConfig.ValidateFingerprint(),
-             self.sanitize_fingerprint,
-             lambda config: True),
-            ('ossec_alert_email', '', str,
-             'Admin email address for receiving OSSEC alerts',
-             SiteConfig.ValidateOSSECEmail(),
-             None,
-             lambda config: True),
-            ('journalist_alert_gpg_public_key', '', str,
-             'Local filepath to journalist alerts GPG public key (optional)',
-             SiteConfig.ValidateOptionalPath(self.args.ansible_path),
-             None,
-             lambda config: True),
-            ('journalist_gpg_fpr', '', str,
-             'Full fingerprint for the journalist alerts ' +
-             'GPG public key (optional)',
-             SiteConfig.ValidateOptionalFingerprint(),
-             self.sanitize_fingerprint,
-             lambda config: config.get('journalist_alert_gpg_public_key')),
-            ('journalist_alert_email', '', str,
-             'Email address for receiving journalist alerts (optional)',
-             SiteConfig.ValidateOptionalEmail(),
-             None,
-             lambda config: config.get('journalist_alert_gpg_public_key')),
-            ('smtp_relay', "smtp.gmail.com", str,
-             'SMTP relay for sending OSSEC alerts',
-             SiteConfig.ValidateNotEmpty(),
-             None,
-             lambda config: True),
-            ('smtp_relay_port', 587, int,
-             'SMTP port for sending OSSEC alerts',
-             SiteConfig.ValidateInt(),
-             int,
-             lambda config: True),
-            ('sasl_domain', "gmail.com", str,
-             'SASL domain for sending OSSEC alerts',
-             None,
-             None,
-             lambda config: True),
-            ('sasl_username', '', str,
-             'SASL username for sending OSSEC alerts',
-             SiteConfig.ValidateOSSECUsername(),
-             None,
-             lambda config: True),
-            ('sasl_password', '', str,
-             'SASL password for sending OSSEC alerts',
-             SiteConfig.ValidateOSSECPassword(),
-             None,
-             lambda config: True),
-            ('enable_ssh_over_tor', True, bool,
-             'Enable SSH over Tor (recommended, disables SSH over LAN). ' +
-             'If you respond no, SSH will be available over LAN only',
-             SiteConfig.ValidateYesNo(),
-             lambda x: x.lower() == 'yes',
-             lambda config: True),
-            ('securedrop_supported_locales', [], list,
-             'Space separated list of additional locales to support '
-             '(' + translations_as_str + ')',
-             SiteConfig.ValidateLocales(self.args.app_path),
-             str.split,
-             lambda config: True),
+            (
+                "ssh_users",
+                "sd",
+                str,
+                "Username for SSH access to the servers",
+                SiteConfig.ValidateUser(),
+                None,
+                lambda config: True,
+            ),
+            (
+                "daily_reboot_time",
+                4,
+                int,
+                "Daily reboot time of the server (24-hour clock)",
+                SiteConfig.ValidateTime(),
+                int,
+                lambda config: True,
+            ),
+            (
+                "app_ip",
+                "10.20.2.2",
+                str,
+                "Local IPv4 address for the Application Server",
+                SiteConfig.ValidateIP(),
+                None,
+                lambda config: True,
+            ),
+            (
+                "monitor_ip",
+                "10.20.3.2",
+                str,
+                "Local IPv4 address for the Monitor Server",
+                SiteConfig.ValidateIP(),
+                None,
+                lambda config: True,
+            ),
+            (
+                "app_hostname",
+                "app",
+                str,
+                "Hostname for Application Server",
+                SiteConfig.ValidateNotEmpty(),
+                None,
+                lambda config: True,
+            ),
+            (
+                "monitor_hostname",
+                "mon",
+                str,
+                "Hostname for Monitor Server",
+                SiteConfig.ValidateNotEmpty(),
+                None,
+                lambda config: True,
+            ),
+            (
+                "dns_server",
+                ["8.8.8.8", "8.8.4.4"],
+                list,
+                "DNS server(s)",
+                SiteConfig.ValidateNameservers(),
+                SiteConfig.split_list,
+                lambda config: True,
+            ),
+            (
+                "securedrop_app_gpg_public_key",
+                "SecureDrop.asc",
+                str,
+                "Local filepath to public key for " + "SecureDrop Application GPG public key",
+                SiteConfig.ValidatePath(self.args.ansible_path),
+                None,
+                lambda config: True,
+            ),
+            (
+                "securedrop_app_https_on_source_interface",
+                False,
+                bool,
+                "Whether HTTPS should be enabled on " + "Source Interface (requires EV cert)",
+                SiteConfig.ValidateYesNo(),
+                lambda x: x.lower() == "yes",
+                lambda config: True,
+            ),
+            (
+                "securedrop_app_https_certificate_cert_src",
+                "",
+                str,
+                "Local filepath to HTTPS certificate",
+                SiteConfig.ValidateOptionalPath(self.args.ansible_path),
+                None,
+                lambda config: config.get("securedrop_app_https_on_source_interface"),
+            ),
+            (
+                "securedrop_app_https_certificate_key_src",
+                "",
+                str,
+                "Local filepath to HTTPS certificate key",
+                SiteConfig.ValidateOptionalPath(self.args.ansible_path),
+                None,
+                lambda config: config.get("securedrop_app_https_on_source_interface"),
+            ),
+            (
+                "securedrop_app_https_certificate_chain_src",
+                "",
+                str,
+                "Local filepath to HTTPS certificate chain file",
+                SiteConfig.ValidateOptionalPath(self.args.ansible_path),
+                None,
+                lambda config: config.get("securedrop_app_https_on_source_interface"),
+            ),
+            (
+                "securedrop_app_gpg_fingerprint",
+                "",
+                str,
+                "Full fingerprint for the SecureDrop Application GPG Key",
+                SiteConfig.ValidateFingerprint(),
+                self.sanitize_fingerprint,
+                lambda config: True,
+            ),
+            (
+                "ossec_alert_gpg_public_key",
+                "ossec.pub",
+                str,
+                "Local filepath to OSSEC alerts GPG public key",
+                SiteConfig.ValidatePath(self.args.ansible_path),
+                None,
+                lambda config: True,
+            ),
+            (
+                "ossec_gpg_fpr",
+                "",
+                str,
+                "Full fingerprint for the OSSEC alerts GPG public key",
+                SiteConfig.ValidateFingerprint(),
+                self.sanitize_fingerprint,
+                lambda config: True,
+            ),
+            (
+                "ossec_alert_email",
+                "",
+                str,
+                "Admin email address for receiving OSSEC alerts",
+                SiteConfig.ValidateOSSECEmail(),
+                None,
+                lambda config: True,
+            ),
+            (
+                "journalist_alert_gpg_public_key",
+                "",
+                str,
+                "Local filepath to journalist alerts GPG public key (optional)",
+                SiteConfig.ValidateOptionalPath(self.args.ansible_path),
+                None,
+                lambda config: True,
+            ),
+            (
+                "journalist_gpg_fpr",
+                "",
+                str,
+                "Full fingerprint for the journalist alerts " + "GPG public key (optional)",
+                SiteConfig.ValidateOptionalFingerprint(),
+                self.sanitize_fingerprint,
+                lambda config: config.get("journalist_alert_gpg_public_key"),
+            ),
+            (
+                "journalist_alert_email",
+                "",
+                str,
+                "Email address for receiving journalist alerts (optional)",
+                SiteConfig.ValidateOptionalEmail(),
+                None,
+                lambda config: config.get("journalist_alert_gpg_public_key"),
+            ),
+            (
+                "smtp_relay",
+                "smtp.gmail.com",
+                str,
+                "SMTP relay for sending OSSEC alerts",
+                SiteConfig.ValidateNotEmpty(),
+                None,
+                lambda config: True,
+            ),
+            (
+                "smtp_relay_port",
+                587,
+                int,
+                "SMTP port for sending OSSEC alerts",
+                SiteConfig.ValidateInt(),
+                int,
+                lambda config: True,
+            ),
+            (
+                "sasl_domain",
+                "gmail.com",
+                str,
+                "SASL domain for sending OSSEC alerts",
+                None,
+                None,
+                lambda config: True,
+            ),
+            (
+                "sasl_username",
+                "",
+                str,
+                "SASL username for sending OSSEC alerts",
+                SiteConfig.ValidateOSSECUsername(),
+                None,
+                lambda config: True,
+            ),
+            (
+                "sasl_password",
+                "",
+                str,
+                "SASL password for sending OSSEC alerts",
+                SiteConfig.ValidateOSSECPassword(),
+                None,
+                lambda config: True,
+            ),
+            (
+                "enable_ssh_over_tor",
+                True,
+                bool,
+                "Enable SSH over Tor (recommended, disables SSH over LAN). "
+                + "If you respond no, SSH will be available over LAN only",
+                SiteConfig.ValidateYesNo(),
+                lambda x: x.lower() == "yes",
+                lambda config: True,
+            ),
+            (
+                "securedrop_supported_locales",
+                [],
+                list,
+                "Space separated list of additional locales to support "
+                "(" + translations_as_str + ")",
+                SiteConfig.ValidateLocales(self.args.app_path),
+                str.split,
+                lambda config: True,
+            ),
         ]  # type: List[_DescEntryType]
 
     def load_and_update_config(self, validate: bool = True, prompt: bool = True) -> bool:
@@ -469,22 +530,20 @@ class SiteConfig:
     def user_prompt_config(self) -> Dict[str, Any]:
         self._config_in_progress = {}
         for desc in self.desc:
-            (var, default, type, prompt, validator, transform,
-                condition) = desc
+            (var, default, type, prompt, validator, transform, condition) = desc
             if not condition(self._config_in_progress):
-                self._config_in_progress[var] = ''
+                self._config_in_progress[var] = ""
                 continue
-            self._config_in_progress[var] = self.user_prompt_config_one(desc,
-                                                                        self.config.get(var))  # noqa: E501
+            self._config_in_progress[var] = self.user_prompt_config_one(
+                desc, self.config.get(var)
+            )  # noqa: E501
         return self._config_in_progress
 
-    def user_prompt_config_one(
-        self, desc: _DescEntryType, from_config: Optional[Any]
-    ) -> Any:
+    def user_prompt_config_one(self, desc: _DescEntryType, from_config: Optional[Any]) -> Any:
         (var, default, type, prompt, validator, transform, condition) = desc
         if from_config is not None:
             default = from_config
-        prompt += ': '
+        prompt += ": "
 
         # The following is for the dynamic check of the user input
         # for the previous question, as we are calling the default value
@@ -498,58 +557,54 @@ class SiteConfig:
         self, prompt: str, default: Any, validator: Validator, transform: Optional[Callable]
     ) -> Any:
         if type(default) is bool:
-            default = default and 'yes' or 'no'
+            default = default and "yes" or "no"
         if type(default) is int:
             default = str(default)
         if isinstance(default, list):
             default = " ".join(default)
         if type(default) is not str:
             default = str(default)
-        value = prompt_toolkit.prompt(prompt,
-                                      default=default,
-                                      validator=validator)
+        value = prompt_toolkit.prompt(prompt, default=default, validator=validator)
         if transform:
             return transform(value)
         else:
             return value
 
     def sanitize_fingerprint(self, value: str) -> str:
-        return value.upper().replace(' ', '')
+        return value.upper().replace(" ", "")
 
     def validate_gpg_keys(self) -> bool:
-        keys = (('securedrop_app_gpg_public_key',
-                 'securedrop_app_gpg_fingerprint'),
-
-                ('ossec_alert_gpg_public_key',
-                 'ossec_gpg_fpr'),
-
-                ('journalist_alert_gpg_public_key',
-                 'journalist_gpg_fpr'))
-        validate = os.path.join(
-            os.path.dirname(__file__), '..', 'bin',
-            'validate-gpg-key.sh')
+        keys = (
+            ("securedrop_app_gpg_public_key", "securedrop_app_gpg_fingerprint"),
+            ("ossec_alert_gpg_public_key", "ossec_gpg_fpr"),
+            ("journalist_alert_gpg_public_key", "journalist_gpg_fpr"),
+        )
+        validate = os.path.join(os.path.dirname(__file__), "..", "bin", "validate-gpg-key.sh")
         for (public_key, fingerprint) in keys:
-            if (self.config[public_key] == '' and
-                    self.config[fingerprint] == ''):
+            if self.config[public_key] == "" and self.config[fingerprint] == "":
                 continue
-            public_key = os.path.join(self.args.ansible_path,
-                                      self.config[public_key])
+            public_key = os.path.join(self.args.ansible_path, self.config[public_key])
             fingerprint = self.config[fingerprint]
             try:
-                sdlog.debug(subprocess.check_output(
-                    [validate, public_key, fingerprint],
-                    stderr=subprocess.STDOUT))
+                sdlog.debug(
+                    subprocess.check_output(
+                        [validate, public_key, fingerprint], stderr=subprocess.STDOUT
+                    )
+                )
             except subprocess.CalledProcessError as e:
                 sdlog.debug(e.output)
                 raise FingerprintException(
-                    "fingerprint {} ".format(fingerprint) +
-                    "does not match " +
-                    "the public key {}".format(public_key))
+                    "fingerprint {} ".format(fingerprint)
+                    + "does not match "
+                    + "the public key {}".format(public_key)
+                )
         return True
 
     def validate_journalist_alert_email(self) -> bool:
-        if (self.config['journalist_alert_gpg_public_key'] == '' and
-                self.config['journalist_gpg_fpr'] == ''):
+        if (
+            self.config["journalist_alert_gpg_public_key"] == ""
+            and self.config["journalist_gpg_fpr"] == ""
+        ):
             return True
 
         class Document:
@@ -557,21 +612,17 @@ class SiteConfig:
                 self.text = text
 
         try:
-            SiteConfig.ValidateEmail().validate(Document(
-                self.config['journalist_alert_email']))
+            SiteConfig.ValidateEmail().validate(Document(self.config["journalist_alert_email"]))
         except ValidationError as e:
-            raise JournalistAlertEmailException(
-                "journalist alerts email: " + e.message)
+            raise JournalistAlertEmailException("journalist alerts email: " + e.message)
         return True
 
     def exists(self) -> bool:
         return os.path.exists(self.args.site_config)
 
     def save(self) -> None:
-        with io.open(self.args.site_config, 'w') as site_config_file:
-            yaml.safe_dump(self.config,
-                           site_config_file,
-                           default_flow_style=False)
+        with io.open(self.args.site_config, "w") as site_config_file:
+            yaml.safe_dump(self.config, site_config_file, default_flow_style=False)
 
     def clean_config(self, config: Dict) -> Dict:
         """
@@ -604,7 +655,7 @@ class SiteConfig:
                     except ValidationError as e:
                         sdlog.error(e)
                         sdlog.error(
-                            'Error loading configuration. '
+                            "Error loading configuration. "
                             'Please run "securedrop-admin sdconfig" again.'
                         )
                         raise
@@ -629,19 +680,18 @@ class SiteConfig:
             sdlog.error("Config file missing, re-run with sdconfig")
             raise
         except yaml.YAMLError:
-            sdlog.error("There was an issue processing {}".format(
-                self.args.site_config))
+            sdlog.error("There was an issue processing {}".format(self.args.site_config))
             raise
 
 
 def setup_logger(verbose: bool = False) -> None:
-    """ Configure logging handler """
+    """Configure logging handler"""
     # Set default level on parent
     sdlog.setLevel(logging.DEBUG)
     level = logging.DEBUG if verbose else logging.INFO
 
     stdout = logging.StreamHandler(sys.stdout)
-    stdout.setFormatter(logging.Formatter('%(levelname)s: %(message)s'))
+    stdout.setFormatter(logging.Formatter("%(levelname)s: %(message)s"))
     stdout.setLevel(level)
     sdlog.addHandler(stdout)
 
@@ -657,6 +707,7 @@ def update_check_required(cmd_name: str) -> Callable[[_FuncT], _FuncT]:
     The user can override this check by specifying the --force argument before
     any subcommand.
     """
+
     def decorator_update_check(func: _FuncT) -> _FuncT:
         @functools.wraps(func)
         def wrapper(*args: Any, **kwargs: Any) -> Any:
@@ -671,8 +722,10 @@ def update_check_required(cmd_name: str) -> Callable[[_FuncT], _FuncT]:
                 # Useful for troubleshooting
                 branch_status = get_git_branch(cli_args)
 
-                sdlog.error("You are not running the most recent signed SecureDrop release "
-                            "on this workstation.")
+                sdlog.error(
+                    "You are not running the most recent signed SecureDrop release "
+                    "on this workstation."
+                )
                 sdlog.error("Latest available version: {}".format(latest_tag))
 
                 if branch_status is not None:
@@ -680,19 +733,27 @@ def update_check_required(cmd_name: str) -> Callable[[_FuncT], _FuncT]:
                 else:
                     sdlog.error("Problem determining current branch status.")
 
-                sdlog.error("Running outdated or mismatched code can cause significant "
-                            "technical issues.")
-                sdlog.error("To display more information about your repository state, run:\n\n\t"
-                            "git status\n")
-                sdlog.error("If you are certain you want to proceed, run:\n\n\t"
-                            "./securedrop-admin --force {}\n".format(cmd_name))
-                sdlog.error("To apply the latest updates, run:\n\n\t"
-                            "./securedrop-admin update\n")
-                sdlog.error("If this fails, see the latest upgrade guide on "
-                            "https://docs.securedrop.org/ for instructions.")
+                sdlog.error(
+                    "Running outdated or mismatched code can cause significant " "technical issues."
+                )
+                sdlog.error(
+                    "To display more information about your repository state, run:\n\n\t"
+                    "git status\n"
+                )
+                sdlog.error(
+                    "If you are certain you want to proceed, run:\n\n\t"
+                    "./securedrop-admin --force {}\n".format(cmd_name)
+                )
+                sdlog.error("To apply the latest updates, run:\n\n\t" "./securedrop-admin update\n")
+                sdlog.error(
+                    "If this fails, see the latest upgrade guide on "
+                    "https://docs.securedrop.org/ for instructions."
+                )
                 sys.exit(1)
             return func(*args, **kwargs)
+
         return cast(_FuncT, wrapper)
+
     return decorator_update_check
 
 
@@ -712,17 +773,18 @@ def generate_new_v3_keys() -> Tuple[str, str]:
 
     private_key = x25519.X25519PrivateKey.generate()
     private_bytes = private_key.private_bytes(
-        encoding=serialization.Encoding.Raw	,
+        encoding=serialization.Encoding.Raw,
         format=serialization.PrivateFormat.Raw,
-        encryption_algorithm=serialization.NoEncryption())
+        encryption_algorithm=serialization.NoEncryption(),
+    )
     public_key = private_key.public_key()
     public_bytes = public_key.public_bytes(
-        encoding=serialization.Encoding.Raw,
-        format=serialization.PublicFormat.Raw)
+        encoding=serialization.Encoding.Raw, format=serialization.PublicFormat.Raw
+    )
 
     # Base32 encode and remove base32 padding characters (`=`)
-    public = base64.b32encode(public_bytes).replace(b'=', b'').decode("utf-8")
-    private = base64.b32encode(private_bytes).replace(b'=', b'').decode("utf-8")
+    public = base64.b32encode(public_bytes).replace(b"=", b"").decode("utf-8")
+    private = base64.b32encode(private_bytes).replace(b"=", b"").decode("utf-8")
     return public, private
 
 
@@ -731,31 +793,27 @@ def find_or_generate_new_torv3_keys(args: argparse.Namespace) -> int:
     This method will either read v3 Tor onion service keys if found or generate
     a new public/private keypair.
     """
-    secret_key_path = os.path.join(args.ansible_path,
-                                   "tor_v3_keys.json")
+    secret_key_path = os.path.join(args.ansible_path, "tor_v3_keys.json")
     if os.path.exists(secret_key_path):
-        print('Tor v3 onion service keys already exist in: {}'.format(
-            secret_key_path))
+        print("Tor v3 onion service keys already exist in: {}".format(secret_key_path))
         return 0
     # No old keys, generate and store them first
-    app_journalist_public_key, \
-        app_journalist_private_key = generate_new_v3_keys()
+    app_journalist_public_key, app_journalist_private_key = generate_new_v3_keys()
     # For app SSH service
     app_ssh_public_key, app_ssh_private_key = generate_new_v3_keys()
     # For mon SSH service
     mon_ssh_public_key, mon_ssh_private_key = generate_new_v3_keys()
     tor_v3_service_info = {
-            "app_journalist_public_key": app_journalist_public_key,
-            "app_journalist_private_key": app_journalist_private_key,
-            "app_ssh_public_key": app_ssh_public_key,
-            "app_ssh_private_key": app_ssh_private_key,
-            "mon_ssh_public_key": mon_ssh_public_key,
-            "mon_ssh_private_key": mon_ssh_private_key,
+        "app_journalist_public_key": app_journalist_public_key,
+        "app_journalist_private_key": app_journalist_private_key,
+        "app_ssh_public_key": app_ssh_public_key,
+        "app_ssh_private_key": app_ssh_private_key,
+        "mon_ssh_public_key": mon_ssh_public_key,
+        "mon_ssh_private_key": mon_ssh_private_key,
     }
-    with open(secret_key_path, 'w') as fobj:
+    with open(secret_key_path, "w") as fobj:
         json.dump(tor_v3_service_info, fobj, indent=4)
-    print('Tor v3 onion service keys generated and stored in: {}'.format(
-        secret_key_path))
+    print("Tor v3 onion service keys generated and stored in: {}".format(secret_key_path))
     return 0
 
 
@@ -766,13 +824,11 @@ def install_securedrop(args: argparse.Namespace) -> int:
     SiteConfig(args).load_and_update_config(prompt=False)
 
     sdlog.info("Now installing SecureDrop on remote servers.")
-    sdlog.info("You will be prompted for the sudo password on the "
-               "servers.")
-    sdlog.info("The sudo password is only necessary during initial "
-               "installation.")
+    sdlog.info("You will be prompted for the sudo password on the " "servers.")
+    sdlog.info("The sudo password is only necessary during initial " "installation.")
     return subprocess.check_call(
-        [os.path.join(args.ansible_path, 'securedrop-prod.yml'), '--ask-become-pass'],
-        cwd=args.ansible_path
+        [os.path.join(args.ansible_path, "securedrop-prod.yml"), "--ask-become-pass"],
+        cwd=args.ansible_path,
     )
 
 
@@ -781,8 +837,7 @@ def verify_install(args: argparse.Namespace) -> int:
 
     sdlog.info("Running configuration tests: ")
     testinfra_cmd = ["./devops/scripts/run_prod_testinfra"]
-    return subprocess.check_call(testinfra_cmd,
-                                 cwd=os.getcwd())
+    return subprocess.check_call(testinfra_cmd, cwd=os.getcwd())
 
 
 @update_check_required("backup")
@@ -793,8 +848,8 @@ def backup_securedrop(args: argparse.Namespace) -> int:
     with the backup tarball."""
     sdlog.info("Backing up the SecureDrop Application Server")
     ansible_cmd = [
-        'ansible-playbook',
-        os.path.join(args.ansible_path, 'securedrop-backup.yml'),
+        "ansible-playbook",
+        os.path.join(args.ansible_path, "securedrop-backup.yml"),
     ]
     return subprocess.check_call(ansible_cmd, cwd=args.ansible_path)
 
@@ -815,9 +870,9 @@ def restore_securedrop(args: argparse.Namespace) -> int:
     os.environ["ANSIBLE_STDOUT_CALLBACK"] = "debug"
 
     ansible_cmd = [
-        'ansible-playbook',
-        os.path.join(args.ansible_path, 'securedrop-restore.yml'),
-        '-e',
+        "ansible-playbook",
+        os.path.join(args.ansible_path, "securedrop-restore.yml"),
+        "-e",
     ]
 
     ansible_cmd_extras = [
@@ -830,7 +885,7 @@ def restore_securedrop(args: argparse.Namespace) -> int:
     if args.restore_manual_transfer:
         ansible_cmd_extras.append("restore_manual_transfer='True'")
 
-    ansible_cmd.append(' '.join(ansible_cmd_extras))
+    ansible_cmd.append(" ".join(ansible_cmd_extras))
     return subprocess.check_call(ansible_cmd, cwd=args.ansible_path)
 
 
@@ -838,17 +893,21 @@ def restore_securedrop(args: argparse.Namespace) -> int:
 def run_tails_config(args: argparse.Namespace) -> int:
     """Configure Tails environment post SD install"""
     sdlog.info("Configuring Tails workstation environment")
-    sdlog.info(("You'll be prompted for the temporary Tails admin password,"
-                " which was set on Tails login screen"))
+    sdlog.info(
+        (
+            "You'll be prompted for the temporary Tails admin password,"
+            " which was set on Tails login screen"
+        )
+    )
     ansible_cmd = [
-        os.path.join(args.ansible_path, 'securedrop-tails.yml'),
+        os.path.join(args.ansible_path, "securedrop-tails.yml"),
         "--ask-become-pass",
         # Passing an empty inventory file to override the automatic dynamic
         # inventory script, which fails if no site vars are configured.
-        '-i', '/dev/null',
+        "-i",
+        "/dev/null",
     ]
-    return subprocess.check_call(ansible_cmd,
-                                 cwd=args.ansible_path)
+    return subprocess.check_call(ansible_cmd, cwd=args.ansible_path)
 
 
 def check_for_updates_wrapper(args: argparse.Namespace) -> int:
@@ -865,20 +924,25 @@ def check_for_updates(args: argparse.Namespace) -> Tuple[bool, str]:
     # may produce very surprising results, because it will locate the most recent
     # _reachable_ tag. However, in our current branching model, it can be
     # relied on to determine if we're on the latest tag or not.
-    current_tag = subprocess.check_output(['git', 'describe'],
-                                          cwd=args.root).decode('utf-8').rstrip('\n')  # noqa: E501
+    current_tag = (
+        subprocess.check_output(["git", "describe"], cwd=args.root).decode("utf-8").rstrip("\n")
+    )  # noqa: E501
 
     # Fetch all branches
-    git_fetch_cmd = ['git', 'fetch', '--all']
+    git_fetch_cmd = ["git", "fetch", "--all"]
     subprocess.check_call(git_fetch_cmd, cwd=args.root)
 
     # Get latest tag
     git_all_tags = ["git", "tag"]
-    all_tags = subprocess.check_output(git_all_tags,
-                                       cwd=args.root).decode('utf-8').rstrip('\n').split('\n')  # noqa: E501
+    all_tags = (
+        subprocess.check_output(git_all_tags, cwd=args.root)
+        .decode("utf-8")
+        .rstrip("\n")
+        .split("\n")
+    )  # noqa: E501
 
     # Do not check out any release candidate tags
-    all_prod_tags = [x for x in all_tags if 'rc' not in x]
+    all_prod_tags = [x for x in all_tags if "rc" not in x]
 
     # We want the tags to be sorted based on semver
     all_prod_tags.sort(key=parse_version)
@@ -896,8 +960,7 @@ def get_git_branch(args: argparse.Namespace) -> Optional[str]:
     """
     Returns the starred line of `git branch` output.
     """
-    git_branch_raw = subprocess.check_output(['git', 'branch'],
-                                             cwd=args.root).decode('utf-8')
+    git_branch_raw = subprocess.check_output(["git", "branch"], cwd=args.root).decode("utf-8")
     match = re.search(r"\* (.*)\n", git_branch_raw)
     if match is not None and len(match.groups()) > 0:
         return match.group(1)
@@ -908,12 +971,11 @@ def get_git_branch(args: argparse.Namespace) -> Optional[str]:
 def get_release_key_from_keyserver(
     args: argparse.Namespace, keyserver: Optional[str] = None, timeout: int = 45
 ) -> None:
-    gpg_recv = ['timeout', str(timeout), 'gpg', '--batch', '--no-tty',
-                '--recv-key']
+    gpg_recv = ["timeout", str(timeout), "gpg", "--batch", "--no-tty", "--recv-key"]
     for release_key in RELEASE_KEYS:
         # We construct the gpg --recv-key command based on optional keyserver arg.
         if keyserver:
-            get_key_cmd = gpg_recv + ['--keyserver', keyserver] + [release_key]
+            get_key_cmd = gpg_recv + ["--keyserver", keyserver] + [release_key]
         else:
             get_key_cmd = gpg_recv + [release_key]
 
@@ -933,48 +995,47 @@ def update(args: argparse.Namespace) -> int:
     sdlog.info("Verifying signature on latest update...")
 
     # Retrieve key from openpgp.org keyserver
-    get_release_key_from_keyserver(args,
-                                   keyserver=DEFAULT_KEYSERVER)
+    get_release_key_from_keyserver(args, keyserver=DEFAULT_KEYSERVER)
 
-    git_verify_tag_cmd = ['git', 'tag', '-v', latest_tag]
+    git_verify_tag_cmd = ["git", "tag", "-v", latest_tag]
     try:
-        sig_result = subprocess.check_output(git_verify_tag_cmd,
-                                             stderr=subprocess.STDOUT,
-                                             cwd=args.root).decode('utf-8')
+        sig_result = subprocess.check_output(
+            git_verify_tag_cmd, stderr=subprocess.STDOUT, cwd=args.root
+        ).decode("utf-8")
 
-        good_sig_text = ['Good signature from "SecureDrop Release Signing ' +
-                         'Key"',
-                         'Good signature from "SecureDrop Release Signing ' +
-                         'Key <securedrop-release-key@freedom.press>"',
-                         'Good signature from "SecureDrop Release Signing ' +
-                         'Key <securedrop-release-key-2021@freedom.press>"']
-        bad_sig_text = 'BAD signature'
-        gpg_lines = sig_result.split('\n')
+        good_sig_text = [
+            'Good signature from "SecureDrop Release Signing ' + 'Key"',
+            'Good signature from "SecureDrop Release Signing '
+            + 'Key <securedrop-release-key@freedom.press>"',
+            'Good signature from "SecureDrop Release Signing '
+            + 'Key <securedrop-release-key-2021@freedom.press>"',
+        ]
+        bad_sig_text = "BAD signature"
+        gpg_lines = sig_result.split("\n")
 
         # Check if any strings in good_sig_text match against gpg_lines[]
-        good_sig_matches = [s for s in gpg_lines if
-                            any(xs in s for xs in good_sig_text)]
+        good_sig_matches = [s for s in gpg_lines if any(xs in s for xs in good_sig_text)]
 
         # To ensure that an adversary cannot name a malicious key good_sig_text
         # we check that bad_sig_text does not appear, that the release key
         # appears on the second line of the output, and that there is a single
         # match from good_sig_text[]
-        if (RELEASE_KEYS[0] in gpg_lines[1] or RELEASE_KEYS[1] in gpg_lines[1]) and \
-                len(good_sig_matches) == 1 and \
-                bad_sig_text not in sig_result:
+        if (
+            (RELEASE_KEYS[0] in gpg_lines[1] or RELEASE_KEYS[1] in gpg_lines[1])
+            and len(good_sig_matches) == 1
+            and bad_sig_text not in sig_result
+        ):
             # Finally, we check that there is no branch of the same name
             # prior to reporting success.
-            cmd = ['git', 'show-ref', '--heads', '--verify',
-                   'refs/heads/{}'.format(latest_tag)]
+            cmd = ["git", "show-ref", "--heads", "--verify", "refs/heads/{}".format(latest_tag)]
             try:
                 # We expect this to produce a non-zero exit code, which
                 # will produce a subprocess.CalledProcessError
-                subprocess.check_output(cmd, stderr=subprocess.STDOUT,
-                                        cwd=args.root)
+                subprocess.check_output(cmd, stderr=subprocess.STDOUT, cwd=args.root)
                 sdlog.info("Signature verification failed.")
                 return 1
             except subprocess.CalledProcessError as e:
-                if 'not a valid ref' in e.output.decode('utf-8'):
+                if "not a valid ref" in e.output.decode("utf-8"):
                     # Then there is no duplicate branch.
                     sdlog.info("Signature verification successful.")
                 else:  # If any other exception occurs, we bail.
@@ -992,7 +1053,7 @@ def update(args: argparse.Namespace) -> int:
         return 1
 
     # Only if the proper signature verifies do we check out the latest
-    git_checkout_cmd = ['git', 'checkout', latest_tag]
+    git_checkout_cmd = ["git", "checkout", latest_tag]
     subprocess.check_call(git_checkout_cmd, cwd=args.root)
 
     sdlog.info("Updated to SecureDrop {}.".format(latest_tag))
@@ -1004,12 +1065,14 @@ def get_logs(args: argparse.Namespace) -> int:
     """Get logs for forensics and debugging purposes"""
     sdlog.info("Gathering logs for forensics and debugging")
     ansible_cmd = [
-        'ansible-playbook',
-        os.path.join(args.ansible_path, 'securedrop-logs.yml'),
+        "ansible-playbook",
+        os.path.join(args.ansible_path, "securedrop-logs.yml"),
     ]
     subprocess.check_call(ansible_cmd, cwd=args.ansible_path)
-    sdlog.info("Please send the encrypted logs to securedrop@freedom.press or "
-               "upload them to the SecureDrop support portal: " + SUPPORT_URL)
+    sdlog.info(
+        "Please send the encrypted logs to securedrop@freedom.press or "
+        "upload them to the SecureDrop support portal: " + SUPPORT_URL
+    )
     return 0
 
 
@@ -1032,92 +1095,98 @@ def reset_admin_access(args: argparse.Namespace) -> int:
     this Admin Workstation."""
     sdlog.info("Resetting SSH access to the SecureDrop servers")
     ansible_cmd = [
-        'ansible-playbook',
-        os.path.join(args.ansible_path, 'securedrop-reset-ssh-key.yml'),
+        "ansible-playbook",
+        os.path.join(args.ansible_path, "securedrop-reset-ssh-key.yml"),
     ]
     return subprocess.check_call(ansible_cmd, cwd=args.ansible_path)
 
 
 def parse_argv(argv: List[str]) -> argparse.Namespace:
-    class ArgParseFormatterCombo(argparse.ArgumentDefaultsHelpFormatter,
-                                 argparse.RawTextHelpFormatter):
+    class ArgParseFormatterCombo(
+        argparse.ArgumentDefaultsHelpFormatter, argparse.RawTextHelpFormatter
+    ):
         """Needed to combine formatting classes for help output"""
+
         pass
 
-    parser = argparse.ArgumentParser(description=__doc__,
-                                     formatter_class=ArgParseFormatterCombo)
-    parser.add_argument('-v', action='store_true', default=False,
-                        help="Increase verbosity on output")
-    parser.add_argument('-d', action='store_true', default=False,
-                        help="Developer mode. Not to be used in production.")
-    parser.add_argument('--force', action='store_true', required=False,
-                        help="force command execution without update check")
-    parser.add_argument('--root', required=True,
-                        help="path to the root of the SecureDrop repository")
-    parser.add_argument('--site-config',
-                        help="path to the YAML site configuration file")
-    parser.add_argument('--ansible-path',
-                        help="path to the Ansible root")
-    parser.add_argument('--app-path',
-                        help="path to the SecureDrop application root")
+    parser = argparse.ArgumentParser(description=__doc__, formatter_class=ArgParseFormatterCombo)
+    parser.add_argument(
+        "-v", action="store_true", default=False, help="Increase verbosity on output"
+    )
+    parser.add_argument(
+        "-d",
+        action="store_true",
+        default=False,
+        help="Developer mode. Not to be used in production.",
+    )
+    parser.add_argument(
+        "--force",
+        action="store_true",
+        required=False,
+        help="force command execution without update check",
+    )
+    parser.add_argument(
+        "--root", required=True, help="path to the root of the SecureDrop repository"
+    )
+    parser.add_argument("--site-config", help="path to the YAML site configuration file")
+    parser.add_argument("--ansible-path", help="path to the Ansible root")
+    parser.add_argument("--app-path", help="path to the SecureDrop application root")
     subparsers = parser.add_subparsers()
 
-    parse_sdconfig = subparsers.add_parser('sdconfig', help=sdconfig.__doc__)
+    parse_sdconfig = subparsers.add_parser("sdconfig", help=sdconfig.__doc__)
     parse_sdconfig.set_defaults(func=sdconfig)
 
-    parse_install = subparsers.add_parser('install',
-                                          help=install_securedrop.__doc__)
+    parse_install = subparsers.add_parser("install", help=install_securedrop.__doc__)
     parse_install.set_defaults(func=install_securedrop)
 
-    parse_tailsconfig = subparsers.add_parser('tailsconfig',
-                                              help=run_tails_config.__doc__)
+    parse_tailsconfig = subparsers.add_parser("tailsconfig", help=run_tails_config.__doc__)
     parse_tailsconfig.set_defaults(func=run_tails_config)
 
     parse_generate_tor_keys = subparsers.add_parser(
-        'generate_v3_keys',
-        help=find_or_generate_new_torv3_keys.__doc__)
+        "generate_v3_keys", help=find_or_generate_new_torv3_keys.__doc__
+    )
     parse_generate_tor_keys.set_defaults(func=find_or_generate_new_torv3_keys)
 
-    parse_backup = subparsers.add_parser('backup',
-                                         help=backup_securedrop.__doc__)
+    parse_backup = subparsers.add_parser("backup", help=backup_securedrop.__doc__)
     parse_backup.set_defaults(func=backup_securedrop)
 
-    parse_restore = subparsers.add_parser('restore',
-                                          help=restore_securedrop.__doc__)
+    parse_restore = subparsers.add_parser("restore", help=restore_securedrop.__doc__)
     parse_restore.set_defaults(func=restore_securedrop)
     parse_restore.add_argument("restore_file")
-    parse_restore.add_argument("--preserve-tor-config", default=False,
-                               action='store_true',
-                               dest='restore_skip_tor',
-                               help="Preserve the server's current Tor config")
+    parse_restore.add_argument(
+        "--preserve-tor-config",
+        default=False,
+        action="store_true",
+        dest="restore_skip_tor",
+        help="Preserve the server's current Tor config",
+    )
 
-    parse_restore.add_argument("--no-transfer", default=False,
-                               action='store_true',
-                               dest='restore_manual_transfer',
-                               help="Restore using a backup file already present on the server")
+    parse_restore.add_argument(
+        "--no-transfer",
+        default=False,
+        action="store_true",
+        dest="restore_manual_transfer",
+        help="Restore using a backup file already present on the server",
+    )
 
-    parse_update = subparsers.add_parser('update', help=update.__doc__)
+    parse_update = subparsers.add_parser("update", help=update.__doc__)
     parse_update.set_defaults(func=update)
 
-    parse_check_updates = subparsers.add_parser('check_for_updates',
-                                                help=check_for_updates.__doc__)
+    parse_check_updates = subparsers.add_parser("check_for_updates", help=check_for_updates.__doc__)
     parse_check_updates.set_defaults(func=check_for_updates_wrapper)
 
-    parse_logs = subparsers.add_parser('logs',
-                                       help=get_logs.__doc__)
+    parse_logs = subparsers.add_parser("logs", help=get_logs.__doc__)
     parse_logs.set_defaults(func=get_logs)
 
-    parse_reset_ssh = subparsers.add_parser('reset_admin_access',
-                                            help=reset_admin_access.__doc__)
+    parse_reset_ssh = subparsers.add_parser("reset_admin_access", help=reset_admin_access.__doc__)
     parse_reset_ssh.set_defaults(func=reset_admin_access)
 
-    parse_verify = subparsers.add_parser('verify',
-                                         help=verify_install.__doc__)
+    parse_verify = subparsers.add_parser("verify", help=verify_install.__doc__)
     parse_verify.set_defaults(func=verify_install)
 
     args = parser.parse_args(argv)
-    if getattr(args, 'func', None) is None:
-        print('Please specify an operation.\n')
+    if getattr(args, "func", None) is None:
+        print("Please specify an operation.\n")
         parser.print_help()
         sys.exit(1)
     return set_default_paths(args)
@@ -1134,15 +1203,13 @@ def main(argv: List[str]) -> None:
         try:
             return_code = args.func(args)
         except KeyboardInterrupt:
-            print('Process was interrupted.')
+            print("Process was interrupted.")
             sys.exit(EXIT_INTERRUPT)
         except subprocess.CalledProcessError as e:
-            print('ERROR (run with -v for more): {msg}'.format(msg=e),
-                  file=sys.stderr)
+            print("ERROR (run with -v for more): {msg}".format(msg=e), file=sys.stderr)
             sys.exit(EXIT_SUBPROCESS_ERROR)
         except Exception as e:
-            raise SystemExit(
-                'ERROR (run with -v for more): {msg}'.format(msg=e))
+            raise SystemExit("ERROR (run with -v for more): {msg}".format(msg=e))
     if return_code == 0:
         sys.exit(EXIT_SUCCESS)
     else:

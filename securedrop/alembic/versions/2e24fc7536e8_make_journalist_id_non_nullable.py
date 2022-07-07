@@ -5,13 +5,13 @@ Revises: de00920916bf
 Create Date: 2022-01-12 19:31:06.186285
 
 """
-from passlib.hash import argon2
 import os
-import pyotp
 import uuid
 
-from alembic import op
+import pyotp
 import sqlalchemy as sa
+from alembic import op
+from passlib.hash import argon2
 
 # raise the errors if we're not in production
 raise_errors = os.environ.get("SECUREDROP_ENV", "prod") != "prod"
@@ -25,8 +25,8 @@ except:  # noqa
 
 
 # revision identifiers, used by Alembic.
-revision = '2e24fc7536e8'
-down_revision = 'de00920916bf'
+revision = "2e24fc7536e8"
+down_revision = "de00920916bf"
 branch_labels = None
 depends_on = None
 
@@ -44,16 +44,18 @@ def create_deleted() -> int:
 
     It should be basically identical to what Journalist.get_deleted() does
     """
-    op.execute(sa.text(
-        """\
+    op.execute(
+        sa.text(
+            """\
         INSERT INTO journalists (uuid, username, session_nonce, passphrase_hash, otp_secret)
         VALUES (:uuid, "deleted", 0, :passphrase_hash, :otp_secret);
         """
-    ).bindparams(
-        uuid=str(uuid.uuid4()),
-        passphrase_hash=generate_passphrase_hash(),
-        otp_secret=pyotp.random_base32(),
-    ))
+        ).bindparams(
+            uuid=str(uuid.uuid4()),
+            passphrase_hash=generate_passphrase_hash(),
+            otp_secret=pyotp.random_base32(),
+        )
+    )
     # Get the autoincrement ID back
     conn = op.get_bind()
     result = conn.execute('SELECT id FROM journalists WHERE username="deleted";').fetchall()
@@ -65,11 +67,13 @@ def migrate_nulls() -> None:
     op.execute("DELETE FROM journalist_login_attempt WHERE journalist_id IS NULL;")
     op.execute("DELETE FROM revoked_tokens WHERE journalist_id IS NULL;")
     # Look to see if we have data to migrate
-    tables = ('replies', 'seen_files', 'seen_messages', 'seen_replies')
+    tables = ("replies", "seen_files", "seen_messages", "seen_replies")
     needs_migration = []
     conn = op.get_bind()
     for table in tables:
-        result = conn.execute(f'SELECT 1 FROM {table} WHERE journalist_id IS NULL;').first()  # nosec
+        result = conn.execute(  # nosec
+            f"SELECT 1 FROM {table} WHERE journalist_id IS NULL;"
+        ).first()
         if result is not None:
             needs_migration.append(table)
 
@@ -83,76 +87,54 @@ def migrate_nulls() -> None:
         # do this update in two passes.
         # First we update as many rows to point to the deleted journalist as possible, ignoring any
         # unique key violations.
-        op.execute(sa.text(
-            f'UPDATE OR IGNORE {table} SET journalist_id=:journalist_id WHERE journalist_id IS NULL;'
-        ).bindparams(journalist_id=deleted_id))
+        op.execute(
+            sa.text(
+                f"UPDATE OR IGNORE {table} SET journalist_id=:journalist_id WHERE journalist_id IS NULL;"
+            ).bindparams(journalist_id=deleted_id)
+        )
         # Then we delete any leftovers which had been ignored earlier.
-        op.execute(f'DELETE FROM {table} WHERE journalist_id IS NULL')  # nosec
+        op.execute(f"DELETE FROM {table} WHERE journalist_id IS NULL")  # nosec
 
 
 def upgrade() -> None:
     migrate_nulls()
 
-    with op.batch_alter_table('journalist_login_attempt', schema=None) as batch_op:
-        batch_op.alter_column('journalist_id',
-                              existing_type=sa.INTEGER(),
-                              nullable=False)
+    with op.batch_alter_table("journalist_login_attempt", schema=None) as batch_op:
+        batch_op.alter_column("journalist_id", existing_type=sa.INTEGER(), nullable=False)
 
-    with op.batch_alter_table('replies', schema=None) as batch_op:
-        batch_op.alter_column('journalist_id',
-                              existing_type=sa.INTEGER(),
-                              nullable=False)
+    with op.batch_alter_table("replies", schema=None) as batch_op:
+        batch_op.alter_column("journalist_id", existing_type=sa.INTEGER(), nullable=False)
 
-    with op.batch_alter_table('revoked_tokens', schema=None) as batch_op:
-        batch_op.alter_column('journalist_id',
-                              existing_type=sa.INTEGER(),
-                              nullable=False)
+    with op.batch_alter_table("revoked_tokens", schema=None) as batch_op:
+        batch_op.alter_column("journalist_id", existing_type=sa.INTEGER(), nullable=False)
 
-    with op.batch_alter_table('seen_files', schema=None) as batch_op:
-        batch_op.alter_column('journalist_id',
-                              existing_type=sa.INTEGER(),
-                              nullable=False)
+    with op.batch_alter_table("seen_files", schema=None) as batch_op:
+        batch_op.alter_column("journalist_id", existing_type=sa.INTEGER(), nullable=False)
 
-    with op.batch_alter_table('seen_messages', schema=None) as batch_op:
-        batch_op.alter_column('journalist_id',
-                              existing_type=sa.INTEGER(),
-                              nullable=False)
+    with op.batch_alter_table("seen_messages", schema=None) as batch_op:
+        batch_op.alter_column("journalist_id", existing_type=sa.INTEGER(), nullable=False)
 
-    with op.batch_alter_table('seen_replies', schema=None) as batch_op:
-        batch_op.alter_column('journalist_id',
-                              existing_type=sa.INTEGER(),
-                              nullable=False)
+    with op.batch_alter_table("seen_replies", schema=None) as batch_op:
+        batch_op.alter_column("journalist_id", existing_type=sa.INTEGER(), nullable=False)
 
 
 def downgrade() -> None:
     # We do not un-migrate the data back to journalist_id=NULL
 
-    with op.batch_alter_table('seen_replies', schema=None) as batch_op:
-        batch_op.alter_column('journalist_id',
-                              existing_type=sa.INTEGER(),
-                              nullable=True)
+    with op.batch_alter_table("seen_replies", schema=None) as batch_op:
+        batch_op.alter_column("journalist_id", existing_type=sa.INTEGER(), nullable=True)
 
-    with op.batch_alter_table('seen_messages', schema=None) as batch_op:
-        batch_op.alter_column('journalist_id',
-                              existing_type=sa.INTEGER(),
-                              nullable=True)
+    with op.batch_alter_table("seen_messages", schema=None) as batch_op:
+        batch_op.alter_column("journalist_id", existing_type=sa.INTEGER(), nullable=True)
 
-    with op.batch_alter_table('seen_files', schema=None) as batch_op:
-        batch_op.alter_column('journalist_id',
-                              existing_type=sa.INTEGER(),
-                              nullable=True)
+    with op.batch_alter_table("seen_files", schema=None) as batch_op:
+        batch_op.alter_column("journalist_id", existing_type=sa.INTEGER(), nullable=True)
 
-    with op.batch_alter_table('revoked_tokens', schema=None) as batch_op:
-        batch_op.alter_column('journalist_id',
-                              existing_type=sa.INTEGER(),
-                              nullable=True)
+    with op.batch_alter_table("revoked_tokens", schema=None) as batch_op:
+        batch_op.alter_column("journalist_id", existing_type=sa.INTEGER(), nullable=True)
 
-    with op.batch_alter_table('replies', schema=None) as batch_op:
-        batch_op.alter_column('journalist_id',
-                              existing_type=sa.INTEGER(),
-                              nullable=True)
+    with op.batch_alter_table("replies", schema=None) as batch_op:
+        batch_op.alter_column("journalist_id", existing_type=sa.INTEGER(), nullable=True)
 
-    with op.batch_alter_table('journalist_login_attempt', schema=None) as batch_op:
-        batch_op.alter_column('journalist_id',
-                              existing_type=sa.INTEGER(),
-                              nullable=True)
+    with op.batch_alter_table("journalist_login_attempt", schema=None) as batch_op:
+        batch_op.alter_column("journalist_id", existing_type=sa.INTEGER(), nullable=True)

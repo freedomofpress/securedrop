@@ -1,19 +1,22 @@
 import re
-import pytest
 
+import pytest
 import testutils
 
 securedrop_test_vars = testutils.securedrop_test_vars
 testinfra_hosts = [securedrop_test_vars.monitor_hostname]
 
 
-@pytest.mark.parametrize('header', [
-    '/^X-Originating-IP:/    IGNORE',
-    '/^X-Mailer:/    IGNORE',
-    '/^Mime-Version:/        IGNORE',
-    '/^User-Agent:/  IGNORE',
-    '/^Received:/    IGNORE',
-])
+@pytest.mark.parametrize(
+    "header",
+    [
+        "/^X-Originating-IP:/    IGNORE",
+        "/^X-Mailer:/    IGNORE",
+        "/^Mime-Version:/        IGNORE",
+        "/^User-Agent:/  IGNORE",
+        "/^Received:/    IGNORE",
+    ],
+)
 def test_postfix_headers(host, header):
     """
     Ensure postfix header filters are set correctly. Common mail headers
@@ -23,7 +26,7 @@ def test_postfix_headers(host, header):
     f = host.file("/etc/postfix/header_checks")
     assert f.is_file
     assert f.mode == 0o644
-    regex = '^{}$'.format(re.escape(header))
+    regex = "^{}$".format(re.escape(header))
     assert re.search(regex, f.content_string, re.M)
 
 
@@ -42,7 +45,8 @@ def test_postfix_generic_maps(host):
     )
     assert host.file("/etc/postfix/main.cf").contains("^smtp_generic_maps")
     assert host.file("/etc/postfix/main.cf").contains(
-                     "^smtpd_recipient_restrictions = reject_unauth_destination")
+        "^smtpd_recipient_restrictions = reject_unauth_destination"
+    )
 
 
 def test_postfix_service(host):

@@ -4,16 +4,13 @@ import os
 import sys
 import time
 from argparse import _SubParsersAction
-
-from typing import List
-from typing import Optional
-
-from flask.ctx import AppContext
+from typing import List, Optional
 
 from db import db
-from rm import secure_delete
-from models import Reply, Source, Submission
+from flask.ctx import AppContext
 from management import app_context
+from models import Reply, Source, Submission
+from rm import secure_delete
 
 
 def find_disconnected_db_submissions(path: str) -> List[Submission]:

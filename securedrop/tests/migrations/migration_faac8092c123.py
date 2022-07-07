@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 
 
-class UpgradeTester():
-    '''This migration has no upgrade because it is only the enabling of
-       pragmas which do not affect database contents.
-    '''
+class UpgradeTester:
+    """This migration has no upgrade because it is only the enabling of
+    pragmas which do not affect database contents.
+    """
 
     def __init__(self, config):
         pass
@@ -16,10 +16,10 @@ class UpgradeTester():
         pass
 
 
-class DowngradeTester():
-    '''This migration has no downgrade because it is only the enabling of
-       pragmas, so we don't need to test the downgrade.
-    '''
+class DowngradeTester:
+    """This migration has no downgrade because it is only the enabling of
+    pragmas, so we don't need to test the downgrade.
+    """
 
     def __init__(self, config):
         pass

@@ -3,8 +3,7 @@ from typing import TYPE_CHECKING
 
 import sqlalchemy
 from flask import session
-
-from source_user import SourceUser, authenticate_source_user, InvalidPassphraseError
+from source_user import InvalidPassphraseError, SourceUser, authenticate_source_user
 
 if TYPE_CHECKING:
     from passphrases import DicewarePassphrase
@@ -35,9 +34,7 @@ class SessionManager:
 
     @classmethod
     def log_user_in(
-        cls,
-        db_session: sqlalchemy.orm.Session,
-        supplied_passphrase: "DicewarePassphrase"
+        cls, db_session: sqlalchemy.orm.Session, supplied_passphrase: "DicewarePassphrase"
     ) -> SourceUser:
         # Late import so the module can be used without a config.py in the parent folder
         from sdconfig import config
@@ -52,8 +49,9 @@ class SessionManager:
 
         # Save the session expiration date in the user's session cookie
         session_duration = timedelta(minutes=config.SESSION_EXPIRATION_MINUTES)
-        session[cls._SESSION_COOKIE_KEY_FOR_EXPIRATION_DATE] = datetime.now(
-            timezone.utc) + session_duration
+        session[cls._SESSION_COOKIE_KEY_FOR_EXPIRATION_DATE] = (
+            datetime.now(timezone.utc) + session_duration
+        )
 
         return source_user
 

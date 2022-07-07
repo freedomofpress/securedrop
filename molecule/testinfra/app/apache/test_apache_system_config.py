@@ -1,15 +1,18 @@
-import pytest
 import re
 
+import pytest
 import testutils
 
 securedrop_test_vars = testutils.securedrop_test_vars
 testinfra_hosts = [securedrop_test_vars.app_hostname]
 
 
-@pytest.mark.parametrize("package", [
-    "libapache2-mod-xsendfile",
-])
+@pytest.mark.parametrize(
+    "package",
+    [
+        "libapache2-mod-xsendfile",
+    ],
+)
 def test_apache_apt_packages(host, package):
     """
     Ensure required Apache packages are installed.
@@ -26,28 +29,31 @@ def test_apache_security_config_deprecated(host):
     assert not host.file("/etc/apache2/security").exists
 
 
-@pytest.mark.parametrize("apache_opt", [
-    'Mutex file:${APACHE_LOCK_DIR} default',
-    'PidFile ${APACHE_PID_FILE}',
-    'Timeout 60',
-    'KeepAlive On',
-    'MaxKeepAliveRequests 100',
-    'KeepAliveTimeout 5',
-    'User www-data',
-    'Group www-data',
-    'AddDefaultCharset UTF-8',
-    'DefaultType None',
-    'HostnameLookups Off',
-    'ErrorLog /dev/null',
-    'LogLevel crit',
-    'IncludeOptional mods-enabled/*.load',
-    'IncludeOptional mods-enabled/*.conf',
-    'Include ports.conf',
-    'IncludeOptional sites-enabled/*.conf',
-    'ServerTokens Prod',
-    'ServerSignature Off',
-    'TraceEnable Off',
-])
+@pytest.mark.parametrize(
+    "apache_opt",
+    [
+        "Mutex file:${APACHE_LOCK_DIR} default",
+        "PidFile ${APACHE_PID_FILE}",
+        "Timeout 60",
+        "KeepAlive On",
+        "MaxKeepAliveRequests 100",
+        "KeepAliveTimeout 5",
+        "User www-data",
+        "Group www-data",
+        "AddDefaultCharset UTF-8",
+        "DefaultType None",
+        "HostnameLookups Off",
+        "ErrorLog /dev/null",
+        "LogLevel crit",
+        "IncludeOptional mods-enabled/*.load",
+        "IncludeOptional mods-enabled/*.conf",
+        "Include ports.conf",
+        "IncludeOptional sites-enabled/*.conf",
+        "ServerTokens Prod",
+        "ServerSignature Off",
+        "TraceEnable Off",
+    ],
+)
 def test_apache_config_settings(host, apache_opt):
     """
     Check required Apache config settings for general server.
@@ -63,10 +69,13 @@ def test_apache_config_settings(host, apache_opt):
     assert re.search("^{}$".format(re.escape(apache_opt)), f.content_string, re.M)
 
 
-@pytest.mark.parametrize("port", [
-    "80",
-    "8080",
-])
+@pytest.mark.parametrize(
+    "port",
+    [
+        "80",
+        "8080",
+    ],
+)
 def test_apache_ports_config(host, port):
     """
     Ensure Apache ports config items, which specify how the
@@ -81,30 +90,34 @@ def test_apache_ports_config(host, port):
     assert f.group == "root"
     assert f.mode == 0o644
 
-    listening_regex = "^Listen {}:{}$".format(re.escape(
-            securedrop_test_vars.apache_listening_address), port)
+    listening_regex = "^Listen {}:{}$".format(
+        re.escape(securedrop_test_vars.apache_listening_address), port
+    )
     assert f.contains(listening_regex)
 
 
-@pytest.mark.parametrize("apache_module", [
-  'access_compat',
-  'authn_core',
-  'alias',
-  'authz_core',
-  'authz_host',
-  'authz_user',
-  'deflate',
-  'filter',
-  'dir',
-  'headers',
-  'mime',
-  'mpm_event',
-  'negotiation',
-  'reqtimeout',
-  'rewrite',
-  'wsgi',
-  'xsendfile',
-])
+@pytest.mark.parametrize(
+    "apache_module",
+    [
+        "access_compat",
+        "authn_core",
+        "alias",
+        "authz_core",
+        "authz_host",
+        "authz_user",
+        "deflate",
+        "filter",
+        "dir",
+        "headers",
+        "mime",
+        "mpm_event",
+        "negotiation",
+        "reqtimeout",
+        "rewrite",
+        "wsgi",
+        "xsendfile",
+    ],
+)
 def test_apache_modules_present(host, apache_module):
     """
     Ensure presence of required Apache modules. Application will not work
@@ -117,13 +130,16 @@ def test_apache_modules_present(host, apache_module):
         assert c.rc == 0
 
 
-@pytest.mark.parametrize("apache_module", [
-  'auth_basic',
-  'authn_file',
-  'autoindex',
-  'env',
-  'status',
-])
+@pytest.mark.parametrize(
+    "apache_module",
+    [
+        "auth_basic",
+        "authn_file",
+        "autoindex",
+        "env",
+        "status",
+    ],
+)
 def test_apache_modules_absent(host, apache_module):
     """
     Ensure absence of unwanted Apache modules. Application does not require
@@ -132,15 +148,13 @@ def test_apache_modules_absent(host, apache_module):
     """
     with host.sudo():
         c = host.run("/usr/sbin/a2query -m {}".format(apache_module))
-        assert "No module matches {} (disabled".format(apache_module) in \
-            c.stderr
+        assert "No module matches {} (disabled".format(apache_module) in c.stderr
         assert c.rc == 32
 
 
-@pytest.mark.parametrize("logfile",
-                         securedrop_test_vars.allowed_apache_logfiles)
+@pytest.mark.parametrize("logfile", securedrop_test_vars.allowed_apache_logfiles)
 def test_apache_logfiles_present(host, logfile):
-    """"
+    """ "
     Ensure that whitelisted Apache log files for the Source and Journalist
     Interfaces are present. In staging, we permit a "source-error" log,
     but on prod even that is not allowed. A separate test will confirm
@@ -166,5 +180,4 @@ def test_apache_logfiles_no_extras(host):
     # We need elevated privileges to read files inside /var/log/apache2
     with host.sudo():
         c = host.run("find /var/log/apache2 -mindepth 1 -name '*.log' | wc -l")
-        assert int(c.stdout) == \
-            len(securedrop_test_vars.allowed_apache_logfiles)
+        assert int(c.stdout) == len(securedrop_test_vars.allowed_apache_logfiles)

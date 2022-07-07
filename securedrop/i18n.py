@@ -16,7 +16,6 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 import collections
-
 from typing import List, Set
 
 from babel.core import (
@@ -28,8 +27,7 @@ from babel.core import (
 )
 from flask import Flask, g, request, session
 from flask_babel import Babel
-
-from sdconfig import SDConfig, FALLBACK_LOCALE
+from sdconfig import FALLBACK_LOCALE, SDConfig
 
 
 class RequestLocaleInfo:
@@ -150,13 +148,13 @@ def validate_locale_configuration(config: SDConfig, babel: Babel) -> None:
     missing = configured - usable
     if missing:
         babel.app.logger.error(
-            f'Configured locales {missing} are not in the set of usable locales {usable}'
+            f"Configured locales {missing} are not in the set of usable locales {usable}"
         )
 
     defaults = parse_locale_set([config.DEFAULT_LOCALE, FALLBACK_LOCALE])
     if not defaults & usable:
         raise ValueError(
-            f'None of the default locales {defaults} are in the set of usable locales {usable}'
+            f"None of the default locales {defaults} are in the set of usable locales {usable}"
         )
 
     global USABLE_LOCALES
@@ -250,9 +248,7 @@ def get_accepted_languages() -> List[str]:
             # at least be more legible at first contact than the
             # probable default locale of English.
             if parsed.language == "zh" and parsed.script:
-                accept_languages.append(
-                    str(Locale(language=parsed.language, script=parsed.script))
-                )
+                accept_languages.append(str(Locale(language=parsed.language, script=parsed.script)))
         except (ValueError, UnknownLocaleError):
             pass
     return accept_languages

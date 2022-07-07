@@ -61,6 +61,42 @@ update-pip-requirements: update-admin-pip-requirements update-python3-requiremen
 #
 #################
 
+.PHONY: check-black
+check-black: ## Check Python source code formatting with black
+	@echo "███ Running black check..."
+	@black --check --diff setup.py securedrop \
+                install_files \
+                journalist_gui \
+                molecule \
+                admin
+	@echo
+
+.PHONY: black
+black: ## Update Python source code formatting with black
+	@black setup.py securedrop \
+                install_files \
+                journalist_gui \
+                molecule \
+                admin
+
+.PHONY: check-isort
+check-isort: ## Check Python import organization with isort
+	@echo "███ Running isort check..."
+	@isort --check-only --diff setup.py securedrop \
+                install_files \
+                journalist_gui \
+                molecule \
+                admin
+	@echo
+
+.PHONY: isort
+isort: ## Update Python import organization with isort
+	@isort setup.py securedrop \
+                install_files \
+                journalist_gui \
+                molecule \
+                admin
+
 .PHONY: ansible-config-lint
 ansible-config-lint: ## Run custom Ansible linting tasks.
 	@echo "███ Linting Ansible configuration..."
@@ -123,7 +159,7 @@ yamllint:  ## Lint YAML files (does not validate syntax!).
 	@echo
 
 .PHONY: lint
-lint: ansible-config-lint app-lint flake8 html-lint shellcheck typelint yamllint ## Runs all lint checks
+lint: ansible-config-lint app-lint check-black check-isort flake8 html-lint shellcheck typelint yamllint ## Runs all lint checks
 
 .PHONY: safety
 safety:  ## Run `safety check` to check python dependencies for vulnerabilities.
@@ -185,6 +221,15 @@ securedrop/config.py: ## Generate the test SecureDrop application config.
 	@echo >> securedrop/config.py
 	@echo "SUPPORTED_LOCALES = $$(if test -f /opt/venvs/securedrop-app-code/bin/python3; then ./securedrop/i18n_tool.py list-locales --python; else DOCKER_BUILD_VERBOSE=false $(DEVSHELL) ./i18n_tool.py list-locales --python; fi)" | sed 's/\r//' >> securedrop/config.py
 	@echo
+
+.PHONY: setup-dev-env
+setup-dev-env: venv add-hooks ## Set up tools and hooks for local development
+
+.PHONY: add-hooks
+add-hooks:  ## copy precommit hooks into place
+	@echo "███ copying git hooks..."
+	@mkdir -p .git/hooks
+	@cp .githooks/* .git/hooks
 
 .PHONY: test-config
 test-config: securedrop/config.py

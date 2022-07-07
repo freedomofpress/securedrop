@@ -1,0 +1,12 @@
+[tool.black]
+line-length = 100
+exclude = "securedrop/config.py"
+
+[tool.isort]
+line_length = 100
+indent = '    '
+multi_line_output = 3
+ensure_newline_before_comments = true
+include_trailing_comma = true
+force_grid_wrap = 0
+use_parentheses = true

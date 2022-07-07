@@ -5,7 +5,7 @@ timeout of asynchronous processes.
 import time
 
 # This is an arbitarily defined value in the SD codebase and not something from rqworker
-REDIS_SUCCESS_RETURN_VALUE = 'success'
+REDIS_SUCCESS_RETURN_VALUE = "success"
 
 
 def wait_for_redis_worker(job, timeout=60):
@@ -23,9 +23,9 @@ def wait_for_redis_worker(job, timeout=60):
         if job.result == REDIS_SUCCESS_RETURN_VALUE:
             return
         elif job.result not in (None, REDIS_SUCCESS_RETURN_VALUE):
-            assert False, 'Redis worker failed!'
+            assert False, "Redis worker failed!"
         time.sleep(0.1)
-    assert False, 'Redis worker timed out!'
+    assert False, "Redis worker timed out!"
 
 
 def wait_for_assertion(assertion_expression, timeout=10):

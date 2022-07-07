@@ -26,9 +26,9 @@ def start_rq_worker(config, queue_name=None):
             "/opt/venvs/securedrop-app-code/bin/rqworker",
             "--path",
             config.SECUREDROP_ROOT,
-            queue_name
+            queue_name,
         ],
-        preexec_fn=os.setsid
+        preexec_fn=os.setsid,
     )
 
 

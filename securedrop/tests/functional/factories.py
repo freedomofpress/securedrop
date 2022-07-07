@@ -1,11 +1,10 @@
-from pathlib import Path
 import secrets
 import shutil
 import subprocess
-from tests.functional.sd_config_v2 import DEFAULT_SECUREDROP_ROOT, FlaskAppConfig
-from tests.functional.sd_config_v2 import SecureDropConfig
+from pathlib import Path
 
 from tests.functional.db_session import _get_fake_db_module
+from tests.functional.sd_config_v2 import DEFAULT_SECUREDROP_ROOT, FlaskAppConfig, SecureDropConfig
 
 
 def _generate_random_token() -> str:
@@ -54,7 +53,7 @@ class SecureDropConfigFactory:
             SOURCE_APP_FLASK_CONFIG_CLS=FlaskAppConfigFactory.create(SESSION_COOKIE_NAME="ss"),
             SCRYPT_GPG_PEPPER=_generate_random_token(),
             SCRYPT_ID_PEPPER=_generate_random_token(),
-            SCRYPT_PARAMS=dict(N=2 ** 14, r=8, p=1),
+            SCRYPT_PARAMS=dict(N=2**14, r=8, p=1),
             WORKER_PIDFILE="/tmp/securedrop_test_worker.pid",
             RQ_WORKER_NAME="test",
             NOUNS=str(NOUNS),

@@ -36,7 +36,7 @@ if [[ $NEW_VERSION == *-rc* ]]; then
 fi
 
 # Get the old version from securedrop/version.py
-old_version_regex="^__version__ = '(.*)'$"
+old_version_regex='^__version__ = "(.*)"$'
 [[ "$(cat securedrop/version.py)" =~ $old_version_regex ]]
 OLD_VERSION=${BASH_REMATCH[1]}
 

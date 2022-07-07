@@ -1,8 +1,8 @@
 import os
 import shutil
+
 import pytest
 from selenium import webdriver
-
 from tests.functional.app_navigators import SourceAppNagivator
 
 from . import functional_test

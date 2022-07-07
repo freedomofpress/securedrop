@@ -8,16 +8,13 @@ Loads test data into the SecureDrop database.
 import argparse
 import datetime
 import io
-from pathlib import Path
-
 import math
 import os
 import random
 import string
 from itertools import cycle
+from pathlib import Path
 from typing import Optional, Tuple
-
-from sqlalchemy.exc import IntegrityError
 
 import journalist_app
 from db import db
@@ -37,6 +34,7 @@ from passphrases import PassphraseGenerator
 from sdconfig import config
 from source_user import create_source_user
 from specialstrings import strings
+from sqlalchemy.exc import IntegrityError
 from store import Storage
 
 messages = cycle(strings)

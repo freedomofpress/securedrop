@@ -2,33 +2,32 @@
 import random
 import uuid
 
-from sqlalchemy import text
-
 from db import db
 from journalist_app import create_app
+from sqlalchemy import text
+
 from .helpers import random_chars
 
-random.seed('くコ:彡')
+random.seed("くコ:彡")
 
 
 class Helper:
-
     def __init__(self):
         self.journalist_id = None
 
     def create_journalist(self, otp_secret="ABCDEFGHIJKLMNOPQRSTUVWXYZ234567"):
         if self.journalist_id is not None:
-            raise RuntimeError('Journalist already created')
+            raise RuntimeError("Journalist already created")
 
         params = {
-            'uuid': str(uuid.uuid4()),
-            'username': random_chars(50),
-            'session_nonce': 0,
-            'otp_secret': otp_secret
+            "uuid": str(uuid.uuid4()),
+            "username": random_chars(50),
+            "session_nonce": 0,
+            "otp_secret": otp_secret,
         }
-        sql = '''INSERT INTO journalists (uuid, username, otp_secret, session_nonce)
+        sql = """INSERT INTO journalists (uuid, username, otp_secret, session_nonce)
                  VALUES (:uuid, :username, :otp_secret, :session_nonce)
-              '''
+              """
         self.journalist_id = db.engine.execute(text(sql), **params).lastrowid
 
 
@@ -52,11 +51,10 @@ class UpgradeTester(Helper):
         with self.app.app_context():
             journalists_sql = "SELECT * FROM journalists"
             journalist = db.engine.execute(text(journalists_sql)).first()
-            assert len(journalist['otp_secret']) == 32  # Varchar ignores length
+            assert len(journalist["otp_secret"]) == 32  # Varchar ignores length
 
 
 class DowngradeTester(Helper):
-
     def __init__(self, config):
         Helper.__init__(self)
         self.config = config
@@ -70,4 +68,4 @@ class DowngradeTester(Helper):
         with self.app.app_context():
             journalists_sql = "SELECT * FROM journalists"
             journalist = db.engine.execute(text(journalists_sql)).first()
-            assert len(journalist['otp_secret']) == 32  # Varchar ignores length
+            assert len(journalist["otp_secret"]) == 32  # Varchar ignores length

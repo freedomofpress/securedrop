@@ -2,14 +2,11 @@ import time
 from pathlib import Path
 
 import pytest
-
-from tests.functional.conftest import spawn_sd_servers
 from tests.functional.app_navigators import SourceAppNagivator
+from tests.functional.conftest import spawn_sd_servers
 from tests.functional.factories import SecureDropConfigFactory
-
 from tests.functional.pageslayout.functional_test import list_locales
 from tests.functional.pageslayout.screenshot_utils import save_screenshot_and_html
-
 
 # Very short session expiration time
 SESSION_EXPIRATION_SECONDS = 3
