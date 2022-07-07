@@ -15,90 +15,136 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-import time
-
 import pytest
-import tests.functional.pageslayout.functional_test as pft
-from tests.functional import journalist_navigation_steps, source_navigation_steps
+from tests.functional.app_navigators import JournalistAppNavigator
+from tests.functional.pageslayout.functional_test import list_locales
+from tests.functional.pageslayout.screenshot_utils import save_screenshot_and_html
 
 
-# TODO(AD): This should be merged with TestJournalist
+@pytest.mark.parametrize("locale", list_locales())
 @pytest.mark.pagelayout
-class TestJournalistLayoutDelete(
-    pft.FunctionalTest,
-    source_navigation_steps.SourceNavigationStepsMixin,
-    journalist_navigation_steps.JournalistNavigationStepsMixin,
-):
-    def test_delete_none(self):
-        self._source_visits_source_homepage()
-        self._source_chooses_to_submit_documents()
-        self._source_continues_to_submit_page()
-        self._source_submits_a_file()
-        self._source_submits_a_message()
-        self._source_logs_out()
-        self._journalist_logs_in()
-        self._journalist_visits_col()
-        self._journalist_clicks_delete_selected_link()
-        self._journalist_confirm_delete_selected()
-        self._screenshot("journalist-delete_none.png")
-        self._save_html("journalist-delete_none.html")
+class TestJournalistLayoutDelete:
+    def test_delete_none(self, locale, sd_servers_v2_with_submitted_file, firefox_web_driver):
+        # Given an SD server with a file submitted by a source
+        # And a journalist logged into the journalist interface
+        locale_with_commas = locale.replace("_", "-")
+        journ_app_nav = JournalistAppNavigator(
+            journalist_app_base_url=sd_servers_v2_with_submitted_file.journalist_app_base_url,
+            web_driver=firefox_web_driver,
+            accept_languages=locale_with_commas,
+        )
+        journ_app_nav.journalist_logs_in(
+            username=sd_servers_v2_with_submitted_file.journalist_username,
+            password=sd_servers_v2_with_submitted_file.journalist_password,
+            otp_secret=sd_servers_v2_with_submitted_file.journalist_otp_secret,
+        )
 
-    # TODO(AD): This should be merged with
-    #  test_journalist_verifies_deletion_of_one_submission_modal()
-    def test_delete_one_confirmation(self):
-        self._source_visits_source_homepage()
-        self._source_chooses_to_submit_documents()
-        self._source_continues_to_submit_page()
-        self._source_submits_a_file()
-        self._source_submits_a_message()
-        self._source_logs_out()
-        self._journalist_logs_in()
-        self._journalist_visits_col()
-        self._journalist_selects_first_doc()
-        self._journalist_clicks_delete_selected_link()
-        time.sleep(1)
-        self._screenshot("journalist-delete_one_confirmation.png")
-        self._save_html("journalist-delete_one_confirmation.html")
+        # And the journalist went to the individual source's page
+        journ_app_nav.journalist_visits_col()
 
-    # TODO(AD): This should be merged with test_journalist_interface_ui_with_modal()
-    def test_delete_all_confirmation(self):
-        self._source_visits_source_homepage()
-        self._source_chooses_to_submit_documents()
-        self._source_continues_to_submit_page()
-        self._source_submits_a_file()
-        self._source_submits_a_message()
-        self._source_logs_out()
-        self._journalist_logs_in()
-        self._journalist_visits_col()
-        self._journalist_delete_all_confirmation()
-        time.sleep(1)
-        self._screenshot("journalist-delete_all_confirmation.png")
-        self._save_html("journalist-delete_all_confirmation.html")
+        journ_app_nav.journalist_clicks_delete_selected_link()
 
-    def test_delete_one(self):
-        self._source_visits_source_homepage()
-        self._source_chooses_to_submit_documents()
-        self._source_continues_to_submit_page()
-        self._source_submits_a_file()
-        self._source_submits_a_message()
-        self._source_logs_out()
-        self._journalist_logs_in()
-        self._journalist_visits_col()
-        self._journalist_delete_one()
-        self._journalist_confirm_delete_selected()
-        self._screenshot("journalist-delete_one.png")
-        self._save_html("journalist-delete_one.html")
+        journ_app_nav.journalist_confirm_delete_selected()
+        save_screenshot_and_html(journ_app_nav.driver, locale, "journalist-delete_none")
 
-    def test_delete_all(self):
-        self._source_visits_source_homepage()
-        self._source_chooses_to_submit_documents()
-        self._source_continues_to_submit_page()
-        self._source_submits_a_file()
-        self._source_submits_a_message()
-        self._source_logs_out()
-        self._journalist_logs_in()
-        self._journalist_visits_col()
-        self._journalist_delete_all()
-        self._journalist_confirm_delete_selected()
-        self._screenshot("journalist-delete_all.png")
-        self._save_html("journalist-delete_all.html")
+    def test_delete_one_confirmation(
+        self, locale, sd_servers_v2_with_submitted_file, firefox_web_driver
+    ):
+        # Given an SD server with a file submitted by a source
+        # And a journalist logged into the journalist interface
+        locale_with_commas = locale.replace("_", "-")
+        journ_app_nav = JournalistAppNavigator(
+            journalist_app_base_url=sd_servers_v2_with_submitted_file.journalist_app_base_url,
+            web_driver=firefox_web_driver,
+            accept_languages=locale_with_commas,
+        )
+        journ_app_nav.journalist_logs_in(
+            username=sd_servers_v2_with_submitted_file.journalist_username,
+            password=sd_servers_v2_with_submitted_file.journalist_password,
+            otp_secret=sd_servers_v2_with_submitted_file.journalist_otp_secret,
+        )
+
+        # And the journalist went to the individual source's page
+        journ_app_nav.journalist_visits_col()
+
+        # And the journalist selected the first submission
+        journ_app_nav.journalist_selects_first_doc()
+
+        # Take a screenshot of the confirmation prompt when the journalist clicks the delete button
+        journ_app_nav.journalist_clicks_delete_selected_link()
+        save_screenshot_and_html(journ_app_nav.driver, locale, "journalist-delete_one_confirmation")
+
+    def test_delete_all_confirmation(
+        self, locale, sd_servers_v2_with_submitted_file, firefox_web_driver
+    ):
+        # Given an SD server with a file submitted by a source
+        # And a journalist logged into the journalist interface
+        locale_with_commas = locale.replace("_", "-")
+        journ_app_nav = JournalistAppNavigator(
+            journalist_app_base_url=sd_servers_v2_with_submitted_file.journalist_app_base_url,
+            web_driver=firefox_web_driver,
+            accept_languages=locale_with_commas,
+        )
+        journ_app_nav.journalist_logs_in(
+            username=sd_servers_v2_with_submitted_file.journalist_username,
+            password=sd_servers_v2_with_submitted_file.journalist_password,
+            otp_secret=sd_servers_v2_with_submitted_file.journalist_otp_secret,
+        )
+
+        # And the journalist went to the individual source's page
+        journ_app_nav.journalist_visits_col()
+
+        # Take a screenshot of the prompt when the journalist clicks the delete all button
+        journ_app_nav.journalist_clicks_delete_all_and_sees_confirmation()
+        save_screenshot_and_html(journ_app_nav.driver, locale, "journalist-delete_all_confirmation")
+
+    def test_delete_one(self, locale, sd_servers_v2_with_submitted_file, firefox_web_driver):
+        # Given an SD server with a file submitted by a source
+        # And a journalist logged into the journalist interface
+        locale_with_commas = locale.replace("_", "-")
+        journ_app_nav = JournalistAppNavigator(
+            journalist_app_base_url=sd_servers_v2_with_submitted_file.journalist_app_base_url,
+            web_driver=firefox_web_driver,
+            accept_languages=locale_with_commas,
+        )
+        journ_app_nav.journalist_logs_in(
+            username=sd_servers_v2_with_submitted_file.journalist_username,
+            password=sd_servers_v2_with_submitted_file.journalist_password,
+            otp_secret=sd_servers_v2_with_submitted_file.journalist_otp_secret,
+        )
+
+        # And the journalist went to the individual source's page
+        journ_app_nav.journalist_visits_col()
+
+        journ_app_nav.journalist_selects_first_doc()
+
+        # And the journalist clicked the delete button and confirmed
+        journ_app_nav.journalist_clicks_delete_selected_link()
+        journ_app_nav.nav_helper.safe_click_by_id("delete-selected")
+
+        # Take a screenshot
+        save_screenshot_and_html(journ_app_nav.driver, locale, "journalist-delete_one")
+
+    def test_delete_all(self, locale, sd_servers_v2_with_submitted_file, firefox_web_driver):
+        # Given an SD server with a file submitted by a source
+        # And a journalist logged into the journalist interface
+        locale_with_commas = locale.replace("_", "-")
+        journ_app_nav = JournalistAppNavigator(
+            journalist_app_base_url=sd_servers_v2_with_submitted_file.journalist_app_base_url,
+            web_driver=firefox_web_driver,
+            accept_languages=locale_with_commas,
+        )
+        journ_app_nav.journalist_logs_in(
+            username=sd_servers_v2_with_submitted_file.journalist_username,
+            password=sd_servers_v2_with_submitted_file.journalist_password,
+            otp_secret=sd_servers_v2_with_submitted_file.journalist_otp_secret,
+        )
+
+        # And the journalist went to the individual source's page
+        journ_app_nav.journalist_visits_col()
+
+        journ_app_nav.journalist_clicks_delete_all_and_sees_confirmation()
+        journ_app_nav.journalist_confirms_delete_selected()
+
+        # Take a screenshot
+        save_screenshot_and_html(journ_app_nav.driver, locale, "journalist-delete_all")

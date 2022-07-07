@@ -8,6 +8,7 @@ import pyotp
 import requests
 from encryption import EncryptionManager
 from selenium.common.exceptions import NoAlertPresentException, WebDriverException
+from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.firefox.webdriver import WebDriver
 from selenium.webdriver.remote.webelement import WebElement
@@ -436,6 +437,18 @@ class JournalistAppNavigator:
             lambda: self.driver.find_element_by_id("delete-selected-confirmation-modal")
         )
 
+    def journalist_clicks_delete_all_and_sees_confirmation(self) -> None:
+        self.nav_helper.safe_click_all_by_css_selector("[name=doc_names_selected]")
+        self.nav_helper.safe_click_by_css_selector("a#delete-selected-link")
+
+    def journalist_confirms_delete_selected(self) -> None:
+        self.nav_helper.wait_for(
+            lambda: expected_conditions.element_to_be_clickable((By.ID, "delete-selected"))
+        )
+        confirm_btn = self.driver.find_element_by_id("delete-selected")
+        confirm_btn.location_once_scrolled_into_view
+        ActionChains(self.driver).move_to_element(confirm_btn).click().perform()
+
     def get_submission_checkboxes_on_current_page(self):
         checkboxes = self.driver.find_elements_by_name("doc_names_selected")
         return checkboxes
@@ -450,3 +463,11 @@ class JournalistAppNavigator:
 
     def count_sources_on_index_page(self) -> int:
         return len(self.get_sources_on_index_page())
+
+    def journalist_confirm_delete_selected(self) -> None:
+        self.nav_helper.wait_for(
+            lambda: expected_conditions.element_to_be_clickable((By.ID, "delete-selected"))
+        )
+        confirm_btn = self.driver.find_element_by_id("delete-selected")
+        confirm_btn.location_once_scrolled_into_view
+        ActionChains(self.driver).move_to_element(confirm_btn).click().perform()

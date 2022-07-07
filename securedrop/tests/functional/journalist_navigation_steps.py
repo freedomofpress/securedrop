@@ -886,13 +886,6 @@ class JournalistNavigationStepsMixin:
         actions.move_to_element(continue_link).perform()
         continue_link.click()
 
-    def _journalist_delete_none(self):
-        self.driver.find_element_by_id("delete-selected-link").click()
-
-    def _journalist_delete_all_confirmation(self):
-        self.safe_click_all_by_css_selector("[name=doc_names_selected]")
-        self.safe_click_by_css_selector("a#delete-selected-link")
-
     def _journalist_delete_one(self):
         self.safe_click_by_css_selector("[name=doc_names_selected]")
 
