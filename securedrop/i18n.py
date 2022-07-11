@@ -16,7 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 import collections
-from typing import List, Set
+from typing import Dict, List, Set
 
 from babel.core import (
     Locale,
@@ -175,18 +175,21 @@ def map_locale_display_names(config: SDConfig) -> None:
     to distinguish them. For languages with more than one translation,
     like Chinese, we do need the additional detail.
     """
-    seen: Set[str] = set()
+
+    language_locale_counts = collections.defaultdict(int)  # type: Dict[str, int]
+    for l in sorted(config.SUPPORTED_LOCALES):
+        locale = RequestLocaleInfo(l)
+        language_locale_counts[locale.language] += 1
+
     locale_map = collections.OrderedDict()
     for l in sorted(config.SUPPORTED_LOCALES):
         if Locale.parse(l) not in USABLE_LOCALES:
             continue
 
         locale = RequestLocaleInfo(l)
-        if locale.language in seen:
+        if language_locale_counts[locale.language] > 1:
             # Disambiguate translations for this language.
             locale.use_display_name = True
-        else:
-            seen.add(locale.language)
 
         locale_map[str(locale)] = locale
 
