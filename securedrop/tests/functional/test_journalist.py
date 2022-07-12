@@ -70,7 +70,7 @@ class TestJournalist:
         # And when the journalist clicks the delete button...
         journ_app_nav.journalist_clicks_delete_selected_link()
         # ... and then confirms the deletion
-        journ_app_nav.nav_helper.safe_click_by_id("delete-selected")
+        journ_app_nav.journalist_confirms_delete_selected()
 
         # Then they see less submissions than before because one was deleted
         def submission_deleted():
@@ -325,8 +325,7 @@ class TestJournalist:
             assert "unread-cb" in classes
 
         # And when the journalist clicks the delete button, it succeeds
-        journ_app_nav.nav_helper.safe_click_all_by_css_selector("[name=doc_names_selected]")
-        journ_app_nav.nav_helper.safe_click_by_css_selector("a#delete-selected-link")
+        journ_app_nav.journalist_clicks_delete_all_and_sees_confirmation()
 
     def test_journalist_uses_index_delete_files_button_modal(
         self, sd_servers_v2_with_submitted_file, firefox_web_driver
