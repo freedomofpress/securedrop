@@ -17,7 +17,6 @@ from encryption import EncryptionManager
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.by import By
-from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.ui import WebDriverWait
 from source_user import _SourceScryptManager
@@ -320,29 +319,6 @@ class JournalistNavigationStepsMixin:
 
         self.wait_for(user_token_added)
 
-    def _admin_deletes_user(self):
-        for i in range(CLICK_ATTEMPTS):
-            try:
-                self.safe_click_by_css_selector(".delete-user a")
-                self.wait_for(
-                    lambda: expected_conditions.element_to_be_clickable((By.ID, "delete-selected"))
-                )
-                self.safe_click_by_id("delete-selected")
-                self.alert_wait()
-                self.alert_accept()
-                break
-            except TimeoutException:
-                # Selenium has failed to click, and the confirmation
-                # alert didn't happen. Try once more.
-                logging.info("Selenium has failed to click yet again; retrying.")
-
-        def user_deleted():
-            if not self.accept_languages:
-                flash_msg = self.driver.find_element_by_css_selector(".flash")
-                assert "Deleted user" in flash_msg.text
-
-        self.wait_for(user_deleted)
-
     def _admin_can_send_test_alert(self):
         alert_button = self.driver.find_element_by_id("test-ossec-alert")
         alert_button.click()
@@ -459,139 +435,6 @@ class JournalistNavigationStepsMixin:
 
         hotp_reset_uid = hotp_reset_button.find_element_by_name("uid")
         assert hotp_reset_uid.is_displayed() is False
-
-    def _admin_editing_invalid_username(self):
-        # Log the new user out
-        self._logout()
-
-        self.wait_for(lambda: self.driver.find_element_by_css_selector(".login-form"))
-
-        self._login_user(self.admin, self.admin_pw, self.admin_user["totp"])
-
-        # Go to the admin interface
-        self.safe_click_by_id("link-admin-index")
-
-        self.wait_for(lambda: self.driver.find_element_by_id("add-user"))
-
-        # Click the "edit user" link for the new user
-        # self._edit_user(self.new_user['username'])
-        selector = 'a.edit-user[data-username="{}"]'.format(self.new_user["username"])
-        new_user_edit_links = self.driver.find_elements_by_css_selector(selector)
-        assert len(new_user_edit_links) == 1
-        new_user_edit_links[0].click()
-
-        def can_edit_user():
-            h = self.driver.find_elements_by_tag_name("h1")[0]
-            assert 'Edit user "{}"'.format(self.new_user["username"]) == h.text
-
-        self.wait_for(can_edit_user)
-
-        new_username = "deleted"
-
-        self.safe_send_keys_by_css_selector('input[name="username"]', Keys.CONTROL + "a")
-        self.safe_send_keys_by_css_selector('input[name="username"]', Keys.DELETE)
-        self.safe_send_keys_by_css_selector('input[name="username"]', new_username)
-        self.safe_click_by_css_selector("button[type=submit]")
-
-        def user_edited():
-            if not self.accept_languages:
-                flash_msg = self.driver.find_element_by_css_selector(".flash")
-                assert "Invalid username" in flash_msg.text
-
-        self.wait_for(user_edited)
-
-    def _admin_can_edit_new_user(self):
-        # Log the new user out
-        self._logout()
-
-        self.wait_for(lambda: self.driver.find_element_by_css_selector(".login-form"))
-
-        self._login_user(self.admin, self.admin_pw, self.admin_user["totp"])
-
-        # Go to the admin interface
-        self.safe_click_by_id("link-admin-index")
-
-        self.wait_for(lambda: self.driver.find_element_by_id("add-user"))
-
-        # Click the "edit user" link for the new user
-        # self._edit_user(self.new_user['username'])
-        selector = 'a.edit-user[data-username="{}"]'.format(self.new_user["username"])
-        new_user_edit_links = self.driver.find_elements_by_css_selector(selector)
-        assert len(new_user_edit_links) == 1
-        new_user_edit_links[0].click()
-
-        def can_edit_user():
-            h = self.driver.find_elements_by_tag_name("h1")[0]
-            assert 'Edit user "{}"'.format(self.new_user["username"]) == h.text
-
-        self.wait_for(can_edit_user)
-
-        new_characters = "2"
-        new_username = self.new_user["username"] + new_characters
-
-        self.safe_send_keys_by_css_selector('input[name="username"]', new_characters)
-        self.safe_click_by_css_selector("button[type=submit]")
-
-        def user_edited():
-            if not self.accept_languages:
-                flash_msg = self.driver.find_element_by_css_selector(".flash")
-                assert "Account updated." in flash_msg.text
-
-        self.wait_for(user_edited)
-
-        def can_edit_user2():
-            assert '"{}"'.format(new_username) in self.driver.page_source
-
-        self.wait_for(can_edit_user2)
-
-        # Update self.new_user with the new username for the future tests
-        self.new_user["username"] = new_username
-
-        # Log the new user in with their new username
-        self._logout()
-
-        self.wait_for(lambda: self.driver.find_element_by_css_selector(".login-form"))
-
-        self._login_user(self.new_user["username"], self.new_user["password"], self.new_totp)
-
-        assert self._is_on_journalist_homepage()
-
-        # Log the admin user back in
-        self._logout()
-
-        self.wait_for(lambda: self.driver.find_element_by_css_selector(".login-form"))
-
-        self._login_user(self.admin, self.admin_pw, self.admin_user["totp"])
-
-        # Go to the admin interface
-        self.safe_click_by_id("link-admin-index")
-
-        self.wait_for(lambda: self.driver.find_element_by_id("add-user"))
-
-        selector = 'a.edit-user[data-username="{}"]'.format(self.new_user["username"])
-        new_user_edit_links = self.driver.find_elements_by_css_selector(selector)
-        assert len(new_user_edit_links) == 1
-        self.safe_click_by_css_selector(selector)
-
-        self.wait_for(can_edit_user)
-
-        new_password = self.driver.find_element_by_css_selector("#password").text.strip()
-        self.new_user["password"] = new_password
-
-        reset_pw_btn = self.driver.find_element_by_css_selector("#reset-password")
-        reset_pw_btn.click()
-
-        def update_password_success():
-            assert "Password updated." in self.driver.page_source
-
-        # Wait until page refreshes to avoid causing a broken pipe error (#623)
-        self.wait_for(update_password_success)
-
-        # Log the new user in with their new password
-        self._logout()
-        self._login_user(self.new_user["username"], self.new_user["password"], self.new_totp)
-
-        assert self._is_on_journalist_homepage()
 
     def _journalist_checks_messages(self):
         self.driver.get(self.journalist_location)
@@ -808,9 +651,6 @@ class JournalistNavigationStepsMixin:
 
         # Run the above step in a retry loop
         self.retry_2fa_pop_ups(_admin_visits_reset_2fa_hotp_step, "reset-two-factor-hotp")
-
-    def _admin_visits_edit_hotp(self):
-        self.wait_for(lambda: self.driver.find_element_by_css_selector('input[name="otp_secret"]'))
 
     def _admin_visits_reset_2fa_totp(self):
         def _admin_visits_reset_2fa_totp_step():

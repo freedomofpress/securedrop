@@ -93,6 +93,7 @@ class SdServersFixtureResult:
     journalist_username: str
     journalist_password: str
     journalist_otp_secret: str
+    journalist_is_admin: bool
 
 
 @contextmanager
@@ -115,10 +116,11 @@ def spawn_sd_servers(
             journalist_password = "correct horse battery staple profanity oil chewy"
             journalist_username = "journalist"
             journalist_otp_secret = "JHCOGO7VCER3EJ4L"
+            journalist_is_admin = True
             journalist = Journalist(
                 username=journalist_username,
                 password=journalist_password,
-                is_admin=True,
+                is_admin=journalist_is_admin,
             )
             journalist.otp_secret = journalist_otp_secret
             db_session_for_sd_servers.add(journalist)
@@ -172,6 +174,7 @@ def spawn_sd_servers(
             journalist_username=journalist_username,
             journalist_password=journalist_password,
             journalist_otp_secret=journalist_otp_secret,
+            journalist_is_admin=journalist_is_admin,
         )
 
     # Clean everything up

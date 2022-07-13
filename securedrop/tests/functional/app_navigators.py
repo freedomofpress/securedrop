@@ -2,12 +2,17 @@ import gzip
 import tempfile
 import time
 from contextlib import contextmanager
-from typing import Dict, Generator, Iterable, List, Optional
+from random import randint
+from typing import Dict, Generator, Iterable, List, Optional, Tuple
 
 import pyotp
 import requests
 from encryption import EncryptionManager
-from selenium.common.exceptions import NoAlertPresentException, WebDriverException
+from selenium.common.exceptions import (
+    NoAlertPresentException,
+    NoSuchElementException,
+    WebDriverException,
+)
 from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.firefox.webdriver import WebDriver
@@ -471,3 +476,98 @@ class JournalistAppNavigator:
         confirm_btn = self.driver.find_element_by_id("delete-selected")
         confirm_btn.location_once_scrolled_into_view
         ActionChains(self.driver).move_to_element(confirm_btn).click().perform()
+
+    def journalist_sees_link_to_admin_page(self) -> bool:
+        try:
+            self.driver.find_element_by_id("link-admin-index")
+            return True
+        except NoSuchElementException:
+            return False
+
+    def admin_visits_admin_interface(self) -> None:
+        self.nav_helper.safe_click_by_id("link-admin-index")
+        self.nav_helper.wait_for(lambda: self.driver.find_element_by_id("add-user"))
+
+    def admin_creates_a_user(
+        self,
+        username: Optional[str] = None,
+        is_admin: bool = False,
+        is_user_creation_expected_to_succeed: bool = True,
+    ) -> Optional[Tuple[str, str, str]]:
+        self.nav_helper.safe_click_by_id("add-user")
+        self.nav_helper.wait_for(lambda: self.driver.find_element_by_id("username"))
+
+        if not self.accept_languages:
+            # The add user page has a form with an "ADD USER" button
+            btns = self.driver.find_elements_by_tag_name("button")
+            assert "ADD USER" in [el.text for el in btns]
+
+        password = self.driver.find_element_by_css_selector("#password").text.strip()
+        if not username:
+            final_username = f"journalist{str(randint(1000, 1000000))}"
+        else:
+            final_username = username
+
+        self._fill_and_submit_user_creation_form(
+            username=final_username,
+            is_admin=is_admin,
+        )
+
+        if not is_user_creation_expected_to_succeed:
+            return None
+
+        self.nav_helper.wait_for(lambda: self.driver.find_element_by_id("check-token"))
+
+        if not self.accept_languages:
+            # Clicking submit on the add user form should redirect to
+            # the FreeOTP page
+            h1s = [h1.text for h1 in self.driver.find_elements_by_tag_name("h1")]
+            assert "Enable FreeOTP" in h1s
+
+        otp_secret = (
+            self.driver.find_element_by_css_selector("#shared-secret").text.strip().replace(" ", "")
+        )
+        totp = pyotp.TOTP(otp_secret)
+
+        self.nav_helper.safe_send_keys_by_css_selector('input[name="token"]', str(totp.now()))
+        self.nav_helper.safe_click_by_css_selector("button[type=submit]")
+
+        # Verify the two-factor authentication
+        def user_token_added():
+            if not self.accept_languages:
+                # Successfully verifying the code should redirect to the admin
+                # interface, and flash a message indicating success
+                flash_msg = self.driver.find_elements_by_css_selector(".flash")
+                expected_msg = (
+                    f'The two-factor code for user "{final_username}"'
+                    f" was verified successfully."
+                )
+                assert expected_msg in [el.text for el in flash_msg]
+
+        self.nav_helper.wait_for(user_token_added)
+        return final_username, password, otp_secret
+
+    def _fill_and_submit_user_creation_form(
+        self, username: str, is_admin: bool, hotp: Optional[str] = None
+    ) -> None:
+        self.nav_helper.safe_send_keys_by_css_selector('input[name="username"]', username)
+
+        if hotp:
+            self.nav_helper.safe_click_all_by_css_selector('input[name="is_hotp"]')
+            self.nav_helper.safe_send_keys_by_css_selector('input[name="otp_secret"]', hotp)
+
+        if is_admin:
+            self.nav_helper.safe_click_by_css_selector('input[name="is_admin"]')
+
+        self.nav_helper.safe_click_by_css_selector("button[type=submit]")
+
+    def journalist_logs_out(self) -> None:
+        # Click the logout link
+        self.nav_helper.safe_click_by_id("link-logout")
+        self.nav_helper.wait_for(lambda: self.driver.find_element_by_css_selector(".login-form"))
+
+        # Logging out should redirect back to the login page
+        def login_page():
+            assert "Login to access the journalist interface" in self.driver.page_source
+
+        self.nav_helper.wait_for(login_page)
