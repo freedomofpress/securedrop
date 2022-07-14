@@ -410,3 +410,17 @@ def test_html_attributes(journalist_app, config):
     )
     html = resp.data.decode("utf-8")
     assert '<html lang="en-US" dir="ltr">' in html
+
+
+def test_same_lang_diff_locale(journalist_app, config):
+    """
+    Verify that when two locales with the same lang are specified, the full locale
+    name is used for both.
+    """
+    del journalist_app
+    config.SUPPORTED_LOCALES = ["en_US", "pt_BR", "pt_PT"]
+    app = journalist_app_module.create_app(config).test_client()
+    resp = app.get("/", follow_redirects=True)
+    html = resp.data.decode("utf-8")
+    assert "português (Brasil)" in html
+    assert "português (Portugal)" in html
