@@ -356,7 +356,10 @@ def _dummy_submission(app):
     """
     return app.post(
         url_for("main.submit"),
-        data=dict(msg="Pay no attention to the man behind the curtain.", fh=(BytesIO(b""), "")),
+        data=dict(
+            msg="Hallo! ö, ü, ä, or ß...Pay no attention to the man behind the curtain.",
+            fh=(BytesIO(b""), ""),
+        ),
         follow_redirects=True,
     )
 
