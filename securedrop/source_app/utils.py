@@ -30,7 +30,7 @@ def codename_detected(message: str, codename: str) -> bool:
     """
     message = message.strip()
 
-    return compare_digest(message.strip(), codename)
+    return compare_digest(message.strip().encode("utf-8"), codename.encode("utf-8"))
 
 
 def flash_msg(
