@@ -1,8 +1,9 @@
 # Changelog
 
-## 2.5.0~rc1
+## 2.4.1~rc1
 
-
+* Bugfix: fixed codename filter bug affecting messages with non-ASCII characters (#6492)
+* Added exclusions for 2 irrelevant safety db entries (#6473, #6477) 
 
 ## 2.4.0
 
