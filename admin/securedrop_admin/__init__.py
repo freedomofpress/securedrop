@@ -63,6 +63,9 @@ EXIT_INTERRUPT = 2
 MAX_NAMESERVERS = 3
 LIST_SPLIT_RE = re.compile(r"\s*,\s*|\s+")
 
+I18N_CONF = "securedrop/i18n.json"
+I18N_DEFAULT_LOCALES = {"en_US"}
+
 
 class FingerprintException(Exception):
     pass
@@ -204,24 +207,27 @@ class SiteConfig:
             self.translation_dir = os.path.realpath(os.path.join(appdir, "translations"))
 
         def get_translations(self) -> Set[str]:
-            translations = set(["en_US"])
+            translations = I18N_DEFAULT_LOCALES
             for dirname in os.listdir(self.translation_dir):
                 if dirname != "messages.pot":
                     translations.add(dirname)
             return translations
 
     class ValidateLocales(Validator):
-        def __init__(self, basedir: str) -> None:
-            self.basedir = basedir
+        def __init__(self, basedir: str, supported: Set[str]) -> None:
+            present = SiteConfig.Locales(basedir).get_translations()
+            self.available = present & supported
+
             super(SiteConfig.ValidateLocales, self).__init__()
 
         def validate(self, document: Document) -> bool:
             desired = document.text.split()
-            existing = SiteConfig.Locales(self.basedir).get_translations()
-            missing = set(desired) - set(existing)
+            missing = set(desired) - self.available
             if not missing:
                 return True
-            raise ValidationError(message="The following locales do not exist " + " ".join(missing))
+            raise ValidationError(
+                message="The following locales are not available " + " ".join(missing)
+            )
 
     class ValidateOSSECUsername(Validator):
         def validate(self, document: Document) -> bool:
@@ -268,8 +274,14 @@ class SiteConfig:
         # Hold runtime configuration before save, to support
         # referencing other responses during validation
         self._config_in_progress = {}  # type: Dict
-        translations = SiteConfig.Locales(self.args.app_path).get_translations()
-        translations_as_str = " ".join(translations)
+
+        supported_locales = I18N_DEFAULT_LOCALES.copy()
+        i18n_conf_path = os.path.join(args.root, I18N_CONF)
+        if os.path.exists(i18n_conf_path):
+            with open(i18n_conf_path) as i18n_conf_file:
+                i18n_conf = json.load(i18n_conf_file)
+            supported_locales.update(set(i18n_conf["supported_locales"].keys()))
+        locale_validator = SiteConfig.ValidateLocales(self.args.app_path, supported_locales)
 
         self.desc = [
             (
@@ -503,8 +515,8 @@ class SiteConfig:
                 [],
                 list,
                 "Space separated list of additional locales to support "
-                "(" + translations_as_str + ")",
-                SiteConfig.ValidateLocales(self.args.app_path),
+                "(" + " ".join(sorted(list(locale_validator.available))) + ")",
+                locale_validator,
                 str.split,
                 lambda config: True,
             ),
