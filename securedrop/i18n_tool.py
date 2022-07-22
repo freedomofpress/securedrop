@@ -4,6 +4,7 @@
 import argparse
 import glob
 import io
+import json
 import logging
 import os
 import re
@@ -21,6 +22,8 @@ from sh import git, msgfmt, msgmerge, pybabel, sed, xgettext
 logging.basicConfig(format="%(asctime)s %(levelname)s %(message)s")
 log = logging.getLogger(__name__)
 
+I18N_CONF = os.path.join(os.path.dirname(__file__), "i18n.json")
+
 
 class I18NTool:
     #
@@ -33,92 +36,9 @@ class I18NTool:
     #       display in the interface.
     # desktop: The language code used for dekstop icons.
     #
-    supported_languages = {
-        "ar": {
-            "name": "Arabic",
-            "desktop": "ar",
-        },
-        "ca": {
-            "name": "Catalan",
-            "desktop": "ca",
-        },
-        "cs": {
-            "name": "Czech",
-            "desktop": "cs",
-        },
-        "de_DE": {
-            "name": "German",
-            "desktop": "de_DE",
-        },
-        "el": {
-            "name": "Greek",
-            "desktop": "el",
-        },
-        "es_ES": {
-            "name": "Spanish",
-            "desktop": "es_ES",
-        },
-        "fr_FR": {
-            "name": "French",
-            "desktop": "fr",
-        },
-        "hi": {
-            "name": "Hindi",
-            "desktop": "hi",
-        },
-        "is": {
-            "name": "Icelandic",
-            "desktop": "is",
-        },
-        "it_IT": {
-            "name": "Italian",
-            "desktop": "it",
-        },
-        "nb_NO": {
-            "name": "Norwegian",
-            "desktop": "nb_NO",
-        },
-        "nl": {
-            "name": "Dutch",
-            "desktop": "nl",
-        },
-        "pt_BR": {
-            "name": "Portuguese, Brasil",
-            "desktop": "pt_BR",
-        },
-        "pt_PT": {
-            "name": "Portuguese, Portugal",
-            "desktop": "pt_PT",
-        },
-        "ro": {
-            "name": "Romanian",
-            "desktop": "ro",
-        },
-        "ru": {
-            "name": "Russian",
-            "desktop": "ru",
-        },
-        "sk": {
-            "name": "Slovak",
-            "desktop": "sk",
-        },
-        "sv": {
-            "name": "Swedish",
-            "desktop": "sv",
-        },
-        "tr": {
-            "name": "Turkish",
-            "desktop": "tr",
-        },
-        "zh_Hans": {
-            "name": "Chinese, Simplified",
-            "desktop": "zh_Hans",
-        },
-        "zh_Hant": {
-            "name": "Chinese, Traditional",
-            "desktop": "zh_Hant",
-        },
-    }
+    with open(I18N_CONF) as i18n_conf:
+        conf = json.load(i18n_conf)
+    supported_languages = conf["supported_locales"]
     release_tag_re = re.compile(r"^\d+\.\d+\.\d+$")
     translated_commit_re = re.compile("Translated using Weblate")
     updated_commit_re = re.compile(r"(?:updated from|  (?:revision|commit):) (\w+)")
