@@ -4,6 +4,16 @@
 
 
 
+## 2.4.1
+
+### Web Applications
+
+* Bugfix: fixed codename filter bug affecting messages with non-ASCII characters (#6492)
+
+### CI
+
+* Added exclusions for 2 irrelevant safety db entries (#6473, #6477) 
+
 ## 2.4.0
 
 ### Web Applications
