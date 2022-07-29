@@ -20,6 +20,7 @@ import tests.functional.pageslayout.functional_test as pft
 from tests.functional import journalist_navigation_steps
 
 
+# TODO(AD): Some tests here are duplicate from TestAdminInterface; they should be combined
 @pytest.mark.pagelayout
 class TestJournalistLayoutAdmin(
     pft.FunctionalTest, journalist_navigation_steps.JournalistNavigationStepsMixin
