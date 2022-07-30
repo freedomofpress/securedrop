@@ -315,7 +315,13 @@ class JournalistAppNavigator:
             lambda: self.driver.find_element_by_css_selector("div.journalist-view-all")
         )
 
-    def journalist_logs_in(self, username: str, password: str, otp_secret: str) -> None:
+    def journalist_logs_in(
+        self,
+        username: str,
+        password: str,
+        otp_secret: str,
+        is_login_expected_to_succeed: bool = True,
+    ) -> None:
         # Submit the login form
         self.driver.get(f"{self._journalist_app_base_url}/login")
         self.nav_helper.safe_send_keys_by_css_selector('input[name="username"]', username)
@@ -323,6 +329,9 @@ class JournalistAppNavigator:
         otp = pyotp.TOTP(otp_secret)
         self.nav_helper.safe_send_keys_by_css_selector('input[name="token"]', str(otp.now()))
         self.nav_helper.safe_click_by_css_selector('button[type="submit"]')
+
+        if not is_login_expected_to_succeed:
+            return
 
         # Successful login should redirect to the index
         self.nav_helper.wait_for(lambda: self.driver.find_element_by_id("link-logout"))
@@ -401,12 +410,14 @@ class JournalistAppNavigator:
     def journalist_selects_the_first_source(self) -> None:
         self.driver.find_element_by_css_selector("#un-starred-source-link-1").click()
 
-    def journalist_sends_reply_to_source(
-        self, reply_content: str = "Thanks for the documents. Can you submit more? éè"
-    ) -> None:
+    def journalist_composes_reply_to_source(self, reply_content: str) -> None:
         self.nav_helper.wait_for(lambda: self.driver.find_element_by_id("reply-text-field"))
         self.nav_helper.safe_send_keys_by_id("reply-text-field", reply_content)
 
+    def journalist_sends_reply_to_source(
+        self, reply_content: str = "Thanks for the documents. Can you submit more? éè"
+    ) -> None:
+        self.journalist_composes_reply_to_source(reply_content=reply_content)
         self.driver.find_element_by_id("reply-button").click()
 
         def reply_stored() -> None:
@@ -582,3 +593,6 @@ class JournalistAppNavigator:
             assert self.driver.find_element_by_id("test-ossec-alert")
 
         self.nav_helper.wait_for(config_page_loaded)
+
+    def journalist_visits_edit_account(self):
+        self.nav_helper.safe_click_by_id("link-edit-account")
