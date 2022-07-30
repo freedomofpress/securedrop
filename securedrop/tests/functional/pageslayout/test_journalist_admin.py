@@ -90,6 +90,7 @@ class TestJournalistLayoutAdmin(
         self._screenshot("journalist-admin_new_user_two_factor_totp.png")
         self._save_html("journalist-admin_new_user_two_factor_totp.html")
 
+    # TODO(AD): Merge this test with TestAdminInterfaceEditConfig.test_admin_updates_image()
     def test_admin_changes_logo(self):
         self._admin_logs_in()
         self._admin_visits_admin_interface()
@@ -100,6 +101,7 @@ class TestJournalistLayoutAdmin(
         self._screenshot("journalist-admin_changes_logo_image.png")
         self._save_html("journalist-admin_changes_logo_image.html")
 
+    # TODO(AD): Merge this test with TestAdminInterfaceEditConfig.test_ossec_alert_button()
     def test_admin_uses_ossec_alert_button(self):
         self._admin_logs_in()
         self._admin_visits_admin_interface()

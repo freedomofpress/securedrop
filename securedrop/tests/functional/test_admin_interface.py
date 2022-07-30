@@ -6,15 +6,13 @@ from uuid import uuid4
 
 import pytest
 from models import Journalist
-from selenium.common.exceptions import TimeoutException
+from selenium.common.exceptions import NoSuchElementException, TimeoutException
 from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.firefox.webdriver import WebDriver
 from selenium.webdriver.support import expected_conditions
-from tests.functional import functional_test as ft
-from tests.functional import journalist_navigation_steps, source_navigation_steps
-from tests.functional.app_navigators import JournalistAppNavigator
+from tests.functional.app_navigators import JournalistAppNavigator, SourceAppNagivator
 from tests.functional.conftest import SdServersFixtureResult, spawn_sd_servers
 from tests.functional.db_session import get_database_session
 from tests.functional.factories import SecureDropConfigFactory
@@ -465,55 +463,224 @@ class TestAdminInterfaceEditAndDeleteUser:
         journ_app_nav.nav_helper.wait_for(user_deleted)
 
 
-# TODO(AD): Will be refactored in my next PR
-class TestAdminInterfaceEditConfig(
-    ft.FunctionalTest,
-    journalist_navigation_steps.JournalistNavigationStepsMixin,
-    source_navigation_steps.SourceNavigationStepsMixin,
-):
-    def test_admin_updates_image(self):
-        self._admin_logs_in()
-        self._admin_visits_admin_interface()
-        self._admin_visits_system_config_page()
-        self._admin_updates_logo_image()
+class TestAdminInterfaceEditConfig:
+    def test_admin_updates_image(self, sd_servers_v2_with_clean_state, firefox_web_driver):
+        # Given an SD server
+        # And a journalist logged into the journalist interface as an admin
+        journ_app_nav = JournalistAppNavigator(
+            journalist_app_base_url=sd_servers_v2_with_clean_state.journalist_app_base_url,
+            web_driver=firefox_web_driver,
+        )
+        assert sd_servers_v2_with_clean_state.journalist_is_admin
+        journ_app_nav.journalist_logs_in(
+            username=sd_servers_v2_with_clean_state.journalist_username,
+            password=sd_servers_v2_with_clean_state.journalist_password,
+            otp_secret=sd_servers_v2_with_clean_state.journalist_otp_secret,
+        )
 
-    def test_ossec_alert_button(self):
-        self._admin_logs_in()
-        self._admin_visits_admin_interface()
-        self._admin_visits_system_config_page()
-        self._admin_can_send_test_alert()
+        # And they go to the admin config page
+        journ_app_nav.admin_visits_admin_interface()
+        journ_app_nav.admin_visits_system_config_page()
 
-    def test_disallow_file_submission(self):
-        self._admin_logs_in()
-        self._admin_visits_admin_interface()
-        self._admin_visits_system_config_page()
-        self._admin_disallows_document_uploads()
+        # When they try to upload a new logo
+        logo_path = Path(__file__).absolute().parent / ".." / ".." / "static" / "i" / "logo.png"
+        assert logo_path.is_file()
+        journ_app_nav.nav_helper.safe_send_keys_by_id("logo-upload", str(logo_path))
+        journ_app_nav.nav_helper.safe_click_by_id("submit-logo-update")
 
-        self._source_visits_source_homepage()
-        self._source_chooses_to_submit_documents()
-        self._source_continues_to_submit_page(files_allowed=False)
-        self._source_does_not_sees_document_attachment_item()
+        # Then it succeeds
+        def updated_image():
+            # TODO(AD): Un-comment the next line when moving this test to the admin layout tests
+            #  if not self.accept_languages:
+            flash_msg = journ_app_nav.driver.find_element_by_css_selector(".flash")
+            assert "Image updated." in flash_msg.text
 
-    def test_allow_file_submission(self):
-        self._admin_logs_in()
-        self._admin_visits_admin_interface()
-        self._admin_visits_system_config_page()
-        self._admin_disallows_document_uploads()
-        self._admin_allows_document_uploads()
+        journ_app_nav.nav_helper.wait_for(updated_image, timeout=20)
 
-        self._source_visits_source_homepage()
-        self._source_chooses_to_submit_documents()
-        self._source_continues_to_submit_page()
-        self._source_sees_document_attachment_item()
+    def test_ossec_alert_button(self, sd_servers_v2_with_clean_state, firefox_web_driver):
+        # Given an SD server
+        # And a journalist logged into the journalist interface as an admin
+        journ_app_nav = JournalistAppNavigator(
+            journalist_app_base_url=sd_servers_v2_with_clean_state.journalist_app_base_url,
+            web_driver=firefox_web_driver,
+        )
+        assert sd_servers_v2_with_clean_state.journalist_is_admin
+        journ_app_nav.journalist_logs_in(
+            username=sd_servers_v2_with_clean_state.journalist_username,
+            password=sd_servers_v2_with_clean_state.journalist_password,
+            otp_secret=sd_servers_v2_with_clean_state.journalist_otp_secret,
+        )
 
-    def test_orgname_is_changed(self):
-        self._admin_logs_in()
-        self._admin_visits_admin_interface()
-        self._admin_visits_system_config_page()
-        self._admin_sets_organization_name()
+        # And they go to the admin config page
+        journ_app_nav.admin_visits_admin_interface()
+        journ_app_nav.admin_visits_system_config_page()
 
-        self._source_visits_source_homepage()
-        self._source_sees_orgname(name=self.orgname_new)
-        self._source_chooses_to_submit_documents()
-        self._source_continues_to_submit_page()
-        self._source_sees_orgname(name=self.orgname_new)
+        # When they try to send an OSSEC alert
+        alert_button = journ_app_nav.driver.find_element_by_id("test-ossec-alert")
+        alert_button.click()
+
+        # Then it succeeds
+        def test_alert_sent():
+            # TODO(AD): Un-comment the next line when moving this test to the admin layout tests
+            #  if not self.accept_languages:
+            flash_msg = journ_app_nav.driver.find_element_by_css_selector(".flash")
+            assert "Test alert sent. Please check your email." in flash_msg.text
+
+        journ_app_nav.nav_helper.wait_for(test_alert_sent)
+
+    def test_disallow_file_submission(
+        self, sd_servers_v2_with_clean_state, firefox_web_driver, tor_browser_web_driver
+    ):
+        # Given an SD server
+        # And a journalist logged into the journalist interface as an admin
+        journ_app_nav = JournalistAppNavigator(
+            journalist_app_base_url=sd_servers_v2_with_clean_state.journalist_app_base_url,
+            web_driver=firefox_web_driver,
+        )
+        assert sd_servers_v2_with_clean_state.journalist_is_admin
+        journ_app_nav.journalist_logs_in(
+            username=sd_servers_v2_with_clean_state.journalist_username,
+            password=sd_servers_v2_with_clean_state.journalist_password,
+            otp_secret=sd_servers_v2_with_clean_state.journalist_otp_secret,
+        )
+
+        # And they go to the admin config page
+        journ_app_nav.admin_visits_admin_interface()
+        journ_app_nav.admin_visits_system_config_page()
+
+        # When they disallow file uploads, then it succeeds
+        self._admin_updates_document_upload_instance_setting(
+            instance_should_allow_file_uploads=False,
+            journ_app_nav=journ_app_nav,
+        )
+
+        # And then, when a source user tries to upload a file
+        source_app_nav = SourceAppNagivator(
+            source_app_base_url=sd_servers_v2_with_clean_state.source_app_base_url,
+            web_driver=tor_browser_web_driver,
+        )
+        source_app_nav.source_visits_source_homepage()
+        source_app_nav.source_clicks_submit_documents_on_homepage()
+        source_app_nav.source_continues_to_submit_page()
+
+        # Then they don't see the option to upload a file because uploads were disallowed
+        with pytest.raises(NoSuchElementException):
+            source_app_nav.driver.find_element_by_class_name("attachment")
+
+    @classmethod
+    def _admin_updates_document_upload_instance_setting(
+        cls,
+        instance_should_allow_file_uploads: bool,
+        journ_app_nav: JournalistAppNavigator,
+    ) -> None:
+        # Retrieve the instance's current upload setting
+        upload_element_id = "prevent_document_uploads"
+        instance_currently_allows_file_uploads = not journ_app_nav.driver.find_element_by_id(
+            upload_element_id
+        ).is_selected()
+
+        # Ensure the new setting is different from the existing setting
+        assert instance_currently_allows_file_uploads != instance_should_allow_file_uploads
+
+        # Update the instance's upload setting
+        journ_app_nav.nav_helper.safe_click_by_id(upload_element_id)
+        journ_app_nav.nav_helper.safe_click_by_id("submit-submission-preferences")
+        cls._admin_submits_instance_settings_form(journ_app_nav)
+
+    @staticmethod
+    def _admin_submits_instance_settings_form(journ_app_nav: JournalistAppNavigator) -> None:
+        def preferences_saved():
+            flash_msg = journ_app_nav.driver.find_element_by_css_selector(".flash")
+            assert "Preferences saved." in flash_msg.text
+
+        journ_app_nav.nav_helper.wait_for(preferences_saved, timeout=20)
+
+    def test_allow_file_submission(
+        self, sd_servers_v2_with_clean_state, firefox_web_driver, tor_browser_web_driver
+    ):
+        # Given an SD server
+        # And a journalist logged into the journalist interface as an admin
+        journ_app_nav = JournalistAppNavigator(
+            journalist_app_base_url=sd_servers_v2_with_clean_state.journalist_app_base_url,
+            web_driver=firefox_web_driver,
+        )
+        assert sd_servers_v2_with_clean_state.journalist_is_admin
+        journ_app_nav.journalist_logs_in(
+            username=sd_servers_v2_with_clean_state.journalist_username,
+            password=sd_servers_v2_with_clean_state.journalist_password,
+            otp_secret=sd_servers_v2_with_clean_state.journalist_otp_secret,
+        )
+
+        # And they go to the admin config page
+        journ_app_nav.admin_visits_admin_interface()
+        journ_app_nav.admin_visits_system_config_page()
+
+        # And the instance is configured to disallow file uploads
+        self._admin_updates_document_upload_instance_setting(
+            instance_should_allow_file_uploads=False,
+            journ_app_nav=journ_app_nav,
+        )
+
+        # When they re-allow file uploads, then it succeeds
+        self._admin_updates_document_upload_instance_setting(
+            instance_should_allow_file_uploads=True,
+            journ_app_nav=journ_app_nav,
+        )
+
+        # And then, when a source user tries to upload a file
+        source_app_nav = SourceAppNagivator(
+            source_app_base_url=sd_servers_v2_with_clean_state.source_app_base_url,
+            web_driver=tor_browser_web_driver,
+        )
+        source_app_nav.source_visits_source_homepage()
+        source_app_nav.source_clicks_submit_documents_on_homepage()
+        source_app_nav.source_continues_to_submit_page()
+
+        # Then they see the option to upload a file because uploads were allowed
+        assert source_app_nav.driver.find_element_by_class_name("attachment")
+
+    def test_orgname_is_changed(
+        self, sd_servers_v2_with_clean_state, firefox_web_driver, tor_browser_web_driver
+    ):
+        # Given an SD server
+        # And a journalist logged into the journalist interface as an admin
+        journ_app_nav = JournalistAppNavigator(
+            journalist_app_base_url=sd_servers_v2_with_clean_state.journalist_app_base_url,
+            web_driver=firefox_web_driver,
+        )
+        assert sd_servers_v2_with_clean_state.journalist_is_admin
+        journ_app_nav.journalist_logs_in(
+            username=sd_servers_v2_with_clean_state.journalist_username,
+            password=sd_servers_v2_with_clean_state.journalist_password,
+            otp_secret=sd_servers_v2_with_clean_state.journalist_otp_secret,
+        )
+
+        # And they go to the admin config page
+        journ_app_nav.admin_visits_admin_interface()
+        journ_app_nav.admin_visits_system_config_page()
+
+        # When they update the organization's name
+        assert "SecureDrop" == journ_app_nav.driver.title
+        journ_app_nav.driver.find_element_by_id("organization_name").clear()
+        new_org_name = "Walden Inquirer"
+        journ_app_nav.nav_helper.safe_send_keys_by_id("organization_name", new_org_name)
+        journ_app_nav.nav_helper.safe_click_by_id("submit-update-org-name")
+        self._admin_submits_instance_settings_form(journ_app_nav)
+
+        # Then it succeeds
+        assert new_org_name == journ_app_nav.driver.title
+
+        # And then, when a source user logs into the source app
+        source_app_nav = SourceAppNagivator(
+            source_app_base_url=sd_servers_v2_with_clean_state.source_app_base_url,
+            web_driver=tor_browser_web_driver,
+        )
+
+        # THey see the new organization name in the homepage
+        source_app_nav.source_visits_source_homepage()
+        assert new_org_name in source_app_nav.driver.title
+
+        # And in the submission page
+        source_app_nav.source_clicks_submit_documents_on_homepage()
+        source_app_nav.source_continues_to_submit_page()
+        assert new_org_name in source_app_nav.driver.title

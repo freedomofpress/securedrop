@@ -212,7 +212,10 @@ class SourceAppNagivator:
         def submit_page_loaded() -> None:
             if not self.accept_languages:
                 headline = self.driver.find_element_by_id("submit-heading")
-                assert "Submit Files or Messages" == headline.text
+                # Message will either be "Submit Messages" or "Submit Files or Messages" depending
+                #  on whether file uploads are allowed by the instance's config
+                assert "Submit" in headline.text
+                assert "Messages" in headline.text
 
         self.nav_helper.wait_for(submit_page_loaded)
 
@@ -571,3 +574,11 @@ class JournalistAppNavigator:
             assert "Login to access the journalist interface" in self.driver.page_source
 
         self.nav_helper.wait_for(login_page)
+
+    def admin_visits_system_config_page(self):
+        self.nav_helper.safe_click_by_id("update-instance-config")
+
+        def config_page_loaded():
+            assert self.driver.find_element_by_id("test-ossec-alert")
+
+        self.nav_helper.wait_for(config_page_loaded)
