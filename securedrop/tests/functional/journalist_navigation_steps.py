@@ -13,15 +13,9 @@ import pytest
 import requests
 
 # Number of times to try flaky clicks.
-from encryption import EncryptionManager
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
 from selenium.webdriver.common.action_chains import ActionChains
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support import expected_conditions
-from selenium.webdriver.support.ui import WebDriverWait
-from source_user import _SourceScryptManager
 from tests.functional.tor_utils import proxies_for_url
-from tests.test_encryption import import_journalist_private_key
 
 CLICK_ATTEMPTS = 15
 
@@ -115,40 +109,6 @@ class JournalistNavigationStepsMixin:
         self.user_pw = self.admin_user["password"]
         self._login_user(self.user, self.user_pw, self.admin_user["totp"])
         assert self._is_on_journalist_homepage()
-
-    def _journalist_visits_col(self):
-        self.wait_for(lambda: self.driver.find_element_by_css_selector("table#collections"))
-
-        self.safe_click_by_id("un-starred-source-link-1")
-
-        self.wait_for(lambda: self.driver.find_element_by_css_selector("table#submissions"))
-
-    def _journalist_selects_first_doc(self):
-        self.safe_click_by_css_selector('input[type="checkbox"][name="doc_names_selected"]')
-
-        self.wait_for(
-            lambda: expected_conditions.element_located_to_be_selected(
-                (By.CSS_SELECTOR, 'input[type="checkbox"][name="doc_names_selected"]')
-            )
-        )
-
-        assert self.driver.find_element_by_css_selector(
-            'input[type="checkbox"][name="doc_names_selected"]'
-        ).is_selected()
-
-    def _journalist_clicks_on_modal(self, click_id):
-        self.safe_click_by_id(click_id)
-
-    def _journalist_clicks_delete_collections_cancel_on_modal(self):
-        self._journalist_clicks_on_modal("cancel-collections-deletions")
-
-    def _journalist_clicks_delete_link(self, click_id, displayed_id):
-        self.safe_click_by_id(click_id)
-        self.wait_for(lambda: self.driver.find_element_by_id(displayed_id))
-
-    def _journalist_clicks_delete_selected_link(self):
-        self.safe_click_by_css_selector("a#delete-selected-link")
-        self.wait_for(lambda: self.driver.find_element_by_id("delete-selected-confirmation-modal"))
 
     def _admin_logs_in(self):
         self.admin = self.admin_user["name"]
@@ -401,82 +361,6 @@ class JournalistNavigationStepsMixin:
         hotp_reset_uid = hotp_reset_button.find_element_by_name("uid")
         assert hotp_reset_uid.is_displayed() is False
 
-    def _journalist_checks_messages(self):
-        self.driver.get(self.journalist_location)
-
-        # There should be 1 collection in the list of collections
-        code_names = self.driver.find_elements_by_class_name("code-name")
-        assert 0 != len(code_names), code_names
-        assert 1 <= len(code_names), code_names
-
-        if not self.accept_languages:
-            # There should be a "1 unread" span in the sole collection entry
-            unread_span = self.driver.find_element_by_css_selector("tr.unread")
-            assert "1 unread" in unread_span.text
-
-    def _journalist_stars_and_unstars_single_message(self):
-        # Message begins unstarred
-        with pytest.raises(NoSuchElementException):
-            self.driver.find_element_by_id("starred-source-link-1")
-
-        # Journalist stars the message
-        self.driver.find_element_by_class_name("button-star").click()
-
-        def message_starred():
-            starred = self.driver.find_elements_by_id("starred-source-link-1")
-            assert 1 == len(starred)
-
-        self.wait_for(message_starred)
-
-        # Journalist unstars the message
-        self.driver.find_element_by_class_name("button-star").click()
-
-        def message_unstarred():
-            with pytest.raises(NoSuchElementException):
-                self.driver.find_element_by_id("starred-source-link-1")
-
-        self.wait_for(message_unstarred)
-
-    def _journalist_selects_the_first_source(self):
-        self.driver.find_element_by_css_selector("#un-starred-source-link-1").click()
-
-    def _journalist_selects_all_documents(self):
-        checkboxes = self.driver.find_elements_by_name("doc_names_selected")
-        for checkbox in checkboxes:
-            checkbox.click()
-
-    def _journalist_downloads_message(self):
-        self._journalist_selects_the_first_source()
-
-        self.wait_for(lambda: self.driver.find_element_by_css_selector("table#submissions"))
-
-        submissions = self.driver.find_elements_by_css_selector("#submissions a")
-        assert 1 == len(submissions)
-
-        file_url = submissions[0].get_attribute("href")
-
-        # Downloading files with Selenium is tricky because it cannot automate
-        # the browser's file download dialog. We can directly request the file
-        # using requests, but we need to pass the cookies for logged in user
-        # for Flask to allow this.
-        def cookie_string_from_selenium_cookies(cookies):
-            result = {}
-            for cookie in cookies:
-                result[cookie["name"]] = cookie["value"]
-            return result
-
-        cks = cookie_string_from_selenium_cookies(self.driver.get_cookies())
-        raw_content = self.return_downloaded_content(file_url, cks)
-
-        encryption_mgr = EncryptionManager.get_default()
-        with import_journalist_private_key(encryption_mgr):
-            decrypted_submission = encryption_mgr._gpg.decrypt(raw_content)
-        submission = self._get_submission_content(file_url, decrypted_submission)
-        if type(submission) == bytes:
-            submission = submission.decode("utf-8")
-
-        assert self.secret_message == submission
-
     def _visit_edit_account(self):
         self.safe_click_by_id("link-edit-account")
 
@@ -644,44 +528,6 @@ class JournalistNavigationStepsMixin:
             is_admin=False,
             hotp=hotp,
         )
-
-    def _journalist_delete_all(self):
-        for checkbox in self.driver.find_elements_by_name("doc_names_selected"):
-            checkbox.click()
-
-        delete_selected_link = self.driver.find_element_by_id("delete-selected-link")
-        ActionChains(self.driver).move_to_element(delete_selected_link).click().perform()
-
-    def _journalist_confirm_delete_selected(self):
-        self.wait_for(
-            lambda: expected_conditions.element_to_be_clickable((By.ID, "delete-selected"))
-        )
-        confirm_btn = self.driver.find_element_by_id("delete-selected")
-        confirm_btn.location_once_scrolled_into_view
-        ActionChains(self.driver).move_to_element(confirm_btn).click().perform()
-
-    def _source_delete_key(self):
-        filesystem_id = _SourceScryptManager.get_default().derive_source_filesystem_id(
-            self.source_name
-        )
-        EncryptionManager.get_default().delete_source_key_pair(filesystem_id)
-
-    def _journalist_continues_after_flagging(self):
-        self.wait_for(lambda: self.driver.find_element_by_id("continue-to-list"))
-        continue_link = self.driver.find_element_by_id("continue-to-list")
-
-        actions = ActionChains(self.driver)
-        actions.move_to_element(continue_link).perform()
-        continue_link.click()
-
-    def _journalist_delete_one(self):
-        self.safe_click_by_css_selector("[name=doc_names_selected]")
-
-        el = WebDriverWait(self.driver, self.timeout, self.poll_frequency).until(
-            expected_conditions.element_to_be_clickable((By.ID, "delete-selected-link"))
-        )
-        el.location_once_scrolled_into_view
-        ActionChains(self.driver).move_to_element(el).click().perform()
 
     def _admin_enters_journalist_account_details_hotp(self, username, hotp_secret):
         self.safe_send_keys_by_css_selector('input[name="username"]', username)

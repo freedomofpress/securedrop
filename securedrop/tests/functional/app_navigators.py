@@ -156,7 +156,6 @@ class _NavigationHelper:
         )
 
 
-# TODO(AD): This is intended to eventually replace the SourceNavigationStepsMixin
 class SourceAppNagivator:
     def __init__(
         self,

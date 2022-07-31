@@ -25,7 +25,7 @@ from selenium.webdriver.common.keys import Keys
 from tests.functional.app_navigators import JournalistAppNavigator
 from tests.functional.conftest import (
     SdServersFixtureResult,
-    _create_source_and_submission,
+    create_source_and_submission,
     spawn_sd_servers,
 )
 from tests.functional.factories import SecureDropConfigFactory
@@ -397,7 +397,7 @@ def _sd_servers_v2_with_missing_file(
 
 
 def _create_submission_with_missing_file(config_in_use: SecureDropConfig) -> None:
-    submission_file_path = _create_source_and_submission(config_in_use)
+    _, submission_file_path = create_source_and_submission(config_in_use)
     submission_file_path.unlink()
 
 

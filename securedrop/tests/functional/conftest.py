@@ -13,6 +13,7 @@ import pytest
 import requests
 from models import Journalist
 from selenium.webdriver.firefox.webdriver import WebDriver
+from source_user import SourceUser
 from tests.functional.db_session import get_database_session
 from tests.functional.factories import SecureDropConfigFactory
 from tests.functional.sd_config_v2 import SecureDropConfig
@@ -217,7 +218,7 @@ def sd_servers_v2(
 def sd_servers_v2_with_clean_state(
     setup_journalist_key_and_gpg_folder: Tuple[str, Path]
 ) -> Generator[SdServersFixtureResult, None, None]:
-    """Sams as sd_servers_v2 but spawns the apps with a clean state.
+    """Same as sd_servers_v2 but spawns the apps with a clean state.
 
     Slower than sd_servers_v2 as it is function-scoped.
     """
@@ -239,7 +240,7 @@ def sd_servers_v2_with_clean_state(
 def sd_servers_v2_with_submitted_file(
     setup_journalist_key_and_gpg_folder: Tuple[str, Path]
 ) -> Generator[SdServersFixtureResult, None, None]:
-    """Sams as sd_servers_v2 but spawns the apps with an already-submitted source file.
+    """Same as sd_servers_v2 but spawns the apps with an already-submitted source file.
 
     Slower than sd_servers_v2 as it is function-scoped.
     """
@@ -254,12 +255,12 @@ def sd_servers_v2_with_submitted_file(
 
     # Spawn the apps in separate processes with a callback to create a submission
     with spawn_sd_servers(
-        config_to_use=default_config, journalist_app_setup_callback=_create_source_and_submission
+        config_to_use=default_config, journalist_app_setup_callback=create_source_and_submission
     ) as sd_servers_result:
         yield sd_servers_result
 
 
-def _create_source_and_submission(config_in_use: SecureDropConfig) -> Path:
+def create_source_and_submission(config_in_use: SecureDropConfig) -> Tuple[SourceUser, Path]:
     """Directly create a source and a submission within the app.
 
     Some tests for the journalist app require a submission to already be present, and this
@@ -311,4 +312,4 @@ def _create_source_and_submission(config_in_use: SecureDropConfig) -> Path:
             file_path=submission_file_path,
         )
 
-        return Path(submission_file_path)
+        return source_user, Path(submission_file_path)

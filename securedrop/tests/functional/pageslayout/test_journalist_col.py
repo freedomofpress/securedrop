@@ -15,60 +15,113 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
+from pathlib import Path
+from typing import Generator, Tuple
+from uuid import uuid4
+
 import pytest
-import tests.functional.pageslayout.functional_test as pft
-from tests.functional import journalist_navigation_steps, source_navigation_steps
+from tests.functional.app_navigators import JournalistAppNavigator
+from tests.functional.conftest import SdServersFixtureResult, spawn_sd_servers
+from tests.functional.factories import SecureDropConfigFactory
+from tests.functional.pageslayout.functional_test import list_locales
+from tests.functional.pageslayout.screenshot_utils import save_screenshot_and_html
+from tests.functional.sd_config_v2 import SecureDropConfig
 
 
+def _create_source_and_submission_and_delete_source_key(config_in_use: SecureDropConfig) -> None:
+    # This function will be called in a separate Process that runs the app
+    # Hence the late imports
+    from encryption import EncryptionManager
+    from tests.functional.conftest import create_source_and_submission
+
+    source_user, _ = create_source_and_submission(config_in_use)
+    EncryptionManager.get_default().delete_source_key_pair(source_user.filesystem_id)
+
+
+@pytest.fixture(scope="function")
+def _sd_servers_v2_with_deleted_source_key(
+    setup_journalist_key_and_gpg_folder: Tuple[str, Path]
+) -> Generator[SdServersFixtureResult, None, None]:
+    """Same as sd_servers_v2 but spawns the apps with a source whose key was deleted.
+
+    Slower than sd_servers_v2 as it is function-scoped.
+    """
+    default_config = SecureDropConfigFactory.create(
+        SECUREDROP_DATA_ROOT=Path(f"/tmp/sd-tests/functional-with-deleted-source-key-{uuid4()}"),
+    )
+
+    # Ensure the GPG settings match the one in the config to use, to ensure consistency
+    journalist_key_fingerprint, gpg_dir = setup_journalist_key_and_gpg_folder
+    assert Path(default_config.GPG_KEY_DIR) == gpg_dir
+    assert default_config.JOURNALIST_KEY == journalist_key_fingerprint
+
+    # Spawn the apps in separate processes with a callback to create a submission
+    with spawn_sd_servers(
+        config_to_use=default_config,
+        journalist_app_setup_callback=_create_source_and_submission_and_delete_source_key,
+    ) as sd_servers_result:
+        yield sd_servers_result
+
+
+@pytest.mark.parametrize("locale", list_locales())
 @pytest.mark.pagelayout
-class TestJournalistLayoutCol(
-    pft.FunctionalTest,
-    source_navigation_steps.SourceNavigationStepsMixin,
-    journalist_navigation_steps.JournalistNavigationStepsMixin,
-):
-    def test_col_no_documents(self):
-        self._source_visits_source_homepage()
-        self._source_chooses_to_submit_documents()
-        self._source_continues_to_submit_page()
-        self._source_submits_a_file()
-        self._source_logs_out()
-        self._journalist_logs_in()
-        self._journalist_visits_col()
-        self._journalist_delete_all()
-        self._journalist_confirm_delete_selected()
-        self._screenshot("journalist-col_no_document.png")
-        self._save_html("journalist-col_no_document.html")
+class TestJournalistLayoutCol:
+    def test_col_with_and_without_documents(
+        self, locale, sd_servers_v2_with_submitted_file, firefox_web_driver
+    ):
+        # Given an SD server with an already-submitted file
+        # And a journalist logging into the journalist interface
+        locale_with_commas = locale.replace("_", "-")
+        journ_app_nav = JournalistAppNavigator(
+            journalist_app_base_url=sd_servers_v2_with_submitted_file.journalist_app_base_url,
+            web_driver=firefox_web_driver,
+            accept_languages=locale_with_commas,
+        )
+        journ_app_nav.journalist_logs_in(
+            username=sd_servers_v2_with_submitted_file.journalist_username,
+            password=sd_servers_v2_with_submitted_file.journalist_password,
+            otp_secret=sd_servers_v2_with_submitted_file.journalist_otp_secret,
+        )
 
-    def test_col_has_no_key(self):
-        self._source_visits_source_homepage()
-        self._source_chooses_to_submit_documents()
-        self._source_continues_to_submit_page()
-        self._source_submits_a_file()
-        self._source_logs_out()
-        self._journalist_logs_in()
-        self._source_delete_key()
-        self._journalist_visits_col()
-        self._screenshot("journalist-col_has_no_key.png")
-        self._save_html("journalist-col_has_no_key.html")
+        # Take a screenshot of the individual source's page when there is a document
+        journ_app_nav.journalist_visits_col()
+        save_screenshot_and_html(journ_app_nav.driver, locale, "journalist-col")
+        # The documentation uses an identical screenshot with a different name:
+        # https://github.com/freedomofpress/securedrop-docs/blob/main/docs/images/manual
+        # /screenshots/journalist-col_javascript.png
+        # So we take the same screenshot again here
+        # TODO(AD): Update the documentation to use a single screenshot
+        save_screenshot_and_html(journ_app_nav.driver, locale, "journalist-col_javascript")
 
-    def test_col(self):
-        self._source_visits_source_homepage()
-        self._source_chooses_to_submit_documents()
-        self._source_continues_to_submit_page()
-        self._source_submits_a_file()
-        self._source_logs_out()
-        self._journalist_logs_in()
-        self._journalist_visits_col()
-        self._screenshot("journalist-col.png")
-        self._save_html("journalist-col.html")
+        # Take a screenshot of the individual source's page when there are no documents
+        journ_app_nav.journalist_clicks_delete_all_and_sees_confirmation()
+        journ_app_nav.journalist_confirms_delete_selected()
 
-    def test_col_javascript(self):
-        self._source_visits_source_homepage()
-        self._source_chooses_to_submit_documents()
-        self._source_continues_to_submit_page()
-        self._source_submits_a_file()
-        self._source_logs_out()
-        self._journalist_logs_in()
-        self._journalist_visits_col()
-        self._screenshot("journalist-col_javascript.png")
-        self._save_html("journalist-col_javascript.html")
+        def submission_deleted() -> None:
+            submissions_after_confirming_count = journ_app_nav.count_submissions_on_current_page()
+            # There will be 0 submissions left after deleting the source's submission
+            assert submissions_after_confirming_count == 0
+
+        journ_app_nav.nav_helper.wait_for(submission_deleted)
+        save_screenshot_and_html(journ_app_nav.driver, locale, "journalist-col_no_document")
+
+    def test_col_has_no_key(
+        self, locale, _sd_servers_v2_with_deleted_source_key, firefox_web_driver
+    ):
+        # Given an SD server with an already-submitted file, but the source's key was deleted
+        # And a journalist logging into the journalist interface
+        locale_with_commas = locale.replace("_", "-")
+        journ_app_nav = JournalistAppNavigator(
+            journalist_app_base_url=_sd_servers_v2_with_deleted_source_key.journalist_app_base_url,
+            web_driver=firefox_web_driver,
+            accept_languages=locale_with_commas,
+        )
+        journ_app_nav.journalist_logs_in(
+            username=_sd_servers_v2_with_deleted_source_key.journalist_username,
+            password=_sd_servers_v2_with_deleted_source_key.journalist_password,
+            otp_secret=_sd_servers_v2_with_deleted_source_key.journalist_otp_secret,
+        )
+
+        # Take a screenshot of the source's page after their key was deleted
+        journ_app_nav.journalist_visits_col()
+        save_screenshot_and_html(journ_app_nav.driver, locale, "journalist-col_has_no_key")
