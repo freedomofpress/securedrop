@@ -1,9 +1,6 @@
 import tempfile
 import time
 
-import pytest
-from selenium.common.exceptions import NoSuchElementException
-
 
 class SourceNavigationStepsMixin:
     def _is_on_source_homepage(self):
@@ -20,9 +17,6 @@ class SourceNavigationStepsMixin:
 
     def _is_on_logout_page(self):
         return self.wait_for(lambda: self.driver.find_element_by_id("source-logout"))
-
-    def _source_sees_orgname(self, name="SecureDrop"):
-        assert name in self.driver.title
 
     def _source_visits_source_homepage(self):
         self.driver.get(self.source_location)
@@ -116,10 +110,3 @@ class SourceNavigationStepsMixin:
     def _source_logs_out(self):
         self.safe_click_by_id("logout")
         assert self._is_on_logout_page()
-
-    def _source_sees_document_attachment_item(self):
-        assert self.driver.find_element_by_class_name("attachment") is not None
-
-    def _source_does_not_sees_document_attachment_item(self):
-        with pytest.raises(NoSuchElementException):
-            self.driver.find_element_by_class_name("attachment")
