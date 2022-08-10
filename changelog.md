@@ -2,7 +2,8 @@
 
 ## 2.5.0~rc1
 
-
+## 2.4.2
+* Security: Update Linux kernel to version 5.15.57, which includes mitigations for the security vulnerability known as “[Retbleed](https://comsec.ethz.ch/research/microarch/retbleed/)”.
 
 ## 2.4.1
 
