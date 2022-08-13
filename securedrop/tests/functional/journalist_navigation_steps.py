@@ -361,55 +361,6 @@ class JournalistNavigationStepsMixin:
         hotp_reset_uid = hotp_reset_button.find_element_by_name("uid")
         assert hotp_reset_uid.is_displayed() is False
 
-    def _visit_edit_account(self):
-        self.safe_click_by_id("link-edit-account")
-
-    def _visit_edit_secret(self, otp_type, tooltip_text=""):
-        reset_form = self.wait_for(
-            lambda: self.driver.find_element_by_id("reset-two-factor-" + otp_type)
-        )
-        assert "/account/reset-2fa-" + otp_type in reset_form.get_attribute("action")
-        reset_button = self.driver.find_elements_by_css_selector(
-            "#button-reset-two-factor-" + otp_type
-        )[0]
-
-        # 2FA reset buttons show a tooltip with explanatory text on hover.
-        # Also, confirm the text on the tooltip is the correct one.
-        reset_button.location_once_scrolled_into_view
-        ActionChains(self.driver).move_to_element(reset_button).perform()
-
-        def explanatory_tooltip_is_correct():
-            explanatory_tooltip = self.driver.find_element_by_css_selector(
-                "#button-reset-two-factor-" + otp_type + " span"
-            )
-
-            explanatory_tooltip_opacity = explanatory_tooltip.value_of_css_property("opacity")
-            assert explanatory_tooltip_opacity == "1"
-
-            if not self.accept_languages:
-                assert explanatory_tooltip.text == tooltip_text
-
-        self.wait_for(explanatory_tooltip_is_correct)
-
-        reset_form.submit()
-
-        alert = self.driver.switch_to_alert()
-        alert.accept()
-
-    def _set_hotp_secret(self):
-        self.safe_send_keys_by_css_selector('input[name="otp_secret"]', "123456")
-        self.safe_click_by_css_selector("button[type=submit]")
-
-    def _visit_edit_hotp_secret(self):
-        self._visit_edit_secret(
-            "hotp", "Reset two-factor authentication for security keys, like a YubiKey"
-        )
-
-    def _visit_edit_totp_secret(self):
-        self._visit_edit_secret(
-            "totp", "Reset two-factor authentication for mobile apps, such as FreeOTP"
-        )
-
     def _admin_visits_add_user(self):
         add_user_btn = self.driver.find_element_by_id("add-user")
         self.wait_for(lambda: add_user_btn.is_enabled() and add_user_btn.is_displayed())
