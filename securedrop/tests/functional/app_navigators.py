@@ -1,9 +1,11 @@
+import base64
 import gzip
 import tempfile
 import time
+from binascii import unhexlify
 from contextlib import contextmanager
 from random import randint
-from typing import Dict, Generator, Iterable, List, Optional, Tuple
+from typing import Callable, Dict, Generator, Iterable, List, Optional, Tuple
 
 import pyotp
 import requests
@@ -516,8 +518,10 @@ class JournalistAppNavigator:
     def admin_creates_a_user(
         self,
         username: Optional[str] = None,
+        hotp_secret: Optional[str] = None,
         is_admin: bool = False,
-        is_user_creation_expected_to_succeed: bool = True,
+        callback_before_submitting_add_user_step: Optional[Callable[[], None]] = None,
+        callback_before_submitting_2fa_step: Optional[Callable[[], None]] = None,
     ) -> Optional[Tuple[str, str, str]]:
         self.nav_helper.safe_click_by_id("add-user")
         self.nav_helper.wait_for(lambda: self.driver.find_element_by_id("username"))
@@ -533,28 +537,51 @@ class JournalistAppNavigator:
         else:
             final_username = username
 
-        self._fill_and_submit_user_creation_form(
-            username=final_username,
-            is_admin=is_admin,
-        )
+        # Fill the form
+        self.nav_helper.safe_send_keys_by_css_selector('input[name="username"]', final_username)
+        if hotp_secret:
+            # Create an HOTP user instead of TOTP
+            self.nav_helper.safe_click_all_by_css_selector('input[name="is_hotp"]')
+            self.nav_helper.safe_send_keys_by_css_selector('input[name="otp_secret"]', hotp_secret)
 
-        if not is_user_creation_expected_to_succeed:
-            return None
+        if is_admin:
+            self.nav_helper.safe_click_by_css_selector('input[name="is_admin"]')
 
+        if callback_before_submitting_add_user_step:
+            callback_before_submitting_add_user_step()
+
+        # Submit the form
+        self.nav_helper.safe_click_by_css_selector("button[type=submit]")
+
+        # Submitting the add user form should redirect to the 2FA page
         self.nav_helper.wait_for(lambda: self.driver.find_element_by_id("check-token"))
-
-        if not self.accept_languages:
-            # Clicking submit on the add user form should redirect to
-            # the FreeOTP page
+        if self.accept_languages in [None, "en-US"]:
+            expected_title = "Enable YubiKey (OATH-HOTP)" if hotp_secret else "Enable FreeOTP"
             h1s = [h1.text for h1 in self.driver.find_elements_by_tag_name("h1")]
-            assert "Enable FreeOTP" in h1s
+            assert expected_title in h1s
 
-        otp_secret = (
-            self.driver.find_element_by_css_selector("#shared-secret").text.strip().replace(" ", "")
-        )
-        totp = pyotp.TOTP(otp_secret)
+        if hotp_secret:
+            # We created an hotp user
+            otp_secret = hotp_secret
+            hotp_secret_as_hex = unhexlify(hotp_secret.replace(" ", ""))
+            hotp_secret_as_b64 = base64.b32encode(hotp_secret_as_hex).decode("ascii")
+            hotp = pyotp.HOTP(hotp_secret_as_b64)
+            current_2fa_code = hotp.at(0)
+        else:
+            # We created a totp user
+            otp_secret = (
+                self.driver.find_element_by_css_selector("#shared-secret")
+                .text.strip()
+                .replace(" ", "")
+            )
+            totp = pyotp.TOTP(otp_secret)
+            current_2fa_code = str(totp.now())
 
-        self.nav_helper.safe_send_keys_by_css_selector('input[name="token"]', str(totp.now()))
+        self.nav_helper.safe_send_keys_by_css_selector('input[name="token"]', current_2fa_code)
+
+        if callback_before_submitting_2fa_step:
+            callback_before_submitting_2fa_step()
+
         self.nav_helper.safe_click_by_css_selector("button[type=submit]")
 
         # Verify the two-factor authentication
@@ -570,21 +597,9 @@ class JournalistAppNavigator:
                 assert expected_msg in [el.text for el in flash_msg]
 
         self.nav_helper.wait_for(user_token_added)
+
+        # TODO(AD): Clarify whether the otp_secret that's being returned is totp or hotp
         return final_username, password, otp_secret
-
-    def _fill_and_submit_user_creation_form(
-        self, username: str, is_admin: bool, hotp: Optional[str] = None
-    ) -> None:
-        self.nav_helper.safe_send_keys_by_css_selector('input[name="username"]', username)
-
-        if hotp:
-            self.nav_helper.safe_click_all_by_css_selector('input[name="is_hotp"]')
-            self.nav_helper.safe_send_keys_by_css_selector('input[name="otp_secret"]', hotp)
-
-        if is_admin:
-            self.nav_helper.safe_click_by_css_selector('input[name="is_admin"]')
-
-        self.nav_helper.safe_click_by_css_selector("button[type=submit]")
 
     def journalist_logs_out(self) -> None:
         # Click the logout link
@@ -607,3 +622,17 @@ class JournalistAppNavigator:
 
     def journalist_visits_edit_account(self):
         self.nav_helper.safe_click_by_id("link-edit-account")
+
+    def admin_visits_user_edit_page(self, username_of_journalist_to_edit: str) -> None:
+        # Go to the "edit user" page for the supplied journalist's username
+        selector = f'a.edit-user[data-username="{username_of_journalist_to_edit}"]'
+        new_user_edit_links = self.driver.find_elements_by_css_selector(selector)
+        assert len(new_user_edit_links) == 1
+        new_user_edit_links[0].click()
+
+        # Ensure the admin is allowed to edit the journalist
+        def can_edit_user():
+            h = self.driver.find_elements_by_tag_name("h1")[0]
+            assert f'Edit user "{username_of_journalist_to_edit}"' == h.text
+
+        self.nav_helper.wait_for(can_edit_user)

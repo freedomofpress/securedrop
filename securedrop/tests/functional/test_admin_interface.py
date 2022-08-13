@@ -1,13 +1,11 @@
 import logging
-import time
 from pathlib import Path
-from typing import Callable, Generator, Tuple
+from typing import Generator, Tuple
 from uuid import uuid4
 
 import pytest
 from models import Journalist
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
-from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.firefox.webdriver import WebDriver
@@ -119,13 +117,25 @@ class TestAdminInterfaceAddUser:
             otp_secret=sd_servers_v2_with_clean_state.journalist_otp_secret,
         )
 
-        # When they go to the admin page to add a new admin user with ann invalid name
+        # When they go to the admin page to add a new admin user with an invalid name
         journ_app_nav.admin_visits_admin_interface()
-        journ_app_nav.admin_creates_a_user(
-            username="deleted", is_user_creation_expected_to_succeed=False
-        )
 
-        # Then it fails
+        # We use a callback and an exception to stop after the form was submitted
+        class StopAfterFormSubmitted(Exception):
+            pass
+
+        def submit_form_and_stop():
+            journ_app_nav.nav_helper.safe_click_by_css_selector("button[type=submit]")
+            raise StopAfterFormSubmitted()
+
+        try:
+            journ_app_nav.admin_creates_a_user(
+                username="deleted", callback_before_submitting_add_user_step=submit_form_and_stop
+            )
+        except StopAfterFormSubmitted:
+            pass
+
+        # Then it fails with an error
         error_msg = journ_app_nav.nav_helper.wait_for(
             lambda: journ_app_nav.driver.find_element_by_css_selector(".form-validation-error")
         )
@@ -181,6 +191,11 @@ def sd_servers_v2_with_second_journalist(
 
 
 class TestAdminInterfaceEditAndDeleteUser:
+    """Test editing another journalist/user.
+
+    Note: Tests to edit a user's 2fa secret are implemented in TestJournalistLayoutAdmin.
+    """
+
     @staticmethod
     def _admin_logs_in_and_goes_to_edit_page_for_second_journalist(
         sd_servers_result: SdServersFixtureResult,
@@ -201,18 +216,9 @@ class TestAdminInterfaceEditAndDeleteUser:
         journ_app_nav.admin_visits_admin_interface()
 
         # Go to the "edit user" page for the second journalist
-        selector = f'a.edit-user[data-username="{_SECOND_JOURNALIST_USERNAME}"]'
-        new_user_edit_links = journ_app_nav.driver.find_elements_by_css_selector(selector)
-        assert len(new_user_edit_links) == 1
-        new_user_edit_links[0].click()
-
-        # Ensure the admin is allowed to edit the second journalist
-        def can_edit_user():
-            h = journ_app_nav.driver.find_elements_by_tag_name("h1")[0]
-            assert f'Edit user "{_SECOND_JOURNALIST_USERNAME}"' == h.text
-
-        journ_app_nav.nav_helper.wait_for(can_edit_user)
-
+        journ_app_nav.admin_visits_user_edit_page(
+            username_of_journalist_to_edit=_SECOND_JOURNALIST_USERNAME
+        )
         return journ_app_nav
 
     def test_admin_edits_username(self, sd_servers_v2_with_second_journalist, firefox_web_driver):
@@ -302,128 +308,6 @@ class TestAdminInterfaceEditAndDeleteUser:
         )
         assert journ_app_nav.is_on_journalist_homepage()
 
-    def test_admin_edits_hotp_secret(
-        self, sd_servers_v2_with_second_journalist, firefox_web_driver
-    ):
-        # Given an SD server with a second journalist created
-        # And the first journalist logged into the journalist interface as an admin
-        # And they went to the "edit user" page for the second journalist
-        journ_app_nav = self._admin_logs_in_and_goes_to_edit_page_for_second_journalist(
-            sd_servers_result=sd_servers_v2_with_second_journalist,
-            firefox_web_driver=firefox_web_driver,
-        )
-
-        # When the admin resets the second journalist's hotp
-        def _admin_visits_reset_2fa_hotp_step() -> None:
-            # 2FA reset buttons show a tooltip with explanatory text on hover.
-            # Also, confirm the text on the tooltip is the correct one.
-            hotp_reset_button = journ_app_nav.driver.find_elements_by_id("reset-two-factor-hotp")[0]
-            hotp_reset_button.location_once_scrolled_into_view
-            ActionChains(journ_app_nav.driver).move_to_element(hotp_reset_button).perform()
-
-            time.sleep(1)
-
-            tip_opacity = journ_app_nav.driver.find_elements_by_css_selector(
-                "#button-reset-two-factor-hotp span.tooltip"
-            )[0].value_of_css_property("opacity")
-            tip_text = journ_app_nav.driver.find_elements_by_css_selector(
-                "#button-reset-two-factor-hotp span.tooltip"
-            )[0].text
-            assert tip_opacity == "1"
-
-            if not journ_app_nav.accept_languages:
-                assert (
-                    tip_text == "Reset two-factor authentication for security keys, like a YubiKey"
-                )
-
-            journ_app_nav.nav_helper.safe_click_by_id("button-reset-two-factor-hotp")
-
-        # Run the above step in a retry loop
-        self._retry_2fa_pop_ups(
-            journ_app_nav, _admin_visits_reset_2fa_hotp_step, "reset-two-factor-hotp"
-        )
-
-        # Then it succeeds
-        journ_app_nav.nav_helper.wait_for(
-            lambda: journ_app_nav.driver.find_element_by_css_selector('input[name="otp_secret"]')
-        )
-
-    @staticmethod
-    def _retry_2fa_pop_ups(
-        journ_app_nav: JournalistAppNavigator, navigation_step: Callable, button_to_click: str
-    ) -> None:
-        """Clicking on Selenium alerts can be flaky. We need to retry them if they timeout."""
-        for i in range(15):
-            try:
-                try:
-                    # This is the button we click to trigger the alert.
-                    journ_app_nav.nav_helper.wait_for(
-                        lambda: journ_app_nav.driver.find_elements_by_id(button_to_click)[0]
-                    )
-                except IndexError:
-                    # If the button isn't there, then the alert is up from the last
-                    # time we attempted to run this test. Switch to it and accept it.
-                    journ_app_nav.nav_helper.alert_wait()
-                    journ_app_nav.nav_helper.alert_accept()
-                    break
-
-                # The alert isn't up. Run the rest of the logic.
-                navigation_step()
-
-                journ_app_nav.nav_helper.alert_wait()
-                journ_app_nav.nav_helper.alert_accept()
-                break
-            except TimeoutException:
-                # Selenium has failed to click, and the confirmation
-                # alert didn't happen. We'll try again.
-                logging.info("Selenium has failed to click; retrying.")
-
-    def test_admin_edits_totp_secret(
-        self, sd_servers_v2_with_second_journalist, firefox_web_driver
-    ):
-        # Given an SD server with a second journalist created
-        # And the first journalist logged into the journalist interface as an admin
-        # And they went to the "edit user" page for the second journalist
-        journ_app_nav = self._admin_logs_in_and_goes_to_edit_page_for_second_journalist(
-            sd_servers_result=sd_servers_v2_with_second_journalist,
-            firefox_web_driver=firefox_web_driver,
-        )
-
-        # When the admin resets the second journalist's totp
-        def _admin_visits_reset_2fa_totp_step():
-            totp_reset_button = journ_app_nav.driver.find_elements_by_id("reset-two-factor-totp")[0]
-            assert "/admin/reset-2fa-totp" in totp_reset_button.get_attribute("action")
-            # 2FA reset buttons show a tooltip with explanatory text on hover.
-            # Also, confirm the text on the tooltip is the correct one.
-            totp_reset_button = journ_app_nav.driver.find_elements_by_css_selector(
-                "#button-reset-two-factor-totp"
-            )[0]
-            totp_reset_button.location_once_scrolled_into_view
-            ActionChains(journ_app_nav.driver).move_to_element(totp_reset_button).perform()
-
-            time.sleep(1)
-
-            tip_opacity = journ_app_nav.driver.find_elements_by_css_selector(
-                "#button-reset-two-factor-totp span.tooltip"
-            )[0].value_of_css_property("opacity")
-            tip_text = journ_app_nav.driver.find_elements_by_css_selector(
-                "#button-reset-two-factor-totp span.tooltip"
-            )[0].text
-
-            assert tip_opacity == "1"
-            if not journ_app_nav.accept_languages:
-                expected_text = "Reset two-factor authentication for mobile apps, such as FreeOTP"
-                assert tip_text == expected_text
-
-            journ_app_nav.nav_helper.safe_click_by_id("button-reset-two-factor-totp")
-
-        # Run the above step in a retry loop
-        self._retry_2fa_pop_ups(
-            journ_app_nav, _admin_visits_reset_2fa_totp_step, "reset-two-factor-totp"
-        )
-
-        # Then it succeeds
-
     def test_admin_deletes_user(self, sd_servers_v2_with_second_journalist, firefox_web_driver):
         # Given an SD server with a second journalist created
         # And the first journalist logged into the journalist interface as an admin
@@ -464,69 +348,10 @@ class TestAdminInterfaceEditAndDeleteUser:
 
 
 class TestAdminInterfaceEditConfig:
-    def test_admin_updates_image(self, sd_servers_v2_with_clean_state, firefox_web_driver):
-        # Given an SD server
-        # And a journalist logged into the journalist interface as an admin
-        journ_app_nav = JournalistAppNavigator(
-            journalist_app_base_url=sd_servers_v2_with_clean_state.journalist_app_base_url,
-            web_driver=firefox_web_driver,
-        )
-        assert sd_servers_v2_with_clean_state.journalist_is_admin
-        journ_app_nav.journalist_logs_in(
-            username=sd_servers_v2_with_clean_state.journalist_username,
-            password=sd_servers_v2_with_clean_state.journalist_password,
-            otp_secret=sd_servers_v2_with_clean_state.journalist_otp_secret,
-        )
+    """Test the instance's system settings.
 
-        # And they go to the admin config page
-        journ_app_nav.admin_visits_admin_interface()
-        journ_app_nav.admin_visits_system_config_page()
-
-        # When they try to upload a new logo
-        logo_path = Path(__file__).absolute().parent / ".." / ".." / "static" / "i" / "logo.png"
-        assert logo_path.is_file()
-        journ_app_nav.nav_helper.safe_send_keys_by_id("logo-upload", str(logo_path))
-        journ_app_nav.nav_helper.safe_click_by_id("submit-logo-update")
-
-        # Then it succeeds
-        def updated_image():
-            # TODO(AD): Un-comment the next line when moving this test to the admin layout tests
-            #  if not self.accept_languages:
-            flash_msg = journ_app_nav.driver.find_element_by_css_selector(".flash")
-            assert "Image updated." in flash_msg.text
-
-        journ_app_nav.nav_helper.wait_for(updated_image, timeout=20)
-
-    def test_ossec_alert_button(self, sd_servers_v2_with_clean_state, firefox_web_driver):
-        # Given an SD server
-        # And a journalist logged into the journalist interface as an admin
-        journ_app_nav = JournalistAppNavigator(
-            journalist_app_base_url=sd_servers_v2_with_clean_state.journalist_app_base_url,
-            web_driver=firefox_web_driver,
-        )
-        assert sd_servers_v2_with_clean_state.journalist_is_admin
-        journ_app_nav.journalist_logs_in(
-            username=sd_servers_v2_with_clean_state.journalist_username,
-            password=sd_servers_v2_with_clean_state.journalist_password,
-            otp_secret=sd_servers_v2_with_clean_state.journalist_otp_secret,
-        )
-
-        # And they go to the admin config page
-        journ_app_nav.admin_visits_admin_interface()
-        journ_app_nav.admin_visits_system_config_page()
-
-        # When they try to send an OSSEC alert
-        alert_button = journ_app_nav.driver.find_element_by_id("test-ossec-alert")
-        alert_button.click()
-
-        # Then it succeeds
-        def test_alert_sent():
-            # TODO(AD): Un-comment the next line when moving this test to the admin layout tests
-            #  if not self.accept_languages:
-            flash_msg = journ_app_nav.driver.find_element_by_css_selector(".flash")
-            assert "Test alert sent. Please check your email." in flash_msg.text
-
-        journ_app_nav.nav_helper.wait_for(test_alert_sent)
+    Note: Additional/related tests are also implemented in TestAdminLayoutEditConfig.
+    """
 
     def test_disallow_file_submission(
         self, sd_servers_v2_with_clean_state, firefox_web_driver, tor_browser_web_driver
