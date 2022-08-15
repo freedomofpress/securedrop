@@ -315,23 +315,35 @@ class JournalistAppNavigator:
             lambda: self.driver.find_element_by_css_selector("div.journalist-view-all")
         )
 
+    def journalist_goes_to_login_page_and_enters_credentials(
+        self,
+        username: str,
+        password: str,
+        otp_secret: str,
+        should_submit_login_form: bool,
+    ) -> None:
+        self.driver.get(f"{self._journalist_app_base_url}/login")
+
+        self.nav_helper.safe_send_keys_by_css_selector('input[name="username"]', username)
+        self.nav_helper.safe_send_keys_by_css_selector('input[name="password"]', password)
+        otp = pyotp.TOTP(otp_secret)
+        self.nav_helper.safe_send_keys_by_css_selector('input[name="token"]', str(otp.now()))
+
+        if should_submit_login_form:
+            self.nav_helper.safe_click_by_css_selector('button[type="submit"]')
+
     def journalist_logs_in(
         self,
         username: str,
         password: str,
         otp_secret: str,
-        is_login_expected_to_succeed: bool = True,
     ) -> None:
-        # Submit the login form
-        self.driver.get(f"{self._journalist_app_base_url}/login")
-        self.nav_helper.safe_send_keys_by_css_selector('input[name="username"]', username)
-        self.nav_helper.safe_send_keys_by_css_selector('input[name="password"]', password)
-        otp = pyotp.TOTP(otp_secret)
-        self.nav_helper.safe_send_keys_by_css_selector('input[name="token"]', str(otp.now()))
-        self.nav_helper.safe_click_by_css_selector('button[type="submit"]')
-
-        if not is_login_expected_to_succeed:
-            return
+        self.journalist_goes_to_login_page_and_enters_credentials(
+            username=username,
+            password=password,
+            otp_secret=otp_secret,
+            should_submit_login_form=True,
+        )
 
         # Successful login should redirect to the index
         self.nav_helper.wait_for(lambda: self.driver.find_element_by_id("link-logout"))

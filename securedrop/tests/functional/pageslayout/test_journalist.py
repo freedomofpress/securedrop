@@ -44,10 +44,37 @@ class TestJournalistLayout:
             otp_secret=sd_servers_v2.journalist_otp_secret,
         )
         save_screenshot_and_html(journ_app_nav.driver, locale, "journalist-index_no_documents")
+        # The documentation uses an identical screenshot with a different name:
+        # https://github.com/freedomofpress/securedrop-docs/blob/main/docs/images/manual
+        # /screenshots/journalist-admin_index_no_documents.png
+        # So we take the same screenshot again here
+        # TODO(AD): Update the documentation to use a single screenshot
+        save_screenshot_and_html(
+            journ_app_nav.driver, locale, "journalist-admin_index_no_documents"
+        )
 
         # Take a screenshot of the edit account page
         journ_app_nav.journalist_visits_edit_account()
         save_screenshot_and_html(journ_app_nav.driver, locale, "journalist-edit_account_user")
+
+    def test_index_entered_text(self, locale, sd_servers_v2, firefox_web_driver):
+        # Given an SD server
+        # And a journalist accessing the journalist interface
+        locale_with_commas = locale.replace("_", "-")
+        journ_app_nav = JournalistAppNavigator(
+            journalist_app_base_url=sd_servers_v2.journalist_app_base_url,
+            web_driver=firefox_web_driver,
+            accept_languages=locale_with_commas,
+        )
+
+        # Take a screenshot of the login page with the form completed
+        journ_app_nav.journalist_goes_to_login_page_and_enters_credentials(
+            username="jane_doe",
+            password="my password is long",
+            otp_secret="2HGGVF5VPHWMCAYQ",
+            should_submit_login_form=False,
+        )
+        save_screenshot_and_html(journ_app_nav.driver, locale, "journalist-index_with_text")
 
     def test_index_with_submission_and_select_documents(
         self, locale, sd_servers_v2_with_submitted_file, firefox_web_driver
@@ -68,6 +95,12 @@ class TestJournalistLayout:
             otp_secret=sd_servers_v2_with_submitted_file.journalist_otp_secret,
         )
         save_screenshot_and_html(journ_app_nav.driver, locale, "journalist-index")
+        # The documentation uses an identical screenshot with a different name:
+        # https://github.com/freedomofpress/securedrop-docs/blob/main/docs/images/manual
+        # /screenshots/journalist-index_javascript.png
+        # So we take the same screenshot again here
+        # TODO(AD): Update the documentation to use a single screenshot
+        save_screenshot_and_html(journ_app_nav.driver, locale, "journalist-index_javascript")
 
         # Take a screenshot of the source's page
         journ_app_nav.journalist_selects_the_first_source()
@@ -111,30 +144,16 @@ class TestJournalistLayout:
         )
 
         # Take a screenshot of trying to log in using invalid credentials
-        journ_app_nav.journalist_logs_in(
+        journ_app_nav.journalist_goes_to_login_page_and_enters_credentials(
             username="root",
             password="worse",
             otp_secret="2HGGVF5VPHWMCAYQ",
-            is_login_expected_to_succeed=False,
+            should_submit_login_form=True,
         )
         save_screenshot_and_html(journ_app_nav.driver, locale, "journalist-code-fail_login")
-
-    def test_fail_login_many(self, locale, sd_servers_v2, firefox_web_driver):
-        # Given an SD server
-        # And someone accessing the journalist interface
-        locale_with_commas = locale.replace("_", "-")
-        journ_app_nav = JournalistAppNavigator(
-            journalist_app_base_url=sd_servers_v2.journalist_app_base_url,
-            web_driver=firefox_web_driver,
-            accept_languages=locale_with_commas,
-        )
-
-        # Take a screenshot of trying to log in using invalid credentials several times
-        for _ in range(6):
-            journ_app_nav.journalist_logs_in(
-                username="root",
-                password="worse",
-                otp_secret="2HGGVF5VPHWMCAYQ",
-                is_login_expected_to_succeed=False,
-            )
+        # The documentation uses an identical screenshot with a different name:
+        # https://github.com/freedomofpress/securedrop-docs/blob/main/docs/images/manual
+        # /screenshots/journalist-code-fail_login_many.png
+        # So we take the same screenshot again here
+        # TODO(AD): Update the documentation to use a single screenshot
         save_screenshot_and_html(journ_app_nav.driver, locale, "journalist-code-fail_login_many")
