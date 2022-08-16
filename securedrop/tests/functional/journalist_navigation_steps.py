@@ -477,23 +477,6 @@ class JournalistNavigationStepsMixin:
 
         assert self.secret_message == submission
 
-    def _journalist_composes_reply(self):
-        reply_text = (
-            "Thanks for the documents. Can you submit more " "information about the main program?"
-        )
-        self.wait_for(lambda: self.driver.find_element_by_id("reply-text-field"))
-        self.safe_send_keys_by_id("reply-text-field", reply_text)
-
-    def _journalist_sends_reply_to_source(self):
-        self._journalist_composes_reply()
-        self.driver.find_element_by_id("reply-button").click()
-
-        def reply_stored():
-            if not self.accept_languages:
-                assert "The source will receive your reply" in self.driver.page_source
-
-        self.wait_for(reply_stored)
-
     def _visit_edit_account(self):
         self.safe_click_by_id("link-edit-account")
 
@@ -699,17 +682,6 @@ class JournalistNavigationStepsMixin:
         )
         el.location_once_scrolled_into_view
         ActionChains(self.driver).move_to_element(el).click().perform()
-
-    def _journalist_visits_admin(self):
-        self.driver.get(self.journalist_location + "/admin")
-
-    def _journalist_fail_login(self):
-        self._try_login_user("root", "worse", "mocked")
-
-    def _journalist_fail_login_many(self):
-        self.user = ""
-        for _ in range(5 + 1):
-            self._try_login_user(self.user, "worse", "mocked")
 
     def _admin_enters_journalist_account_details_hotp(self, username, hotp_secret):
         self.safe_send_keys_by_css_selector('input[name="username"]', username)

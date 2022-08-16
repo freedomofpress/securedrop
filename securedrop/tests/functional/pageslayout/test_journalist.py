@@ -16,92 +16,144 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 import pytest
-import tests.functional.pageslayout.functional_test as pft
-from tests.functional import journalist_navigation_steps, source_navigation_steps
+from tests.functional.app_navigators import JournalistAppNavigator
+from tests.functional.pageslayout.functional_test import list_locales
+from tests.functional.pageslayout.screenshot_utils import save_screenshot_and_html
 
 
+@pytest.mark.parametrize("locale", list_locales())
 @pytest.mark.pagelayout
-class TestJournalistLayout(
-    pft.FunctionalTest,
-    source_navigation_steps.SourceNavigationStepsMixin,
-    journalist_navigation_steps.JournalistNavigationStepsMixin,
-):
-    def test_login(self):
-        self.driver.get(self.journalist_location + "/login")
-        self._screenshot("journalist-login.png")
-        self._save_html("journalist-login.html")
+class TestJournalistLayout:
+    def test_login_index_and_edit(self, locale, sd_servers_v2, firefox_web_driver):
+        # Given an SD server
+        # And a journalist accessing the journalist interface
+        locale_with_commas = locale.replace("_", "-")
+        journ_app_nav = JournalistAppNavigator(
+            journalist_app_base_url=sd_servers_v2.journalist_app_base_url,
+            web_driver=firefox_web_driver,
+            accept_languages=locale_with_commas,
+        )
+        journ_app_nav.driver.get(f"{sd_servers_v2.journalist_app_base_url}/login")
+        save_screenshot_and_html(journ_app_nav.driver, locale, "journalist-login")
 
-    def test_journalist_composes_reply(self):
-        self._source_visits_source_homepage()
-        self._source_chooses_to_submit_documents()
-        self._source_continues_to_submit_page()
-        self._source_submits_a_file()
-        self._source_logs_out()
-        self._journalist_logs_in()
-        self._journalist_checks_messages()
-        self._journalist_downloads_message()
-        self._journalist_composes_reply()
-        self._screenshot("journalist-composes_reply.png")
-        self._save_html("journalist-composes_reply.html")
+        # And they log into the app and are an admin
+        assert sd_servers_v2.journalist_is_admin
+        journ_app_nav.journalist_logs_in(
+            username=sd_servers_v2.journalist_username,
+            password=sd_servers_v2.journalist_password,
+            otp_secret=sd_servers_v2.journalist_otp_secret,
+        )
+        save_screenshot_and_html(journ_app_nav.driver, locale, "journalist-index_no_documents")
+        # The documentation uses an identical screenshot with a different name:
+        # https://github.com/freedomofpress/securedrop-docs/blob/main/docs/images/manual
+        # /screenshots/journalist-admin_index_no_documents.png
+        # So we take the same screenshot again here
+        # TODO(AD): Update the documentation to use a single screenshot
+        save_screenshot_and_html(
+            journ_app_nav.driver, locale, "journalist-admin_index_no_documents"
+        )
 
-    def test_edit_account_user(self):
-        self._journalist_logs_in()
-        self._visit_edit_account()
-        self._screenshot("journalist-edit_account_user.png")
-        self._save_html("journalist-edit_account_user.html")
+        # Take a screenshot of the edit account page
+        journ_app_nav.journalist_visits_edit_account()
+        save_screenshot_and_html(journ_app_nav.driver, locale, "journalist-edit_account_user")
 
-    def test_index_no_documents_admin(self):
-        self._admin_logs_in()
-        self._screenshot("journalist-admin_index_no_documents.png")
-        self._save_html("journalist-admin_index_no_documents.html")
+    def test_index_entered_text(self, locale, sd_servers_v2, firefox_web_driver):
+        # Given an SD server
+        # And a journalist accessing the journalist interface
+        locale_with_commas = locale.replace("_", "-")
+        journ_app_nav = JournalistAppNavigator(
+            journalist_app_base_url=sd_servers_v2.journalist_app_base_url,
+            web_driver=firefox_web_driver,
+            accept_languages=locale_with_commas,
+        )
 
-    def test_index_no_documents(self):
-        self._journalist_logs_in()
-        self._screenshot("journalist-index_no_documents.png")
-        self._save_html("journalist-index_no_documents.html")
+        # Take a screenshot of the login page with the form completed
+        journ_app_nav.journalist_goes_to_login_page_and_enters_credentials(
+            username="jane_doe",
+            password="my password is long",
+            otp_secret="2HGGVF5VPHWMCAYQ",
+            should_submit_login_form=False,
+        )
+        save_screenshot_and_html(journ_app_nav.driver, locale, "journalist-index_with_text")
 
-    def test_index(self):
-        self._source_visits_source_homepage()
-        self._source_chooses_to_submit_documents()
-        self._source_continues_to_submit_page()
-        self._source_submits_a_file()
-        self._source_submits_a_message()
-        self._source_logs_out()
-        self._journalist_logs_in()
-        self._screenshot("journalist-index.png")
-        self._save_html("journalist-index.html")
+    def test_index_with_submission_and_select_documents(
+        self, locale, sd_servers_v2_with_submitted_file, firefox_web_driver
+    ):
+        # Given an SD server with an already-submitted file
+        # And a journalist logging into the journalist interface
+        locale_with_commas = locale.replace("_", "-")
+        journ_app_nav = JournalistAppNavigator(
+            journalist_app_base_url=sd_servers_v2_with_submitted_file.journalist_app_base_url,
+            web_driver=firefox_web_driver,
+            accept_languages=locale_with_commas,
+        )
 
-    def test_index_javascript(self):
-        self._source_visits_source_homepage()
-        self._source_chooses_to_submit_documents()
-        self._source_continues_to_submit_page()
-        self._source_submits_a_file()
-        self._source_submits_a_message()
-        self._source_logs_out()
-        self._journalist_logs_in()
-        self._screenshot("journalist-index_javascript.png")
-        self._save_html("journalist-index_javascript.html")
-        self._journalist_selects_the_first_source()
-        self._journalist_selects_all_documents()
-        self._screenshot("journalist-clicks_on_source_and_selects_documents.png")
-        self._save_html("journalist-clicks_on_source_and_selects_documents.html")
+        # Take a screenshot of the index page when there is a source and submission
+        journ_app_nav.journalist_logs_in(
+            username=sd_servers_v2_with_submitted_file.journalist_username,
+            password=sd_servers_v2_with_submitted_file.journalist_password,
+            otp_secret=sd_servers_v2_with_submitted_file.journalist_otp_secret,
+        )
+        save_screenshot_and_html(journ_app_nav.driver, locale, "journalist-index")
+        # The documentation uses an identical screenshot with a different name:
+        # https://github.com/freedomofpress/securedrop-docs/blob/main/docs/images/manual
+        # /screenshots/journalist-index_javascript.png
+        # So we take the same screenshot again here
+        # TODO(AD): Update the documentation to use a single screenshot
+        save_screenshot_and_html(journ_app_nav.driver, locale, "journalist-index_javascript")
 
-    def test_index_entered_text(self):
-        self._input_text_in_login_form("jane_doe", "my password is long", "117264")
-        self._screenshot("journalist-index_with_text.png")
-        self._save_html("journalist-index_with_text.html")
+        # Take a screenshot of the source's page
+        journ_app_nav.journalist_selects_the_first_source()
+        checkboxes = journ_app_nav.get_submission_checkboxes_on_current_page()
+        for checkbox in checkboxes:
+            checkbox.click()
+        save_screenshot_and_html(
+            journ_app_nav.driver, locale, "journalist-clicks_on_source_and_selects_documents"
+        )
 
-    def test_fail_to_visit_admin(self):
-        self._journalist_visits_admin()
-        self._screenshot("journalist-code-fail_to_visit_admin.png")
-        self._save_html("journalist-code-fail_to_visit_admin.html")
+        # Take a screenshot of the reply page
+        journ_app_nav.journalist_composes_reply_to_source(
+            reply_content="Thanks for the documents."
+            " Can you submit more information about the main program?"
+        )
+        save_screenshot_and_html(journ_app_nav.driver, locale, "journalist-composes_reply")
 
-    def test_fail_login(self, hardening):
-        self._journalist_fail_login()
-        self._screenshot("journalist-code-fail_login.png")
-        self._save_html("journalist-code-fail_login.html")
+    def test_fail_to_visit_admin(self, locale, sd_servers_v2, firefox_web_driver):
+        # Given an SD server
+        # And someone accessing the journalist interface
+        locale_with_commas = locale.replace("_", "-")
+        journ_app_nav = JournalistAppNavigator(
+            journalist_app_base_url=sd_servers_v2.journalist_app_base_url,
+            web_driver=firefox_web_driver,
+            accept_languages=locale_with_commas,
+        )
+        # Take a screenshot of them trying to force-browse to the admin interface
+        journ_app_nav.driver.get(f"{sd_servers_v2.journalist_app_base_url}/admin")
+        save_screenshot_and_html(
+            journ_app_nav.driver, locale, "journalist-code-fail_to_visit_admin"
+        )
 
-    def test_fail_login_many(self, hardening):
-        self._journalist_fail_login_many()
-        self._screenshot("journalist-code-fail_login_many.png")
-        self._save_html("journalist-code-fail_login_many.html")
+    def test_fail_login(self, locale, sd_servers_v2, firefox_web_driver):
+        # Given an SD server
+        # And someone accessing the journalist interface
+        locale_with_commas = locale.replace("_", "-")
+        journ_app_nav = JournalistAppNavigator(
+            journalist_app_base_url=sd_servers_v2.journalist_app_base_url,
+            web_driver=firefox_web_driver,
+            accept_languages=locale_with_commas,
+        )
+
+        # Take a screenshot of trying to log in using invalid credentials
+        journ_app_nav.journalist_goes_to_login_page_and_enters_credentials(
+            username="root",
+            password="worse",
+            otp_secret="2HGGVF5VPHWMCAYQ",
+            should_submit_login_form=True,
+        )
+        save_screenshot_and_html(journ_app_nav.driver, locale, "journalist-code-fail_login")
+        # The documentation uses an identical screenshot with a different name:
+        # https://github.com/freedomofpress/securedrop-docs/blob/main/docs/images/manual
+        # /screenshots/journalist-code-fail_login_many.png
+        # So we take the same screenshot again here
+        # TODO(AD): Update the documentation to use a single screenshot
+        save_screenshot_and_html(journ_app_nav.driver, locale, "journalist-code-fail_login_many")
