@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 #
 # SecureDrop whistleblower submission system
-# Copyright (C) 2017 Loic Dachary <loic@dachary.org>
+# Copyright (C) 2017- Freedom of the Press Foundation and SecureDrop
+# contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
@@ -247,28 +248,15 @@ class TestSecureDropAdmin(object):
     @pytest.mark.parametrize(
         "git_output",
         [
-            b"gpg: Signature made Tue 13 Mar "
-            b"2018 01:14:11 AM UTC\n"
-            b"gpg:                using RSA key "
-            b"22245C81E3BAEB4138B36061310F561200F4AD77\n"
-            b'gpg: Good signature from "SecureDrop Release '
-            b'Signing Key" [unknown]\n',
             b"gpg: Signature made Thu 20 Jul "
-            b"2017 08:12:25 PM EDT\n"
-            b"gpg:                using RSA key "
-            b"22245C81E3BAEB4138B36061310F561200F4AD77\n"
-            b'gpg: Good signature from "SecureDrop Release '
-            b"Signing Key "
-            b'<securedrop-release-key@freedom.press>"\n',
-            b"gpg: Signature made Thu 20 Jul "
-            b"2017 08:12:25 PM EDT\n"
+            b"2022 08:12:25 PM EDT\n"
             b"gpg:                using RSA key "
             b"2359E6538C0613E652955E6C188EDD3B7B22E6A3\n"
             b'gpg: Good signature from "SecureDrop Release '
             b"Signing Key "
             b'<securedrop-release-key-2021@freedom.press>"\n',
             b"gpg: Signature made Thu 20 Jul "
-            b"2017 08:12:25 PM EDT\n"
+            b"2022 08:12:25 PM EDT\n"
             b"gpg:                using RSA key "
             b"2359E6538C0613E652955E6C188EDD3B7B22E6A3\n"
             b'gpg: Good signature from "SecureDrop Release '
@@ -276,16 +264,6 @@ class TestSecureDropAdmin(object):
             b'gpg:                 aka "SecureDrop Release '
             b"Signing Key "
             b'<securedrop-release-key-2021@freedom.press>" '
-            b"[unknown]\n",
-            b"gpg: Signature made Thu 20 Jul "
-            b"2017 08:12:25 PM EDT\n"
-            b"gpg:                using RSA key "
-            b"22245C81E3BAEB4138B36061310F561200F4AD77\n"
-            b'gpg: Good signature from "SecureDrop Release '
-            b'Signing Key" [unknown]\n'
-            b'gpg:                 aka "SecureDrop Release '
-            b"Signing Key "
-            b'<securedrop-release-key@freedom.press>" '
             b"[unknown]\n",
         ],
     )
@@ -295,6 +273,9 @@ class TestSecureDropAdmin(object):
         patchers = [
             mock.patch("securedrop_admin.check_for_updates", return_value=(True, "0.6.1")),
             mock.patch("subprocess.check_call"),
+            # securedrop-admin checks if there is a branch with the same name as a tag
+            # that is being verified, and bails if there is. To ensure the verification
+            # succeeds, we have to mock the "not a valid ref" output it looks for.
             mock.patch(
                 "subprocess.check_output",
                 side_effect=[
@@ -322,9 +303,9 @@ class TestSecureDropAdmin(object):
         args = argparse.Namespace(root=git_repo_path)
 
         git_output = (
-            b"gpg: Signature made Tue 13 Mar 2018 01:14:11 AM UTC\n"
+            b"gpg: Signature made Tue 13 Mar 2022 01:14:11 AM UTC\n"
             b"gpg:                using RSA key "
-            b"22245C81E3BAEB4138B36061310F561200F4AD77\n"
+            b"2359E6538C0613E652955E6C188EDD3B7B22E6A3\n"
             b'gpg: Good signature from "SecureDrop Release '
             b'Signing Key" [unknown]\n'
         )
@@ -354,14 +335,56 @@ class TestSecureDropAdmin(object):
             for patcher in patchers:
                 patcher.stop()
 
+    def test_outdated_signature_does_not_verify(self, tmpdir, caplog):
+        """
+        When a tag is signed with a release key that is no longer valid
+            Then the signature of a current tag should not verify
+        """
+
+        git_repo_path = str(tmpdir)
+        args = argparse.Namespace(root=git_repo_path)
+
+        git_output = (
+            b"gpg: Signature made Tue 13 Mar 2022 01:14:11 AM UTC\n"
+            b"gpg:                using RSA key "
+            b"22245C81E3BAEB4138B36061310F561200F4AD77\n"
+            b'gpg: Good signature from "SecureDrop Release '
+            b'Signing Key" [unknown]\n'
+        )
+
+        patchers = [
+            mock.patch("securedrop_admin.check_for_updates", return_value=(True, "0.6.1")),
+            mock.patch("subprocess.check_call"),
+            mock.patch(
+                "subprocess.check_output",
+                side_effect=[
+                    git_output,
+                    subprocess.CalledProcessError(1, "cmd", b"not a valid ref"),
+                ],
+            ),
+        ]
+
+        for patcher in patchers:
+            patcher.start()
+
+        try:
+            ret_code = securedrop_admin.update(args)
+            assert "Applying SecureDrop updates..." in caplog.text
+            assert "Signature verification successful." not in caplog.text
+            assert "Updated to SecureDrop" not in caplog.text
+            assert ret_code == 1
+        finally:
+            for patcher in patchers:
+                patcher.stop()
+
     def test_update_signature_does_not_verify(self, tmpdir, caplog):
         git_repo_path = str(tmpdir)
         args = argparse.Namespace(root=git_repo_path)
 
         git_output = (
-            b"gpg: Signature made Tue 13 Mar 2018 01:14:11 AM UTC\n"
+            b"gpg: Signature made Tue 13 Mar 2022 01:14:11 AM UTC\n"
             b"gpg:                using RSA key "
-            b"22245C81E3BAEB4138B36061310F561200F4AD77\n"
+            b"2359E6538C0613E652955E6C188EDD3B7B22E6A3\n"
             b'gpg: BAD signature from "SecureDrop Release '
             b'Signing Key" [unknown]\n'
         )
@@ -380,11 +403,11 @@ class TestSecureDropAdmin(object):
         args = argparse.Namespace(root=git_repo_path)
 
         git_output = (
-            b"gpg: Signature made Tue 13 Mar 2018 01:14:11 AM UTC\n"
+            b"gpg: Signature made Tue 13 Mar 2022 01:14:11 AM UTC\n"
             b"gpg:                using RSA key "
             b"1234567812345678123456781234567812345678\n"
-            b'gpg: Good signature from "22245C81E3BAEB4138'
-            b'B36061310F561200F4AD77" [unknown]\n'
+            b'gpg: Good signature from "2359E6538C0613E652'
+            b'955E6C188EDD3B7B22E6A3" [unknown]\n'
         )
 
         with mock.patch("securedrop_admin.check_for_updates", return_value=(True, "0.6.1")):
@@ -401,7 +424,7 @@ class TestSecureDropAdmin(object):
         args = argparse.Namespace(root=git_repo_path)
 
         git_output = (
-            b"gpg: Signature made Tue 13 Mar 2018 01:14:11 AM UTC\n"
+            b"gpg: Signature made Tue 13 Mar 2022 01:14:11 AM UTC\n"
             b"gpg:                using RSA key "
             b"1234567812345678123456781234567812345678\n"
             b"gpg: Good signature from Good signature from "
@@ -422,11 +445,11 @@ class TestSecureDropAdmin(object):
         args = argparse.Namespace(root=git_repo_path)
 
         git_output = (
-            b"gpg: Signature made Tue 13 Mar 2018 01:14:11 AM UTC\n"
+            b"gpg: Signature made Tue 13 Mar 2022 01:14:11 AM UTC\n"
             b"gpg:                using RSA key "
             b"1234567812345678123456781234567812345678\n"
             b"gpg: Good signature from 22245C81E3BAEB4138"
-            b"B36061310F561200F4AD77 Good signature from "
+            b"955E6C188EDD3B7B22E6A3 Good signature from "
             b'"SecureDrop Release Signing Key" [unknown]\n'
         )
 
