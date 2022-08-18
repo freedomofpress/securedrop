@@ -1002,9 +1002,6 @@ def update(args: argparse.Namespace) -> int:
         ).decode("utf-8")
 
         good_sig_text = [
-            'Good signature from "SecureDrop Release Signing ' + 'Key"',
-            'Good signature from "SecureDrop Release Signing '
-            + 'Key <securedrop-release-key@freedom.press>"',
             'Good signature from "SecureDrop Release Signing '
             + 'Key <securedrop-release-key-2021@freedom.press>"',
         ]
