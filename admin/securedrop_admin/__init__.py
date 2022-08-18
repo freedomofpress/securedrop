@@ -1019,7 +1019,7 @@ def update(args: argparse.Namespace) -> int:
         # appears on the second line of the output, and that there is a single
         # match from good_sig_text[]
         if (
-            RELEASE_KEYS[0] in gpg_lines[1]
+            any(key in gpg_lines[1] for key in RELEASE_KEYS)
             and len(good_sig_matches) == 1
             and bad_sig_text not in sig_result
         ):
