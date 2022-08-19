@@ -254,17 +254,7 @@ class TestSecureDropAdmin(object):
             b"2359E6538C0613E652955E6C188EDD3B7B22E6A3\n"
             b'gpg: Good signature from "SecureDrop Release '
             b"Signing Key "
-            b'<securedrop-release-key-2021@freedom.press>"\n',
-            b"gpg: Signature made Thu 20 Jul "
-            b"2022 08:12:25 PM EDT\n"
-            b"gpg:                using RSA key "
-            b"2359E6538C0613E652955E6C188EDD3B7B22E6A3\n"
-            b'gpg: Good signature from "SecureDrop Release '
-            b'Signing Key" [unknown]\n'
-            b'gpg:                 aka "SecureDrop Release '
-            b"Signing Key "
-            b'<securedrop-release-key-2021@freedom.press>" '
-            b"[unknown]\n",
+            b'<securedrop-release-key-2021@freedom.press>" [unknown]\n',
         ],
     )
     def test_update_signature_verifies(self, tmpdir, caplog, git_output):
@@ -307,7 +297,7 @@ class TestSecureDropAdmin(object):
             b"gpg:                using RSA key "
             b"2359E6538C0613E652955E6C188EDD3B7B22E6A3\n"
             b'gpg: Good signature from "SecureDrop Release '
-            b'Signing Key" [unknown]\n'
+            b'Signing Key <securedrop-release-key-2021@freedom.press>" [unknown]\n'
         )
 
         patchers = [
@@ -386,7 +376,7 @@ class TestSecureDropAdmin(object):
             b"gpg:                using RSA key "
             b"2359E6538C0613E652955E6C188EDD3B7B22E6A3\n"
             b'gpg: BAD signature from "SecureDrop Release '
-            b'Signing Key" [unknown]\n'
+            b'Signing Key <securedrop-release-key-2021@freedom.press>" [unknown]\n'
         )
 
         with mock.patch("securedrop_admin.check_for_updates", return_value=(True, "0.6.1")):
@@ -428,7 +418,8 @@ class TestSecureDropAdmin(object):
             b"gpg:                using RSA key "
             b"1234567812345678123456781234567812345678\n"
             b"gpg: Good signature from Good signature from "
-            b'"SecureDrop Release Signing Key" [unknown]\n'
+            b'"SecureDrop Release Signing Key <securedrop-release-key-2021@freedom.press>" '
+            b"[unknown]\n"
         )
 
         with mock.patch("securedrop_admin.check_for_updates", return_value=(True, "0.6.1")):
@@ -450,7 +441,8 @@ class TestSecureDropAdmin(object):
             b"1234567812345678123456781234567812345678\n"
             b"gpg: Good signature from 22245C81E3BAEB4138"
             b"955E6C188EDD3B7B22E6A3 Good signature from "
-            b'"SecureDrop Release Signing Key" [unknown]\n'
+            b'"SecureDrop Release Signing Key <securedrop-release-key-2021@freedom.press>" '
+            b"[unknown]\n"
         )
 
         with mock.patch("securedrop_admin.check_for_updates", return_value=(True, "0.6.1")):
