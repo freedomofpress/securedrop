@@ -46,11 +46,9 @@ from prompt_toolkit.validation import ValidationError, Validator
 
 sdlog = logging.getLogger(__name__)
 
-# We list two (2) pubkeys as authorized to sign SecureDrop release artifacts,
-# to provide a transition window during key rotation. On or around v2.0.0,
-# we can remove the older of the two keys and only trust the newer going forward.
+# In the event of a key rotation, this list can be added to
+# in order to support a transition period.
 RELEASE_KEYS = [
-    "22245C81E3BAEB4138B36061310F561200F4AD77",
     "2359E6538C0613E652955E6C188EDD3B7B22E6A3",
 ]
 DEFAULT_KEYSERVER = "hkps://keys.openpgp.org"
@@ -1004,9 +1002,6 @@ def update(args: argparse.Namespace) -> int:
         ).decode("utf-8")
 
         good_sig_text = [
-            'Good signature from "SecureDrop Release Signing ' + 'Key"',
-            'Good signature from "SecureDrop Release Signing '
-            + 'Key <securedrop-release-key@freedom.press>"',
             'Good signature from "SecureDrop Release Signing '
             + 'Key <securedrop-release-key-2021@freedom.press>"',
         ]
@@ -1021,7 +1016,7 @@ def update(args: argparse.Namespace) -> int:
         # appears on the second line of the output, and that there is a single
         # match from good_sig_text[]
         if (
-            (RELEASE_KEYS[0] in gpg_lines[1] or RELEASE_KEYS[1] in gpg_lines[1])
+            any(key in gpg_lines[1] for key in RELEASE_KEYS)
             and len(good_sig_matches) == 1
             and bad_sig_text not in sig_result
         ):
