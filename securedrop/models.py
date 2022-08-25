@@ -201,6 +201,7 @@ class Submission(db.Model):
         return self.filename.endswith("msg.gpg")
 
     def to_json(self) -> "Dict[str, Any]":
+        # TODO: Batch these queries in a JOIN
         seen_by = {
             f.journalist.uuid
             for f in SeenFile.query.filter(SeenFile.file_id == self.id)
@@ -284,6 +285,7 @@ class Reply(db.Model):
         return "<Reply %r>" % (self.filename)
 
     def to_json(self) -> "Dict[str, Any]":
+        # TODO: batch these queries in a join
         seen_by = [r.journalist.uuid for r in SeenReply.query.filter(SeenReply.reply_id == self.id)]
         json_reply = {
             "source_url": url_for("api.single_source", source_uuid=self.source.uuid)

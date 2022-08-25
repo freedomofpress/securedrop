@@ -26,6 +26,7 @@ from models import (
 from sdconfig import SDConfig
 from sqlalchemy import Column
 from sqlalchemy.exc import IntegrityError
+from sqlalchemy.orm import joinedload
 from store import NotEncrypted, Storage
 from werkzeug.exceptions import default_exceptions
 
@@ -155,7 +156,12 @@ def make_blueprint(config: SDConfig) -> Blueprint:
     @api.route("/sources", methods=["GET"])
     @token_required
     def get_all_sources() -> Tuple[flask.Response, int]:
-        sources = Source.query.filter_by(pending=False, deleted_at=None).all()
+        # TODO: can we also join Source.stars here?
+        sources = (
+            Source.query.options(joinedload(Source.submissions))
+            .filter_by(pending=False, deleted_at=None)
+            .all()
+        )
         return jsonify({"sources": [source.to_json() for source in sources]}), 200
 
     @api.route("/sources/<source_uuid>", methods=["GET", "DELETE"])
@@ -328,7 +334,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
     @api.route("/submissions", methods=["GET"])
     @token_required
     def get_all_submissions() -> Tuple[flask.Response, int]:
-        submissions = Submission.query.all()
+        submissions = Submission.query.options(joinedload(Submission.source)).all()
         return (
             jsonify(
                 {
@@ -343,7 +349,8 @@ def make_blueprint(config: SDConfig) -> Blueprint:
     @api.route("/replies", methods=["GET"])
     @token_required
     def get_all_replies() -> Tuple[flask.Response, int]:
-        replies = Reply.query.all()
+        # TODO: Also Reply.source
+        replies = Reply.query.options(joinedload(Reply.journalist)).all()
         return jsonify({"replies": [reply.to_json() for reply in replies if reply.source]}), 200
 
     @api.route("/seen", methods=["POST"])
