@@ -2,7 +2,7 @@ import os
 from base64 import b32encode
 from functools import lru_cache
 from pathlib import Path
-from random import SystemRandom
+from secrets import SystemRandom
 from typing import TYPE_CHECKING, List, Optional
 
 import models

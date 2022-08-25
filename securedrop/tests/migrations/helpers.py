@@ -1,16 +1,17 @@
 # -*- coding: utf-8 -*-
 
 import random
+import secrets
 import string
 from datetime import datetime
 
 
 def random_bool():
-    return bool(random.getrandbits(1))
+    return bool(secrets.getrandbits(1))
 
 
 def bool_or_none():
-    return random.choice([None, True, False])
+    return secrets.choice([None, True, False])
 
 
 def random_bytes(min, max, nullable):
@@ -32,11 +33,11 @@ def random_username():
 
 
 def random_chars(len, chars=string.printable):
-    return "".join([random.choice(chars) for _ in range(len)])
+    return "".join([secrets.choice(chars) for _ in range(len)])
 
 
 def random_ascii_chars(len, chars=string.ascii_lowercase):
-    return "".join([random.choice(chars) for _ in range(len)])
+    return "".join([secrets.choice(chars) for _ in range(len)])
 
 
 def random_datetime(nullable):
