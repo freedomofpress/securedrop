@@ -16,19 +16,18 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 import pytest
-from tests.functional.app_navigators import SourceAppNagivator
-from tests.functional.pageslayout.functional_test import list_locales
-from tests.functional.pageslayout.screenshot_utils import save_screenshot_and_html
+from tests.functional.app_navigators.source_app_nav import SourceAppNavigator
+from tests.functional.pageslayout.utils import list_locales, save_screenshot_and_html
 
 
 @pytest.mark.parametrize("locale", list_locales())
 @pytest.mark.pagelayout
 class TestSourceLayout:
-    def test(self, locale, sd_servers_v2_with_clean_state, tor_browser_web_driver):
+    def test(self, locale, sd_servers_with_clean_state, tor_browser_web_driver):
         # Given a source user accessing the app from their browser
         locale_with_commas = locale.replace("_", "-")
-        source_app_nav = SourceAppNagivator(
-            source_app_base_url=sd_servers_v2_with_clean_state.source_app_base_url,
+        source_app_nav = SourceAppNavigator(
+            source_app_base_url=sd_servers_with_clean_state.source_app_base_url,
             web_driver=tor_browser_web_driver,
             accept_languages=locale_with_commas,
         )
@@ -59,10 +58,10 @@ class TestSourceLayout:
             source_app_nav.driver, locale, "source-next_submission_flashed_message"
         )
 
-    def test_login(self, locale, sd_servers_v2_with_clean_state, tor_browser_web_driver):
+    def test_login(self, locale, sd_servers_with_clean_state, tor_browser_web_driver):
         # Given a source user accessing the app from their browser
-        source_app_nav = SourceAppNagivator(
-            source_app_base_url=sd_servers_v2_with_clean_state.source_app_base_url,
+        source_app_nav = SourceAppNavigator(
+            source_app_base_url=sd_servers_with_clean_state.source_app_base_url,
             web_driver=tor_browser_web_driver,
         )
 

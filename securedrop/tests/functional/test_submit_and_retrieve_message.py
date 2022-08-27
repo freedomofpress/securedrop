@@ -1,16 +1,17 @@
 from pathlib import Path
 
 from encryption import EncryptionManager
-from tests.functional.app_navigators import JournalistAppNavigator, SourceAppNagivator
+from tests.functional.app_navigators.journalist_app_nav import JournalistAppNavigator
+from tests.functional.app_navigators.source_app_nav import SourceAppNavigator
 
 
 class TestSubmitAndRetrieveMessage:
     def test_submit_and_retrieve_happy_path(
-        self, sd_servers_v2_with_clean_state, tor_browser_web_driver, firefox_web_driver
+        self, sd_servers_with_clean_state, tor_browser_web_driver, firefox_web_driver
     ):
         # Given a source user accessing the app from their browser
-        source_app_nav = SourceAppNagivator(
-            source_app_base_url=sd_servers_v2_with_clean_state.source_app_base_url,
+        source_app_nav = SourceAppNavigator(
+            source_app_base_url=sd_servers_with_clean_state.source_app_base_url,
             web_driver=tor_browser_web_driver,
         )
 
@@ -26,19 +27,19 @@ class TestSubmitAndRetrieveMessage:
 
         # When a journalist logs in
         journ_app_nav = JournalistAppNavigator(
-            journalist_app_base_url=sd_servers_v2_with_clean_state.journalist_app_base_url,
+            journalist_app_base_url=sd_servers_with_clean_state.journalist_app_base_url,
             web_driver=firefox_web_driver,
         )
         journ_app_nav.journalist_logs_in(
-            username=sd_servers_v2_with_clean_state.journalist_username,
-            password=sd_servers_v2_with_clean_state.journalist_password,
-            otp_secret=sd_servers_v2_with_clean_state.journalist_otp_secret,
+            username=sd_servers_with_clean_state.journalist_username,
+            password=sd_servers_with_clean_state.journalist_password,
+            otp_secret=sd_servers_with_clean_state.journalist_otp_secret,
         )
         journ_app_nav.journalist_checks_messages()
 
         #  And they try to download the message
         #  Then it succeeds and the journalist sees correct message
-        servers_sd_config = sd_servers_v2_with_clean_state.config_in_use
+        servers_sd_config = sd_servers_with_clean_state.config_in_use
         retrieved_message = journ_app_nav.journalist_downloads_first_message(
             encryption_mgr_to_use_for_decryption=EncryptionManager(
                 gpg_key_dir=Path(servers_sd_config.GPG_KEY_DIR),

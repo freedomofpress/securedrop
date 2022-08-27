@@ -23,30 +23,29 @@ from typing import Callable
 import pytest
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver import ActionChains
-from tests.functional.app_navigators import JournalistAppNavigator
-from tests.functional.pageslayout.functional_test import list_locales
-from tests.functional.pageslayout.screenshot_utils import save_screenshot_and_html
+from tests.functional.app_navigators.journalist_app_nav import JournalistAppNavigator
+from tests.functional.pageslayout.utils import list_locales, save_screenshot_and_html
 
 
 @pytest.mark.parametrize("locale", list_locales())
 @pytest.mark.pagelayout
 class TestAdminLayoutAddAndEditUser:
     def test_admin_adds_user_hotp_and_edits_hotp(
-        self, locale, sd_servers_v2_with_clean_state, firefox_web_driver
+        self, locale, sd_servers_with_clean_state, firefox_web_driver
     ):
         # Given an SD server
         # And a journalist logging into the journalist interface as an admin
-        assert sd_servers_v2_with_clean_state.journalist_is_admin
+        assert sd_servers_with_clean_state.journalist_is_admin
         locale_with_commas = locale.replace("_", "-")
         journ_app_nav = JournalistAppNavigator(
-            journalist_app_base_url=sd_servers_v2_with_clean_state.journalist_app_base_url,
+            journalist_app_base_url=sd_servers_with_clean_state.journalist_app_base_url,
             web_driver=firefox_web_driver,
             accept_languages=locale_with_commas,
         )
         journ_app_nav.journalist_logs_in(
-            username=sd_servers_v2_with_clean_state.journalist_username,
-            password=sd_servers_v2_with_clean_state.journalist_password,
-            otp_secret=sd_servers_v2_with_clean_state.journalist_otp_secret,
+            username=sd_servers_with_clean_state.journalist_username,
+            password=sd_servers_with_clean_state.journalist_password,
+            otp_secret=sd_servers_with_clean_state.journalist_otp_secret,
         )
 
         # Take a screenshot of the admin interface
@@ -116,21 +115,21 @@ class TestAdminLayoutAddAndEditUser:
         )
 
     def test_admin_adds_user_totp_and_edits_totp(
-        self, locale, sd_servers_v2_with_clean_state, firefox_web_driver
+        self, locale, sd_servers_with_clean_state, firefox_web_driver
     ):
         # Given an SD server
         # And a journalist logging into the journalist interface as an admin
-        assert sd_servers_v2_with_clean_state.journalist_is_admin
+        assert sd_servers_with_clean_state.journalist_is_admin
         locale_with_commas = locale.replace("_", "-")
         journ_app_nav = JournalistAppNavigator(
-            journalist_app_base_url=sd_servers_v2_with_clean_state.journalist_app_base_url,
+            journalist_app_base_url=sd_servers_with_clean_state.journalist_app_base_url,
             web_driver=firefox_web_driver,
             accept_languages=locale_with_commas,
         )
         journ_app_nav.journalist_logs_in(
-            username=sd_servers_v2_with_clean_state.journalist_username,
-            password=sd_servers_v2_with_clean_state.journalist_password,
-            otp_secret=sd_servers_v2_with_clean_state.journalist_otp_secret,
+            username=sd_servers_with_clean_state.journalist_username,
+            password=sd_servers_with_clean_state.journalist_password,
+            otp_secret=sd_servers_with_clean_state.journalist_otp_secret,
         )
         journ_app_nav.admin_visits_admin_interface()
 
@@ -222,20 +221,20 @@ class TestAdminLayoutAddAndEditUser:
 @pytest.mark.parametrize("locale", list_locales())
 @pytest.mark.pagelayout
 class TestAdminLayoutEditConfig:
-    def test_admin_changes_logo(self, locale, sd_servers_v2_with_clean_state, firefox_web_driver):
+    def test_admin_changes_logo(self, locale, sd_servers_with_clean_state, firefox_web_driver):
         # Given an SD server
         # And a journalist logging into the journalist interface as an admin
-        assert sd_servers_v2_with_clean_state.journalist_is_admin
+        assert sd_servers_with_clean_state.journalist_is_admin
         locale_with_commas = locale.replace("_", "-")
         journ_app_nav = JournalistAppNavigator(
-            journalist_app_base_url=sd_servers_v2_with_clean_state.journalist_app_base_url,
+            journalist_app_base_url=sd_servers_with_clean_state.journalist_app_base_url,
             web_driver=firefox_web_driver,
             accept_languages=locale_with_commas,
         )
         journ_app_nav.journalist_logs_in(
-            username=sd_servers_v2_with_clean_state.journalist_username,
-            password=sd_servers_v2_with_clean_state.journalist_password,
-            otp_secret=sd_servers_v2_with_clean_state.journalist_otp_secret,
+            username=sd_servers_with_clean_state.journalist_username,
+            password=sd_servers_with_clean_state.journalist_password,
+            otp_secret=sd_servers_with_clean_state.journalist_otp_secret,
         )
 
         # Take a screenshot of the system config page
@@ -264,20 +263,20 @@ class TestAdminLayoutEditConfig:
             journ_app_nav.driver, locale, "journalist-admin_changes_logo_image"
         )
 
-    def test_ossec_alert_button(self, locale, sd_servers_v2, firefox_web_driver):
+    def test_ossec_alert_button(self, locale, sd_servers, firefox_web_driver):
         # Given an SD server
         # And a journalist logging into the journalist interface as an admin
-        assert sd_servers_v2.journalist_is_admin
+        assert sd_servers.journalist_is_admin
         locale_with_commas = locale.replace("_", "-")
         journ_app_nav = JournalistAppNavigator(
-            journalist_app_base_url=sd_servers_v2.journalist_app_base_url,
+            journalist_app_base_url=sd_servers.journalist_app_base_url,
             web_driver=firefox_web_driver,
             accept_languages=locale_with_commas,
         )
         journ_app_nav.journalist_logs_in(
-            username=sd_servers_v2.journalist_username,
-            password=sd_servers_v2.journalist_password,
-            otp_secret=sd_servers_v2.journalist_otp_secret,
+            username=sd_servers.journalist_username,
+            password=sd_servers.journalist_password,
+            otp_secret=sd_servers.journalist_otp_secret,
         )
         # And they go to the admin config page
         journ_app_nav.admin_visits_admin_interface()
@@ -289,8 +288,6 @@ class TestAdminLayoutEditConfig:
 
         # Then it succeeds
         def test_alert_sent():
-            # TODO(AD): Un-comment the next line when moving this test to the admin layout tests
-            #  if not self.accept_languages:
             flash_msg = journ_app_nav.driver.find_element_by_css_selector(".flash")
             assert "Test alert sent. Please check your email." in flash_msg.text
 

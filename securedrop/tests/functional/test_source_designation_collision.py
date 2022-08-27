@@ -1,10 +1,9 @@
 from pathlib import Path
 
 import pytest
-
-from .app_navigators import SourceAppNagivator
-from .conftest import spawn_sd_servers
-from .factories import SecureDropConfigFactory
+from tests.functional.app_navigators.source_app_nav import SourceAppNavigator
+from tests.functional.conftest import spawn_sd_servers
+from tests.functional.factories import SecureDropConfigFactory
 
 
 @pytest.fixture(scope="session")
@@ -37,7 +36,7 @@ def _sd_servers_with_designation_collisions(setup_journalist_key_and_gpg_folder)
 
 class TestSourceAppDesignationCollision:
     def test(self, _sd_servers_with_designation_collisions, tor_browser_web_driver):
-        navigator = SourceAppNagivator(
+        navigator = SourceAppNavigator(
             source_app_base_url=_sd_servers_with_designation_collisions.source_app_base_url,
             web_driver=tor_browser_web_driver,
         )

@@ -19,29 +19,28 @@ from typing import Optional
 
 import pytest
 from selenium.webdriver import ActionChains
-from tests.functional.app_navigators import JournalistAppNavigator
-from tests.functional.pageslayout.functional_test import list_locales
-from tests.functional.pageslayout.screenshot_utils import save_screenshot_and_html
+from tests.functional.app_navigators.journalist_app_nav import JournalistAppNavigator
+from tests.functional.pageslayout.utils import list_locales, save_screenshot_and_html
 
 
 @pytest.mark.parametrize("locale", list_locales())
 @pytest.mark.pagelayout
 class TestJournalistLayoutAccount:
     def test_account_edit_and_set_hotp_secret(
-        self, locale, sd_servers_v2_with_clean_state, firefox_web_driver
+        self, locale, sd_servers_with_clean_state, firefox_web_driver
     ):
         # Given an SD server
         # And a journalist logging into the journalist interface
         locale_with_commas = locale.replace("_", "-")
         journ_app_nav = JournalistAppNavigator(
-            journalist_app_base_url=sd_servers_v2_with_clean_state.journalist_app_base_url,
+            journalist_app_base_url=sd_servers_with_clean_state.journalist_app_base_url,
             web_driver=firefox_web_driver,
             accept_languages=locale_with_commas,
         )
         journ_app_nav.journalist_logs_in(
-            username=sd_servers_v2_with_clean_state.journalist_username,
-            password=sd_servers_v2_with_clean_state.journalist_password,
-            otp_secret=sd_servers_v2_with_clean_state.journalist_otp_secret,
+            username=sd_servers_with_clean_state.journalist_username,
+            password=sd_servers_with_clean_state.journalist_password,
+            otp_secret=sd_servers_with_clean_state.journalist_otp_secret,
         )
 
         # And the journalist went to the edit account page
@@ -100,20 +99,20 @@ class TestJournalistLayoutAccount:
         alert.accept()
 
     def test_account_new_two_factor_totp(
-        self, locale, sd_servers_v2_with_clean_state, firefox_web_driver
+        self, locale, sd_servers_with_clean_state, firefox_web_driver
     ):
         # Given an SD server
         # And a journalist logging into the journalist interface
         locale_with_commas = locale.replace("_", "-")
         journ_app_nav = JournalistAppNavigator(
-            journalist_app_base_url=sd_servers_v2_with_clean_state.journalist_app_base_url,
+            journalist_app_base_url=sd_servers_with_clean_state.journalist_app_base_url,
             web_driver=firefox_web_driver,
             accept_languages=locale_with_commas,
         )
         journ_app_nav.journalist_logs_in(
-            username=sd_servers_v2_with_clean_state.journalist_username,
-            password=sd_servers_v2_with_clean_state.journalist_password,
-            otp_secret=sd_servers_v2_with_clean_state.journalist_otp_secret,
+            username=sd_servers_with_clean_state.journalist_username,
+            password=sd_servers_with_clean_state.journalist_password,
+            otp_secret=sd_servers_with_clean_state.journalist_otp_secret,
         )
 
         # And the journalist went to the edit account page
