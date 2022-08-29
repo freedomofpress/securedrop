@@ -38,8 +38,6 @@
     rm -f /usr/share/python-wheels/setuptools-*.whl
     mv /tmp/securedrop-app-code-requirements-download/setuptools-*.whl /usr/share/python-wheels/
 
-- include: sass.yml
-
 - include: translations.yml
 
 - name: Create apparmor.d directory in prep directory

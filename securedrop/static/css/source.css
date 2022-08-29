@@ -1,0 +1,1742 @@
+@charset "UTF-8";
+/*
+** Colors for "local" referencing.
+** Please use descriptive variables stylesheets
+*/
+:root {
+  /* Blue-ish */
+  --color-cerulean: #2d99ff;
+  --color-cyan: #05edfe;
+  --color-grimace-blue: #2a319d;
+  --color-lapis: #0065db;
+  --color-lazuli: #045fb4;
+  --color-smurfette: #00c7ff;
+  --color-alice-blue: #f5fafe;
+  --color-wistful: #a4a7d5;
+  --color-lavender: #e4e5f3;
+  --color-ffs-blue: #000c6c;
+  --color-pattens-blue: #c0e1ff;
+
+  /* Red-ish */
+  --color-pig-pink: #ffd6e0;
+  --color-red-ribbon: #d04;
+  --color-urgent-coral: #f36;
+  --color-bubble-gum: #ffc2d2;
+  --color-tickle-me-pink: #ff85a3;
+  --color-illusion: #ff99b3;
+
+  /*
+  ** Variable Naming scheme:
+  ** --$use-[$state-]$decleration[-$detail]
+  */
+
+  --body-bg: #fff;
+  --body-color: #3d3d3d;
+
+  --heading-color: #102781;
+  --heading-alt-color: var(--color-ffs-blue);
+
+  --bold-color: #000;
+
+  --link-color: var(--color-cerulean);
+  --link-border: rgba(0, 117, 247, 0.4);
+  --link-hover-color: var(--color-lazuli);
+  --link-hover-border: var(--link-hover-color);
+
+  --main-border: #e1e1e1;
+
+  /* Button border order: [box] border-inside > border > shadow */
+
+  --button-bg: var(--color-lazuli);
+  --button-color: #fff;
+  --button-hover-bg: var(--color-lapis);
+  --button-hover-outline: var(--color-cerulean);
+  --button-active-bg: var(--button-hover-outline);
+  --button-active-outline: var(--color-smurfette);
+  --button-focus-bg: var(--button-hover-outline);
+  --button-focus-border: var(--color-grimace-blue);
+
+  --button-secondary-bg: #fff;
+  --button-secondary-border: var(--button-bg);
+  --button-secondary-color: var(--button-secondary-border);
+  --button-secondary-hover-border: var(--button-hover-outline);
+  --button-secondary-hover-color: var(--button-hover-outline);
+  --button-secondary-hover-outline: #7fe2ff;
+  --button-secondary-active-border: #00C7ff;
+  --button-secondary-active-color: var(--button-hover-outline);
+  --button-secondary-active-shadow: var(--button-secondary-active-border);
+  --button-secondary-focus-border: var(--button-secondary-hover-border);
+  --button-secondary-focus-color: var(--button-secondary-hover-border);
+
+  --button-danger-bg: #fff;
+  --button-danger-border: var(--color-urgent-coral);
+  --button-danger-color: var(--button-danger-border);
+  --button-danger-hover-border: var(--color-red-ribbon);
+  --button-danger-hover-color: var(--button-danger-hover-border);
+  --button-danger-hover-outline: var(--color-pig-pink);
+  --button-danger-active-border: var(--button-danger-hover-outline);
+  --button-danger-active-color: var(--color-illusion);
+  --button-danger-active-outline: var(--button-danger-hover-border);
+  --button-danger-focus-border: var(--button-danger-hover-outline);
+  --button-danger-focus-color: var(--button-danger-hover-border);
+  --button-danger-focus-outline: var(--button-danger-focus-color);
+
+  --button-danger-secondary-bg: var(--color-urgent-coral);
+  --button-danger-secondary-color: #fff;
+  --button-danger-secondary-hover-bg: var(--color-red-ribbon);
+  --button-danger-secondary-hover-outline: var(--color-bubble-gum);
+  --button-danger-secondary-active-bg: var(--color-tickle-me-pink);
+  --button-danger-secondary-active-outline: var(--button-danger-secondary-bg);
+  --button-danger-secondary-focus-bg: var(--button-danger-secondary-hover-bg);
+  --button-danger-secondary-focus-border: var(--button-danger-secondary-bg);
+
+  --checkbox-checkbox-color: var(--color-grimace-blue);
+  --checkbox-label-color: #505050;
+  --checkbox-border: var(--color-lavender);
+  --checkbox-hover-bg: var(--color-alice-blue);
+  --checkbox-hover-border: var(--color-wistful);
+  --checkbox-hover-border-inside: #fff;
+
+  --locale-menu-list-shadow: rgba(0, 0, 0, 0.25);
+  --locale-menu-item-border: #f0f0f0;
+  --locale-menu-item-hover-bg: var(--locale-menu-item-border);
+
+  /* Used with: button (primary (default), secondary, danger, icon), checkbox */
+  --focus-shadow: var(--color-cyan);
+
+  --flash-color: #3b3b3b;
+  --flash-error-bg: #fff4f7;
+  --flash-error-color: var(--flash-color);
+  --flash-error-heading-color: var(--color-urgent-coral);
+  --flash-error-icon-color: var(--flash-error-heading-color);
+  --flash-success-bg: #f6ffdf;
+  --flash-success-color: var(--flash-color);
+  --flash-success-heading-color: #00a61b;
+  --flash-success-icon-color: var(--flash-success-heading-color);
+  --flash-notification-bg: #fffee8;
+  --flash-notification-color: #000;
+  --flash-notification-heading-color: var(--flash-notification-color);
+  --flash-notification-icon-color: var(--color-lazuli);
+
+  --info-bg: var(--flash-notification-bg);
+  --info-color: var(--flash-notification-color);
+  --info-icon-color: var(--flash-notification-icon-color);
+
+  --passphrase-bg: #fafcff;
+  --passphrase-color: var(--checkbox-checkbox-color);
+  --passphrase-border: #fff;
+  --passphrase-masked-color: #d0d3eb;
+  --passphrase-icon-color: var(--color-grimace-blue);
+  --passphrase-shadow: rgba(121, 134, 169, 0.33);
+
+  --passphrase-input-border: #757575;
+  --passphrase-input-inner-shadow: rgba(0, 0, 0, 0.02);
+  --passphrase-input-placeholder-color: #817b8e;
+  --passphrase-input-focus-border: #007aff;
+  --passphrase-input-focus-outline: #fff;
+  --passphrase-input-focus-shadow: #c1e3ff;
+
+  --form-attachment-bg: linear-gradient(115deg, #fbfcff, #f3f7fb);
+  --form-attachment-input-bg: rgba(0,0,0,0.05);
+  --form-attachment-icon-color: #d9dce4;
+  --form-fields-border: #c3c3c3;
+
+  --reply-bg: #fcfcfc;
+  --reply-border: #ededed;
+  --reply-time-bg: #f4f4f4;
+  --reply-time-color: #3c3c3c;
+  --reply-noreply-bg: #f8f8f8;
+  --reply-noreply-color: #9e9e9e;
+
+  --modal-background-bg: rgba(0,0,0,0.3);
+  --modal-bg: #fff;
+  --modal-border: var(--color-lazuli);
+  --modal-close-icon-bg: var(--color-ffs-blue);
+  --modal-close-icon-hover-bg: var(--color-lazuli);
+  --modal-close-icon-hover-outline: var(--color-pattens-blue);
+
+  --reply-delete-icon-color: var(--color-urgent-coral);
+  --reply-delete-icon-hover-color: var(--color-red-ribbon);
+  --reply-delete-icon-hover-outline: var(--color-pig-pink);
+  --reply-delete-icon-focus-color: var(--reply-delete-icon-hover-color);
+  --reply-delete-icon-active-color: var(--reply-delete-icon-color);
+
+  --footer-border: #d0d0d0;
+  --footer-fpf-color: #9d9cbd;
+
+  --warning-browser-bg: #813a81;
+  --warning-browser-color: #fff;
+  --warning-browser-dialog-border: #666;
+
+  --index-middle-separator: #e9eaf5;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+*:focus-visible {
+  outline: 0;
+  box-shadow: 0 0 0 3px var(--focus-shadow);
+}
+
+*:lang(ar) {
+  letter-spacing: 0 !important;
+}
+
+body {
+  background: var(--body-bg);
+  font-family: Arimo, Arial, sans-serif;
+  font-size: 14px;
+  line-height: 21px;
+  color: var(--body-color);
+  padding: 0;
+  margin: 0;
+  letter-spacing: 0.25px;
+}
+
+button {
+  font-family: Arimo, Arial, sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  color: var(--heading-color);
+}
+
+h1,
+h2 {
+  font-size: 24px;
+}
+
+#source-lookup h2 {
+  font-size: 18px;
+}
+
+p {
+  margin: 0 0 12px 0;
+}
+
+b,
+strong {
+  color: var(--bold-color);
+  letter-spacing: 0.5px;
+}
+
+a,
+a:visited {
+  color: var(--link-color);
+  text-decoration: none;
+  border-bottom: 1px solid var(--link-border);
+}
+
+a:hover,
+a:visited:hover {
+  color: var(--link-hover-color);
+  border-color: var(--link-hover-border);
+}
+
+button,
+.btn,
+.btn:visited {
+  display: inline-block;
+  background: var(--button-bg);
+  padding: 11px 30px;
+  margin: 0;
+  color: var(--button-color);
+  text-decoration: none;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
+  line-height: 20px;
+  text-align: center;
+  border: 2px solid var(--button-bg);
+  letter-spacing: 2px;
+}
+
+button:focus-visible,
+button:hover:focus-visible,
+.btn:focus-visible,
+.btn:hover:focus-visible,
+.btn:visited:focus-visible,
+.btn:visited:hover:focus-visible {
+  background: var(--button-focus-bg);
+  border-color: var(--button-focus-border);
+  color: var(--button-color);
+  box-shadow: 0 0 0 3px var(--focus-shadow);
+}
+
+button:hover,
+.btn:hover,
+.btn:visited:hover {
+  background: var(--button-hover-bg);
+  border-color: var(--button-hover-bg);
+  color: var(--button-color);
+  box-shadow: 0 0 0 2px var(--button-hover-outline);
+}
+
+button:active,
+.btn:active,
+.btn:visited:active {
+  background: var(--button-active-bg);
+  border-color: var(--button-active-bg);
+  color: var(--button-color);
+  box-shadow: 0 0 0 2px var(--button-active-outline);
+}
+
+button.secondary,
+button.secondary:visited,
+.btn.secondary,
+.btn.secondary:visited,
+.btn.secondary:visited,
+.btn.secondary:visited:visited {
+  border: 2px solid var(--button-secondary-border);
+  background: var(--button-secondary-bg);
+  color: var(--button-secondary-color);
+}
+
+button.secondary:focus-visible,
+button.secondary:hover:focus-visible,
+button.secondary:visited:focus-visible,
+button.secondary:visited:hover:focus-visible,
+.btn.secondary:focus-visible,
+.btn.secondary:hover:focus-visible,
+.btn.secondary:visited:focus-visible,
+.btn.secondary:visited:hover:focus-visible,
+.btn.secondary:visited:focus-visible,
+.btn.secondary:visited:hover:focus-visible,
+.btn.secondary:visited:visited:focus-visible,
+.btn.secondary:visited:visited:hover:focus-visible {
+  background: var(--button-secondary-bg);
+  border-color: var(--button-secondary-focus-border);
+  color: var(--button-secondary-focus-color);
+  box-shadow: 0 0 0 3px var(--focus-shadow);
+}
+
+button.secondary:hover,
+button.secondary:visited:hover,
+.btn.secondary:hover,
+.btn.secondary:visited:hover,
+.btn.secondary:visited:hover,
+.btn.secondary:visited:visited:hover {
+  border-color: var(--button-secondary-hover-border);
+  color: var(--button-secondary-hover-color);
+  box-shadow: 0 0 0 2px var(--button-secondary-hover-outline);
+}
+
+button.secondary:active,
+button.secondary:visited:active,
+.btn.secondary:active,
+.btn.secondary:visited:active,
+.btn.secondary:visited:active,
+.btn.secondary:visited:visited:active {
+  border-color: var(--button-secondary-active-border);
+  color: var(--button-secondary-active-color);
+  box-shadow: 0 0 0 1px var(--button-secondary-active-border);
+}
+
+button.danger,
+.btn.danger,
+.btn.danger:visited {
+  background: var(--button-danger-bg);
+  color: var(--button-danger-color);
+  border-color: var(--button-danger-border);
+}
+
+button.danger:focus-visible,
+button.danger:focus-visible:hover,
+.btn.danger:focus-visible,
+.btn.danger:focus-visible:hover,
+.btn.danger:visited:focus-visible,
+.btn.danger:visited:focus-visible:hover {
+  background: var(--button-danger-bg);
+  color: var(--button-danger-focus-color);
+  border-color: var(--button-danger-focus-outline);
+  box-shadow: inset 0 0 0 2px var(--button-danger-focus-border) 0 0 0 3px var(--focus-shadow);
+}
+
+button.danger:hover,
+.btn.danger:hover,
+.btn.danger:visited:hover {
+  background: var(--button-danger-bg);
+  color: var(--button-danger-hover-color);
+  border-color: var(--button-danger-hover-border);
+  box-shadow: 0 0 0 2px var(--button-danger-hover-outline);
+}
+
+button.danger:active,
+.btn.danger:active,
+.btn.danger:visited:active {
+  background: var(--button-danger-bg);
+  color: var(--button-danger-active-color);
+  border-color: var(--button-danger-active-border);
+  box-shadow: 0 0 0 2px var(--button-danger-active-outline);
+}
+
+button.danger.secondary,
+.btn.danger.secondary,
+.btn.danger.secondary:visited {
+  background: var(--button-danger-secondary-bg);
+  border-color: var(--button-danger-secondary-bg);
+  color: var(--button-danger-secondary-color);
+}
+
+button.danger.secondary:focus-visible,
+button.danger.secondary:focus-visible:hover,
+.btn.danger.secondary:focus-visible,
+.btn.danger.secondary:focus-visible:hover,
+.btn.danger.secondary:visited:focus-visible,
+.btn.danger.secondary:visited:focus-visible:hover {
+  color: var(--button-danger-secondary-color);
+  background: var(--button-danger-secondary-focus-bg);
+  border-color: var(--button-danger-secondary-focus-border);
+  box-shadow: 0 0 0 3px var(--focus-shadow);
+}
+
+button.danger.secondary:hover,
+.btn.danger.secondary:hover,
+.btn.danger.secondary:visited:hover {
+  background: var(--button-danger-secondary-hover-bg);
+  border-color: var(--button-danger-secondary-hover-bg);
+  box-shadow: 0 0 0 2px var(--button-danger-secondary-hover-outline);
+}
+
+button.danger.secondary:active,
+.btn.danger.secondary:active,
+.btn.danger.secondary:visited:active {
+  background: var(--button-danger-secondary-active-bg);
+  border-color: var(--button-danger-secondary-active-bg);
+  box-shadow: 0 0 0 2px var(--button-danger-secondary-active-outline);
+}
+
+button {
+  padding-left: 31px;
+  padding-right: 31px;
+}
+
+body > .warning {
+  display: none;
+  background: var(--warning-browser-bg);
+  color: var(--warning-browser-color);
+  text-align: center;
+  padding: 10px;
+}
+
+body > .warning p {
+  margin: 0;
+}
+
+body > .warning a,
+body > .warning a:hover,
+body > .warning a:visited,
+body > .warning a:active,
+body > .warning a:focus-visible,
+body > .warning b {
+  color: var(--warning-browser-color);
+  border: 0;
+  text-decoration: underline;
+}
+
+body > .warning strong {
+  color: var(--warning-browser-color);
+}
+
+body > .warning span:last-child {
+  font-weight: bold;
+  font-size: 1.5em;
+  line-height: 14px;
+  vertical-align: text-bottom;
+  cursor: pointer;
+}
+
+#security-level-info {
+  display: none;
+  border: 3px solid var(--warning-browser-dialog-border);
+  border-radius: 10px;
+  padding: 10px 25px;
+  margin-top: -2em;
+  font-size: 16px;
+  z-index: 1;
+}
+
+.content {
+  max-width: 965px;
+  margin: 17px auto 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+header {
+  width: 150px;
+  padding-top: 43px;
+  padding-bottom: 30px;
+  margin: 0 30px 0 15px;
+}
+
+#source-index .content {
+  margin-top: 60px;
+}
+
+#source-index header {
+  padding-top: 0;
+  margin-right: calc(25% - 150px);
+}
+
+#source-index main {
+  display: flex;
+  justify-content: center;
+  padding: 0;
+  border: 0;
+  width: calc(70% - 30px);
+}
+
+#source-index main h2 {
+  font-size: 24px;
+  margin-top: 0;
+}
+
+#source-index main .btn {
+  min-width: 186px;
+}
+
+#source-index main p {
+  width: 230px;
+  margin-bottom: 2em;
+}
+
+#source-index .content section:not(#locales-menu):not(#flashed) {
+  width: 50%;
+  min-height: 240px;
+  padding: 50px 45px 85px 45px;
+  position: relative;
+}
+
+#source-index .content section:not(#locales-menu):not(#flashed) .btn,
+#source-index .content section:not(#locales-menu):not(#flashed) button {
+  position: absolute;
+  bottom: 50px;
+}
+
+#source-index .content section#return-visit:not(#locales-menu):not(#flashed) {
+  padding-left: 65px;
+}
+
+html[dir=ltr] #source-index .content section:not(#locales-menu):not(#flashed):first-child {
+  border-right: 2px solid var(--index-middle-separator);
+}
+
+html[dir=rtl] #source-index .content section:not(#locales-menu):not(#flashed):first-child {
+  border-left: 2px solid var(--index-middle-separator);
+}
+
+@media only screen and (min-width: 769px) and (max-width: 850px) {
+  html #source-index header {
+    margin-right: calc(20% - 180px);
+  }
+  html #source-index > .content > main {
+    min-width: 575px;
+  }
+  html #source-index > .content > main > section {
+    width: 45%;
+  }
+  html #source-index > .content > main > section#return-visit {
+    padding-left: 30px;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .content,
+  #source-index .content {
+    display: block;
+    margin-top: 30px;
+  }
+  header,
+  #source-index header {
+    margin: 0 auto;
+    width: 185px;
+    padding-top: 1px;
+  }
+  html mark > span::before {
+    width: 81%;
+  }
+  html #upload .attachment input {
+    font-size: 130%;
+  }
+  #source-index > .content > main {
+    display: block;
+    width: 100%;
+  }
+  #source-index > .content > main > section:not(#locales-menu):not(#flashed) {
+    width: auto;
+    margin: 0;
+    padding-top: 0;
+    min-height: unset;
+  }
+  html[dir=ltr] #source-index > .content > main > section:not(#locales-menu):not(#flashed):first-child {
+    border-right: 0;
+  }
+  html[dir=rtl] #source-index > .content > main > section:not(#locales-menu):not(#flashed):first-child {
+    border-left: 0;
+  }
+  #source-index > .content > main > section#return-visit:not(#locales-menu):not(#flashed) {
+    padding-left: 45px;
+  }
+  #source-index > .content > main p {
+    width: auto;
+    max-width: 500px;
+  }
+  #source-index > .content > main button,
+  #source-index > .content > main .btn {
+    width: 80%;
+  }
+  .content main {
+    width: auto;
+    border-left: 0;
+    border-right: 0;
+    margin-right: 0;
+  }
+  .content main #upload .fields {
+    display: block;
+  }
+  .content main #upload .fields div {
+    width: auto;
+  }
+}
+
+header h1,
+header h1 a {
+  font-size: 13px;
+  display: block;
+  border: 0;
+  text-align: center;
+  margin: 1em 0;
+}
+
+header > a[href="#main"],
+header > a[href="#flashed"] {
+  display: block;
+  position: absolute;
+  top: -999rem;
+  text-align: center;
+  text-decoration: none;
+  border: none;
+}
+
+html[dir=ltr] header > a[href="#main"],
+html[dir=ltr] header > a[href="#flashed"] {
+  left: -999rem;
+}
+
+html[dir=rtl] header > a[href="#main"],
+html[dir=rtl] header > a[href="#flashed"] {
+  right: -999rem;
+}
+
+header > a[href="#main"]:focus-visible,
+header > a[href="#flashed"]:focus-visible {
+  position: initial;
+  margin-top: -21px;
+}
+
+label {
+  cursor: pointer;
+}
+
+#logout,
+#source-logout nav a {
+  padding-right: 22px;
+  padding-left: 22px;
+}
+
+html[dir=ltr] #logout,
+html[dir=ltr] #source-logout nav a {
+  margin-left: 20px;
+  float: right;
+}
+
+html[dir=rtl] #logout,
+html[dir=rtl] #source-logout nav a {
+  margin-right: 20px;
+  float: left;
+}
+
+html[dir=ltr] #source-login main {
+  padding-left: 53px;
+}
+
+html[dir=rtl] #source-login main {
+  padding-right: 53px;
+}
+
+mark,
+#source-login form div:first-of-type {
+  position: relative;
+  width: 100%;
+}
+
+html[dir=ltr] mark::before,
+html[dir=rtl] mark::after,
+html[dir=ltr] #source-login form div:first-of-type::before,
+html[dir=rtl] #source-login form div:first-of-type::after {
+  content: "";
+  background-image: url(/static/i/source.png);
+  background-size: 32px;
+  background-color: var(--passphrase-icon-color);
+  background-position: 2px 2px;
+  clip-path: circle(14px at 18px 18px);
+  display: block;
+  position: absolute;
+  width: 34px;
+  height: 34px;
+}
+
+#source-login form div:first-of-type {
+  margin-top: 45px;
+}
+
+#source-login form div:first-of-type::before,
+#source-login form div:first-of-type::after {
+  top: calc(50% - 18px);
+}
+
+html[dir=ltr] #source-login form div:first-of-type::before {
+  left: -43px;
+}
+
+html[dir=rtl] #source-login form div:first-of-type::after {
+  right: -43px;
+}
+
+#source-login form input[type=password] {
+  padding: 10px;
+  width: 100%;
+  border: 1px solid var(--passphrase-input-border);
+  border-radius: 2px;
+  font-size: 16px;
+}
+
+#source-login form input[type=password]::placeholder {
+  color: var(--passphrase-input-placeholder-color);
+  letter-spacing: 1px;
+  font-size: 11px;
+}
+
+#upload textarea:focus-visible,
+#source-login form input[type=password]:focus-visible {
+  border-color: var(--passphrase-input-focus-border);
+  outline: none;
+  box-shadow: 0 0 0 1px var(--passphrase-input-focus-outline) 0 0 0 3px var(--passphrase-input-focus-shadow);
+}
+
+html[dir=ltr] mark {
+  box-shadow: 2px 2px 4px var(--passphrase-shadow);
+}
+
+html[dir=ltr] mark::before {
+  left: 15px;
+}
+
+html[dir=ltr] mark > span::before {
+  left: 60px;
+}
+
+html[dir=rtl] mark {
+  box-shadow: -2px 2px 4px var(--passphrase-shadow);
+}
+
+html[dir=rtl] mark::after {
+  right: 15px;
+}
+
+html[dir=rtl] mark > span::before {
+  right: 60px;
+}
+
+mark {
+  display: block;
+  background-color: var(--passphrase-bg);
+  color: var(--passphrase-color);
+  border: 1px solid var(--passphrase-border);
+  box-shadow: 2px 2px 4px var(--passphrase-shadow);
+  font-family: monospace;
+  letter-spacing: 1.25px;
+  line-height: 0;
+  font-weight: bold;
+  font-size: 14px;
+  padding: 20px 35px 20px 60px;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+mark::before,
+mark::after {
+  top: calc(50% - 18px);
+}
+
+mark > span {
+  display: inline-block;
+  visibility: hidden;
+  overflow: hidden;
+  line-height: 15px;
+}
+
+mark > span::before {
+  content: "";
+  display: block;
+  position: absolute;
+  visibility: visible;
+  text-indent: 0;
+  width: 85%;
+  height: 1em;
+  background: var(--passphrase-masked-color);
+  clip-path: polygon(0% 0%, 0% 100%, 20% 100%, 20% 0%, 23% 0%, 23% 100%, 32% 100%, 32% 0%, 35% 0%, 35% 100%, 42% 100%, 42% 0%, 45% 0%, 45% 100%, 64% 100%, 64% 0%, 67% 0%, 67% 100%, 74% 100%, 74% 0%, 77% 0%, 77% 100%, 90% 100%, 90% 0%, 93% 0%, 93% 100%, 100% 100%, 100% 0%);
+}
+
+#codename-reminder {
+  font-size: 18px;
+  color: var(--heading-alt-color);
+}
+
+#codename-show-checkbox {
+  position: absolute;
+}
+
+html[dir=ltr] #codename-show-checkbox {
+  left: -999rem;
+}
+
+html[dir=rtl] #codename-show-checkbox {
+  right: -999rem;
+}
+
+#codename-show-checkbox ~ #codename-show {
+  font-size: 11px;
+  line-height: 14px;
+  margin-top: -2px;
+  padding: 8px 15px;
+  color: var(--checkbox-label-color);
+  border: 1px solid var(--checkbox-border);
+}
+
+html[dir=ltr] #codename-show-checkbox ~ #codename-show {
+  float: right;
+}
+
+html[dir=rtl] #codename-show-checkbox ~ #codename-show {
+  float: left;
+}
+
+#codename-show-checkbox ~ #codename-show:hover {
+  background: var(--checkbox-hover-bg);
+  border-color: var(--checkbox-hover-border);
+  box-shadow: inset 0 0 0 1px var(--checkbox-hover-border-inside);
+}
+
+html[dir=ltr] #codename-show-checkbox ~ #codename-show::before {
+  content: "";
+  background: var(--body-bg);
+  display: block;
+  width: 11px;
+  height: 11px;
+  border: 1px solid var(--checkbox-checkbox-color);
+}
+
+html[dir=rtl] #codename-show-checkbox ~ #codename-show::after {
+  content: "";
+  background: var(--body-bg);
+  display: block;
+  width: 11px;
+  height: 11px;
+  border: 1px solid var(--checkbox-checkbox-color);
+}
+
+html[dir=ltr] #codename-show-checkbox ~ #codename-show::before {
+  margin-right: 12px;
+  float: left;
+}
+
+html[dir=rtl] #codename-show-checkbox ~ #codename-show::after {
+  margin-left: 12px;
+  float: right;
+}
+
+#codename-show-checkbox:focus-visible ~ #codename-show {
+  box-shadow: 0 0 0 3px var(--focus-shadow);
+}
+
+#codename-show-checkbox:checked ~ mark > span {
+  visibility: visible;
+}
+
+#codename-show-checkbox:checked ~ mark > span::before {
+  display: none;
+}
+
+html[dir=ltr] #codename-show-checkbox:checked ~ #codename-show::before {
+  background-image: url(/static/i/checkbox.png);
+  background-size: 13px;
+  background-color: var(--checkbox-checkbox-color);
+  width: 13px;
+  height: 13px;
+  border: 0;
+}
+
+html[dir=rtl] #codename-show-checkbox:checked ~ #codename-show::after {
+  background-image: url(/static/i/checkbox.png);
+  background-size: 13px;
+  background-color: var(--checkbox-checkbox-color);
+  width: 13px;
+  height: 13px;
+  border: 0;
+}
+
+#codename-show {
+  display: block;
+}
+
+#upload .fields {
+  display: flex;
+  border: 1px solid var(--form-fields-border);
+  align-items: center;
+  background: var(--form-attachment-bg);
+}
+
+#upload .fields > div:last-child {
+  display: none;
+}
+
+#upload .message {
+  width: 100%;
+}
+
+#upload textarea {
+  width: 100%;
+  min-height: 168px;
+  border: 0;
+  padding: 10px;
+  font: inherit;
+  color: inherit;
+  display: block;
+  position: relative;
+  z-index: 1;
+  margin: 0;
+}
+
+#upload .attachment {
+  padding: 12px;
+}
+
+#upload .attachment::before {
+  content: "";
+  display: block;
+  width: 100%;
+  height: 56px;
+  margin-bottom: 10px;
+  background: var(--form-attachment-icon-color);
+  mask-image: url(/static/i/upload.png);
+  -webkit-mask-image: url(/static/i/upload.png);
+  mask-position: center;
+  -webkit-mask-position: center;
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+  mask-size: 56px 56px;
+  -webkit-mask-size: 56px 56px;
+}
+
+#upload .attachment input {
+  padding: 10px;
+  width: 100%;
+  background: var(--form-attachment-input-bg);
+}
+
+#upload .attachment {
+  width: 42%;
+}
+
+#upload .attachment + .message {
+  width: 58%;
+}
+
+#max-file-size,
+#min-char-length {
+  text-align: center;
+  font-size: 10px;
+  font-style: italic;
+  margin: 0;
+}
+
+#min-char-length {
+  background: var(--body-bg);
+  padding: 0 10px 12px 10px;
+}
+
+#upload textarea:focus-visible,
+#source-login form input[type=password]:focus-visible {
+  border: 1px solid var(--passphrase-input-focus-border);
+  outline: none;
+  box-shadow: 0 0 0 1px var(--passphrase-input-focus-outline) 0 0 0 3px var(--passphrase-input-focus-shadow);
+}
+
+#upload textarea:focus-visible {
+  padding: 9px;
+}
+
+#create-form,
+.form-controls {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-top: 14px;
+}
+
+html[dir=ltr] #create-form *:last-child,
+html[dir=ltr] .form-controls *:last-child {
+  margin-left: 10px;
+}
+
+html[dir=rtl] #create-form *:last-child,
+html[dir=rtl] .form-controls *:last-child {
+  margin-right: 10px;
+}
+
+#create-form {
+  margin-top: 40px;
+}
+
+.form-controls {
+  padding-bottom: 16px;
+}
+
+#no-replies {
+  font-size: 16px;
+  font-weight: bold;
+  padding: 40px;
+  text-align: center;
+  background: var(--reply-noreply-bg);
+  color: var(--reply-noreply-color);
+}
+
+#no-replies::before,
+#no-replies::after {
+  content: " — ";
+}
+
+#replies article {
+  border: 1px solid var(--reply-border);
+  position: relative;
+  margin-bottom: 1em;
+  overflow-wrap: break-word;
+}
+
+#replies article h3 {
+  margin: 0;
+  position: absolute;
+  font-size: 10px;
+  top: 1px;
+  background: var(--reply-time-bg);
+  color: var(--reply-time-color);
+  padding: 0 7px;
+  line-height: 21px;
+}
+
+html[dir=ltr] #replies article h3 {
+  right: 1px;
+}
+
+html[dir=rtl] #replies article h3 {
+  left: 1px;
+}
+
+#replies article > a {
+  display: block;
+  position: absolute;
+  top: 2em;
+  width: 32px;
+  height: 32px;
+  overflow: hidden;
+  border: 0;
+}
+
+html[dir=ltr] #replies article > a {
+  right: 1em;
+}
+
+html[dir=rtl] #replies article > a {
+  left: 1em;
+}
+
+#replies article > a::before {
+  display: block;
+  content: "";
+  width: 32px;
+  height: 32px;
+  background: var(--reply-delete-icon-color);
+  mask-image: url("/static/i/material/trash.png");
+  -webkit-mask-image: url("/static/i/material/trash.png");
+  mask-size: 28px 32px;
+  -webkit-mask-size: 28px 32px;
+  mask-position: 2px 0;
+  -webkit-mask-position: 2px 0;
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+}
+
+#replies article > a:hover {
+  background: var(--reply-delete-icon-hover-outline);
+  mask-image: url("/static/i/material/trash-outline.png");
+  -webkit-mask-image: url("/static/i/material/trash-outline.png");
+  mask-size: 28px 32px;
+  -webkit-mask-size: 28px 32px;
+  mask-position: 2px 0;
+  -webkit-mask-position: 2px 0;
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+}
+
+#replies article > a:hover::before {
+  background: var(--reply-delete-icon-hover-color);
+}
+
+#replies article > a:focus-visible::before {
+  background: var(--reply-delete-icon-focus-color);
+}
+
+#replies article > a:active::before {
+  background: var(--reply-delete-icon-active-color);
+}
+
+html[dir=ltr] #replies article blockquote {
+  margin: 2em 3.75em 2em 2.25em;
+}
+
+html[dir=rtl] #replies article blockquote {
+  margin: 2em 2.25em 2em 3.75em;
+}
+
+#replies article dialog,
+#delete-all dialog {
+  visibility: hidden;
+  top: -75px;
+  padding: 0;
+  border: 0;
+}
+
+html[dir=ltr] #replies article dialog,
+html[dir=ltr] #delete-all dialog {
+  left: unset;
+  right: -40px;
+}
+
+html[dir=rtl] #replies article dialog,
+html[dir=rtl] #delete-all dialog {
+  left: -40px;
+  right: unset;
+}
+
+#replies article dialog:target,
+#delete-all dialog:target {
+  visibility: visible;
+  z-index: 5;
+}
+
+#replies article dialog:target::before,
+#delete-all dialog:target::before {
+  display: block;
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  z-index: -1;
+  background: var(--modal-background-bg);
+}
+
+#replies article dialog:target > div,
+#delete-all dialog:target > div {
+  background: var(--body-bg);
+  padding: 80px;
+  border: 1px solid var(--modal-border);
+}
+
+#replies article dialog a.close,
+#delete-all dialog a.close {
+  display: block;
+  position: absolute;
+  top: 10px;
+  width: 24px;
+  height: 24px;
+  overflow: hidden;
+  border: 0;
+}
+
+html[dir=ltr] #replies article dialog a.close,
+html[dir=ltr] #delete-all dialog a.close {
+  right: 10px;
+}
+
+html[dir=rtl] #replies article dialog a.close,
+html[dir=rtl] #delete-all dialog a.close {
+  left: 10px;
+}
+
+#replies article dialog a.close::before,
+#delete-all dialog a.close::before {
+  display: block;
+  content: "";
+  background: var(--modal-close-icon-bg) url(/static/i/close.png);
+  background-size: 22px;
+  background-repeat: no-repeat;
+  background-position: 1px 1px;
+  width: 24px;
+  height: 24px;
+  clip-path: circle(10px at 12px 12px);
+}
+
+#replies article dialog a.close:hover,
+#replies article dialog a.close:focus-visible,
+#delete-all dialog a.close:hover,
+#delete-all dialog a.close:focus-visible {
+  background-color: var(--modal-close-icon-hover-outline);
+  clip-path: circle(12px at 12px 12px);
+}
+
+#replies article dialog a.close:hover::before,
+#replies article dialog a.close:focus-visible::before,
+#delete-all dialog a.close:hover::before,
+#delete-all dialog a.close:focus-visible::before {
+  background-color: var(--modal-close-icon-hover-bg);
+  background-image: url(/static/i/close.png);
+}
+
+#replies article dialog a.close:focus-visible,
+#delete-all dialog a.close:focus-visible {
+  box-shadow: unset;
+  background-color: var(--focus-shadow);
+  clip-path: circle(12px at 12px 12px);
+}
+
+#replies article dialog h3,
+#replies article dialog h4,
+#delete-all dialog h3,
+#delete-all dialog h4 {
+  font-size: 24px;
+  margin-top: 0;
+}
+
+#replies article dialog .form-controls,
+#delete-all dialog .form-controls {
+  padding-bottom: 0;
+  justify-content: center;
+}
+
+#delete-all dialog {
+  top: -95px;
+  left: 4em;
+  right: 4em;
+}
+
+#replies button,
+#replies .btn {
+  font-size: 12px;
+  padding-top: 7px;
+  padding-bottom: 7px;
+}
+
+#delete-all {
+  margin-top: 14px;
+  text-align: center;
+  position: relative;
+}
+
+#locales-menu label {
+  display: flex;
+  padding: .7em;
+  background: var(--body-bg);
+  border: 1px solid var(--locale-menu-item-hover-bg);
+}
+
+#locales-menu label:hover,
+#locales-menu label:focus-visible,
+#locales-menu label:active {
+  background-color: var(--locale-menu-item-hover-bg);
+}
+
+#locales-menu label::before {
+  content: "";
+  display: inline-block;
+  height: 18px;
+  width: 18px;
+  background-image: url(/static/i/languages_globe.png);
+  background-size: 18px 18px;
+}
+
+html[dir=ltr] #locales-menu label::before {
+  margin-right: 1ch;
+}
+
+html[dir=rtl] #locales-menu label::before {
+  margin-left: 1ch;
+}
+
+#locales-menu label::after {
+  content: "";
+  display: inline;
+  height: 18px;
+  width: 12px;
+  background-image: url(/static/i/languages_arrow.png);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+html[dir=ltr] #locales-menu label::after {
+  margin-left: auto;
+}
+
+html[dir=rtl] #locales-menu label::after {
+  margin-right: auto;
+}
+
+#locales-menu h2 {
+  display: none;
+}
+
+#locales-menu input {
+  position: absolute;
+  top: -999rem;
+}
+
+html[dir=ltr] #locales-menu input {
+  left: -999rem;
+}
+
+html[dir=rtl] #locales-menu input {
+  right: -999rem;
+}
+
+#locales-menu input:focus-visible ~ label {
+  box-shadow: 0 0 0 3px var(--focus-shadow);
+}
+
+header img,
+#locales-menu,
+#locales-menu-list {
+  width: 150px;
+  margin: 0 auto;
+  padding: 0;
+  height: auto;
+}
+
+@media only screen and (max-width: 768px) {
+  header img {
+    width: 185px;
+  }
+}
+
+#locales-menu,
+#locales-menu-list {
+  width: 135px;
+}
+
+*:lang(nb-No) #locales-menu,
+*:lang(nb-No) #locales-menu-list {
+  width: 155px;
+}
+
+*:lang(nl) #locales-menu,
+*:lang(nl) #locales-menu-list {
+  width: 140px;
+}
+
+#locales-menu-list {
+  background-color: var(--body-bg);
+  display: none;
+  position: absolute;
+  margin-top: 0;
+  padding: 0;
+  box-shadow: 0 0 8px var(--locale-menu-list-shadow);
+  list-style-type: none;
+  z-index: 2;
+}
+
+#locales-menu-list li {
+  display: inline;
+  border-bottom: 1px solid var(--locale-menu-item-border);
+  position: relative;
+}
+
+#locales-menu-list li a {
+  display: block;
+  padding: 8px;
+  text-decoration: none;
+  border: 0;
+}
+
+#locales-menu-list li a:hover,
+#locales-menu-list li a:focus-visible,
+#locales-menu-list li a:active {
+  background-color: var(--locale-menu-item-hover-bg);
+}
+
+#locales-menu-list li:last-child::after {
+  content: "";
+  display: block;
+  position: absolute;
+  bottom: -30px;
+  height: 30px;
+  width: 30px;
+}
+
+#locales-menu-checkbox:checked ~ #locales-menu-list {
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  width: calc(100% - 210px);
+  border: 1px solid var(--main-border);
+  padding: 50px 30px 24px 30px;
+}
+
+section[aria-labelledby="submit-heading"] {
+  clear: both;
+}
+
+section[aria-labelledby="codename-reminder"] + section h2 {
+  padding-top: 26px;
+}
+
+#source-lookup main,
+#source-logout main {
+  padding-top: 22px;
+}
+
+#source-logout main nav + section {
+  margin-top: 44px;
+}
+
+#replies > .info:first-child {
+  font-size: 13px;
+  line-height: 19px;
+  display: flex;
+}
+
+#replies > .info:first-child::before {
+  content: "";
+  flex-shrink: 0;
+  width: 19px;
+  height: 19px;
+  background-color: var(--info-icon-color);
+  background-image: url(/static/i/info-small.png);
+  background-size: 18px;
+  clip-path: circle(7px at 9px 9px);
+}
+
+html[dir=ltr] #replies > .info:first-child::before {
+  margin: 0.1em 0.3em 0 0;
+}
+
+html[dir=rtl] #replies > .info:first-child::before {
+  margin: 0.1em 0 0 0.3em;
+}
+
+#flashed ul {
+  padding: 0;
+}
+
+#flashed li {
+  display: flex;
+  list-style: none;
+  padding: 24px;
+}
+
+#flashed h2 {
+  flex-shrink: 0;
+  font-size: 100%;
+  position: relative;
+  height: min-content;
+}
+
+html[dir=ltr] #flashed h2 {
+  margin: 0 0.75em 0 calc(1.6em + 1ex);
+}
+
+html[dir=rtl] #flashed h2 {
+  margin: 0 calc(1.6em + 1ex) 0 0.75em;
+}
+
+#flashed h2::before {
+  margin-right: 5px;
+}
+
+#flashed p {
+  margin: 0;
+}
+
+#flashed img {
+  vertical-align: sub;
+}
+
+.content > #flashed {
+  margin-bottom: 4em;
+}
+
+#flashed img[src="/static/i/torbroom.png"] {
+  display: inline-block;
+  background: var(--flash-error-icon-color);
+  overflow: hidden;
+  padding-top: 16px;
+  mask-image: url(/static/i/torbroom.png);
+  -webkit-mask-image: url(/static/i/torbroom.png);
+  mask-size: 16px 16px;
+  -webkit-mask-size: 16px 16px;
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+}
+
+#security-level-info {
+  display: none;
+  border: 3px solid var(--warning-browser-dialog-border);
+  border-radius: 10px;
+  padding: 10px 25px;
+  margin-top: -2em;
+  font-size: 16px;
+}
+
+.error,
+.notification,
+.success {
+  background: var(--flash-error-bg);
+  color: var(--flash-error-color);
+}
+
+.error h2,
+.notification h2,
+.success h2 {
+  color: var(--flash-error-heading-color);
+}
+
+html[dir=ltr] .error h2::before,
+html[dir=ltr] .notification h2::before,
+html[dir=ltr] .success h2::before {
+  content: "";
+  display: block;
+  width: 22px;
+  height: 22px;
+  background: var(--flash-error-icon-color);
+  vertical-align: bottom;
+  mask-image: url(/static/i/material/error.png);
+  -webkit-mask-image: url(/static/i/material/error.png);
+  mask-size: 100%;
+  -webkit-mask-size: 100%;
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+  position: absolute;
+  top: calc(50% - 11px);
+  left: calc(-1.6em - 1ex);
+}
+
+html[dir=rtl] .error h2::after,
+html[dir=rtl] .notification h2::after,
+html[dir=rtl] .success h2::after {
+  content: "";
+  display: block;
+  width: 22px;
+  height: 22px;
+  background: var(--flash-error-icon-color);
+  vertical-align: bottom;
+  mask-image: url(/static/i/material/error.png);
+  -webkit-mask-image: url(/static/i/material/error.png);
+  mask-size: 100%;
+  -webkit-mask-size: 100%;
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+  position: absolute;
+  top: calc(50% - 11px);
+  right: calc(-1.6em - 1ex);
+}
+
+.error .icon,
+.error.icon,
+.notification .icon,
+.notification.icon,
+.success .icon,
+.success.icon {
+  display: flex;
+}
+
+.error .icon::before,
+.error.icon::before,
+.notification .icon::before,
+.notification.icon::before,
+.success .icon::before,
+.success.icon::before {
+  flex-shrink: 0;
+  content: "";
+  display: block;
+  width: 22px;
+  height: 22px;
+  background: var(--flash-error-icon-color);
+  vertical-align: bottom;
+  mask-image: url(/static/i/material/error.png);
+  -webkit-mask-image: url(/static/i/material/error.png);
+  mask-size: 100%;
+  -webkit-mask-size: 100%;
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+}
+
+html[dir=ltr] .error .icon::before,
+html[dir=ltr] .error.icon::before,
+html[dir=ltr] .notification .icon::before,
+html[dir=ltr] .notification.icon::before,
+html[dir=ltr] .success .icon::before,
+html[dir=ltr] .success.icon::before {
+  margin-right: 1ex;
+}
+
+html[dir=rtl] .error .icon::before,
+html[dir=rtl] .error.icon::before,
+html[dir=rtl] .notification .icon::before,
+html[dir=rtl] .notification.icon::before,
+html[dir=rtl] .success .icon::before,
+html[dir=rtl] .success.icon::before {
+  margin-left: 1ex;
+}
+
+.success {
+  background: var(--flash-success-bg);
+  color: var(--flash-success-color);
+}
+
+.success h2 {
+  color: var(--flash-success-heading-color);
+}
+
+html[dir=ltr] .success h2::before {
+  background: var(--flash-success-icon-color);
+  mask-image: url(/static/i/check.png);
+  -webkit-mask-image: url(/static/i/check.png);
+}
+
+html[dir=rtl] .success h2::after {
+  background: var(--flash-success-icon-color);
+  mask-image: url(/static/i/check.png);
+  -webkit-mask-image: url(/static/i/check.png);
+}
+
+.success .icon::before {
+  background: var(--flash-success-icon-color);
+  mask-image: url(/static/i/check.png);
+  -webkit-mask-image: url(/static/i/check.png);
+}
+
+.notification,
+.info {
+  background: var(--flash-notification-bg);
+  color: var(--flash-notification-color);
+}
+
+.notification h2,
+.info h2 {
+  color: var(--flash-notification-heading-color);
+}
+
+html[dir=ltr] .notification h2::before,
+html[dir=ltr] .info h2::before {
+  background-color: var(--flash-notification-icon-color);
+  background-image: url(/static/i/material/info.png);
+  background-size: 22px;
+  clip-path: circle(9px at 11px 11px);
+  mask-image: none;
+  -webkit-mask-image: none;
+}
+
+html[dir=rtl] .notification h2::after,
+html[dir=rtl] .info h2::after {
+  background-color: var(--flash-notification-icon-color);
+  background-image: url(/static/i/material/info.png);
+  background-size: 22px;
+  clip-path: circle(9px at 11px 11px);
+  mask-image: none;
+  -webkit-mask-image: none;
+}
+
+.notification .icon::before,
+.notification.icon::before,
+.info .icon::before,
+.info.icon::before {
+  background-color: var(--flash-notification-icon-color);
+  background-image: url(/static/i/material/info.png);
+  background-size: 22px;
+  clip-path: circle(9px at 11px 11px);
+  mask-image: none;
+  -webkit-mask-image: none;
+}
+
+.info {
+  padding: 9px;
+}
+
+#flashed + section,
+#codename-hint + section:not(#flashed) {
+  margin-top: 3em;
+}
+
+#source-lookup nav + section:not(#flashed) {
+  margin-top: 53px;
+}
+
+nav + section#flashed {
+  margin-top: -1em;
+  clear: none;
+}
+
+#source-generate main section {
+  margin-top: 20px;
+}
+
+#source-generate main section + ul {
+  padding-left: 1.2em;
+}
+
+footer {
+  padding: 2em 0;
+  max-width: 940px;
+  border-top: 1px solid var(--footer-border);
+  text-align: center;
+  margin: 65px auto 0 auto;
+  font-size: 13px;
+  line-height: 23px;
+}
+
+footer p {
+  margin: 0;
+}
+
+#footer-powered-by::before {
+  content: "";
+  display: inline-block;
+  height: 23px;
+  width: 20px;
+  vertical-align: middle;
+  background-image: url(/static/i/logo-footer.png);
+  background-size: 20px 23px;
+}
+
+#footer-fpf {
+  color: var(--footer-fpf-color);
+}
+
+body::after {
+  position: absolute;
+  top: -999px;
+  width: 0;
+  height: 0;
+  visibility: hidden;
+  z-index: -1;
+  content: url(/static/i/source.png) url(/static/i/info-small.png) url(/static/i/material/info.png) url(/static/i/material/error.png) url(/static/i/check.png) url(/static/i/checkbox.png);
+}

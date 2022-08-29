@@ -9,15 +9,6 @@ DH_VIRTUALENV_VERSION = "1.2.2"
 testinfra_hosts = ["docker://{}-sd-app".format(SECUREDROP_TARGET_DISTRIBUTION)]
 
 
-def test_sass_gem_installed(host):
-    """
-    Ensure the `sass` Ruby gem is installed, for compiling SASS to CSS.
-    """
-    c = host.run("gem list")
-    assert "sass (3.4.23)" in c.stdout
-    assert c.rc == 0
-
-
 @pytest.mark.xfail(reason="This check conflicts with the concept of pegging" "dependencies")
 def test_build_all_packages_updated(host):
     """

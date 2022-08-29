@@ -51,10 +51,6 @@ function maybe_create_config_py() {
     fi
 }
 
-function run_sass() {
-    sass --stop-on-error sass:static/css --style compressed "$@"
-}
-
 function maybe_use_tor() {
     if [[ -n "${USE_TOR:-}" ]]; then
         echo "Setting up Tor..."

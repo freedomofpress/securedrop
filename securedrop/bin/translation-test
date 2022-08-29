@@ -11,7 +11,6 @@ run_redis &
 setup_vncauth
 run_x11vnc &
 urandom
-run_sass --force --update
 maybe_create_config_py
 ./i18n_tool.py translate-messages --compile
 
