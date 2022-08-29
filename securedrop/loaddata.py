@@ -11,6 +11,7 @@ import io
 import math
 import os
 import random
+import secrets
 import string
 from itertools import cycle
 from pathlib import Path
@@ -65,14 +66,14 @@ def random_bool() -> bool:
     """
     Flips a coin.
     """
-    return random.choice((True, False))
+    return secrets.choice((True, False))
 
 
 def random_chars(count: int, chars: str = string.ascii_letters) -> str:
     """
     Returns a random string of len characters from the supplied list.
     """
-    return "".join([random.choice(chars) for _ in range(count)])
+    return "".join([secrets.choice(chars) for _ in range(count)])
 
 
 def random_datetime(nullable: bool) -> Optional[datetime.datetime]:
@@ -330,11 +331,11 @@ def add_sources(args: argparse.Namespace, journalists: Tuple[Journalist, ...]) -
         source, codename = add_source()
 
         for _ in range(args.messages_per_source):
-            submit_message(source, random.choice(journalists) if seen_message_count > 0 else None)
+            submit_message(source, secrets.choice(journalists) if seen_message_count > 0 else None)
             seen_message_count -= 1
 
         for _ in range(args.files_per_source):
-            submit_file(source, random.choice(journalists) if seen_file_count > 0 else None)
+            submit_file(source, secrets.choice(journalists) if seen_file_count > 0 else None)
             seen_file_count -= 1
 
         if i <= starred_sources_count:
@@ -342,8 +343,8 @@ def add_sources(args: argparse.Namespace, journalists: Tuple[Journalist, ...]) -
 
         if i <= replied_sources_count:
             for _ in range(args.replies_per_source):
-                journalist_who_replied = random.choice([dellsberg, journalist_to_be_deleted])
-                journalist_who_saw = random.choice([default_journalist, None])
+                journalist_who_replied = secrets.choice([dellsberg, journalist_to_be_deleted])
+                journalist_who_saw = secrets.choice([default_journalist, None])
                 add_reply(source, journalist_who_replied, journalist_who_saw)
 
         print(

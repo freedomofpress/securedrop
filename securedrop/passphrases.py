@@ -1,5 +1,5 @@
 from pathlib import Path
-from random import SystemRandom
+from secrets import SystemRandom
 from typing import Dict, List, NewType, Optional, Set
 
 from sdconfig import config
