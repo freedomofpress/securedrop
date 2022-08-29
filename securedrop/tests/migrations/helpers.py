@@ -7,7 +7,7 @@ from datetime import datetime
 
 
 def random_bool():
-    return bool(secrets.getrandbits(1))
+    return bool(secrets.randbits(1))
 
 
 def bool_or_none():
