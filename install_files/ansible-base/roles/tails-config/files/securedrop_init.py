@@ -124,10 +124,9 @@ for shortcut in ["source.desktop", "journalist.desktop"]:
     subprocess.call(["gio", "set", path_desktop + shortcut, "metadata::trusted", "true"], env=env)
 
 # in Tails 4, reload gnome-shell desktop icons extension to update with changes above
-cmd = ["lsb_release", "--id", "--short"]
-p = subprocess.check_output(cmd)
-distro_id = p.rstrip()
-if distro_id == "Debian" and os.uname()[1] == "amnesia":
+with open("/etc/os-release") as f:
+    is_tails = "TAILS_PRODUCT_NAME" in f.read()
+if is_tails:
     subprocess.call(["gnome-shell-extension-tool", "-r", "desktop-icons@csoriano"], env=env)
 
 # reacquire uid0 and notify the user

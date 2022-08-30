@@ -82,7 +82,7 @@ class TestSecureDropAdmin(object):
         python_lib_path = os.path.join(str(tmpdir), "lib/python3.7")
         os.makedirs(python_lib_path)
         with mock.patch("bootstrap.is_tails", return_value=True):
-            with mock.patch("subprocess.check_output", return_value=b"bullseye"):
+            with mock.patch("builtins.open", mock.mock_open(read_data='TAILS_VERSION_ID="5.0"')):
                 bootstrap.clean_up_old_tails_venv(venv_path)
                 assert "Tails 4 virtualenv detected." in caplog.text
                 assert "Tails 4 virtualenv deleted." in caplog.text

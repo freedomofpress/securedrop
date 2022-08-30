@@ -2,8 +2,6 @@
 
 DEB_DH_INSTALL_ARGS=-X .git
 
-SECUREDROP_BUILD_PLATFORM=$(shell lsb_release -sc)
-
 %:
 	dh $@ --with python-virtualenv --with systemd
 
