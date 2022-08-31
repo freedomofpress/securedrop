@@ -1,15 +1,12 @@
-# ubuntu 20.04 image from 2021-09-21
-FROM ubuntu@sha256:3555f4996aea6be945ae1532fa377c88f4b3b9e6d93531f47af5d78a7d5e3761
+# ubuntu 20.04 image from 2022-08-01
+FROM ubuntu@sha256:a06ae92523384c2cd182dcfe7f8b2bf09075062e937d5653d7d0db0375ad2221
 ARG USER_NAME
 ENV USER_NAME ${USER_NAME:-root}
 ARG USER_ID
 ENV USER_ID ${USER_ID:-0}
 
-# If running grsecurity kernel on the host, Memprotect must be disabled on mono-sgen in the container
-RUN apt-get update && apt-get install -y paxctl && \
-    { apt-get install -y libgtk2.0 || echo 'libgtk2.0 was not installed'; } && \
-    paxctl -cm /usr/bin/mono-sgen && dpkg-reconfigure mono-runtime-sgen && \
-    apt-get install -y apache2-dev coreutils devscripts vim \
+RUN apt-get update && apt-get install -y \
+                       libgtk2.0 apache2-dev coreutils devscripts vim \
                        python3-pip python3-all python3-venv virtualenv libpython3.8-dev libssl-dev \
                        gnupg2 ruby redis-server git xvfb curl wget \
                        x11vnc enchant libffi-dev sqlite3 gettext sudo \
@@ -25,7 +22,7 @@ RUN gem install sass -v 3.4.23
 # Current versions of the test browser software. Tor Browser is based
 # on a specific version of Firefox, noted in Help > About Tor Browser.
 # Ideally we'll keep those in sync.
-ENV FF_VERSION 91.5.0esr
+ENV FF_VERSION 91.12.0esr
 ENV GECKODRIVER_VERSION v0.29.1
 
 # Import Tor release signing key
@@ -38,10 +35,7 @@ RUN TBB_VERSION=$(curl -s https://aus1.torproject.org/torbrowser/update_3/releas
     wget https://www.torproject.org/dist/torbrowser/${TBB_VERSION}/tor-browser-linux64-${TBB_VERSION}_en-US.tar.xz.asc && \
     gpg2 --verify tor-browser-linux64-${TBB_VERSION}_en-US.tar.xz.asc 2>&1 | grep "Primary key fingerprint:" | sed -e 's/Primary key fingerprint: //' -e 's/ //g' | tail -1 | grep -qE "${TOR_RELEASE_KEY_FINGERPRINT}" && \
     tar -xvJf tor-browser-linux64-${TBB_VERSION}_en-US.tar.xz && \
-    mkdir -p /root/.local/tbb && mv tor-browser_en-US /root/.local/tbb &&\
-    paxctl -cm /root/.local/tbb/tor-browser_en-US/Browser/firefox.real && \
-    paxctl -cm /root/.local/tbb/tor-browser_en-US/Browser/libnspr4.so && \
-    paxctl -cm /root/.local/tbb/tor-browser_en-US/Browser/plugin-container
+    mkdir -p /root/.local/tbb && mv tor-browser_en-US /root/.local/tbb
 
 # Import Mozilla release signing key
 ENV MOZILLA_RELEASE_KEY_FINGERPRINT "14F26682D0916CDD81E37B6D61B7B526D98F0353"
@@ -52,15 +46,13 @@ RUN curl -LO https://archive.mozilla.org/pub/firefox/releases/${FF_VERSION}/linu
     curl -LO https://archive.mozilla.org/pub/firefox/releases/${FF_VERSION}/linux-x86_64/en-US/firefox-${FF_VERSION}.tar.bz2.asc && \
     gpg2 --verify firefox-${FF_VERSION}.tar.bz2.asc 2>&1 | grep "Primary key fingerprint:" | sed -e 's/Primary key fingerprint: //' -e 's/ //g' | tail -1 | grep -qE "${MOZILLA_RELEASE_KEY_FINGERPRINT}" && \
     tar xjf firefox-*.tar.bz2 && \
-    mv firefox /usr/bin && \
-    paxctl -cm /usr/bin/firefox/firefox
+    mv firefox /usr/bin
 
 # Install geckodriver
 RUN wget https://github.com/mozilla/geckodriver/releases/download/${GECKODRIVER_VERSION}/geckodriver-${GECKODRIVER_VERSION}-linux64.tar.gz && \
     wget https://github.com/mozilla/geckodriver/releases/download/${GECKODRIVER_VERSION}/geckodriver-${GECKODRIVER_VERSION}-linux64.tar.gz.asc && \
     gpg2 --verify geckodriver-${GECKODRIVER_VERSION}-linux64.tar.gz.asc && \
-    tar -zxvf geckodriver*tar.gz && chmod +x geckodriver && mv geckodriver /bin && \
-    paxctl -cm /bin/geckodriver
+    tar -zxvf geckodriver*tar.gz && chmod +x geckodriver && mv geckodriver /bin
 
 COPY requirements requirements
 RUN python3 -m venv /opt/venvs/securedrop-app-code && \
