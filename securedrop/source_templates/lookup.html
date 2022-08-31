@@ -62,10 +62,10 @@
 
     <div class="form-controls">
       <a href="{{ url_for('main.lookup') }}" class="btn secondary" role="button"
-        aria-label="{{ gettext('Cancel') }}">
+        aria-label="{{ gettext('Cancel and Clear Uploaded Content') }}">
         {{ gettext('CANCEL') }}
       </a>
-      <button type="submit" aria-label="{{ gettext('Submit') }}">
+      <button type="submit" aria-label="{{ gettext('Submit Uploaded Content to the SecureDrop') }}">
         {{ gettext('SUBMIT') }}
       </button>
     </div>
@@ -96,7 +96,7 @@
               {{ gettext('Delete reply from {timestamp}?').format(timestamp=timestamp) }}</h4>
             <div class="form-controls">
               <button type="submit" class="danger" role="button"
-                aria-label="{{ gettext('Delete') }}">{{ gettext('DELETE') }}</button>
+                aria-label="{{ gettext('Delete Reply') }}">{{ gettext('DELETE') }}</button>
               <a href="#reply-{{ reply.filename }}" class="btn danger secondary" role="button"
                  aria-label="{{ gettext('Cancel') }}">{{ gettext('CANCEL') }}</a>
             </div>

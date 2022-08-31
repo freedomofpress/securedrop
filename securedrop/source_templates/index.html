@@ -44,7 +44,7 @@
     <span id="browser-tb-close" aria-label="{{ gettext('Close') }}">×</span></p>
   </div>
   <div id="browser-android" class="warning" role="alert">
-    <p>{{ gettext('<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop version.</strong> <a class="recommend-tor" href="{tor_browser_url}">Learn how to install it</a>, or ignore this warning to continue.').format(tor_browser_url=url_for('info.recommend_tor_browser')) }}
+    <p>{{ gettext('<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop version.</strong> <a class="recommend-tor" aria-label="{{ gettext('Learn how to install Tor Browser') }}" href="{tor_browser_url}">Learn how to install it</a>, or ignore this warning to continue.').format(tor_browser_url=url_for('info.recommend_tor_browser')) }}
     <span id="browser-android-close" aria-label="{{ gettext('Close') }}">×</span></p>
   </div>
 
@@ -62,7 +62,7 @@
         <form id="started-form" method="post" action="/generate" autocomplete="off">
           <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
           <input name="tor2web_check" type="hidden" value='href="fake.onion"'>
-          <button type="submit" aria-label="{{ gettext('Get Started') }}">
+          <button type="submit" aria-label="{{ gettext('Get Started With Your First Submission') }}">
             {{ gettext('GET STARTED') }}
           </button>
         </form>
@@ -72,7 +72,7 @@
           <h2 id="return-visit-heading">{{ gettext('Return visit') }}</h2>
           <p>{{ gettext('Already have a codename? Check for replies or submit something new.') }}</p>
           <a href="{{ url_for('main.login') }}" class="btn secondary"
-            aria-label="{{ gettext('Log In') }}">
+            aria-label="{{ gettext('Log In Again Using A Previous Codename') }}">
             {{ gettext('LOG IN') }}
           </a>
       </section>
