@@ -7,6 +7,9 @@ REPOROOT=$(git rev-parse --show-toplevel)
 cd "${REPOROOT}"
 
 if [ "$(command -v mypy)" ]; then
+    source "${BASH_SOURCE%/*}/dev-deps"
+    build_redwood
+
     mypy ./securedrop ./admin --namespace-packages --explicit-package-bases "$@"
 elif [ -d "/opt/venvs/securedrop-app-code/" ]; then
     # Inside the dev container, but no mypy
