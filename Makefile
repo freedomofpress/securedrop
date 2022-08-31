@@ -119,6 +119,12 @@ html-lint:  ## Validate HTML in web application template files.
 		securedrop/source_templates/*.html securedrop/journalist_templates/*.html
 	@echo
 
+.PHONY: rust-lint
+rust-lint: ## Lint Rust code
+	@echo "███ Linting Rust code..."
+	cargo fmt --check
+	cargo clippy
+
 .PHONY: shellcheck
 shellcheck:  ## Lint shell scripts.
 	@echo "███ Linting shell scripts..."
@@ -282,6 +288,11 @@ test:  ## Run the test suite in a Docker container.
 
 .PHONY: test-focal
 test-focal:  test
+
+.PHONY: rust-test
+rust-test:
+	@echo "███ Running Rust tests..."
+	cargo test
 
 .PHONY: validate-test-html
 validate-test-html:
