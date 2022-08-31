@@ -30,6 +30,7 @@ FILES=$(find "." \
         -o -path './install_files/ossec-agent' \
         -o -path './install_files/ossec-server' \
         -o -path './securedrop/static/*' \
+        -o -path './target' \
         -o -path './test-results/*' \
      \) -prune \
      -o -type f \
