@@ -12,10 +12,9 @@ from journalist_app.utils import (
     validate_user,
 )
 from passphrases import PassphraseGenerator
-from sdconfig import SDConfig
 
 
-def make_blueprint(config: SDConfig) -> Blueprint:
+def make_blueprint() -> Blueprint:
     view = Blueprint("account", __name__)
 
     @view.route("/account", methods=("GET",))

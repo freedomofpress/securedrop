@@ -874,7 +874,7 @@ class JournalistLoginAttempt(db.Model):
 
     __tablename__ = "journalist_login_attempt"
     id = Column(Integer, primary_key=True)
-    timestamp = Column(DateTime, default=datetime.datetime.utcnow)
+    timestamp = Column(DateTime, default=datetime.datetime.utcnow, nullable=True)
     journalist_id = Column(Integer, ForeignKey("journalists.id"), nullable=False)
 
     def __init__(self, journalist: Journalist) -> None:

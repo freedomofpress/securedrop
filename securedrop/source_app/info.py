@@ -6,11 +6,11 @@ import werkzeug
 from encryption import EncryptionManager
 from flask import Blueprint, redirect, render_template, send_file, url_for
 from flask_babel import gettext
-from sdconfig import SDConfig
+from sdconfig import SecureDropConfig
 from source_app.utils import flash_msg, get_sourcev3_url
 
 
-def make_blueprint(config: SDConfig) -> Blueprint:
+def make_blueprint(config: SecureDropConfig) -> Blueprint:
     view = Blueprint("info", __name__)
 
     @view.route("/tor2web-warning")

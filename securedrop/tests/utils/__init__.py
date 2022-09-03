@@ -1,11 +1,8 @@
-# -*- coding: utf-8 -*-
-
 from flask import g
 from pyotp import TOTP
 
 from . import asynchronous  # noqa
 from . import db_helper  # noqa
-from . import env  # noqa
 
 
 def flaky_filter_xfail(err, *args):

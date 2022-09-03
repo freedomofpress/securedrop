@@ -6,6 +6,7 @@ import io
 import logging
 import os
 import time
+from pathlib import Path
 
 import manage
 import mock
@@ -140,26 +141,21 @@ def test_get_username_to_delete(mocker):
 
 
 def test_reset(journalist_app, test_journo, alembic_config, config):
-    original_config = manage.config
-    try:
-        # We need to override the config to point at the per-test DB
-        manage.config = config
-        with journalist_app.app_context() as context:
-            # Override the hardcoded alembic.ini value
-            manage.config.TEST_ALEMBIC_INI = alembic_config
+    with journalist_app.app_context() as context:
+        args = argparse.Namespace(store_dir=config.STORE_DIR)
+        # We have to override the hardcoded alembic .ini file because during testing
+        # the value in the .ini doesn't exist.
+        return_value = manage.reset(
+            args=args, alembic_ini_path=Path(alembic_config), context=context
+        )
 
-            args = argparse.Namespace(store_dir=config.STORE_DIR)
-            return_value = manage.reset(args=args, context=context)
+        assert return_value == 0
+        assert config.DATABASE_FILE.exists()
+        assert config.STORE_DIR.exists()
 
-            assert return_value == 0
-            assert os.path.exists(config.DATABASE_FILE)
-            assert os.path.exists(config.STORE_DIR)
-
-            # Verify journalist user present in the database is gone
-            res = Journalist.query.filter_by(username=test_journo["username"]).one_or_none()
-            assert res is None
-    finally:
-        manage.config = original_config
+        # Verify journalist user present in the database is gone
+        res = Journalist.query.filter_by(username=test_journo["username"]).one_or_none()
+        assert res is None
 
 
 def test_get_username(mocker):

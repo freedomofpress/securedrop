@@ -1,6 +1,7 @@
 import importlib
 
 import config as _config
+from sdconfig import SecureDropConfig
 
 
 def test_missing_config_attribute_is_handled():
@@ -13,17 +14,12 @@ def test_missing_config_attribute_is_handled():
     configuration.
     """
     attributes_to_test = (
-        "JournalistInterfaceFlaskConfig",
-        "SourceInterfaceFlaskConfig",
         "DATABASE_ENGINE",
         "DATABASE_FILE",
         "ADJECTIVES",
         "NOUNS",
         "GPG_KEY_DIR",
-        "JOURNALIST_KEY",
         "JOURNALIST_TEMPLATES_DIR",
-        "SCRYPT_GPG_PEPPER",
-        "SCRYPT_ID_PEPPER",
         "SCRYPT_PARAMS",
         "SECUREDROP_DATA_ROOT",
         "SECUREDROP_ROOT",
@@ -31,7 +27,6 @@ def test_missing_config_attribute_is_handled():
         "SOURCE_TEMPLATES_DIR",
         "TEMP_DIR",
         "STORE_DIR",
-        "WORKER_PIDFILE",
     )
 
     try:
@@ -40,8 +35,6 @@ def test_missing_config_attribute_is_handled():
         for a in attributes_to_test:
             delattr(_config, a)
 
-        from sdconfig import SDConfig
-
-        SDConfig()
+        SecureDropConfig.get_current()
     finally:
         importlib.reload(_config)

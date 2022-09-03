@@ -3,8 +3,9 @@ from encryption import EncryptionManager, GpgKeyNotFoundError
 from execution import asynchronous
 from journalist_app import create_app
 from models import Source
-from sdconfig import config
+from sdconfig import SecureDropConfig
 
+config = SecureDropConfig.get_current()
 app = create_app(config)
 
 

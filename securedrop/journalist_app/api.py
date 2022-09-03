@@ -23,7 +23,6 @@ from models import (
     Submission,
     WrongPasswordException,
 )
-from sdconfig import SDConfig
 from sqlalchemy import Column
 from sqlalchemy.exc import IntegrityError
 from store import NotEncrypted, Storage
@@ -67,7 +66,7 @@ def get_or_404(model: db.Model, object_id: str, column: Column) -> db.Model:
     return result
 
 
-def make_blueprint(config: SDConfig) -> Blueprint:
+def make_blueprint() -> Blueprint:
     api = Blueprint("api", __name__)
 
     @api.route("/")

@@ -2,7 +2,7 @@ from pathlib import Path
 from secrets import SystemRandom
 from typing import Dict, List, NewType, Optional, Set
 
-from sdconfig import config
+from sdconfig import SecureDropConfig
 
 # A list of words to be used by as a passphrase
 # For example: "recede anytime acorn durably discuss"
@@ -99,7 +99,8 @@ class PassphraseGenerator:
     def get_default(cls) -> "PassphraseGenerator":
         global _default_generator
         if _default_generator is None:
-            language_to_words = _parse_available_words_list(Path(config.SECUREDROP_ROOT))
+            config = SecureDropConfig.get_current()
+            language_to_words = _parse_available_words_list(config.SECUREDROP_ROOT)
             _default_generator = cls(language_to_words)
         return _default_generator
 

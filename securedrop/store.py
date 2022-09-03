@@ -12,6 +12,7 @@ from pathlib import Path
 import rm
 from encryption import EncryptionManager
 from flask import current_app
+from sdconfig import SecureDropConfig
 from secure_tempfile import SecureTemporaryFile
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -111,12 +112,10 @@ class Storage:
 
     @classmethod
     def get_default(cls) -> "Storage":
-        from sdconfig import config
-
         global _default_storage
-
         if _default_storage is None:
-            _default_storage = cls(config.STORE_DIR, config.TEMP_DIR)
+            config = SecureDropConfig.get_current()
+            _default_storage = cls(str(config.STORE_DIR), str(config.TEMP_DIR))
 
         return _default_storage
 
@@ -386,7 +385,8 @@ class Storage:
 
 
 def async_add_checksum_for_file(db_obj: "Union[Submission, Reply]", storage: Storage) -> str:
-    return create_queue().enqueue(
+    config = SecureDropConfig.get_current()
+    return create_queue(config.RQ_WORKER_NAME).enqueue(
         queued_add_checksum_for_file,
         type(db_obj),
         db_obj.id,

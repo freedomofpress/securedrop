@@ -9,10 +9,10 @@ import signal
 import subprocess
 from os import path
 from pathlib import Path
-from tempfile import TemporaryDirectory
 from typing import Any, Dict, Generator, Tuple
 from unittest import mock
 from unittest.mock import PropertyMock
+from uuid import uuid4
 
 import models
 import pretty_bad_protocol as gnupg
@@ -26,20 +26,13 @@ from hypothesis import settings
 from journalist_app import create_app as create_journalist_app
 from passphrases import PassphraseGenerator
 from pyotp import TOTP
-from sdconfig import SDConfig
-from sdconfig import config as original_config
+from sdconfig import SecureDropConfig
 from source_app import create_app as create_source_app
 from source_user import _SourceScryptManager, create_source_user
 from store import Storage
-
-from . import utils
-from .utils import i18n
-
-# The PID file for the redis worker is hard-coded below.
-# Ideally this constant would be provided by a test harness.
-# It has been intentionally omitted from `config.py.example`
-# in order to isolate the test vars from prod vars.
-TEST_WORKER_PIDFILE = "/tmp/securedrop_test_worker.pid"
+from tests import utils
+from tests.functional.factories import SecureDropConfigFactory
+from tests.utils import i18n
 
 # Quiet down gnupg output. (See Issue #2595)
 GNUPG_LOG_LEVEL = os.environ.get("GNUPG_LOG_LEVEL", "ERROR")
@@ -80,14 +73,6 @@ def hardening(request):
     request.addfinalizer(finalizer)
     models.LOGIN_HARDENING = True
     return None
-
-
-@pytest.fixture(scope="session")
-def setUpTearDown():
-    _start_test_rqworker(original_config)
-    yield
-    _stop_test_rqworker()
-    _cleanup_test_securedrop_dataroot(original_config)
 
 
 def insecure_scrypt() -> Generator[None, None, None]:
@@ -142,41 +127,26 @@ def setup_journalist_key_and_gpg_folder() -> Generator[Tuple[str, Path], None, N
 
 @pytest.fixture(scope="function")
 def config(
-    setup_journalist_key_and_gpg_folder: Tuple[str, Path]
-) -> Generator[SDConfig, None, None]:
-    config = SDConfig()
+    setup_journalist_key_and_gpg_folder: Tuple[str, Path],
+    setup_rqworker: Tuple[str, str],
+) -> Generator[SecureDropConfig, None, None]:
     journalist_key_fingerprint, gpg_key_dir = setup_journalist_key_and_gpg_folder
-    config.GPG_KEY_DIR = str(gpg_key_dir)
-    config.JOURNALIST_KEY = journalist_key_fingerprint
+    worker_name, _ = setup_rqworker
+    config = SecureDropConfigFactory.create(
+        SECUREDROP_DATA_ROOT=Path(f"/tmp/sd-tests/conftest-{uuid4()}"),
+        GPG_KEY_DIR=gpg_key_dir,
+        JOURNALIST_KEY=journalist_key_fingerprint,
+        SUPPORTED_LOCALES=i18n.get_test_locales(),
+        RQ_WORKER_NAME=worker_name,
+    )
 
-    # Setup the filesystem for the application
-    with TemporaryDirectory() as data_dir_name:
-        data_dir = Path(data_dir_name)
-        config.SECUREDROP_DATA_ROOT = str(data_dir)
-
-        store_dir = data_dir / "store"
-        store_dir.mkdir()
-        config.STORE_DIR = str(store_dir)
-
-        tmp_dir = data_dir / "tmp"
-        tmp_dir.mkdir()
-        config.TEMP_DIR = str(tmp_dir)
-
-        # Create the db file
-        sqlite_db_path = data_dir / "db.sqlite"
-        config.DATABASE_FILE = str(sqlite_db_path)
-        subprocess.check_call(["sqlite3", config.DATABASE_FILE, ".databases"])
-
-        config.SUPPORTED_LOCALES = i18n.get_test_locales()
-
-        # Set this newly-created config as the "global" config
-        with mock.patch.object(sdconfig, "config", config):
-
-            yield config
+    # Set this newly-created config as the current config
+    with mock.patch.object(sdconfig.SecureDropConfig, "get_current", return_value=config):
+        yield config
 
 
 @pytest.fixture(scope="function")
-def alembic_config(config: SDConfig) -> str:
+def alembic_config(config: SecureDropConfig) -> str:
     base_dir = path.join(path.dirname(__file__), "..")
     migrations_dir = path.join(base_dir, "alembic")
     ini = configparser.ConfigParser()
@@ -185,26 +155,20 @@ def alembic_config(config: SDConfig) -> str:
     ini.set("alembic", "script_location", path.join(migrations_dir))
     ini.set("alembic", "sqlalchemy.url", config.DATABASE_URI)
 
-    alembic_path = path.join(config.SECUREDROP_DATA_ROOT, "alembic.ini")
+    alembic_path = config.SECUREDROP_DATA_ROOT / "alembic.ini"
     with open(alembic_path, "w") as f:
         ini.write(f)
 
-    return alembic_path
+    return str(alembic_path)
 
 
 @pytest.fixture(scope="function")
-def app_storage(config: SDConfig) -> "Storage":
-    return Storage(config.STORE_DIR, config.TEMP_DIR)
+def app_storage(config: SecureDropConfig) -> "Storage":
+    return Storage(str(config.STORE_DIR), str(config.TEMP_DIR))
 
 
 @pytest.fixture(scope="function")
-def source_app(config: SDConfig, app_storage: Storage) -> Generator[Flask, None, None]:
-    config.SOURCE_APP_FLASK_CONFIG_CLS.TESTING = True
-    config.SOURCE_APP_FLASK_CONFIG_CLS.USE_X_SENDFILE = False
-
-    # Disable CSRF checks to make writing tests easier
-    config.SOURCE_APP_FLASK_CONFIG_CLS.WTF_CSRF_ENABLED = False
-
+def source_app(config: SecureDropConfig, app_storage: Storage) -> Generator[Flask, None, None]:
     with mock.patch("store.Storage.get_default") as mock_storage_global:
         mock_storage_global.return_value = app_storage
         app = create_source_app(config)
@@ -219,13 +183,7 @@ def source_app(config: SDConfig, app_storage: Storage) -> Generator[Flask, None,
 
 
 @pytest.fixture(scope="function")
-def journalist_app(config: SDConfig, app_storage: Storage) -> Generator[Flask, None, None]:
-    config.JOURNALIST_APP_FLASK_CONFIG_CLS.TESTING = True
-    config.JOURNALIST_APP_FLASK_CONFIG_CLS.USE_X_SENDFILE = False
-
-    # Disable CSRF checks to make writing tests easier
-    config.JOURNALIST_APP_FLASK_CONFIG_CLS.WTF_CSRF_ENABLED = False
-
+def journalist_app(config: SecureDropConfig, app_storage: Storage) -> Generator[Flask, None, None]:
     with mock.patch("store.Storage.get_default") as mock_storage_global:
         mock_storage_global.return_value = app_storage
         app = create_journalist_app(config)
@@ -361,17 +319,36 @@ def journalist_api_token(journalist_app, test_journo):
         return response.json["token"]
 
 
-def _start_test_rqworker(config: SDConfig) -> None:
-    if not psutil.pid_exists(_get_pid_from_file(TEST_WORKER_PIDFILE)):
+@pytest.fixture(scope="session")
+def setup_rqworker() -> Generator[Tuple[str, Path], None, None]:
+    # The PID file and name for the redis worker are hard-coded below
+    test_worker_pid_file = Path("/tmp/securedrop_test_worker.pid")
+    test_worker_name = "test"
+
+    try:
+        _start_test_rqworker(
+            worker_name=test_worker_name,
+            worker_pid_file=test_worker_pid_file,
+            securedrop_root=sdconfig.DEFAULT_SECUREDROP_ROOT,
+        )
+
+        yield test_worker_name, test_worker_pid_file
+
+    finally:
+        _stop_test_rqworker(test_worker_pid_file)
+
+
+def _start_test_rqworker(worker_name: str, worker_pid_file: Path, securedrop_root: Path) -> None:
+    if not psutil.pid_exists(_get_pid_from_file(worker_pid_file)):
         tmp_logfile = open("/tmp/test_rqworker.log", "w")
         subprocess.Popen(
             [
                 "rqworker",
-                config.RQ_WORKER_NAME,
+                worker_name,
                 "-P",
-                config.SECUREDROP_ROOT,
+                securedrop_root,
                 "--pid",
-                TEST_WORKER_PIDFILE,
+                worker_pid_file,
                 "--logging_level",
                 "DEBUG",
                 "-v",
@@ -381,27 +358,18 @@ def _start_test_rqworker(config: SDConfig) -> None:
         )
 
 
-def _stop_test_rqworker() -> None:
-    rqworker_pid = _get_pid_from_file(TEST_WORKER_PIDFILE)
+def _stop_test_rqworker(worker_pid_file: Path) -> None:
+    rqworker_pid = _get_pid_from_file(worker_pid_file)
     if rqworker_pid:
         os.kill(rqworker_pid, signal.SIGTERM)
         try:
-            os.remove(TEST_WORKER_PIDFILE)
+            os.remove(worker_pid_file)
         except OSError:
             pass
 
 
-def _get_pid_from_file(pid_file_name: str) -> int:
+def _get_pid_from_file(pid_file_name: Path) -> int:
     try:
         return int(open(pid_file_name).read())
     except IOError:
         return -1
-
-
-def _cleanup_test_securedrop_dataroot(config: SDConfig) -> None:
-    # Keyboard interrupts or dropping to pdb after a test failure sometimes
-    # result in the temporary test SecureDrop data root not being deleted.
-    try:
-        shutil.rmtree(config.SECUREDROP_DATA_ROOT)
-    except OSError:
-        pass

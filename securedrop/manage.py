@@ -12,6 +12,7 @@ import sys
 import time
 import traceback
 from argparse import _SubParsersAction
+from pathlib import Path
 from typing import List, Optional
 
 from flask.ctx import AppContext
@@ -27,7 +28,7 @@ if not os.environ.get("SECUREDROP_ENV"):
 
 
 from db import db  # noqa: E402
-from management import app_context, config  # noqa: E402
+from management import SecureDropConfig, app_context  # noqa: E402
 from management.run import run  # noqa: E402
 from management.submissions import (  # noqa: E402
     add_check_db_disconnect_parser,
@@ -50,13 +51,19 @@ def obtain_input(text: str) -> str:
     return input(text)
 
 
-def reset(args: argparse.Namespace, context: Optional[AppContext] = None) -> int:
+def reset(
+    args: argparse.Namespace,
+    alembic_ini_path: Path = Path("alembic.ini"),
+    context: Optional[AppContext] = None,
+) -> int:
     """Clears the SecureDrop development applications' state, restoring them to
     the way they were immediately after running `setup_dev.sh`. This command:
     1. Erases the development sqlite database file.
     2. Regenerates the database.
     3. Erases stored submissions and replies from the store dir.
     """
+    config = SecureDropConfig.get_current()
+
     # Erase the development db file
     if not hasattr(config, "DATABASE_FILE"):
         raise Exception(
@@ -92,13 +99,8 @@ def reset(args: argparse.Namespace, context: Optional[AppContext] = None) -> int
         with context or app_context():
             db.create_all()
     else:
-        # We have to override the hardcoded .ini file because during testing
-        # the value in the .ini doesn't exist.
-        ini_dir = os.path.dirname(getattr(config, "TEST_ALEMBIC_INI", "alembic.ini"))
-
         # 3. Migrate it to 'head'
-        # nosemgrep: python.lang.security.audit.subprocess-shell-true.subprocess-shell-true
-        subprocess.check_call("cd {} && alembic upgrade head".format(ini_dir), shell=True)  # nosec
+        subprocess.check_call(["alembic", "upgrade", "head"], cwd=alembic_ini_path.parent)
 
     # Clear submission/reply storage
     try:
@@ -311,6 +313,7 @@ def clean_tmp(args: argparse.Namespace) -> int:
 
 
 def init_db(args: argparse.Namespace) -> None:
+    config = SecureDropConfig.get_current()
     user = pwd.getpwnam(args.user)
     subprocess.check_call(["sqlite3", config.DATABASE_FILE, ".databases"])
     os.chown(config.DATABASE_FILE, user.pw_uid, user.pw_gid)
@@ -319,6 +322,7 @@ def init_db(args: argparse.Namespace) -> None:
 
 
 def get_args() -> argparse.ArgumentParser:
+    config = SecureDropConfig.get_current()
     parser = argparse.ArgumentParser(
         prog=__file__, description="Management " "and testing utility for SecureDrop."
     )
@@ -390,6 +394,8 @@ def get_args() -> argparse.ArgumentParser:
 
 
 def set_clean_tmp_parser(subps: _SubParsersAction, name: str) -> None:
+    config = SecureDropConfig.get_current()
+
     parser = subps.add_parser(name, help="Cleanup the " "SecureDrop temp directory.")
     default_days = 7
     parser.add_argument(

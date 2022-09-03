@@ -8,6 +8,7 @@ from typing import TYPE_CHECKING, List, Optional
 import models
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives.kdf import scrypt
+from sdconfig import SecureDropConfig
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
@@ -169,11 +170,9 @@ class _SourceScryptManager:
 
     @classmethod
     def get_default(cls) -> "_SourceScryptManager":
-        # Late import so _SourceScryptManager can be used without a config.py in the parent folder
-        from sdconfig import config
-
         global _default_scrypt_mgr
         if _default_scrypt_mgr is None:
+            config = SecureDropConfig.get_current()
             _default_scrypt_mgr = cls(
                 salt_for_gpg_secret=config.SCRYPT_GPG_PEPPER.encode("utf-8"),
                 salt_for_filesystem_id=config.SCRYPT_ID_PEPPER.encode("utf-8"),
@@ -216,11 +215,10 @@ class _DesignationGenerator:
 
     @classmethod
     def get_default(cls) -> "_DesignationGenerator":
-        # Late import so _SourceScryptManager can be used without a config.py in the parent folder
-        from sdconfig import config
-
         global _default_designation_generator
         if _default_designation_generator is None:
+            config = SecureDropConfig.get_current()
+
             # Parse the nouns and adjectives files from the config
             nouns = Path(config.NOUNS).read_text().strip().splitlines()
             adjectives = Path(config.ADJECTIVES).read_text().strip().splitlines()

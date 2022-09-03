@@ -10,6 +10,7 @@ from base64 import b64decode
 from html import escape as htmlescape
 from io import BytesIO
 from pathlib import Path
+from typing import Tuple
 
 import journalist_app as journalist_app_module
 import models
@@ -36,12 +37,15 @@ from models import (
 )
 from passphrases import PassphraseGenerator
 from pyotp import TOTP
-from sdconfig import config
+from sdconfig import SecureDropConfig
+from source_user import create_source_user
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm.exc import StaleDataError
 from sqlalchemy.sql.expression import func
+from store import Storage
 
 from . import utils
+from .functional.factories import SecureDropConfigFactory
 from .utils.i18n import (
     get_plural_tests,
     get_test_locales,
@@ -1513,7 +1517,7 @@ def test_admin_add_user_too_short_username(config, journalist_app, test_admin, l
         if i != 0
     ),
 )
-def test_admin_add_user_yubikey_odd_length(journalist_app, test_admin, locale, secret):
+def test_admin_add_user_yubikey_odd_length(config, journalist_app, test_admin, locale, secret):
     with journalist_app.test_client() as app:
         _login_user(app, test_admin["username"], test_admin["password"], test_admin["otp_secret"])
 
@@ -1545,7 +1549,7 @@ def test_admin_add_user_yubikey_odd_length(journalist_app, test_admin, locale, s
 @pytest.mark.parametrize(
     "locale, secret", ((locale, " " * i) for locale in get_test_locales() for i in range(3))
 )
-def test_admin_add_user_yubikey_blank_secret(journalist_app, test_admin, locale, secret):
+def test_admin_add_user_yubikey_blank_secret(config, journalist_app, test_admin, locale, secret):
     with journalist_app.test_client() as app:
         _login_user(app, test_admin["username"], test_admin["password"], test_admin["otp_secret"])
 
@@ -1572,7 +1576,7 @@ def test_admin_add_user_yubikey_blank_secret(journalist_app, test_admin, locale,
 
 @flaky(rerun_filter=utils.flaky_filter_xfail)
 @pytest.mark.parametrize("locale", get_test_locales())
-def test_admin_add_user_yubikey_valid_length(journalist_app, test_admin, locale):
+def test_admin_add_user_yubikey_valid_length(config, journalist_app, test_admin, locale):
     otp = "1234567890123456789012345678901234567890"
 
     with journalist_app.test_client() as app:
@@ -1601,7 +1605,9 @@ def test_admin_add_user_yubikey_valid_length(journalist_app, test_admin, locale)
 
 @flaky(rerun_filter=utils.flaky_filter_xfail)
 @pytest.mark.parametrize("locale", get_test_locales())
-def test_admin_add_user_yubikey_correct_length_with_whitespace(journalist_app, test_admin, locale):
+def test_admin_add_user_yubikey_correct_length_with_whitespace(
+    config, journalist_app, test_admin, locale
+):
     otp = "12 34 56 78 90 12 34 56 78 90 12 34 56 78 90 12 34 56 78 90"
 
     with journalist_app.test_client() as app:
@@ -2022,7 +2028,7 @@ def test_orgname_html_escaped(config, journalist_app, test_admin, locale):
             assert InstanceConfig.get_current().organization_name == htmlescape(t_name, quote=True)
 
 
-def test_logo_default_available(journalist_app):
+def test_logo_default_available(journalist_app, config):
     # if the custom image is available, this test will fail
     custom_image_location = os.path.join(config.SECUREDROP_ROOT, "static/i/custom_logo.png")
     if os.path.exists(custom_image_location):
@@ -2408,7 +2414,7 @@ def test_valid_user_first_last_name_change(config, journalist_app, test_journo, 
 
 @flaky(rerun_filter=utils.flaky_filter_xfail)
 @pytest.mark.parametrize("locale", get_test_locales())
-def test_valid_user_invalid_first_last_name_change(journalist_app, test_journo, locale):
+def test_valid_user_invalid_first_last_name_change(config, journalist_app, test_journo, locale):
     with journalist_app.test_client() as app:
         overly_long_name = "a" * (Journalist.MAX_NAME_LEN + 1)
         _login_user(
@@ -2709,34 +2715,48 @@ def test_valid_login_calls_argon2(mocker, test_journo):
     assert mock_argon2.called
 
 
-def test_render_locales(config, journalist_app, test_journo, test_source):
+def test_render_locales(
+    setup_journalist_key_and_gpg_folder: Tuple[str, Path],
+    setup_rqworker: Tuple[str, str],
+) -> None:
     """the locales.html template must collect both request.args (l=XX) and
     request.view_args (/<filesystem_id>) to build the URL to
     change the locale
     """
-
-    # We use the `journalist_app` fixture to generate all our tables, but we
-    # don't use it during the test because we need to inject the i18n settings
-    # (which are only triggered during `create_app`
-    config.SUPPORTED_LOCALES = ["en_US", "fr_FR"]
-    app = journalist_app_module.create_app(config)
+    journalist_key_fingerprint, gpg_key_dir = setup_journalist_key_and_gpg_folder
+    worker_name, _ = setup_rqworker
+    config_with_fr_locale = SecureDropConfigFactory.create(
+        SECUREDROP_DATA_ROOT=Path(f"/tmp/sd-tests/render_locales"),
+        GPG_KEY_DIR=gpg_key_dir,
+        JOURNALIST_KEY=journalist_key_fingerprint,
+        SUPPORTED_LOCALES=["en_US", "fr_FR"],
+        RQ_WORKER_NAME=worker_name,
+    )
+    app = journalist_app_module.create_app(config_with_fr_locale)
     app.config["SERVER_NAME"] = "localhost.localdomain"  # needed for url_for
-    url = url_for("col.col", filesystem_id=test_source["filesystem_id"])
-
-    # we need the relative URL, not the full url including proto / localhost
-    url_end = url.replace("http://", "")
-    url_end = url_end[url_end.index("/") + 1 :]
-
-    with app.test_client() as app:
-        _login_user(
-            app, test_journo["username"], test_journo["password"], test_journo["otp_secret"]
+    with app.app_context():
+        journo_user, journo_pw = utils.db_helper.init_journalist(is_admin=False)
+        source_user = create_source_user(
+            db_session=db.session,
+            source_passphrase=PassphraseGenerator.get_default().generate_passphrase(),
+            source_app_storage=Storage(
+                str(config_with_fr_locale.STORE_DIR), str(config_with_fr_locale.TEMP_DIR)
+            ),
         )
-        resp = app.get(url + "?l=fr_FR")
 
-    # check that links to i18n URLs are/aren't present
-    text = resp.data.decode("utf-8")
-    assert "?l=fr_FR" not in text, text
-    assert url_end + "?l=en_US" in text, text
+        url = url_for("col.col", filesystem_id=source_user.filesystem_id)
+        # we need the relative URL, not the full url including proto / localhost
+        url_end = url.replace("http://", "")
+        url_end = url_end[url_end.index("/") + 1 :]
+
+        with app.test_client() as app:
+            _login_user(app, journo_user.username, journo_pw, journo_user.otp_secret)
+            resp = app.get(url + "?l=fr_FR")
+
+        # check that links to i18n URLs are/aren't present
+        text = resp.data.decode("utf-8")
+        assert "?l=fr_FR" not in text, text
+        assert url_end + "?l=en_US" in text, text
 
 
 def test_download_selected_submissions_and_replies(
@@ -3199,36 +3219,6 @@ def test_single_source_is_successfully_unstarred(journalist_app, test_journo, te
 
         source = Source.query.get(test_source["id"])
         assert not source.star.starred
-
-
-@flaky(rerun_filter=utils.flaky_filter_xfail)
-@pytest.mark.parametrize("locale", get_test_locales())
-def test_journalist_session_expiration(config, journalist_app, test_journo, locale):
-    # set the expiration to ensure we trigger an expiration
-    config.SESSION_EXPIRATION_MINUTES = -1
-    with journalist_app.test_client() as app:
-        with InstrumentedApp(journalist_app) as ins:
-            login_data = {
-                "username": test_journo["username"],
-                "password": test_journo["password"],
-                "token": TOTP(test_journo["otp_secret"]).now(),
-            }
-            resp = app.post(url_for("main.login"), data=login_data)
-            ins.assert_redirects(resp, url_for("main.index"))
-        assert "uid" in session
-
-        resp = app.get(url_for("account.edit", l=locale), follow_redirects=True)
-        # because the session is being cleared when it expires, the
-        # response should always be in English.
-        assert page_language(resp.data) == "en-US"
-        assert "You have been logged out due to inactivity." in resp.data.decode("utf-8")
-
-        # check that the session was cleared (apart from 'expires'
-        # which is always present and 'csrf_token' which leaks no info)
-        session.pop("expires", None)
-        session.pop("csrf_token", None)
-        session.pop("locale", None)
-        assert not session, session
 
 
 @flaky(rerun_filter=utils.flaky_filter_xfail)

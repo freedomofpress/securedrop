@@ -20,6 +20,7 @@ from typing import Generator, Tuple
 from uuid import uuid4
 
 import pytest
+from sdconfig import SecureDropConfig
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.keys import Keys
 from tests.functional.app_navigators.journalist_app_nav import JournalistAppNavigator
@@ -29,7 +30,6 @@ from tests.functional.conftest import (
     spawn_sd_servers,
 )
 from tests.functional.factories import SecureDropConfigFactory
-from tests.functional.sd_config_v2 import SecureDropConfig
 
 
 class TestJournalist:
@@ -376,17 +376,18 @@ class TestJournalist:
 
 @pytest.fixture(scope="function")
 def _sd_servers_with_missing_file(
-    setup_journalist_key_and_gpg_folder: Tuple[str, Path]
+    setup_journalist_key_and_gpg_folder: Tuple[str, Path],
+    setup_rqworker: Tuple[str, Path],
 ) -> Generator[SdServersFixtureResult, None, None]:
     """Same as sd_servers but spawns the apps with a submission whose file has been deleted."""
+    journalist_key_fingerprint, gpg_key_dir = setup_journalist_key_and_gpg_folder
+    worker_name, _ = setup_rqworker
     default_config = SecureDropConfigFactory.create(
         SECUREDROP_DATA_ROOT=Path(f"/tmp/sd-tests/functional-with-missing-file-{uuid4()}"),
+        GPG_KEY_DIR=gpg_key_dir,
+        JOURNALIST_KEY=journalist_key_fingerprint,
+        RQ_WORKER_NAME=worker_name,
     )
-
-    # Ensure the GPG settings match the one in the config to use, to ensure consistency
-    journalist_key_fingerprint, gpg_dir = setup_journalist_key_and_gpg_folder
-    assert Path(default_config.GPG_KEY_DIR) == gpg_dir
-    assert default_config.JOURNALIST_KEY == journalist_key_fingerprint
 
     # Spawn the apps in separate processes with a callback have a submission with a missing file
     with spawn_sd_servers(

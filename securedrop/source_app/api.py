@@ -5,11 +5,11 @@ import server_os
 import version
 from flask import Blueprint, make_response
 from models import InstanceConfig
-from sdconfig import SDConfig
+from sdconfig import SecureDropConfig
 from source_app.utils import get_sourcev3_url
 
 
-def make_blueprint(config: SDConfig) -> Blueprint:
+def make_blueprint(config: SecureDropConfig) -> Blueprint:
     view = Blueprint("api", __name__)
 
     @view.route("/metadata")
