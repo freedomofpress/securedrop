@@ -175,3 +175,6 @@ raw-test-output/
 #Functional test logs
 securedrop/tests/functional/firefox.log
 securedrop/geckodriver.log
+
+#asdf-tools
+.tool-versions
