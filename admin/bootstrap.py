@@ -63,17 +63,8 @@ def run_command(command: List[str]) -> Iterator[bytes]:
 
 
 def is_tails() -> bool:
-    try:
-        id = subprocess.check_output("lsb_release --id --short", shell=True).decode("utf-8").strip()
-    except subprocess.CalledProcessError:
-        return False
-
-    # dirty hack to unreliably detect Tails 4.0~beta2
-    if id == "Debian":
-        if os.uname()[1] == "amnesia":
-            id = "Tails"
-
-    return id == "Tails"
+    with open("/etc/os-release") as f:
+        return "TAILS_PRODUCT_NAME" in f.read()
 
 
 def clean_up_old_tails_venv(virtualenv_dir: str = VENV_DIR) -> None:
@@ -84,18 +75,19 @@ def clean_up_old_tails_venv(virtualenv_dir: str = VENV_DIR) -> None:
     venv, so it'll get recreated.
     """
     if is_tails():
-        try:
-            dist = subprocess.check_output("lsb_release --codename --short", shell=True).strip()
-        except subprocess.CalledProcessError:
-            return None
-
-        # Tails 5 is based on bullseye / Python 3.9
-        if dist == b"bullseye":
-            python_lib_path = os.path.join(virtualenv_dir, "lib/python3.7")
-            if os.path.exists(python_lib_path):
-                sdlog.info("Tails 4 virtualenv detected. Removing it.")
-                shutil.rmtree(virtualenv_dir)
-                sdlog.info("Tails 4 virtualenv deleted.")
+        with open("/etc/os-release") as f:
+            os_release = f.readlines()
+            for line in os_release:
+                if line.startswith("TAILS_VERSION_ID="):
+                    version = line.split("=")[1].strip().strip('"')
+                    if version.startswith("5."):
+                        # Tails 5 is based on Python 3.9
+                        python_lib_path = os.path.join(virtualenv_dir, "lib/python3.7")
+                        if os.path.exists(python_lib_path):
+                            sdlog.info("Tails 4 virtualenv detected. Removing it.")
+                            shutil.rmtree(virtualenv_dir)
+                            sdlog.info("Tails 4 virtualenv deleted.")
+                    break
 
 
 def checkenv(args: argparse.Namespace) -> None:

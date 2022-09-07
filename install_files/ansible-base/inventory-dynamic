@@ -6,7 +6,6 @@ for SSH. The THS must already be provisioned on the target host.
 import io
 import json
 import os
-import subprocess
 
 import yaml
 
@@ -126,25 +125,13 @@ def lookup_ssh_address(hostname):
     return ssh_address
 
 
-def lookup_host_distro_id():
-    """
-    Returns output of `lsb_release --id --short`, to check
-    whether host machine is Tails.
-    """
-    cmd = ["lsb_release", "--id", "--short"]
-    p = subprocess.check_output(cmd).decode("utf-8")
-    distro_id = p.rstrip()
-    if distro_id == 'Debian' and os.uname()[1] == 'amnesia':
-        distro_id = 'Tails'
-    return distro_id
-
-
 def host_is_tails():
     """
     Wrapper return True/False for whether script is executed
     within Tails. We don't want to add SSH extra args if True.
     """
-    return lookup_host_distro_id() == "Tails"
+    with open("/etc/os-release") as f:
+        return "TAILS_PRODUCT_NAME" in f.read()
 
 
 def build_inventory():
