@@ -261,6 +261,43 @@ jobs:
             fromtag=$(docker images |grep securedrop-test-focal-py3 |head -n1 |awk '{print $2}')
             DOCKER_BUILD_ARGUMENTS="--cache-from securedrop-test-focal-py3:${fromtag:-latest}" securedrop/bin/dev-shell bash -c "pip3 install -U -q --upgrade pip && pip3 install -U -q --upgrade semgrep && make -C .. semgrep"
 
+  zap-vulnerability-scan:
+    machine:
+      image: ubuntu-2004:202010-01
+      enabled: true
+    environment:
+      DOCKER_API_VERSION: 1.23
+      BASE_OS: focal
+    parallelism: 3
+    steps:
+      - checkout
+      - *rebaseontarget
+      - *createcachedir
+      - *restorecache
+      - *loadimagelayers
+      - *dockerimagebuild
+      - *saveimagelayers
+      - *savecache
+
+      - run:
+          name: Run tests
+          command: |
+            JOB_TESTFILES=$(cd securedrop; circleci tests glob 'tests/test*py' 'tests/{files,functional}/test*py')
+            echo "JOB_TESTFILES: ${JOB_TESTFILES}"
+            RUN_TESTFILES=$(echo "$JOB_TESTFILES" |circleci tests split --split-by=timings)
+            echo "RUN_TESTFILES: ${RUN_TESTFILES}"
+            export TESTFILES=$RUN_TESTFILES
+            fromtag=$(docker images |grep securedrop-test-focal-py3 |head -n1 |awk '{print $2}')
+            DOCKER_BUILD_ARGUMENTS="--cache-from securedrop-test-focal-py3:${fromtag:-latest}" make test
+          no_output_timeout: 15m
+
+      - store_test_results:
+          path: ~/project/test-results
+
+      - store_artifacts:
+          path: ~/project/test-results
+
+
   staging-test-with-rebase:
     machine:
       image: ubuntu-2004:202010-01
@@ -391,3 +428,4 @@ workflows:
     jobs:
       - deb-tests
       - translation-tests
+      - zap-vulnerability-scan
