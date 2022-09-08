@@ -412,7 +412,6 @@ def test_control_helper_files_are_present(host: Host):
         "postrm",
         "preinst",
         "prerm",
-        "templates",
     ]
     c = host.run("dpkg-deb --info {}".format(deb_paths["securedrop_app_code"]))
     for wanted_file in wanted_files:
