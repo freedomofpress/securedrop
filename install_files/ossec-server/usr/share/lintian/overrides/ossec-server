@@ -1,7 +1,0 @@
-ossec-server: embedded-library
-ossec-server: embedded-zlib
-ossec-server: possible-gpl-code-linked-with-openssl
-ossec-server: new-package-should-close-itp-bug
-ossec-server: possibly-insecure-handling-of-tmp-files-in-maintainer-script
-ossec-server: non-standard-dir-in-var
-ossec-server: file-in-unusual-dir
