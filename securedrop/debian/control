@@ -1,0 +1,46 @@
+Source: securedrop
+Section: web
+Priority: optional
+Maintainer: SecureDrop Team <securedrop@freedom.press>
+Build-Depends: debhelper (>= 9), dh-python, python3-all, python3-setuptools, dh-systemd, dh-virtualenv
+Homepage: https://securedrop.org
+Standards-Version: 4.5.1
+
+Package: securedrop-app-code
+Architecture: amd64
+Conflicts: libapache2-mod-wsgi, supervisor
+Replaces: libapache2-mod-wsgi, supervisor
+Depends: ${dist:Depends}, ${misc:Depends}, ${python3:Depends}, apache2, apparmor-utils, coreutils, gnupg2, libapache2-mod-xsendfile, libpython3.8, paxctld, python3, python3-distutils, redis-server, securedrop-config, securedrop-keyring, sqlite3
+Description: SecureDrop application code, dependencies, Apache configuration, systemd services, and AppArmor profiles. This package will put the AppArmor profiles in enforce mode.
+
+Package: securedrop-config
+Architecture: all
+Depends: unattended-upgrades, update-notifier-common
+Description: Establishes baseline system state for running SecureDrop.
+ Configures apt repositories.
+
+Package: securedrop-keyring
+Architecture: amd64
+Depends: gnupg
+Description: Provides an apt keyring for SecureDrop-related packages, so the master signing key used for SecureDrop packages can be updated via apt.
+
+Package: securedrop-ossec-agent
+Architecture: amd64
+Depends: libevent-2.1-7,libpcre2-8-0,ossec-agent,securedrop-keyring,securedrop-config
+Replaces: ossec-agent
+Conflicts: securedrop-ossec-server
+Description: Installs the securedrop pre-configured OSSEC agent
+ This package installs an OSSEC agent pre-configured for the
+ SecureDrop app server.
+
+Package: securedrop-ossec-server
+Architecture: amd64
+Depends: libevent-2.1-7,libpcre2-8-0,ossec-server,securedrop-keyring,securedrop-config
+Replaces: ossec-server
+Conflicts: securedrop-ossec-agent
+Description: Installs the pre-packaged OSSEC server
+ This package installs an OSSEC server pre-configured for the
+ SecureDrop mon server. It is configured to email all alerts to
+ root@localhost. The SecureDrop ansible playbook will configure
+ procmail and postfix to gpg encrypt the OSSEC alerts and email
+ them to SecureDrop Admin.

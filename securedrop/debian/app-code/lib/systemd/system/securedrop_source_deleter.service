@@ -1,0 +1,19 @@
+[Unit]
+Description=SecureDrop Source deleter
+
+[Service]
+Environment=PYTHONPATH="/var/www/securedrop:/opt/venvs/securedrop-app-code/lib/python3.8/site-packages"
+ExecStart=/opt/venvs/securedrop-app-code/bin/python /var/www/securedrop/scripts/source_deleter --interval 10
+PrivateDevices=yes
+PrivateTmp=yes
+ProtectSystem=full
+ReadOnlyDirectories=/
+ReadWriteDirectories=/var/lib/securedrop
+Restart=always
+RestartSec=10s
+UMask=077
+User=www-data
+WorkingDirectory=/var/www/securedrop
+
+[Install]
+WantedBy=multi-user.target

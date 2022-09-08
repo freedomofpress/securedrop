@@ -13,19 +13,7 @@ platforms:
   - name: focal-sd-generic-ossec-server
     groups:
       - builders
-  - name: focal-sd-generic-ossec-agent2
-    groups:
-      - builders
-  - name: focal-sd-generic-ossec-server2
-    groups:
-      - builders
   - name: focal-sd-grsec
-    groups:
-      - builders
-  - name: focal-sd-config
-    groups:
-      - builders
-  - name: focal-sd-keyring
     groups:
       - builders
   - name: focal-sd-sec-update

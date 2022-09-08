@@ -1,108 +1,24 @@
 ---
-# Construct a staging area from which we can build the sdist tarball
-# which we'll then immediately extract for dh-virtualenv.
-- name: Copy install_files/securedrop-app-code to prep directory
-  synchronize:
-    src: "{{ role_path }}/../../../securedrop-app-code/"
-    dest: "{{ securedrop_app_code_prep_dir }}"
-    delete: yes
-    recursive: yes
-
-- name: Copy app code to prep directory under var/www/securedrop
-  synchronize:
-    src: "{{ role_path }}/../../../../securedrop/"
-    dest: "{{ securedrop_code_filtered }}"
-    recursive: yes
-    delete: yes
-    rsync_opts: "{{ securedrop_app_rsync_opts }}"
-
-- name: Copy setup.py to prep directory
-  copy:
-    src: "{{ role_path }}/../../../../setup.py"
-    dest: "{{ securedrop_app_code_prep_dir }}/setup.py"
-
-- name: Copy MANIFEST.in to prep directory
-  copy:
-    src: "{{ role_path }}/../../../../MANIFEST.in"
-    dest: "{{ securedrop_app_code_prep_dir }}/MANIFEST.in"
-
-- name: Copy translation-requirements.txt to prep directory
-  command: cp "{{ securedrop_translation_pip_requirements }}" "{{ securedrop_app_code_prep_dir }}/translation-requirements.txt"
-
-- name: Copy requirements.txt to prep directory
-  command: cp "{{ securedrop_pip_requirements }}" "{{ securedrop_app_code_prep_dir }}/requirements.txt"
-
-- name: Control the version of setuptools used in the default construction of virtual environments
-  shell: |
-    pip3 download --no-deps --require-hashes -r "{{ securedrop_app_code_prep_dir }}/requirements.txt" --dest /tmp/securedrop-app-code-requirements-download
-    rm -f /usr/share/python-wheels/setuptools-*.whl
-    mv /tmp/securedrop-app-code-requirements-download/setuptools-*.whl /usr/share/python-wheels/
-
-- include: translations.yml
-
-- name: Create apparmor.d directory in prep directory
-  file:
-    state: directory
-    dest: "{{ securedrop_app_code_prep_dir }}/etc/apparmor.d"
-  tags: apparmor
-
-- name: Copy AppArmor profiles to prep path
-  copy:
-    src: "{{ item }}"
-    dest: "{{ securedrop_app_code_prep_dir }}/etc/apparmor.d/{{ item }}"
-  with_items: "{{ apparmor_profiles }}"
-  tags: apparmor
-
-- name: Replace placeholder changelog to dist-specific changelog
-  copy:
-    src: "changelog-{{ securedrop_target_distribution }}"
-    dest: "{{ securedrop_app_code_prep_dir }}/debian/changelog"
-
-- name: Create the control file based on distribution
-  template:
-    src: "control.j2"
-    dest: "{{ securedrop_app_code_prep_dir }}/debian/control"
-
-- name: Create lib/systemd/services directory in prep directory
-  file:
-    state: directory
-    dest: "{{ securedrop_app_code_prep_dir }}/lib/systemd/system"
-  tags: systemd
-
-- name: Copy systemd service configurations to prep path
-  template:
-    src: "{{ item }}"
-    dest: "{{ securedrop_app_code_prep_dir }}/lib/systemd/system/{{ item }}"
-    mode: 0644
-  with_items: "{{ systemd_services }}"
-  tags: systemd
-
-- name: Create sdist in prep dir
-  command: python3 setup.py sdist
-  args:
-    chdir: "{{ securedrop_app_code_prep_dir }}"
-
 - name: Create build dir
   file:
     state: directory
     dest: "{{ securedrop_app_code_deb_dir }}"
 
-- name: Extract sdist to build dir
-  unarchive:
-    remote_src: yes
-    src: "{{ securedrop_app_code_prep_dir }}/dist/{{ securedrop_app_code_sdist_name }}"
+- name: Copy securedrop to build directory
+  synchronize:
+    src: "{{ role_path }}/../../../../securedrop/"
     dest: "{{ securedrop_app_code_deb_dir }}"
-    extra_opts:
-      - --strip-components=1
+    delete: yes
+    recursive: yes
+    rsync_opts: "{{ securedrop_app_rsync_opts }}"
 
-# Because setup.py sdist refuses to include empty directories, and we
-# have to build from the sdist.
-- name: Create empty static asset directories in build dir
-  file:
-    state: directory
-    dest: "{{ item }}"
-  with_items:
-    - "{{ securedrop_app_code_deb_dir }}/var/www/securedrop/.well-known/pki-validation"
+- name: Control the version of setuptools used in the default construction of virtual environments
+  shell: |
+    pip3 download --no-deps --require-hashes -r "{{ securedrop_pip_requirements }}" --dest /tmp/securedrop-app-code-requirements-download
+    rm -f /usr/share/python-wheels/setuptools-*.whl
+    mv /tmp/securedrop-app-code-requirements-download/setuptools-*.whl /usr/share/python-wheels/
+
+- include: translations.yml
 
 - name: Build securedrop-app-code Debian package
   command: dpkg-buildpackage -us -uc

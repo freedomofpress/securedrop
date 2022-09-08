@@ -4,18 +4,18 @@ After=redis-server.service
 Wants=redis-server.service
 
 [Service]
-Environment=PYTHONPATH="{{ securedrop_code }}:{{ securedrop_venv_site_packages }}"
-ExecStart={{ securedrop_venv_bin }}/rqworker
+Environment=PYTHONPATH="/var/www/securedrop:/opt/venvs/securedrop-app-code/lib/python3.8/site-packages"
+ExecStart=/opt/venvs/securedrop-app-code/bin/rqworker
 PrivateDevices=yes
 PrivateTmp=yes
 ProtectSystem=full
 ReadOnlyDirectories=/
-ReadWriteDirectories={{ securedrop_data }}
+ReadWriteDirectories=/var/lib/securedrop
 Restart=always
 RestartSec=10s
 UMask=077
 User=www-data
-WorkingDirectory={{ securedrop_code }}
+WorkingDirectory=/var/www/securedrop
 
 [Install]
 WantedBy=multi-user.target

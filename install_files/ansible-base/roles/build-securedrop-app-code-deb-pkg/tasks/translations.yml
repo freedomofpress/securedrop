@@ -19,8 +19,8 @@
   shell: >
     set -e &&
     python3 -m venv /tmp/securedrop-app-code-i18n-ve &&
-    /tmp/securedrop-app-code-i18n-ve/bin/pip3 install --no-deps --no-binary :all: --require-hashes -r {{ securedrop_app_code_prep_dir }}/translation-requirements.txt &&
-    /tmp/securedrop-app-code-i18n-ve/bin/pip3 install --no-deps --no-binary :all: --require-hashes -r {{ securedrop_app_code_prep_dir }}/requirements.txt
+    /tmp/securedrop-app-code-i18n-ve/bin/pip3 install --no-deps --no-binary :all: --require-hashes -r {{ securedrop_translation_pip_requirements }} &&
+    /tmp/securedrop-app-code-i18n-ve/bin/pip3 install --no-deps --no-binary :all: --require-hashes -r {{ securedrop_pip_requirements }}
   environment:
     PATH: /root/.cargo/bin:{{ ansible_env.PATH }}
   tags:
@@ -33,6 +33,6 @@
     . /tmp/securedrop-app-code-i18n-ve/bin/activate ;
     /tmp/securedrop-app-code-i18n-ve/bin/python3 ./i18n_tool.py --verbose translate-messages --compile
   args:
-    chdir: "{{ securedrop_code_filtered }}"
+    chdir: "{{ securedrop_app_code_deb_dir }}"
   environment:
     PYTHONDONTWRITEBYTECODE: "true"

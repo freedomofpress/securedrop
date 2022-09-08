@@ -1,4 +1,5 @@
 #!/usr/bin/make -f
+include /usr/share/dpkg/pkg-info.mk
 
 DEB_DH_INSTALL_ARGS=-X .git
 
@@ -14,16 +15,26 @@ override_dh_gencontrol:
 # want them to be correctly updated with each update.
 override_dh_installdeb:
 	dh_installdeb
-	cp ${CURDIR}/debian/conffiles ${CURDIR}/debian/securedrop-app-code/DEBIAN/
+	echo "" > ${CURDIR}/debian/securedrop-app-code/DEBIAN/conffiles
+
+override_dh_install:
+	# Things to exclude
+	find . -type f -name '*requirements.in' -delete
+	find . -type f -name '*.mako' -delete
+	rm upload-screenshots.py
+	dh_install
 
 override_dh_strip_nondeterminism:
+	# Delete non-reproducible things
 	find ./debian/ -type f -name '*.pyc' -delete
 	find ./debian/ -type f -name 'pip-selfcheck.json' -delete
 	find -type f -name RECORD -exec sed -i -e '/.*\.pyc.*/d' {} +
 	dh_strip_nondeterminism $@
 
 override_dh_virtualenv:
+	cp requirements/python3/securedrop-app-code-requirements.txt requirements.txt
 	dh_virtualenv \
+		--package=securedrop-app-code \
 		--python=/usr/bin/python3 \
 		--builtin-venv \
 		--preinstall setuptools-scm==6.0.1 \
@@ -32,6 +43,12 @@ override_dh_virtualenv:
 		--extra-pip-arg "--no-deps" \
 		--extra-pip-arg "--no-binary=:all:" \
 		--extra-pip-arg "--no-cache-dir"
+
+override_dh_gencontrol:
+	dh_gencontrol -psecuredrop-ossec-agent -- "-v3.6.0+${DEB_VERSION}"
+	dh_gencontrol -psecuredrop-ossec-server -- "-v3.6.0+${DEB_VERSION}"
+	dh_gencontrol -psecuredrop-keyring -- "-v0.1.6+${DEB_VERSION}"
+	dh_gencontrol --remaining-packages
 
 #
 # Have to override the automatic service handling since we have more
