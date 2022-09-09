@@ -20,7 +20,6 @@ RUN apt-get -y update && apt-get upgrade -y && apt-get install -y \
         libffi-dev \
         libssl-dev \
         make \
-        paxctl \
         python3-all \
         python3-pip \
         python3-setuptools \
@@ -55,6 +54,6 @@ RUN TMPDIR=`mktemp -d` && cd ${TMPDIR} \
 
 RUN echo "source $HOME/.cargo/env" >> $HOME/.bashrc
 
-RUN paxctl -cm /usr/bin/python3.8 && mkdir -p /tmp/build
+RUN mkdir -p /tmp/build
 RUN apt-get clean \
         && rm -rf /var/lib/apt/lists/*
