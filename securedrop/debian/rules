@@ -28,7 +28,7 @@ override_dh_strip_nondeterminism:
 	# Delete non-reproducible things
 	find ./debian/ -type f -name '*.pyc' -delete
 	find ./debian/ -type f -name 'pip-selfcheck.json' -delete
-	find -type f -name RECORD -exec sed -i -e '/.*\.pyc.*/d' {} +
+	find ./debian/ -type f -name 'RECORD' -delete
 	dh_strip_nondeterminism $@
 
 override_dh_virtualenv:
@@ -43,6 +43,8 @@ override_dh_virtualenv:
 		--extra-pip-arg "--no-deps" \
 		--extra-pip-arg "--no-binary=:all:" \
 		--extra-pip-arg "--no-cache-dir"
+	# Strip non-reproducible debugging information
+	dh_strip $@ --no-automatic-dbgsym
 
 override_dh_gencontrol:
 	dh_gencontrol -psecuredrop-ossec-agent -- "-v3.6.0+${DEB_VERSION}"
