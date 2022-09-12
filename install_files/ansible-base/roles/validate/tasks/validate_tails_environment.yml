@@ -15,7 +15,7 @@
 
 - name: Check for persistence volume.
   stat:
-    path: /live/persistence/TailsData_unlocked/persistence.conf
+    path: "{{ item }}"
   register: tails_persistence_check_result
   with_items:
     - /live/persistence/TailsData_unlocked/persistence.conf
