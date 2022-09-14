@@ -462,7 +462,7 @@ def test_delete_collection(mocker, source_app, journalist_app, test_journo):
             in text
         )
 
-        assert "No documents have been submitted!" in text
+        assert "There are no submissions!" in text
 
         # Make sure the collection is deleted from the filesystem
         def assertion():
