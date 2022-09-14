@@ -47,7 +47,7 @@
       <thead hidden aria-hidden="false">
         <tr>
           <th scope="col">{{ gettext('Designation') }}</th>
-          <th scope="col">{{ gettext('Documents') }}</th>
+          <th scope="col">{{ gettext('Files') }}</th>
           <th scope="col">{{ gettext('Messages') }}</th>
           <th scope="col">{{ gettext('Unread') }}</th>
           <th scope="col">{{ gettext('Date') }}</th>
@@ -77,7 +77,7 @@
     </table>
   </form>
   {% else %}
-  <p>{{ gettext('No documents have been submitted!') }}</p>
+  <p>{{ gettext('There are no submissions!') }}</p>
   {% endif %}
 </div>
 {% endblock %}
