@@ -18,8 +18,6 @@
     rm -f /usr/share/python-wheels/setuptools-*.whl
     mv /tmp/securedrop-app-code-requirements-download/setuptools-*.whl /usr/share/python-wheels/
 
-- include: translations.yml
-
 - name: Build securedrop-app-code Debian package
   command: dpkg-buildpackage -us -uc
   args:

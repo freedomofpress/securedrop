@@ -18,6 +18,8 @@ override_dh_installdeb:
 	echo "" > ${CURDIR}/debian/securedrop-app-code/DEBIAN/conffiles
 
 override_dh_install:
+	# Build translations
+	bash ./debian/translations.sh
 	# Things to exclude
 	find . -type f -name '*requirements.in' -delete
 	find . -type f -name '*.mako' -delete
