@@ -32,7 +32,7 @@ IPTABLES_RULES_DEFAULT_DROP = {
 }
 
 
-def list_iptables_rules():
+def list_iptables_rules() -> dict:
     result = subprocess.run(["iptables", "-S"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     rules = result.stdout.decode("utf-8").splitlines()
     policies = [r for r in rules if r.startswith("-P")]
@@ -48,12 +48,12 @@ def list_iptables_rules():
     }
 
 
-def check_iptables_are_default(rules):
+def check_iptables_are_default(rules: dict) -> None:
     if rules["all"] == IPTABLES_RULES_UNCONFIGURED:
         raise ValueError("The iptables rules have not been configured.")
 
 
-def check_iptables_default_drop(rules):
+def check_iptables_default_drop(rules: dict) -> None:
     for chain, chain_rules in IPTABLES_RULES_DEFAULT_DROP.items():
         for i, rule in enumerate(reversed(chain_rules), 1):
             try:
@@ -63,13 +63,13 @@ def check_iptables_default_drop(rules):
                 raise ValueError("The iptables default drop rules are incorrect.")
 
 
-def check_iptables_rules():
+def check_iptables_rules() -> None:
     rules = list_iptables_rules()
     check_iptables_are_default(rules)
     check_iptables_default_drop(rules)
 
 
-def check_system_configuration(args):
+def check_system_configuration(args: argparse.Namespace) -> None:
     print("Checking system configuration...")
     try:
         check_iptables_rules()
