@@ -373,7 +373,7 @@ def test_login_valid_credentials(config, journalist_app, test_journo, locale):
             follow_redirects=True,
         )
         assert page_language(resp.data) == language_tag(locale)
-        msgids = ["All Sources", "No documents have been submitted!"]
+        msgids = ["All Sources", "There are no submissions!"]
         with xfail_untranslated_messages(config, locale, msgids):
             resp_text = resp.data.decode("utf-8")
             for msgid in msgids:

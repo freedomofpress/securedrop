@@ -331,7 +331,7 @@ def get_args() -> argparse.ArgumentParser:
     parser.add_argument(
         "--store-dir",
         default=config.STORE_DIR,
-        help=("directory in which the documents are stored"),
+        help=("directory in which the files are stored"),
     )
     subps = parser.add_subparsers()
     # Add/remove journalists + admins
