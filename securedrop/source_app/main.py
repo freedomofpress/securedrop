@@ -294,7 +294,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
             elif fh and not msg:
                 html_contents = gettext("Thanks! We received your file.")
             else:
-                html_contents = gettext("Thanks! We received your submission.")
+                html_contents = gettext("Thanks! We received your file and message.")
 
             flash_msg("success", gettext("Success!"), html_contents)
 

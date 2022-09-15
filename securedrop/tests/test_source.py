@@ -481,7 +481,7 @@ def test_submit_both(source_app):
         )
         assert resp.status_code == 200
         text = resp.data.decode("utf-8")
-        assert "Thanks! We received your submission" in text
+        assert "Thanks! We received your file and message" in text
 
 
 def test_submit_antispam(source_app):
