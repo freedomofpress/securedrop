@@ -20,12 +20,12 @@ Description: Establishes baseline system state for running SecureDrop.
  Configures apt repositories.
 
 Package: securedrop-keyring
-Architecture: amd64
+Architecture: all
 Depends: gnupg
 Description: Provides an apt keyring for SecureDrop-related packages, so the master signing key used for SecureDrop packages can be updated via apt.
 
 Package: securedrop-ossec-agent
-Architecture: amd64
+Architecture: all
 Depends: libevent-2.1-7,libpcre2-8-0,ossec-agent,securedrop-keyring,securedrop-config
 Replaces: ossec-agent
 Conflicts: securedrop-ossec-server
@@ -34,7 +34,7 @@ Description: Installs the securedrop pre-configured OSSEC agent
  SecureDrop app server.
 
 Package: securedrop-ossec-server
-Architecture: amd64
+Architecture: all
 Depends: libevent-2.1-7,libpcre2-8-0,ossec-server,securedrop-keyring,securedrop-config
 Replaces: ossec-server
 Conflicts: securedrop-ossec-agent

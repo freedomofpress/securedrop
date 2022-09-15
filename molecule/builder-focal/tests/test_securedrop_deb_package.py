@@ -65,7 +65,6 @@ def make_deb_paths() -> Dict[str, Path]:
         securedrop_version=securedrop_test_vars["securedrop_version"],
         ossec_version=securedrop_test_vars["ossec_version"],
         keyring_version=securedrop_test_vars["keyring_version"],
-        config_version=securedrop_test_vars["config_version"],
         grsec_version=grsec_version,
         securedrop_target_distribution=securedrop_test_vars["securedrop_target_distribution"],
     )
@@ -190,8 +189,14 @@ def test_deb_package_control_fields(host: Host, deb: Path) -> None:
     c = host.run("dpkg-deb --field {}".format(deb))
 
     assert "Maintainer: SecureDrop Team <securedrop@freedom.press>" in c.stdout
-    # The securedrop-config package is architecture indepedent
-    if package_name == "securedrop-config":
+    arch_all = (
+        "securedrop-config",
+        "securedrop-keyring",
+        "securedrop-ossec-agent",
+        "securedrop-ossec-server",
+    )
+    # Some packages are architecture independent
+    if package_name in arch_all:
         assert "Architecture: all" in c.stdout
     else:
         assert "Architecture: amd64" in c.stdout
