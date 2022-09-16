@@ -63,7 +63,7 @@ def test_tor_torrc_sandbox(host):
     before we push it out to servers. See issues #944 and #1969.
     """
     f = host.file("/etc/tor/torrc")
-    # Only `Sandbox 1` will enable, but make sure there are zero occurrances
+    # Only `Sandbox 1` will enable, but make sure there are zero occurrences
     # of "Sandbox", otherwise we may have a regression somewhere.
     assert not f.contains("^.*Sandbox.*$")
 
