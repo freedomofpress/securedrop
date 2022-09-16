@@ -188,16 +188,15 @@ def spawn_sd_servers(
             journalist_app_process.join()
 
 
-# TODO(AD): This is intended to eventually replace the sd_servers fixture
 @pytest.fixture(scope="session")
-def sd_servers_v2(
+def sd_servers(
     setup_journalist_key_and_gpg_folder: Tuple[str, Path]
 ) -> Generator[SdServersFixtureResult, None, None]:
     """Spawn the source and journalist apps as separate processes with a default config.
 
     This fixture is session-scoped so the apps are only spawned once during the test session, and
     shared between the different unit tests. If your test needs to modify the state of the apps
-    (example: a source submits a message), use the sd_servers_v2_with_clean_state fixture, which is
+    (example: a source submits a message), use the sd_servers_with_clean_state fixture, which is
     slower.
     """
     default_config = SecureDropConfigFactory.create(
@@ -215,12 +214,12 @@ def sd_servers_v2(
 
 
 @pytest.fixture(scope="function")
-def sd_servers_v2_with_clean_state(
+def sd_servers_with_clean_state(
     setup_journalist_key_and_gpg_folder: Tuple[str, Path]
 ) -> Generator[SdServersFixtureResult, None, None]:
-    """Same as sd_servers_v2 but spawns the apps with a clean state.
+    """Same as sd_servers but spawns the apps with a clean state.
 
-    Slower than sd_servers_v2 as it is function-scoped.
+    Slower than sd_servers as it is function-scoped.
     """
     default_config = SecureDropConfigFactory.create(
         SECUREDROP_DATA_ROOT=Path(f"/tmp/sd-tests/functional-clean-state-{uuid4()}"),
@@ -237,12 +236,12 @@ def sd_servers_v2_with_clean_state(
 
 
 @pytest.fixture(scope="function")
-def sd_servers_v2_with_submitted_file(
+def sd_servers_with_submitted_file(
     setup_journalist_key_and_gpg_folder: Tuple[str, Path]
 ) -> Generator[SdServersFixtureResult, None, None]:
-    """Same as sd_servers_v2 but spawns the apps with an already-submitted source file.
+    """Same as sd_servers but spawns the apps with an already-submitted source file.
 
-    Slower than sd_servers_v2 as it is function-scoped.
+    Slower than sd_servers as it is function-scoped.
     """
     default_config = SecureDropConfigFactory.create(
         SECUREDROP_DATA_ROOT=Path(f"/tmp/sd-tests/functional-with-submitted-file-{uuid4()}"),

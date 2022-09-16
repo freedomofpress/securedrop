@@ -3,21 +3,21 @@ from pathlib import Path
 import pytest
 from encryption import EncryptionManager
 from selenium.common.exceptions import NoSuchElementException
-from tests.functional.app_navigators import JournalistAppNavigator, SourceAppNagivator
-from tests.functional.pageslayout.functional_test import list_locales
-from tests.functional.pageslayout.screenshot_utils import save_screenshot_and_html
+from tests.functional.app_navigators.journalist_app_nav import JournalistAppNavigator
+from tests.functional.app_navigators.source_app_nav import SourceAppNavigator
+from tests.functional.pageslayout.utils import list_locales, save_screenshot_and_html
 
 
 @pytest.mark.parametrize("locale", list_locales())
 @pytest.mark.pagelayout
 class TestSubmitAndRetrieveFile:
     def test_submit_and_retrieve_happy_path(
-        self, locale, sd_servers_v2_with_clean_state, tor_browser_web_driver, firefox_web_driver
+        self, locale, sd_servers_with_clean_state, tor_browser_web_driver, firefox_web_driver
     ):
         # Given a source user accessing the app from their browser
         locale_with_commas = locale.replace("_", "-")
-        source_app_nav = SourceAppNagivator(
-            source_app_base_url=sd_servers_v2_with_clean_state.source_app_base_url,
+        source_app_nav = SourceAppNavigator(
+            source_app_base_url=sd_servers_with_clean_state.source_app_base_url,
             web_driver=tor_browser_web_driver,
             accept_languages=locale_with_commas,
         )
@@ -35,13 +35,13 @@ class TestSubmitAndRetrieveFile:
 
         # And a journalist logs in
         journ_app_nav = JournalistAppNavigator(
-            journalist_app_base_url=sd_servers_v2_with_clean_state.journalist_app_base_url,
+            journalist_app_base_url=sd_servers_with_clean_state.journalist_app_base_url,
             web_driver=firefox_web_driver,
         )
         journ_app_nav.journalist_logs_in(
-            username=sd_servers_v2_with_clean_state.journalist_username,
-            password=sd_servers_v2_with_clean_state.journalist_password,
-            otp_secret=sd_servers_v2_with_clean_state.journalist_otp_secret,
+            username=sd_servers_with_clean_state.journalist_username,
+            password=sd_servers_with_clean_state.journalist_password,
+            otp_secret=sd_servers_with_clean_state.journalist_otp_secret,
         )
         journ_app_nav.journalist_checks_messages()
 
@@ -50,7 +50,7 @@ class TestSubmitAndRetrieveFile:
 
         # And when they try to download the file
         # Then it succeeds and the journalist sees the correct content
-        apps_sd_config = sd_servers_v2_with_clean_state.config_in_use
+        apps_sd_config = sd_servers_with_clean_state.config_in_use
         retrieved_message = journ_app_nav.journalist_downloads_first_message(
             encryption_mgr_to_use_for_decryption=EncryptionManager(
                 gpg_key_dir=Path(apps_sd_config.GPG_KEY_DIR),
@@ -73,7 +73,7 @@ class TestSubmitAndRetrieveFile:
         save_screenshot_and_html(source_app_nav.driver, locale, "source-deletes_reply")
 
     @staticmethod
-    def _source_deletes_journalist_reply(navigator: SourceAppNagivator) -> None:
+    def _source_deletes_journalist_reply(navigator: SourceAppNavigator) -> None:
         # Get the reply filename so we can use IDs to select the delete buttons
         reply_filename_element = navigator.driver.find_element_by_name("reply_filename")
         reply_filename = reply_filename_element.get_attribute("value")

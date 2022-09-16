@@ -20,11 +20,10 @@ from typing import Generator, Tuple
 from uuid import uuid4
 
 import pytest
-from tests.functional.app_navigators import JournalistAppNavigator
+from tests.functional.app_navigators.journalist_app_nav import JournalistAppNavigator
 from tests.functional.conftest import SdServersFixtureResult, spawn_sd_servers
 from tests.functional.factories import SecureDropConfigFactory
-from tests.functional.pageslayout.functional_test import list_locales
-from tests.functional.pageslayout.screenshot_utils import save_screenshot_and_html
+from tests.functional.pageslayout.utils import list_locales, save_screenshot_and_html
 from tests.functional.sd_config_v2 import SecureDropConfig
 
 
@@ -39,12 +38,12 @@ def _create_source_and_submission_and_delete_source_key(config_in_use: SecureDro
 
 
 @pytest.fixture(scope="function")
-def _sd_servers_v2_with_deleted_source_key(
+def _sd_servers_with_deleted_source_key(
     setup_journalist_key_and_gpg_folder: Tuple[str, Path]
 ) -> Generator[SdServersFixtureResult, None, None]:
-    """Same as sd_servers_v2 but spawns the apps with a source whose key was deleted.
+    """Same as sd_servers but spawns the apps with a source whose key was deleted.
 
-    Slower than sd_servers_v2 as it is function-scoped.
+    Slower than sd_servers as it is function-scoped.
     """
     default_config = SecureDropConfigFactory.create(
         SECUREDROP_DATA_ROOT=Path(f"/tmp/sd-tests/functional-with-deleted-source-key-{uuid4()}"),
@@ -67,20 +66,20 @@ def _sd_servers_v2_with_deleted_source_key(
 @pytest.mark.pagelayout
 class TestJournalistLayoutCol:
     def test_col_with_and_without_documents(
-        self, locale, sd_servers_v2_with_submitted_file, firefox_web_driver
+        self, locale, sd_servers_with_submitted_file, firefox_web_driver
     ):
         # Given an SD server with an already-submitted file
         # And a journalist logging into the journalist interface
         locale_with_commas = locale.replace("_", "-")
         journ_app_nav = JournalistAppNavigator(
-            journalist_app_base_url=sd_servers_v2_with_submitted_file.journalist_app_base_url,
+            journalist_app_base_url=sd_servers_with_submitted_file.journalist_app_base_url,
             web_driver=firefox_web_driver,
             accept_languages=locale_with_commas,
         )
         journ_app_nav.journalist_logs_in(
-            username=sd_servers_v2_with_submitted_file.journalist_username,
-            password=sd_servers_v2_with_submitted_file.journalist_password,
-            otp_secret=sd_servers_v2_with_submitted_file.journalist_otp_secret,
+            username=sd_servers_with_submitted_file.journalist_username,
+            password=sd_servers_with_submitted_file.journalist_password,
+            otp_secret=sd_servers_with_submitted_file.journalist_otp_secret,
         )
 
         # Take a screenshot of the individual source's page when there is a document
@@ -105,21 +104,19 @@ class TestJournalistLayoutCol:
         journ_app_nav.nav_helper.wait_for(submission_deleted)
         save_screenshot_and_html(journ_app_nav.driver, locale, "journalist-col_no_document")
 
-    def test_col_has_no_key(
-        self, locale, _sd_servers_v2_with_deleted_source_key, firefox_web_driver
-    ):
+    def test_col_has_no_key(self, locale, _sd_servers_with_deleted_source_key, firefox_web_driver):
         # Given an SD server with an already-submitted file, but the source's key was deleted
         # And a journalist logging into the journalist interface
         locale_with_commas = locale.replace("_", "-")
         journ_app_nav = JournalistAppNavigator(
-            journalist_app_base_url=_sd_servers_v2_with_deleted_source_key.journalist_app_base_url,
+            journalist_app_base_url=_sd_servers_with_deleted_source_key.journalist_app_base_url,
             web_driver=firefox_web_driver,
             accept_languages=locale_with_commas,
         )
         journ_app_nav.journalist_logs_in(
-            username=_sd_servers_v2_with_deleted_source_key.journalist_username,
-            password=_sd_servers_v2_with_deleted_source_key.journalist_password,
-            otp_secret=_sd_servers_v2_with_deleted_source_key.journalist_otp_secret,
+            username=_sd_servers_with_deleted_source_key.journalist_username,
+            password=_sd_servers_with_deleted_source_key.journalist_password,
+            otp_secret=_sd_servers_with_deleted_source_key.journalist_otp_secret,
         )
 
         # Take a screenshot of the source's page after their key was deleted

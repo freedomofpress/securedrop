@@ -3,13 +3,12 @@ import shutil
 
 import pytest
 from selenium import webdriver
-from tests.functional.app_navigators import SourceAppNagivator
-
-from . import functional_test
+from tests.functional.app_navigators.source_app_nav import SourceAppNavigator
+from tests.functional.web_drivers import _FIREFOX_PATH
 
 
 @pytest.fixture
-def orbot_web_driver(sd_servers_v2):
+def orbot_web_driver(sd_servers):
     # Create new profile and driver with the orbot user agent
     orbot_user_agent = "Mozilla/5.0 (Android; Mobile; rv:52.0) Gecko/20100101 Firefox/52.0"
     f_profile_path2 = "/tmp/testprofile2"
@@ -19,7 +18,7 @@ def orbot_web_driver(sd_servers_v2):
     profile = webdriver.FirefoxProfile(f_profile_path2)
     profile.set_preference("general.useragent.override", orbot_user_agent)
 
-    if sd_servers_v2.journalist_app_base_url.find(".onion") != -1:
+    if sd_servers.journalist_app_base_url.find(".onion") != -1:
         # set FF preference to socks proxy in Tor Browser
         profile.set_preference("network.proxy.type", 1)
         profile.set_preference("network.proxy.socks", "127.0.0.1")
@@ -28,9 +27,7 @@ def orbot_web_driver(sd_servers_v2):
         profile.set_preference("network.proxy.socks_remote_dns", True)
         profile.set_preference("network.dns.blockDotOnion", False)
     profile.update_preferences()
-    orbot_web_driver = webdriver.Firefox(
-        firefox_binary=functional_test.FIREFOX_PATH, firefox_profile=profile
-    )
+    orbot_web_driver = webdriver.Firefox(firefox_binary=_FIREFOX_PATH, firefox_profile=profile)
 
     try:
         driver_user_agent = orbot_web_driver.execute_script("return navigator.userAgent")
@@ -41,10 +38,10 @@ def orbot_web_driver(sd_servers_v2):
 
 
 class TestSourceAppBrowserWarnings:
-    def test_warning_appears_if_tor_browser_not_in_use(self, sd_servers_v2, firefox_web_driver):
+    def test_warning_appears_if_tor_browser_not_in_use(self, sd_servers, firefox_web_driver):
         # Given a user
-        navigator = SourceAppNagivator(
-            source_app_base_url=sd_servers_v2.source_app_base_url,
+        navigator = SourceAppNavigator(
+            source_app_base_url=sd_servers.source_app_base_url,
             # Who is using Firefox instead of the tor browser
             web_driver=firefox_web_driver,
         )
@@ -66,10 +63,10 @@ class TestSourceAppBrowserWarnings:
 
         navigator.nav_helper.wait_for(warning_banner_is_hidden)
 
-    def test_warning_appears_if_orbot_is_used(self, sd_servers_v2, orbot_web_driver):
+    def test_warning_appears_if_orbot_is_used(self, sd_servers, orbot_web_driver):
         # Given a user
-        navigator = SourceAppNagivator(
-            source_app_base_url=sd_servers_v2.source_app_base_url,
+        navigator = SourceAppNavigator(
+            source_app_base_url=sd_servers.source_app_base_url,
             # Who is using Orbot instead of the (desktop) Tor browser
             web_driver=orbot_web_driver,
         )
@@ -91,10 +88,10 @@ class TestSourceAppBrowserWarnings:
 
         navigator.nav_helper.wait_for(warning_banner_is_hidden)
 
-    def test_warning_high_security(self, sd_servers_v2, tor_browser_web_driver):
+    def test_warning_high_security(self, sd_servers, tor_browser_web_driver):
         # Given a user
-        navigator = SourceAppNagivator(
-            source_app_base_url=sd_servers_v2.source_app_base_url,
+        navigator = SourceAppNavigator(
+            source_app_base_url=sd_servers.source_app_base_url,
             # Who is using the Tor browser
             web_driver=tor_browser_web_driver,
         )

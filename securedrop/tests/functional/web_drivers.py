@@ -113,7 +113,6 @@ def _create_firefox_driver(
     return firefox_driver
 
 
-# TODO(AD): This is intended to eventually replace the web driver code in FunctionalTest
 @contextmanager
 def get_web_driver(
     web_driver_type: WebDriverTypeEnum = WebDriverTypeEnum.TOR_BROWSER,

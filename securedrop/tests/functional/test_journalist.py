@@ -22,7 +22,7 @@ from uuid import uuid4
 import pytest
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.keys import Keys
-from tests.functional.app_navigators import JournalistAppNavigator
+from tests.functional.app_navigators.journalist_app_nav import JournalistAppNavigator
 from tests.functional.conftest import (
     SdServersFixtureResult,
     create_source_and_submission,
@@ -34,18 +34,18 @@ from tests.functional.sd_config_v2 import SecureDropConfig
 
 class TestJournalist:
     def test_journalist_verifies_deletion_of_one_submission_modal(
-        self, sd_servers_v2_with_submitted_file, firefox_web_driver
+        self, sd_servers_with_submitted_file, firefox_web_driver
     ):
         # Given an SD server with a file submitted by a source
         # And a journalist logged into the journalist interface
         journ_app_nav = JournalistAppNavigator(
-            journalist_app_base_url=sd_servers_v2_with_submitted_file.journalist_app_base_url,
+            journalist_app_base_url=sd_servers_with_submitted_file.journalist_app_base_url,
             web_driver=firefox_web_driver,
         )
         journ_app_nav.journalist_logs_in(
-            username=sd_servers_v2_with_submitted_file.journalist_username,
-            password=sd_servers_v2_with_submitted_file.journalist_password,
-            otp_secret=sd_servers_v2_with_submitted_file.journalist_otp_secret,
+            username=sd_servers_with_submitted_file.journalist_username,
+            password=sd_servers_with_submitted_file.journalist_password,
+            otp_secret=sd_servers_with_submitted_file.journalist_otp_secret,
         )
 
         # And the journalist went to the individual source's page
@@ -80,18 +80,18 @@ class TestJournalist:
         journ_app_nav.nav_helper.wait_for(submission_deleted)
 
     def test_journalist_uses_col_delete_collection_button_modal(
-        self, sd_servers_v2_with_submitted_file, firefox_web_driver
+        self, sd_servers_with_submitted_file, firefox_web_driver
     ):
         # Given an SD server with a file submitted by a source
         # And a journalist logged into the journalist interface
         journ_app_nav = JournalistAppNavigator(
-            journalist_app_base_url=sd_servers_v2_with_submitted_file.journalist_app_base_url,
+            journalist_app_base_url=sd_servers_with_submitted_file.journalist_app_base_url,
             web_driver=firefox_web_driver,
         )
         journ_app_nav.journalist_logs_in(
-            username=sd_servers_v2_with_submitted_file.journalist_username,
-            password=sd_servers_v2_with_submitted_file.journalist_password,
-            otp_secret=sd_servers_v2_with_submitted_file.journalist_otp_secret,
+            username=sd_servers_with_submitted_file.journalist_username,
+            password=sd_servers_with_submitted_file.journalist_password,
+            otp_secret=sd_servers_with_submitted_file.journalist_otp_secret,
         )
 
         # And the journalist went to the individual source's page
@@ -126,18 +126,18 @@ class TestJournalist:
         )
 
     def test_journalist_uses_index_delete_collections_button_modal(
-        self, sd_servers_v2_with_submitted_file, firefox_web_driver
+        self, sd_servers_with_submitted_file, firefox_web_driver
     ):
         # Given an SD server with a file submitted by a source
         # And a journalist logged into the journalist interface
         journ_app_nav = JournalistAppNavigator(
-            journalist_app_base_url=sd_servers_v2_with_submitted_file.journalist_app_base_url,
+            journalist_app_base_url=sd_servers_with_submitted_file.journalist_app_base_url,
             web_driver=firefox_web_driver,
         )
         journ_app_nav.journalist_logs_in(
-            username=sd_servers_v2_with_submitted_file.journalist_username,
-            password=sd_servers_v2_with_submitted_file.journalist_password,
-            otp_secret=sd_servers_v2_with_submitted_file.journalist_otp_secret,
+            username=sd_servers_with_submitted_file.journalist_username,
+            password=sd_servers_with_submitted_file.journalist_password,
+            otp_secret=sd_servers_with_submitted_file.journalist_otp_secret,
         )
 
         # And at least one source previously used the app
@@ -213,18 +213,18 @@ class TestJournalist:
         )
 
     def test_journalist_interface_ui_with_modal(
-        self, sd_servers_v2_with_submitted_file, firefox_web_driver
+        self, sd_servers_with_submitted_file, firefox_web_driver
     ):
         # Given an SD server with a file submitted by a source
         # And a journalist logged into the journalist interface
         journ_app_nav = JournalistAppNavigator(
-            journalist_app_base_url=sd_servers_v2_with_submitted_file.journalist_app_base_url,
+            journalist_app_base_url=sd_servers_with_submitted_file.journalist_app_base_url,
             web_driver=firefox_web_driver,
         )
         journ_app_nav.journalist_logs_in(
-            username=sd_servers_v2_with_submitted_file.journalist_username,
-            password=sd_servers_v2_with_submitted_file.journalist_password,
-            otp_secret=sd_servers_v2_with_submitted_file.journalist_otp_secret,
+            username=sd_servers_with_submitted_file.journalist_username,
+            password=sd_servers_with_submitted_file.journalist_password,
+            otp_secret=sd_servers_with_submitted_file.journalist_otp_secret,
         )
 
         # When the journalist uses the filter by sources to find text that doesn't match any source
@@ -328,18 +328,18 @@ class TestJournalist:
         journ_app_nav.journalist_clicks_delete_all_and_sees_confirmation()
 
     def test_journalist_uses_index_delete_files_button_modal(
-        self, sd_servers_v2_with_submitted_file, firefox_web_driver
+        self, sd_servers_with_submitted_file, firefox_web_driver
     ):
         # Given an SD server with a file submitted by a source
         # And a journalist logged into the journalist interface
         journ_app_nav = JournalistAppNavigator(
-            journalist_app_base_url=sd_servers_v2_with_submitted_file.journalist_app_base_url,
+            journalist_app_base_url=sd_servers_with_submitted_file.journalist_app_base_url,
             web_driver=firefox_web_driver,
         )
         journ_app_nav.journalist_logs_in(
-            username=sd_servers_v2_with_submitted_file.journalist_username,
-            password=sd_servers_v2_with_submitted_file.journalist_password,
-            otp_secret=sd_servers_v2_with_submitted_file.journalist_otp_secret,
+            username=sd_servers_with_submitted_file.journalist_username,
+            password=sd_servers_with_submitted_file.journalist_password,
+            otp_secret=sd_servers_with_submitted_file.journalist_otp_secret,
         )
 
         # And at least one source previously used the app
@@ -375,10 +375,10 @@ class TestJournalist:
 
 
 @pytest.fixture(scope="function")
-def _sd_servers_v2_with_missing_file(
+def _sd_servers_with_missing_file(
     setup_journalist_key_and_gpg_folder: Tuple[str, Path]
 ) -> Generator[SdServersFixtureResult, None, None]:
-    """Same as sd_servers_v2 but spawns the apps with a submission whose file has been deleted."""
+    """Same as sd_servers but spawns the apps with a submission whose file has been deleted."""
     default_config = SecureDropConfigFactory.create(
         SECUREDROP_DATA_ROOT=Path(f"/tmp/sd-tests/functional-with-missing-file-{uuid4()}"),
     )
@@ -405,17 +405,17 @@ class TestJournalistMissingFile:
     """Test error handling when a message file has been deleted from disk but remains in the
     database. Ref #4787."""
 
-    def test_download_source_unread(self, _sd_servers_v2_with_missing_file, firefox_web_driver):
+    def test_download_source_unread(self, _sd_servers_with_missing_file, firefox_web_driver):
         # Given an SD server with a submission whose file was deleted from disk
         # And a journalist logged into the journalist interface
         journ_app_nav = JournalistAppNavigator(
-            journalist_app_base_url=_sd_servers_v2_with_missing_file.journalist_app_base_url,
+            journalist_app_base_url=_sd_servers_with_missing_file.journalist_app_base_url,
             web_driver=firefox_web_driver,
         )
         journ_app_nav.journalist_logs_in(
-            username=_sd_servers_v2_with_missing_file.journalist_username,
-            password=_sd_servers_v2_with_missing_file.journalist_password,
-            otp_secret=_sd_servers_v2_with_missing_file.journalist_otp_secret,
+            username=_sd_servers_with_missing_file.journalist_username,
+            password=_sd_servers_with_missing_file.journalist_password,
+            otp_secret=_sd_servers_with_missing_file.journalist_otp_secret,
         )
 
         # When the journalist clicks on the source's "n unread" button
@@ -441,18 +441,18 @@ class TestJournalistMissingFile:
         assert notification.text in error_msg
 
     def test_select_source_and_download_all(
-        self, _sd_servers_v2_with_missing_file, firefox_web_driver
+        self, _sd_servers_with_missing_file, firefox_web_driver
     ):
         # Given an SD server with a submission whose file was deleted from disk
         # And a journalist logged into the journalist interface
         journ_app_nav = JournalistAppNavigator(
-            journalist_app_base_url=_sd_servers_v2_with_missing_file.journalist_app_base_url,
+            journalist_app_base_url=_sd_servers_with_missing_file.journalist_app_base_url,
             web_driver=firefox_web_driver,
         )
         journ_app_nav.journalist_logs_in(
-            username=_sd_servers_v2_with_missing_file.journalist_username,
-            password=_sd_servers_v2_with_missing_file.journalist_password,
-            otp_secret=_sd_servers_v2_with_missing_file.journalist_otp_secret,
+            username=_sd_servers_with_missing_file.journalist_username,
+            password=_sd_servers_with_missing_file.journalist_password,
+            otp_secret=_sd_servers_with_missing_file.journalist_otp_secret,
         )
 
         # When the journalist selects the source and then clicks the "Download" button
@@ -466,18 +466,18 @@ class TestJournalistMissingFile:
         journ_app_nav.is_on_journalist_homepage()
 
     def test_select_source_and_download_unread(
-        self, _sd_servers_v2_with_missing_file, firefox_web_driver
+        self, _sd_servers_with_missing_file, firefox_web_driver
     ):
         # Given an SD server with a submission whose file was deleted from disk
         # And a journalist logged into the journalist interface
         journ_app_nav = JournalistAppNavigator(
-            journalist_app_base_url=_sd_servers_v2_with_missing_file.journalist_app_base_url,
+            journalist_app_base_url=_sd_servers_with_missing_file.journalist_app_base_url,
             web_driver=firefox_web_driver,
         )
         journ_app_nav.journalist_logs_in(
-            username=_sd_servers_v2_with_missing_file.journalist_username,
-            password=_sd_servers_v2_with_missing_file.journalist_password,
-            otp_secret=_sd_servers_v2_with_missing_file.journalist_otp_secret,
+            username=_sd_servers_with_missing_file.journalist_username,
+            password=_sd_servers_with_missing_file.journalist_password,
+            otp_secret=_sd_servers_with_missing_file.journalist_otp_secret,
         )
 
         # When the journalist selects the source then clicks the "Download Unread" button
@@ -490,17 +490,17 @@ class TestJournalistMissingFile:
         self._journalist_sees_missing_file_error_message(journ_app_nav)
         journ_app_nav.is_on_journalist_homepage()
 
-    def test_download_message(self, _sd_servers_v2_with_missing_file, firefox_web_driver):
+    def test_download_message(self, _sd_servers_with_missing_file, firefox_web_driver):
         # Given an SD server with a submission whose file was deleted from disk
         # And a journalist logged into the journalist interface
         journ_app_nav = JournalistAppNavigator(
-            journalist_app_base_url=_sd_servers_v2_with_missing_file.journalist_app_base_url,
+            journalist_app_base_url=_sd_servers_with_missing_file.journalist_app_base_url,
             web_driver=firefox_web_driver,
         )
         journ_app_nav.journalist_logs_in(
-            username=_sd_servers_v2_with_missing_file.journalist_username,
-            password=_sd_servers_v2_with_missing_file.journalist_password,
-            otp_secret=_sd_servers_v2_with_missing_file.journalist_otp_secret,
+            username=_sd_servers_with_missing_file.journalist_username,
+            password=_sd_servers_with_missing_file.journalist_password,
+            otp_secret=_sd_servers_with_missing_file.journalist_otp_secret,
         )
 
         # When the journalist clicks on the individual message from the source page
@@ -527,18 +527,18 @@ class TestJournalistMissingFile:
         )
 
     def test_select_message_and_download_selected(
-        self, _sd_servers_v2_with_missing_file, firefox_web_driver
+        self, _sd_servers_with_missing_file, firefox_web_driver
     ):
         # Given an SD server with a submission whose file was deleted from disk
         # And a journalist logged into the journalist interface
         journ_app_nav = JournalistAppNavigator(
-            journalist_app_base_url=_sd_servers_v2_with_missing_file.journalist_app_base_url,
+            journalist_app_base_url=_sd_servers_with_missing_file.journalist_app_base_url,
             web_driver=firefox_web_driver,
         )
         journ_app_nav.journalist_logs_in(
-            username=_sd_servers_v2_with_missing_file.journalist_username,
-            password=_sd_servers_v2_with_missing_file.journalist_password,
-            otp_secret=_sd_servers_v2_with_missing_file.journalist_otp_secret,
+            username=_sd_servers_with_missing_file.journalist_username,
+            password=_sd_servers_with_missing_file.journalist_password,
+            otp_secret=_sd_servers_with_missing_file.journalist_otp_secret,
         )
         # When the journalist selects the individual message from the source page
         # and clicks "Download Selected"

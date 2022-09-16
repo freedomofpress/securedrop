@@ -10,7 +10,8 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.firefox.webdriver import WebDriver
 from selenium.webdriver.support import expected_conditions
-from tests.functional.app_navigators import JournalistAppNavigator, SourceAppNagivator
+from tests.functional.app_navigators.journalist_app_nav import JournalistAppNavigator
+from tests.functional.app_navigators.source_app_nav import SourceAppNavigator
 from tests.functional.conftest import SdServersFixtureResult, spawn_sd_servers
 from tests.functional.db_session import get_database_session
 from tests.functional.factories import SecureDropConfigFactory
@@ -18,18 +19,18 @@ from tests.functional.sd_config_v2 import SecureDropConfig
 
 
 class TestAdminInterfaceAddUser:
-    def test_admin_adds_non_admin_user(self, sd_servers_v2_with_clean_state, firefox_web_driver):
+    def test_admin_adds_non_admin_user(self, sd_servers_with_clean_state, firefox_web_driver):
         # Given an SD server
         # And a journalist logged into the journalist interface as an admin
         journ_app_nav = JournalistAppNavigator(
-            journalist_app_base_url=sd_servers_v2_with_clean_state.journalist_app_base_url,
+            journalist_app_base_url=sd_servers_with_clean_state.journalist_app_base_url,
             web_driver=firefox_web_driver,
         )
-        assert sd_servers_v2_with_clean_state.journalist_is_admin
+        assert sd_servers_with_clean_state.journalist_is_admin
         journ_app_nav.journalist_logs_in(
-            username=sd_servers_v2_with_clean_state.journalist_username,
-            password=sd_servers_v2_with_clean_state.journalist_password,
-            otp_secret=sd_servers_v2_with_clean_state.journalist_otp_secret,
+            username=sd_servers_with_clean_state.journalist_username,
+            password=sd_servers_with_clean_state.journalist_password,
+            otp_secret=sd_servers_with_clean_state.journalist_otp_secret,
         )
 
         # Then they see the same interface as a normal user, since there may be users who wish to
@@ -63,18 +64,18 @@ class TestAdminInterfaceAddUser:
         # And since the new user is not an admin, they don't see a link to the admin page
         assert not journ_app_nav.journalist_sees_link_to_admin_page()
 
-    def test_admin_adds_admin_user(self, sd_servers_v2_with_clean_state, firefox_web_driver):
+    def test_admin_adds_admin_user(self, sd_servers_with_clean_state, firefox_web_driver):
         # Given an SD server
         # And the first journalist logged into the journalist interface as an admin
         journ_app_nav = JournalistAppNavigator(
-            journalist_app_base_url=sd_servers_v2_with_clean_state.journalist_app_base_url,
+            journalist_app_base_url=sd_servers_with_clean_state.journalist_app_base_url,
             web_driver=firefox_web_driver,
         )
-        assert sd_servers_v2_with_clean_state.journalist_is_admin
+        assert sd_servers_with_clean_state.journalist_is_admin
         journ_app_nav.journalist_logs_in(
-            username=sd_servers_v2_with_clean_state.journalist_username,
-            password=sd_servers_v2_with_clean_state.journalist_password,
-            otp_secret=sd_servers_v2_with_clean_state.journalist_otp_secret,
+            username=sd_servers_with_clean_state.journalist_username,
+            password=sd_servers_with_clean_state.journalist_password,
+            otp_secret=sd_servers_with_clean_state.journalist_otp_secret,
         )
 
         # When they go to the admin page to add a new admin user
@@ -102,19 +103,19 @@ class TestAdminInterfaceAddUser:
         assert journ_app_nav.journalist_sees_link_to_admin_page()
 
     def test_admin_adds_user_with_invalid_username(
-        self, sd_servers_v2_with_clean_state, firefox_web_driver
+        self, sd_servers_with_clean_state, firefox_web_driver
     ):
         # Given an SD server
         # And the first journalist logged into the journalist interface as an admin
         journ_app_nav = JournalistAppNavigator(
-            journalist_app_base_url=sd_servers_v2_with_clean_state.journalist_app_base_url,
+            journalist_app_base_url=sd_servers_with_clean_state.journalist_app_base_url,
             web_driver=firefox_web_driver,
         )
-        assert sd_servers_v2_with_clean_state.journalist_is_admin
+        assert sd_servers_with_clean_state.journalist_is_admin
         journ_app_nav.journalist_logs_in(
-            username=sd_servers_v2_with_clean_state.journalist_username,
-            password=sd_servers_v2_with_clean_state.journalist_password,
-            otp_secret=sd_servers_v2_with_clean_state.journalist_otp_secret,
+            username=sd_servers_with_clean_state.journalist_username,
+            password=sd_servers_with_clean_state.journalist_password,
+            otp_secret=sd_servers_with_clean_state.journalist_otp_secret,
         )
 
         # When they go to the admin page to add a new admin user with an invalid name
@@ -167,12 +168,12 @@ def _create_second_journalist(config_in_use: SecureDropConfig) -> None:
 
 
 @pytest.fixture(scope="function")
-def sd_servers_v2_with_second_journalist(
+def sd_servers_with_second_journalist(
     setup_journalist_key_and_gpg_folder: Tuple[str, Path]
 ) -> Generator[SdServersFixtureResult, None, None]:
-    """Sams as sd_servers_v2 but spawns the apps with an already-created second journalist.
+    """Sams as sd_servers but spawns the apps with an already-created second journalist.
 
-    Slower than sd_servers_v2 as it is function-scoped.
+    Slower than sd_servers as it is function-scoped.
     """
     default_config = SecureDropConfigFactory.create(
         SECUREDROP_DATA_ROOT=Path(f"/tmp/sd-tests/functional-with-second-journnalist-{uuid4()}"),
@@ -221,12 +222,12 @@ class TestAdminInterfaceEditAndDeleteUser:
         )
         return journ_app_nav
 
-    def test_admin_edits_username(self, sd_servers_v2_with_second_journalist, firefox_web_driver):
+    def test_admin_edits_username(self, sd_servers_with_second_journalist, firefox_web_driver):
         # Given an SD server with a second journalist created
         # And the first journalist logged into the journalist interface as an admin
         # And they went to the "edit user" page for the second journalist
         journ_app_nav = self._admin_logs_in_and_goes_to_edit_page_for_second_journalist(
-            sd_servers_result=sd_servers_v2_with_second_journalist,
+            sd_servers_result=sd_servers_with_second_journalist,
             firefox_web_driver=firefox_web_driver,
         )
 
@@ -241,13 +242,13 @@ class TestAdminInterfaceEditAndDeleteUser:
         journ_app_nav.nav_helper.wait_for(user_edited)
 
     def test_admin_edits_invalid_username(
-        self, sd_servers_v2_with_second_journalist, firefox_web_driver
+        self, sd_servers_with_second_journalist, firefox_web_driver
     ):
         # Given an SD server with a second journalist created
         # And the first journalist logged into the journalist interface as an admin
         # And they went to the "edit user" page for the second journalist
         journ_app_nav = self._admin_logs_in_and_goes_to_edit_page_for_second_journalist(
-            sd_servers_result=sd_servers_v2_with_second_journalist,
+            sd_servers_result=sd_servers_with_second_journalist,
             firefox_web_driver=firefox_web_driver,
         )
 
@@ -277,12 +278,12 @@ class TestAdminInterfaceEditAndDeleteUser:
         )
         journ_app_nav.nav_helper.safe_click_by_css_selector("button[type=submit]")
 
-    def test_admin_resets_password(self, sd_servers_v2_with_second_journalist, firefox_web_driver):
+    def test_admin_resets_password(self, sd_servers_with_second_journalist, firefox_web_driver):
         # Given an SD server with a second journalist created
         # And the first journalist logged into the journalist interface as an admin
         # And they went to the "edit user" page for the second journalist
         journ_app_nav = self._admin_logs_in_and_goes_to_edit_page_for_second_journalist(
-            sd_servers_result=sd_servers_v2_with_second_journalist,
+            sd_servers_result=sd_servers_with_second_journalist,
             firefox_web_driver=firefox_web_driver,
         )
 
@@ -308,18 +309,18 @@ class TestAdminInterfaceEditAndDeleteUser:
         )
         assert journ_app_nav.is_on_journalist_homepage()
 
-    def test_admin_deletes_user(self, sd_servers_v2_with_second_journalist, firefox_web_driver):
+    def test_admin_deletes_user(self, sd_servers_with_second_journalist, firefox_web_driver):
         # Given an SD server with a second journalist created
         # And the first journalist logged into the journalist interface as an admin
         journ_app_nav = JournalistAppNavigator(
-            journalist_app_base_url=sd_servers_v2_with_second_journalist.journalist_app_base_url,
+            journalist_app_base_url=sd_servers_with_second_journalist.journalist_app_base_url,
             web_driver=firefox_web_driver,
         )
-        assert sd_servers_v2_with_second_journalist.journalist_is_admin
+        assert sd_servers_with_second_journalist.journalist_is_admin
         journ_app_nav.journalist_logs_in(
-            username=sd_servers_v2_with_second_journalist.journalist_username,
-            password=sd_servers_v2_with_second_journalist.journalist_password,
-            otp_secret=sd_servers_v2_with_second_journalist.journalist_otp_secret,
+            username=sd_servers_with_second_journalist.journalist_username,
+            password=sd_servers_with_second_journalist.journalist_password,
+            otp_secret=sd_servers_with_second_journalist.journalist_otp_secret,
         )
 
         # When the admin deletes the second journalist
@@ -354,19 +355,19 @@ class TestAdminInterfaceEditConfig:
     """
 
     def test_disallow_file_submission(
-        self, sd_servers_v2_with_clean_state, firefox_web_driver, tor_browser_web_driver
+        self, sd_servers_with_clean_state, firefox_web_driver, tor_browser_web_driver
     ):
         # Given an SD server
         # And a journalist logged into the journalist interface as an admin
         journ_app_nav = JournalistAppNavigator(
-            journalist_app_base_url=sd_servers_v2_with_clean_state.journalist_app_base_url,
+            journalist_app_base_url=sd_servers_with_clean_state.journalist_app_base_url,
             web_driver=firefox_web_driver,
         )
-        assert sd_servers_v2_with_clean_state.journalist_is_admin
+        assert sd_servers_with_clean_state.journalist_is_admin
         journ_app_nav.journalist_logs_in(
-            username=sd_servers_v2_with_clean_state.journalist_username,
-            password=sd_servers_v2_with_clean_state.journalist_password,
-            otp_secret=sd_servers_v2_with_clean_state.journalist_otp_secret,
+            username=sd_servers_with_clean_state.journalist_username,
+            password=sd_servers_with_clean_state.journalist_password,
+            otp_secret=sd_servers_with_clean_state.journalist_otp_secret,
         )
 
         # And they go to the admin config page
@@ -380,8 +381,8 @@ class TestAdminInterfaceEditConfig:
         )
 
         # And then, when a source user tries to upload a file
-        source_app_nav = SourceAppNagivator(
-            source_app_base_url=sd_servers_v2_with_clean_state.source_app_base_url,
+        source_app_nav = SourceAppNavigator(
+            source_app_base_url=sd_servers_with_clean_state.source_app_base_url,
             web_driver=tor_browser_web_driver,
         )
         source_app_nav.source_visits_source_homepage()
@@ -421,19 +422,19 @@ class TestAdminInterfaceEditConfig:
         journ_app_nav.nav_helper.wait_for(preferences_saved, timeout=20)
 
     def test_allow_file_submission(
-        self, sd_servers_v2_with_clean_state, firefox_web_driver, tor_browser_web_driver
+        self, sd_servers_with_clean_state, firefox_web_driver, tor_browser_web_driver
     ):
         # Given an SD server
         # And a journalist logged into the journalist interface as an admin
         journ_app_nav = JournalistAppNavigator(
-            journalist_app_base_url=sd_servers_v2_with_clean_state.journalist_app_base_url,
+            journalist_app_base_url=sd_servers_with_clean_state.journalist_app_base_url,
             web_driver=firefox_web_driver,
         )
-        assert sd_servers_v2_with_clean_state.journalist_is_admin
+        assert sd_servers_with_clean_state.journalist_is_admin
         journ_app_nav.journalist_logs_in(
-            username=sd_servers_v2_with_clean_state.journalist_username,
-            password=sd_servers_v2_with_clean_state.journalist_password,
-            otp_secret=sd_servers_v2_with_clean_state.journalist_otp_secret,
+            username=sd_servers_with_clean_state.journalist_username,
+            password=sd_servers_with_clean_state.journalist_password,
+            otp_secret=sd_servers_with_clean_state.journalist_otp_secret,
         )
 
         # And they go to the admin config page
@@ -453,8 +454,8 @@ class TestAdminInterfaceEditConfig:
         )
 
         # And then, when a source user tries to upload a file
-        source_app_nav = SourceAppNagivator(
-            source_app_base_url=sd_servers_v2_with_clean_state.source_app_base_url,
+        source_app_nav = SourceAppNavigator(
+            source_app_base_url=sd_servers_with_clean_state.source_app_base_url,
             web_driver=tor_browser_web_driver,
         )
         source_app_nav.source_visits_source_homepage()
@@ -465,19 +466,19 @@ class TestAdminInterfaceEditConfig:
         assert source_app_nav.driver.find_element_by_class_name("attachment")
 
     def test_orgname_is_changed(
-        self, sd_servers_v2_with_clean_state, firefox_web_driver, tor_browser_web_driver
+        self, sd_servers_with_clean_state, firefox_web_driver, tor_browser_web_driver
     ):
         # Given an SD server
         # And a journalist logged into the journalist interface as an admin
         journ_app_nav = JournalistAppNavigator(
-            journalist_app_base_url=sd_servers_v2_with_clean_state.journalist_app_base_url,
+            journalist_app_base_url=sd_servers_with_clean_state.journalist_app_base_url,
             web_driver=firefox_web_driver,
         )
-        assert sd_servers_v2_with_clean_state.journalist_is_admin
+        assert sd_servers_with_clean_state.journalist_is_admin
         journ_app_nav.journalist_logs_in(
-            username=sd_servers_v2_with_clean_state.journalist_username,
-            password=sd_servers_v2_with_clean_state.journalist_password,
-            otp_secret=sd_servers_v2_with_clean_state.journalist_otp_secret,
+            username=sd_servers_with_clean_state.journalist_username,
+            password=sd_servers_with_clean_state.journalist_password,
+            otp_secret=sd_servers_with_clean_state.journalist_otp_secret,
         )
 
         # And they go to the admin config page
@@ -496,8 +497,8 @@ class TestAdminInterfaceEditConfig:
         assert new_org_name == journ_app_nav.driver.title
 
         # And then, when a source user logs into the source app
-        source_app_nav = SourceAppNagivator(
-            source_app_base_url=sd_servers_v2_with_clean_state.source_app_base_url,
+        source_app_nav = SourceAppNavigator(
+            source_app_base_url=sd_servers_with_clean_state.source_app_base_url,
             web_driver=tor_browser_web_driver,
         )
 

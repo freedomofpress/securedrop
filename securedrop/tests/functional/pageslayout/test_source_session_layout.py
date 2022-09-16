@@ -2,11 +2,10 @@ import time
 from pathlib import Path
 
 import pytest
-from tests.functional.app_navigators import SourceAppNagivator
+from tests.functional.app_navigators.source_app_nav import SourceAppNavigator
 from tests.functional.conftest import spawn_sd_servers
 from tests.functional.factories import SecureDropConfigFactory
-from tests.functional.pageslayout.functional_test import list_locales
-from tests.functional.pageslayout.screenshot_utils import save_screenshot_and_html
+from tests.functional.pageslayout.utils import list_locales, save_screenshot_and_html
 
 # Very short session expiration time
 SESSION_EXPIRATION_SECONDS = 3
@@ -37,7 +36,7 @@ class TestSourceAppSessionTimeout:
     def test_source_session_timeout(self, locale, _sd_servers_with_short_timeout):
         # Given a source user accessing the app from their browser
         locale_with_commas = locale.replace("_", "-")
-        with SourceAppNagivator.using_tor_browser_web_driver(
+        with SourceAppNavigator.using_tor_browser_web_driver(
             source_app_base_url=_sd_servers_with_short_timeout.source_app_base_url,
             accept_languages=locale_with_commas,
         ) as navigator:

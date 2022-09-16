@@ -1,7 +1,7 @@
 import requests
 import werkzeug
 from tests.functional import tor_utils
-from tests.functional.app_navigators import SourceAppNagivator
+from tests.functional.app_navigators.source_app_nav import SourceAppNavigator
 
 from ..test_journalist import VALID_PASSWORD
 
@@ -10,9 +10,9 @@ class TestSourceAppCodenameHints:
 
     FIRST_SUBMISSION_TEXT = "Please check back later for replies"
 
-    def test_no_codename_hint_on_second_login(self, sd_servers_v2, tor_browser_web_driver):
-        navigator = SourceAppNagivator(
-            source_app_base_url=sd_servers_v2.source_app_base_url,
+    def test_no_codename_hint_on_second_login(self, sd_servers, tor_browser_web_driver):
+        navigator = SourceAppNavigator(
+            source_app_base_url=sd_servers.source_app_base_url,
             web_driver=tor_browser_web_driver,
         )
 
@@ -42,9 +42,9 @@ class TestSourceAppCodenameHints:
         codename = navigator.driver.find_elements_by_css_selector("#codename-reminder")
         assert len(codename) == 0
 
-    def test_submission_notifications_on_first_login(self, sd_servers_v2, tor_browser_web_driver):
-        navigator = SourceAppNagivator(
-            source_app_base_url=sd_servers_v2.source_app_base_url,
+    def test_submission_notifications_on_first_login(self, sd_servers, tor_browser_web_driver):
+        navigator = SourceAppNavigator(
+            source_app_base_url=sd_servers.source_app_base_url,
             web_driver=tor_browser_web_driver,
         )
 
@@ -66,9 +66,9 @@ class TestSourceAppCodenameHints:
         # Then they don't see the messages since it's not their first submission
         assert self.FIRST_SUBMISSION_TEXT not in confirmation_text_second_submission
 
-    def test_submission_notifications_on_second_login(self, sd_servers_v2, tor_browser_web_driver):
-        navigator = SourceAppNagivator(
-            source_app_base_url=sd_servers_v2.source_app_base_url,
+    def test_submission_notifications_on_second_login(self, sd_servers, tor_browser_web_driver):
+        navigator = SourceAppNavigator(
+            source_app_base_url=sd_servers.source_app_base_url,
             web_driver=tor_browser_web_driver,
         )
 
@@ -99,9 +99,9 @@ class TestSourceAppCodenameHints:
 
 
 class TestSourceAppDownloadJournalistKey:
-    def test(self, sd_servers_v2):
+    def test(self, sd_servers):
         # Given a source app, when fetching the instance's journalist public key
-        url = f"{sd_servers_v2.source_app_base_url}/public-key"
+        url = f"{sd_servers.source_app_base_url}/public-key"
         response = requests.get(url=url, proxies=tor_utils.proxies_for_url(url))
 
         # Then it succeeds and the right data is returned
@@ -112,24 +112,24 @@ class TestSourceAppCodenamesInMultipleTabs:
     """Test generation of multiple codenames in different browser tabs, ref. issue 4458."""
 
     @staticmethod
-    def _assert_is_on_lookup_page(navigator: SourceAppNagivator) -> None:
+    def _assert_is_on_lookup_page(navigator: SourceAppNavigator) -> None:
         navigator.nav_helper.wait_for(lambda: navigator.driver.find_element_by_id("upload"))
 
     @staticmethod
-    def _extract_generated_codename(navigator: SourceAppNagivator) -> str:
+    def _extract_generated_codename(navigator: SourceAppNavigator) -> str:
         codename = navigator.driver.find_element_by_css_selector("#codename span").text
         assert codename
         return codename
 
     @staticmethod
-    def _extract_flash_message_content(navigator: SourceAppNagivator) -> str:
+    def _extract_flash_message_content(navigator: SourceAppNavigator) -> str:
         notification = navigator.driver.find_element_by_css_selector(".notification").text
         assert notification
         return notification
 
-    def test_generate_codenames_in_multiple_tabs(self, sd_servers_v2, tor_browser_web_driver):
-        navigator = SourceAppNagivator(
-            source_app_base_url=sd_servers_v2.source_app_base_url,
+    def test_generate_codenames_in_multiple_tabs(self, sd_servers, tor_browser_web_driver):
+        navigator = SourceAppNavigator(
+            source_app_base_url=sd_servers.source_app_base_url,
             web_driver=tor_browser_web_driver,
         )
 
@@ -172,10 +172,10 @@ class TestSourceAppCodenamesInMultipleTabs:
         assert navigator.source_retrieves_codename_from_hint() == codename_a
 
     def test_generate_and_refresh_codenames_in_multiple_tabs(
-        self, sd_servers_v2, tor_browser_web_driver
+        self, sd_servers, tor_browser_web_driver
     ):
-        navigator = SourceAppNagivator(
-            source_app_base_url=sd_servers_v2.source_app_base_url,
+        navigator = SourceAppNavigator(
+            source_app_base_url=sd_servers.source_app_base_url,
             web_driver=tor_browser_web_driver,
         )
 
@@ -225,12 +225,12 @@ class TestSourceAppCodenamesInMultipleTabs:
         assert navigator.source_retrieves_codename_from_hint() == codename_a2
 
     # TODO(AD): This test takes ~50s ; we could refactor it to speed it up
-    def test_codenames_exceed_max_cookie_size(self, sd_servers_v2, tor_browser_web_driver):
+    def test_codenames_exceed_max_cookie_size(self, sd_servers, tor_browser_web_driver):
         """Test generation of enough codenames that the resulting cookie exceeds the recommended
         `werkzeug.Response.max_cookie_size` = 4093 bytes. (#6043)
         """
-        navigator = SourceAppNagivator(
-            source_app_base_url=sd_servers_v2.source_app_base_url,
+        navigator = SourceAppNavigator(
+            source_app_base_url=sd_servers.source_app_base_url,
             web_driver=tor_browser_web_driver,
         )
 

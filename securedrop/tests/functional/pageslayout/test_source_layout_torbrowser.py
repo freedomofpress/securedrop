@@ -17,19 +17,18 @@
 #
 import pytest
 from tbselenium.utils import disable_js
-from tests.functional.app_navigators import SourceAppNagivator
-from tests.functional.pageslayout.functional_test import list_locales
-from tests.functional.pageslayout.screenshot_utils import save_screenshot_and_html
+from tests.functional.app_navigators.source_app_nav import SourceAppNavigator
+from tests.functional.pageslayout.utils import list_locales, save_screenshot_and_html
 
 
 @pytest.mark.parametrize("locale", list_locales())
 @pytest.mark.pagelayout
 class TestSourceLayoutTorBrowser:
-    def test_index_and_logout(self, locale, sd_servers_v2):
+    def test_index_and_logout(self, locale, sd_servers):
         # Given a source user accessing the app from their browser
         locale_with_commas = locale.replace("_", "-")
-        with SourceAppNagivator.using_tor_browser_web_driver(
-            source_app_base_url=sd_servers_v2.source_app_base_url,
+        with SourceAppNavigator.using_tor_browser_web_driver(
+            source_app_base_url=sd_servers.source_app_base_url,
             accept_languages=locale_with_commas,
         ) as navigator:
 
