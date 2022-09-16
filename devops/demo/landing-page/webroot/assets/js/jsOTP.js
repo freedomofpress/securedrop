@@ -996,7 +996,7 @@ var SUPPORTED_ALGS = 4 | 2 | 1;
 	 * @param {Int_64} a The first 64-bit integer argument to be added
 	 * @param {Int_64} b The second 64-bit integer argument to be added
 	 * @param {Int_64} c The third 64-bit integer argument to be added
-	 * @param {Int_64} d The fouth 64-bit integer argument to be added
+	 * @param {Int_64} d The fourth 64-bit integer argument to be added
 	 * @return {Int_64} The sum of a + b + c + d
 	 */
 	function safeAdd_64_4(a, b, c, d)
@@ -1026,8 +1026,8 @@ var SUPPORTED_ALGS = 4 | 2 | 1;
 	 * @param {Int_64} a The first 64-bit integer argument to be added
 	 * @param {Int_64} b The second 64-bit integer argument to be added
 	 * @param {Int_64} c The third 64-bit integer argument to be added
-	 * @param {Int_64} d The fouth 64-bit integer argument to be added
-	 * @param {Int_64} e The fouth 64-bit integer argument to be added
+	 * @param {Int_64} d The fourth 64-bit integer argument to be added
+	 * @param {Int_64} e The fourth 64-bit integer argument to be added
 	 * @return {Int_64} The sum of a + b + c + d + e
 	 */
 	function safeAdd_64_5(a, b, c, d, e)

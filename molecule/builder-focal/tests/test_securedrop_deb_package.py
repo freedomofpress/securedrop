@@ -18,7 +18,7 @@ def extract_package_name_from_filepath(filepath: str) -> str:
     E.g., given:
        securedrop-ossec-agent-2.8.2+0.3.10-amd64.deb
 
-    retuns:
+    returns:
 
        securedrop-ossec-agent
 

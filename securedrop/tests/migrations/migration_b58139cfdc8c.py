@@ -190,7 +190,7 @@ class DowngradeTester(Helper):
         """
         Verify that the checksum column is now gone.
         The dropping of the revoked_tokens table cannot be checked. If the migration completes,
-        then it wokred correctly.
+        then it worked correctly.
         """
         with self.app.app_context():
             sql = "SELECT * FROM submissions"
