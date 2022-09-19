@@ -2,7 +2,6 @@
 
 import binascii
 import os
-from html import escape
 from typing import Optional, Union
 
 import werkzeug
@@ -132,7 +131,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
         if form.validate_on_submit():
             try:
                 value = request.form["organization_name"]
-                InstanceConfig.set_organization_name(escape(value, quote=True))
+                InstanceConfig.set_organization_name(value)
                 flash(gettext("Preferences saved."), "org-name-success")
             except Exception:
                 flash(gettext("Failed to update organization name."), "org-name-error")

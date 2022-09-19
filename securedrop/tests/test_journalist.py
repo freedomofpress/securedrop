@@ -7,7 +7,6 @@ import os
 import random
 import zipfile
 from base64 import b64decode
-from html import escape as htmlescape
 from io import BytesIO
 from pathlib import Path
 
@@ -2001,25 +2000,6 @@ def test_orgname_oversized_fails(config, journalist_app, test_admin, locale):
                 InstanceConfig.MAX_ORG_NAME_LEN,
             ).format(num=InstanceConfig.MAX_ORG_NAME_LEN) in resp.data.decode("utf-8")
         assert InstanceConfig.get_current().organization_name == "SecureDrop"
-
-
-@flaky(rerun_filter=utils.flaky_filter_xfail)
-@pytest.mark.parametrize("locale", get_test_locales())
-def test_orgname_html_escaped(config, journalist_app, test_admin, locale):
-    t_name = '"> <a href=foo>'
-    with journalist_app.test_client() as app:
-        _login_user(app, test_admin["username"], test_admin["password"], test_admin["otp_secret"])
-        form = journalist_app_module.forms.OrgNameForm(organization_name=t_name)
-        assert InstanceConfig.get_current().organization_name == "SecureDrop"
-        with InstrumentedApp(journalist_app) as ins:
-            resp = app.post(
-                url_for("admin.update_org_name", l=locale), data=form.data, follow_redirects=True
-            )
-            assert page_language(resp.data) == language_tag(locale)
-            msgids = ["Preferences saved."]
-            with xfail_untranslated_messages(config, locale, msgids):
-                ins.assert_message_flashed(gettext(msgids[0]), "org-name-success")
-            assert InstanceConfig.get_current().organization_name == htmlescape(t_name, quote=True)
 
 
 def test_logo_default_available(journalist_app):
