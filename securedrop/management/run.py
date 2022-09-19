@@ -167,9 +167,6 @@ def run(args: Any) -> None:  # pragma: no cover
     procs = [
         lambda: DevServerProcess("Source Interface", ["python", "source.py"], "blue"),
         lambda: DevServerProcess("Journalist Interface", ["python", "journalist.py"], "cyan"),
-        lambda: DevServerProcess(
-            "SASS Compiler", ["sass", "--watch", "sass:static/css"], "magenta"
-        ),
     ]
 
     monitor = DevServerProcessMonitor(procs)

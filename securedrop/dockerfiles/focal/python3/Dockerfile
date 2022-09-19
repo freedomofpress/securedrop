@@ -8,7 +8,7 @@ ENV USER_ID ${USER_ID:-0}
 RUN apt-get update && apt-get install -y \
                        libgtk2.0 apache2-dev coreutils devscripts vim \
                        python3-pip python3-all python3-venv virtualenv libpython3.8-dev libssl-dev \
-                       gnupg2 ruby redis-server git xvfb curl wget \
+                       gnupg2 redis-server git xvfb curl wget \
                        x11vnc enchant libffi-dev sqlite3 gettext sudo \
                        # For html5validator.  Used only in "app-page-layout-tests", but we can live
                        # with its being installed along with everything else since it will be
@@ -16,8 +16,6 @@ RUN apt-get update && apt-get install -y \
                        default-jdk \
                        libasound2 libdbus-glib-1-2 libgtk2.0-0 libfontconfig1 libxrender1 \
                        libcairo-gobject2 libgtk-3-0 libstartup-notification0 tor basez
-
-RUN gem install sass -v 3.4.23
 
 # Current versions of the test browser software. Tor Browser is based
 # on a specific version of Firefox, noted in Help > About Tor Browser.

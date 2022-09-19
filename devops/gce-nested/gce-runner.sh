@@ -44,7 +44,6 @@ function copy_securedrop_repo() {
       --exclude '*.venv' \
       --exclude .python3 \
       --exclude .mypy_cache \
-      --exclude securedrop/.sass-cache \
       --exclude .gce.creds \
       --exclude '*.creds' \
       "${TOPLEVEL}/" "${SSH_TARGET}:~/securedrop-source"
