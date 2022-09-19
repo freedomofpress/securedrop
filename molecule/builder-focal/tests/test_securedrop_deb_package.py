@@ -57,15 +57,10 @@ def make_deb_paths() -> Dict[str, Path]:
     reuse vars in other var values, as is the case with Ansible).
     """
 
-    grsec_version = "{}+{}".format(
-        securedrop_test_vars["grsec_version_focal"], SECUREDROP_TARGET_DISTRIBUTION
-    )
-
     substitutions = dict(
         securedrop_version=securedrop_test_vars["securedrop_version"],
         ossec_version=securedrop_test_vars["ossec_version"],
         keyring_version=securedrop_test_vars["keyring_version"],
-        grsec_version=grsec_version,
         securedrop_target_distribution=securedrop_test_vars["securedrop_target_distribution"],
     )
 
@@ -369,22 +364,6 @@ def test_deb_app_package_contains_https_validate_dir(securedrop_app_code_content
         securedrop_app_code_contents,
         re.M,
     )
-
-
-def test_grsec_metapackage(host: Host):
-    """
-    Sanity checks on the securedrop-grsec metapackage. Mostly checks
-    for presence of PaX flags hook and sysctl settings.
-    Does not validate file contents, just presence.
-    """
-
-    c = host.run("dpkg-deb --contents {}".format(deb_paths["securedrop_grsec"]))
-    contents = c.stdout
-    assert not re.search(r"^.*\./etc/kernel/postinst.d/paxctl-grub$", contents, re.M)
-    assert re.search(r"^.*\./opt/securedrop/paxctld.conf$", contents, re.M)
-
-    # Custom sysctl options should be present
-    assert re.search(r"^.*\./etc/sysctl.d/30-securedrop.conf$", contents, re.M)
 
 
 def test_control_helper_files_are_present(host: Host):

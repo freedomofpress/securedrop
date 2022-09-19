@@ -29,11 +29,3 @@ enable_ssh_over_tor: true
 # force a reboot. Needed because of the de-coupled nature of
 # the many roles of the current prod playbook
 securedrop_cond_reboot_file: /tmp/sd-reboot-now
-
-# If you bump this, also remember to bump in molecule/builder-focal/tests/vars.yml
-securedrop_pkg_grsec_focal:
-  ver: "5.15.57"
-  depends: "linux-image-5.15.57-grsec-securedrop,intel-microcode"
-
-# Mostly useful for local package installation
-grsec_version: "{{ securedrop_pkg_grsec_focal.ver }}"

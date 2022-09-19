@@ -21,23 +21,13 @@ def test_ssh_motd_disabled(host):
     assert not f.contains(r"pam\.motd")
 
 
-@pytest.mark.parametrize(
-    "package",
-    [
-        "linux-image-{}-grsec-securedrop",
-        "securedrop-grsec",
-    ],
-)
-def test_grsecurity_apt_packages(host, package):
+def test_grsecurity_apt_packages(host):
     """
     Ensure the grsecurity-related apt packages are present on the system.
     Includes the FPF-maintained metapackage, as well as paxctl, for managing
     PaX flags on binaries.
     """
-    KERNEL_VERSION = sdvars.grsec_version_focal
-    if package.startswith("linux-image"):
-        package = package.format(KERNEL_VERSION)
-    assert host.package(package).is_installed
+    assert host.package("securedrop-grsec").is_installed
 
 
 @pytest.mark.parametrize(
@@ -81,12 +71,10 @@ def test_grsecurity_lock_file(host):
 
 def test_grsecurity_kernel_is_running(host):
     """
-    Make sure the currently running kernel is specific grsec kernel.
+    Make sure the currently running kernel is our grsec kernel.
     """
-    KERNEL_VERSION = sdvars.grsec_version_focal
     c = host.run("uname -r")
     assert c.stdout.strip().endswith("-grsec-securedrop")
-    assert c.stdout.strip() == "{}-grsec-securedrop".format(KERNEL_VERSION)
 
 
 @pytest.mark.parametrize(
@@ -214,9 +202,9 @@ def test_wireless_disabled_in_kernel_config(host, kernel_opts):
     remove wireless support from the kernel. Let's make sure wireless is
     disabled in the running kernel config!
     """
-    KERNEL_VERSION = sdvars.grsec_version_focal
+    kernel_version = host.run("uname -r").stdout.strip()
     with host.sudo():
-        kernel_config_path = "/boot/config-{}-grsec-securedrop".format(KERNEL_VERSION)
+        kernel_config_path = "/boot/config-{}".format(kernel_version)
         kernel_config = host.file(kernel_config_path).content_string
 
         line = "# CONFIG_{} is not set".format(kernel_opts)
@@ -236,9 +224,9 @@ def test_kernel_options_enabled_config(host, kernel_opts):
     Tests kernel config for options that should be enabled
     """
 
-    KERNEL_VERSION = sdvars.grsec_version_focal
+    kernel_version = host.run("uname -r").stdout.strip()
     with host.sudo():
-        kernel_config_path = "/boot/config-{}-grsec-securedrop".format(KERNEL_VERSION)
+        kernel_config_path = "/boot/config-{}".format(kernel_version)
         kernel_config = host.file(kernel_config_path).content_string
 
         line = "{}=y".format(kernel_opts)
