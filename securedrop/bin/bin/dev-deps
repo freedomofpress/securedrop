@@ -1,0 +1,137 @@
+#!/bin/bash
+
+export DISPLAY=:1
+
+export REPOROOT="${REPOROOT:-$(git rev-parse --show-toplevel)}"
+
+function run_tor {
+    tor > /tmp/tor.out 2>&1 || cat /tmp/tor.out
+}
+
+function run_xvfb() {
+    (setsid Xvfb :1 -screen 0 1024x768x24 -ac +extension GLX +render -noreset >& /tmp/xvfb.out || cat /tmp/xvfb.out) &
+
+    # give it time to start
+    for _ in {1..10}
+    do
+        xdpyinfo -display :1 >/dev/null 2>&1 && return 0
+        sleep 1
+    done
+    xdpyinfo -display :1 >/dev/null 2>&1 || (echo "Xvfb is not available"; exit 1)
+}
+
+function run_redis() {
+    rm -f "${REPOROOT}/securedrop/dump.rdb"
+    setsid redis-server >& /tmp/redis.out || cat /tmp/redis.out
+}
+
+function setup_vncauth {
+    x11vnc -storepasswd freedom /tmp/vncpasswd
+}
+
+function run_x11vnc() {
+    setsid x11vnc -display :1 -geometry 1024x768 -rfbauth /tmp/vncpasswd -rfbport 5909 -shared >& /tmp/x11vnc.out || cat /tmp/x11vnc.out
+}
+
+function urandom() {
+    sudo rm /dev/random ||:
+    sudo ln -s /dev/urandom /dev/random || echo "Unable to replace /dev/random"
+}
+
+function append_to_exit() {
+    local existing
+    existing="$(trap | sed -n "/EXIT\$/s/^trap -- '\(.*\)' EXIT/\1/p")"
+    trap "${existing:-true} ; $1" EXIT
+}
+
+function maybe_create_config_py() {
+    if ! test -f "${REPOROOT}/securedrop/config.py" ; then
+        append_to_exit "rm ${REPOROOT}/securedrop/config.py"
+        (cd "$REPOROOT" && make test-config)
+    fi
+}
+
+function run_sass() {
+    sass --stop-on-error sass:static/css --style compressed "$@"
+}
+
+function maybe_use_tor() {
+    if [[ -n "${USE_TOR:-}" ]]; then
+        echo "Setting up Tor..."
+        # append torrc lines for SI and JI
+        sudo -u debian-tor mkdir -p /var/lib/tor/services
+        echo "HiddenServiceDir /var/lib/tor/services/source/" | sudo tee -a /etc/tor/torrc
+        echo "HiddenServicePort 80 127.0.0.1:8080" | sudo tee -a /etc/tor/torrc
+        echo "HiddenServiceDir /var/lib/tor/services/journalist/" | sudo tee -a /etc/tor/torrc
+        echo "HiddenServicePort 80 127.0.0.1:8081" | sudo tee -a /etc/tor/torrc
+        # start Tor to create service directories
+        sudo service tor start
+        # create x25519 keypair and journalist client auth file
+        openssl genpkey -algorithm x25519 -out /tmp/k1.prv.pem
+        grep -v " PRIVATE KEY" < /tmp/k1.prv.pem | base64pem -d | tail --bytes=32 | base32 | sed 's/=//g' > /tmp/k1.prv.key
+        openssl pkey -in /tmp/k1.prv.pem -pubout | grep -v " PUBLIC KEY" | base64pem -d | tail --bytes=32 | base32 | sed 's/=//g' > /tmp/k1.pub.key
+        echo "descriptor:x25519:$(cat /tmp/k1.pub.key)" | sudo -u debian-tor tee /var/lib/tor/services/journalist/authorized_clients/client.auth
+        # shellcheck disable=SC2024
+        sudo -u debian-tor cat /var/lib/tor/services/source/hostname > /var/lib/securedrop/source_v3_url
+        # kill and restart Tor to pick up authorized_clients change
+        # (restart a little flaky hence the kill)
+        sudo kill "$(cat /run/tor/tor.pid)"; sudo service tor restart
+        # print out the addresses and the JI client auth key
+        echo
+        echo  ##############################################################################
+        echo "Tor configuration complete! details as follows:"
+        echo "Source Interface:     http://$(sudo -u debian-tor cat /var/lib/tor/services/source/hostname)"
+        echo "Journalist Interface: http://$(sudo -u debian-tor cat /var/lib/tor/services/journalist/hostname)"
+        echo "Journalist Auth Key:  $(sudo -u debian-tor cat /tmp/k1.prv.key)"
+        echo  ##############################################################################
+    fi
+}
+
+function reset_demo() {
+    # Set up GPG keys directory structure.
+    sudo mkdir -p /var/lib/securedrop/{store,keys,tmp}
+    sudo chown -R "$(id -u)" /var/lib/securedrop
+    cp ./tests/files/test_journalist_key.pub /var/lib/securedrop/keys
+    gpg2 --homedir /var/lib/securedrop/keys --import /var/lib/securedrop/keys/test_journalist_key.pub >& /tmp/gpg.out || cat /tmp/gpg.out
+
+    # Create gpg-agent.conf
+    echo allow-loopback-pinentry > /var/lib/securedrop/keys/gpg-agent.conf
+    echo 'default-cache-ttl 0' >> /var/lib/securedrop/keys/gpg-agent.conf
+
+    # Kill gpg-agent(s) if they exist so it picks up the new config on restart.
+    pkill -f gpg-agent || true
+    # Note that we should avoid `gpgconf --kill gpg-agent` since the pkill command will
+    # handle killing multiple gpg-agent processes if they exist (this is what we want).
+
+    # Set permissions on GPG-related directories/files.
+    sudo chown -R "$(id -gn)" /var/lib/securedrop/keys
+    chmod 700 /var/lib/securedrop/keys
+    chmod 600 /var/lib/securedrop/keys/*
+
+    # If the following directories exist, make sure they have the proper permissions.
+    chmod -f 700 /var/lib/securedrop/keys/private-keys-v1.d || true
+    chmod -f 700 /var/lib/securedrop/keys/openpgp-revocs.d || true
+
+    # Generate translated strings
+    ./i18n_tool.py translate-messages --compile
+
+    # remove previously uploaded custom logos
+    rm -f /var/www/securedrop/static/i/custom_logo.png
+
+    # create an empty database
+    sqlite3 /var/lib/securedrop/db.sqlite .databases &> /dev/null
+
+    ./manage.py reset
+
+    gpg2 --homedir /var/lib/securedrop/keys --no-default-keyring --keyring /var/lib/securedrop/keys/pubring.gpg --import /var/lib/securedrop/keys/test_journalist_key.pub
+
+    # Can't pass an array environment variable with "docker --env", so
+    # break up the string we can pass.
+    if [ -n "${LOADDATA_ARGS:-""}" ]
+    then
+        IFS=" " read -r -a loaddata_arg_array <<< "${LOADDATA_ARGS}"
+        ./loaddata.py "${loaddata_arg_array[@]}"
+    else
+        ./loaddata.py
+    fi
+}

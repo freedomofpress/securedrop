@@ -52,13 +52,18 @@
             <config>{"kvps":"&amp;","kvs":"=","struct":[]}</config>
         </postparser>
         <authentication>
-            <type>0</type>
+            <type>4</type>
             <strategy>EACH_RESP</strategy>
             <pollurl/>
             <polldata/>
             <pollheaders/>
             <pollfreq>60</pollfreq>
             <pollunits>REQUESTS</pollunits>
+            <loggedout>^.*?LOG\sIN.*$</loggedout>
+            <script>
+                <name>journalist_auth</name>
+                <params>VGFyZ2V0IFVSTA==:aHR0cDovLzEyNy4wLjAuMTo4MDgwL2xvZ2lu&amp;RXh0cmEgUE9TVCBkYXRh:</params>
+            </script>
         </authentication>
         <forceduser>-1</forceduser>
         <session>

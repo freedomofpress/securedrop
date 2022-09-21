@@ -1,0 +1,73 @@
+#!/bin/bash
+# shellcheck disable=SC1090
+
+set -euo pipefail
+
+export PATH="/opt/venvs/securedrop-app-code/bin:$PATH"
+
+REPOROOT=$(git rev-parse --show-toplevel)
+cd "${REPOROOT}/securedrop"
+
+PYTHONPATH=".:${PYTHONPATH:-}"
+export PYTHONPATH
+
+TEST_RESULTS=../test-results
+JUNIT_XML=${TEST_RESULTS}/junit.xml
+
+source "${BASH_SOURCE%/*}/dev-deps"
+
+run_xvfb
+run_tor &
+run_redis &
+setup_vncauth
+run_x11vnc &
+urandom
+run_sass --force --update
+maybe_create_config_py
+
+if [ -n "${CIRCLE_BRANCH:-}" ] ; then
+    touch tests/log/firefox.log
+    function finish {
+        # Rewrite the TESTCASE[file] attribute in $JUNIT_XML relative to our
+        # working directory so that CircleCI can match timings to files on the
+        # next job.
+        sed -i 's/file="/file="tests\//g' "$JUNIT_XML"
+
+        cp tests/log/firefox.log "$TEST_RESULTS"
+
+        # download and validate codecov uploader
+        echo "   Validating codecov uploader..."
+        curl https://keybase.io/codecovsecurity/pgp_keys.asc | gpg --no-default-keyring --keyring trustedkeys.gpg --import
+        curl -Os https://uploader.codecov.io/latest/linux/codecov
+        curl -Os https://uploader.codecov.io/latest/linux/codecov.SHA256SUM
+        curl -Os https://uploader.codecov.io/latest/linux/codecov.SHA256SUM.sig
+        gpgv codecov.SHA256SUM.sig codecov.SHA256SUM
+        shasum -a 256 -c codecov.SHA256SUM
+        chmod +x codecov
+        echo "   Uploading coverage results to codecov..."
+        ./codecov
+    }
+    trap finish EXIT
+fi
+
+mkdir -p "$TEST_RESULTS"
+
+: "${TEST_LOCALES:="ar en_US"}"
+export TEST_LOCALES
+export TOR_FORCE_NET_CONFIG=0
+
+pytest \
+    --force-flaky --max-runs=3 \
+    -rx \
+    --no-success-flaky-report \
+    --page-layout \
+    --durations 10 \
+    --junitxml "$JUNIT_XML" \
+    --override-ini junit_family=xunit1 \
+    --cov-report term-missing \
+    --cov-report "html:${TEST_RESULTS}/cov_html" \
+    --cov-report "xml:${TEST_RESULTS}/cov.xml" \
+    --cov-report "annotate:${TEST_RESULTS}/cov_annotate" \
+    --cov=. \
+    --strict-markers \
+    "$@"

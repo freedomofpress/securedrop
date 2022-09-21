@@ -1,0 +1,26 @@
+#!/bin/bash
+# shellcheck disable=SC1090
+
+set -eu
+
+export REPOROOT="${REPOROOT:-$(git rev-parse --show-toplevel)}"
+
+cd "${REPOROOT}/securedrop"
+
+source /opt/venvs/securedrop-app-code/bin/activate
+source "${BASH_SOURCE%/*}/dev-deps"
+
+run_redis &
+urandom
+run_sass --watch &
+maybe_create_config_py
+reset_demo
+maybe_use_tor
+
+# run the batch processing services normally managed by systemd
+/opt/venvs/securedrop-app-code/bin/rqworker &
+PYTHONPATH="${REPOROOT}/securedrop" /opt/venvs/securedrop-app-code/bin/python "${REPOROOT}/securedrop/scripts/rqrequeue" --interval 60 &
+/opt/venvs/securedrop-app-code/bin/python "${REPOROOT}/securedrop/scripts/shredder" --interval 60 &
+/opt/venvs/securedrop-app-code/bin/python "${REPOROOT}/securedrop/scripts/source_deleter" --interval 10 &
+
+./manage.py run

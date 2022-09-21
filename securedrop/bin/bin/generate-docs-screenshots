@@ -1,0 +1,17 @@
+#!/bin/bash
+# shellcheck disable=SC1090
+
+set -eu
+
+source "${BASH_SOURCE%/*}/dev-deps"
+
+run_xvfb &
+run_tor &
+run_redis &
+run_x11vnc &
+urandom
+run_sass --force --update
+maybe_create_config_py
+
+./i18n_tool.py translate-messages --compile
+pytest -v --page-layout "${@:-tests/functional/pageslayout}"

@@ -1,0 +1,45 @@
+#!/bin/bash
+# shellcheck disable=SC1090
+
+set -euo pipefail
+
+source "${BASH_SOURCE%/*}/dev-deps"
+
+run_xvfb
+run_tor &
+run_redis &
+setup_vncauth
+run_x11vnc &
+urandom
+run_sass --force --update
+maybe_create_config_py
+./i18n_tool.py translate-messages --compile
+
+mkdir -p "/tmp/test-results/logs"
+
+SUPPORTED_LOCALES=$(./i18n_tool.py list-locales)
+LOCALES="${*:-${SUPPORTED_LOCALES}}"
+
+function locale_is_supported {
+    echo "$SUPPORTED_LOCALES" | grep -q "$1"
+}
+
+for l in $LOCALES
+do
+    locale_is_supported "$l" || (printf "Unsupported locale \"%s\"\n" "$l"; exit 1 )
+done
+
+printf "Running tests in these locales: %s\n" "$LOCALES"
+
+# Taking screenshots for consumes a lot of memory
+# and can result in OOM errors in CI. Running each locale
+# separately avoids this.
+for locale in $LOCALES
+do
+  TEST_LOCALES=$locale pytest \
+    -v \
+    --force-flaky --max-runs=3 \
+    --page-layout \
+    --durations 10 \
+    tests/functional/pageslayout
+done

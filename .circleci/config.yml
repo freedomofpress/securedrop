@@ -280,22 +280,47 @@ jobs:
       - *savecache
 
       - run:
-          name: Run tests
+          name: Install zap
           command: |
-            JOB_TESTFILES=$(cd securedrop; circleci tests glob 'tests/test*py' 'tests/{files,functional}/test*py')
-            echo "JOB_TESTFILES: ${JOB_TESTFILES}"
-            RUN_TESTFILES=$(echo "$JOB_TESTFILES" |circleci tests split --split-by=timings)
-            echo "RUN_TESTFILES: ${RUN_TESTFILES}"
-            export TESTFILES=$RUN_TESTFILES
+            sudo systemctl stop apt-daily.service
+            sudo systemctl kill --kill-who=all apt-daily.service
+            while ! (systemctl list-units --all apt-daily.service | egrep -q '(dead|failed)') do sleep 1; done
+            ( sudo apt-get update || sudo apt-get update )
+            sudo apt-get install -y openjdk-17-jre-headless wget
+            wget https://github.com/zaproxy/zaproxy/releases/download/v2.11.1/ZAP_2_11_1_unix.sh -O /tmp/zap_installer.sh
+            chmod u+x /tmp/zap_installer.sh
+            sudo /tmp/zap_installer.sh -q
+            zap.sh -cmd -addoninstall jython
+            sudo pip3 install zapcli
+      
+      - run:
+        name: whatever else
+        command: for i in $(seq 50); do echo "bob"; sleep 10; done
+        background: true
+
+      - run:
+          name: Run dev instance
+          command: |
             fromtag=$(docker images |grep securedrop-test-focal-py3 |head -n1 |awk '{print $2}')
-            DOCKER_BUILD_ARGUMENTS="--cache-from securedrop-test-focal-py3:${fromtag:-latest}" make test
-          no_output_timeout: 15m
+            DOCKER_BUILD_ARGUMENTS="--cache-from securedrop-test-focal-py3:${fromtag:-latest}" make dev-detatched
+          background: true
+
+      - run:
+          name: Run zap daemon
+          command: zap.sh -daemon -port 8090 -config api.disablekey=true
+          background: true
+
+      - run:
+          name: Run zap
+          command: |
+            chmod u+x zap/scripts/run_tests.sh
+            zap/scripts/run_tests.sh
 
       - store_test_results:
-          path: ~/project/test-results
+          path: ~/project/zap-results
 
       - store_artifacts:
-          path: ~/project/test-results
+          path: ~/project/zap-results
 
 
   staging-test-with-rebase:
@@ -347,6 +372,7 @@ workflows:
   version: 2
   securedrop_ci:
     jobs:
+      - zap-vulnerability-scan
       - lint
       - app-tests:
           filters:
