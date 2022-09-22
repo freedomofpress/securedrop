@@ -495,13 +495,16 @@ class TestSecureDropAdmin(object):
 
 
 class TestSiteConfig(object):
-    def test_exists(self):
+    def test_exists(self, tmpdir):
         args = argparse.Namespace(
-            site_config="DOES_NOT_EXIST", ansible_path=".", app_path=dirname(__file__)
+            site_config="DOES_NOT_EXIST",
+            ansible_path=".",
+            app_path=dirname(__file__),
+            root=tmpdir,
         )
         assert not securedrop_admin.SiteConfig(args).exists()
         args = argparse.Namespace(
-            site_config=__file__, ansible_path=".", app_path=dirname(__file__)
+            site_config=__file__, ansible_path=".", app_path=dirname(__file__), root=tmpdir
         )
         assert securedrop_admin.SiteConfig(args).exists()
 
@@ -638,9 +641,12 @@ class TestSiteConfig(object):
         assert validator.validate(Document("012345678901234567890123456789ABCDEFABCD"))
         assert validator.validate(Document(""))
 
-    def test_sanitize_fingerprint(self):
+    def test_sanitize_fingerprint(self, tmpdir):
         args = argparse.Namespace(
-            site_config="DOES_NOT_EXIST", ansible_path=".", app_path=dirname(__file__)
+            site_config="DOES_NOT_EXIST",
+            ansible_path=".",
+            app_path=dirname(__file__),
+            root=tmpdir,
         )
         site_config = securedrop_admin.SiteConfig(args)
         assert "ABC" == site_config.sanitize_fingerprint("    A bc")
@@ -658,7 +664,9 @@ class TestSiteConfig(object):
         assert "fr_FR" in translations
 
     def test_validate_locales(self):
-        validator = securedrop_admin.SiteConfig.ValidateLocales(dirname(__file__))
+        validator = securedrop_admin.SiteConfig.ValidateLocales(
+            dirname(__file__), {"en_US", "fr_FR"}
+        )
         assert validator.validate(Document("en_US  fr_FR "))
         with pytest.raises(ValidationError) as e:
             validator.validate(Document("BAD"))
@@ -667,7 +675,10 @@ class TestSiteConfig(object):
     def test_save(self, tmpdir):
         site_config_path = join(str(tmpdir), "site_config")
         args = argparse.Namespace(
-            site_config=site_config_path, ansible_path=".", app_path=dirname(__file__)
+            site_config=site_config_path,
+            ansible_path=".",
+            app_path=dirname(__file__),
+            root=tmpdir,
         )
         site_config = securedrop_admin.SiteConfig(args)
         site_config.config = {"var1": "val1", "var2": "val2"}
@@ -680,9 +691,12 @@ class TestSiteConfig(object):
         )
         assert expected == io.open(site_config_path).read()
 
-    def test_validate_gpg_key(self, caplog):
+    def test_validate_gpg_key(self, tmpdir, caplog):
         args = argparse.Namespace(
-            site_config="INVALID", ansible_path="tests/files", app_path=dirname(__file__)
+            site_config="INVALID",
+            ansible_path="tests/files",
+            app_path=dirname(__file__),
+            root=tmpdir,
         )
         good_config = {
             "securedrop_app_gpg_public_key": "test_journalist_key.pub",
@@ -704,9 +718,12 @@ class TestSiteConfig(object):
                 site_config.validate_gpg_keys()
             assert "FAIL does not match" in str(e)
 
-    def test_journalist_alert_email(self):
+    def test_journalist_alert_email(self, tmpdir):
         args = argparse.Namespace(
-            site_config="INVALID", ansible_path="tests/files", app_path=dirname(__file__)
+            site_config="INVALID",
+            ansible_path="tests/files",
+            app_path=dirname(__file__),
+            root=tmpdir,
         )
         site_config = securedrop_admin.SiteConfig(args)
         site_config.config = {
@@ -738,6 +755,7 @@ class TestSiteConfig(object):
             site_config="tests/files/site-specific",
             ansible_path="tests/files",
             app_path=dirname(__file__),
+            root="tests/files",
         )
         site_config = securedrop_admin.SiteConfig(args)
 
@@ -751,7 +769,10 @@ class TestSiteConfig(object):
     def test_update_config_no_site_specific(self, validate_gpg_keys, mock_validate_input, tmpdir):
         site_config_path = join(str(tmpdir), "site_config")
         args = argparse.Namespace(
-            site_config=site_config_path, ansible_path=".", app_path=dirname(__file__)
+            site_config=site_config_path,
+            ansible_path=".",
+            app_path=dirname(__file__),
+            root=tmpdir,
         )
         site_config = securedrop_admin.SiteConfig(args)
         assert site_config.load_and_update_config()
@@ -759,11 +780,12 @@ class TestSiteConfig(object):
         validate_gpg_keys.assert_called_once()
         assert exists(site_config_path)
 
-    def test_load_and_update_config(self):
+    def test_load_and_update_config(self, tmpdir):
         args = argparse.Namespace(
             site_config="tests/files/site-specific",
             ansible_path="tests/files",
             app_path=dirname(__file__),
+            root=tmpdir,
         )
         site_config = securedrop_admin.SiteConfig(args)
         with mock.patch("securedrop_admin.SiteConfig.update_config"):
@@ -774,6 +796,7 @@ class TestSiteConfig(object):
             site_config="tests/files/site-specific-missing-entries",
             ansible_path="tests/files",
             app_path=dirname(__file__),
+            root=tmpdir,
         )
         site_config = securedrop_admin.SiteConfig(args)
         with mock.patch("securedrop_admin.SiteConfig.update_config"):
@@ -781,7 +804,10 @@ class TestSiteConfig(object):
             assert site_config.config != {}
 
         args = argparse.Namespace(
-            site_config="UNKNOWN", ansible_path="tests/files", app_path=dirname(__file__)
+            site_config="UNKNOWN",
+            ansible_path="tests/files",
+            app_path=dirname(__file__),
+            root=tmpdir,
         )
         site_config = securedrop_admin.SiteConfig(args)
         with mock.patch("securedrop_admin.SiteConfig.update_config"):
@@ -812,7 +838,7 @@ class TestSiteConfig(object):
         assert site_config.user_prompt_config_one(desc, "YES") is True
         assert site_config.user_prompt_config_one(desc, "NO") is False
 
-    def test_desc_conditional(self):
+    def test_desc_conditional(self, tmpdir):
         """Ensure that conditional prompts behave correctly.
 
         Prompts which depend on another question should only be
@@ -842,6 +868,7 @@ class TestSiteConfig(object):
             site_config="tests/files/site-specific",
             ansible_path="tests/files",
             app_path=dirname(__file__),
+            root=tmpdir,
         )
         site_config = securedrop_admin.SiteConfig(args)
         site_config.desc = questions
@@ -919,9 +946,12 @@ class TestSiteConfig(object):
         with pytest.raises(ValidationError):
             site_config.user_prompt_config_one(desc, "wrong")
 
-    def test_user_prompt_config_one(self):
+    def test_user_prompt_config_one(self, tmpdir):
         args = argparse.Namespace(
-            site_config="UNKNOWN", ansible_path="tests/files", app_path=dirname(__file__)
+            site_config="UNKNOWN",
+            ansible_path="tests/files",
+            app_path=dirname(__file__),
+            root=tmpdir,
         )
         site_config = securedrop_admin.SiteConfig(args)
 
@@ -937,9 +967,12 @@ class TestSiteConfig(object):
                 print("checking " + method)
                 getattr(self, method)(site_config, desc)
 
-    def test_validated_input(self):
+    def test_validated_input(self, tmpdir):
         args = argparse.Namespace(
-            site_config="UNKNOWN", ansible_path="tests/files", app_path=dirname(__file__)
+            site_config="UNKNOWN",
+            ansible_path="tests/files",
+            app_path=dirname(__file__),
+            root=tmpdir,
         )
         site_config = securedrop_admin.SiteConfig(args)
 
@@ -956,17 +989,21 @@ class TestSiteConfig(object):
             assert "a b" == site_config.validated_input("", ["a", "b"], lambda: True, None)
             assert "{}" == site_config.validated_input("", {}, lambda: True, None)
 
-    def test_load(self, caplog):
+    def test_load(self, tmpdir, caplog):
         args = argparse.Namespace(
             site_config="tests/files/site-specific",
             ansible_path="tests/files",
             app_path=dirname(__file__),
+            root=tmpdir,
         )
         site_config = securedrop_admin.SiteConfig(args)
         assert "app_hostname" in site_config.load()
 
         args = argparse.Namespace(
-            site_config="UNKNOWN", ansible_path="tests/files", app_path=dirname(__file__)
+            site_config="UNKNOWN",
+            ansible_path="tests/files",
+            app_path=dirname(__file__),
+            root=tmpdir,
         )
         site_config = securedrop_admin.SiteConfig(args)
         with pytest.raises(IOError) as e:
@@ -978,6 +1015,7 @@ class TestSiteConfig(object):
             site_config="tests/files/corrupted",
             ansible_path="tests/files",
             app_path=dirname(__file__),
+            root=tmpdir,
         )
         site_config = securedrop_admin.SiteConfig(args)
         with pytest.raises(yaml.YAMLError) as e:

@@ -4,6 +4,7 @@
 import argparse
 import glob
 import io
+import json
 import logging
 import os
 import re
@@ -13,13 +14,23 @@ import sys
 import textwrap
 from argparse import _SubParsersAction
 from os.path import abspath, dirname, join, realpath
-from typing import List, Optional, Set
+from pathlib import Path
+from typing import Dict, List, Optional, Set
 
 import version
 from sh import git, msgfmt, msgmerge, pybabel, sed, xgettext
 
 logging.basicConfig(format="%(asctime)s %(levelname)s %(message)s")
 log = logging.getLogger(__name__)
+
+I18N_CONF = os.path.join(os.path.dirname(__file__), "i18n.json")
+
+# Map components of the "securedrop" Weblate project (keys) to their filesystem
+# paths (values) relative to the repository root.
+LOCALE_DIR = {
+    "securedrop": "securedrop/translations",
+    "desktop": "install_files/ansible-base/roles/tails-config/templates",
+}
 
 
 class I18NTool:
@@ -33,92 +44,9 @@ class I18NTool:
     #       display in the interface.
     # desktop: The language code used for dekstop icons.
     #
-    supported_languages = {
-        "ar": {
-            "name": "Arabic",
-            "desktop": "ar",
-        },
-        "ca": {
-            "name": "Catalan",
-            "desktop": "ca",
-        },
-        "cs": {
-            "name": "Czech",
-            "desktop": "cs",
-        },
-        "de_DE": {
-            "name": "German",
-            "desktop": "de_DE",
-        },
-        "el": {
-            "name": "Greek",
-            "desktop": "el",
-        },
-        "es_ES": {
-            "name": "Spanish",
-            "desktop": "es_ES",
-        },
-        "fr_FR": {
-            "name": "French",
-            "desktop": "fr",
-        },
-        "hi": {
-            "name": "Hindi",
-            "desktop": "hi",
-        },
-        "is": {
-            "name": "Icelandic",
-            "desktop": "is",
-        },
-        "it_IT": {
-            "name": "Italian",
-            "desktop": "it",
-        },
-        "nb_NO": {
-            "name": "Norwegian",
-            "desktop": "nb_NO",
-        },
-        "nl": {
-            "name": "Dutch",
-            "desktop": "nl",
-        },
-        "pt_BR": {
-            "name": "Portuguese, Brasil",
-            "desktop": "pt_BR",
-        },
-        "pt_PT": {
-            "name": "Portuguese, Portugal",
-            "desktop": "pt_PT",
-        },
-        "ro": {
-            "name": "Romanian",
-            "desktop": "ro",
-        },
-        "ru": {
-            "name": "Russian",
-            "desktop": "ru",
-        },
-        "sk": {
-            "name": "Slovak",
-            "desktop": "sk",
-        },
-        "sv": {
-            "name": "Swedish",
-            "desktop": "sv",
-        },
-        "tr": {
-            "name": "Turkish",
-            "desktop": "tr",
-        },
-        "zh_Hans": {
-            "name": "Chinese, Simplified",
-            "desktop": "zh_Hans",
-        },
-        "zh_Hant": {
-            "name": "Chinese, Traditional",
-            "desktop": "zh_Hant",
-        },
-    }
+    with open(I18N_CONF) as i18n_conf:
+        conf = json.load(i18n_conf)
+    supported_languages = conf["supported_locales"]
     release_tag_re = re.compile(r"^\d+\.\d+\.\d+$")
     translated_commit_re = re.compile("Translated using Weblate")
     updated_commit_re = re.compile(r"(?:updated from|  (?:revision|commit):) (\w+)")
@@ -158,7 +86,7 @@ class I18NTool:
                 "--strip-comments",
                 "--add-location=never",
                 "--no-wrap",
-                *sources
+                *sources,
             )
 
             sed("-i", "-e", '/^"POT-Creation-Date/d', messages_file)
@@ -190,7 +118,7 @@ class I18NTool:
                 "--msgid-bugs-address=securedrop@freedom.press",
                 "--copyright-holder=Freedom of the Press Foundation",
                 *sources,
-                **k
+                **k,
             )
             sed("-i", "-e", '/^"POT-Creation-Date/d', messages_file, **k)
 
@@ -291,7 +219,8 @@ class I18NTool:
         )
         translations_dir = join(
             dirname(realpath(__file__)),
-            "../install_files/ansible-base/roles/tails-config/templates",
+            "..",
+            LOCALE_DIR["desktop"],
         )
         sources = "desktop-journalist-icon.j2.in,desktop-source-icon.j2.in"
         self.set_translate_parser(parser, translations_dir, sources)
@@ -347,56 +276,62 @@ class I18NTool:
         Pull in updated translations from the i18n repo.
         """
         self.ensure_i18n_remote(args)
-        codes = list(self.supported_languages.keys())
+
+        # Check out *all* remote changes to the LOCALE_DIRs.
+        git(
+            "-C",
+            args.root,
+            "checkout",
+            args.target,
+            "--",
+            *LOCALE_DIR.values(),
+        )
+
+        # Use the LOCALE_DIR corresponding to the "securedrop" component to
+        # determine which locales are present.
+        locale_dir = os.path.join(args.root, LOCALE_DIR["securedrop"])
+        locales = self.translated_locales(locale_dir)
         if args.supported_languages:
             codes = args.supported_languages.split(",")
-        for code in sorted(codes):
-            info = self.supported_languages[code]
+            locales = {code: locales[code] for code in locales if code in codes}
 
-            def need_update(path: str) -> bool:
-                """
-                Check if the file is different in the i18n repo.
-                """
-
-                exists = os.path.exists(join(args.root, path))
-                k = {"_cwd": args.root}
-                git.checkout(args.target, "--", path, **k)
-                git.reset("HEAD", "--", path, **k)
-                if not exists:
-                    return True
-
-                return self.file_is_modified(join(args.root, path))
+        # Then iterate over all locales present and decide which to stage and commit.
+        for code, path in locales.items():
+            paths = []
 
             def add(path: str) -> None:
                 """
                 Add the file to the git index.
                 """
                 git("-C", args.root, "add", path)
+                paths.append(path)
 
-            updated = False
-            #
-            # Add changes to web .po files
-            #
-            path = "securedrop/translations/{l}/LC_MESSAGES/messages.po".format(
-                l=code  # noqa: E741
-            )
-            if need_update(path):
-                add(path)
-                updated = True
-            #
-            # Add changes to desktop .po files
-            #
-            desktop_code = info["desktop"]
-            path = join(
-                "install_files/ansible-base/roles",
-                "tails-config/templates/{l}.po".format(l=desktop_code),  # noqa: E741
-            )
-            if need_update(path):
-                add(path)
-                updated = True
+            # Any translated locale may have changes that need to be staged from the
+            # securedrop/securedrop component.
+            add(path)
 
-            if updated:
-                self.commit_changes(args, code)
+            # Only supported locales may have changes that need to be staged from the
+            # securedrop/desktop component, because the link between the two components
+            # is defined in I18N_CONF when a language is marked supported.
+            try:
+                info = self.supported_languages[code]
+                name = info["name"]
+                desktop_code = info["desktop"]
+                path = join(
+                    LOCALE_DIR["desktop"],
+                    "{l}.po".format(l=desktop_code),  # noqa: E741
+                )
+                add(path)
+            except KeyError:
+                log.info(
+                    f"{code} has translations but is not marked as supported; "
+                    f"skipping desktop translation"
+                )
+                name = code
+
+            # Try to commit changes for this locale no matter what, even if it turns out to be a
+            # no-op.
+            self.commit_changes(args, code, name, paths)
 
     def translators(
         self, args: argparse.Namespace, path: str, since_commit: Optional[str]
@@ -438,17 +373,32 @@ class I18NTool:
             "--no-pager", "-C", root, "log", "--format=%H", path, _encoding="utf-8"
         ).splitlines()
 
-    def commit_changes(self, args: argparse.Namespace, code: str) -> None:
+    def translated_locales(self, path: str) -> Dict[str, str]:
+        """Return a dictionary of all locale directories present in `path`, where the keys
+        are the base (directory) names and the values are the full paths."""
+        p = Path(path)
+        return {x.name: str(x) for x in p.iterdir() if x.is_dir()}
+
+    def commit_changes(
+        self, args: argparse.Namespace, code: str, name: str, paths: List[str]
+    ) -> None:
+        """Check if any of the given paths have had changed staged.  If so, commit them."""
         self.require_git_email_name(args.root)
         authors = set()  # type: Set[str]
-        diffs = "{}".format(git("--no-pager", "-C", args.root, "diff", "--name-only", "--cached"))
+        diffs = "{}".format(
+            git("--no-pager", "-C", args.root, "diff", "--name-only", "--cached", *paths)
+        )
+
+        # If nothing was changed, "git commit" will return nonzero as a no-op.
+        if len(diffs) == 0:
+            return
 
         # for each modified file, find the last commit made by this
         # function, then collect all the contributors since that
         # commit, so they can be credited in this one. if no commit
         # with the right message is found, just use the most recent
         # commit that touched the file.
-        for path in sorted(diffs.strip().split("\n")):
+        for path in paths:
             path_commits = self.get_path_commits(args.root, path)
             since_commit = None
             for path_commit in path_commits:
@@ -465,7 +415,6 @@ class I18NTool:
         authors_as_str = "\n  ".join(sorted(authors))
 
         current = git("-C", args.root, "rev-parse", args.target)
-        info = self.supported_languages[code]
         message = textwrap.dedent(
             """
         l10n: updated {name} ({code})
@@ -477,10 +426,8 @@ class I18NTool:
           repo: {remote}
           commit: {current}
         """
-        ).format(
-            remote=args.url, name=info["name"], authors=authors_as_str, code=code, current=current
-        )
-        git("-C", args.root, "commit", "-m", message)
+        ).format(remote=args.url, name=name, authors=authors_as_str, code=code, current=current)
+        git("-C", args.root, "commit", "-m", message, *paths)
 
     def set_update_from_weblate_parser(self, subps: _SubParsersAction) -> None:
         parser = subps.add_parser("update-from-weblate", help=("Import translations from weblate"))
@@ -590,8 +537,8 @@ class I18NTool:
 
     def list_translators(self, args: argparse.Namespace) -> None:
         self.ensure_i18n_remote(args)
-        app_template = "securedrop/translations/{}/LC_MESSAGES/messages.po"
-        desktop_template = "install_files/ansible-base/roles/tails-config/templates/{}.po"
+        app_template = "{}/{}/LC_MESSAGES/messages.po"
+        desktop_template = LOCALE_DIR["desktop"] + "/{}.po"
         since = None
         if args.all:
             print("Listing all translators who have ever helped")
@@ -601,7 +548,7 @@ class I18NTool:
         for code, info in sorted(self.supported_languages.items()):
             translators = set([])
             paths = [
-                app_template.format(code),
+                app_template.format(LOCALE_DIR["securedrop"], code),
                 desktop_template.format(info["desktop"]),
             ]
             for path in paths:

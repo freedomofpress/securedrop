@@ -1,0 +1,84 @@
+{
+  "supported_locales": {
+    "ca": {
+      "name": "Catalan",
+      "desktop": "ca"
+    },
+    "cs": {
+      "name": "Czech",
+      "desktop": "cs"
+    },
+    "de_DE": {
+      "name": "German",
+      "desktop": "de_DE"
+    },
+    "el": {
+      "name": "Greek",
+      "desktop": "el"
+    },
+    "es_ES": {
+      "name": "Spanish",
+      "desktop": "es_ES"
+    },
+    "fr_FR": {
+      "name": "French",
+      "desktop": "fr"
+    },
+    "hi": {
+      "name": "Hindi",
+      "desktop": "hi"
+    },
+    "is": {
+      "name": "Icelandic",
+      "desktop": "is"
+    },
+    "it_IT": {
+      "name": "Italian",
+      "desktop": "it"
+    },
+    "nb_NO": {
+      "name": "Norwegian",
+      "desktop": "nb_NO"
+    },
+    "nl": {
+      "name": "Dutch",
+      "desktop": "nl"
+    },
+    "pt_BR": {
+      "name": "Portuguese, Brasil",
+      "desktop": "pt_BR"
+    },
+    "pt_PT": {
+      "name": "Portuguese, Portugal",
+      "desktop": "pt_PT"
+    },
+    "ro": {
+      "name": "Romanian",
+      "desktop": "ro"
+    },
+    "ru": {
+      "name": "Russian",
+      "desktop": "ru"
+    },
+    "sk": {
+      "name": "Slovak",
+      "desktop": "sk"
+    },
+    "sv": {
+      "name": "Swedish",
+      "desktop": "sv"
+    },
+    "tr": {
+      "name": "Turkish",
+      "desktop": "tr"
+    },
+    "zh_Hans": {
+      "name": "Chinese, Simplified",
+      "desktop": "zh_Hans"
+    },
+    "zh_Hant": {
+      "name": "Chinese, Traditional",
+      "desktop": "zh_Hant"
+    }
+  }
+}
