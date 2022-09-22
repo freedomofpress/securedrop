@@ -140,6 +140,9 @@ def setup_function(function):
     for name in ["de_DE", "es_ES", "fr_FR", "pt_BR"]:
         dircmd = "mkdir -p {0}/securedrop/translations/{1}".format(SD_DIR, name)
         subprocess.check_call(dircmd.split())
+    subprocess.check_call(
+        "cp {0}/files/securedrop/i18n.json {1}/securedrop".format(CURRENT_DIR, SD_DIR).split()
+    )
 
 
 def teardown_function(function):

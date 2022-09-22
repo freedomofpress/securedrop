@@ -1,0 +1,16 @@
+{
+  "supported_locales": {
+    "de_DE": {
+      "name": "German",
+      "desktop": "de_DE"
+    },
+    "es_ES": {
+      "name": "Spanish",
+      "desktop": "es_ES"
+    },
+    "fr_FR": {
+      "name": "French",
+      "desktop": "fr"
+    }
+  }
+}
