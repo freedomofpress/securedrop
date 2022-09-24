@@ -1,10 +1,11 @@
 import secrets
 import shutil
-import subprocess
 from pathlib import Path
+from typing import List, Optional
 
 from tests.functional.db_session import _get_fake_db_module
 from tests.functional.sd_config_v2 import DEFAULT_SECUREDROP_ROOT, FlaskAppConfig, SecureDropConfig
+from tests.utils.db_helper import reset_database
 
 
 def _generate_random_token() -> str:
@@ -35,6 +36,9 @@ class SecureDropConfigFactory:
         SESSION_EXPIRATION_MINUTES: float = 120,
         NOUNS: Path = DEFAULT_SECUREDROP_ROOT / "dictionaries" / "nouns.txt",
         ADJECTIVES: Path = DEFAULT_SECUREDROP_ROOT / "dictionaries" / "adjectives.txt",
+        SUPPORTED_LOCALES: Optional[List[str]] = None,
+        DEFAULT_LOCALE: str = "en_US",
+        TRANSLATION_DIRS: Path = DEFAULT_SECUREDROP_ROOT / "translations",
     ) -> SecureDropConfig:
         """Create a securedrop config suitable for the unit tests.
 
@@ -51,6 +55,7 @@ class SecureDropConfigFactory:
             SESSION_EXPIRATION_MINUTES=SESSION_EXPIRATION_MINUTES,
             SECUREDROP_DATA_ROOT=str(SECUREDROP_DATA_ROOT),
             DATABASE_FILE=str(database_file),
+            SECUREDROP_ROOT=DEFAULT_SECUREDROP_ROOT,
             DATABASE_ENGINE="sqlite",
             JOURNALIST_APP_FLASK_CONFIG_CLS=FlaskAppConfigFactory.create(SESSION_COOKIE_NAME="js"),
             SOURCE_APP_FLASK_CONFIG_CLS=FlaskAppConfigFactory.create(SESSION_COOKIE_NAME="ss"),
@@ -61,14 +66,17 @@ class SecureDropConfigFactory:
             NOUNS=str(NOUNS),
             ADJECTIVES=str(ADJECTIVES),
             RQ_WORKER_NAME=RQ_WORKER_NAME,
-            GPG_KEY_DIR=GPG_KEY_DIR,
+            GPG_KEY_DIR=str(GPG_KEY_DIR),
             JOURNALIST_KEY=JOURNALIST_KEY,
+            SUPPORTED_LOCALES=SUPPORTED_LOCALES if SUPPORTED_LOCALES is not None else ["en_US"],
+            TRANSLATION_DIRS=TRANSLATION_DIRS,
+            SOURCE_TEMPLATES_DIR=DEFAULT_SECUREDROP_ROOT / "source_templates",
+            JOURNALIST_TEMPLATES_DIR=DEFAULT_SECUREDROP_ROOT / "journalist_templates",
+            DEFAULT_LOCALE=DEFAULT_LOCALE,
         )
 
-        # Delete any previous/existing DB and tnitialize a new one
-        database_file.unlink(missing_ok=True)  # type: ignore
-        database_file.touch()
-        subprocess.check_call(["sqlite3", database_file, ".databases"])
+        # Delete any previous/existing DB and initialize a new one
+        reset_database(database_file)
         with _get_fake_db_module(database_uri=config.DATABASE_URI) as initialized_db_module:
             initialized_db_module.create_all()
 

@@ -6,29 +6,13 @@ import shutil
 import signal
 import time
 from os.path import abspath, dirname, exists, getmtime, join, realpath
+from pathlib import Path
 
 import i18n_tool
 import pytest
 from mock import patch
-from sh import git, msginit, pybabel, sed, touch
-
-
-def dummy_translate(po):
-    buf = None
-    with io.open(po, "r") as in_file:
-        buf = in_file.readlines()
-
-    with io.open(po, "w") as out_file:
-        for line in buf:
-            if line.startswith("msgid "):
-                out_file.write(line)
-                idstr = line.split("msgid ", 1)
-                out_file.write("msgstr {}".format(idstr[1]))
-
-            elif line.startswith("msgstr "):
-                pass
-            else:
-                out_file.write(line)
+from sh import git, msginit, pybabel, touch
+from tests.test_i18n import set_msg_translation_in_po_file
 
 
 class TestI18NTool(object):
@@ -73,9 +57,7 @@ class TestI18NTool(object):
 
         i18n_file = join(str(tmpdir), "source.desktop")
 
-        #
         # Extract+update but do not compile
-        #
         old_messages_mtime = getmtime(messages_file)
         assert not exists(i18n_file)
         i18n_tool.I18NTool().main(
@@ -93,29 +75,22 @@ class TestI18NTool(object):
         current_messages_mtime = getmtime(messages_file)
         assert old_messages_mtime < current_messages_mtime
 
-        locale = "fr_FR"
-        po_file = join(str(tmpdir), locale + ".po")
-        msginit(
-            "--no-translator", "--locale", locale, "--output", po_file, "--input", messages_file
-        )
-        source = "SecureDrop Source Interfaces"
-        sed("-i", "-e", '/{}/,+1s/msgstr ""/msgstr "SOURCE FR"/'.format(source), po_file)
-        assert exists(po_file)
+        for locale, translation in [
+            ("fr_FR", "SOURCE FR"),
+            # Regression test for #4192; bug when adding Romanian as an accepted language
+            ("ro", "SOURCE RO"),
+        ]:
+            po_file = Path(tmpdir) / f"{locale}.po"
+            msginit(
+                "--no-translator", "--locale", locale, "--output", po_file, "--input", messages_file
+            )
+            set_msg_translation_in_po_file(
+                po_file=po_file,
+                msgid_to_translate="SecureDrop Source Interfaces",
+                msgstr=translation,
+            )
 
-        # Regression test to trigger bug introduced when adding
-        # Romanian as an accepted language.
-        locale = "ro"
-        po_file = join(str(tmpdir), locale + ".po")
-        msginit(
-            "--no-translator", "--locale", locale, "--output", po_file, "--input", messages_file
-        )
-        source = "SecureDrop Source Interfaces"
-        sed("-i", "-e", '/{}/,+1s/msgstr ""/msgstr "SOURCE RO"/'.format(source), po_file)
-        assert exists(po_file)
-
-        #
         # Compile but do not extract+update
-        #
         old_messages_mtime = current_messages_mtime
         i18n_tool.I18NTool().main(
             [
@@ -166,8 +141,14 @@ class TestI18NTool(object):
         locale_dir = join(str(tmpdir), locale)
         pybabel("init", "-i", messages_file, "-d", str(tmpdir), "-l", locale)
 
-        po_file = join(locale_dir, "LC_MESSAGES/messages.po")
-        dummy_translate(po_file)
+        # Add a dummy translation
+        po_file = Path(locale_dir) / "LC_MESSAGES/messages.po"
+        for msgid in ["code hello i18n", "template hello i18n"]:
+            set_msg_translation_in_po_file(
+                po_file=po_file,
+                msgid_to_translate=msgid,
+                msgstr=msgid,
+            )
 
         mo_file = join(locale_dir, "LC_MESSAGES/messages.mo")
         assert not exists(mo_file)
@@ -231,7 +212,11 @@ class TestI18NTool(object):
 
         #
         # Translation would occur here - let's fake it
-        dummy_translate(po_file)
+        set_msg_translation_in_po_file(
+            po_file=Path(po_file),
+            msgid_to_translate="code hello i18n",
+            msgstr="code hello i18n",
+        )
 
         #
         # Compile but do not extract+update
@@ -368,16 +353,19 @@ class TestI18NTool(object):
         message = str(git("--no-pager", "-C", "securedrop", "show", _cwd=d, _encoding="utf-8"))
         assert "Loïc" in message
 
-        #
         # an update is done to nl in weblate
-        #
-        k = {"_cwd": join(d, "i18n")}
-        f = "securedrop/translations/nl/LC_MESSAGES/messages.po"
-        sed("-i", "-e", "s/inactiviteit/INACTIVITEIT/", f, **k)
-        git.add(f, **k)
+        i18n_dir = Path(d) / "i18n"
+        po_file = i18n_dir / "securedrop/translations/nl/LC_MESSAGES/messages.po"
+        content = po_file.read_text()
+        text_to_update = "inactiviteit"
+        assert text_to_update in content
+        updated_content = content.replace(text_to_update, "INACTIVITEIT")
+        po_file.write_text(updated_content)
+
+        git.add(str(po_file), **k)
         git.config("user.email", "somone@else.com", **k)
         git.config("user.name", "Someone Else", **k)
-        git.commit("-m", "translation change", f, **k)
+        git.commit("-m", "translation change", str(po_file), **k)
 
         k = {"_cwd": join(d, "securedrop")}
         git.config("user.email", "somone@else.com", **k)

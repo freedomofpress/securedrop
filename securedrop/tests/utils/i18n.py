@@ -2,6 +2,7 @@ import collections
 import contextlib
 import functools
 import os
+from pathlib import Path
 from typing import Dict, Generator, Iterable, List, Optional, Tuple
 
 import pytest
@@ -44,7 +45,7 @@ def language_tag(locale: str) -> str:
 
 
 @functools.lru_cache(maxsize=None)
-def message_catalog(config: SDConfig, locale: str) -> Catalog:
+def message_catalog(translation_dir: Path, locale: str) -> Catalog:
     """
     Returns the gettext message catalog for the given locale.
 
@@ -52,14 +53,14 @@ def message_catalog(config: SDConfig, locale: str) -> Catalog:
     an actual translation or merely the result of falling back to the
     default locale.
 
-    >>> german = message_catalog(config, 'de_DE')
+    >>> german = message_catalog(translation_dir, 'de_DE')
     >>> m = german.get("a string that has been added to the catalog but not translated")
     >>> m.string
     ''
     >>> german.get("Password").string
     'Passwort'
     """
-    return read_po(open(str(config.TRANSLATION_DIRS / locale / "LC_MESSAGES/messages.po")))
+    return read_po(open((translation_dir / locale / "LC_MESSAGES" / "messages.po")))
 
 
 def page_language(page_text: str) -> Optional[str]:
@@ -71,7 +72,9 @@ def page_language(page_text: str) -> Optional[str]:
 
 
 @contextlib.contextmanager
-def xfail_untranslated_messages(config: SDConfig, locale: str, msgids: Iterable[str]) -> Generator:
+def xfail_untranslated_messages(
+    config: SDConfig, locale: str, msgids: Iterable[str]
+) -> Generator[None, None, None]:
     """
     Trigger pytest.xfail for untranslated strings.
 
@@ -88,7 +91,7 @@ def xfail_untranslated_messages(config: SDConfig, locale: str, msgids: Iterable[
     """
     with force_locale(locale):
         if locale != "en_US":
-            catalog = message_catalog(config, locale)
+            catalog = message_catalog(config.TRANSLATION_DIRS, locale)
             for msgid in msgids:
                 m = catalog.get(msgid)
                 if not m:

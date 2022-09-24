@@ -18,7 +18,7 @@ from pathlib import Path
 from typing import Dict, List, Optional, Set
 
 import version
-from sh import git, msgfmt, msgmerge, pybabel, sed, xgettext
+from sh import git, msgfmt, msgmerge, pybabel, xgettext
 
 logging.basicConfig(format="%(asctime)s %(levelname)s %(message)s")
 log = logging.getLogger(__name__)
@@ -65,7 +65,7 @@ class I18NTool:
         git.fetch("i18n", **k)
 
     def translate_messages(self, args: argparse.Namespace) -> None:
-        messages_file = os.path.join(args.translations_dir, "messages.pot")
+        messages_file = Path(args.translations_dir).absolute() / "messages.pot"
 
         if args.extract_update:
             if not os.path.exists(args.translations_dir):
@@ -76,7 +76,7 @@ class I18NTool:
                 "--mapping",
                 args.mapping,
                 "--output",
-                messages_file,
+                str(messages_file),
                 "--project=SecureDrop",
                 "--version",
                 args.version,
@@ -89,13 +89,20 @@ class I18NTool:
                 *sources,
             )
 
-            sed("-i", "-e", '/^"POT-Creation-Date/d', messages_file)
+            msg_file_content = messages_file.read_text()
+            updated_content = _remove_from_content_line_with_text(
+                text='"POT-Creation-Date:', content=msg_file_content
+            )
+            messages_file.write_text(updated_content)
 
-            if self.file_is_modified(messages_file) and len(os.listdir(args.translations_dir)) > 1:
+            if (
+                self.file_is_modified(str(messages_file))
+                and len(os.listdir(args.translations_dir)) > 1
+            ):
                 tglob = "{}/*/LC_MESSAGES/*.po".format(args.translations_dir)
                 for translation in glob.iglob(tglob):
                     msgmerge("--previous", "--update", "--no-wrap", translation, messages_file)
-                log.warning("messages translations updated in {}".format(messages_file))
+                log.warning(f"messages translations updated in {messages_file}")
             else:
                 log.warning("messages translations are already up to date")
 
@@ -103,7 +110,7 @@ class I18NTool:
             pybabel.compile("--directory", args.translations_dir)
 
     def translate_desktop(self, args: argparse.Namespace) -> None:
-        messages_file = os.path.join(args.translations_dir, "desktop.pot")
+        messages_file = Path(args.translations_dir).absolute() / "desktop.pot"
 
         if args.extract_update:
             sources = args.sources.split(",")
@@ -120,15 +127,19 @@ class I18NTool:
                 *sources,
                 **k,
             )
-            sed("-i", "-e", '/^"POT-Creation-Date/d', messages_file, **k)
+            msg_file_content = messages_file.read_text()
+            updated_content = _remove_from_content_line_with_text(
+                text='"POT-Creation-Date:', content=msg_file_content
+            )
+            messages_file.write_text(updated_content)
 
-            if self.file_is_modified(messages_file):
+            if self.file_is_modified(str(messages_file)):
                 for f in os.listdir(args.translations_dir):
                     if not f.endswith(".po"):
                         continue
                     po_file = os.path.join(args.translations_dir, f)
                     msgmerge("--update", po_file, messages_file)
-                log.warning("messages translations updated in " + messages_file)
+                log.warning(f"messages translations updated in {messages_file}")
             else:
                 log.warning("desktop translations are already up to date")
 
@@ -595,6 +606,18 @@ class I18NTool:
             return args.func(args)
         except KeyboardInterrupt:
             return signal.SIGINT
+
+
+def _remove_from_content_line_with_text(text: str, content: str) -> str:
+    # Split where the text is located; assume there is only one instance of the text
+    split_content = content.split(text)
+    assert len(split_content) == 2
+
+    # Remove the while line containing the text
+    content_before_line = split_content[0]
+    content_after_line = split_content[1].split("\n", maxsplit=1)[1]
+    updated_content = content_before_line + content_after_line
+    return updated_content
 
 
 if __name__ == "__main__":  # pragma: no cover
