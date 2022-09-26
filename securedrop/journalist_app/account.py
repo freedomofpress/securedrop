@@ -43,7 +43,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
         if validate_user(user.username, current_password, token, error_message):
             password = request.form.get("password")
             if set_diceware_password(user, password):
-                current_app.session_interface.logout_user(user.id)
+                current_app.session_interface.logout_user(user.id)  # type: ignore
                 return redirect(url_for("main.login"))
         return redirect(url_for("account.edit"))
 

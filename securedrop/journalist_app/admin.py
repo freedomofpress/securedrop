@@ -350,7 +350,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
             abort(403)
         else:
             user.delete()
-            current_app.session_interface.logout_user(user.id)
+            current_app.session_interface.logout_user(user.id)  # type: ignore
             db.session.commit()
             flash(
                 gettext("Deleted user '{user}'.").format(user=user.username),
@@ -368,7 +368,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
             abort(404)
         password = request.form.get("password")
         if set_diceware_password(user, password, admin=True) is not False:
-            current_app.session_interface.logout_user(user.id)
+            current_app.session_interface.logout_user(user.id)  # type: ignore
             db.session.commit()
         return redirect(url_for("admin.edit_user", user_id=user_id))
 
