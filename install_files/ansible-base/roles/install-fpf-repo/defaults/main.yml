@@ -2,7 +2,7 @@
 # The FPF apt repository hosts Debian packages for use with SecureDrop.
 # For a full list of the packages, see:
 #
-#   https://docs.securedrop.org/en/stable/development/apt_repo.html
+#   https://developers.securedrop.org/en/latest/apt_repo.html
 #
 # To request source packages for the grsecurity-patched kernels, see:
 #
