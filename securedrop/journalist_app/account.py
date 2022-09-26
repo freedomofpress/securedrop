@@ -3,9 +3,9 @@ from typing import Union
 
 import werkzeug
 from db import db
-from flask import Blueprint, flash, g, redirect, render_template, request, url_for
+from flask import Blueprint, current_app, flash, g, redirect, render_template, request, url_for
 from flask_babel import gettext
-from journalist_app.sessions import logout_user, session
+from journalist_app.sessions import session
 from journalist_app.utils import (
     set_diceware_password,
     set_name,
@@ -43,7 +43,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
         if validate_user(user.username, current_password, token, error_message):
             password = request.form.get("password")
             if set_diceware_password(user, password):
-                logout_user(user.id)
+                current_app.session_interface.logout_user(user.id)
                 return redirect(url_for("main.login"))
         return redirect(url_for("account.edit"))
 

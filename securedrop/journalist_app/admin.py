@@ -20,7 +20,7 @@ from flask import (
 from flask_babel import gettext
 from journalist_app.decorators import admin_required
 from journalist_app.forms import LogoForm, NewUserForm, OrgNameForm, SubmissionPreferencesForm
-from journalist_app.sessions import logout_user, session
+from journalist_app.sessions import session
 from journalist_app.utils import commit_account_changes, set_diceware_password, validate_hotp_secret
 from models import (
     FirstOrLastNameError,
@@ -350,7 +350,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
             abort(403)
         else:
             user.delete()
-            logout_user(user.id)
+            current_app.session_interface.logout_user(user.id)
             db.session.commit()
             flash(
                 gettext("Deleted user '{user}'.").format(user=user.username),
@@ -368,7 +368,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
             abort(404)
         password = request.form.get("password")
         if set_diceware_password(user, password, admin=True) is not False:
-            logout_user(user.id)
+            current_app.session_interface.logout_user(user.id)
             db.session.commit()
         return redirect(url_for("admin.edit_user", user_id=user_id))
 

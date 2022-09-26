@@ -223,6 +223,16 @@ class SessionInterface(FlaskSessionInterface):
                 **conditional_cookie_kwargs  # type: ignore
             )
 
+    def logout_user(self, uid: int) -> None:
+        for key in self.redis.keys(self.key_prefix + "*") + self.redis.keys(
+            "api_" + self.key_prefix + "*"
+        ):
+            found = self.redis.get(key)
+            if found:
+                sess = session_json_serializer.loads(found.decode("utf-8"))
+                if "uid" in sess and sess["uid"] == uid:
+                    self.redis.delete(key)
+
 
 class Session:
     def __init__(self, app: Flask) -> None:
@@ -255,26 +265,6 @@ class Session:
         )
 
         return session_interface
-
-
-def logout_user(uid: int) -> None:
-    redis = Redis()
-    for key in redis.keys(app.config["SESSION_KEY_PREFIX"] + "*") + redis.keys(
-        "api_" + app.config["SESSION_KEY_PREFIX"] + "*"
-    ):
-        found = redis.get(key)
-        if found:
-            sess = session_json_serializer.loads(found.decode("utf-8"))
-            if "uid" in sess and sess["uid"] == uid:
-                redis.delete(key)
-
-
-def logout_all() -> None:
-    redis = Redis()
-    for key in redis.keys(app.config["SESSION_KEY_PREFIX"] + "*") + redis.keys(
-        "api_" + app.config["SESSION_KEY_PREFIX"] + "*"
-    ):
-        redis.delete(key)
 
 
 # Re-export flask.session, but with the correct type information for mypy.
