@@ -34,7 +34,13 @@ Any special considerations for deployment? Consider both:
 
 - [ ] [Configuration tests](https://docs.securedrop.org/en/latest/development/testing_configuration_tests.html) pass
 
-### If you added or removed a file deployed with the application:
+### If you added or removed a file
+
+#### ...used to build the application:
+
+- [ ] I have updated `securedrop/.rsync-filter` to include the change
+
+#### ...deployed with the application:
 
 - [ ] I have updated AppArmor rules to include the change
 
