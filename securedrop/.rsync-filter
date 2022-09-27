@@ -88,6 +88,7 @@ include sass/global/**.sass
 include sass/modules/
 include sass/modules/**.sass
 include babel.cfg
+include i18n.json
 include translations/
 include translations/*.pot
 include translations/*/
