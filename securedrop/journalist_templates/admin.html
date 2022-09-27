@@ -31,7 +31,7 @@
             {{ gettext('Edit') }}
           </a>
         </td>
-        {% if user.id == g.user.id %}
+        {% if user.id == session.get_uid() %}
         <td class="delete-user-disabled">
           <span>{{ gettext('User deletion disabled') }}</span>
         </td>

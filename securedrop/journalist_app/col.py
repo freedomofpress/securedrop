@@ -12,7 +12,6 @@ from flask import (
     current_app,
     escape,
     flash,
-    g,
     redirect,
     render_template,
     request,
@@ -21,6 +20,7 @@ from flask import (
 )
 from flask_babel import gettext
 from journalist_app.forms import ReplyForm
+from journalist_app.sessions import session
 from journalist_app.utils import (
     col_delete,
     col_delete_data,
@@ -151,7 +151,7 @@ def make_blueprint(config: SDConfig) -> Blueprint:
 
         # mark as seen by the current user
         try:
-            journalist = g.get("user")
+            journalist = session.get_user()
             if fn.endswith("reply.gpg"):
                 reply = Reply.query.filter(Reply.filename == fn).one()
                 mark_seen([reply], journalist)
@@ -165,7 +165,8 @@ def make_blueprint(config: SDConfig) -> Blueprint:
             current_app.logger.error("Could not mark {} as seen: {}".format(fn, e))
 
         return send_file(
-            Storage.get_default().path(filesystem_id, fn), mimetype="application/pgp-encrypted"
+            Storage.get_default().path(filesystem_id, fn),
+            mimetype="application/pgp-encrypted",
         )
 
     return view

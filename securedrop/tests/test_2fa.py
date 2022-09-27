@@ -62,7 +62,9 @@ def test_totp_reuse_protections(journalist_app, test_journo, hardening):
             resp = app.post(
                 url_for("main.login"),
                 data=dict(
-                    username=test_journo["username"], password=test_journo["password"], token=token
+                    username=test_journo["username"],
+                    password=test_journo["password"],
+                    token=token,
                 ),
             )
 
@@ -136,19 +138,8 @@ def test_bad_token_fails_to_verify_on_admin_new_user_two_factor_page(
 
                 assert resp.status_code == 200
                 ins.assert_message_flashed(
-                    "There was a problem verifying the two-factor code. Please try again.", "error"
-                )
-
-        with journalist_app.test_client() as app:
-            login_user(app, test_admin)
-            # Submit the same invalid token again
-            with InstrumentedApp(journalist_app) as ins:
-                resp = app.post(
-                    url_for("admin.new_user_two_factor", uid=test_admin["id"]),
-                    data=dict(token=invalid_token),
-                )
-                ins.assert_message_flashed(
-                    "There was a problem verifying the two-factor code. Please try again.", "error"
+                    "There was a problem verifying the two-factor code. Please try again.",
+                    "error",
                 )
 
 
@@ -169,15 +160,6 @@ def test_bad_token_fails_to_verify_on_new_user_two_factor_page(
 
                 assert resp.status_code == 200
                 ins.assert_message_flashed(
-                    "There was a problem verifying the two-factor code. Please try again.", "error"
-                )
-
-        with journalist_app.test_client() as app:
-            login_user(app, test_journo)
-
-            # Submit the same invalid token again
-            with InstrumentedApp(journalist_app) as ins:
-                resp = app.post(url_for("account.new_two_factor"), data=dict(token=invalid_token))
-                ins.assert_message_flashed(
-                    "There was a problem verifying the two-factor code. Please try again.", "error"
+                    "There was a problem verifying the two-factor code. Please try again.",
+                    "error",
                 )

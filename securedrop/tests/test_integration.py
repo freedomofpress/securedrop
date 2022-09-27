@@ -14,7 +14,8 @@ import mock
 from bs4 import BeautifulSoup
 from db import db
 from encryption import EncryptionManager
-from flask import escape, g, session
+from flask import escape
+from journalist_app.sessions import session
 from pyotp import HOTP, TOTP
 from source_app.session_manager import SessionManager
 from store import Storage
@@ -39,7 +40,7 @@ def _login_user(app, user_dict):
         follow_redirects=True,
     )
     assert resp.status_code == 200
-    assert hasattr(g, "user")  # ensure logged in
+    assert session.get_user() is not None
 
 
 def test_submit_message(journalist_app, source_app, test_journo, app_storage):
@@ -306,7 +307,9 @@ def _helper_test_reply(
     resp = app.post(
         "/bulk",
         data=dict(
-            filesystem_id=filesystem_id, action="download", doc_names_selected=checkbox_values
+            filesystem_id=filesystem_id,
+            action="download",
+            doc_names_selected=checkbox_values,
         ),
         follow_redirects=True,
     )
@@ -355,7 +358,11 @@ def _helper_filenames_delete(journalist_app, soup, i):
     # delete
     resp = journalist_app.post(
         "/bulk",
-        data=dict(filesystem_id=filesystem_id, action="delete", doc_names_selected=checkbox_values),
+        data=dict(
+            filesystem_id=filesystem_id,
+            action="delete",
+            doc_names_selected=checkbox_values,
+        ),
         follow_redirects=True,
     )
     assert resp.status_code == 200
@@ -400,7 +407,12 @@ def test_reply_normal(journalist_app, source_app, test_journo, config):
     encryption_mgr = EncryptionManager.get_default()
     with mock.patch.object(encryption_mgr._gpg, "_encoding", "ansi_x3.4_1968"):
         _helper_test_reply(
-            journalist_app, source_app, config, test_journo, "This is a test reply.", True
+            journalist_app,
+            source_app,
+            config,
+            test_journo,
+            "This is a test reply.",
+            True,
         )
 
 
@@ -416,7 +428,12 @@ def test_unicode_reply_with_ansi_env(journalist_app, source_app, test_journo, co
     encryption_mgr = EncryptionManager.get_default()
     with mock.patch.object(encryption_mgr._gpg, "_encoding", "ansi_x3.4_1968"):
         _helper_test_reply(
-            journalist_app, source_app, config, test_journo, "ᚠᛇᚻ᛫ᛒᛦᚦ᛫ᚠᚱᚩᚠᚢᚱ᛫ᚠᛁᚱᚪ᛫ᚷᛖᚻᚹᛦᛚᚳᚢᛗ", True
+            journalist_app,
+            source_app,
+            config,
+            test_journo,
+            "ᚠᛇᚻ᛫ᛒᛦᚦ᛫ᚠᚱᚩᚠᚢᚱ᛫ᚠᛁᚱᚪ᛫ᚷᛖᚻᚹᛦᛚᚳᚢᛗ",
+            True,
         )
 
 
@@ -707,7 +724,9 @@ def test_prevent_document_uploads(source_app, journalist_app, test_admin):
             prevent_document_uploads=True, min_message_length=0
         )
         resp = app.post(
-            "/admin/update-submission-preferences", data=form.data, follow_redirects=True
+            "/admin/update-submission-preferences",
+            data=form.data,
+            follow_redirects=True,
         )
         assert resp.status_code == 200
 
@@ -737,7 +756,9 @@ def test_no_prevent_document_uploads(source_app, journalist_app, test_admin):
             prevent_document_uploads=False, min_message_length=0
         )
         resp = app.post(
-            "/admin/update-submission-preferences", data=form.data, follow_redirects=True
+            "/admin/update-submission-preferences",
+            data=form.data,
+            follow_redirects=True,
         )
         assert resp.status_code == 200
 

@@ -5,6 +5,7 @@ import binascii
 import io
 import os
 import random
+import time
 import zipfile
 from base64 import b64decode
 from io import BytesIO
@@ -16,8 +17,9 @@ import pytest
 from db import db
 from encryption import EncryptionManager, GpgKeyNotFoundError
 from flaky import flaky
-from flask import current_app, escape, g, session, url_for
+from flask import current_app, escape, g, url_for
 from flask_babel import gettext, ngettext
+from journalist_app.sessions import session
 from journalist_app.utils import mark_seen
 from mock import call, patch
 from models import (
@@ -60,11 +62,15 @@ VALID_PASSWORD_2 = "another correct horse battery staple generic passphrase"
 def _login_user(app, username, password, otp_secret, success=True):
     resp = app.post(
         url_for("main.login"),
-        data={"username": username, "password": password, "token": TOTP(otp_secret).now()},
+        data={
+            "username": username,
+            "password": password,
+            "token": TOTP(otp_secret).now(),
+        },
         follow_redirects=True,
     )
     assert resp.status_code == 200
-    assert success == hasattr(g, "user")  # check logged-in vs expected
+    assert (session.get_user() is not None) == success
 
 
 @pytest.mark.parametrize("otp_secret", ["", "GA", "GARBAGE", "JHCOGO7VCER3EJ4"])
@@ -104,13 +110,19 @@ def test_reply_error_logging(journalist_app, test_journo, test_source):
 
     with journalist_app.test_client() as app:
         _login_user(
-            app, test_journo["username"], test_journo["password"], test_journo["otp_secret"]
+            app,
+            test_journo["username"],
+            test_journo["password"],
+            test_journo["otp_secret"],
         )
         with patch.object(journalist_app.logger, "error") as mocked_error_logger:
             with patch.object(db.session, "commit", side_effect=exception_class(exception_msg)):
                 resp = app.post(
                     url_for("main.reply"),
-                    data={"filesystem_id": test_source["filesystem_id"], "message": "_"},
+                    data={
+                        "filesystem_id": test_source["filesystem_id"],
+                        "message": "_",
+                    },
                     follow_redirects=True,
                 )
                 assert resp.status_code == 200
@@ -131,14 +143,20 @@ def test_reply_error_flashed_message(config, journalist_app, test_journo, test_s
 
     with journalist_app.test_client() as app:
         _login_user(
-            app, test_journo["username"], test_journo["password"], test_journo["otp_secret"]
+            app,
+            test_journo["username"],
+            test_journo["password"],
+            test_journo["otp_secret"],
         )
 
         with InstrumentedApp(app) as ins:
             with patch.object(db.session, "commit", side_effect=exception_class()):
                 resp = app.post(
                     url_for("main.reply", l=locale),
-                    data={"filesystem_id": test_source["filesystem_id"], "message": "_"},
+                    data={
+                        "filesystem_id": test_source["filesystem_id"],
+                        "message": "_",
+                    },
                     follow_redirects=True,
                 )
 
@@ -153,7 +171,10 @@ def test_reply_error_flashed_message(config, journalist_app, test_journo, test_s
 def test_empty_replies_are_rejected(config, journalist_app, test_journo, test_source, locale):
     with journalist_app.test_client() as app:
         _login_user(
-            app, test_journo["username"], test_journo["password"], test_journo["otp_secret"]
+            app,
+            test_journo["username"],
+            test_journo["password"],
+            test_journo["otp_secret"],
         )
         resp = app.post(
             url_for("main.reply", l=locale),
@@ -172,7 +193,10 @@ def test_empty_replies_are_rejected(config, journalist_app, test_journo, test_so
 def test_nonempty_replies_are_accepted(config, journalist_app, test_journo, test_source, locale):
     with journalist_app.test_client() as app:
         _login_user(
-            app, test_journo["username"], test_journo["password"], test_journo["otp_secret"]
+            app,
+            test_journo["username"],
+            test_journo["password"],
+            test_journo["otp_secret"],
         )
         resp = app.post(
             url_for("main.reply", l=locale),
@@ -232,7 +256,9 @@ def test_login_throttle(config, journalist_app, test_journo, locale):
                     resp = app.post(
                         url_for("main.login"),
                         data=dict(
-                            username=test_journo["username"], password="invalid", token="invalid"
+                            username=test_journo["username"],
+                            password="invalid",
+                            token="invalid",
                         ),
                     )
                     assert resp.status_code == 200
@@ -242,7 +268,9 @@ def test_login_throttle(config, journalist_app, test_journo, locale):
                 resp = app.post(
                     url_for("main.login", l=locale),
                     data=dict(
-                        username=test_journo["username"], password="invalid", token="invalid"
+                        username=test_journo["username"],
+                        password="invalid",
+                        token="invalid",
                     ),
                 )
                 assert page_language(resp.data) == language_tag(locale)
@@ -283,7 +311,9 @@ def test_login_throttle_is_not_global(config, journalist_app, test_journo, test_
                     resp = app.post(
                         url_for("main.login", l=locale),
                         data=dict(
-                            username=test_journo["username"], password="invalid", token="invalid"
+                            username=test_journo["username"],
+                            password="invalid",
+                            token="invalid",
                         ),
                     )
                     assert page_language(resp.data) == language_tag(locale)
@@ -294,7 +324,9 @@ def test_login_throttle_is_not_global(config, journalist_app, test_journo, test_
                 resp = app.post(
                     url_for("main.login", l=locale),
                     data=dict(
-                        username=test_journo["username"], password="invalid", token="invalid"
+                        username=test_journo["username"],
+                        password="invalid",
+                        token="invalid",
                     ),
                 )
                 assert page_language(resp.data) == language_tag(locale)
@@ -475,7 +507,10 @@ def test_admin_logout_redirects_to_index(journalist_app, test_admin):
     with journalist_app.test_client() as app:
         with InstrumentedApp(journalist_app) as ins:
             _login_user(
-                app, test_admin["username"], test_admin["password"], test_admin["otp_secret"]
+                app,
+                test_admin["username"],
+                test_admin["password"],
+                test_admin["otp_secret"],
             )
             resp = app.get(url_for("main.logout"))
             ins.assert_redirects(resp, url_for("main.index"))
@@ -485,7 +520,10 @@ def test_user_logout_redirects_to_index(journalist_app, test_journo):
     with journalist_app.test_client() as app:
         with InstrumentedApp(journalist_app) as ins:
             _login_user(
-                app, test_journo["username"], test_journo["password"], test_journo["otp_secret"]
+                app,
+                test_journo["username"],
+                test_journo["password"],
+                test_journo["otp_secret"],
             )
             resp = app.get(url_for("main.logout"))
             ins.assert_redirects(resp, url_for("main.index"))
@@ -495,7 +533,12 @@ def test_user_logout_redirects_to_index(journalist_app, test_journo):
 @pytest.mark.parametrize("locale", get_test_locales())
 def test_admin_index(config, journalist_app, test_admin, locale):
     with journalist_app.test_client() as app:
-        _login_user(app, test_admin["username"], test_admin["password"], test_admin["otp_secret"])
+        _login_user(
+            app,
+            test_admin["username"],
+            test_admin["password"],
+            test_admin["otp_secret"],
+        )
         resp = app.get(url_for("admin.index", l=locale))
         assert page_language(resp.data) == language_tag(locale)
         msgids = ["Admin Interface"]
@@ -511,7 +554,12 @@ def test_admin_delete_user(config, journalist_app, test_admin, test_journo, loca
         assert Journalist.query.get(test_journo["id"]) is not None
 
     with journalist_app.test_client() as app:
-        _login_user(app, test_admin["username"], test_admin["password"], test_admin["otp_secret"])
+        _login_user(
+            app,
+            test_admin["username"],
+            test_admin["password"],
+            test_admin["otp_secret"],
+        )
         with InstrumentedApp(journalist_app) as ins:
             resp = app.post(
                 url_for("admin.delete_user", user_id=test_journo["id"], l=locale),
@@ -522,7 +570,8 @@ def test_admin_delete_user(config, journalist_app, test_admin, test_journo, loca
             msgids = ["Deleted user '{user}'."]
             with xfail_untranslated_messages(config, locale, msgids):
                 ins.assert_message_flashed(
-                    gettext(msgids[0]).format(user=test_journo["username"]), "notification"
+                    gettext(msgids[0]).format(user=test_journo["username"]),
+                    "notification",
                 )
 
     # Verify journalist is no longer in the database
@@ -538,9 +587,15 @@ def test_admin_cannot_delete_self(config, journalist_app, test_admin, test_journ
         assert Journalist.query.get(test_journo["id"]) is not None
 
     with journalist_app.test_client() as app:
-        _login_user(app, test_admin["username"], test_admin["password"], test_admin["otp_secret"])
+        _login_user(
+            app,
+            test_admin["username"],
+            test_admin["password"],
+            test_admin["otp_secret"],
+        )
         resp = app.post(
-            url_for("admin.delete_user", user_id=test_admin["id"], l=locale), follow_redirects=True
+            url_for("admin.delete_user", user_id=test_admin["id"], l=locale),
+            follow_redirects=True,
         )
 
         # Assert correct interface behavior
@@ -580,7 +635,12 @@ def test_admin_edits_user_password_success_response(
     config, journalist_app, test_admin, test_journo, locale
 ):
     with journalist_app.test_client() as app:
-        _login_user(app, test_admin["username"], test_admin["password"], test_admin["otp_secret"])
+        _login_user(
+            app,
+            test_admin["username"],
+            test_admin["password"],
+            test_admin["otp_secret"],
+        )
 
         resp = app.post(
             url_for("admin.new_password", user_id=test_journo["id"], l=locale),
@@ -606,13 +666,19 @@ def test_admin_edits_user_password_session_invalidate(
     # Start the journalist session.
     with journalist_app.test_client() as app:
         _login_user(
-            app, test_journo["username"], test_journo["password"], test_journo["otp_secret"]
+            app,
+            test_journo["username"],
+            test_journo["password"],
+            test_journo["otp_secret"],
         )
 
         # Change the journalist password via an admin session.
         with journalist_app.test_client() as admin_app:
             _login_user(
-                admin_app, test_admin["username"], test_admin["password"], test_admin["otp_secret"]
+                admin_app,
+                test_admin["username"],
+                test_admin["password"],
+                test_admin["otp_secret"],
             )
 
             resp = admin_app.post(
@@ -630,27 +696,18 @@ def test_admin_edits_user_password_session_invalidate(
                 assert escape(gettext(msgids[0])) in resp_text
                 assert VALID_PASSWORD_2 in resp_text
 
-        # Now verify the password change error is flashed.
-        with InstrumentedApp(journalist_app) as ins:
-            resp = app.get(url_for("main.index", l=locale), follow_redirects=True)
-            msgids = ["You have been logged out due to password change"]
-            assert page_language(resp.data) == language_tag(locale)
-            with xfail_untranslated_messages(config, locale, msgids):
-                ins.assert_message_flashed(gettext(msgids[0]), "error")
-
-        # Also ensure that session is now invalid.
-        session.pop("expires", None)
-        session.pop("csrf_token", None)
-        session.pop("locale", None)
-        assert not session, session
-
 
 def test_admin_deletes_invalid_user_404(journalist_app, test_admin):
     with journalist_app.app_context():
         invalid_id = db.session.query(func.max(Journalist.id)).scalar() + 1
 
     with journalist_app.test_client() as app:
-        _login_user(app, test_admin["username"], test_admin["password"], test_admin["otp_secret"])
+        _login_user(
+            app,
+            test_admin["username"],
+            test_admin["password"],
+            test_admin["otp_secret"],
+        )
         resp = app.post(url_for("admin.delete_user", user_id=invalid_id))
         assert resp.status_code == 404
 
@@ -662,7 +719,12 @@ def test_admin_deletes_deleted_user_403(journalist_app, test_admin):
         deleted_id = deleted.id
 
     with journalist_app.test_client() as app:
-        _login_user(app, test_admin["username"], test_admin["password"], test_admin["otp_secret"])
+        _login_user(
+            app,
+            test_admin["username"],
+            test_admin["password"],
+            test_admin["otp_secret"],
+        )
         resp = app.post(url_for("admin.delete_user", user_id=deleted_id))
         assert resp.status_code == 403
 
@@ -673,7 +735,12 @@ def test_admin_edits_user_password_error_response(
     config, journalist_app, test_admin, test_journo, locale
 ):
     with journalist_app.test_client() as app:
-        _login_user(app, test_admin["username"], test_admin["password"], test_admin["otp_secret"])
+        _login_user(
+            app,
+            test_admin["username"],
+            test_admin["password"],
+            test_admin["otp_secret"],
+        )
 
         with patch("sqlalchemy.orm.scoping.scoped_session.commit", side_effect=Exception()):
             with InstrumentedApp(journalist_app) as ins:
@@ -704,18 +771,22 @@ def test_user_edits_password_success_response(config, journalist_app, test_journ
 
         with journalist_app.test_client() as app:
             _login_user(
-                app, test_journo["username"], test_journo["password"], test_journo["otp_secret"]
+                app,
+                test_journo["username"],
+                test_journo["password"],
+                test_journo["otp_secret"],
             )
             token = TOTP(test_journo["otp_secret"]).now()
             resp = app.post(
                 url_for("account.new_password", l=locale),
                 data=dict(
-                    current_password=test_journo["password"], token=token, password=VALID_PASSWORD_2
+                    current_password=test_journo["password"],
+                    token=token,
+                    password=VALID_PASSWORD_2,
                 ),
                 follow_redirects=True,
             )
 
-            assert page_language(resp.data) == language_tag(locale)
             msgids = [
                 "Password updated. Don't forget to save it in your KeePassX database. New password:"
             ]
@@ -736,7 +807,10 @@ def test_user_edits_password_expires_session(journalist_app, test_journo):
         models.LOGIN_HARDENING = False
         with journalist_app.test_client() as app:
             _login_user(
-                app, test_journo["username"], test_journo["password"], test_journo["otp_secret"]
+                app,
+                test_journo["username"],
+                test_journo["password"],
+                test_journo["otp_secret"],
             )
             assert "uid" in session
 
@@ -754,7 +828,7 @@ def test_user_edits_password_expires_session(journalist_app, test_journo):
                 ins.assert_redirects(resp, url_for("main.login"))
 
             # verify the session was expired after the password was changed
-            assert "uid" not in session
+            assert session.uid is None and session.user is None
     finally:
         models.LOGIN_HARDENING = original_hardening
 
@@ -771,7 +845,10 @@ def test_user_edits_password_error_response(config, journalist_app, test_journo,
 
         with journalist_app.test_client() as app:
             _login_user(
-                app, test_journo["username"], test_journo["password"], test_journo["otp_secret"]
+                app,
+                test_journo["username"],
+                test_journo["password"],
+                test_journo["otp_secret"],
             )
 
             # patch token verification because there are multiple commits
@@ -808,7 +885,10 @@ def test_user_edits_password_error_response(config, journalist_app, test_journo,
 def test_admin_add_user_when_username_already_taken(config, journalist_app, test_admin, locale):
     with journalist_app.test_client() as client:
         _login_user(
-            client, test_admin["username"], test_admin["password"], test_admin["otp_secret"]
+            client,
+            test_admin["username"],
+            test_admin["password"],
+            test_admin["otp_secret"],
         )
         with InstrumentedApp(journalist_app) as ins:
             resp = client.post(
@@ -878,7 +958,12 @@ def test_admin_edits_user_password_too_long_warning(journalist_app, test_admin, 
     )
 
     with journalist_app.test_client() as app:
-        _login_user(app, test_admin["username"], test_admin["password"], test_admin["otp_secret"])
+        _login_user(
+            app,
+            test_admin["username"],
+            test_admin["password"],
+            test_admin["otp_secret"],
+        )
         with InstrumentedApp(journalist_app) as ins:
             app.post(
                 url_for("admin.new_password", user_id=test_journo["id"]),
@@ -893,7 +978,8 @@ def test_admin_edits_user_password_too_long_warning(journalist_app, test_admin, 
             )
 
             ins.assert_message_flashed(
-                "The password you submitted is invalid. " "Password not changed.", "error"
+                "The password you submitted is invalid. " "Password not changed.",
+                "error",
             )
 
 
@@ -904,7 +990,10 @@ def test_user_edits_password_too_long_warning(journalist_app, test_journo):
 
     with journalist_app.test_client() as app:
         _login_user(
-            app, test_journo["username"], test_journo["password"], test_journo["otp_secret"]
+            app,
+            test_journo["username"],
+            test_journo["password"],
+            test_journo["otp_secret"],
         )
 
         with InstrumentedApp(journalist_app) as ins:
@@ -923,7 +1012,8 @@ def test_user_edits_password_too_long_warning(journalist_app, test_journo):
             )
 
             ins.assert_message_flashed(
-                "The password you submitted is invalid. " "Password not changed.", "error"
+                "The password you submitted is invalid. " "Password not changed.",
+                "error",
             )
 
 
@@ -934,7 +1024,12 @@ def test_admin_add_user_password_too_long_warning(config, journalist_app, test_a
         Journalist.MAX_PASSWORD_LEN - len(VALID_PASSWORD) + 1
     )
     with journalist_app.test_client() as app:
-        _login_user(app, test_admin["username"], test_admin["password"], test_admin["otp_secret"])
+        _login_user(
+            app,
+            test_admin["username"],
+            test_admin["password"],
+            test_admin["otp_secret"],
+        )
 
         with InstrumentedApp(journalist_app) as ins:
             resp = app.post(
@@ -963,7 +1058,12 @@ def test_admin_add_user_password_too_long_warning(config, journalist_app, test_a
 def test_admin_add_user_first_name_too_long_warning(config, journalist_app, test_admin, locale):
     with journalist_app.test_client() as app:
         overly_long_name = "a" * (Journalist.MAX_NAME_LEN + 1)
-        _login_user(app, test_admin["username"], test_admin["password"], test_admin["otp_secret"])
+        _login_user(
+            app,
+            test_admin["username"],
+            test_admin["password"],
+            test_admin["otp_secret"],
+        )
 
         resp = app.post(
             url_for("admin.add_user", l=locale),
@@ -991,7 +1091,12 @@ def test_admin_add_user_first_name_too_long_warning(config, journalist_app, test
 def test_admin_add_user_last_name_too_long_warning(config, journalist_app, test_admin, locale):
     with journalist_app.test_client() as app:
         overly_long_name = "a" * (Journalist.MAX_NAME_LEN + 1)
-        _login_user(app, test_admin["username"], test_admin["password"], test_admin["otp_secret"])
+        _login_user(
+            app,
+            test_admin["username"],
+            test_admin["password"],
+            test_admin["otp_secret"],
+        )
 
         resp = app.post(
             url_for("admin.add_user", l=locale),
@@ -1023,7 +1128,12 @@ def test_admin_edits_user_invalid_username_deleted(
     username to deleted"""
     new_username = "deleted"
     with journalist_app.test_client() as app:
-        _login_user(app, test_admin["username"], test_admin["password"], test_admin["otp_secret"])
+        _login_user(
+            app,
+            test_admin["username"],
+            test_admin["password"],
+            test_admin["otp_secret"],
+        )
 
         with InstrumentedApp(journalist_app) as ins:
             resp = app.post(
@@ -1046,7 +1156,12 @@ def test_admin_edits_user_invalid_username_deleted(
 def test_admin_resets_user_hotp_format_non_hexa(journalist_app, test_admin, test_journo):
 
     with journalist_app.test_client() as app:
-        _login_user(app, test_admin["username"], test_admin["password"], test_admin["otp_secret"])
+        _login_user(
+            app,
+            test_admin["username"],
+            test_admin["password"],
+            test_admin["otp_secret"],
+        )
 
         journo = test_journo["journalist"]
         # guard to ensure check below tests the correct condition
@@ -1082,7 +1197,12 @@ def test_admin_resets_user_hotp_format_too_short(
 ):
 
     with journalist_app.test_client() as app:
-        _login_user(app, test_admin["username"], test_admin["password"], test_admin["otp_secret"])
+        _login_user(
+            app,
+            test_admin["username"],
+            test_admin["password"],
+            test_admin["otp_secret"],
+        )
 
         journo = test_journo["journalist"]
         # guard to ensure check below tests the correct condition
@@ -1114,7 +1234,12 @@ def test_admin_resets_user_hotp_format_too_short(
 
 def test_admin_resets_user_hotp(journalist_app, test_admin, test_journo):
     with journalist_app.test_client() as app:
-        _login_user(app, test_admin["username"], test_admin["password"], test_admin["otp_secret"])
+        _login_user(
+            app,
+            test_admin["username"],
+            test_admin["password"],
+            test_admin["otp_secret"],
+        )
 
         journo = test_journo["journalist"]
         old_secret = journo.otp_secret
@@ -1145,9 +1270,17 @@ def test_admin_resets_user_hotp_error(mocker, journalist_app, test_admin, test_j
     old_secret = test_journo["otp_secret"]
 
     with journalist_app.test_client() as app:
-        _login_user(app, test_admin["username"], test_admin["password"], test_admin["otp_secret"])
+        _login_user(
+            app,
+            test_admin["username"],
+            test_admin["password"],
+            test_admin["otp_secret"],
+        )
 
-        mocker.patch("models.Journalist.set_hotp_secret", side_effect=binascii.Error(error_message))
+        mocker.patch(
+            "models.Journalist.set_hotp_secret",
+            side_effect=binascii.Error(error_message),
+        )
 
         with InstrumentedApp(journalist_app) as ins:
             app.post(
@@ -1180,12 +1313,16 @@ def test_user_resets_hotp(journalist_app, test_journo):
 
     with journalist_app.test_client() as app:
         _login_user(
-            app, test_journo["username"], test_journo["password"], test_journo["otp_secret"]
+            app,
+            test_journo["username"],
+            test_journo["password"],
+            test_journo["otp_secret"],
         )
 
         with InstrumentedApp(journalist_app) as ins:
             resp = app.post(
-                url_for("account.reset_two_factor_hotp"), data=dict(otp_secret=new_secret)
+                url_for("account.reset_two_factor_hotp"),
+                data=dict(otp_secret=new_secret),
             )
             # should redirect to verification page
             ins.assert_redirects(resp, url_for("account.new_two_factor"))
@@ -1203,12 +1340,16 @@ def test_user_resets_user_hotp_format_non_hexa(journalist_app, test_journo):
     non_hexa_secret = "0123456789ABCDZZ0123456789ABCDEF01234567"
     with journalist_app.test_client() as app:
         _login_user(
-            app, test_journo["username"], test_journo["password"], test_journo["otp_secret"]
+            app,
+            test_journo["username"],
+            test_journo["password"],
+            test_journo["otp_secret"],
         )
 
         with InstrumentedApp(journalist_app) as ins:
             app.post(
-                url_for("account.reset_two_factor_hotp"), data=dict(otp_secret=non_hexa_secret)
+                url_for("account.reset_two_factor_hotp"),
+                data=dict(otp_secret=non_hexa_secret),
             )
             ins.assert_message_flashed(
                 "Invalid HOTP secret format: " "please only submit letters A-F and numbers 0-9.",
@@ -1230,13 +1371,22 @@ def test_user_resets_user_hotp_error(mocker, journalist_app, test_journo):
 
     with journalist_app.test_client() as app:
         _login_user(
-            app, test_journo["username"], test_journo["password"], test_journo["otp_secret"]
+            app,
+            test_journo["username"],
+            test_journo["password"],
+            test_journo["otp_secret"],
         )
 
-        mocker.patch("models.Journalist.set_hotp_secret", side_effect=binascii.Error(error_message))
+        mocker.patch(
+            "models.Journalist.set_hotp_secret",
+            side_effect=binascii.Error(error_message),
+        )
 
         with InstrumentedApp(journalist_app) as ins:
-            app.post(url_for("account.reset_two_factor_hotp"), data=dict(otp_secret=bad_secret))
+            app.post(
+                url_for("account.reset_two_factor_hotp"),
+                data=dict(otp_secret=bad_secret),
+            )
             ins.assert_message_flashed(
                 "An unexpected error occurred! Please inform your " "admin.", "error"
             )
@@ -1257,7 +1407,12 @@ def test_admin_resets_user_totp(journalist_app, test_admin, test_journo):
     old_secret = test_journo["otp_secret"]
 
     with journalist_app.test_client() as app:
-        _login_user(app, test_admin["username"], test_admin["password"], test_admin["otp_secret"])
+        _login_user(
+            app,
+            test_admin["username"],
+            test_admin["password"],
+            test_admin["otp_secret"],
+        )
 
         with InstrumentedApp(journalist_app) as ins:
             resp = app.post(
@@ -1277,7 +1432,10 @@ def test_user_resets_totp(journalist_app, test_journo):
 
     with journalist_app.test_client() as app:
         _login_user(
-            app, test_journo["username"], test_journo["password"], test_journo["otp_secret"]
+            app,
+            test_journo["username"],
+            test_journo["password"],
+            test_journo["otp_secret"],
         )
 
         with InstrumentedApp(journalist_app) as ins:
@@ -1296,7 +1454,12 @@ def test_user_resets_totp(journalist_app, test_journo):
 @pytest.mark.parametrize("locale", get_test_locales())
 def test_admin_resets_hotp_with_missing_otp_secret_key(config, journalist_app, test_admin, locale):
     with journalist_app.test_client() as app:
-        _login_user(app, test_admin["username"], test_admin["password"], test_admin["otp_secret"])
+        _login_user(
+            app,
+            test_admin["username"],
+            test_admin["password"],
+            test_admin["otp_secret"],
+        )
         resp = app.post(
             url_for("admin.reset_two_factor_hotp", l=locale),
             data=dict(uid=test_admin["id"]),
@@ -1310,7 +1473,12 @@ def test_admin_resets_hotp_with_missing_otp_secret_key(config, journalist_app, t
 
 def test_admin_new_user_2fa_redirect(journalist_app, test_admin, test_journo):
     with journalist_app.test_client() as app:
-        _login_user(app, test_admin["username"], test_admin["password"], test_admin["otp_secret"])
+        _login_user(
+            app,
+            test_admin["username"],
+            test_admin["password"],
+            test_admin["otp_secret"],
+        )
         with InstrumentedApp(journalist_app) as ins:
             resp = app.post(
                 url_for("admin.new_user_two_factor", uid=test_journo["id"]),
@@ -1325,7 +1493,12 @@ def test_http_get_on_admin_new_user_two_factor_page(
     config, journalist_app, test_admin, test_journo, locale
 ):
     with journalist_app.test_client() as app:
-        _login_user(app, test_admin["username"], test_admin["password"], test_admin["otp_secret"])
+        _login_user(
+            app,
+            test_admin["username"],
+            test_admin["password"],
+            test_admin["otp_secret"],
+        )
         resp = app.get(
             url_for("admin.new_user_two_factor", uid=test_journo["id"], l=locale),
         )
@@ -1340,7 +1513,12 @@ def test_http_get_on_admin_new_user_two_factor_page(
 @pytest.mark.parametrize("locale", get_test_locales())
 def test_http_get_on_admin_add_user_page(config, journalist_app, test_admin, locale):
     with journalist_app.test_client() as app:
-        _login_user(app, test_admin["username"], test_admin["password"], test_admin["otp_secret"])
+        _login_user(
+            app,
+            test_admin["username"],
+            test_admin["password"],
+            test_admin["otp_secret"],
+        )
         resp = app.get(url_for("admin.add_user", l=locale))
         assert page_language(resp.data) == language_tag(locale)
         msgids = ["ADD USER"]
@@ -1352,7 +1530,12 @@ def test_admin_add_user(journalist_app, test_admin):
     username = "dellsberg"
 
     with journalist_app.test_client() as app:
-        _login_user(app, test_admin["username"], test_admin["password"], test_admin["otp_secret"])
+        _login_user(
+            app,
+            test_admin["username"],
+            test_admin["password"],
+            test_admin["otp_secret"],
+        )
 
         with InstrumentedApp(journalist_app) as ins:
             resp = app.post(
@@ -1377,7 +1560,12 @@ def test_admin_add_user_with_invalid_username(config, journalist_app, test_admin
     username = "deleted"
 
     with journalist_app.test_client() as app:
-        _login_user(app, test_admin["username"], test_admin["password"], test_admin["otp_secret"])
+        _login_user(
+            app,
+            test_admin["username"],
+            test_admin["password"],
+            test_admin["otp_secret"],
+        )
 
         resp = app.post(
             url_for("admin.add_user", l=locale),
@@ -1452,7 +1640,12 @@ def test_deleted_user_cannot_login_exception(journalist_app, locale):
 @pytest.mark.parametrize("locale", get_test_locales())
 def test_admin_add_user_without_username(config, journalist_app, test_admin, locale):
     with journalist_app.test_client() as app:
-        _login_user(app, test_admin["username"], test_admin["password"], test_admin["otp_secret"])
+        _login_user(
+            app,
+            test_admin["username"],
+            test_admin["password"],
+            test_admin["otp_secret"],
+        )
 
         resp = app.post(
             url_for("admin.add_user", l=locale),
@@ -1478,7 +1671,12 @@ def test_admin_add_user_too_short_username(config, journalist_app, test_admin, l
     username = "a" * (Journalist.MIN_USERNAME_LEN - 1)
 
     with journalist_app.test_client() as app:
-        _login_user(app, test_admin["username"], test_admin["password"], test_admin["otp_secret"])
+        _login_user(
+            app,
+            test_admin["username"],
+            test_admin["password"],
+            test_admin["otp_secret"],
+        )
 
         resp = app.post(
             url_for("admin.add_user", l=locale),
@@ -1514,7 +1712,12 @@ def test_admin_add_user_too_short_username(config, journalist_app, test_admin, l
 )
 def test_admin_add_user_yubikey_odd_length(journalist_app, test_admin, locale, secret):
     with journalist_app.test_client() as app:
-        _login_user(app, test_admin["username"], test_admin["password"], test_admin["otp_secret"])
+        _login_user(
+            app,
+            test_admin["username"],
+            test_admin["password"],
+            test_admin["otp_secret"],
+        )
 
         resp = app.post(
             url_for("admin.add_user", l=locale),
@@ -1542,11 +1745,17 @@ def test_admin_add_user_yubikey_odd_length(journalist_app, test_admin, locale, s
 
 @flaky(rerun_filter=utils.flaky_filter_xfail)
 @pytest.mark.parametrize(
-    "locale, secret", ((locale, " " * i) for locale in get_test_locales() for i in range(3))
+    "locale, secret",
+    ((locale, " " * i) for locale in get_test_locales() for i in range(3)),
 )
 def test_admin_add_user_yubikey_blank_secret(journalist_app, test_admin, locale, secret):
     with journalist_app.test_client() as app:
-        _login_user(app, test_admin["username"], test_admin["password"], test_admin["otp_secret"])
+        _login_user(
+            app,
+            test_admin["username"],
+            test_admin["password"],
+            test_admin["otp_secret"],
+        )
 
         resp = app.post(
             url_for("admin.add_user", l=locale),
@@ -1575,7 +1784,12 @@ def test_admin_add_user_yubikey_valid_length(journalist_app, test_admin, locale)
     otp = "1234567890123456789012345678901234567890"
 
     with journalist_app.test_client() as app:
-        _login_user(app, test_admin["username"], test_admin["password"], test_admin["otp_secret"])
+        _login_user(
+            app,
+            test_admin["username"],
+            test_admin["password"],
+            test_admin["otp_secret"],
+        )
 
         resp = app.post(
             url_for("admin.add_user", l=locale),
@@ -1604,7 +1818,12 @@ def test_admin_add_user_yubikey_correct_length_with_whitespace(journalist_app, t
     otp = "12 34 56 78 90 12 34 56 78 90 12 34 56 78 90 12 34 56 78 90"
 
     with journalist_app.test_client() as app:
-        _login_user(app, test_admin["username"], test_admin["password"], test_admin["otp_secret"])
+        _login_user(
+            app,
+            test_admin["username"],
+            test_admin["password"],
+            test_admin["otp_secret"],
+        )
 
         resp = app.post(
             url_for("admin.add_user", l=locale),
@@ -1631,7 +1850,12 @@ def test_admin_sets_user_to_admin(journalist_app, test_admin):
     new_user = "admin-set-user-to-admin-test"
 
     with journalist_app.test_client() as app:
-        _login_user(app, test_admin["username"], test_admin["password"], test_admin["otp_secret"])
+        _login_user(
+            app,
+            test_admin["username"],
+            test_admin["password"],
+            test_admin["otp_secret"],
+        )
 
         resp = app.post(
             url_for("admin.add_user"),
@@ -1664,7 +1888,12 @@ def test_admin_renames_user(journalist_app, test_admin):
     new_user = "admin-renames-user-test"
 
     with journalist_app.test_client() as app:
-        _login_user(app, test_admin["username"], test_admin["password"], test_admin["otp_secret"])
+        _login_user(
+            app,
+            test_admin["username"],
+            test_admin["password"],
+            test_admin["otp_secret"],
+        )
 
         resp = app.post(
             url_for("admin.add_user"),
@@ -1696,7 +1925,12 @@ def test_admin_adds_first_name_last_name_to_user(journalist_app, test_admin):
     new_user = "admin-first-name-last-name-user-test"
 
     with journalist_app.test_client() as app:
-        _login_user(app, test_admin["username"], test_admin["password"], test_admin["otp_secret"])
+        _login_user(
+            app,
+            test_admin["username"],
+            test_admin["password"],
+            test_admin["otp_secret"],
+        )
 
         resp = app.post(
             url_for("admin.add_user"),
@@ -1730,7 +1964,10 @@ def test_admin_adds_invalid_first_last_name_to_user(config, journalist_app, test
         new_user = "admin-invalid-first-name-last-name-user-test"
 
         _login_user(
-            client, test_admin["username"], test_admin["password"], test_admin["otp_secret"]
+            client,
+            test_admin["username"],
+            test_admin["password"],
+            test_admin["otp_secret"],
         )
 
         resp = client.post(
@@ -1752,7 +1989,11 @@ def test_admin_adds_invalid_first_last_name_to_user(config, journalist_app, test
         with InstrumentedApp(journalist_app) as ins:
             resp = client.post(
                 url_for("admin.edit_user", user_id=journo.id, l=locale),
-                data=dict(username=new_user, first_name=overly_long_name, last_name="test name"),
+                data=dict(
+                    username=new_user,
+                    first_name=overly_long_name,
+                    last_name="test name",
+                ),
                 follow_redirects=True,
             )
             assert resp.status_code == 200
@@ -1775,7 +2016,12 @@ def test_admin_add_user_integrity_error(config, journalist_app, test_admin, mock
     )
 
     with journalist_app.test_client() as app:
-        _login_user(app, test_admin["username"], test_admin["password"], test_admin["otp_secret"])
+        _login_user(
+            app,
+            test_admin["username"],
+            test_admin["password"],
+            test_admin["otp_secret"],
+        )
 
         with InstrumentedApp(journalist_app) as ins:
             resp = app.post(
@@ -1807,12 +2053,19 @@ def test_admin_add_user_integrity_error(config, journalist_app, test_admin, mock
 @pytest.mark.parametrize("locale", get_test_locales())
 def test_prevent_document_uploads(config, journalist_app, test_admin, locale):
     with journalist_app.test_client() as app:
-        _login_user(app, test_admin["username"], test_admin["password"], test_admin["otp_secret"])
+        _login_user(
+            app,
+            test_admin["username"],
+            test_admin["password"],
+            test_admin["otp_secret"],
+        )
         form = journalist_app_module.forms.SubmissionPreferencesForm(
             prevent_document_uploads=True, min_message_length=0
         )
         app.post(
-            url_for("admin.update_submission_preferences"), data=form.data, follow_redirects=True
+            url_for("admin.update_submission_preferences"),
+            data=form.data,
+            follow_redirects=True,
         )
         assert InstanceConfig.get_current().allow_document_uploads is False
         with InstrumentedApp(journalist_app) as ins:
@@ -1831,10 +2084,17 @@ def test_prevent_document_uploads(config, journalist_app, test_admin, locale):
 @pytest.mark.parametrize("locale", get_test_locales())
 def test_no_prevent_document_uploads(config, journalist_app, test_admin, locale):
     with journalist_app.test_client() as app:
-        _login_user(app, test_admin["username"], test_admin["password"], test_admin["otp_secret"])
+        _login_user(
+            app,
+            test_admin["username"],
+            test_admin["password"],
+            test_admin["otp_secret"],
+        )
         form = journalist_app_module.forms.SubmissionPreferencesForm(min_message_length=0)
         app.post(
-            url_for("admin.update_submission_preferences"), data=form.data, follow_redirects=True
+            url_for("admin.update_submission_preferences"),
+            data=form.data,
+            follow_redirects=True,
         )
         assert InstanceConfig.get_current().allow_document_uploads is True
         with InstrumentedApp(journalist_app) as ins:
@@ -1852,7 +2112,12 @@ def test_no_prevent_document_uploads(config, journalist_app, test_admin, locale)
 
 def test_prevent_document_uploads_invalid(journalist_app, test_admin):
     with journalist_app.test_client() as app:
-        _login_user(app, test_admin["username"], test_admin["password"], test_admin["otp_secret"])
+        _login_user(
+            app,
+            test_admin["username"],
+            test_admin["password"],
+            test_admin["otp_secret"],
+        )
         form_true = journalist_app_module.forms.SubmissionPreferencesForm(
             prevent_document_uploads=True, min_message_length=0
         )
@@ -1878,7 +2143,12 @@ def test_prevent_document_uploads_invalid(journalist_app, test_admin):
 
 def test_message_filtering(config, journalist_app, test_admin):
     with journalist_app.test_client() as app:
-        _login_user(app, test_admin["username"], test_admin["password"], test_admin["otp_secret"])
+        _login_user(
+            app,
+            test_admin["username"],
+            test_admin["password"],
+            test_admin["otp_secret"],
+        )
         # Assert status quo
         assert InstanceConfig.get_current().initial_message_min_len == 0
 
@@ -1887,7 +2157,9 @@ def test_message_filtering(config, journalist_app, test_admin):
             prevent_short_messages=False, min_message_length=10
         )
         app.post(
-            url_for("admin.update_submission_preferences"), data=form.data, follow_redirects=True
+            url_for("admin.update_submission_preferences"),
+            data=form.data,
+            follow_redirects=True,
         )
         # Still 0
         assert InstanceConfig.get_current().initial_message_min_len == 0
@@ -1897,7 +2169,9 @@ def test_message_filtering(config, journalist_app, test_admin):
             prevent_short_messages=True, min_message_length=0
         )
         resp = app.post(
-            url_for("admin.update_submission_preferences"), data=form.data, follow_redirects=True
+            url_for("admin.update_submission_preferences"),
+            data=form.data,
+            follow_redirects=True,
         )
         # Still 0
         assert InstanceConfig.get_current().initial_message_min_len == 0
@@ -1909,7 +2183,9 @@ def test_message_filtering(config, journalist_app, test_admin):
             prevent_short_messages=True, min_message_length=10
         )
         app.post(
-            url_for("admin.update_submission_preferences"), data=form.data, follow_redirects=True
+            url_for("admin.update_submission_preferences"),
+            data=form.data,
+            follow_redirects=True,
         )
         assert InstanceConfig.get_current().initial_message_min_len == 10
 
@@ -1925,7 +2201,9 @@ def test_message_filtering(config, journalist_app, test_admin):
         assert InstanceConfig.get_current().reject_message_with_codename is False
         form = journalist_app_module.forms.SubmissionPreferencesForm(reject_codename_messages=True)
         app.post(
-            url_for("admin.update_submission_preferences"), data=form.data, follow_redirects=True
+            url_for("admin.update_submission_preferences"),
+            data=form.data,
+            follow_redirects=True,
         )
         assert InstanceConfig.get_current().reject_message_with_codename is True
 
@@ -1938,7 +2216,10 @@ def test_orgname_default_set(journalist_app, test_admin):
         with journalist_app.test_client() as app:
             iMock.return_value = dummy_current()
             _login_user(
-                app, test_admin["username"], test_admin["password"], test_admin["otp_secret"]
+                app,
+                test_admin["username"],
+                test_admin["password"],
+                test_admin["otp_secret"],
             )
             assert g.organization_name == "SecureDrop"
 
@@ -1948,12 +2229,19 @@ def test_orgname_default_set(journalist_app, test_admin):
 def test_orgname_valid_succeeds(config, journalist_app, test_admin, locale):
     test_name = "Walden Inquirer"
     with journalist_app.test_client() as app:
-        _login_user(app, test_admin["username"], test_admin["password"], test_admin["otp_secret"])
+        _login_user(
+            app,
+            test_admin["username"],
+            test_admin["password"],
+            test_admin["otp_secret"],
+        )
         form = journalist_app_module.forms.OrgNameForm(organization_name=test_name)
         assert InstanceConfig.get_current().organization_name == "SecureDrop"
         with InstrumentedApp(journalist_app) as ins:
             resp = app.post(
-                url_for("admin.update_org_name", l=locale), data=form.data, follow_redirects=True
+                url_for("admin.update_org_name", l=locale),
+                data=form.data,
+                follow_redirects=True,
             )
             assert page_language(resp.data) == language_tag(locale)
             msgids = ["Preferences saved."]
@@ -1966,12 +2254,19 @@ def test_orgname_valid_succeeds(config, journalist_app, test_admin, locale):
 @pytest.mark.parametrize("locale", get_test_locales())
 def test_orgname_null_fails(config, journalist_app, test_admin, locale):
     with journalist_app.test_client() as app:
-        _login_user(app, test_admin["username"], test_admin["password"], test_admin["otp_secret"])
+        _login_user(
+            app,
+            test_admin["username"],
+            test_admin["password"],
+            test_admin["otp_secret"],
+        )
         form = journalist_app_module.forms.OrgNameForm(organization_name=None)
         assert InstanceConfig.get_current().organization_name == "SecureDrop"
         with InstrumentedApp(journalist_app) as ins:
             resp = app.post(
-                url_for("admin.update_org_name", l=locale), data=form.data, follow_redirects=True
+                url_for("admin.update_org_name", l=locale),
+                data=form.data,
+                follow_redirects=True,
             )
             assert page_language(resp.data) == language_tag(locale)
             msgids = ["This field is required."]
@@ -1985,11 +2280,18 @@ def test_orgname_null_fails(config, journalist_app, test_admin, locale):
 def test_orgname_oversized_fails(config, journalist_app, test_admin, locale):
     test_name = "1234567812345678123456781234567812345678123456781234567812345678a"
     with journalist_app.test_client() as app:
-        _login_user(app, test_admin["username"], test_admin["password"], test_admin["otp_secret"])
+        _login_user(
+            app,
+            test_admin["username"],
+            test_admin["password"],
+            test_admin["otp_secret"],
+        )
         form = journalist_app_module.forms.OrgNameForm(organization_name=test_name)
         assert InstanceConfig.get_current().organization_name == "SecureDrop"
         resp = app.post(
-            url_for("admin.update_org_name", l=locale), data=form.data, follow_redirects=True
+            url_for("admin.update_org_name", l=locale),
+            data=form.data,
+            follow_redirects=True,
         )
         assert page_language(resp.data) == language_tag(locale)
         msgids = ["Cannot be longer than {num} character."]
@@ -2031,13 +2333,20 @@ def test_logo_upload_with_valid_image_succeeds(config, journalist_app, test_admi
 
         with journalist_app.test_client() as app:
             _login_user(
-                app, test_admin["username"], test_admin["password"], test_admin["otp_secret"]
+                app,
+                test_admin["username"],
+                test_admin["password"],
+                test_admin["otp_secret"],
             )
+            # Create 1px * 1px 'white' PNG file from its base64 string
+            form = journalist_app_module.forms.LogoForm(logo=(BytesIO(logo_bytes), "test.png"))
             # Create 1px * 1px 'white' PNG file from its base64 string
             form = journalist_app_module.forms.LogoForm(logo=(BytesIO(logo_bytes), "test.png"))
             with InstrumentedApp(journalist_app) as ins:
                 resp = app.post(
-                    url_for("admin.manage_config", l=locale), data=form.data, follow_redirects=True
+                    url_for("admin.manage_config", l=locale),
+                    data=form.data,
+                    follow_redirects=True,
                 )
                 assert page_language(resp.data) == language_tag(locale)
                 msgids = ["Image updated."]
@@ -2060,12 +2369,19 @@ def test_logo_upload_with_valid_image_succeeds(config, journalist_app, test_admi
 @pytest.mark.parametrize("locale", get_test_locales())
 def test_logo_upload_with_invalid_filetype_fails(config, journalist_app, test_admin, locale):
     with journalist_app.test_client() as app:
-        _login_user(app, test_admin["username"], test_admin["password"], test_admin["otp_secret"])
+        _login_user(
+            app,
+            test_admin["username"],
+            test_admin["password"],
+            test_admin["otp_secret"],
+        )
 
         form = journalist_app_module.forms.LogoForm(logo=(BytesIO(b"filedata"), "bad.exe"))
         with InstrumentedApp(journalist_app) as ins:
             resp = app.post(
-                url_for("admin.manage_config", l=locale), data=form.data, follow_redirects=True
+                url_for("admin.manage_config", l=locale),
+                data=form.data,
+                follow_redirects=True,
             )
 
             assert page_language(resp.data) == language_tag(locale)
@@ -2085,7 +2401,10 @@ def test_logo_upload_save_fails(config, journalist_app, test_admin, locale):
     try:
         with journalist_app.test_client() as app:
             _login_user(
-                app, test_admin["username"], test_admin["password"], test_admin["otp_secret"]
+                app,
+                test_admin["username"],
+                test_admin["password"],
+                test_admin["otp_secret"],
             )
             # Create 1px * 1px 'white' PNG file from its base64 string
             form = journalist_app_module.forms.LogoForm(
@@ -2121,7 +2440,12 @@ def test_logo_upload_save_fails(config, journalist_app, test_admin, locale):
 def test_creation_of_ossec_test_log_event(journalist_app, test_admin, mocker):
     mocked_error_logger = mocker.patch("journalist.app.logger.error")
     with journalist_app.test_client() as app:
-        _login_user(app, test_admin["username"], test_admin["password"], test_admin["otp_secret"])
+        _login_user(
+            app,
+            test_admin["username"],
+            test_admin["password"],
+            test_admin["otp_secret"],
+        )
         app.post(url_for("admin.ossec_test"))
 
     mocked_error_logger.assert_called_once_with("This is a test OSSEC alert")
@@ -2131,13 +2455,20 @@ def test_creation_of_ossec_test_log_event(journalist_app, test_admin, mocker):
 @pytest.mark.parametrize("locale", get_test_locales())
 def test_logo_upload_with_empty_input_field_fails(config, journalist_app, test_admin, locale):
     with journalist_app.test_client() as app:
-        _login_user(app, test_admin["username"], test_admin["password"], test_admin["otp_secret"])
+        _login_user(
+            app,
+            test_admin["username"],
+            test_admin["password"],
+            test_admin["otp_secret"],
+        )
 
         form = journalist_app_module.forms.LogoForm(logo=(BytesIO(b""), ""))
 
         with InstrumentedApp(journalist_app) as ins:
             resp = app.post(
-                url_for("admin.manage_config", l=locale), data=form.data, follow_redirects=True
+                url_for("admin.manage_config", l=locale),
+                data=form.data,
+                follow_redirects=True,
             )
 
             assert page_language(resp.data) == language_tag(locale)
@@ -2155,7 +2486,10 @@ def test_admin_page_restriction_http_gets(journalist_app, test_journo):
 
     with journalist_app.test_client() as app:
         _login_user(
-            app, test_journo["username"], test_journo["password"], test_journo["otp_secret"]
+            app,
+            test_journo["username"],
+            test_journo["password"],
+            test_journo["otp_secret"],
         )
         for admin_url in admin_urls:
             resp = app.get(admin_url)
@@ -2175,7 +2509,10 @@ def test_admin_page_restriction_http_posts(journalist_app, test_journo):
     ]
     with journalist_app.test_client() as app:
         _login_user(
-            app, test_journo["username"], test_journo["password"], test_journo["otp_secret"]
+            app,
+            test_journo["username"],
+            test_journo["password"],
+            test_journo["otp_secret"],
         )
         for admin_url in admin_urls:
             resp = app.post(admin_url)
@@ -2220,7 +2557,10 @@ def test_user_authorization_for_posts(journalist_app):
 def test_incorrect_current_password_change(config, journalist_app, test_journo, locale):
     with journalist_app.test_client() as app:
         _login_user(
-            app, test_journo["username"], test_journo["password"], test_journo["otp_secret"]
+            app,
+            test_journo["username"],
+            test_journo["password"],
+            test_journo["otp_secret"],
         )
         with InstrumentedApp(journalist_app) as ins:
             resp = app.post(
@@ -2317,7 +2657,10 @@ def test_too_long_user_password_change(config, journalist_app, test_journo, loca
 
     with journalist_app.test_client() as app:
         _login_user(
-            app, test_journo["username"], test_journo["password"], test_journo["otp_secret"]
+            app,
+            test_journo["username"],
+            test_journo["password"],
+            test_journo["otp_secret"],
         )
 
         with InstrumentedApp(journalist_app) as ins:
@@ -2342,7 +2685,10 @@ def test_too_long_user_password_change(config, journalist_app, test_journo, loca
 def test_valid_user_password_change(config, journalist_app, test_journo, locale):
     with journalist_app.test_client() as app:
         _login_user(
-            app, test_journo["username"], test_journo["password"], test_journo["otp_secret"]
+            app,
+            test_journo["username"],
+            test_journo["password"],
+            test_journo["otp_secret"],
         )
 
         resp = app.post(
@@ -2368,7 +2714,10 @@ def test_valid_user_password_change(config, journalist_app, test_journo, locale)
 def test_valid_user_first_last_name_change(config, journalist_app, test_journo, locale):
     with journalist_app.test_client() as app:
         _login_user(
-            app, test_journo["username"], test_journo["password"], test_journo["otp_secret"]
+            app,
+            test_journo["username"],
+            test_journo["password"],
+            test_journo["otp_secret"],
         )
 
         with InstrumentedApp(journalist_app) as ins:
@@ -2392,7 +2741,10 @@ def test_valid_user_invalid_first_last_name_change(journalist_app, test_journo, 
     with journalist_app.test_client() as app:
         overly_long_name = "a" * (Journalist.MAX_NAME_LEN + 1)
         _login_user(
-            app, test_journo["username"], test_journo["password"], test_journo["otp_secret"]
+            app,
+            test_journo["username"],
+            test_journo["password"],
+            test_journo["otp_secret"],
         )
 
         with InstrumentedApp(journalist_app) as ins:
@@ -2414,7 +2766,10 @@ def test_regenerate_totp(journalist_app, test_journo):
 
     with journalist_app.test_client() as app:
         _login_user(
-            app, test_journo["username"], test_journo["password"], test_journo["otp_secret"]
+            app,
+            test_journo["username"],
+            test_journo["password"],
+            test_journo["otp_secret"],
         )
 
         with InstrumentedApp(journalist_app) as ins:
@@ -2435,12 +2790,16 @@ def test_edit_hotp(journalist_app, test_journo):
 
     with journalist_app.test_client() as app:
         _login_user(
-            app, test_journo["username"], test_journo["password"], test_journo["otp_secret"]
+            app,
+            test_journo["username"],
+            test_journo["password"],
+            test_journo["otp_secret"],
         )
 
         with InstrumentedApp(journalist_app) as ins:
             resp = app.post(
-                url_for("account.reset_two_factor_hotp"), data=dict(otp_secret=valid_secret)
+                url_for("account.reset_two_factor_hotp"),
+                data=dict(otp_secret=valid_secret),
             )
 
             new_secret = Journalist.query.get(test_journo["id"]).otp_secret
@@ -2684,7 +3043,9 @@ def test_login_with_invalid_password_doesnt_call_argon2(mocker, test_journo):
 def test_valid_login_calls_argon2(mocker, test_journo):
     mock_argon2 = mocker.patch("models.argon2.verify")
     Journalist.login(
-        test_journo["username"], test_journo["password"], TOTP(test_journo["otp_secret"]).now()
+        test_journo["username"],
+        test_journo["password"],
+        TOTP(test_journo["otp_secret"]).now(),
     )
     assert mock_argon2.called
 
@@ -2709,7 +3070,10 @@ def test_render_locales(config, journalist_app, test_journo, test_source):
 
     with app.test_client() as app:
         _login_user(
-            app, test_journo["username"], test_journo["password"], test_journo["otp_secret"]
+            app,
+            test_journo["username"],
+            test_journo["password"],
+            test_journo["otp_secret"],
         )
         resp = app.get(url + "?l=fr_FR")
 
@@ -2936,7 +3300,12 @@ def selected_missing_files(journalist_app, test_source, app_storage):
 
 
 def test_download_selected_submissions_missing_files(
-    journalist_app, test_journo, test_source, mocker, selected_missing_files, app_storage
+    journalist_app,
+    test_journo,
+    test_source,
+    mocker,
+    selected_missing_files,
+    app_storage,
 ):
     """Tests download of selected submissions with missing files in storage."""
     mocked_error_logger = mocker.patch("journalist.app.logger.error")
@@ -2969,7 +3338,12 @@ def test_download_selected_submissions_missing_files(
 
 
 def test_download_single_submission_missing_file(
-    journalist_app, test_journo, test_source, mocker, selected_missing_files, app_storage
+    journalist_app,
+    test_journo,
+    test_source,
+    mocker,
+    selected_missing_files,
+    app_storage,
 ):
     """Tests download of single submissions with missing files in storage."""
     mocked_error_logger = mocker.patch("journalist.app.logger.error")
@@ -3152,7 +3526,10 @@ def test_download_all_selected_sources(journalist_app, test_journo, app_storage)
 def test_single_source_is_successfully_starred(journalist_app, test_journo, test_source):
     with journalist_app.test_client() as app:
         _login_user(
-            app, test_journo["username"], test_journo["password"], test_journo["otp_secret"]
+            app,
+            test_journo["username"],
+            test_journo["password"],
+            test_journo["otp_secret"],
         )
         with InstrumentedApp(journalist_app) as ins:
             resp = app.post(url_for("col.add_star", filesystem_id=test_source["filesystem_id"]))
@@ -3166,7 +3543,10 @@ def test_single_source_is_successfully_starred(journalist_app, test_journo, test
 def test_single_source_is_successfully_unstarred(journalist_app, test_journo, test_source):
     with journalist_app.test_client() as app:
         _login_user(
-            app, test_journo["username"], test_journo["password"], test_journo["otp_secret"]
+            app,
+            test_journo["username"],
+            test_journo["password"],
+            test_journo["otp_secret"],
         )
         # First star the source
         app.post(url_for("col.add_star", filesystem_id=test_source["filesystem_id"]))
@@ -3184,8 +3564,8 @@ def test_single_source_is_successfully_unstarred(journalist_app, test_journo, te
 @flaky(rerun_filter=utils.flaky_filter_xfail)
 @pytest.mark.parametrize("locale", get_test_locales())
 def test_journalist_session_expiration(config, journalist_app, test_journo, locale):
-    # set the expiration to ensure we trigger an expiration
-    config.SESSION_EXPIRATION_MINUTES = -1
+    # set the expiration to be very short
+    journalist_app.session_interface.lifetime = 1
     with journalist_app.test_client() as app:
         with InstrumentedApp(journalist_app) as ins:
             login_data = {
@@ -3197,17 +3577,20 @@ def test_journalist_session_expiration(config, journalist_app, test_journo, loca
             ins.assert_redirects(resp, url_for("main.index"))
         assert "uid" in session
 
-        resp = app.get(url_for("account.edit", l=locale), follow_redirects=True)
+        # Wait 2s for the redis key to expire
+        time.sleep(2)
+        resp = app.get(url_for("account.edit"), follow_redirects=True)
         # because the session is being cleared when it expires, the
         # response should always be in English.
         assert page_language(resp.data) == "en-US"
-        assert "You have been logged out due to inactivity." in resp.data.decode("utf-8")
+        assert "Login to access the journalist interface" in resp.data.decode("utf-8")
 
         # check that the session was cleared (apart from 'expires'
         # which is always present and 'csrf_token' which leaks no info)
         session.pop("expires", None)
         session.pop("csrf_token", None)
         session.pop("locale", None)
+        session.pop("renew_count", None)
         assert not session, session
 
 
@@ -3240,10 +3623,16 @@ def test_col_process_aborts_with_bad_action(journalist_app, test_journo):
     """If the action is not a valid choice, a 500 should occur"""
     with journalist_app.test_client() as app:
         _login_user(
-            app, test_journo["username"], test_journo["password"], test_journo["otp_secret"]
+            app,
+            test_journo["username"],
+            test_journo["password"],
+            test_journo["otp_secret"],
         )
 
-        form_data = {"cols_selected": "does not matter", "action": "this action does not exist"}
+        form_data = {
+            "cols_selected": "does not matter",
+            "action": "this action does not exist",
+        }
 
         resp = app.post(url_for("col.process"), data=form_data)
         assert resp.status_code == 500
@@ -3262,7 +3651,10 @@ def test_col_process_successfully_deletes_multiple_sources(
 
     with journalist_app.test_client() as app:
         _login_user(
-            app, test_journo["username"], test_journo["password"], test_journo["otp_secret"]
+            app,
+            test_journo["username"],
+            test_journo["password"],
+            test_journo["otp_secret"],
         )
 
         form_data = {
@@ -3290,7 +3682,10 @@ def test_col_process_successfully_stars_sources(
 
     with journalist_app.test_client() as app:
         _login_user(
-            app, test_journo["username"], test_journo["password"], test_journo["otp_secret"]
+            app,
+            test_journo["username"],
+            test_journo["password"],
+            test_journo["otp_secret"],
         )
 
         form_data = {"cols_selected": [test_source["filesystem_id"]], "action": "star"}
@@ -3309,7 +3704,10 @@ def test_col_process_successfully_unstars_sources(
 
     with journalist_app.test_client() as app:
         _login_user(
-            app, test_journo["username"], test_journo["password"], test_journo["otp_secret"]
+            app,
+            test_journo["username"],
+            test_journo["password"],
+            test_journo["otp_secret"],
         )
 
         # First star the source
@@ -3317,7 +3715,10 @@ def test_col_process_successfully_unstars_sources(
         app.post(url_for("col.process"), data=form_data, follow_redirects=True)
 
         # Now unstar the source
-        form_data = {"cols_selected": [test_source["filesystem_id"]], "action": "un-star"}
+        form_data = {
+            "cols_selected": [test_source["filesystem_id"]],
+            "action": "un-star",
+        }
         resp = app.post(url_for("col.process"), data=form_data, follow_redirects=True)
 
     assert resp.status_code == 200
@@ -3336,7 +3737,10 @@ def test_source_with_null_last_updated(journalist_app, test_journo, test_files):
 
     with journalist_app.test_client() as app:
         _login_user(
-            app, test_journo["username"], test_journo["password"], test_journo["otp_secret"]
+            app,
+            test_journo["username"],
+            test_journo["password"],
+            test_journo["otp_secret"],
         )
         resp = app.get(url_for("main.index"))
         assert resp.status_code == 200

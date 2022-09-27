@@ -2,26 +2,15 @@
 import binascii
 import os
 from datetime import datetime, timezone
-from typing import Any, List, Optional, Union
+from typing import List, Optional, Union
 
 import flask
 import werkzeug
 from db import db
 from encryption import EncryptionManager
-from flask import (
-    Markup,
-    abort,
-    current_app,
-    escape,
-    flash,
-    g,
-    redirect,
-    request,
-    send_file,
-    sessions,
-    url_for,
-)
+from flask import Markup, abort, current_app, escape, flash, redirect, send_file, url_for
 from flask_babel import gettext, ngettext
+from journalist_app.sessions import session
 from models import (
     HOTP_SECRET_LENGTH,
     BadTokenException,
@@ -33,7 +22,6 @@ from models import (
     LoginThrottledException,
     PasswordError,
     Reply,
-    RevokedToken,
     SeenFile,
     SeenMessage,
     SeenReply,
@@ -47,24 +35,16 @@ from sqlalchemy.exc import IntegrityError
 from store import Storage, add_checksum_for_file
 
 
-def logged_in() -> bool:
-    # When a user is logged in, we push their user ID (database primary key)
-    # into the session. setup_g checks for this value, and if it finds it,
-    # stores a reference to the user's Journalist object in g.
-    #
-    # This check is good for the edge case where a user is deleted but still
-    # has an active session - we will not authenticate a user if they are not
-    # in the database.
-    return bool(g.get("user", None))
-
-
 def commit_account_changes(user: Journalist) -> None:
     if db.session.is_modified(user):
         try:
             db.session.add(user)
             db.session.commit()
         except Exception as e:
-            flash(gettext("An unexpected error occurred! Please " "inform your admin."), "error")
+            flash(
+                gettext("An unexpected error occurred! Please " "inform your admin."),
+                "error",
+            )
             current_app.logger.error("Account changes for '{}' failed: {}".format(user, e))
             db.session.rollback()
         else:
@@ -177,7 +157,10 @@ def validate_hotp_secret(user: Journalist, otp_secret: str) -> bool:
             )
             return False
         else:
-            flash(gettext("An unexpected error occurred! " "Please inform your admin."), "error")
+            flash(
+                gettext("An unexpected error occurred! " "Please inform your admin."),
+                "error",
+            )
             current_app.logger.error(
                 "set_hotp_secret '{}' (id {}) failed: {}".format(otp_secret, user.id, e)
             )
@@ -247,7 +230,7 @@ def download(
         zip_basename, datetime.now(timezone.utc).strftime("%Y-%m-%d--%H-%M-%S")
     )
 
-    mark_seen(submissions, g.user)
+    mark_seen(submissions, session.get_user())
 
     return send_file(
         zf.name,
@@ -451,12 +434,17 @@ def set_name(user: Journalist, first_name: Optional[str], last_name: Optional[st
         flash(gettext("Name not updated: {message}").format(message=e), "error")
 
 
-def set_diceware_password(user: Journalist, password: Optional[str]) -> bool:
+def set_diceware_password(
+    user: Journalist, password: Optional[str], admin: Optional[bool] = False
+) -> bool:
     try:
         # nosemgrep: python.django.security.audit.unvalidated-password.unvalidated-password
         user.set_password(password)
     except PasswordError:
-        flash(gettext("The password you submitted is invalid. Password not changed."), "error")
+        flash(
+            gettext("The password you submitted is invalid. Password not changed."),
+            "error",
+        )
         return False
 
     try:
@@ -474,20 +462,39 @@ def set_diceware_password(user: Journalist, password: Optional[str]) -> bool:
         return False
 
     # using Markup so the HTML isn't escaped
-    flash(
-        Markup(
-            "<p>{message} <span><code>{password}</code></span></p>".format(
-                message=Markup.escape(
-                    gettext(
-                        "Password updated. Don't forget to save it in your KeePassX database. "
-                        "New password:"
+    if not admin:
+        session.destroy(
+            (
+                "success",
+                Markup(
+                    "<p>{message} <span><code>{password}</code></span></p>".format(
+                        message=Markup.escape(
+                            gettext(
+                                "Password updated. Don't forget to save it in your KeePassX database. "  # noqa: E501
+                                "New password:"
+                            )
+                        ),
+                        password=Markup.escape("" if password is None else password),
                     )
                 ),
-                password=Markup.escape("" if password is None else password),
-            )
-        ),
-        "success",
-    )
+            ),
+            session.get("locale"),
+        )
+    else:
+        flash(
+            Markup(
+                "<p>{message} <span><code>{password}</code></span></p>".format(
+                    message=Markup.escape(
+                        gettext(
+                            "Password updated. Don't forget to save it in your KeePassX database. "
+                            "New password:"
+                        )
+                    ),
+                    password=Markup.escape("" if password is None else password),
+                )
+            ),
+            "success",
+        )
     return True
 
 
@@ -535,41 +542,3 @@ def serve_file_with_etag(db_obj: Union[Reply, Submission]) -> flask.Response:
     response.direct_passthrough = False
     response.headers["Etag"] = db_obj.checksum
     return response
-
-
-class JournalistInterfaceSessionInterface(sessions.SecureCookieSessionInterface):
-    """A custom session interface that skips storing sessions for api requests but
-    otherwise just uses the default behaviour."""
-
-    def save_session(self, app: flask.Flask, session: Any, response: flask.Response) -> None:
-        # If this is an api request do not save the session
-        if request.path.split("/")[1] == "api":
-            return
-        else:
-            super(JournalistInterfaceSessionInterface, self).save_session(app, session, response)
-
-
-def cleanup_expired_revoked_tokens() -> None:
-    """Remove tokens that have now expired from the revoked token table."""
-
-    revoked_tokens = db.session.query(RevokedToken).all()
-
-    for revoked_token in revoked_tokens:
-        if Journalist.validate_token_is_not_expired_or_invalid(revoked_token.token):
-            pass  # The token has not expired, we must keep in the revoked token table.
-        else:
-            # The token is no longer valid, remove from the revoked token table.
-            db.session.delete(revoked_token)
-
-    db.session.commit()
-
-
-def revoke_token(user: Journalist, auth_token: str) -> None:
-    try:
-        revoked_token = RevokedToken(token=auth_token, journalist_id=user.id)
-        db.session.add(revoked_token)
-        db.session.commit()
-    except IntegrityError as e:
-        db.session.rollback()
-        if "UNIQUE constraint failed: revoked_tokens.token" not in str(e):
-            raise e

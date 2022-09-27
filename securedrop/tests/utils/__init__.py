@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from flask import g
 from pyotp import TOTP
 
 from . import asynchronous  # noqa
@@ -30,4 +29,4 @@ def login_user(app, test_user):
         follow_redirects=True,
     )
     assert resp.status_code == 200
-    assert hasattr(g, "user")  # ensure logged in
+    assert test_user["username"] in resp.data.decode("utf-8")

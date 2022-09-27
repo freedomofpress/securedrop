@@ -17,9 +17,8 @@ from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives.kdf import scrypt
 from db import db
 from encryption import EncryptionManager, GpgKeyNotFoundError
-from flask import current_app, url_for
+from flask import url_for
 from flask_babel import gettext, ngettext
-from itsdangerous import BadData, TimedJSONWebSignatureSerializer
 from markupsafe import Markup
 from passlib.hash import argon2
 from passphrases import PassphraseGenerator
@@ -153,7 +152,11 @@ class Source(db.Model):
             "is_starred": starred,
             "last_updated": last_updated,
             "interaction_count": self.interaction_count,
-            "key": {"type": "PGP", "public": self.public_key, "fingerprint": self.fingerprint},
+            "key": {
+                "type": "PGP",
+                "public": self.public_key,
+                "fingerprint": self.fingerprint,
+            },
             "number_of_documents": docs_msg_count["documents"],
             "number_of_messages": docs_msg_count["messages"],
             "submissions_url": url_for("api.all_source_submissions", source_uuid=self.uuid),
@@ -218,7 +221,9 @@ class Submission(db.Model):
             if self.source
             else None,
             "submission_url": url_for(
-                "api.single_submission", source_uuid=self.source.uuid, submission_uuid=self.uuid
+                "api.single_submission",
+                source_uuid=self.source.uuid,
+                submission_uuid=self.uuid,
             )
             if self.source
             else None,
@@ -229,7 +234,9 @@ class Submission(db.Model):
             "is_read": self.seen,
             "uuid": self.uuid,
             "download_url": url_for(
-                "api.download_submission", source_uuid=self.source.uuid, submission_uuid=self.uuid
+                "api.download_submission",
+                source_uuid=self.source.uuid,
+                submission_uuid=self.uuid,
             )
             if self.source
             else None,
@@ -403,7 +410,6 @@ class Journalist(db.Model):
     pw_salt = Column(LargeBinary(32), nullable=True)
     pw_hash = Column(LargeBinary(256), nullable=True)
     is_admin = Column(Boolean)
-    session_nonce = Column(Integer, nullable=False, default=0)
 
     otp_secret = Column(String(32), default=pyotp.random_base32)
     is_totp = Column(Boolean, default=True)
@@ -417,7 +423,6 @@ class Journalist(db.Model):
     login_attempts = relationship(
         "JournalistLoginAttempt", backref="journalist", cascade="all, delete"
     )
-    revoked_tokens = relationship("RevokedToken", backref="journalist", cascade="all, delete")
 
     MIN_USERNAME_LEN = 3
     MIN_NAME_LEN = 0
@@ -710,39 +715,10 @@ class Journalist(db.Model):
 
         return user
 
-    def generate_api_token(self, expiration: int) -> str:
-        s = TimedJSONWebSignatureSerializer(current_app.config["SECRET_KEY"], expires_in=expiration)
-        return s.dumps({"id": self.id}).decode("ascii")  # type:ignore
-
-    @staticmethod
-    def validate_token_is_not_expired_or_invalid(token: str) -> bool:
-        s = TimedJSONWebSignatureSerializer(current_app.config["SECRET_KEY"])
-        try:
-            s.loads(token)
-        except BadData:
-            return False
-
-        return True
-
-    @staticmethod
-    def validate_api_token_and_get_user(token: str) -> "Optional[Journalist]":
-        s = TimedJSONWebSignatureSerializer(current_app.config["SECRET_KEY"])
-        try:
-            data = s.loads(token)
-        except BadData:
-            return None
-
-        revoked_token = RevokedToken.query.filter_by(token=token).one_or_none()
-        if revoked_token is not None:
-            return None
-
-        return Journalist.query.get(data["id"])
-
     def to_json(self, all_info: bool = True) -> Dict[str, Any]:
         """Returns a JSON representation of the journalist user. If all_info is
         False, potentially sensitive or extraneous fields are excluded. Note
         that both representations do NOT include credentials."""
-
         json_user = {
             "username": self.username,
             "uuid": self.uuid,
@@ -839,7 +815,8 @@ class SeenFile(db.Model):
     file_id = Column(Integer, ForeignKey("submissions.id"), nullable=False)
     journalist_id = Column(Integer, ForeignKey("journalists.id"), nullable=False)
     file = relationship(
-        "Submission", backref=backref("seen_files", lazy="dynamic", cascade="all,delete")
+        "Submission",
+        backref=backref("seen_files", lazy="dynamic", cascade="all,delete"),
     )
     journalist = relationship("Journalist", backref=backref("seen_files"))
 
@@ -851,7 +828,8 @@ class SeenMessage(db.Model):
     message_id = Column(Integer, ForeignKey("submissions.id"), nullable=False)
     journalist_id = Column(Integer, ForeignKey("journalists.id"), nullable=False)
     message = relationship(
-        "Submission", backref=backref("seen_messages", lazy="dynamic", cascade="all,delete")
+        "Submission",
+        backref=backref("seen_messages", lazy="dynamic", cascade="all,delete"),
     )
     journalist = relationship("Journalist", backref=backref("seen_messages"))
 
@@ -881,19 +859,6 @@ class JournalistLoginAttempt(db.Model):
         self.journalist = journalist
 
 
-class RevokedToken(db.Model):
-
-    """
-    API tokens that have been revoked either through a logout or other revocation mechanism.
-    """
-
-    __tablename__ = "revoked_tokens"
-
-    id = Column(Integer, primary_key=True)
-    journalist_id = Column(Integer, ForeignKey("journalists.id"), nullable=False)
-    token = db.Column(db.Text, nullable=False, unique=True)
-
-
 class InstanceConfig(db.Model):
     """Versioned key-value store of settings configurable from the journalist
     interface.  The current version has valid_until=0 (unix epoch start)
@@ -905,7 +870,10 @@ class InstanceConfig(db.Model):
     __tablename__ = "instance_config"
     version = Column(Integer, primary_key=True)
     valid_until = Column(
-        DateTime, default=datetime.datetime.fromtimestamp(0), nullable=False, unique=True
+        DateTime,
+        default=datetime.datetime.fromtimestamp(0),
+        nullable=False,
+        unique=True,
     )
     allow_document_uploads = Column(Boolean, default=True)
     organization_name = Column(String(255), nullable=True, default="SecureDrop")

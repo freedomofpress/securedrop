@@ -18,11 +18,11 @@ from flask import (
     redirect,
     render_template,
     request,
-    session,
     url_for,
 )
 from flask_babel import gettext
 from journalist_app.forms import ReplyForm
+from journalist_app.sessions import session
 from journalist_app.utils import bulk_delete, download, get_source, validate_user
 from models import Reply, SeenReply, Source, SourceStar, Submission
 from sdconfig import SDConfig
@@ -38,7 +38,9 @@ def make_blueprint(config: SDConfig) -> Blueprint:
     def login() -> Union[str, werkzeug.Response]:
         if request.method == "POST":
             user = validate_user(
-                request.form["username"], request.form["password"], request.form["token"]
+                request.form["username"],
+                request.form["password"],
+                request.form["token"],
             )
             if user:
                 current_app.logger.info(
@@ -53,16 +55,14 @@ def make_blueprint(config: SDConfig) -> Blueprint:
                 db.session.commit()
 
                 session["uid"] = user.id
-                session["nonce"] = user.session_nonce
+                session.regenerate()
                 return redirect(url_for("main.index"))
 
         return render_template("login.html")
 
     @view.route("/logout")
     def logout() -> werkzeug.Response:
-        session.pop("uid", None)
-        session.pop("expires", None)
-        session.pop("nonce", None)
+        session.destroy()
         return redirect(url_for("main.index"))
 
     @view.route("/")
@@ -152,20 +152,23 @@ def make_blueprint(config: SDConfig) -> Blueprint:
         )
 
         try:
-            reply = Reply(g.user, g.source, filename, Storage.get_default())
+            reply = Reply(session.get_user(), g.source, filename, Storage.get_default())
             db.session.add(reply)
-            seen_reply = SeenReply(reply=reply, journalist=g.user)
+            seen_reply = SeenReply(reply=reply, journalist=session.get_user())
             db.session.add(seen_reply)
             db.session.commit()
             store.async_add_checksum_for_file(reply, Storage.get_default())
         except Exception as exc:
-            flash(gettext("An unexpected error occurred! Please " "inform your admin."), "error")
+            flash(
+                gettext("An unexpected error occurred! Please " "inform your admin."),
+                "error",
+            )
             # We take a cautious approach to logging here because we're dealing
             # with responses to sources. It's possible the exception message
             # could contain information we don't want to write to disk.
             current_app.logger.error(
                 "Reply from '{}' (ID {}) failed: {}!".format(
-                    g.user.username, g.user.id, exc.__class__
+                    session.get_user().username, session.get_uid(), exc.__class__
                 )
             )
         else:
@@ -222,7 +225,9 @@ def make_blueprint(config: SDConfig) -> Blueprint:
         if action == "download":
             source = get_source(g.filesystem_id)
             return download(
-                source.journalist_filename, selected_docs, on_error_redirect=error_redirect
+                source.journalist_filename,
+                selected_docs,
+                on_error_redirect=error_redirect,
             )
         elif action == "delete":
             return bulk_delete(g.filesystem_id, selected_docs)

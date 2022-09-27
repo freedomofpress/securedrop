@@ -6,17 +6,28 @@ import config as _config
 FALLBACK_LOCALE = "en_US"
 
 
+# Adding a subclass here allows for adding attributes without modifying config.py
+class JournalistInterfaceConfig(_config.JournalistInterfaceFlaskConfig):
+    SESSION_COOKIE_NAME = "js"
+    SESSION_SIGNER_SALT = "js_session"
+    SESSION_KEY_PREFIX = "js_session:"
+    SESSION_LIFETIME = 2 * 60 * 60
+    SESSION_RENEW_COUNT = 5
+
+
+class SourceInterfaceConfig(_config.SourceInterfaceFlaskConfig):
+    SESSION_COOKIE_NAME = "ss"
+
+
 class SDConfig:
     def __init__(self) -> None:
         try:
-            self.JOURNALIST_APP_FLASK_CONFIG_CLS = (
-                _config.JournalistInterfaceFlaskConfig
-            )  # type: Type
+            self.JOURNALIST_APP_FLASK_CONFIG_CLS = JournalistInterfaceConfig  # type: Type
         except AttributeError:
             pass
 
         try:
-            self.SOURCE_APP_FLASK_CONFIG_CLS = _config.SourceInterfaceFlaskConfig  # type: Type
+            self.SOURCE_APP_FLASK_CONFIG_CLS = SourceInterfaceConfig  # type: Type
         except AttributeError:
             pass
 
