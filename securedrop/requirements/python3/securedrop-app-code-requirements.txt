@@ -256,9 +256,9 @@ python-dateutil==2.7.2 \
 python-editor==1.0.3 \
     --hash=sha256:a3c066acee22a1c94f63938341d4fb374e3fdd69366ed6603d7b24bed1efc565
     # via alembic
-pytz==2017.3 \
-    --hash=sha256:c41c62827ce9cafacd6f2f7018e4f83a6f1986e87bfd000b8cfbd4ab5da95f1a \
-    --hash=sha256:fae4cffc040921b8a2d60c6cf0b5d662c1190fe54d718271db4eb17d44a185b7
+pytz==2022.2.1 \
+    --hash=sha256:220f481bdafa09c3955dfbdddb7b57780e9a94f5127e35456a48589b9e0c0197 \
+    --hash=sha256:cea221417204f2d1a2aa03ddae3e867921971d0d76f14d87abb4414415bbdcf5
     # via
     #   babel
     #   flask-babel
