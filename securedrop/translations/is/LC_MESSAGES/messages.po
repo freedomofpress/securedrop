@@ -41,9 +41,6 @@ msgstr "Fyrir {time} síðan"
 msgid "You have been logged out due to inactivity."
 msgstr "Þú hefur verið skráð/ur út vegna aðgerðaleysis."
 
-msgid "You have been logged out due to password change"
-msgstr "Útskráning vegna breytingar á lykilorði"
-
 msgid "SecureDrop"
 msgstr "SecureDrop"
 
@@ -475,7 +472,9 @@ msgstr "Ólesið"
 msgid "Read"
 msgstr "Lesa"
 
-msgid "Uploaded Document"
+#, fuzzy
+#| msgid "Uploaded Document"
+msgid "Uploaded File"
 msgstr "Innsent skjal"
 
 msgid "Reply"
@@ -510,6 +509,19 @@ msgstr "Eyða notandaaðgangi heimildarmanns"
 
 msgid "Are you sure?"
 msgstr "Ertu viss?"
+
+msgid ""
+"<p>\n"
+"Deleting the account for <b>{source}</b> will:\n"
+"</p>\n"
+"<ul>\n"
+"<li>prevent them from logging in with their codename again\n"
+"<li>prevent your organization from sending replies\n"
+"</ul>\n"
+"<p>\n"
+"All files, messages, and replies will also be deleted when their account is deleted.\n"
+"</p>"
+msgstr ""
 
 msgid "Yes, Delete Source Account"
 msgstr "Já, eyða notandaaðgangi heimildarmanns"
@@ -550,7 +562,9 @@ msgstr "UPPFÆRA MERKI"
 msgid "Submission Preferences"
 msgstr "Kjörstillingar fyrir innsendingu"
 
-msgid "Prevent sources from uploading documents. Sources will still be able to send messages."
+#, fuzzy
+#| msgid "Prevent sources from uploading documents. Sources will still be able to send messages."
+msgid "Prevent sources from uploading files. Sources will still be able to send messages."
 msgstr "Koma í veg fyrir að heimildarmenn geti sent inn skjöl. Heimildamenn geta eftir sem áður sent skilaboð."
 
 msgid "Prevent sources from sending initial messages shorter than the minimum required length:"
@@ -673,8 +687,10 @@ msgstr "Fjarlægja stjörnumerkingu"
 msgid "Designation"
 msgstr "Tilnefnt"
 
-msgid "Documents"
-msgstr "Skjöl"
+#, fuzzy
+#| msgid "Filename"
+msgid "Files"
+msgstr "Skráarheiti"
 
 msgid "Messages"
 msgstr "Skilaboð"
@@ -682,8 +698,8 @@ msgstr "Skilaboð"
 msgid "Date"
 msgstr "Dagsetning"
 
-msgid "No documents have been submitted!"
-msgstr "Engin skjöl hafa verið send inn!"
+msgid "There are no submissions!"
+msgstr ""
 
 msgid "Filter by codename"
 msgstr "Sía eftir kóðanafni"
@@ -775,11 +791,15 @@ msgstr "Takk fyrir að senda þessar upplýsingar til okkar. Komdu svo aftur sí
 msgid "Thanks! We received your message."
 msgstr "Takk fyrir! Við fengum skilaboðin þín."
 
-msgid "Thanks! We received your document."
-msgstr "Takk fyrir! Við fengum skjalið þitt."
+#, fuzzy
+#| msgid "Thanks! We received your message."
+msgid "Thanks! We received your file."
+msgstr "Takk fyrir! Við fengum skilaboðin þín."
 
-msgid "Thanks! We received your message and document."
-msgstr "Takk fyrir! Við fengum skilaboðin og skjalið þitt."
+#, fuzzy
+#| msgid "Thanks! We received your message."
+msgid "Thanks! We received your file and message."
+msgstr "Takk fyrir! Við fengum skilaboðin þín."
 
 msgid "Reply deleted"
 msgstr "Svari var eytt"
@@ -823,7 +843,9 @@ msgstr "Fletta upp kóðanafni..."
 msgid "Powered by"
 msgstr "Keyrt með"
 
-msgid "Please note: Sharing sensitive documents may put you at risk, even when using Tor and SecureDrop."
+#, fuzzy
+#| msgid "Please note: Sharing sensitive documents may put you at risk, even when using Tor and SecureDrop."
+msgid "Please note: Sharing sensitive information may put you at risk, even when using Tor and SecureDrop."
 msgstr "Athugaðu: Að deila viðkvæmum upplýsingum getur falið í sér áhættu, jafnvel þó notast sé við Tor og SecureDrop."
 
 msgid "SecureDrop is a project of Freedom of the Press Foundation."
@@ -1051,6 +1073,21 @@ msgstr "<strong>Mikilvægt:</strong> Ef þú óskar áframhaldandi nafnleyndar, 
 
 msgid "Back to submission page"
 msgstr "Til baka á innsendingasíðuna"
+
+#~ msgid "You have been logged out due to password change"
+#~ msgstr "Útskráning vegna breytingar á lykilorði"
+
+#~ msgid "Documents"
+#~ msgstr "Skjöl"
+
+#~ msgid "No documents have been submitted!"
+#~ msgstr "Engin skjöl hafa verið send inn!"
+
+#~ msgid "Thanks! We received your document."
+#~ msgstr "Takk fyrir! Við fengum skjalið þitt."
+
+#~ msgid "Thanks! We received your message and document."
+#~ msgstr "Takk fyrir! Við fengum skilaboðin og skjalið þitt."
 
 #~ msgid "Forgot your codename?"
 #~ msgstr "Gleymdirðu kóðanafninu þínu?"

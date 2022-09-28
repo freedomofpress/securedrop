@@ -37,9 +37,6 @@ msgstr "vor {time}"
 msgid "You have been logged out due to inactivity."
 msgstr "Sie wurden wegen Inaktivität abgemeldet."
 
-msgid "You have been logged out due to password change"
-msgstr "Sie wurden wegen einer Passwortänderung abgemeldet"
-
 msgid "SecureDrop"
 msgstr "SecureDrop"
 
@@ -471,7 +468,9 @@ msgstr "Ungelesen"
 msgid "Read"
 msgstr "Gelesen"
 
-msgid "Uploaded Document"
+#, fuzzy
+#| msgid "Uploaded Document"
+msgid "Uploaded File"
 msgstr "Hochgeladenes Dokument"
 
 msgid "Reply"
@@ -506,6 +505,19 @@ msgstr "Quellkonto löschen"
 
 msgid "Are you sure?"
 msgstr "Sind Sie sicher?"
+
+msgid ""
+"<p>\n"
+"Deleting the account for <b>{source}</b> will:\n"
+"</p>\n"
+"<ul>\n"
+"<li>prevent them from logging in with their codename again\n"
+"<li>prevent your organization from sending replies\n"
+"</ul>\n"
+"<p>\n"
+"All files, messages, and replies will also be deleted when their account is deleted.\n"
+"</p>"
+msgstr ""
 
 msgid "Yes, Delete Source Account"
 msgstr "Ja, Quellkonto löschen"
@@ -546,7 +558,9 @@ msgstr "LOGO AKTUALISIEREN"
 msgid "Submission Preferences"
 msgstr "Einreichungseinstellungen"
 
-msgid "Prevent sources from uploading documents. Sources will still be able to send messages."
+#, fuzzy
+#| msgid "Prevent sources from uploading documents. Sources will still be able to send messages."
+msgid "Prevent sources from uploading files. Sources will still be able to send messages."
 msgstr "Quellen am Hochladen von Dokumenten hindern. Quellen werden weiterhin Nachrichten senden können."
 
 msgid "Prevent sources from sending initial messages shorter than the minimum required length:"
@@ -669,8 +683,10 @@ msgstr "Markieren rückgängig machen"
 msgid "Designation"
 msgstr "Bestimmung"
 
-msgid "Documents"
-msgstr "Dokumente"
+#, fuzzy
+#| msgid "Filename"
+msgid "Files"
+msgstr "Dateiname"
 
 msgid "Messages"
 msgstr "Nachrichten"
@@ -678,8 +694,8 @@ msgstr "Nachrichten"
 msgid "Date"
 msgstr "Datum"
 
-msgid "No documents have been submitted!"
-msgstr "Es wurden keine Dokumente eingereicht!"
+msgid "There are no submissions!"
+msgstr ""
 
 msgid "Filter by codename"
 msgstr "Nach Deckname filtern"
@@ -771,11 +787,15 @@ msgstr "Danke, dass Sie uns diese Information gesendet haben. Bitte kommen Sie s
 msgid "Thanks! We received your message."
 msgstr "Danke! Wir haben Ihre Nachricht erhalten."
 
-msgid "Thanks! We received your document."
-msgstr "Danke! Wir haben Ihr Dokument erhalten."
+#, fuzzy
+#| msgid "Thanks! We received your message."
+msgid "Thanks! We received your file."
+msgstr "Danke! Wir haben Ihre Nachricht erhalten."
 
-msgid "Thanks! We received your message and document."
-msgstr "Danke! Wir haben Ihre Nachricht und Dokument erhalten."
+#, fuzzy
+#| msgid "Thanks! We received your message."
+msgid "Thanks! We received your file and message."
+msgstr "Danke! Wir haben Ihre Nachricht erhalten."
 
 msgid "Reply deleted"
 msgstr "Antwort gelöscht"
@@ -819,7 +839,9 @@ msgstr "Decknamen nachschlagen..."
 msgid "Powered by"
 msgstr "Ermöglicht durch"
 
-msgid "Please note: Sharing sensitive documents may put you at risk, even when using Tor and SecureDrop."
+#, fuzzy
+#| msgid "Please note: Sharing sensitive documents may put you at risk, even when using Tor and SecureDrop."
+msgid "Please note: Sharing sensitive information may put you at risk, even when using Tor and SecureDrop."
 msgstr "Achtung: Das Teilen von vertraulichen Dokumenten kann Sie in Gefahr bringen, auch wenn Sie Tor und SecureDrop verwenden."
 
 msgid "SecureDrop is a project of Freedom of the Press Foundation."
@@ -1047,6 +1069,21 @@ msgstr "<strong>Wichtig:</strong> Verwenden Sie <strong>nicht</strong> GPG, um d
 
 msgid "Back to submission page"
 msgstr "Zurück zur Einreichungsseite"
+
+#~ msgid "You have been logged out due to password change"
+#~ msgstr "Sie wurden wegen einer Passwortänderung abgemeldet"
+
+#~ msgid "Documents"
+#~ msgstr "Dokumente"
+
+#~ msgid "No documents have been submitted!"
+#~ msgstr "Es wurden keine Dokumente eingereicht!"
+
+#~ msgid "Thanks! We received your document."
+#~ msgstr "Danke! Wir haben Ihr Dokument erhalten."
+
+#~ msgid "Thanks! We received your message and document."
+#~ msgstr "Danke! Wir haben Ihre Nachricht und Dokument erhalten."
 
 #~ msgid "Forgot your codename?"
 #~ msgstr "Decknamen vergessen?"

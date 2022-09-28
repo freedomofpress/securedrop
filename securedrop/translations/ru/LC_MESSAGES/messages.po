@@ -42,9 +42,6 @@ msgstr "{time} назад"
 msgid "You have been logged out due to inactivity."
 msgstr "Ваша сессия была завершена из-за неактивности."
 
-msgid "You have been logged out due to password change"
-msgstr "Ваша сессия была завершена из-за смены пароля"
-
 msgid "SecureDrop"
 msgstr "SecureDrop"
 
@@ -485,7 +482,9 @@ msgstr "Не прочитано"
 msgid "Read"
 msgstr "Прочитано"
 
-msgid "Uploaded Document"
+#, fuzzy
+#| msgid "Uploaded Document"
+msgid "Uploaded File"
 msgstr "Загруженный документ"
 
 msgid "Reply"
@@ -520,6 +519,19 @@ msgstr "Удалить учетную запись источника"
 
 msgid "Are you sure?"
 msgstr "Вы уверены?"
+
+msgid ""
+"<p>\n"
+"Deleting the account for <b>{source}</b> will:\n"
+"</p>\n"
+"<ul>\n"
+"<li>prevent them from logging in with their codename again\n"
+"<li>prevent your organization from sending replies\n"
+"</ul>\n"
+"<p>\n"
+"All files, messages, and replies will also be deleted when their account is deleted.\n"
+"</p>"
+msgstr ""
 
 msgid "Yes, Delete Source Account"
 msgstr "Да, удалить учетную запись источника"
@@ -560,7 +572,9 @@ msgstr "ОБНОВИТЬ ЛОГОТИП"
 msgid "Submission Preferences"
 msgstr "Параметры публикации"
 
-msgid "Prevent sources from uploading documents. Sources will still be able to send messages."
+#, fuzzy
+#| msgid "Prevent sources from uploading documents. Sources will still be able to send messages."
+msgid "Prevent sources from uploading files. Sources will still be able to send messages."
 msgstr "Запретить источникам загрузку документов. Источники все ещё смогут отправлять сообщения."
 
 msgid "Prevent sources from sending initial messages shorter than the minimum required length:"
@@ -683,8 +697,10 @@ msgstr "Снять отметку"
 msgid "Designation"
 msgstr "Назначение"
 
-msgid "Documents"
-msgstr "Документы"
+#, fuzzy
+#| msgid "Filename"
+msgid "Files"
+msgstr "Имя файла"
 
 msgid "Messages"
 msgstr "Сообщения"
@@ -692,8 +708,8 @@ msgstr "Сообщения"
 msgid "Date"
 msgstr "Дата"
 
-msgid "No documents have been submitted!"
-msgstr "Отправленные документы отсутствуют!"
+msgid "There are no submissions!"
+msgstr ""
 
 msgid "Filter by codename"
 msgstr "Фильтр по кодовому имени"
@@ -785,11 +801,15 @@ msgstr "Благодарим вас за отправку нам этой инф
 msgid "Thanks! We received your message."
 msgstr "Спасибо! Мы получили ваше сообщение."
 
-msgid "Thanks! We received your document."
-msgstr "Спасибо! Мы получили ваш документ."
+#, fuzzy
+#| msgid "Thanks! We received your message."
+msgid "Thanks! We received your file."
+msgstr "Спасибо! Мы получили ваше сообщение."
 
-msgid "Thanks! We received your message and document."
-msgstr "Спасибо! Мы получили ваше сообщение и документ."
+#, fuzzy
+#| msgid "Thanks! We received your message."
+msgid "Thanks! We received your file and message."
+msgstr "Спасибо! Мы получили ваше сообщение."
 
 msgid "Reply deleted"
 msgstr "Ответ удален"
@@ -833,7 +853,9 @@ msgstr "Посмотреть кодовое имя..."
 msgid "Powered by"
 msgstr "Основано на"
 
-msgid "Please note: Sharing sensitive documents may put you at risk, even when using Tor and SecureDrop."
+#, fuzzy
+#| msgid "Please note: Sharing sensitive documents may put you at risk, even when using Tor and SecureDrop."
+msgid "Please note: Sharing sensitive information may put you at risk, even when using Tor and SecureDrop."
 msgstr "Пометка: выкладывать секретными документами может быть опасным, даже если используется Tor и SecureDrop."
 
 msgid "SecureDrop is a project of Freedom of the Press Foundation."
@@ -1061,6 +1083,21 @@ msgstr "<strong>Внимание:</strong> Если вы хотите сохра
 
 msgid "Back to submission page"
 msgstr "Вернуться на страницу отправки"
+
+#~ msgid "You have been logged out due to password change"
+#~ msgstr "Ваша сессия была завершена из-за смены пароля"
+
+#~ msgid "Documents"
+#~ msgstr "Документы"
+
+#~ msgid "No documents have been submitted!"
+#~ msgstr "Отправленные документы отсутствуют!"
+
+#~ msgid "Thanks! We received your document."
+#~ msgstr "Спасибо! Мы получили ваш документ."
+
+#~ msgid "Thanks! We received your message and document."
+#~ msgstr "Спасибо! Мы получили ваше сообщение и документ."
 
 #~ msgid "Forgot your codename?"
 #~ msgstr "Забыли ваше кодовое имя?"

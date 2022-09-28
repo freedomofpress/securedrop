@@ -46,9 +46,6 @@ msgstr "{time} مضت"
 msgid "You have been logged out due to inactivity."
 msgstr "تم الخروج من الحساب بسبب انعدام النشاط."
 
-msgid "You have been logged out due to password change"
-msgstr "تم الخروج من الحساب بسبب تغيير كلمة السر"
-
 msgid "SecureDrop"
 msgstr "SecureDrop"
 
@@ -516,7 +513,9 @@ msgstr "غير مقروءة"
 msgid "Read"
 msgstr "قراءة"
 
-msgid "Uploaded Document"
+#, fuzzy
+#| msgid "Uploaded Document"
+msgid "Uploaded File"
 msgstr "تم رفع المستند"
 
 msgid "Reply"
@@ -551,6 +550,19 @@ msgstr "حذف حساب المصدر"
 
 msgid "Are you sure?"
 msgstr "هل أنت متأكد؟"
+
+msgid ""
+"<p>\n"
+"Deleting the account for <b>{source}</b> will:\n"
+"</p>\n"
+"<ul>\n"
+"<li>prevent them from logging in with their codename again\n"
+"<li>prevent your organization from sending replies\n"
+"</ul>\n"
+"<p>\n"
+"All files, messages, and replies will also be deleted when their account is deleted.\n"
+"</p>"
+msgstr ""
 
 msgid "Yes, Delete Source Account"
 msgstr "نعم، احذف حساب المصدر"
@@ -591,7 +603,9 @@ msgstr "تغيير الشعار"
 msgid "Submission Preferences"
 msgstr "تفضيلات الإرسال"
 
-msgid "Prevent sources from uploading documents. Sources will still be able to send messages."
+#, fuzzy
+#| msgid "Prevent sources from uploading documents. Sources will still be able to send messages."
+msgid "Prevent sources from uploading files. Sources will still be able to send messages."
 msgstr "منع المصادر من رفع وثائق. سوف تظل المصادر قادرة على توجيه رسائل."
 
 msgid "Prevent sources from sending initial messages shorter than the minimum required length:"
@@ -714,8 +728,10 @@ msgstr "إزالة النجمة"
 msgid "Designation"
 msgstr "تعيين رمز"
 
-msgid "Documents"
-msgstr "المستندات"
+#, fuzzy
+#| msgid "Filename"
+msgid "Files"
+msgstr "اسم الملف"
 
 msgid "Messages"
 msgstr "الرسائل"
@@ -723,8 +739,8 @@ msgstr "الرسائل"
 msgid "Date"
 msgstr "التاريخ"
 
-msgid "No documents have been submitted!"
-msgstr "لا توجد مستندات مودعة!"
+msgid "There are no submissions!"
+msgstr ""
 
 msgid "Filter by codename"
 msgstr "الترشيح بالاسم الرمزي"
@@ -816,11 +832,15 @@ msgstr "شكرا لإرسالك هذه المعلومات إلينا. تَرَق
 msgid "Thanks! We received your message."
 msgstr "شكرا! لقد تلقينا الرسالة."
 
-msgid "Thanks! We received your document."
-msgstr "شكرا! لقد تلقينا المستند."
+#, fuzzy
+#| msgid "Thanks! We received your message."
+msgid "Thanks! We received your file."
+msgstr "شكرا! لقد تلقينا الرسالة."
 
-msgid "Thanks! We received your message and document."
-msgstr "شكرا! لقد تلقينا الرسالة و&nbsp;المستند."
+#, fuzzy
+#| msgid "Thanks! We received your message."
+msgid "Thanks! We received your file and message."
+msgstr "شكرا! لقد تلقينا الرسالة."
 
 msgid "Reply deleted"
 msgstr "حُذِفَ الرد"
@@ -864,7 +884,9 @@ msgstr "البحث عن اسم رمزي..."
 msgid "Powered by"
 msgstr "تشغّله"
 
-msgid "Please note: Sharing sensitive documents may put you at risk, even when using Tor and SecureDrop."
+#, fuzzy
+#| msgid "Please note: Sharing sensitive documents may put you at risk, even when using Tor and SecureDrop."
+msgid "Please note: Sharing sensitive information may put you at risk, even when using Tor and SecureDrop."
 msgstr "يرجى الانتباه: قد تعرّضك مشاركة وثائق حساسة للخطر وإن لجأت لتور Tor و سيكيور دروب SecureDrop."
 
 msgid "SecureDrop is a project of Freedom of the Press Foundation."
@@ -1092,6 +1114,21 @@ msgstr "<strong>هام:</strong> إذا كنت ترغب في البقاء مجه
 
 msgid "Back to submission page"
 msgstr "الرجوع إلى صفحة الإيداع"
+
+#~ msgid "You have been logged out due to password change"
+#~ msgstr "تم الخروج من الحساب بسبب تغيير كلمة السر"
+
+#~ msgid "Documents"
+#~ msgstr "المستندات"
+
+#~ msgid "No documents have been submitted!"
+#~ msgstr "لا توجد مستندات مودعة!"
+
+#~ msgid "Thanks! We received your document."
+#~ msgstr "شكرا! لقد تلقينا المستند."
+
+#~ msgid "Thanks! We received your message and document."
+#~ msgstr "شكرا! لقد تلقينا الرسالة و&nbsp;المستند."
 
 #~ msgid "Forgot your codename?"
 #~ msgstr "هل نسيت اسمك الرمزي بك؟"

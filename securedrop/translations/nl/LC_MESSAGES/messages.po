@@ -42,9 +42,6 @@ msgstr "{time} geleden"
 msgid "You have been logged out due to inactivity."
 msgstr "U bent wegens inactiviteit uitgelogd."
 
-msgid "You have been logged out due to password change"
-msgstr "U bent uitgelogd omdat uw wachtwoord is gewijzigd"
-
 msgid "SecureDrop"
 msgstr "SecureDrop"
 
@@ -476,7 +473,9 @@ msgstr "Ongelezen"
 msgid "Read"
 msgstr "Gelezen"
 
-msgid "Uploaded Document"
+#, fuzzy
+#| msgid "Uploaded Document"
+msgid "Uploaded File"
 msgstr "Geüploade document"
 
 msgid "Reply"
@@ -511,6 +510,19 @@ msgstr "Verwijder bronaccount"
 
 msgid "Are you sure?"
 msgstr "Bent u zeker?"
+
+msgid ""
+"<p>\n"
+"Deleting the account for <b>{source}</b> will:\n"
+"</p>\n"
+"<ul>\n"
+"<li>prevent them from logging in with their codename again\n"
+"<li>prevent your organization from sending replies\n"
+"</ul>\n"
+"<p>\n"
+"All files, messages, and replies will also be deleted when their account is deleted.\n"
+"</p>"
+msgstr ""
 
 msgid "Yes, Delete Source Account"
 msgstr "Ja, verwijder bronaccount"
@@ -551,7 +563,9 @@ msgstr "LOGO BIJWERKEN"
 msgid "Submission Preferences"
 msgstr "Inzendingsvoorkeuren"
 
-msgid "Prevent sources from uploading documents. Sources will still be able to send messages."
+#, fuzzy
+#| msgid "Prevent sources from uploading documents. Sources will still be able to send messages."
+msgid "Prevent sources from uploading files. Sources will still be able to send messages."
 msgstr "Voorkom dat bronnen documenten kunnen uploaden. Bronnen kunnen wel nog berichten verzenden."
 
 msgid "Prevent sources from sending initial messages shorter than the minimum required length:"
@@ -674,8 +688,10 @@ msgstr "De-markeren"
 msgid "Designation"
 msgstr "Benaming"
 
-msgid "Documents"
-msgstr "Documenten"
+#, fuzzy
+#| msgid "Filename"
+msgid "Files"
+msgstr "Bestandsnaam"
 
 msgid "Messages"
 msgstr "Bericht"
@@ -683,8 +699,8 @@ msgstr "Bericht"
 msgid "Date"
 msgstr "Datum"
 
-msgid "No documents have been submitted!"
-msgstr "Geen documenten ingezonden!"
+msgid "There are no submissions!"
+msgstr ""
 
 msgid "Filter by codename"
 msgstr "Filter op codenaam"
@@ -749,7 +765,6 @@ msgstr "Uw verbinding is op dit moment niet anoniem!"
 msgid "You were redirected because you are already logged in. If you want to create a new account, you should log out first."
 msgstr "U bent omgeleid omdat u al ingelogd bent. Indien u een nieuw account wilt aanmaken, moet u eerst uitloggen."
 
-#| msgid "You are already logged in. Please verify your codename above as it may differ from the one displayed on the previous page."
 msgid "You are already logged in. Please verify your codename as it may differ from the one displayed on the previous page."
 msgstr "U bent al ingelogd. Verifieer uw codenaam hierboven want die zou kunnen afwijken van de codenaam op de vorige pagina."
 
@@ -777,11 +792,15 @@ msgstr "Bedankt voor het inzenden van deze informatie. Kom later terug om reacti
 msgid "Thanks! We received your message."
 msgstr "Bedankt! We hebben uw bericht ontvangen."
 
-msgid "Thanks! We received your document."
-msgstr "Bedankt! We hebben uw document ontvangen."
+#, fuzzy
+#| msgid "Thanks! We received your message."
+msgid "Thanks! We received your file."
+msgstr "Bedankt! We hebben uw bericht ontvangen."
 
-msgid "Thanks! We received your message and document."
-msgstr "Bedankt! We hebben uw bericht en document ontvangen."
+#, fuzzy
+#| msgid "Thanks! We received your message."
+msgid "Thanks! We received your file and message."
+msgstr "Bedankt! We hebben uw bericht ontvangen."
 
 msgid "Reply deleted"
 msgstr "Reactie verwijderd"
@@ -825,7 +844,9 @@ msgstr "Zoek naar een codenaam..."
 msgid "Powered by"
 msgstr "Mogelijk gemaakt door"
 
-msgid "Please note: Sharing sensitive documents may put you at risk, even when using Tor and SecureDrop."
+#, fuzzy
+#| msgid "Please note: Sharing sensitive documents may put you at risk, even when using Tor and SecureDrop."
+msgid "Please note: Sharing sensitive information may put you at risk, even when using Tor and SecureDrop."
 msgstr "Let op: het delen van gevoelige documenten kan u in gevaar brengen, zelfs als u Tor en SecureDrop gebruikt."
 
 msgid "SecureDrop is a project of Freedom of the Press Foundation."
@@ -1053,6 +1074,21 @@ msgstr "<strong>Belangrijk:</strong> Als u anoniem wilt blijven, gebruik dan <st
 
 msgid "Back to submission page"
 msgstr "Terug naar inzendingenpagina"
+
+#~ msgid "You have been logged out due to password change"
+#~ msgstr "U bent uitgelogd omdat uw wachtwoord is gewijzigd"
+
+#~ msgid "Documents"
+#~ msgstr "Documenten"
+
+#~ msgid "No documents have been submitted!"
+#~ msgstr "Geen documenten ingezonden!"
+
+#~ msgid "Thanks! We received your document."
+#~ msgstr "Bedankt! We hebben uw document ontvangen."
+
+#~ msgid "Thanks! We received your message and document."
+#~ msgstr "Bedankt! We hebben uw bericht en document ontvangen."
 
 #~ msgid "Forgot your codename?"
 #~ msgstr "Uw codenaam vergeten?"

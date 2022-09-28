@@ -42,9 +42,6 @@ msgstr "před {time}"
 msgid "You have been logged out due to inactivity."
 msgstr "Z důvodu neaktivity jste byli odhlášeni."
 
-msgid "You have been logged out due to password change"
-msgstr "Z důvodu změny hesla jste byl/a odhlášen/a"
-
 msgid "SecureDrop"
 msgstr "SecureDrop"
 
@@ -485,7 +482,9 @@ msgstr "Nepřečteno"
 msgid "Read"
 msgstr "Přečteno"
 
-msgid "Uploaded Document"
+#, fuzzy
+#| msgid "Uploaded Document"
+msgid "Uploaded File"
 msgstr "Nahraný dokument"
 
 msgid "Reply"
@@ -520,6 +519,19 @@ msgstr "Smazat účet zdroje"
 
 msgid "Are you sure?"
 msgstr "Jste si jisti?"
+
+msgid ""
+"<p>\n"
+"Deleting the account for <b>{source}</b> will:\n"
+"</p>\n"
+"<ul>\n"
+"<li>prevent them from logging in with their codename again\n"
+"<li>prevent your organization from sending replies\n"
+"</ul>\n"
+"<p>\n"
+"All files, messages, and replies will also be deleted when their account is deleted.\n"
+"</p>"
+msgstr ""
 
 msgid "Yes, Delete Source Account"
 msgstr "Ano, smazat účet zdroje"
@@ -560,7 +572,9 @@ msgstr "AKTUALIZOVAT LOGO"
 msgid "Submission Preferences"
 msgstr "Preference podání"
 
-msgid "Prevent sources from uploading documents. Sources will still be able to send messages."
+#, fuzzy
+#| msgid "Prevent sources from uploading documents. Sources will still be able to send messages."
+msgid "Prevent sources from uploading files. Sources will still be able to send messages."
 msgstr "Zabraňte zdrojům nahrávat dokumenty. Zdroje budou stále moci posílat zprávy."
 
 msgid "Prevent sources from sending initial messages shorter than the minimum required length:"
@@ -683,8 +697,10 @@ msgstr "Odznačit"
 msgid "Designation"
 msgstr "Označení"
 
-msgid "Documents"
-msgstr "Dokumenty"
+#, fuzzy
+#| msgid "Filename"
+msgid "Files"
+msgstr "Jméno souboru"
 
 msgid "Messages"
 msgstr "Zprávy"
@@ -692,8 +708,8 @@ msgstr "Zprávy"
 msgid "Date"
 msgstr "Datum"
 
-msgid "No documents have been submitted!"
-msgstr "Žádné dokumenty nebyly podány!"
+msgid "There are no submissions!"
+msgstr ""
 
 msgid "Filter by codename"
 msgstr "Filtrovat podle krycího jména"
@@ -785,11 +801,15 @@ msgstr "Děkujeme za zaslání těchto informací. Přihlaste se prosím za něj
 msgid "Thanks! We received your message."
 msgstr "Děkujeme! Obdrželi jsme vaši zprávu."
 
-msgid "Thanks! We received your document."
-msgstr "Děkujeme! Obdrželi jsme váš dokument."
+#, fuzzy
+#| msgid "Thanks! We received your message."
+msgid "Thanks! We received your file."
+msgstr "Děkujeme! Obdrželi jsme vaši zprávu."
 
-msgid "Thanks! We received your message and document."
-msgstr "Děkujeme! Obdrželi jsme vaši zprávu a dokument."
+#, fuzzy
+#| msgid "Thanks! We received your message."
+msgid "Thanks! We received your file and message."
+msgstr "Děkujeme! Obdrželi jsme vaši zprávu."
 
 msgid "Reply deleted"
 msgstr "Odpověď smazána"
@@ -833,7 +853,9 @@ msgstr "Vyhledat krycí jméno..."
 msgid "Powered by"
 msgstr "Používá systém"
 
-msgid "Please note: Sharing sensitive documents may put you at risk, even when using Tor and SecureDrop."
+#, fuzzy
+#| msgid "Please note: Sharing sensitive documents may put you at risk, even when using Tor and SecureDrop."
+msgid "Please note: Sharing sensitive information may put you at risk, even when using Tor and SecureDrop."
 msgstr "Uvědomte si prosím, že sdílení citlivých dokumentů Vás může ohrozit i při používání Tor a SecureDrop."
 
 msgid "SecureDrop is a project of Freedom of the Press Foundation."
@@ -1061,6 +1083,21 @@ msgstr "<strong>Důležité:</strong> Chcete-li zůstat v anonymitě, <strong>ne
 
 msgid "Back to submission page"
 msgstr "Zpátky na stránku podání"
+
+#~ msgid "You have been logged out due to password change"
+#~ msgstr "Z důvodu změny hesla jste byl/a odhlášen/a"
+
+#~ msgid "Documents"
+#~ msgstr "Dokumenty"
+
+#~ msgid "No documents have been submitted!"
+#~ msgstr "Žádné dokumenty nebyly podány!"
+
+#~ msgid "Thanks! We received your document."
+#~ msgstr "Děkujeme! Obdrželi jsme váš dokument."
+
+#~ msgid "Thanks! We received your message and document."
+#~ msgstr "Děkujeme! Obdrželi jsme vaši zprávu a dokument."
 
 #~ msgid "Forgot your codename?"
 #~ msgstr "Zapomněli jste své krycí jméno?"

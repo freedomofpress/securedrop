@@ -44,9 +44,6 @@ msgstr "acum {time}"
 msgid "You have been logged out due to inactivity."
 msgstr "Ai fost deconectat(ă) din cauza inactivității."
 
-msgid "You have been logged out due to password change"
-msgstr "Ai fost deconectat(ă) în urma schimbării parolei"
-
 msgid "SecureDrop"
 msgstr "SecureDrop"
 
@@ -505,7 +502,9 @@ msgstr "Necitit"
 msgid "Read"
 msgstr "Citit"
 
-msgid "Uploaded Document"
+#, fuzzy
+#| msgid "Uploaded Document"
+msgid "Uploaded File"
 msgstr "Documentul a fost încărcat"
 
 msgid "Reply"
@@ -544,6 +543,19 @@ msgstr "Șterge contul de sursă"
 
 msgid "Are you sure?"
 msgstr "Ești sigur(ă)?"
+
+msgid ""
+"<p>\n"
+"Deleting the account for <b>{source}</b> will:\n"
+"</p>\n"
+"<ul>\n"
+"<li>prevent them from logging in with their codename again\n"
+"<li>prevent your organization from sending replies\n"
+"</ul>\n"
+"<p>\n"
+"All files, messages, and replies will also be deleted when their account is deleted.\n"
+"</p>"
+msgstr ""
 
 msgid "Yes, Delete Source Account"
 msgstr "Da, șterge contul de sursă"
@@ -588,7 +600,9 @@ msgstr "ACTUALIZEAZĂ LOGO"
 msgid "Submission Preferences"
 msgstr "Preferințe de trimitere"
 
-msgid "Prevent sources from uploading documents. Sources will still be able to send messages."
+#, fuzzy
+#| msgid "Prevent sources from uploading documents. Sources will still be able to send messages."
+msgid "Prevent sources from uploading files. Sources will still be able to send messages."
 msgstr "Împiedică sursele să încarce documente. Sursele vor putea să trimită mesaje în continuare."
 
 msgid "Prevent sources from sending initial messages shorter than the minimum required length:"
@@ -718,9 +732,9 @@ msgid "Designation"
 msgstr ""
 
 #, fuzzy
-#| msgid "Uploaded Document"
-msgid "Documents"
-msgstr "Documentul a fost încărcat"
+#| msgid "First name"
+msgid "Files"
+msgstr "Prenume"
 
 #, fuzzy
 #| msgid "Message"
@@ -730,8 +744,8 @@ msgstr "Mesaj"
 msgid "Date"
 msgstr ""
 
-msgid "No documents have been submitted!"
-msgstr "Nu a fost trimis niciun document!"
+msgid "There are no submissions!"
+msgstr ""
 
 msgid "Filter by codename"
 msgstr "Filtrează după numele de cod"
@@ -836,11 +850,15 @@ msgstr "Îți mulțumim că ne-ai trimis aceste informații. Te rugăm să revii
 msgid "Thanks! We received your message."
 msgstr "Îți mulțumim! Am primit mesajul tău."
 
-msgid "Thanks! We received your document."
-msgstr "Îți mulțumim! Am primit documentul tău."
+#, fuzzy
+#| msgid "Thanks! We received your message."
+msgid "Thanks! We received your file."
+msgstr "Îți mulțumim! Am primit mesajul tău."
 
-msgid "Thanks! We received your message and document."
-msgstr "Îți mulțumim! Am primit mesajul și documentul."
+#, fuzzy
+#| msgid "Thanks! We received your message."
+msgid "Thanks! We received your file and message."
+msgstr "Îți mulțumim! Am primit mesajul tău."
 
 msgid "Reply deleted"
 msgstr "Răspunsul a fost șters"
@@ -884,7 +902,9 @@ msgstr "Caută un nume de cod..."
 msgid "Powered by"
 msgstr "Oferit de"
 
-msgid "Please note: Sharing sensitive documents may put you at risk, even when using Tor and SecureDrop."
+#, fuzzy
+#| msgid "Please note: Sharing sensitive documents may put you at risk, even when using Tor and SecureDrop."
+msgid "Please note: Sharing sensitive information may put you at risk, even when using Tor and SecureDrop."
 msgstr "Notă: Partajarea de documente sensibile te poate supune la riscuri, chiar și când folosești Tor sau SecureDrop."
 
 msgid "SecureDrop is a project of Freedom of the Press Foundation."
@@ -1133,6 +1153,23 @@ msgstr "<strong>Important:</strong> Dacă vrei să rămâi anonim(ă), <strong>n
 
 msgid "Back to submission page"
 msgstr "Înapoi la pagina de trimitere"
+
+#~ msgid "You have been logged out due to password change"
+#~ msgstr "Ai fost deconectat(ă) în urma schimbării parolei"
+
+#, fuzzy
+#~| msgid "Uploaded Document"
+#~ msgid "Documents"
+#~ msgstr "Documentul a fost încărcat"
+
+#~ msgid "No documents have been submitted!"
+#~ msgstr "Nu a fost trimis niciun document!"
+
+#~ msgid "Thanks! We received your document."
+#~ msgstr "Îți mulțumim! Am primit documentul tău."
+
+#~ msgid "Thanks! We received your message and document."
+#~ msgstr "Îți mulțumim! Am primit mesajul și documentul."
 
 #~ msgid "Forgot your codename?"
 #~ msgstr "Ți-ai uitat numele de cod?"
