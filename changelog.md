@@ -2,8 +2,49 @@
 
 ## 2.5.0~rc1
 
+### Web Applications
+
+* Added unified Redis-based session handling for the Journalist Interface and API (#6403)
+* Added supported languages list and updated i18n tooling to process all langiuages available in Weblate (#6557, #6566)
+* Fixed double character escaping of organisation names in the Source and Journalist Interface (#6550)
+* Removed SASS from build process, added pure CSS for both web applications (#6529)
+* Updated string referencing submissions to use consistent terminology (#6543)
+* Updated application dependencies: mako from 1.07 to 1.2.2 (#6535)
+* Updated applications and utilities to use `secrets` module instead of `random` (#6525)
+* Updated locale widget to use full names for locales with shared languages (#6475)
+* Removed support for runtime asset minification (#6425)
+* Updated wordlists to replace potentially offensive terms (#6442)
+* Fixed string localization error (#6465)
+
+### Operations
+
+* Removed tracking parameters from Gitter badge in project README (#6548)
+* Fixed Ansible error in Tails validation task (#6533)
+* Removed usage of lsb_release in Tails and server code (#6530)
+* Updated descriptions in template KeePassXC database (#6524)
+* Removed old signing key and code referring to it (#6457, #6519)
+* Updated contact information in kernel source offer file (#6521)
+
+### Development
+
+* Updated development dependencies: dparse from 0.5.1 to 0.6.2; ujson from 5.3.0 to 5.5.0 (#6565)
+* Updated developer documentation URLs to point to new site at developers.securedrop.org (#6556)
+* Updated dev Dockerfile to use gpgv for signature verification (#6555,#6564)
+* Refactored functional tests to use fixtures throughout (#6518, #6517, #6516, #6505, #6504, #6503, #6487, #6484, #6482, #6481, #6476, #6383, #6382, #6379, #6365)
+* Fixed miscellaneous typos in code comments (#6549)
+* Removed grsecurity support from dev Dockerfile, misc version updates (#6528)
+* Added black and isort formatting for source code (#6480, #6486)
+
+### CI
+
+* Added static code analysis via semgrep (#6479)
+* Updated pagelayout test to address intermittent CI failure (#6470)
+
 ## 2.4.2
-* Security: Update Linux kernel to version 5.15.57, which includes mitigations for the security vulnerability known as “[Retbleed](https://comsec.ethz.ch/research/microarch/retbleed/)”.
+
+### Security
+
+* Updated Linux kernel to version 5.15.57, which includes mitigations for the security vulnerability known as “[Retbleed](https://comsec.ethz.ch/research/microarch/retbleed/)” (#6506)
 
 ## 2.4.1
 
