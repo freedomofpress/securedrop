@@ -12,8 +12,6 @@ from db import db
 from flask import session
 from sh import pybabel
 
-from .utils.env import TESTS_DIR
-
 
 def verify_rel_datetime_format(app):
     with app.test_client() as c:
@@ -90,16 +88,17 @@ def test_journalist_filters(config):
 def do_test(config, create_app):
     config.SUPPORTED_LOCALES = ["en_US", "fr_FR"]
     config.TRANSLATION_DIRS = Path(config.TEMP_DIR)
+    i18n_dir = Path(__file__).absolute().parent / "i18n"
     i18n_tool.I18NTool().main(
         [
             "--verbose",
             "translate-messages",
             "--mapping",
-            os.path.join(TESTS_DIR, "i18n/babel.cfg"),
+            str(i18n_dir / "babel.cfg"),
             "--translations-dir",
             config.TEMP_DIR,
             "--sources",
-            os.path.join(TESTS_DIR, "i18n/code.py"),
+            str(i18n_dir / "code.py"),
             "--extract-update",
             "--compile",
         ]

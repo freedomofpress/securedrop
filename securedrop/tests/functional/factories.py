@@ -29,6 +29,9 @@ class SecureDropConfigFactory:
     @staticmethod
     def create(
         SECUREDROP_DATA_ROOT: Path,
+        GPG_KEY_DIR: Path,
+        JOURNALIST_KEY: str,
+        RQ_WORKER_NAME: str,
         SESSION_EXPIRATION_MINUTES: float = 120,
         NOUNS: Path = DEFAULT_SECUREDROP_ROOT / "dictionaries" / "nouns.txt",
         ADJECTIVES: Path = DEFAULT_SECUREDROP_ROOT / "dictionaries" / "adjectives.txt",
@@ -55,12 +58,11 @@ class SecureDropConfigFactory:
             SCRYPT_ID_PEPPER=_generate_random_token(),
             SCRYPT_PARAMS=dict(N=2**14, r=8, p=1),
             WORKER_PIDFILE="/tmp/securedrop_test_worker.pid",
-            RQ_WORKER_NAME="test",
             NOUNS=str(NOUNS),
             ADJECTIVES=str(ADJECTIVES),
-            # The next 2 fields must match the GPG fixture
-            GPG_KEY_DIR="/tmp/securedrop/keys",
-            JOURNALIST_KEY="65A1B5FF195B56353CC63DFFCC40EF1228271441",
+            RQ_WORKER_NAME=RQ_WORKER_NAME,
+            GPG_KEY_DIR=GPG_KEY_DIR,
+            JOURNALIST_KEY=JOURNALIST_KEY,
         )
 
         # Delete any previous/existing DB and tnitialize a new one

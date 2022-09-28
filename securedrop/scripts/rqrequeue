@@ -9,6 +9,7 @@ import time
 sys.path.insert(0, "/opt/venvs/securedrop-app-code/lib/python3.5/site-packages")  # noqa: E402
 sys.path.insert(0, "/var/www/securedrop")  # noqa: E402
 
+from sdconfig import config
 from worker import requeue_interrupted_jobs
 
 
@@ -41,7 +42,7 @@ def main():
         logging.info("Running every %s seconds.", args.interval)
         while True:
             try:
-                requeue_interrupted_jobs()
+                requeue_interrupted_jobs(config.RQ_WORKER_NAME)
             except Exception as e:
                 logging.error("Error: %s", e)
 
@@ -49,7 +50,7 @@ def main():
             requeue_threshold += datetime.timedelta(seconds=args.interval)
     else:
         logging.info("Running once.")
-        requeue_interrupted_jobs()
+        requeue_interrupted_jobs(config.RQ_WORKER_NAME)
 
 
 if __name__ == "__main__":

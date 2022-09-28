@@ -34,8 +34,6 @@ from sdconfig import FALLBACK_LOCALE, SDConfig
 from sh import pybabel, sed
 from werkzeug.datastructures import Headers
 
-from .utils.env import TESTS_DIR
-
 NEVER_LOCALE = "eo"  # Esperanto
 
 
@@ -195,17 +193,14 @@ def test_i18n(journalist_app, config):
     # Then delete it because using it won't test what we want
     del journalist_app
 
-    sources = [
-        os.path.join(TESTS_DIR, "i18n/code.py"),
-        os.path.join(TESTS_DIR, "i18n/template.html"),
-    ]
-
+    i18n_dir = Path(__file__).absolute().parent / "i18n"
+    sources = [str(i18n_dir / "code.py"), str(i18n_dir / "template.html")]
     i18n_tool.I18NTool().main(
         [
             "--verbose",
             "translate-messages",
             "--mapping",
-            os.path.join(TESTS_DIR, "i18n/babel.cfg"),
+            str(i18n_dir / "babel.cfg"),
             "--translations-dir",
             config.TEMP_DIR,
             "--sources",

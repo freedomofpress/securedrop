@@ -386,7 +386,9 @@ class Storage:
 
 
 def async_add_checksum_for_file(db_obj: "Union[Submission, Reply]", storage: Storage) -> str:
-    return create_queue().enqueue(
+    from sdconfig import config
+
+    return create_queue(config.RQ_WORKER_NAME).enqueue(
         queued_add_checksum_for_file,
         type(db_obj),
         db_obj.id,

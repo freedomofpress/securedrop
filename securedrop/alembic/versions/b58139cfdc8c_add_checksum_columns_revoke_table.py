@@ -60,7 +60,7 @@ def upgrade() -> None:
             )
             for (sub_id, filesystem_id, filename) in conn.execute(query):
                 full_path = Storage.get_default().path(filesystem_id, filename)
-                create_queue().enqueue(
+                create_queue(config.RQ_WORKER_NAME).enqueue(
                     queued_add_checksum_for_file,
                     Submission,
                     int(sub_id),
@@ -77,7 +77,7 @@ def upgrade() -> None:
             )
             for (rep_id, filesystem_id, filename) in conn.execute(query):
                 full_path = Storage.get_default().path(filesystem_id, filename)
-                create_queue().enqueue(
+                create_queue(config.RQ_WORKER_NAME).enqueue(
                     queued_add_checksum_for_file,
                     Reply,
                     int(rep_id),

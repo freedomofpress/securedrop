@@ -15,12 +15,10 @@ def layabout():
     time.sleep(3600)
 
 
-def start_rq_worker(config, queue_name=None):
+def start_rq_worker(config, queue_name):
     """
     Launches an rq worker process.
     """
-    if queue_name is None:
-        queue_name = config.RQ_WORKER_NAME
     return subprocess.Popen(
         [
             "/opt/venvs/securedrop-app-code/bin/rqworker",
@@ -32,16 +30,16 @@ def start_rq_worker(config, queue_name=None):
     )
 
 
-def test_no_interrupted_jobs(caplog):
+def test_no_interrupted_jobs(config, caplog):
     """
     Tests requeue_interrupted_jobs when there are no interrupted jobs.
     """
     caplog.set_level(logging.DEBUG)
 
-    q = worker.create_queue()
+    q = worker.create_queue(config.RQ_WORKER_NAME)
     try:
         assert len(q.get_job_ids()) == 0
-        worker.requeue_interrupted_jobs()
+        worker.requeue_interrupted_jobs(config.RQ_WORKER_NAME)
         assert "No interrupted jobs found in started job registry." in caplog.text
     finally:
         q.delete()
