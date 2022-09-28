@@ -41,9 +41,6 @@ msgstr "há {time}"
 msgid "You have been logged out due to inactivity."
 msgstr "A sua sessão terminou por inatividade."
 
-msgid "You have been logged out due to password change"
-msgstr "A sua sessão foi terminada devido à alteração da sua palavra-passe"
-
 msgid "SecureDrop"
 msgstr "SecureDrop"
 
@@ -475,7 +472,9 @@ msgstr "Por Ler"
 msgid "Read"
 msgstr "Lida"
 
-msgid "Uploaded Document"
+#, fuzzy
+#| msgid "Uploaded Document"
+msgid "Uploaded File"
 msgstr "Documento Carregado"
 
 msgid "Reply"
@@ -510,6 +509,19 @@ msgstr "Eliminar Conta da Fonte"
 
 msgid "Are you sure?"
 msgstr "Tem a certeza?"
+
+msgid ""
+"<p>\n"
+"Deleting the account for <b>{source}</b> will:\n"
+"</p>\n"
+"<ul>\n"
+"<li>prevent them from logging in with their codename again\n"
+"<li>prevent your organization from sending replies\n"
+"</ul>\n"
+"<p>\n"
+"All files, messages, and replies will also be deleted when their account is deleted.\n"
+"</p>"
+msgstr ""
 
 msgid "Yes, Delete Source Account"
 msgstr "Sim, Eliminar Conta da Fonte"
@@ -550,7 +562,9 @@ msgstr "ALTERAR LOGÓTIPO"
 msgid "Submission Preferences"
 msgstr "Definições de Envio"
 
-msgid "Prevent sources from uploading documents. Sources will still be able to send messages."
+#, fuzzy
+#| msgid "Prevent sources from uploading documents. Sources will still be able to send messages."
+msgid "Prevent sources from uploading files. Sources will still be able to send messages."
 msgstr "Impedir que fontes submetam documentos. As fontes continuarão a poder enviar mensagens."
 
 msgid "Prevent sources from sending initial messages shorter than the minimum required length:"
@@ -673,8 +687,10 @@ msgstr "Remover dos favoritos"
 msgid "Designation"
 msgstr "Designação"
 
-msgid "Documents"
-msgstr "Documentos"
+#, fuzzy
+#| msgid "Filename"
+msgid "Files"
+msgstr "Nome do ficheiro"
 
 msgid "Messages"
 msgstr "Mensagens"
@@ -682,8 +698,8 @@ msgstr "Mensagens"
 msgid "Date"
 msgstr "Data"
 
-msgid "No documents have been submitted!"
-msgstr "Nenhum documento foi enviado!"
+msgid "There are no submissions!"
+msgstr ""
 
 msgid "Filter by codename"
 msgstr "Filtrar por nome-código"
@@ -775,11 +791,15 @@ msgstr "Obrigado por nos enviar esta informação. Por favor, volte mais tarde p
 msgid "Thanks! We received your message."
 msgstr "Obrigado! Recebemos a sua mensagem."
 
-msgid "Thanks! We received your document."
-msgstr "Obrigado! Recebemos o seu documento."
+#, fuzzy
+#| msgid "Thanks! We received your message."
+msgid "Thanks! We received your file."
+msgstr "Obrigado! Recebemos a sua mensagem."
 
-msgid "Thanks! We received your message and document."
-msgstr "Obrigado! Recebemos a sua mensagem e documento."
+#, fuzzy
+#| msgid "Thanks! We received your message."
+msgid "Thanks! We received your file and message."
+msgstr "Obrigado! Recebemos a sua mensagem."
 
 msgid "Reply deleted"
 msgstr "Resposta eliminada"
@@ -823,7 +843,9 @@ msgstr "Procurar um nome-código..."
 msgid "Powered by"
 msgstr "Este site utiliza o"
 
-msgid "Please note: Sharing sensitive documents may put you at risk, even when using Tor and SecureDrop."
+#, fuzzy
+#| msgid "Please note: Sharing sensitive documents may put you at risk, even when using Tor and SecureDrop."
+msgid "Please note: Sharing sensitive information may put you at risk, even when using Tor and SecureDrop."
 msgstr "Atenção: Partilhar documentos sensíveis pode colocá-lo em risco, mesmo usando o Tor e SecureDrop."
 
 msgid "SecureDrop is a project of Freedom of the Press Foundation."
@@ -1051,6 +1073,21 @@ msgstr "<strong>Importante:</strong> para manter o seu anonimato, <strong>não</
 
 msgid "Back to submission page"
 msgstr "Voltar à página de envio"
+
+#~ msgid "You have been logged out due to password change"
+#~ msgstr "A sua sessão foi terminada devido à alteração da sua palavra-passe"
+
+#~ msgid "Documents"
+#~ msgstr "Documentos"
+
+#~ msgid "No documents have been submitted!"
+#~ msgstr "Nenhum documento foi enviado!"
+
+#~ msgid "Thanks! We received your document."
+#~ msgstr "Obrigado! Recebemos o seu documento."
+
+#~ msgid "Thanks! We received your message and document."
+#~ msgstr "Obrigado! Recebemos a sua mensagem e documento."
 
 #~ msgid "Forgot your codename?"
 #~ msgstr "Esqueceu-se do seu nome-código?"

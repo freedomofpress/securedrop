@@ -43,9 +43,6 @@ msgstr "{time} पहले"
 msgid "You have been logged out due to inactivity."
 msgstr "निष्क्रियता के कारण आपको लॉग आउट कर दिया गया है|"
 
-msgid "You have been logged out due to password change"
-msgstr "पासवर्ड बदलने के कारण आप लॉग आउट हो गये है"
-
 msgid "SecureDrop"
 msgstr "SecureDrop"
 
@@ -495,7 +492,9 @@ msgstr "अपठित"
 msgid "Read"
 msgstr "पठित"
 
-msgid "Uploaded Document"
+#, fuzzy
+#| msgid "Uploaded Document"
+msgid "Uploaded File"
 msgstr "अपलोड किए गए दस्तावेज़"
 
 msgid "Reply"
@@ -534,6 +533,19 @@ msgstr "स्रोत खाता हटाएं"
 
 msgid "Are you sure?"
 msgstr "क्या आपको यकीन है?"
+
+msgid ""
+"<p>\n"
+"Deleting the account for <b>{source}</b> will:\n"
+"</p>\n"
+"<ul>\n"
+"<li>prevent them from logging in with their codename again\n"
+"<li>prevent your organization from sending replies\n"
+"</ul>\n"
+"<p>\n"
+"All files, messages, and replies will also be deleted when their account is deleted.\n"
+"</p>"
+msgstr ""
 
 msgid "Yes, Delete Source Account"
 msgstr "हाँ, स्रोत खाता हटाएं"
@@ -578,7 +590,9 @@ msgstr "अपडेट लोगो"
 msgid "Submission Preferences"
 msgstr "सबमिशन पसंदगी"
 
-msgid "Prevent sources from uploading documents. Sources will still be able to send messages."
+#, fuzzy
+#| msgid "Prevent sources from uploading documents. Sources will still be able to send messages."
+msgid "Prevent sources from uploading files. Sources will still be able to send messages."
 msgstr "दस्तावेज़ अपलोड करने से स्रोतों को रोकें। स्रोत अभी भी संदेश भेजने में सक्षम होंगे।"
 
 msgid "Prevent sources from sending initial messages shorter than the minimum required length:"
@@ -708,9 +722,9 @@ msgid "Designation"
 msgstr ""
 
 #, fuzzy
-#| msgid "Uploaded Document"
-msgid "Documents"
-msgstr "अपलोड किए गए दस्तावेज़"
+#| msgid "First name"
+msgid "Files"
+msgstr "प्रथम नाम"
 
 #, fuzzy
 #| msgid "Message"
@@ -720,8 +734,8 @@ msgstr "संदेश"
 msgid "Date"
 msgstr ""
 
-msgid "No documents have been submitted!"
-msgstr "कोई दस्तावेज जमा नहीं किया गया है!"
+msgid "There are no submissions!"
+msgstr ""
 
 msgid "Filter by codename"
 msgstr "कोडनेम द्वारा फ़िल्टर करें"
@@ -826,11 +840,15 @@ msgstr "हमें यह जानकारी भेजने के लि�
 msgid "Thanks! We received your message."
 msgstr "धन्यवाद! हमें आपका संदेशा मिला|"
 
-msgid "Thanks! We received your document."
-msgstr "धन्यवाद! हमें आपका दस्तावेज़ मिला।"
+#, fuzzy
+#| msgid "Thanks! We received your message."
+msgid "Thanks! We received your file."
+msgstr "धन्यवाद! हमें आपका संदेशा मिला|"
 
-msgid "Thanks! We received your message and document."
-msgstr "धन्यवाद! हमें आपका संदेशा और दस्तावेज़ मिला।"
+#, fuzzy
+#| msgid "Thanks! We received your message."
+msgid "Thanks! We received your file and message."
+msgstr "धन्यवाद! हमें आपका संदेशा मिला|"
 
 msgid "Reply deleted"
 msgstr "जवाब हटा दिया गया"
@@ -874,7 +892,9 @@ msgstr "एक कोडनाम खोजें..."
 msgid "Powered by"
 msgstr "द्वारा संचालित"
 
-msgid "Please note: Sharing sensitive documents may put you at risk, even when using Tor and SecureDrop."
+#, fuzzy
+#| msgid "Please note: Sharing sensitive documents may put you at risk, even when using Tor and SecureDrop."
+msgid "Please note: Sharing sensitive information may put you at risk, even when using Tor and SecureDrop."
 msgstr "कृपया ध्यान दें: Tor और SecureDrop द्वारा संवेदनशील दस्तावेज़ साझा करना आपको जोखिम में डाल सकता है।"
 
 msgid "SecureDrop is a project of Freedom of the Press Foundation."
@@ -1121,6 +1141,23 @@ msgstr "<strong>महत्वपूर्ण:</strong> यदि आप गु
 
 msgid "Back to submission page"
 msgstr "सबमिशन पृष्ठ पर वापस जाएं"
+
+#~ msgid "You have been logged out due to password change"
+#~ msgstr "पासवर्ड बदलने के कारण आप लॉग आउट हो गये है"
+
+#, fuzzy
+#~| msgid "Uploaded Document"
+#~ msgid "Documents"
+#~ msgstr "अपलोड किए गए दस्तावेज़"
+
+#~ msgid "No documents have been submitted!"
+#~ msgstr "कोई दस्तावेज जमा नहीं किया गया है!"
+
+#~ msgid "Thanks! We received your document."
+#~ msgstr "धन्यवाद! हमें आपका दस्तावेज़ मिला।"
+
+#~ msgid "Thanks! We received your message and document."
+#~ msgstr "धन्यवाद! हमें आपका संदेशा और दस्तावेज़ मिला।"
 
 #~ msgid "Forgot your codename?"
 #~ msgstr "अपना संकेत नाम भूल गए?"

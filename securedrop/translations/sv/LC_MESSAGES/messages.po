@@ -41,9 +41,6 @@ msgstr "{time} sedan"
 msgid "You have been logged out due to inactivity."
 msgstr "Du har blivit utloggad på grund av inaktivitet."
 
-msgid "You have been logged out due to password change"
-msgstr "Du har blivit utloggad på grund av lösenordsbyte"
-
 msgid "SecureDrop"
 msgstr "SecureDrop"
 
@@ -475,7 +472,9 @@ msgstr "Olästa"
 msgid "Read"
 msgstr "Lästa"
 
-msgid "Uploaded Document"
+#, fuzzy
+#| msgid "Uploaded Document"
+msgid "Uploaded File"
 msgstr "Uppladdat dokument"
 
 msgid "Reply"
@@ -510,6 +509,19 @@ msgstr "Radera en källa"
 
 msgid "Are you sure?"
 msgstr "Är du säker?"
+
+msgid ""
+"<p>\n"
+"Deleting the account for <b>{source}</b> will:\n"
+"</p>\n"
+"<ul>\n"
+"<li>prevent them from logging in with their codename again\n"
+"<li>prevent your organization from sending replies\n"
+"</ul>\n"
+"<p>\n"
+"All files, messages, and replies will also be deleted when their account is deleted.\n"
+"</p>"
+msgstr ""
 
 msgid "Yes, Delete Source Account"
 msgstr "Ja, radera källan"
@@ -550,7 +562,9 @@ msgstr "UPPDATERA LOGGA"
 msgid "Submission Preferences"
 msgstr "Inlämningsinställningar"
 
-msgid "Prevent sources from uploading documents. Sources will still be able to send messages."
+#, fuzzy
+#| msgid "Prevent sources from uploading documents. Sources will still be able to send messages."
+msgid "Prevent sources from uploading files. Sources will still be able to send messages."
 msgstr "Förhindra källor från att ladda upp dokument. Källor kommer fortfarande kunna skicka meddelanden."
 
 msgid "Prevent sources from sending initial messages shorter than the minimum required length:"
@@ -673,8 +687,10 @@ msgstr "Ta bort stjärnmärkning"
 msgid "Designation"
 msgstr "Beteckning"
 
-msgid "Documents"
-msgstr "Dokument"
+#, fuzzy
+#| msgid "Filename"
+msgid "Files"
+msgstr "Filnamn"
 
 msgid "Messages"
 msgstr "Meddelanden"
@@ -682,8 +698,8 @@ msgstr "Meddelanden"
 msgid "Date"
 msgstr "Datum"
 
-msgid "No documents have been submitted!"
-msgstr "Inga dokument har lämnats in!"
+msgid "There are no submissions!"
+msgstr ""
 
 msgid "Filter by codename"
 msgstr "Filtrera på kodnamn"
@@ -775,11 +791,15 @@ msgstr "Tack för att du skickade denna information till oss. Kom tillbaka senar
 msgid "Thanks! We received your message."
 msgstr "Tack! Vi har tagit emot ditt meddelande."
 
-msgid "Thanks! We received your document."
-msgstr "Tack! Vi har tagit emot ditt dokument."
+#, fuzzy
+#| msgid "Thanks! We received your message."
+msgid "Thanks! We received your file."
+msgstr "Tack! Vi har tagit emot ditt meddelande."
 
-msgid "Thanks! We received your message and document."
-msgstr "Tack! Vi har tagit emot ditt meddelande och dokument."
+#, fuzzy
+#| msgid "Thanks! We received your message."
+msgid "Thanks! We received your file and message."
+msgstr "Tack! Vi har tagit emot ditt meddelande."
 
 msgid "Reply deleted"
 msgstr "Svaret har tagits bort"
@@ -823,7 +843,9 @@ msgstr "Sök ett kodnamn..."
 msgid "Powered by"
 msgstr "Körs på"
 
-msgid "Please note: Sharing sensitive documents may put you at risk, even when using Tor and SecureDrop."
+#, fuzzy
+#| msgid "Please note: Sharing sensitive documents may put you at risk, even when using Tor and SecureDrop."
+msgid "Please note: Sharing sensitive information may put you at risk, even when using Tor and SecureDrop."
 msgstr "Observera: Delning av känsliga dokument kan utsätta dig för risk, även om du använder Tor och SecureDrop."
 
 msgid "SecureDrop is a project of Freedom of the Press Foundation."
@@ -1051,6 +1073,21 @@ msgstr "<strong> Viktigt:</strong> Ifall du önskar att förbli anonym, <strong>
 
 msgid "Back to submission page"
 msgstr "Tillbaka till inlämningssidan"
+
+#~ msgid "You have been logged out due to password change"
+#~ msgstr "Du har blivit utloggad på grund av lösenordsbyte"
+
+#~ msgid "Documents"
+#~ msgstr "Dokument"
+
+#~ msgid "No documents have been submitted!"
+#~ msgstr "Inga dokument har lämnats in!"
+
+#~ msgid "Thanks! We received your document."
+#~ msgstr "Tack! Vi har tagit emot ditt dokument."
+
+#~ msgid "Thanks! We received your message and document."
+#~ msgstr "Tack! Vi har tagit emot ditt meddelande och dokument."
 
 #~ msgid "Forgot your codename?"
 #~ msgstr "Har du glömt ditt kodnamn?"

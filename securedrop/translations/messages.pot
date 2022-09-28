@@ -6,7 +6,7 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: SecureDrop 2.4.0~rc1\n"
+"Project-Id-Version: SecureDrop 2.5.0~rc1\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
@@ -37,9 +37,6 @@ msgid "{time} ago"
 msgstr ""
 
 msgid "You have been logged out due to inactivity."
-msgstr ""
-
-msgid "You have been logged out due to password change"
 msgstr ""
 
 msgid "SecureDrop"
@@ -473,7 +470,7 @@ msgstr ""
 msgid "Read"
 msgstr ""
 
-msgid "Uploaded Document"
+msgid "Uploaded File"
 msgstr ""
 
 msgid "Reply"
@@ -507,6 +504,19 @@ msgid "Delete Source Account"
 msgstr ""
 
 msgid "Are you sure?"
+msgstr ""
+
+msgid ""
+"<p>\n"
+"Deleting the account for <b>{source}</b> will:\n"
+"</p>\n"
+"<ul>\n"
+"<li>prevent them from logging in with their codename again\n"
+"<li>prevent your organization from sending replies\n"
+"</ul>\n"
+"<p>\n"
+"All files, messages, and replies will also be deleted when their account is deleted.\n"
+"</p>"
 msgstr ""
 
 msgid "Yes, Delete Source Account"
@@ -548,7 +558,7 @@ msgstr ""
 msgid "Submission Preferences"
 msgstr ""
 
-msgid "Prevent sources from uploading documents. Sources will still be able to send messages."
+msgid "Prevent sources from uploading files. Sources will still be able to send messages."
 msgstr ""
 
 msgid "Prevent sources from sending initial messages shorter than the minimum required length:"
@@ -671,7 +681,7 @@ msgstr ""
 msgid "Designation"
 msgstr ""
 
-msgid "Documents"
+msgid "Files"
 msgstr ""
 
 msgid "Messages"
@@ -680,7 +690,7 @@ msgstr ""
 msgid "Date"
 msgstr ""
 
-msgid "No documents have been submitted!"
+msgid "There are no submissions!"
 msgstr ""
 
 msgid "Filter by codename"
@@ -773,10 +783,10 @@ msgstr ""
 msgid "Thanks! We received your message."
 msgstr ""
 
-msgid "Thanks! We received your document."
+msgid "Thanks! We received your file."
 msgstr ""
 
-msgid "Thanks! We received your message and document."
+msgid "Thanks! We received your file and message."
 msgstr ""
 
 msgid "Reply deleted"
@@ -821,7 +831,7 @@ msgstr ""
 msgid "Powered by"
 msgstr ""
 
-msgid "Please note: Sharing sensitive documents may put you at risk, even when using Tor and SecureDrop."
+msgid "Please note: Sharing sensitive information may put you at risk, even when using Tor and SecureDrop."
 msgstr ""
 
 msgid "SecureDrop is a project of Freedom of the Press Foundation."

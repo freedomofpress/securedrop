@@ -41,9 +41,6 @@ msgstr "{time} 之前"
 msgid "You have been logged out due to inactivity."
 msgstr "因為閒置太久，已將您登出。"
 
-msgid "You have been logged out due to password change"
-msgstr "因密碼變更已被登出"
-
 msgid "SecureDrop"
 msgstr "SecureDrop"
 
@@ -466,7 +463,9 @@ msgstr "未讀"
 msgid "Read"
 msgstr "讀取"
 
-msgid "Uploaded Document"
+#, fuzzy
+#| msgid "Uploaded Document"
+msgid "Uploaded File"
 msgstr "已上傳的文件"
 
 msgid "Reply"
@@ -501,6 +500,19 @@ msgstr "刪除線人帳號"
 
 msgid "Are you sure?"
 msgstr "確定嗎？"
+
+msgid ""
+"<p>\n"
+"Deleting the account for <b>{source}</b> will:\n"
+"</p>\n"
+"<ul>\n"
+"<li>prevent them from logging in with their codename again\n"
+"<li>prevent your organization from sending replies\n"
+"</ul>\n"
+"<p>\n"
+"All files, messages, and replies will also be deleted when their account is deleted.\n"
+"</p>"
+msgstr ""
 
 msgid "Yes, Delete Source Account"
 msgstr "是的，請刪除線人帳號"
@@ -541,7 +553,9 @@ msgstr "更新商標"
 msgid "Submission Preferences"
 msgstr "提交偏好"
 
-msgid "Prevent sources from uploading documents. Sources will still be able to send messages."
+#, fuzzy
+#| msgid "Prevent sources from uploading documents. Sources will still be able to send messages."
+msgid "Prevent sources from uploading files. Sources will still be able to send messages."
 msgstr "防止消息來源上傳文件，但來源仍可以傳送訊息。"
 
 msgid "Prevent sources from sending initial messages shorter than the minimum required length:"
@@ -664,8 +678,10 @@ msgstr "未標星"
 msgid "Designation"
 msgstr "指定"
 
-msgid "Documents"
-msgstr "文件"
+#, fuzzy
+#| msgid "Filename"
+msgid "Files"
+msgstr "檔案名稱"
 
 msgid "Messages"
 msgstr "訊息"
@@ -673,8 +689,8 @@ msgstr "訊息"
 msgid "Date"
 msgstr "日期"
 
-msgid "No documents have been submitted!"
-msgstr "未有文件被提交！"
+msgid "There are no submissions!"
+msgstr ""
 
 msgid "Filter by codename"
 msgstr "按代號篩選"
@@ -766,11 +782,15 @@ msgstr "感谢你發送此一訊息給我們。請稍晚再來查看回覆。"
 msgid "Thanks! We received your message."
 msgstr "謝謝！我們已收到你的訊息。"
 
-msgid "Thanks! We received your document."
-msgstr "謝謝！我們已收到你的文件。"
+#, fuzzy
+#| msgid "Thanks! We received your message."
+msgid "Thanks! We received your file."
+msgstr "謝謝！我們已收到你的訊息。"
 
-msgid "Thanks! We received your message and document."
-msgstr "謝謝！我們已收到你的訊息和文件。"
+#, fuzzy
+#| msgid "Thanks! We received your message."
+msgid "Thanks! We received your file and message."
+msgstr "謝謝！我們已收到你的訊息。"
 
 msgid "Reply deleted"
 msgstr "回覆已刪除"
@@ -814,7 +834,9 @@ msgstr "查詢代號..."
 msgid "Powered by"
 msgstr "使用版本"
 
-msgid "Please note: Sharing sensitive documents may put you at risk, even when using Tor and SecureDrop."
+#, fuzzy
+#| msgid "Please note: Sharing sensitive documents may put you at risk, even when using Tor and SecureDrop."
+msgid "Please note: Sharing sensitive information may put you at risk, even when using Tor and SecureDrop."
 msgstr "請注意：即便利用 Tor 或 SecureDrop，但分享敏感文件還是對您有某些風險。"
 
 msgid "SecureDrop is a project of Freedom of the Press Foundation."
@@ -1042,6 +1064,21 @@ msgstr "<strong>重要：</strong>如果您希望保持匿名，<strong>請勿</
 
 msgid "Back to submission page"
 msgstr "返回提交文件頁面"
+
+#~ msgid "You have been logged out due to password change"
+#~ msgstr "因密碼變更已被登出"
+
+#~ msgid "Documents"
+#~ msgstr "文件"
+
+#~ msgid "No documents have been submitted!"
+#~ msgstr "未有文件被提交！"
+
+#~ msgid "Thanks! We received your document."
+#~ msgstr "謝謝！我們已收到你的文件。"
+
+#~ msgid "Thanks! We received your message and document."
+#~ msgstr "謝謝！我們已收到你的訊息和文件。"
 
 #~ msgid "Forgot your codename?"
 #~ msgstr "忘記你的代號？"

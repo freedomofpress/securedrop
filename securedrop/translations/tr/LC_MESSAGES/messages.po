@@ -41,9 +41,6 @@ msgstr "{time} önce"
 msgid "You have been logged out due to inactivity."
 msgstr "Uzun süredir bir işlem yapmadığınız için oturumunuz kapatıldı."
 
-msgid "You have been logged out due to password change"
-msgstr "Parolanız değiştirildiği için oturumunuz kapatıldı"
-
 msgid "SecureDrop"
 msgstr "SecureDrop"
 
@@ -475,7 +472,9 @@ msgstr "Okunmamış"
 msgid "Read"
 msgstr "Okunmuş"
 
-msgid "Uploaded Document"
+#, fuzzy
+#| msgid "Uploaded Document"
+msgid "Uploaded File"
 msgstr "Yüklenen Belge"
 
 msgid "Reply"
@@ -510,6 +509,19 @@ msgstr "Kaynak Hesabını Sil"
 
 msgid "Are you sure?"
 msgstr "Emin misiniz?"
+
+msgid ""
+"<p>\n"
+"Deleting the account for <b>{source}</b> will:\n"
+"</p>\n"
+"<ul>\n"
+"<li>prevent them from logging in with their codename again\n"
+"<li>prevent your organization from sending replies\n"
+"</ul>\n"
+"<p>\n"
+"All files, messages, and replies will also be deleted when their account is deleted.\n"
+"</p>"
+msgstr ""
 
 msgid "Yes, Delete Source Account"
 msgstr "Evet, Kaynak Hesabını Sil"
@@ -550,7 +562,9 @@ msgstr "LOGOYU GÜNCELLE"
 msgid "Submission Preferences"
 msgstr "Gönderim Tercihleri"
 
-msgid "Prevent sources from uploading documents. Sources will still be able to send messages."
+#, fuzzy
+#| msgid "Prevent sources from uploading documents. Sources will still be able to send messages."
+msgid "Prevent sources from uploading files. Sources will still be able to send messages."
 msgstr "Kaynakların belge yüklemelerini engeller. Kaynaklar halen ileti gönderebilir."
 
 msgid "Prevent sources from sending initial messages shorter than the minimum required length:"
@@ -673,8 +687,10 @@ msgstr "İşareti Kaldır"
 msgid "Designation"
 msgstr "Atama"
 
-msgid "Documents"
-msgstr "Belgeler"
+#, fuzzy
+#| msgid "Filename"
+msgid "Files"
+msgstr "Dosya adı"
 
 msgid "Messages"
 msgstr "İletiler"
@@ -682,8 +698,8 @@ msgstr "İletiler"
 msgid "Date"
 msgstr "Tarih"
 
-msgid "No documents have been submitted!"
-msgstr "Herhangi bir belge gönderilmedi!"
+msgid "There are no submissions!"
+msgstr ""
 
 msgid "Filter by codename"
 msgstr "Kod adına göre süz"
@@ -775,11 +791,15 @@ msgstr "Bu bilgiyi bize gönderdiğiniz için teşekkür ederiz. Yanıtlar için
 msgid "Thanks! We received your message."
 msgstr "Teşekkürler! İletiniz alındı."
 
-msgid "Thanks! We received your document."
-msgstr "Teşekkürler! Belgeniz alındı."
+#, fuzzy
+#| msgid "Thanks! We received your message."
+msgid "Thanks! We received your file."
+msgstr "Teşekkürler! İletiniz alındı."
 
-msgid "Thanks! We received your message and document."
-msgstr "Teşekkürler! İletiniz ve belgeniz alındı."
+#, fuzzy
+#| msgid "Thanks! We received your message."
+msgid "Thanks! We received your file and message."
+msgstr "Teşekkürler! İletiniz alındı."
 
 msgid "Reply deleted"
 msgstr "Yanıt silindi"
@@ -823,7 +843,9 @@ msgstr "Bir kod adı ara..."
 msgid "Powered by"
 msgstr "Destekleyen"
 
-msgid "Please note: Sharing sensitive documents may put you at risk, even when using Tor and SecureDrop."
+#, fuzzy
+#| msgid "Please note: Sharing sensitive documents may put you at risk, even when using Tor and SecureDrop."
+msgid "Please note: Sharing sensitive information may put you at risk, even when using Tor and SecureDrop."
 msgstr "Lütfen unutmayın: Tor ve SecureDrop kullanıyor olsanız bile önemli belgeleri paylaşarak risk alırsınız."
 
 msgid "SecureDrop is a project of Freedom of the Press Foundation."
@@ -1051,6 +1073,21 @@ msgstr "<strong>Önemli:</strong> Anonim kalmak istiyorsanız, dosyanın GPG tar
 
 msgid "Back to submission page"
 msgstr "Gönderi sayfasına geri dön"
+
+#~ msgid "You have been logged out due to password change"
+#~ msgstr "Parolanız değiştirildiği için oturumunuz kapatıldı"
+
+#~ msgid "Documents"
+#~ msgstr "Belgeler"
+
+#~ msgid "No documents have been submitted!"
+#~ msgstr "Herhangi bir belge gönderilmedi!"
+
+#~ msgid "Thanks! We received your document."
+#~ msgstr "Teşekkürler! Belgeniz alındı."
+
+#~ msgid "Thanks! We received your message and document."
+#~ msgstr "Teşekkürler! İletiniz ve belgeniz alındı."
 
 #~ msgid "Forgot your codename?"
 #~ msgstr "Kod adınızı mı unuttunuz?"
