@@ -7,7 +7,7 @@ from tests.functional.factories import SecureDropConfigFactory
 
 
 @pytest.fixture(scope="session")
-def _sd_servers_with_designation_collisions(setup_journalist_key_and_gpg_folder):
+def _sd_servers_with_designation_collisions(setup_journalist_key_and_gpg_folder, setup_rqworker):
     """Spawn source and journalist apps that can only generate a single journalist designation."""
     # Generate a config that can only generate a single journalist designation
     folder_for_fixture_path = Path("/tmp/sd-tests/functional-designation-collisions")
@@ -18,16 +18,17 @@ def _sd_servers_with_designation_collisions(setup_journalist_key_and_gpg_folder)
     adjectives_path = folder_for_fixture_path / "adjectives.txt"
     adjectives_path.touch(exist_ok=True)
     adjectives_path.write_text("tonic")
+
+    worker_name, _ = setup_rqworker
+    journalist_key_fingerprint, gpg_key_dir = setup_journalist_key_and_gpg_folder
     config_for_collisions = SecureDropConfigFactory.create(
         SECUREDROP_DATA_ROOT=folder_for_fixture_path / "sd_data_root",
         NOUNS=nouns_path,
         ADJECTIVES=adjectives_path,
+        GPG_KEY_DIR=gpg_key_dir,
+        JOURNALIST_KEY=journalist_key_fingerprint,
+        RQ_WORKER_NAME=worker_name,
     )
-
-    # Ensure the GPG settings match the one in the config to use, to ensure consistency
-    journalist_key_fingerprint, gpg_dir = setup_journalist_key_and_gpg_folder
-    assert Path(config_for_collisions.GPG_KEY_DIR) == gpg_dir
-    assert config_for_collisions.JOURNALIST_KEY == journalist_key_fingerprint
 
     # Spawn the apps in separate processes
     with spawn_sd_servers(config_to_use=config_for_collisions) as sd_servers_result:

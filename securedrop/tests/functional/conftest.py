@@ -153,18 +153,26 @@ def spawn_sd_servers(
         journalist_app_base_url = f"http://127.0.0.1:{journalist_port}"
 
         # Sleep until the source and journalist web apps are up and running
+        attempts_count = 30
+        seconds_between_attempts = 0.25
         response_source_status_code = None
-        response_journalist_status_code = None
-        for _ in range(30):
+        for _ in range(attempts_count):
             try:
                 response_source = requests.get(source_app_base_url, timeout=1)
                 response_source_status_code = response_source.status_code
+                break
+            except (requests.ConnectionError, requests.Timeout):
+                time.sleep(seconds_between_attempts)
+        assert response_source_status_code == 200
+
+        response_journalist_status_code = None
+        for _ in range(attempts_count):
+            try:
                 response_journalist = requests.get(journalist_app_base_url, timeout=1)
                 response_journalist_status_code = response_journalist.status_code
                 break
             except (requests.ConnectionError, requests.Timeout):
-                time.sleep(0.25)
-        assert response_source_status_code == 200
+                time.sleep(seconds_between_attempts)
         assert response_journalist_status_code == 200
 
         # Ready for the tests
@@ -190,7 +198,8 @@ def spawn_sd_servers(
 
 @pytest.fixture(scope="session")
 def sd_servers(
-    setup_journalist_key_and_gpg_folder: Tuple[str, Path]
+    setup_journalist_key_and_gpg_folder: Tuple[str, Path],
+    setup_rqworker: Tuple[str, Path],
 ) -> Generator[SdServersFixtureResult, None, None]:
     """Spawn the source and journalist apps as separate processes with a default config.
 
@@ -199,14 +208,14 @@ def sd_servers(
     (example: a source submits a message), use the sd_servers_with_clean_state fixture, which is
     slower.
     """
+    journalist_key_fingerprint, gpg_key_dir = setup_journalist_key_and_gpg_folder
+    worker_name, _ = setup_rqworker
     default_config = SecureDropConfigFactory.create(
         SECUREDROP_DATA_ROOT=Path("/tmp/sd-tests/functional"),
+        GPG_KEY_DIR=gpg_key_dir,
+        JOURNALIST_KEY=journalist_key_fingerprint,
+        RQ_WORKER_NAME=worker_name,
     )
-
-    # Ensure the GPG settings match the one in the config to use, to ensure consistency
-    journalist_key_fingerprint, gpg_dir = setup_journalist_key_and_gpg_folder
-    assert Path(default_config.GPG_KEY_DIR) == gpg_dir
-    assert default_config.JOURNALIST_KEY == journalist_key_fingerprint
 
     # Spawn the apps in separate processes
     with spawn_sd_servers(config_to_use=default_config) as sd_servers_result:
@@ -215,20 +224,21 @@ def sd_servers(
 
 @pytest.fixture(scope="function")
 def sd_servers_with_clean_state(
-    setup_journalist_key_and_gpg_folder: Tuple[str, Path]
+    setup_journalist_key_and_gpg_folder: Tuple[str, Path],
+    setup_rqworker: Tuple[str, Path],
 ) -> Generator[SdServersFixtureResult, None, None]:
     """Same as sd_servers but spawns the apps with a clean state.
 
     Slower than sd_servers as it is function-scoped.
     """
+    journalist_key_fingerprint, gpg_key_dir = setup_journalist_key_and_gpg_folder
+    worker_name, _ = setup_rqworker
     default_config = SecureDropConfigFactory.create(
         SECUREDROP_DATA_ROOT=Path(f"/tmp/sd-tests/functional-clean-state-{uuid4()}"),
+        GPG_KEY_DIR=gpg_key_dir,
+        JOURNALIST_KEY=journalist_key_fingerprint,
+        RQ_WORKER_NAME=worker_name,
     )
-
-    # Ensure the GPG settings match the one in the config to use, to ensure consistency
-    journalist_key_fingerprint, gpg_dir = setup_journalist_key_and_gpg_folder
-    assert Path(default_config.GPG_KEY_DIR) == gpg_dir
-    assert default_config.JOURNALIST_KEY == journalist_key_fingerprint
 
     # Spawn the apps in separate processes
     with spawn_sd_servers(config_to_use=default_config) as sd_servers_result:
@@ -237,20 +247,21 @@ def sd_servers_with_clean_state(
 
 @pytest.fixture(scope="function")
 def sd_servers_with_submitted_file(
-    setup_journalist_key_and_gpg_folder: Tuple[str, Path]
+    setup_journalist_key_and_gpg_folder: Tuple[str, Path],
+    setup_rqworker: Tuple[str, Path],
 ) -> Generator[SdServersFixtureResult, None, None]:
     """Same as sd_servers but spawns the apps with an already-submitted source file.
 
     Slower than sd_servers as it is function-scoped.
     """
+    journalist_key_fingerprint, gpg_key_dir = setup_journalist_key_and_gpg_folder
+    worker_name, _ = setup_rqworker
     default_config = SecureDropConfigFactory.create(
         SECUREDROP_DATA_ROOT=Path(f"/tmp/sd-tests/functional-with-submitted-file-{uuid4()}"),
+        GPG_KEY_DIR=gpg_key_dir,
+        JOURNALIST_KEY=journalist_key_fingerprint,
+        RQ_WORKER_NAME=worker_name,
     )
-
-    # Ensure the GPG settings match the one in the config to use, to ensure consistency
-    journalist_key_fingerprint, gpg_dir = setup_journalist_key_and_gpg_folder
-    assert Path(default_config.GPG_KEY_DIR) == gpg_dir
-    assert default_config.JOURNALIST_KEY == journalist_key_fingerprint
 
     # Spawn the apps in separate processes with a callback to create a submission
     with spawn_sd_servers(

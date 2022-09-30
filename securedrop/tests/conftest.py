@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import configparser
 import json
 import logging
@@ -27,19 +25,12 @@ from journalist_app import create_app as create_journalist_app
 from passphrases import PassphraseGenerator
 from pyotp import TOTP
 from sdconfig import SDConfig
-from sdconfig import config as original_config
 from source_app import create_app as create_source_app
 from source_user import _SourceScryptManager, create_source_user
 from store import Storage
-
-from . import utils
-from .utils import i18n
-
-# The PID file for the redis worker is hard-coded below.
-# Ideally this constant would be provided by a test harness.
-# It has been intentionally omitted from `config.py.example`
-# in order to isolate the test vars from prod vars.
-TEST_WORKER_PIDFILE = "/tmp/securedrop_test_worker.pid"
+from tests import utils
+from tests.functional.sd_config_v2 import DEFAULT_SECUREDROP_ROOT
+from tests.utils import i18n
 
 # Quiet down gnupg output. (See Issue #2595)
 GNUPG_LOG_LEVEL = os.environ.get("GNUPG_LOG_LEVEL", "ERROR")
@@ -80,14 +71,6 @@ def hardening(request):
     request.addfinalizer(finalizer)
     models.LOGIN_HARDENING = True
     return None
-
-
-@pytest.fixture(scope="session")
-def setUpTearDown():
-    _start_test_rqworker(original_config)
-    yield
-    _stop_test_rqworker()
-    _cleanup_test_securedrop_dataroot(original_config)
 
 
 def insecure_scrypt() -> Generator[None, None, None]:
@@ -142,7 +125,8 @@ def setup_journalist_key_and_gpg_folder() -> Generator[Tuple[str, Path], None, N
 
 @pytest.fixture(scope="function")
 def config(
-    setup_journalist_key_and_gpg_folder: Tuple[str, Path]
+    setup_journalist_key_and_gpg_folder: Tuple[str, Path],
+    setup_rqworker: Tuple[str, str],
 ) -> Generator[SDConfig, None, None]:
     config = SDConfig()
     journalist_key_fingerprint, gpg_key_dir = setup_journalist_key_and_gpg_folder
@@ -361,17 +345,36 @@ def journalist_api_token(journalist_app, test_journo):
         return response.json["token"]
 
 
-def _start_test_rqworker(config: SDConfig) -> None:
-    if not psutil.pid_exists(_get_pid_from_file(TEST_WORKER_PIDFILE)):
+@pytest.fixture(scope="session")
+def setup_rqworker() -> Generator[Tuple[str, Path], None, None]:
+    # The PID file and name for the redis worker are hard-coded below
+    test_worker_pid_file = Path("/tmp/securedrop_test_worker.pid")
+    test_worker_name = "test"
+
+    try:
+        _start_test_rqworker(
+            worker_name=test_worker_name,
+            worker_pid_file=test_worker_pid_file,
+            securedrop_root=DEFAULT_SECUREDROP_ROOT,
+        )
+
+        yield test_worker_name, test_worker_pid_file
+
+    finally:
+        _stop_test_rqworker(test_worker_pid_file)
+
+
+def _start_test_rqworker(worker_name: str, worker_pid_file: Path, securedrop_root: Path) -> None:
+    if not psutil.pid_exists(_get_pid_from_file(worker_pid_file)):
         tmp_logfile = open("/tmp/test_rqworker.log", "w")
         subprocess.Popen(
             [
                 "rqworker",
-                config.RQ_WORKER_NAME,
+                worker_name,
                 "-P",
-                config.SECUREDROP_ROOT,
+                securedrop_root,
                 "--pid",
-                TEST_WORKER_PIDFILE,
+                worker_pid_file,
                 "--logging_level",
                 "DEBUG",
                 "-v",
@@ -381,27 +384,18 @@ def _start_test_rqworker(config: SDConfig) -> None:
         )
 
 
-def _stop_test_rqworker() -> None:
-    rqworker_pid = _get_pid_from_file(TEST_WORKER_PIDFILE)
+def _stop_test_rqworker(worker_pid_file: Path) -> None:
+    rqworker_pid = _get_pid_from_file(worker_pid_file)
     if rqworker_pid:
         os.kill(rqworker_pid, signal.SIGTERM)
         try:
-            os.remove(TEST_WORKER_PIDFILE)
+            os.remove(worker_pid_file)
         except OSError:
             pass
 
 
-def _get_pid_from_file(pid_file_name: str) -> int:
+def _get_pid_from_file(pid_file_name: Path) -> int:
     try:
         return int(open(pid_file_name).read())
     except IOError:
         return -1
-
-
-def _cleanup_test_securedrop_dataroot(config: SDConfig) -> None:
-    # Keyboard interrupts or dropping to pdb after a test failure sometimes
-    # result in the temporary test SecureDrop data root not being deleted.
-    try:
-        shutil.rmtree(config.SECUREDROP_DATA_ROOT)
-    except OSError:
-        pass

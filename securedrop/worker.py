@@ -7,17 +7,14 @@ from rq.exceptions import InvalidJobOperation, NoSuchJobError
 from rq.queue import Queue
 from rq.registry import StartedJobRegistry
 from rq.worker import Worker, WorkerStatus
-from sdconfig import config
 
 
-def create_queue(name: Optional[str] = None, timeout: int = 3600) -> Queue:
+def create_queue(name: str, timeout: int = 3600) -> Queue:
     """
     Create an rq ``Queue`` named ``name`` with default timeout ``timeout``.
 
     If ``name`` is omitted, ``config.RQ_WORKER_NAME`` is used.
     """
-    if name is None:
-        name = config.RQ_WORKER_NAME
     q = Queue(name=name, connection=Redis(), default_timeout=timeout)
     return q
 
@@ -51,7 +48,7 @@ def worker_for_job(job_id: str) -> Optional[Worker]:
     return None
 
 
-def requeue_interrupted_jobs(queue_name: Optional[str] = None) -> None:
+def requeue_interrupted_jobs(queue_name: str) -> None:
     """
     Requeues jobs found in the given queue's started job registry.
 

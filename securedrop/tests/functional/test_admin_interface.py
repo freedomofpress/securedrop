@@ -169,20 +169,21 @@ def _create_second_journalist(config_in_use: SecureDropConfig) -> None:
 
 @pytest.fixture(scope="function")
 def sd_servers_with_second_journalist(
-    setup_journalist_key_and_gpg_folder: Tuple[str, Path]
+    setup_journalist_key_and_gpg_folder: Tuple[str, Path],
+    setup_rqworker: Tuple[str, Path],
 ) -> Generator[SdServersFixtureResult, None, None]:
     """Sams as sd_servers but spawns the apps with an already-created second journalist.
 
     Slower than sd_servers as it is function-scoped.
     """
+    journalist_key_fingerprint, gpg_key_dir = setup_journalist_key_and_gpg_folder
+    worker_name, _ = setup_rqworker
     default_config = SecureDropConfigFactory.create(
-        SECUREDROP_DATA_ROOT=Path(f"/tmp/sd-tests/functional-with-second-journnalist-{uuid4()}"),
+        SECUREDROP_DATA_ROOT=Path(f"/tmp/sd-tests/functional-with-second-journalist-{uuid4()}"),
+        GPG_KEY_DIR=gpg_key_dir,
+        JOURNALIST_KEY=journalist_key_fingerprint,
+        RQ_WORKER_NAME=worker_name,
     )
-
-    # Ensure the GPG settings match the one in the config to use, to ensure consistency
-    journalist_key_fingerprint, gpg_dir = setup_journalist_key_and_gpg_folder
-    assert Path(default_config.GPG_KEY_DIR) == gpg_dir
-    assert default_config.JOURNALIST_KEY == journalist_key_fingerprint
 
     # Spawn the apps in separate processes with a callback to create a submission
     with spawn_sd_servers(
