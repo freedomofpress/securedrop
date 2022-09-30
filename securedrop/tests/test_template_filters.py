@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-import os
 from datetime import datetime, timedelta
 from pathlib import Path
 
@@ -11,6 +9,7 @@ import template_filters
 from db import db
 from flask import session
 from sh import pybabel
+from tests.test_i18n import create_config_for_i18n_test
 
 
 def verify_rel_datetime_format(app):
@@ -75,19 +74,18 @@ def verify_filesizeformat(app):
 
 # We can't use fixtures because these options are set at app init time, and we
 # can't modify them after.
-def test_source_filters(config):
-    do_test(config, source_app.create_app)
+def test_source_filters():
+    do_test(source_app.create_app)
 
 
 # We can't use fixtures because these options are set at app init time, and we
 # can't modify them after.
-def test_journalist_filters(config):
-    do_test(config, journalist_app.create_app)
+def test_journalist_filters():
+    do_test(journalist_app.create_app)
 
 
-def do_test(config, create_app):
-    config.SUPPORTED_LOCALES = ["en_US", "fr_FR"]
-    config.TRANSLATION_DIRS = Path(config.TEMP_DIR)
+def do_test(create_app):
+    test_config = create_config_for_i18n_test(supported_locales=["en_US", "fr_FR"])
     i18n_dir = Path(__file__).absolute().parent / "i18n"
     i18n_tool.I18NTool().main(
         [
@@ -96,7 +94,7 @@ def do_test(config, create_app):
             "--mapping",
             str(i18n_dir / "babel.cfg"),
             "--translations-dir",
-            config.TEMP_DIR,
+            str(test_config.TEMP_DIR),
             "--sources",
             str(i18n_dir / "code.py"),
             "--extract-update",
@@ -105,13 +103,13 @@ def do_test(config, create_app):
     )
 
     for l in ("en_US", "fr_FR"):
-        pot = os.path.join(config.TEMP_DIR, "messages.pot")
-        pybabel("init", "-i", pot, "-d", config.TEMP_DIR, "-l", l)
+        pot = Path(test_config.TEMP_DIR) / "messages.pot"
+        pybabel("init", "-i", pot, "-d", test_config.TEMP_DIR, "-l", l)
 
-    app = create_app(config)
+    app = create_app(test_config)
     with app.app_context():
         db.create_all()
 
-    assert list(i18n.LOCALES.keys()) == config.SUPPORTED_LOCALES
+    assert list(i18n.LOCALES.keys()) == test_config.SUPPORTED_LOCALES
     verify_filesizeformat(app)
     verify_rel_datetime_format(app)

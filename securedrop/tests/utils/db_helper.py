@@ -7,6 +7,8 @@ import io
 import math
 import os
 import random
+import subprocess
+from pathlib import Path
 from typing import Dict, List
 
 import mock
@@ -233,3 +235,9 @@ def bulk_setup_for_seen_only(journo: Journalist, storage: Storage) -> List[Dict]
         setup_collection.append(collection)
 
     return setup_collection
+
+
+def reset_database(database_file: Path) -> None:
+    database_file.unlink(missing_ok=True)  # type: ignore
+    database_file.touch()
+    subprocess.check_call(["sqlite3", database_file, ".databases"])
