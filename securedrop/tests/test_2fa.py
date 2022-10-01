@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import time
 from contextlib import contextmanager
 from datetime import datetime, timedelta
@@ -7,9 +6,8 @@ import pytest
 from flask import url_for
 from models import BadTokenException, Journalist
 from pyotp import TOTP
-
-from .utils import login_user
-from .utils.instrument import InstrumentedApp
+from tests.utils import login_journalist
+from tests.utils.instrument import InstrumentedApp
 
 
 @contextmanager
@@ -41,7 +39,7 @@ def totp_window():
     assert now < window_end
 
 
-def test_totp_reuse_protections(journalist_app, test_journo, hardening):
+def test_totp_reuse_protections(journalist_app, test_journo):
     """Ensure that logging in twice with the same TOTP token fails.
     Also, ensure that last_token is updated accordingly.
     """
@@ -50,7 +48,17 @@ def test_totp_reuse_protections(journalist_app, test_journo, hardening):
         token = TOTP(test_journo["otp_secret"]).now()
 
         with journalist_app.test_client() as app:
-            login_user(app, test_journo)
+            resp = app.post(
+                url_for("main.login"),
+                data=dict(
+                    username=test_journo["username"],
+                    password=test_journo["password"],
+                    token=token,
+                ),
+                follow_redirects=True,
+            )
+            assert resp.status_code == 200
+
             resp = app.get(url_for("main.logout"), follow_redirects=True)
             assert resp.status_code == 200
 
@@ -73,7 +81,7 @@ def test_totp_reuse_protections(journalist_app, test_journo, hardening):
             assert "Login failed" in text
 
 
-def test_totp_reuse_protections2(journalist_app, test_journo, hardening):
+def test_totp_reuse_protections2(journalist_app, test_journo):
     """More granular than the preceeding test, we want to make sure the right
     exception is being raised in the right place.
     """
@@ -87,7 +95,7 @@ def test_totp_reuse_protections2(journalist_app, test_journo, hardening):
                 Journalist.login(test_journo["username"], test_journo["password"], token)
 
 
-def test_totp_reuse_protections3(journalist_app, test_journo, hardening):
+def test_totp_reuse_protections3(journalist_app, test_journo):
     """We want to ensure that padding has no effect on token reuse verification."""
 
     with totp_window():
@@ -99,7 +107,7 @@ def test_totp_reuse_protections3(journalist_app, test_journo, hardening):
                 Journalist.login(test_journo["username"], test_journo["password"], token + " ")
 
 
-def test_totp_reuse_protections4(journalist_app, test_journo, hardening):
+def test_totp_reuse_protections4(journalist_app, test_journo):
     """More granular than the preceeding test, we want to make sure the right
     exception is being raised in the right place.
     """
@@ -117,9 +125,7 @@ def test_totp_reuse_protections4(journalist_app, test_journo, hardening):
                 Journalist.login(test_journo["username"], test_journo["password"], token)
 
 
-def test_bad_token_fails_to_verify_on_admin_new_user_two_factor_page(
-    journalist_app, test_admin, hardening
-):
+def test_bad_token_fails_to_verify_on_admin_new_user_two_factor_page(journalist_app, test_admin):
     """Regression test for
     https://github.com/freedomofpress/securedrop/pull/1692
     """
@@ -128,7 +134,12 @@ def test_bad_token_fails_to_verify_on_admin_new_user_two_factor_page(
 
     with totp_window():
         with journalist_app.test_client() as app:
-            login_user(app, test_admin)
+            login_journalist(
+                app,
+                test_admin["username"],
+                test_admin["password"],
+                test_admin["otp_secret"],
+            )
             # Submit the token once
             with InstrumentedApp(journalist_app) as ins:
                 resp = app.post(
@@ -143,9 +154,7 @@ def test_bad_token_fails_to_verify_on_admin_new_user_two_factor_page(
                 )
 
 
-def test_bad_token_fails_to_verify_on_new_user_two_factor_page(
-    journalist_app, test_journo, hardening
-):
+def test_bad_token_fails_to_verify_on_new_user_two_factor_page(journalist_app, test_journo):
     """Regression test for
     https://github.com/freedomofpress/securedrop/pull/1692
     """
@@ -153,7 +162,12 @@ def test_bad_token_fails_to_verify_on_new_user_two_factor_page(
 
     with totp_window():
         with journalist_app.test_client() as app:
-            login_user(app, test_journo)
+            login_journalist(
+                app,
+                test_journo["username"],
+                test_journo["password"],
+                test_journo["otp_secret"],
+            )
             # Submit the token once
             with InstrumentedApp(journalist_app) as ins:
                 resp = app.post(url_for("account.new_two_factor"), data=dict(token=invalid_token))

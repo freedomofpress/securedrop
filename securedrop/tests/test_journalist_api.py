@@ -89,7 +89,7 @@ def test_user_cannot_get_an_api_token_with_wrong_password(journalist_app, test_j
         assert response.json["error"] == "Forbidden"
 
 
-def test_user_cannot_get_an_api_token_with_wrong_2fa_token(journalist_app, test_journo, hardening):
+def test_user_cannot_get_an_api_token_with_wrong_2fa_token(journalist_app, test_journo):
     with journalist_app.test_client() as app:
         response = app.post(
             url_for("api.get_token"),
