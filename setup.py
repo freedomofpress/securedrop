@@ -11,7 +11,7 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     license="AGPLv3+",
-    python_requires=">=3.5",
+    python_requires=">=3.8",
     url="https://github.com/freedomofpress/securedrop",
     classifiers=(
         "Development Status :: 5 - Stable",
