@@ -97,11 +97,16 @@ adjust_wsgi_configuration() {
 }
 
 #
-# Remove any existing byte code files from the virtualenv, to ensure
-# that obsolete dependencies can't linger after they've been removed.
 #
-remove_bytecode() {
+refresh_bytecode() {
+    # Remove any existing byte code files, to ensure that obsolete
+    # dependencies can't linger after they've been removed.
     find "${SDVE}" -name '*.py[co]' -delete
+    find /var/www/securedrop -name '*.py[co]' -delete
+    # Now generate the new byte-code
+    py3compile "${SDVE}"
+    py3compile /var/www/securedrop
+
 }
 
 #
@@ -193,6 +198,9 @@ case "$1" in
     chown www-data:www-data /var/www/journalist.wsgi
     chown www-data:www-data /var/www/source.wsgi
 
+    # No Python code should be executed before this
+    refresh_bytecode
+
     # Apache's default sites are not allowed by the securedrop apparmor profile
     # disable the site before putting the apache apparmor profile in enforce
     # mode.
@@ -220,9 +228,6 @@ case "$1" in
 
     # Munge Apache config while service is stopped.
     adjust_wsgi_configuration
-
-    # Remove Python bytecode from virtualenv
-    remove_bytecode
 
     # Add TLS1.3 configruation to the source configruation if required
     update_to_tls13
