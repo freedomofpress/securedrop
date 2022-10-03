@@ -38,28 +38,28 @@ database_migration() {
     cd '/var/www/securedrop/'
 
     # `alembic current` outputs nothing if the DB isn't under version control.
-    if [ -z "$(${SDBIN}/alembic current)" ]; then
+    if [ -z "$(sudo -u www-data ${SDBIN}/alembic current)" ]; then
         sqlite_tables=$(sqlite3 "$database_file" .tables)
 
         if ! echo "$sqlite_tables" | grep -q journalists; then
             # This is a fresh install, run the full migrations.
-            ${SDBIN}/alembic upgrade head
+            sudo -u www-data ${SDBIN}/alembic upgrade head
         else
             # This is an old install, so mark that the schema is up to date
             # as of the version of migration 15ac9509fc68_init.py when we first
             # started version controlling the database.
-            ${SDBIN}/alembic stamp 15ac9509fc68
+            sudo -u www-data ${SDBIN}/alembic stamp 15ac9509fc68
         fi
     fi
 
     db_backup="/var/lib/securedrop/backups/$(date +%Y-%m-%d-%H-%M-%S)-db.sqlite"
 
-    if ! ${SDBIN}/alembic current | grep -q '(head)'; then
-        cp /var/lib/securedrop/db.sqlite "$db_backup"
+    if ! sudo -u www-data ${SDBIN}/alembic current | grep -q '(head)'; then
+        sudo -u www-data cp /var/lib/securedrop/db.sqlite "$db_backup"
     fi
 
-    if ${SDBIN}/alembic upgrade head; then
-        rm -f "$db_backup"
+    if sudo -u www-data ${SDBIN}/alembic upgrade head; then
+        sudo -u www-data rm -f "$db_backup"
     else
         echo "Error migrating database: Backup saved to $db_backup" >&2
         return 1
@@ -238,9 +238,6 @@ case "$1" in
     # set to "enforce", then apache2 will fail to restart, since it lacks
     # the ability to send signals to unconfined peers.
     service apache2 stop
-
-    # Point Apache to our bundled mod_wsgi
-    ${SDBIN}/mod_wsgi-express module-config > /etc/apache2/mods-available/wsgi.load
 
     # and make sure it's enabled
     a2enmod wsgi
