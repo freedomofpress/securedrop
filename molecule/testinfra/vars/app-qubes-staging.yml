@@ -10,7 +10,7 @@ wanted_apache_headers:
 
 securedrop_venv: /opt/venvs/securedrop-app-code
 securedrop_venv_bin: "{{ securedrop_venv }}/bin"
-securedrop_venv_site_packages: "{{ securedrop_venv }}/lib/python3.5/site-packages"
+securedrop_venv_site_packages: "{{ securedrop_venv }}/lib/python3.8/site-packages"
 securedrop_code: /var/www/securedrop
 securedrop_data: /var/lib/securedrop
 securedrop_user: www-data
