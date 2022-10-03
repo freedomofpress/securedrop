@@ -1,4 +1,5 @@
 var/www /var/
+etc/apache2/mods-available/wsgi.load /etc/apache2/mods-available
 etc/apparmor.d/usr.sbin.apache2 /etc/apparmor.d
 etc/apparmor.d/usr.sbin.tor /etc/apparmor.d
 lib/systemd/system/securedrop_rqrequeue.service /lib/systemd/system
