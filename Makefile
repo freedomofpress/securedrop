@@ -106,7 +106,7 @@ ansible-config-lint: ## Run custom Ansible linting tasks.
 .PHONY: app-lint
 app-lint:  ## Test pylint compliance.
 	@echo "███ Linting application code..."
-	@cd securedrop && find . -name '*.py' | xargs pylint --reports=no --errors-only \
+	@cd securedrop && find . -name '*.py' -or -path './scripts/*' | xargs pylint --reports=no --errors-only \
 	   --disable=no-name-in-module \
 	   --disable=unexpected-keyword-arg \
 	   --disable=too-many-function-args \
@@ -118,7 +118,7 @@ app-lint:  ## Test pylint compliance.
 .PHONY: app-lint-full
 app-lint-full: ## Test pylint compliance, with no checks disabled.
 	@echo "███ Linting application code with no checks disabled..."
-	@cd securedrop && find . -name '*.py' | xargs pylint
+	@cd securedrop && find . -name '*.py' -or -path './scripts/*' | xargs pylint
 	@echo
 
 .PHONY: flake8
