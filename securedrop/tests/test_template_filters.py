@@ -1,3 +1,4 @@
+import subprocess
 from datetime import datetime, timedelta
 from pathlib import Path
 
@@ -8,7 +9,6 @@ import source_app
 import template_filters
 from db import db
 from flask import session
-from sh import pybabel
 from tests.test_i18n import create_config_for_i18n_test
 
 
@@ -104,7 +104,7 @@ def do_test(create_app):
 
     for l in ("en_US", "fr_FR"):
         pot = Path(test_config.TEMP_DIR) / "messages.pot"
-        pybabel("init", "-i", pot, "-d", test_config.TEMP_DIR, "-l", l)
+        subprocess.check_call(["pybabel", "init", "-i", pot, "-d", test_config.TEMP_DIR, "-l", l])
 
     app = create_app(test_config)
     with app.app_context():

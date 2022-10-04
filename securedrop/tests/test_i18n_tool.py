@@ -4,6 +4,7 @@ import io
 import os
 import shutil
 import signal
+import subprocess
 import time
 from os.path import abspath, dirname, exists, getmtime, join, realpath
 from pathlib import Path
@@ -11,7 +12,6 @@ from pathlib import Path
 import i18n_tool
 import pytest
 from mock import patch
-from sh import git, msginit, pybabel, touch
 from tests.test_i18n import set_msg_translation_in_po_file
 
 
@@ -81,8 +81,17 @@ class TestI18NTool(object):
             ("ro", "SOURCE RO"),
         ]:
             po_file = Path(tmpdir) / f"{locale}.po"
-            msginit(
-                "--no-translator", "--locale", locale, "--output", po_file, "--input", messages_file
+            subprocess.check_call(
+                [
+                    "msginit",
+                    "--no-translator",
+                    "--locale",
+                    locale,
+                    "--output",
+                    po_file,
+                    "--input",
+                    messages_file,
+                ]
             )
             set_msg_translation_in_po_file(
                 po_file=po_file,
@@ -139,7 +148,18 @@ class TestI18NTool(object):
 
         locale = "en_US"
         locale_dir = join(str(tmpdir), locale)
-        pybabel("init", "-i", messages_file, "-d", str(tmpdir), "-l", locale)
+        subprocess.check_call(
+            [
+                "pybabel",
+                "init",
+                "-i",
+                messages_file,
+                "-d",
+                str(tmpdir),
+                "-l",
+                locale,
+            ]
+        )
 
         # Add a dummy translation
         po_file = Path(locale_dir) / "LC_MESSAGES/messages.po"
@@ -185,7 +205,9 @@ class TestI18NTool(object):
         locale = "en_US"
         locale_dir = join(str(tmpdir), locale)
         po_file = join(locale_dir, "LC_MESSAGES/messages.po")
-        pybabel(["init", "-i", messages_file, "-d", str(tmpdir), "-l", locale])
+        subprocess.check_call(
+            ["pybabel", "init", "-i", messages_file, "-d", str(tmpdir), "-l", locale]
+        )
         assert exists(po_file)
         # pretend this happened a few seconds ago
         few_seconds_ago = time.time() - 60
@@ -241,25 +263,25 @@ class TestI18NTool(object):
             assert b"template hello i18n" not in mo
 
     def test_require_git_email_name(self, tmpdir):
-        k = {"_cwd": str(tmpdir)}
-        git("init", **k)
+        k = {"cwd": str(tmpdir)}
+        subprocess.check_call(["git", "init"], **k)
         with pytest.raises(Exception) as excinfo:
             i18n_tool.I18NTool.require_git_email_name(str(tmpdir))
         assert "please set name" in str(excinfo.value)
 
-        git.config("user.email", "you@example.com", **k)
-        git.config("user.name", "Your Name", **k)
+        subprocess.check_call(["git", "config", "user.email", "you@example.com"], **k)
+        subprocess.check_call(["git", "config", "user.name", "Your Name"], **k)
         assert i18n_tool.I18NTool.require_git_email_name(str(tmpdir))
 
     def test_update_docs(self, tmpdir, caplog):
-        k = {"_cwd": str(tmpdir)}
-        git.init(**k)
-        git.config("user.email", "you@example.com", **k)
-        git.config("user.name", "Your Name", **k)
+        k = {"cwd": str(tmpdir)}
+        subprocess.check_call(["git", "init"], **k)
+        subprocess.check_call(["git", "config", "user.email", "you@example.com"], **k)
+        subprocess.check_call(["git", "config", "user.name", "Your Name"], **k)
         os.makedirs(join(str(tmpdir), "docs/includes"))
-        touch("docs/includes/l10n.txt", **k)
-        git.add("docs/includes/l10n.txt", **k)
-        git.commit("-m", "init", **k)
+        subprocess.check_call(["touch", "docs/includes/l10n.txt"], **k)
+        subprocess.check_call(["git", "add", "docs/includes/l10n.txt"], **k)
+        subprocess.check_call(["git", "commit", "-m", "init"], **k)
 
         i18n_tool.I18NTool().main(["--verbose", "update-docs", "--docs-repo-dir", str(tmpdir)])
         assert "l10n.txt updated" in caplog.text
@@ -271,23 +293,23 @@ class TestI18NTool(object):
         d = str(tmpdir)
         for repo in ("i18n", "securedrop"):
             os.mkdir(join(d, repo))
-            k = {"_cwd": join(d, repo)}
-            git.init(**k)
-            git.config("user.email", "you@example.com", **k)
-            git.config("user.name", "Loïc Nordhøy", **k)
-            touch("README.md", **k)
-            git.add("README.md", **k)
-            git.commit("-m", "README", "README.md", **k)
+            k = {"cwd": join(d, repo)}
+            subprocess.check_call(["git", "init"], **k)
+            subprocess.check_call(["git", "config", "user.email", "you@example.com"], **k)
+            subprocess.check_call(["git", "config", "user.name", "Loïc Nordhøy"], **k)
+            subprocess.check_call(["touch", "README.md"], **k)
+            subprocess.check_call(["git", "add", "README.md"], **k)
+            subprocess.check_call(["git", "commit", "-m", "README", "README.md"], **k)
         for o in os.listdir(join(self.dir, "i18n")):
             f = join(self.dir, "i18n", o)
             if os.path.isfile(f):
                 shutil.copyfile(f, join(d, "i18n", o))
             else:
                 shutil.copytree(f, join(d, "i18n", o))
-        k = {"_cwd": join(d, "i18n")}
-        git.add("securedrop", "install_files", **k)
-        git.commit("-m", "init", "-a", **k)
-        git.checkout("-b", "i18n", "master", **k)
+        k = {"cwd": join(d, "i18n")}
+        subprocess.check_call(["git", "add", "securedrop", "install_files"], **k)
+        subprocess.check_call(["git", "commit", "-m", "init", "-a"], **k)
+        subprocess.check_call(["git", "checkout", "-b", "i18n", "master"], **k)
 
         def r():
             return "".join([str(l) for l in caplog.records])
@@ -350,7 +372,11 @@ class TestI18NTool(object):
         )
         assert "l10n: updated Dutch (nl)" not in r()
         assert "l10n: updated German (de_DE)" not in r()
-        message = str(git("--no-pager", "-C", "securedrop", "show", _cwd=d, _encoding="utf-8"))
+        message = subprocess.check_output(
+            ["git", "--no-pager", "-C", "securedrop", "show"],
+            cwd=d,
+            encoding="utf-8",
+        )
         assert "Loïc" in message
 
         # an update is done to nl in weblate
@@ -362,14 +388,15 @@ class TestI18NTool(object):
         updated_content = content.replace(text_to_update, "INACTIVITEIT")
         po_file.write_text(updated_content)
 
-        git.add(str(po_file), **k)
-        git.config("user.email", "somone@else.com", **k)
-        git.config("user.name", "Someone Else", **k)
-        git.commit("-m", "translation change", str(po_file), **k)
+        k = {"cwd": join(d, "i18n")}
+        subprocess.check_call(["git", "add", str(po_file)], **k)
+        subprocess.check_call(["git", "config", "user.email", "somone@else.com"], **k)
+        subprocess.check_call(["git", "config", "user.name", "Someone Else"], **k)
+        subprocess.check_call(["git", "commit", "-m", "translation change", str(po_file)], **k)
 
-        k = {"_cwd": join(d, "securedrop")}
-        git.config("user.email", "somone@else.com", **k)
-        git.config("user.name", "Someone Else", **k)
+        k = {"cwd": join(d, "securedrop")}
+        subprocess.check_call(["git", "config", "user.email", "somone@else.com"], **k)
+        subprocess.check_call(["git", "config", "user.name", "Someone Else"], **k)
 
         #
         # the nl translation update from weblate is copied
@@ -390,6 +417,10 @@ class TestI18NTool(object):
         )
         assert "l10n: updated Dutch (nl)" in r()
         assert "l10n: updated German (de_DE)" not in r()
-        message = str(git("--no-pager", "-C", "securedrop", "show", _cwd=d))
+        message = subprocess.check_output(
+            ["git", "--no-pager", "-C", "securedrop", "show"],
+            cwd=d,
+            encoding="utf-8",
+        )
         assert "Someone Else" in message
         assert "Loïc" not in message

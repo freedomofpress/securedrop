@@ -17,6 +17,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 import re
+import subprocess
 from pathlib import Path
 from typing import List
 
@@ -31,7 +32,6 @@ from flask import render_template, render_template_string, request, session
 from flask_babel import gettext
 from i18n import parse_locale_set
 from sdconfig import FALLBACK_LOCALE
-from sh import pybabel
 from tests.functional.factories import SecureDropConfigFactory
 from tests.functional.sd_config_v2 import DEFAULT_SECUREDROP_ROOT, SecureDropConfig
 from werkzeug.datastructures import Headers
@@ -259,7 +259,7 @@ def test_i18n():
     )
 
     pot = translation_dirs / "messages.pot"
-    pybabel("init", "-i", pot, "-d", translation_dirs, "-l", "en_US")
+    subprocess.check_call(["pybabel", "init", "-i", pot, "-d", translation_dirs, "-l", "en_US"])
 
     for (locale, translated_msg) in (
         ("fr_FR", "code bonjour"),
@@ -268,7 +268,7 @@ def test_i18n():
         ("nb_NO", "code norwegian"),
         ("es_ES", "code spanish"),
     ):
-        pybabel("init", "-i", pot, "-d", translation_dirs, "-l", locale)
+        subprocess.check_call(["pybabel", "init", "-i", pot, "-d", translation_dirs, "-l", locale])
 
         # Populate the po file with a translation
         po_file = translation_dirs / locale / "LC_MESSAGES" / "messages.po"
