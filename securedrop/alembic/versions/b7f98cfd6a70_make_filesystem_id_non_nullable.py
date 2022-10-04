@@ -19,8 +19,8 @@ def upgrade() -> None:
     # Not having a filesystem_id makes the source useless, so if any of those do exist, we'll
     # delete them first, as part of this migration.
     # Because we can't rely on SQLAlchemy's cascade deletion, we have to do it manually.
-    # First we delete out of replies/seen_files/seen_messages (things that refer to things that refer
-    # to sources)
+    # First we delete out of replies/seen_files/seen_messages (things that refer to things
+    # (source_stars/submissions/replies) that refer to sources)
     op.execute(
         "DELETE FROM seen_replies WHERE reply_id IN ("
         "SELECT replies.id FROM replies "

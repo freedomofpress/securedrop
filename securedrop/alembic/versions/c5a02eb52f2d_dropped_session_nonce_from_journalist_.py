@@ -1,4 +1,5 @@
-"""dropped session_nonce from journalist table and revoked tokens table due to new session implementation
+"""dropped session_nonce from journalist table and revoked tokens table
+   due to new session implementation
 
 Revision ID: c5a02eb52f2d
 Revises: b7f98cfd6a70
@@ -27,7 +28,8 @@ def upgrade() -> None:
 def downgrade() -> None:
     """This would have been the easy way, however previous does not have
     default value and thus up/down assertion fails"""
-    # op.add_column('journalists', sa.Column('session_nonce', sa.Integer(), nullable=False, server_default='0'))
+    # op.add_column('journalists', sa.Column('session_nonce', sa.Integer(),
+    #               nullable=False, server_default='0'))
 
     conn = op.get_bind()
     conn.execute("PRAGMA legacy_alter_table=ON")
