@@ -108,8 +108,6 @@ app-lint:  ## Test pylint compliance.
 	@echo "███ Linting application code..."
 	@cd securedrop && find . -name '*.py' -or -path './scripts/*' | xargs pylint --reports=no --errors-only \
 	   --disable=no-name-in-module \
-	   --disable=unexpected-keyword-arg \
-	   --disable=too-many-function-args \
 	   --disable=import-error \
 	   --disable=no-member \
 	   --max-line-length=100

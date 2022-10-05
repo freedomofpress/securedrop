@@ -311,9 +311,7 @@ docutils==0.14 \
 dparse==0.6.2 \
     --hash=sha256:8097076f1dd26c377f30d4745e6ec18fef42f3bf493933b842ac5bafad8c345f \
     --hash=sha256:d45255bda21f998bc7ddf2afd5e62505ba6134756ba2d42a84c56b0826614dfe
-    # via
-    #   -r requirements/python3/develop-requirements.in
-    #   safety
+    # via safety
 entrypoints==0.3 \
     --hash=sha256:589f874b313739ad35be6e0cd7efde2a4e9b6fea91edcc34e58ecbb8dbe56d19 \
     --hash=sha256:c70dd71abe5a8c85e55e12c19bd91ccfeec11a6e99044204511f9ed547d48451
@@ -977,9 +975,7 @@ ujson==5.5.0 \
     --hash=sha256:f5179088ef6487c475604b7898731a6ddeeada7702cfb2162155b016703a8475 \
     --hash=sha256:f63d1ae1ca17bb2c847e298c7bcf084a73d56d434b4c50509fb93a4b4300b0b2 \
     --hash=sha256:ff4928dc1e9704b567171c16787238201fdbf023665573c12c02146fe1e02eec
-    # via
-    #   -r requirements/python3/develop-requirements.in
-    #   python-lsp-jsonrpc
+    # via python-lsp-jsonrpc
 urllib3==1.26.6 \
     --hash=sha256:39fb8672126159acb139a7718dd10806104dec1e2f0f6c88aab05d17df10c8d4 \
     --hash=sha256:f57b4c16c62fa2760b7e3d97c35b255512fb6b59a259730f36ba32ce9f8e342f

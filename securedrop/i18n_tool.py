@@ -18,7 +18,6 @@ from pathlib import Path
 from typing import Dict, List, Optional, Set
 
 import version
-from sh import git, msgfmt, msgmerge, pybabel, xgettext
 
 logging.basicConfig(format="%(asctime)s %(levelname)s %(message)s")
 log = logging.getLogger(__name__)
@@ -59,10 +58,10 @@ class I18NTool:
         Make sure we have a git remote for the i18n repo.
         """
 
-        k = {"_cwd": args.root}
-        if b"i18n" not in git.remote(**k).stdout:
-            git.remote.add("i18n", args.url, **k)
-        git.fetch("i18n", **k)
+        k = {"cwd": args.root}
+        if "i18n" not in subprocess.check_output(["git", "remote"], encoding="utf-8", **k):
+            subprocess.check_call(["git", "remote", "add", "i18n", args.url], **k)
+        subprocess.check_call(["git", "fetch", "i18n"], **k)
 
     def translate_messages(self, args: argparse.Namespace) -> None:
         messages_file = Path(args.translations_dir).absolute() / "messages.pot"
@@ -71,22 +70,26 @@ class I18NTool:
             if not os.path.exists(args.translations_dir):
                 os.makedirs(args.translations_dir)
             sources = args.sources.split(",")
-            pybabel.extract(
-                "--charset=utf-8",
-                "--mapping",
-                args.mapping,
-                "--output",
-                str(messages_file),
-                "--project=SecureDrop",
-                "--version",
-                args.version,
-                "--msgid-bugs-address=securedrop@freedom.press",
-                "--copyright-holder=Freedom of the Press Foundation",
-                "--add-comments=Translators:",
-                "--strip-comments",
-                "--add-location=never",
-                "--no-wrap",
-                *sources,
+            subprocess.check_call(
+                [
+                    "pybabel",
+                    "extract",
+                    "--charset=utf-8",
+                    "--mapping",
+                    args.mapping,
+                    "--output",
+                    messages_file,
+                    "--project=SecureDrop",
+                    "--version",
+                    args.version,
+                    "--msgid-bugs-address=securedrop@freedom.press",
+                    "--copyright-holder=Freedom of the Press Foundation",
+                    "--add-comments=Translators:",
+                    "--strip-comments",
+                    "--add-location=never",
+                    "--no-wrap",
+                    *sources,
+                ]
             )
 
             msg_file_content = messages_file.read_text()
@@ -101,31 +104,42 @@ class I18NTool:
             ):
                 tglob = "{}/*/LC_MESSAGES/*.po".format(args.translations_dir)
                 for translation in glob.iglob(tglob):
-                    msgmerge("--previous", "--update", "--no-wrap", translation, messages_file)
+                    subprocess.check_call(
+                        [
+                            "msgmerge",
+                            "--previous",
+                            "--update",
+                            "--no-wrap",
+                            translation,
+                            messages_file,
+                        ]
+                    )
                 log.warning(f"messages translations updated in {messages_file}")
             else:
                 log.warning("messages translations are already up to date")
 
         if args.compile and len(os.listdir(args.translations_dir)) > 1:
-            pybabel.compile("--directory", args.translations_dir)
+            subprocess.check_call(["pybabel", "compile", "--directory", args.translations_dir])
 
     def translate_desktop(self, args: argparse.Namespace) -> None:
         messages_file = Path(args.translations_dir).absolute() / "desktop.pot"
 
         if args.extract_update:
             sources = args.sources.split(",")
-            k = {"_cwd": args.translations_dir}
-            xgettext(
-                "--output=desktop.pot",
-                "--language=Desktop",
-                "--keyword",
-                "--keyword=Name",
-                "--package-version",
-                args.version,
-                "--msgid-bugs-address=securedrop@freedom.press",
-                "--copyright-holder=Freedom of the Press Foundation",
-                *sources,
-                **k,
+            subprocess.check_call(
+                [
+                    "xgettext",
+                    "--output=desktop.pot",
+                    "--language=Desktop",
+                    "--keyword",
+                    "--keyword=Name",
+                    "--package-version",
+                    args.version,
+                    "--msgid-bugs-address=securedrop@freedom.press",
+                    "--copyright-holder=Freedom of the Press Foundation",
+                    *sources,
+                ],
+                cwd=args.translations_dir,
             )
             msg_file_content = messages_file.read_text()
             updated_content = _remove_from_content_line_with_text(
@@ -138,7 +152,7 @@ class I18NTool:
                     if not f.endswith(".po"):
                         continue
                     po_file = os.path.join(args.translations_dir, f)
-                    msgmerge("--update", po_file, messages_file)
+                    subprocess.check_call(["msgmerge", "--update", po_file, messages_file])
                 log.warning(f"messages translations updated in {messages_file}")
             else:
                 log.warning("desktop translations are already up to date")
@@ -153,15 +167,18 @@ class I18NTool:
 
                 for source in args.sources.split(","):
                     target = source.rstrip(".in")
-                    msgfmt(
-                        "--desktop",
-                        "--template",
-                        source,
-                        "-o",
-                        target,
-                        "-d",
-                        ".",
-                        _cwd=args.translations_dir,
+                    subprocess.check_call(
+                        [
+                            "msgfmt",
+                            "--desktop",
+                            "--template",
+                            source,
+                            "-o",
+                            target,
+                            "-d",
+                            ".",
+                        ],
+                        cwd=args.translations_dir,
                     )
                     self.sort_desktop_template(join(args.translations_dir, target))
             finally:
@@ -263,12 +280,11 @@ class I18NTool:
         io.open(l10n_txt, mode="w").write(l10n_content)
         self.require_git_email_name(includes)
         if self.file_is_modified(l10n_txt):
-            k = {"_cwd": includes}
-            git.add("l10n.txt", **k)
+            subprocess.check_call(["git", "add", "l10n.txt"], cwd=includes)
             msg = "docs: update the list of supported languages"
-            git.commit("-m", msg, "l10n.txt", **k)
+            subprocess.check_call(["git", "commit", "-m", msg, "l10n.txt"], cwd=includes)
             log.warning(l10n_txt + " updated")
-            git_show_out = git.show(**k)
+            git_show_out = subprocess.check_output(["git", "show"], encoding="utf-8", cwd=includes)
             log.warning(git_show_out)
         else:
             log.warning(l10n_txt + " already up to date")
@@ -289,13 +305,15 @@ class I18NTool:
         self.ensure_i18n_remote(args)
 
         # Check out *all* remote changes to the LOCALE_DIRs.
-        git(
-            "-C",
-            args.root,
-            "checkout",
-            args.target,
-            "--",
-            *LOCALE_DIR.values(),
+        subprocess.check_call(
+            [
+                "git",
+                "checkout",
+                args.target,
+                "--",
+                *LOCALE_DIR.values(),
+            ],
+            cwd=args.root,
         )
 
         # Use the LOCALE_DIR corresponding to the "securedrop" component to
@@ -314,7 +332,7 @@ class I18NTool:
                 """
                 Add the file to the git index.
                 """
-                git("-C", args.root, "add", path)
+                subprocess.check_call(["git", "add", path], cwd=args.root)
                 paths.append(path)
 
             # Any translated locale may have changes that need to be staged from the
@@ -364,7 +382,7 @@ class I18NTool:
 
         log_command.extend([args.target, "--", path])
 
-        log_lines = subprocess.check_output(log_command).decode("utf-8").strip().split("\n")
+        log_lines = subprocess.check_output(log_command, encoding="utf-8").strip().splitlines()
         path_changes = [c.split("\x1e") for c in log_lines]
         path_changes = [
             c
@@ -380,9 +398,8 @@ class I18NTool:
         """
         Returns the list of commit hashes involving the path, most recent first.
         """
-        return git(
-            "--no-pager", "-C", root, "log", "--format=%H", path, _encoding="utf-8"
-        ).splitlines()
+        cmd = ["git", "--no-pager", "log", "--format=%H", path]
+        return subprocess.check_output(cmd, encoding="utf-8", cwd=root).splitlines()
 
     def translated_locales(self, path: str) -> Dict[str, str]:
         """Return a dictionary of all locale directories present in `path`, where the keys
@@ -396,9 +413,8 @@ class I18NTool:
         """Check if any of the given paths have had changed staged.  If so, commit them."""
         self.require_git_email_name(args.root)
         authors = set()  # type: Set[str]
-        diffs = "{}".format(
-            git("--no-pager", "-C", args.root, "diff", "--name-only", "--cached", *paths)
-        )
+        cmd = ["git", "--no-pager", "diff", "--name-only", "--cached", *paths]
+        diffs = subprocess.check_output(cmd, cwd=args.root, encoding="utf-8")
 
         # If nothing was changed, "git commit" will return nonzero as a no-op.
         if len(diffs) == 0:
@@ -413,8 +429,10 @@ class I18NTool:
             path_commits = self.get_path_commits(args.root, path)
             since_commit = None
             for path_commit in path_commits:
-                commit_message = "{}".format(
-                    git("--no-pager", "-C", args.root, "show", path_commit, _encoding="utf-8")
+                commit_message = subprocess.check_output(
+                    ["git", "--no-pager", "show", path_commit],
+                    encoding="utf-8",
+                    cwd=args.root,
                 )
                 m = self.updated_commit_re.search(commit_message)
                 if m:
@@ -425,7 +443,9 @@ class I18NTool:
 
         authors_as_str = "\n  ".join(sorted(authors))
 
-        current = git("-C", args.root, "rev-parse", args.target)
+        current = subprocess.check_output(
+            ["git", "rev-parse", args.target], cwd=args.root, encoding="utf-8"
+        )
         message = textwrap.dedent(
             """
         l10n: updated {name} ({code})
@@ -438,7 +458,8 @@ class I18NTool:
           commit: {current}
         """
         ).format(remote=args.url, name=name, authors=authors_as_str, code=code, current=current)
-        git("-C", args.root, "commit", "-m", message, *paths)
+        subprocess.check_call(["git", "commit", "-m", message, *paths], cwd=args.root)
+        log.debug(f"Committing with this message: {message}")
 
     def set_update_from_weblate_parser(self, subps: _SubParsersAction) -> None:
         parser = subps.add_parser("update-from-weblate", help=("Import translations from weblate"))
