@@ -82,14 +82,15 @@ def migrate_nulls() -> None:
 
     deleted_id = create_deleted()
     for table in needs_migration:
-        # The seen_ tables have UNIQUE(fk_id, journalist_id), so the deleted journalist can only have
-        # seen each item once. It is possible multiple NULL journalist have seen the same thing so we
-        # do this update in two passes.
+        # The seen_ tables have UNIQUE(fk_id, journalist_id), so the deleted journalist can only
+        # have seen each item once. It is possible multiple NULL journalist have seen the same thing
+        # so we do this update in two passes.
         # First we update as many rows to point to the deleted journalist as possible, ignoring any
         # unique key violations.
         op.execute(
             sa.text(
-                f"UPDATE OR IGNORE {table} SET journalist_id=:journalist_id WHERE journalist_id IS NULL;"
+                f"UPDATE OR IGNORE {table} SET journalist_id=:journalist_id "
+                "WHERE journalist_id IS NULL;"
             ).bindparams(journalist_id=deleted_id)
         )
         # Then we delete any leftovers which had been ignored earlier.
