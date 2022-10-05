@@ -1,5 +1,12 @@
 # Changelog
 
+## 2.5.0~rc2
+
+### Web Applications
+
+* Fixed missing AppArmor entry for new `sessions` module (#6584)
+* Changed installation logic to generate Python bytecode during installation (#6591)
+
 ## 2.5.0~rc1
 
 ### Web Applications
