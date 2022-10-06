@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.5.0~rc3
+
+### Web Applications
+
+* Allowed Apache to generate Python bytecode to address an installation-time edge case (#6602)
+
 ## 2.5.0~rc2
 
 ### Web Applications
