@@ -567,7 +567,7 @@ class SiteConfig:
         self, prompt: str, default: Any, validator: Validator, transform: Optional[Callable]
     ) -> Any:
         if type(default) is bool:
-            default = default and "yes" or "no"
+            default = "yes" if default else "no"
         if type(default) is int:
             default = str(default)
         if isinstance(default, list):
