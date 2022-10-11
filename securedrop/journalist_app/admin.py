@@ -366,6 +366,15 @@ def make_blueprint(config: SDConfig) -> Blueprint:
             user = Journalist.query.get(user_id)
         except NoResultFound:
             abort(404)
+
+        if user.id == session.get_uid():
+            current_app.logger.error(
+                "Admin {} tried to change their password without validation.".format(
+                    session.get_user().username
+                )
+            )
+            abort(403)
+
         password = request.form.get("password")
         if set_diceware_password(user, password, admin=True) is not False:
             current_app.session_interface.logout_user(user.id)  # type: ignore
