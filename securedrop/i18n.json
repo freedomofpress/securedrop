@@ -1,5 +1,9 @@
 {
   "supported_locales": {
+    "ar": {
+      "name": "Arabic",
+      "desktop": "ar"
+    },
     "ca": {
       "name": "Catalan",
       "desktop": "ca"
