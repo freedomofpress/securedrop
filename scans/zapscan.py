@@ -9,7 +9,8 @@ from selenium.webdriver.common.by import By
 from selenium.common.exceptions import WebDriverException, NoSuchElementException
 
 
-# Test credentials from https://developers.securedrop.org/en/latest/setup_development.html#using-the-docker-environment
+# Test credentials from docs
+# https://developers.securedrop.org/en/latest/setup_development.html#using-the-docker-environment
 
 SOURCE_URL = "http://127.0.0.1:8080"
 JOURNALIST_URL = "http://127.0.0.1:8081"
@@ -17,8 +18,6 @@ JOURNALIST_USERNAME = "journalist"
 JOURNALIST_PASS = "correct horse battery staple profanity oil chewy"
 OTP_SECRET = "JHCOGO7VCER3EJ4L"
 
-SCAN_CMD_FMT = "zap-cli active-scan {url}"
-REPORT_CMD_FMT = "zap-cli report -f {cmd_ftype} -o {filename}"
 
 class ReportType(Enum):
     XML = 1
@@ -26,7 +25,8 @@ class ReportType(Enum):
     MARKDOWN = 3
 
 
-class ServiceNotUpException(Exception): pass
+class ServiceNotUpException(Exception):
+    pass
 
 
 def get_ff_options(proxy_addr="127.0.0.1:8090") -> FirefoxOptions:
@@ -49,8 +49,8 @@ def start_driver() -> Firefox():
 def prepare_source_iface(base_url: str, driver: Firefox):
     generate_url = base_url + "/generate"
     driver.get(generate_url)
-    elem = driver.find_element(By.ID, "codename")
-    codename = elem.text
+    # elem = driver.find_element(By.ID, "codename")
+    # codename = elem.text
     continue_btn = driver.find_element(By.ID, "create-form").find_element(By.TAG_NAME, "button")
     continue_btn.click()
 
@@ -80,20 +80,24 @@ def export_report(outfile="zap_report.html", filetype=ReportType.HTML):
         cmd_ftype = "xml"
     elif filetype == ReportType.MARKDOWN:
         cmd_ftype = "md"
-    else: raise ValueError("filetype is not one of: ReportType.HTML, ReportType.XML, ReportType.MARKDOWN")
-    cmdstr = REPORT_CMD_FMT.format(cmd_ftype=cmd_ftype, filename=outfile)
-    res = run(cmdstr, shell=True, check=True)
-    return res.returncode
+    else:
+        raise ValueError("type is not one of: ReportType.HTML, ReportType.XML, ReportType.MARKDOWN")
+    try:
+        cmd = ["zap-cli", "report", "-f", cmd_ftype, "-o", outfile]
+        run(cmd, check=True)
+    except Exception:
+        print("Failed to write report to file: {}".format(outfile))
+        raise
 
 
-def run_zap_scan(base_url: str, outfile="report.html") -> bool:
-    cmdstr = SCAN_CMD_FMT.format(url=base_url)
-    res = run(cmdstr, shell=True)
-    if res.returncode != 0:
-        return False
-    if export_report(outfile=outfile) != 0:
-        return False
-    return True
+def run_zap_scan(url: str, outfile="report.html"):
+    try:
+        cmd = ["zap-cli", "active-scan", url]
+        run(cmd, check=True)
+        export_report(outfile=outfile)
+    except Exception:
+        print("Zap scan failed for {}, with reporting in file {}".format(url, outfile))
+        raise
 
 
 def scan(base_url: str, login_fn=None, report_file="report.html"):
@@ -102,7 +106,10 @@ def scan(base_url: str, login_fn=None, report_file="report.html"):
     sleep(2)
     if login_fn:
         login_fn(base_url, driver)
-    run_zap_scan(base_url, outfile=report_file)
+    try:
+        run_zap_scan(base_url, outfile=report_file)
+    except Exception:
+        raise
     driver.quit()
 
 
@@ -155,21 +162,26 @@ def wait_for_services():
 def main():
     wait_for_services()
     print("Starting scan of journalist interface")
-    jrn_res = scan(JOURNALIST_URL, login_fn=prepare_journalist_iface, report_file="jrn_report.html")
-    if jrn_res:
+    jrn_failed, src_failed = False, False
+    try:
+        scan(JOURNALIST_URL, login_fn=prepare_journalist_iface, report_file="jrn_report.html")
         print("Journalist interface scan complete")
         print("Starting scan of source interface")
-    else:
-        print("Journalist interface scan encountered an error; proceeding to source interface scan")
-    src_res = scan(SOURCE_URL, login_fn=prepare_source_iface, report_file="src_report.html")
-    if jrn_res:
+    except Exception as e:
+        jrn_failed = True
+        print("Scan failed for journalist interface, trying source interface...")
+        print(e)
+    try:
+        scan(SOURCE_URL, login_fn=prepare_source_iface, report_file="src_report.html")
         print("Source interface scan complete")
-    else:
+    except Exception as e:
+        src_failed = True
         print("Source interface scan encountered an error")
-    if not src_res or not jrn_res:
-        if not jrn_res: print("Journalist interface failed to complete")
-        if not src_res: print("Source interface failed to complete")
-        exit(1)
+        print(e)
+    if jrn_failed:
+        print("Journalist interface failed to complete")
+    if src_failed:
+        print("Source interface failed to complete")
 
 
 if __name__ == "__main__":
