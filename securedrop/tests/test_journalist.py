@@ -631,6 +631,28 @@ def test_admin_cannot_delete_self(config, journalist_app, test_admin, test_journ
 
 @flaky(rerun_filter=utils.flaky_filter_xfail)
 @pytest.mark.parametrize("locale", get_test_locales())
+def test_admin_cannot_edit_own_password_without_validation(
+    config, journalist_app, test_admin, locale, mocker
+):
+    mocked_error_logger = mocker.patch("journalist.app.logger.error")
+
+    with journalist_app.test_client() as app:
+        _login_user(app, test_admin["username"], test_admin["password"], test_admin["otp_secret"])
+
+        resp = app.post(
+            url_for("admin.new_password", user_id=test_admin["id"], l=locale),
+            data=dict(password=VALID_PASSWORD),
+            follow_redirects=True,
+        )
+        assert resp.status_code == 403
+
+    mocked_error_logger.assert_called_once_with(
+        "Admin {} tried to change their password without validation.".format(test_admin["username"])
+    )
+
+
+@flaky(rerun_filter=utils.flaky_filter_xfail)
+@pytest.mark.parametrize("locale", get_test_locales())
 def test_admin_edits_user_password_success_response(
     config, journalist_app, test_admin, test_journo, locale
 ):
