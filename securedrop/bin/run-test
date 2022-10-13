@@ -34,18 +34,17 @@ if [ -n "${CIRCLE_BRANCH:-}" ] ; then
 
         cp tests/log/firefox.log "$TEST_RESULTS"
 
-        # # Codecov disabled temporarily due to GPG key not being available
-        # # download and validate codecov uploader
-        # echo "   Validating codecov uploader..."
-        # curl https://keybase.io/codecovsecurity/pgp_keys.asc | gpg --no-default-keyring --keyring trustedkeys.gpg --import
-        # curl -Os https://uploader.codecov.io/latest/linux/codecov
-        # curl -Os https://uploader.codecov.io/latest/linux/codecov.SHA256SUM
-        # curl -Os https://uploader.codecov.io/latest/linux/codecov.SHA256SUM.sig
-        # gpgv codecov.SHA256SUM.sig codecov.SHA256SUM
-        # shasum -a 256 -c codecov.SHA256SUM
-        # chmod +x codecov
-        # echo "   Uploading coverage results to codecov..."
-        # ./codecov
+        # download and validate codecov uploader
+        echo "   Validating codecov uploader..."
+        gpg --no-default-keyring --keyring ./codecov.gpg --import tests/files/codecov.asc
+        curl -Os https://uploader.codecov.io/latest/linux/codecov
+        curl -Os https://uploader.codecov.io/latest/linux/codecov.SHA256SUM
+        curl -Os https://uploader.codecov.io/latest/linux/codecov.SHA256SUM.sig
+        gpgv --keyring ./codecov.gpg codecov.SHA256SUM.sig codecov.SHA256SUM
+        shasum -a 256 -c codecov.SHA256SUM
+        chmod +x codecov
+        echo "   Uploading coverage results to codecov..."
+        ./codecov
     }
     trap finish EXIT
 fi
