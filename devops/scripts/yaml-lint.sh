@@ -12,4 +12,4 @@ find . -path "*/.venv*" -prune -o \
                  -path "**/.molecule" -prune -o \
                  -type f | \
         grep -E '^.*\.ya?ml' | \
-        xargs yamllint -c ".yamllint"
+        xargs yamllint --strict -c ".yamllint"
