@@ -244,7 +244,7 @@ class SiteConfig:
     class ValidateEmail(Validator):
         def validate(self, document: Document) -> bool:
             text = document.text
-            if text == "":
+            if not text:
                 raise ValidationError(message=("Must not be empty"))
             if "@" not in text:
                 raise ValidationError(message=("Must contain a @"))
