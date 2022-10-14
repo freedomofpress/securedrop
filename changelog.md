@@ -1,5 +1,16 @@
 # Changelog
 
+## 2.5.0~rc4
+
+## Web Applications
+
+* Fixed new password functionality to require admins to authenticate if changing their own password (#6627)
+* Fixed i18n.json, restoring Arabic as a supported language (#6614)
+
+## CI
+
+* Removed an external CI dependency by bundling the Codecov GPG key (#6612, #6626)
+
 ## 2.5.0~rc3
 
 ### Web Applications
