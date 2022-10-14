@@ -78,7 +78,7 @@
       file under `~/Persistent/securedrop/install_files/ansible-base/ and
       retry the install command.
   when:
-   - v3_source_file.stat.exists
+    - v3_source_file.stat.exists
 
 - name: Confirm that the Tor keys file is present
   assert:

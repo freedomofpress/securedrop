@@ -75,7 +75,8 @@ jobs:
           name: Run all linters
           command: |
             fromtag=$(docker images |grep securedrop-test-focal-py3 |head -n1 |awk '{print $2}')
-            DOCKER_BUILD_ARGUMENTS="--cache-from securedrop-test-focal-py3:${fromtag:-latest}" securedrop/bin/dev-shell bash -c "sudo apt install shellcheck && /opt/venvs/securedrop-app-code/bin/pip3 install --require-hashes -r requirements/python3/develop-requirements.txt && make -C .. lint"
+            DOCKER_BUILD_ARGUMENTS="--cache-from securedrop-test-focal-py3:${fromtag:-latest}" securedrop/bin/dev-shell \
+                  bash -c "sudo apt install shellcheck && /opt/venvs/securedrop-app-code/bin/pip3 install --require-hashes -r requirements/python3/develop-requirements.txt && make -C .. lint"
 
   app-tests:
     machine:
@@ -247,19 +248,22 @@ jobs:
           name: Check Python dependencies for CVEs
           command: |
             fromtag=$(docker images |grep securedrop-test-focal-py3 |head -n1 |awk '{print $2}')
-            DOCKER_BUILD_ARGUMENTS="--cache-from securedrop-test-focal-py3:${fromtag:-latest}" securedrop/bin/dev-shell bash -c "pip3 install -U -q --upgrade safety && make -C .. safety"
+            DOCKER_BUILD_ARGUMENTS="--cache-from securedrop-test-focal-py3:${fromtag:-latest}" securedrop/bin/dev-shell \
+                  bash -c "pip3 install -U -q --upgrade safety && make -C .. safety"
 
       - run:
           name: Run static security testing on source code with bandit
           command: |
             fromtag=$(docker images |grep securedrop-test-focal-py3 |head -n1 |awk '{print $2}')
-            DOCKER_BUILD_ARGUMENTS="--cache-from securedrop-test-focal-py3:${fromtag:-latest}" securedrop/bin/dev-shell bash -c "pip3 install -U -q --upgrade pip && pip3 install -U -q --upgrade bandit && make -C .. bandit"
+            DOCKER_BUILD_ARGUMENTS="--cache-from securedrop-test-focal-py3:${fromtag:-latest}" securedrop/bin/dev-shell \
+                  bash -c "pip3 install -U -q --upgrade pip && pip3 install -U -q --upgrade bandit && make -C .. bandit"
 
       - run:
           name: Run static security testing on source code with semgrep
           command: |
             fromtag=$(docker images |grep securedrop-test-focal-py3 |head -n1 |awk '{print $2}')
-            DOCKER_BUILD_ARGUMENTS="--cache-from securedrop-test-focal-py3:${fromtag:-latest}" securedrop/bin/dev-shell bash -c "pip3 install -U -q --upgrade pip && pip3 install -U -q --upgrade semgrep && make -C .. semgrep"
+            DOCKER_BUILD_ARGUMENTS="--cache-from securedrop-test-focal-py3:${fromtag:-latest}" securedrop/bin/dev-shell \
+                  bash -c "pip3 install -U -q --upgrade pip && pip3 install -U -q --upgrade semgrep && make -C .. semgrep"
 
   staging-test-with-rebase:
     machine:
