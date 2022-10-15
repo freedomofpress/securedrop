@@ -29,7 +29,7 @@ app_ip: 10.0.1.4
 
 pip_deps:
   - name: 'Flask'
-    version: '2.0.2'
+    version: '2.0.3'
 
 apparmor_complain: []
 
