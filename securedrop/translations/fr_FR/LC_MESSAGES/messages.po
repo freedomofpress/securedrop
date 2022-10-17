@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2022-05-10 17:11+0000\n"
+"PO-Revision-Date: 2022-10-13 17:27+0000\n"
 "Last-Translator: AO Localization Lab <ao@localizationlab.org>\n"
 "Language-Team: French <https://weblate.securedrop.org/projects/securedrop/securedrop/fr/>\n"
 "Language: fr_FR\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.11.2\n"
+"X-Generator: Weblate 4.14.1\n"
 "Generated-By: Babel 2.4.0\n"
 
 msgid "Name too long"
@@ -258,10 +258,10 @@ msgid "You will not be able to send them replies."
 msgstr "Vous ne pourrez pas lui envoyer de réponses."
 
 msgid "All files and messages from that source will also be destroyed."
-msgstr "Tous les fichiers et messages de cette source seront aussi détruits."
+msgstr "Tout les fichiers et messages de cette source seront détruits."
 
 msgid "Are you sure this is what you want?"
-msgstr "Est-ce vraiment ce que vous voulez ?"
+msgstr "Confirmez-vous ?"
 
 msgid "Yes, Delete Selected Source Accounts"
 msgstr "Oui, supprimer les comptes des sources sélectionnées"
@@ -285,7 +285,7 @@ msgid "Continue to change secret"
 msgstr "Poursuivre pour changer le secret"
 
 msgid "CONTINUE"
-msgstr "CONTINUER"
+msgstr "POURSUIVRE"
 
 msgid "Enable FreeOTP"
 msgstr "Activer FreeOTP"
@@ -336,7 +336,7 @@ msgid "ADD USER"
 msgstr "AJOUTER UN UTILISATEUR"
 
 msgid "Username"
-msgstr "nom d’utilisateur"
+msgstr "Nom d’utilisateur"
 
 msgid "Edit"
 msgstr "Modifier"
@@ -473,10 +473,8 @@ msgstr "Non lu"
 msgid "Read"
 msgstr "Lu"
 
-#, fuzzy
-#| msgid "Uploaded Document"
 msgid "Uploaded File"
-msgstr "Le document a été téléversé"
+msgstr "Le fichier a été téléversé"
 
 msgid "Reply"
 msgstr "Répondre"
@@ -506,7 +504,7 @@ msgid "An encryption key will be generated for the source the next time they log
 msgstr "Une clé de chiffrement sera générée pour la source la prochaine fois qu’elle se connectera, après quoi vous serez en mesure de lui répondre ici."
 
 msgid "Delete Source Account"
-msgstr "Supprimer le compte source"
+msgstr "Supprimer le compte de la source"
 
 msgid "Are you sure?"
 msgstr "Confirmez-vous ?"
@@ -523,6 +521,16 @@ msgid ""
 "All files, messages, and replies will also be deleted when their account is deleted.\n"
 "</p>"
 msgstr ""
+"<p>\n"
+"Supprimer le compte de <b>{source}</b> aura pour conséquences :\n"
+"</p>\n"
+"<ul>\n"
+"<li>de l’empêcher de se connecter de nouveau avec son nom de code\n"
+"<li>d’empêcher votre organisme de lui envoyer des réponses\n"
+"</ul>\n"
+"<p>\n"
+"Tous les fichiers, messages et réponses seront aussi supprimés lors de la suppression de son compte.\n"
+"</p>"
 
 msgid "Yes, Delete Source Account"
 msgstr "Oui, supprimer le compte de la source"
@@ -563,10 +571,8 @@ msgstr "METTRE À JOUR LE LOGO"
 msgid "Submission Preferences"
 msgstr "Préférences des envois"
 
-#, fuzzy
-#| msgid "Prevent sources from uploading documents. Sources will still be able to send messages."
 msgid "Prevent sources from uploading files. Sources will still be able to send messages."
-msgstr "Empêcher les sources de téléverser des documents. Les sources pourront encore envoyer des messages."
+msgstr "Empêcher les sources de téléverser des fichiers. Les sources pourront encore envoyer des messages."
 
 msgid "Prevent sources from sending initial messages shorter than the minimum required length:"
 msgstr "Empêcher les sources d’envoyer des messages initiaux plus courts que la longueur minimale requise :"
@@ -688,10 +694,8 @@ msgstr "Ôter l’étoile"
 msgid "Designation"
 msgstr "Désignation"
 
-#, fuzzy
-#| msgid "Filename"
 msgid "Files"
-msgstr "Nom du fichier"
+msgstr "Fichiers"
 
 msgid "Messages"
 msgstr "Messages"
@@ -700,7 +704,7 @@ msgid "Date"
 msgstr "Date"
 
 msgid "There are no submissions!"
-msgstr ""
+msgstr "Il n’y a aucun envoi"
 
 msgid "Filter by codename"
 msgstr "Filtrer par nom de code"
@@ -792,15 +796,11 @@ msgstr "Nous vous remercions de nous avoir envoyé ces renseignements. Veuillez 
 msgid "Thanks! We received your message."
 msgstr "Merci ! Nous avons reçu votre message."
 
-#, fuzzy
-#| msgid "Thanks! We received your message."
 msgid "Thanks! We received your file."
-msgstr "Merci ! Nous avons reçu votre message."
+msgstr "Merci. Nous avons reçu votre fichier."
 
-#, fuzzy
-#| msgid "Thanks! We received your message."
 msgid "Thanks! We received your file and message."
-msgstr "Merci ! Nous avons reçu votre message."
+msgstr "Merci. Nous avons reçu vos fichier et message."
 
 msgid "Reply deleted"
 msgstr "La réponse a été supprimée"
@@ -844,10 +844,8 @@ msgstr "Chercher un nom de code…"
 msgid "Powered by"
 msgstr "Propulsée par"
 
-#, fuzzy
-#| msgid "Please note: Sharing sensitive documents may put you at risk, even when using Tor and SecureDrop."
 msgid "Please note: Sharing sensitive information may put you at risk, even when using Tor and SecureDrop."
-msgstr "Veuillez noter : le partage de documents délicats pourrait vous mettre en danger, même en utilisant Tor et SecureDrop."
+msgstr "Veuillez noter : le partage de renseignements délicats pourrait vous mettre en danger, même en utilisant Tor et SecureDrop."
 
 msgid "SecureDrop is a project of Freedom of the Press Foundation."
 msgstr "SecureDrop est un projet de la fondation « Freedom of the Press » (liberté des médias)."
@@ -886,7 +884,7 @@ msgid "Select <b>Safest</b> and close the preferences tab"
 msgstr "Sélectionnez <b>Le plus sûr</b> et fermer l’onglet des préférences"
 
 msgid "<a href=\"/\" aria-label=\"Follow these instructions, then refresh this page\">Refresh this page</a>, and you're done!"
-msgstr "<a href=\"/\" aria-label=\"Suivez ces instructions, puis actualisez cette page\">Actualisez cette page</a> et tout est prêt ."
+msgstr "<a href=\"/\" aria-label=\"Suivez ces instructions, puis actualisez cette page\">Actualisez cette page</a> et vous aurez terminé."
 
 msgid "<strong>It is recommended to use Tor Browser to access SecureDrop:</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
 msgstr "<strong>Il est recommandé d’utiliser le Navigateur Tor pour accéder à SecureDrop : </strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Apprenez à l’installer</a> ou ignorez cet avertissement pour poursuivre."
