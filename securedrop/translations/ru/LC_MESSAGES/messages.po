@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SecureDrop 0.4.3\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2022-05-07 16:11+0000\n"
+"PO-Revision-Date: 2022-10-01 21:16+0000\n"
 "Last-Translator: Andrey <andrey@mailbox.org>\n"
 "Language-Team: Russian <https://weblate.securedrop.org/projects/securedrop/securedrop/ru/>\n"
 "Language: ru\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.11.2\n"
+"X-Generator: Weblate 4.14.1\n"
 "Generated-By: Babel 2.4.0\n"
 
 msgid "Name too long"
@@ -482,10 +482,8 @@ msgstr "Не прочитано"
 msgid "Read"
 msgstr "Прочитано"
 
-#, fuzzy
-#| msgid "Uploaded Document"
 msgid "Uploaded File"
-msgstr "Загруженный документ"
+msgstr "Загруженный файл"
 
 msgid "Reply"
 msgstr "Ответить"
@@ -532,6 +530,16 @@ msgid ""
 "All files, messages, and replies will also be deleted when their account is deleted.\n"
 "</p>"
 msgstr ""
+"<p>\n"
+"Удаление аккаунта для <b>{source}</b> приведет к:\n"
+"</p>\n"
+"<ul>\n"
+"<li>запрету авторизации под своим псевдонимом\n"
+"<li>запрету вашей организации отправлять ответы\n"
+"</ul>\n"
+"<p>\n"
+"Все файлы, сообщения и ответы также будут удалены при удалении их аккаунта.\n"
+"</p>"
 
 msgid "Yes, Delete Source Account"
 msgstr "Да, удалить учетную запись источника"
@@ -572,10 +580,8 @@ msgstr "ОБНОВИТЬ ЛОГОТИП"
 msgid "Submission Preferences"
 msgstr "Параметры публикации"
 
-#, fuzzy
-#| msgid "Prevent sources from uploading documents. Sources will still be able to send messages."
 msgid "Prevent sources from uploading files. Sources will still be able to send messages."
-msgstr "Запретить источникам загрузку документов. Источники все ещё смогут отправлять сообщения."
+msgstr "Запретить источникам загружать файлы. Источники по-прежнему смогут отправлять сообщения."
 
 msgid "Prevent sources from sending initial messages shorter than the minimum required length:"
 msgstr "Запретить источникам отправлять первичные сообщения короче минимально необходимой длины:"
@@ -697,10 +703,8 @@ msgstr "Снять отметку"
 msgid "Designation"
 msgstr "Назначение"
 
-#, fuzzy
-#| msgid "Filename"
 msgid "Files"
-msgstr "Имя файла"
+msgstr "Файлы"
 
 msgid "Messages"
 msgstr "Сообщения"
@@ -709,7 +713,7 @@ msgid "Date"
 msgstr "Дата"
 
 msgid "There are no submissions!"
-msgstr ""
+msgstr "Предложений нет!"
 
 msgid "Filter by codename"
 msgstr "Фильтр по кодовому имени"
@@ -801,15 +805,11 @@ msgstr "Благодарим вас за отправку нам этой инф
 msgid "Thanks! We received your message."
 msgstr "Спасибо! Мы получили ваше сообщение."
 
-#, fuzzy
-#| msgid "Thanks! We received your message."
 msgid "Thanks! We received your file."
-msgstr "Спасибо! Мы получили ваше сообщение."
+msgstr "Спасибо! Мы получили ваш файл."
 
-#, fuzzy
-#| msgid "Thanks! We received your message."
 msgid "Thanks! We received your file and message."
-msgstr "Спасибо! Мы получили ваше сообщение."
+msgstr "Спасибо! Мы получили ваши файл и сообщение."
 
 msgid "Reply deleted"
 msgstr "Ответ удален"
@@ -853,16 +853,14 @@ msgstr "Посмотреть кодовое имя..."
 msgid "Powered by"
 msgstr "Основано на"
 
-#, fuzzy
-#| msgid "Please note: Sharing sensitive documents may put you at risk, even when using Tor and SecureDrop."
 msgid "Please note: Sharing sensitive information may put you at risk, even when using Tor and SecureDrop."
-msgstr "Пометка: выкладывать секретными документами может быть опасным, даже если используется Tor и SecureDrop."
+msgstr "Обратите внимание: передача конфиденциальной информации может подвергнуть вас риску, даже при использовании Tor и SecureDrop."
 
 msgid "SecureDrop is a project of Freedom of the Press Foundation."
 msgstr "SecureDrop - Это проект Фонда поддержки свободы прессы."
 
 msgid "Get Your Codename"
-msgstr "Получение псевдонима"
+msgstr "Получить псевдоним"
 
 msgid "A <em>codename</em> in SecureDrop functions as both your username and your password."
 msgstr "<em>Псевдоним</em> в SecureDrop одновременно является и вашим именем пользователя, и вашим паролем."
