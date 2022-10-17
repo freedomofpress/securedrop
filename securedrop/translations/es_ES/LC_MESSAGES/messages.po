@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2022-03-18 11:42+0000\n"
-"Last-Translator: Zuhualime Akoochimoya <zakooch@protonmail.ch>\n"
+"PO-Revision-Date: 2022-10-03 13:27+0000\n"
+"Last-Translator: cacu <carlosm2@riseup.net>\n"
 "Language-Team: Spanish <https://weblate.securedrop.org/projects/securedrop/securedrop/es/>\n"
 "Language: es_ES\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.11.2\n"
+"X-Generator: Weblate 4.14.1\n"
 "Generated-By: Babel 2.4.0\n"
 
 msgid "Name too long"
@@ -473,10 +473,8 @@ msgstr "No leído"
 msgid "Read"
 msgstr "Leído"
 
-#, fuzzy
-#| msgid "Uploaded Document"
 msgid "Uploaded File"
-msgstr "Documento Cargado"
+msgstr "Archivo Cargado"
 
 msgid "Reply"
 msgstr "Responder"
@@ -523,6 +521,16 @@ msgid ""
 "All files, messages, and replies will also be deleted when their account is deleted.\n"
 "</p>"
 msgstr ""
+"<p>\n"
+"Eliminar la cuenta para <b>{source}</b> implicará lo siguiente:\n"
+"</p>\n"
+"<ul>\n"
+"<li>les impedirá identificarse nuevamente con su nombre clave \n"
+"<li>impedirá a tu organización enviar respuestas\n"
+"</ul>\n"
+"<p>\n"
+"Todos los archivos, mensajes y respuestas también serán eliminados cuando su cuenta se borre.\n"
+"</p>"
 
 msgid "Yes, Delete Source Account"
 msgstr "Sí, eliminar cuenta de fuente"
@@ -563,10 +571,8 @@ msgstr "ACTUALIZAR LOGOTIPO"
 msgid "Submission Preferences"
 msgstr "Preferencias de envío"
 
-#, fuzzy
-#| msgid "Prevent sources from uploading documents. Sources will still be able to send messages."
 msgid "Prevent sources from uploading files. Sources will still be able to send messages."
-msgstr "Impide que las fuentes suban documentos. Las fuentes todavía podrán seguir enviando mensajes."
+msgstr "Impide que las fuentes suban archivos. Las fuentes todavía podrán seguir enviando mensajes."
 
 msgid "Prevent sources from sending initial messages shorter than the minimum required length:"
 msgstr "Evitar que las fuentes envíen mensajes iniciales más cortos que la longitud mínima requerida:"
@@ -688,10 +694,8 @@ msgstr "Desmarcar"
 msgid "Designation"
 msgstr "Designación"
 
-#, fuzzy
-#| msgid "Filename"
 msgid "Files"
-msgstr "Nombre de archivo"
+msgstr "Archivos"
 
 msgid "Messages"
 msgstr "Mensajes"
@@ -700,7 +704,7 @@ msgid "Date"
 msgstr "Fecha"
 
 msgid "There are no submissions!"
-msgstr ""
+msgstr "¡No hay entregas!"
 
 msgid "Filter by codename"
 msgstr "Filtrar por nombre clave"
@@ -765,10 +769,8 @@ msgstr "¡Tu conexión no es anónima en este momento!"
 msgid "You were redirected because you are already logged in. If you want to create a new account, you should log out first."
 msgstr "Fuiste redirigido porque ya tenías una sesión iniciada. Si deseas crear una cuenta nueva, debes cerrar la sesión primero."
 
-#, fuzzy
-#| msgid "You are already logged in. Please verify your codename above as it may differ from the one displayed on the previous page."
 msgid "You are already logged in. Please verify your codename as it may differ from the one displayed on the previous page."
-msgstr "Ya tienes una sesión iniciada. Por favor verifica arriba tu nombre clave, ya que pudiera diferir del mostrado en la página previa."
+msgstr "Ya tienes una sesión iniciada. Por favor verifica tu nombre clave, ya que pudiera diferir del mostrado en la página previa."
 
 msgid "There was a temporary problem creating your account. Please try again."
 msgstr "Hubo un problema temporario al crear tu cuenta. Por favor intenta nuevamente."
@@ -794,15 +796,11 @@ msgstr "Gracias por enviarnos esta información. Por favor, verifica más tarde 
 msgid "Thanks! We received your message."
 msgstr "¡Gracias! Recibimos tu mensaje."
 
-#, fuzzy
-#| msgid "Thanks! We received your message."
 msgid "Thanks! We received your file."
-msgstr "¡Gracias! Recibimos tu mensaje."
+msgstr "¡Gracias! Recibimos tu archivo."
 
-#, fuzzy
-#| msgid "Thanks! We received your message."
 msgid "Thanks! We received your file and message."
-msgstr "¡Gracias! Recibimos tu mensaje."
+msgstr "¡Gracias! Recibimos tu archivo y el mensaje."
 
 msgid "Reply deleted"
 msgstr "Respuesta eliminada"
@@ -846,10 +844,8 @@ msgstr "Buscar un nombre clave..."
 msgid "Powered by"
 msgstr "Con tecnología de"
 
-#, fuzzy
-#| msgid "Please note: Sharing sensitive documents may put you at risk, even when using Tor and SecureDrop."
 msgid "Please note: Sharing sensitive information may put you at risk, even when using Tor and SecureDrop."
-msgstr "Por favor ten en cuenta: compartir documentos confidenciales puede ponerte en riesgo, incluso si lo haces a través de Tor y SecureDrop."
+msgstr "Por favor ten en cuenta: compartir información confidencial puede ponerte en riesgo, incluso si lo haces a través de Tor y SecureDrop."
 
 msgid "SecureDrop is a project of Freedom of the Press Foundation."
 msgstr "SecureDrop es un proyecto de la Freedom of the Press Foundation."
@@ -897,7 +893,7 @@ msgid "<strong>It is recommended you use the desktop version of Tor Browser to a
 msgstr "<strong>Se recomienda que uses la versión de escritorio del Navegador Tor para acceder a SecureDrop, ya que Orfox no proporciona el mismo nivel de seguridad y anonimato.</strong><a class=\"recommend-tor\" href=\"{tor_browser_url}\"> Aprende cómo instalarlo</a>, o ignora esta advertencia para continuar."
 
 msgid "{} logo"
-msgstr ""
+msgstr "logotipo de {}"
 
 msgid "First submission"
 msgstr "Primer envío"
@@ -953,10 +949,8 @@ msgstr "<a href=\"{url}\" class=\"text-link\">Aprende más</a>."
 msgid "Maximum upload size: 500 MB"
 msgstr "Tamaño máximo de carga: 500 MB"
 
-#, fuzzy
-#| msgid "Your first message must be at least {} characters long."
 msgid "If you are only sending a message, it must be at least {} characters long."
-msgstr "Tu primer mensaje debe tener al menos {} caracteres de longitud."
+msgstr "Si solo estás enviando un mensaje, este debe tener al menos {} caracteres de longitud."
 
 msgid "Anti-spam check. Do not fill this in!"
 msgstr "Comprobación de contenido no solicitado. ¡No completes esto!"
@@ -1006,10 +1000,8 @@ msgstr "Parece que estás usando un servicio de proxy Tor para acceder a SecureD
 msgid "Anyone monitoring your Internet traffic &mdash; including your government, your Internet provider, or the proxy operator &mdash; may be able to identify you."
 msgstr "Cualquiera que esté monitoreando tu tráfico de Internet &mdash; incluyendo tu gobierno, tu proveedor de Internet o el operador del proxy &mdash; podría ser capaz de identificarte."
 
-#, fuzzy
-#| msgid "Always use <a href=\"www.torproject.org/projects/torbrowser.html\">Tor Browser</a> to access SecureDrop. Valid SecureDrop site addresses end with <code>.onion</code>. The correct address for this site is:"
 msgid "Always use Tor Browser (<code>{}</code>) to access SecureDrop. Valid SecureDrop site addresses end with <code>.onion</code>. The correct address for this site is:"
-msgstr "Usa siempre el <a href=\"www.torproject.org/projects/torbrowser.html\">Navegador Tor</a> para acceder a SecureDrop. Las direcciones válidas de sitios SecureDrop terminan en <code>.onion</code>. La dirección correcta para este sitio es:"
+msgstr "Usa siempre el Navegador Tor (<code>{}</code>) para acceder a SecureDrop. Las direcciones válidas de sitios SecureDrop terminan en <code>.onion</code>. La dirección correcta para este sitio es:"
 
 msgid "If you are already using Tor Browser, copy the address above and generate a new identity before you access SecureDrop."
 msgstr "Si ya estás usando al Navegador Tor, copia la dirección de arriba y genera una nueva identidad antes de acceder a SecureDrop."
@@ -1038,10 +1030,8 @@ msgstr "Recuerda que tu nombre clave es:"
 msgid "Codename"
 msgstr "Nombre Clave"
 
-#, fuzzy
-#| msgid "Codename"
 msgid "Show Codename"
-msgstr "Nombre Clave"
+msgstr "Mostrar Nombre Clave"
 
 msgid "Why download the team's public key?"
 msgstr "¿Por qué descargar la llave pública del equipo?"
