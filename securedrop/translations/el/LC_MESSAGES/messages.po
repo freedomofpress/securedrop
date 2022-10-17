@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SecureDrop 0.8.0~rc1\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2022-05-17 13:11+0000\n"
+"PO-Revision-Date: 2022-10-08 17:27+0000\n"
 "Last-Translator: Dimitris Maroulidis <dmaroulidis@dimitrismaroulidis.com>\n"
 "Language-Team: Greek <https://weblate.securedrop.org/projects/securedrop/securedrop/el/>\n"
 "Language: el\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.11.2\n"
+"X-Generator: Weblate 4.14.1\n"
 "Generated-By: Babel 2.5.1\n"
 
 msgid "Name too long"
@@ -472,10 +472,8 @@ msgstr "Μη αναγνωσμένο"
 msgid "Read"
 msgstr "Αναγνωσμένο"
 
-#, fuzzy
-#| msgid "Uploaded Document"
 msgid "Uploaded File"
-msgstr "Ανεβασμένο έγγραφο"
+msgstr "Ανεβασμένο αρχείο"
 
 msgid "Reply"
 msgstr "Απάντηση"
@@ -522,6 +520,16 @@ msgid ""
 "All files, messages, and replies will also be deleted when their account is deleted.\n"
 "</p>"
 msgstr ""
+"<p>\n"
+"Η διαγραφή του λογαριασμού του/της <b>{source}</b> θα:\n"
+"</p>\n"
+"<ul>\n"
+"<li>τον/την αποτρέψει από το να συνδεθεί ξανά με το κωδικό όνομά του/της\n"
+"<li>αποτρέψει τον οργανισμό σας από να του/της στείλει απαντήσεις\n"
+"</ul>\n"
+"<p>\n"
+"Επίσης, όλα τα αρχεία, μηνύματα και απαντήσεις θα διαγραφούν όταν διαγραφεί ο λογαριασμός του/της.\n"
+"</p>"
 
 msgid "Yes, Delete Source Account"
 msgstr "Ναι, Διαγραφή λογαριασμού πηγής"
@@ -562,10 +570,8 @@ msgstr "ΑΝΑΝΕΩΣΗ ΛΟΓΟΤΥΠΟΥ"
 msgid "Submission Preferences"
 msgstr "Ρυθμίσεις καταχωρήσεων"
 
-#, fuzzy
-#| msgid "Prevent sources from uploading documents. Sources will still be able to send messages."
 msgid "Prevent sources from uploading files. Sources will still be able to send messages."
-msgstr "Να μην επιτρέπεται σε πηγές να ανεβάζουν έγγραφα. Οι πηγές θα μπορούν παρ' όλα αυτά να στέλνουν μηνύματα."
+msgstr "Να μην επιτρέπεται σε πηγές να ανεβάζουν αρχεία. Οι πηγές θα μπορούν παρ' όλα αυτά να στέλνουν μηνύματα."
 
 msgid "Prevent sources from sending initial messages shorter than the minimum required length:"
 msgstr "Αποτρέψτε τις πηγές από την αποστολή μηνυμάτων μικρότερων του ελάχιστου απαιτούμενου μήκους:"
@@ -687,10 +693,8 @@ msgstr "Απο-επισήμανση"
 msgid "Designation"
 msgstr "Χαρακτηρισμός"
 
-#, fuzzy
-#| msgid "Filename"
 msgid "Files"
-msgstr "Όνομα αρχείου"
+msgstr "Αρχεία"
 
 msgid "Messages"
 msgstr "Μηνύματα"
@@ -699,7 +703,7 @@ msgid "Date"
 msgstr "Ημερομηνία"
 
 msgid "There are no submissions!"
-msgstr ""
+msgstr "Δεν υπάρχουν υποβολές!"
 
 msgid "Filter by codename"
 msgstr "Φιλτράρισμα ανά κωδικό όνομα"
@@ -791,15 +795,11 @@ msgstr "Ευχαριστούμε που μας στείλατε αυτές τι�
 msgid "Thanks! We received your message."
 msgstr "Ευχαριστούμε! Λάβαμε το μήνυμά σας."
 
-#, fuzzy
-#| msgid "Thanks! We received your message."
 msgid "Thanks! We received your file."
-msgstr "Ευχαριστούμε! Λάβαμε το μήνυμά σας."
+msgstr "Ευχαριστούμε! Λάβαμε το αρχείο σας."
 
-#, fuzzy
-#| msgid "Thanks! We received your message."
 msgid "Thanks! We received your file and message."
-msgstr "Ευχαριστούμε! Λάβαμε το μήνυμά σας."
+msgstr "Ευχαριστούμε! Λάβαμε το αρχείο και το μήνυμά σας."
 
 msgid "Reply deleted"
 msgstr "Η απάντηση διαγράφτηκε"
@@ -843,10 +843,8 @@ msgstr "Αναζήτηση ενός κωδικού ονόματος..."
 msgid "Powered by"
 msgstr "Με την υποστήριξη του"
 
-#, fuzzy
-#| msgid "Please note: Sharing sensitive documents may put you at risk, even when using Tor and SecureDrop."
 msgid "Please note: Sharing sensitive information may put you at risk, even when using Tor and SecureDrop."
-msgstr "Σημείωση: Η κοινοποίηση ευαίσθητων αρχείων μπορεί να σας εκθέσει σε κίνδυνο, ακόμα και όταν χρησιμοποιείτε το Tor και το SecureDrop."
+msgstr "Σημείωση: Η κοινοποίηση ευαίσθητων πληροφοριών μπορεί να σας εκθέσει σε κίνδυνο, ακόμα και όταν χρησιμοποιείτε το Tor και το SecureDrop."
 
 msgid "SecureDrop is a project of Freedom of the Press Foundation."
 msgstr "Το SecureDrop είναι έργο του ιδρύματος Freedom of the Press."
