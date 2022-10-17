@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SecureDrop 0.12.0~rc1\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2022-05-19 00:11+0000\n"
+"PO-Revision-Date: 2022-10-09 10:08+0000\n"
 "Last-Translator: Oktavia <oktaviahrund@gmail.com>\n"
 "Language-Team: Icelandic <https://weblate.securedrop.org/projects/securedrop/securedrop/is/>\n"
 "Language: is\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n % 10 != 1 || n % 100 == 11;\n"
-"X-Generator: Weblate 4.11.2\n"
+"X-Generator: Weblate 4.14.1\n"
 "Generated-By: Babel 2.5.1\n"
 
 msgid "Name too long"
@@ -472,10 +472,8 @@ msgstr "Ólesið"
 msgid "Read"
 msgstr "Lesa"
 
-#, fuzzy
-#| msgid "Uploaded Document"
 msgid "Uploaded File"
-msgstr "Innsent skjal"
+msgstr "Innsend skrá"
 
 msgid "Reply"
 msgstr "Svara"
@@ -522,6 +520,16 @@ msgid ""
 "All files, messages, and replies will also be deleted when their account is deleted.\n"
 "</p>"
 msgstr ""
+"<p>\n"
+"Eyðing aðgangsins fyrir <b>{source}</b> mun:\n"
+"</p>\n"
+"<ul>\n"
+"<li>koma í veg fyrir að viðkomandi geti skráð sig aftur inn með kóðanafninu sínu\n"
+"<li>koma í veg fyrir að félagið þitt getur sent viðkomandi svör\n"
+"</ul>\n"
+"<p>\n"
+"Allar skrár, skilaboð og svör munu einnig eyðast þegar aðgangi viðkomandi er eytt.\n"
+"</p>"
 
 msgid "Yes, Delete Source Account"
 msgstr "Já, eyða notandaaðgangi heimildarmanns"
@@ -562,10 +570,8 @@ msgstr "UPPFÆRA MERKI"
 msgid "Submission Preferences"
 msgstr "Kjörstillingar fyrir innsendingu"
 
-#, fuzzy
-#| msgid "Prevent sources from uploading documents. Sources will still be able to send messages."
 msgid "Prevent sources from uploading files. Sources will still be able to send messages."
-msgstr "Koma í veg fyrir að heimildarmenn geti sent inn skjöl. Heimildamenn geta eftir sem áður sent skilaboð."
+msgstr "Koma í veg fyrir að heimildarmenn geti sent inn skrár. Heimildamenn geta eftir sem áður sent skilaboð."
 
 msgid "Prevent sources from sending initial messages shorter than the minimum required length:"
 msgstr "Koma í veg fyrir að heimildarmenn sendi upphafsskilaboð sem séu styttri en tiltekin lágmarkslengd:"
@@ -687,10 +693,8 @@ msgstr "Fjarlægja stjörnumerkingu"
 msgid "Designation"
 msgstr "Tilnefnt"
 
-#, fuzzy
-#| msgid "Filename"
 msgid "Files"
-msgstr "Skráarheiti"
+msgstr "Skrár"
 
 msgid "Messages"
 msgstr "Skilaboð"
@@ -699,7 +703,7 @@ msgid "Date"
 msgstr "Dagsetning"
 
 msgid "There are no submissions!"
-msgstr ""
+msgstr "Það eru engar innsendingar!"
 
 msgid "Filter by codename"
 msgstr "Sía eftir kóðanafni"
@@ -791,15 +795,11 @@ msgstr "Takk fyrir að senda þessar upplýsingar til okkar. Komdu svo aftur sí
 msgid "Thanks! We received your message."
 msgstr "Takk fyrir! Við fengum skilaboðin þín."
 
-#, fuzzy
-#| msgid "Thanks! We received your message."
 msgid "Thanks! We received your file."
-msgstr "Takk fyrir! Við fengum skilaboðin þín."
+msgstr "Takk fyrir! Við fengum skrána þína."
 
-#, fuzzy
-#| msgid "Thanks! We received your message."
 msgid "Thanks! We received your file and message."
-msgstr "Takk fyrir! Við fengum skilaboðin þín."
+msgstr "Takk fyrir! Við fengum skrána þína og skilaboðin."
 
 msgid "Reply deleted"
 msgstr "Svari var eytt"
@@ -843,8 +843,6 @@ msgstr "Fletta upp kóðanafni..."
 msgid "Powered by"
 msgstr "Keyrt með"
 
-#, fuzzy
-#| msgid "Please note: Sharing sensitive documents may put you at risk, even when using Tor and SecureDrop."
 msgid "Please note: Sharing sensitive information may put you at risk, even when using Tor and SecureDrop."
 msgstr "Athugaðu: Að deila viðkvæmum upplýsingum getur falið í sér áhættu, jafnvel þó notast sé við Tor og SecureDrop."
 
@@ -999,7 +997,7 @@ msgid "You appear to be using a Tor proxy service to access SecureDrop. Proxy se
 msgstr "Það lítur út eins og þú notir milliþjónustu Tor til að tengjast SecureDrop. Að nota milliþjóna verndar ekki nafnleynd þína."
 
 msgid "Anyone monitoring your Internet traffic &mdash; including your government, your Internet provider, or the proxy operator &mdash; may be able to identify you."
-msgstr "Það er hugsanlegt að hver sá sem fylgist með netumferðinni þinni &mdash; t.d. stjórnvöld, netþjónustan þín, o.fl. &mdash; geti greint hver þú ert."
+msgstr "Hver sá sem gæti fylgist með netumferðinni þinni &mdash; t.d. stjórnvöld, netþjónustan þín, o.fl. &mdash; getur greint hver þú ert."
 
 msgid "Always use Tor Browser (<code>{}</code>) to access SecureDrop. Valid SecureDrop site addresses end with <code>.onion</code>. The correct address for this site is:"
 msgstr "Þú skalt alltaf nota Tor-vafrann (<code>{}</code>) til að tengjast SecureDrop. Gildar slóðir á SecureDrop-vefsvæði enda á <code>.onion</code>. Rétta slóðin á þennan vef er:"
