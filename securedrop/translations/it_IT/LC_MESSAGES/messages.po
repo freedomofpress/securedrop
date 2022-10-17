@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: SecureDrop\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2022-05-17 13:11+0000\n"
+"PO-Revision-Date: 2022-10-14 17:27+0000\n"
 "Last-Translator: Claudio Arseni <claudio.arseni@ubuntu.com>\n"
 "Language-Team: Italian <https://weblate.securedrop.org/projects/securedrop/securedrop/it/>\n"
 "Language: it_IT\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.11.2\n"
+"X-Generator: Weblate 4.14.1\n"
 "Generated-By: Babel 2.4.0\n"
 
 msgid "Name too long"
@@ -476,10 +476,8 @@ msgstr "Non letto"
 msgid "Read"
 msgstr "Letto"
 
-#, fuzzy
-#| msgid "Uploaded Document"
 msgid "Uploaded File"
-msgstr "Documento caricato"
+msgstr "File caricato"
 
 msgid "Reply"
 msgstr "Rispondi"
@@ -526,6 +524,16 @@ msgid ""
 "All files, messages, and replies will also be deleted when their account is deleted.\n"
 "</p>"
 msgstr ""
+"<p>\n"
+"L'eliminazione dell'account di <b>{source}</b> comporterà:\n"
+"</p>\n"
+"<ul>\n"
+"<li>l'impossibilità di ulteriori accessi della fonte con il proprio nome in codice\n"
+"<li>l'impossibilità per la tua organizzazione di inviare risposte\n"
+"</ul>\n"
+"<p>\n"
+"Anche tutti i file, i messaggi e le risposte verranno cancellate quando l'account viene eliminato.\n"
+"</p>"
 
 msgid "Yes, Delete Source Account"
 msgstr "Sì, elimina l'account della fonte"
@@ -566,10 +574,8 @@ msgstr "AGGIORNA LOGO"
 msgid "Submission Preferences"
 msgstr "Preferenze di invio"
 
-#, fuzzy
-#| msgid "Prevent sources from uploading documents. Sources will still be able to send messages."
 msgid "Prevent sources from uploading files. Sources will still be able to send messages."
-msgstr "Impedire alle fonti di caricare documenti. Le stesse potranno comunque continuare a inviare messaggi."
+msgstr "Impedire alle fonti di caricare file. Le stesse potranno comunque continuare a inviare messaggi."
 
 msgid "Prevent sources from sending initial messages shorter than the minimum required length:"
 msgstr "Impedisci alle fonti di inviare messaggi iniziali più corti della lunghezza minima richiesta:"
@@ -691,10 +697,8 @@ msgstr "Rimuovi dai preferiti"
 msgid "Designation"
 msgstr "Denominazione"
 
-#, fuzzy
-#| msgid "Filename"
 msgid "Files"
-msgstr "Nome file"
+msgstr "File"
 
 msgid "Messages"
 msgstr "Messaggi"
@@ -703,7 +707,7 @@ msgid "Date"
 msgstr "Data"
 
 msgid "There are no submissions!"
-msgstr ""
+msgstr "Non ci sono invii!"
 
 msgid "Filter by codename"
 msgstr "Filtra per nome in codice"
@@ -795,15 +799,11 @@ msgstr "Grazie per aver inviato questa informazione. Verifica più tardi per ved
 msgid "Thanks! We received your message."
 msgstr "Grazie! Abbiamo ricevuto il tuo messaggio."
 
-#, fuzzy
-#| msgid "Thanks! We received your message."
 msgid "Thanks! We received your file."
-msgstr "Grazie! Abbiamo ricevuto il tuo messaggio."
+msgstr "Grazie! Abbiamo ricevuto il tuo file."
 
-#, fuzzy
-#| msgid "Thanks! We received your message."
 msgid "Thanks! We received your file and message."
-msgstr "Grazie! Abbiamo ricevuto il tuo messaggio."
+msgstr "Grazie! Abbiamo ricevuto il tuo file e il messaggio."
 
 msgid "Reply deleted"
 msgstr "Risposta eliminata"
@@ -847,10 +847,8 @@ msgstr "Ricerca un nome in codice..."
 msgid "Powered by"
 msgstr "Implementato da"
 
-#, fuzzy
-#| msgid "Please note: Sharing sensitive documents may put you at risk, even when using Tor and SecureDrop."
 msgid "Please note: Sharing sensitive information may put you at risk, even when using Tor and SecureDrop."
-msgstr "Nota: la condivisione di documenti riservati può comportare un rischio, anche quando si utilizzano Tor e SecureDrop."
+msgstr "Nota: la condivisione di informazioni riservate può comportare un rischio, anche quando si utilizzano Tor e SecureDrop."
 
 msgid "SecureDrop is a project of Freedom of the Press Foundation."
 msgstr "SecureDrop è un progetto della Freedom of the Press Foundation."
