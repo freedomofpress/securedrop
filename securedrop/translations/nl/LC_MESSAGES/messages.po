@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2022-05-19 13:11+0000\n"
+"PO-Revision-Date: 2022-09-29 19:27+0000\n"
 "Last-Translator: kwadronaut <kwadronaut@autistici.org>\n"
 "Language-Team: Dutch <https://weblate.securedrop.org/projects/securedrop/securedrop/nl/>\n"
 "Language: nl\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.11.2\n"
+"X-Generator: Weblate 4.14.1\n"
 "Generated-By: Babel 2.4.0\n"
 
 msgid "Name too long"
@@ -473,10 +473,8 @@ msgstr "Ongelezen"
 msgid "Read"
 msgstr "Gelezen"
 
-#, fuzzy
-#| msgid "Uploaded Document"
 msgid "Uploaded File"
-msgstr "Geüploade document"
+msgstr "Geüpload bestand"
 
 msgid "Reply"
 msgstr "Reageren"
@@ -523,6 +521,16 @@ msgid ""
 "All files, messages, and replies will also be deleted when their account is deleted.\n"
 "</p>"
 msgstr ""
+"<p>\n"
+"Als u het account van <b>{source}</b> verwijdert:\n"
+"</p>\n"
+"<ul>\n"
+"<li>kunnen ze niet meer inloggen met hun codenaam\n"
+"<li>kan uw organisatie geen antwoorden meer versturen\n"
+"</ul>\n"
+"<p>\n"
+"Alle bestanden, berichten en antwoorden worden ook verwijderd wanneer hun account wordt verwijderd.\n"
+"</p>"
 
 msgid "Yes, Delete Source Account"
 msgstr "Ja, verwijder bronaccount"
@@ -563,10 +571,8 @@ msgstr "LOGO BIJWERKEN"
 msgid "Submission Preferences"
 msgstr "Inzendingsvoorkeuren"
 
-#, fuzzy
-#| msgid "Prevent sources from uploading documents. Sources will still be able to send messages."
 msgid "Prevent sources from uploading files. Sources will still be able to send messages."
-msgstr "Voorkom dat bronnen documenten kunnen uploaden. Bronnen kunnen wel nog berichten verzenden."
+msgstr "Voorkom dat bronnen bestanden kunnen uploaden. Bronnen kunnen wel nog berichten verzenden."
 
 msgid "Prevent sources from sending initial messages shorter than the minimum required length:"
 msgstr "Voorkom dat bronnen hun eerste berichten sturen als korter zijn dan de minimaal vereiste lengte:"
@@ -688,10 +694,8 @@ msgstr "De-markeren"
 msgid "Designation"
 msgstr "Benaming"
 
-#, fuzzy
-#| msgid "Filename"
 msgid "Files"
-msgstr "Bestandsnaam"
+msgstr "Bestanden"
 
 msgid "Messages"
 msgstr "Bericht"
@@ -700,7 +704,7 @@ msgid "Date"
 msgstr "Datum"
 
 msgid "There are no submissions!"
-msgstr ""
+msgstr "Er zijn geen inzendingen!"
 
 msgid "Filter by codename"
 msgstr "Filter op codenaam"
@@ -792,15 +796,11 @@ msgstr "Bedankt voor het inzenden van deze informatie. Kom later terug om reacti
 msgid "Thanks! We received your message."
 msgstr "Bedankt! We hebben uw bericht ontvangen."
 
-#, fuzzy
-#| msgid "Thanks! We received your message."
 msgid "Thanks! We received your file."
-msgstr "Bedankt! We hebben uw bericht ontvangen."
+msgstr "Bedankt! We hebben uw bestand ontvangen."
 
-#, fuzzy
-#| msgid "Thanks! We received your message."
 msgid "Thanks! We received your file and message."
-msgstr "Bedankt! We hebben uw bericht ontvangen."
+msgstr "Bedankt! We hebben uw bestand en bericht ontvangen."
 
 msgid "Reply deleted"
 msgstr "Reactie verwijderd"
@@ -844,10 +844,8 @@ msgstr "Zoek naar een codenaam..."
 msgid "Powered by"
 msgstr "Mogelijk gemaakt door"
 
-#, fuzzy
-#| msgid "Please note: Sharing sensitive documents may put you at risk, even when using Tor and SecureDrop."
 msgid "Please note: Sharing sensitive information may put you at risk, even when using Tor and SecureDrop."
-msgstr "Let op: het delen van gevoelige documenten kan u in gevaar brengen, zelfs als u Tor en SecureDrop gebruikt."
+msgstr "Let op: het delen van gevoelige informatie kan u in gevaar brengen, zelfs als u Tor en SecureDrop gebruikt."
 
 msgid "SecureDrop is a project of Freedom of the Press Foundation."
 msgstr "SecureDrop is een project van Freedom of the Press Foundation."
