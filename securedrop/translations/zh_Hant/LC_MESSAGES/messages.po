@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2022-05-11 08:11+0000\n"
+"PO-Revision-Date: 2022-10-07 01:27+0000\n"
 "Last-Translator: Chi-Hsun Tsai <chihsun.tsai@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://weblate.securedrop.org/projects/securedrop/securedrop/zh_Hant/>\n"
 "Language: zh_Hant\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.11.2\n"
+"X-Generator: Weblate 4.14.1\n"
 "Generated-By: Babel 2.4.0\n"
 
 msgid "Name too long"
@@ -463,10 +463,8 @@ msgstr "未讀"
 msgid "Read"
 msgstr "讀取"
 
-#, fuzzy
-#| msgid "Uploaded Document"
 msgid "Uploaded File"
-msgstr "已上傳的文件"
+msgstr "已上傳的檔案"
 
 msgid "Reply"
 msgstr "回覆"
@@ -513,6 +511,16 @@ msgid ""
 "All files, messages, and replies will also be deleted when their account is deleted.\n"
 "</p>"
 msgstr ""
+"<p>\n"
+"刪除<b>{source}</b>帳號會產生以下狀況:\n"
+"</p>\n"
+"<ul>\n"
+"<li>他們無法使用帳名登入\n"
+"<li>您的組織將無法傳送回覆\n"
+"</ul>\n"
+"<p>\n"
+" 一旦刪除帳號，全部的檔案、訊息與回覆也將消除。\n"
+"</p>"
 
 msgid "Yes, Delete Source Account"
 msgstr "是的，請刪除線人帳號"
@@ -553,10 +561,8 @@ msgstr "更新商標"
 msgid "Submission Preferences"
 msgstr "提交偏好"
 
-#, fuzzy
-#| msgid "Prevent sources from uploading documents. Sources will still be able to send messages."
 msgid "Prevent sources from uploading files. Sources will still be able to send messages."
-msgstr "防止消息來源上傳文件，但來源仍可以傳送訊息。"
+msgstr "防止消息來源上傳檔案，但來源仍可以傳送訊息。"
 
 msgid "Prevent sources from sending initial messages shorter than the minimum required length:"
 msgstr "防止線人傳送不足字數長度的訊息:"
@@ -678,10 +684,8 @@ msgstr "未標星"
 msgid "Designation"
 msgstr "指定"
 
-#, fuzzy
-#| msgid "Filename"
 msgid "Files"
-msgstr "檔案名稱"
+msgstr "檔案"
 
 msgid "Messages"
 msgstr "訊息"
@@ -690,7 +694,7 @@ msgid "Date"
 msgstr "日期"
 
 msgid "There are no submissions!"
-msgstr ""
+msgstr "無任何提交!"
 
 msgid "Filter by codename"
 msgstr "按代號篩選"
@@ -756,7 +760,7 @@ msgid "You were redirected because you are already logged in. If you want to cre
 msgstr "你被重定向了， 因為已在登錄狀態。如果想創建一個新帳戶，請先登出。"
 
 msgid "You are already logged in. Please verify your codename as it may differ from the one displayed on the previous page."
-msgstr "您已登入。請驗證您的代號，它可能與上一頁所顯示的不同。"
+msgstr "您已登入。請驗證您的代號，它可能與上一頁所顯示的代號不同。"
 
 msgid "There was a temporary problem creating your account. Please try again."
 msgstr "創建新帳號發生問題。請再次嘗試。"
@@ -782,15 +786,11 @@ msgstr "感谢你發送此一訊息給我們。請稍晚再來查看回覆。"
 msgid "Thanks! We received your message."
 msgstr "謝謝！我們已收到你的訊息。"
 
-#, fuzzy
-#| msgid "Thanks! We received your message."
 msgid "Thanks! We received your file."
-msgstr "謝謝！我們已收到你的訊息。"
+msgstr "謝謝！我們已收到你的檔案。"
 
-#, fuzzy
-#| msgid "Thanks! We received your message."
 msgid "Thanks! We received your file and message."
-msgstr "謝謝！我們已收到你的訊息。"
+msgstr "謝謝！我們已收到你的檔案和訊息。"
 
 msgid "Reply deleted"
 msgstr "回覆已刪除"
@@ -834,10 +834,8 @@ msgstr "查詢代號..."
 msgid "Powered by"
 msgstr "使用版本"
 
-#, fuzzy
-#| msgid "Please note: Sharing sensitive documents may put you at risk, even when using Tor and SecureDrop."
 msgid "Please note: Sharing sensitive information may put you at risk, even when using Tor and SecureDrop."
-msgstr "請注意：即便利用 Tor 或 SecureDrop，但分享敏感文件還是對您有某些風險。"
+msgstr "請注意：即便利用 Tor 或 SecureDrop，但分享敏感資訊還是對您有某些風險。"
 
 msgid "SecureDrop is a project of Freedom of the Press Foundation."
 msgstr "SecureDrop 為新聞自由基金會(Freedom of the Press Foundation)的專案。"
@@ -993,7 +991,7 @@ msgid "Anyone monitoring your Internet traffic &mdash; including your government
 msgstr "任何網路流量監控者（如政府、網路服務業者、代理服務商）都有可能認出您。"
 
 msgid "Always use Tor Browser (<code>{}</code>) to access SecureDrop. Valid SecureDrop site addresses end with <code>.onion</code>. The correct address for this site is:"
-msgstr "請永遠使用 Tor 瀏覽器 (<code>{}</code>) 來存取 SecureDrop。有效的 SecureDrop 網址都以 <code>.onion</code> 結尾。本網站正確的網址為："
+msgstr "請務必使用 Tor 瀏覽器 (<code>{}</code>) 來存取 SecureDrop。有效的 SecureDrop 網址都以 <code>.onion</code> 結尾。本網站正確的網址為："
 
 msgid "If you are already using Tor Browser, copy the address above and generate a new identity before you access SecureDrop."
 msgstr "若已使用 Tor 瀏覽器，請複製上方網址以自動產生新的身份連線到 SecureDrop 。"
