@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SecureDrop 0.5-rc4\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2022-05-07 06:11+0000\n"
+"PO-Revision-Date: 2022-09-28 07:20+0000\n"
 "Last-Translator: Kaya Zeren <kayazeren@gmail.com>\n"
 "Language-Team: Turkish <https://weblate.securedrop.org/projects/securedrop/securedrop/tr/>\n"
 "Language: tr\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.11.2\n"
+"X-Generator: Weblate 4.14.1\n"
 "Generated-By: Babel 2.4.0\n"
 
 msgid "Name too long"
@@ -472,10 +472,8 @@ msgstr "Okunmamış"
 msgid "Read"
 msgstr "Okunmuş"
 
-#, fuzzy
-#| msgid "Uploaded Document"
 msgid "Uploaded File"
-msgstr "Yüklenen Belge"
+msgstr "Yüklenen dosya"
 
 msgid "Reply"
 msgstr "Yanıtla"
@@ -522,6 +520,16 @@ msgid ""
 "All files, messages, and replies will also be deleted when their account is deleted.\n"
 "</p>"
 msgstr ""
+"<p>\n"
+"<b>{source}</b> hesabı silindiğinde:\n"
+"</p>\n"
+"<ul>\n"
+"<li>Kod adlarıyla yeniden oturum açılamaz\n"
+"<li>Kuruluşunuz yanıt gönderemez\n"
+"</ul>\n"
+"<p>\n"
+"Silinen hesapların tüm dosyaları, iletileri ve yanıtları da silinir.\n"
+"</p>"
 
 msgid "Yes, Delete Source Account"
 msgstr "Evet, Kaynak Hesabını Sil"
@@ -562,10 +570,8 @@ msgstr "LOGOYU GÜNCELLE"
 msgid "Submission Preferences"
 msgstr "Gönderim Tercihleri"
 
-#, fuzzy
-#| msgid "Prevent sources from uploading documents. Sources will still be able to send messages."
 msgid "Prevent sources from uploading files. Sources will still be able to send messages."
-msgstr "Kaynakların belge yüklemelerini engeller. Kaynaklar halen ileti gönderebilir."
+msgstr "Kaynakların dosya yüklemelerini engeller. Kaynaklar ileti göndermeyi sürdürebilir."
 
 msgid "Prevent sources from sending initial messages shorter than the minimum required length:"
 msgstr "Kaynakların gereken en az uzunluktan daha kısa ilk iletiler göndermesi engellensin:"
@@ -687,10 +693,8 @@ msgstr "İşareti Kaldır"
 msgid "Designation"
 msgstr "Atama"
 
-#, fuzzy
-#| msgid "Filename"
 msgid "Files"
-msgstr "Dosya adı"
+msgstr "Dosyalar"
 
 msgid "Messages"
 msgstr "İletiler"
@@ -699,7 +703,7 @@ msgid "Date"
 msgstr "Tarih"
 
 msgid "There are no submissions!"
-msgstr ""
+msgstr "Herhangi bir gönderim yok!"
 
 msgid "Filter by codename"
 msgstr "Kod adına göre süz"
@@ -791,15 +795,11 @@ msgstr "Bu bilgiyi bize gönderdiğiniz için teşekkür ederiz. Yanıtlar için
 msgid "Thanks! We received your message."
 msgstr "Teşekkürler! İletiniz alındı."
 
-#, fuzzy
-#| msgid "Thanks! We received your message."
 msgid "Thanks! We received your file."
-msgstr "Teşekkürler! İletiniz alındı."
+msgstr "Teşekkürler! Dosyanız alındı."
 
-#, fuzzy
-#| msgid "Thanks! We received your message."
 msgid "Thanks! We received your file and message."
-msgstr "Teşekkürler! İletiniz alındı."
+msgstr "Teşekkürler! Dosyanız ve iletiniz alındı."
 
 msgid "Reply deleted"
 msgstr "Yanıt silindi"
@@ -843,10 +843,8 @@ msgstr "Bir kod adı ara..."
 msgid "Powered by"
 msgstr "Destekleyen"
 
-#, fuzzy
-#| msgid "Please note: Sharing sensitive documents may put you at risk, even when using Tor and SecureDrop."
 msgid "Please note: Sharing sensitive information may put you at risk, even when using Tor and SecureDrop."
-msgstr "Lütfen unutmayın: Tor ve SecureDrop kullanıyor olsanız bile önemli belgeleri paylaşarak risk alırsınız."
+msgstr "Lütfen unutmayın: Tor ve SecureDrop kullanıyor olsanız bile önemli bilgileri paylaşarak risk alırsınız."
 
 msgid "SecureDrop is a project of Freedom of the Press Foundation."
 msgstr "SecureDrop, Freedom of the Press (Basın Özgürlüğü) vakfının bir projesidir."
