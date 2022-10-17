@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2022-05-11 19:11+0000\n"
+"PO-Revision-Date: 2022-09-28 15:27+0000\n"
 "Last-Translator: Øyvind Bye Skille <oyvind@byeskille.net>\n"
 "Language-Team: Norwegian Bokmål <https://weblate.securedrop.org/projects/securedrop/securedrop/nb_NO/>\n"
 "Language: nb_NO\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.11.2\n"
+"X-Generator: Weblate 4.14.1\n"
 "Generated-By: Babel 2.4.0\n"
 
 msgid "Name too long"
@@ -473,10 +473,8 @@ msgstr "Ulest"
 msgid "Read"
 msgstr "Lest"
 
-#, fuzzy
-#| msgid "Uploaded Document"
 msgid "Uploaded File"
-msgstr "Opplastet dokument"
+msgstr "Opplastet fil"
 
 msgid "Reply"
 msgstr "Svar"
@@ -523,6 +521,16 @@ msgid ""
 "All files, messages, and replies will also be deleted when their account is deleted.\n"
 "</p>"
 msgstr ""
+"<p>\n"
+"Sletting av kontoen for <b>{source}</b> vil:\n"
+"</p>\n"
+"<ul>\n"
+"<li>hindre vedkommende fra å logge inn med sitt kodenavn igjen\n"
+"<li>hindre din organisasjon fra å sende nye svar\n"
+"</ul>\n"
+"<p>\n"
+"Alle filer, meldinger og svar vil også bli slettet når kontoen er slettet.\n"
+"</p>"
 
 msgid "Yes, Delete Source Account"
 msgstr "Ja, slett kildens konto"
@@ -563,8 +571,6 @@ msgstr "OPPDATER LOGO"
 msgid "Submission Preferences"
 msgstr "Forsendelsesinnstillinger"
 
-#, fuzzy
-#| msgid "Prevent sources from uploading documents. Sources will still be able to send messages."
 msgid "Prevent sources from uploading files. Sources will still be able to send messages."
 msgstr "Forhindre kilder i å laste opp filer. De vil fortsatt kunne sende inn meldinger."
 
@@ -688,10 +694,8 @@ msgstr "Fjern stjernemerking"
 msgid "Designation"
 msgstr "Merket"
 
-#, fuzzy
-#| msgid "Filename"
 msgid "Files"
-msgstr "Filnavn"
+msgstr "Filer"
 
 msgid "Messages"
 msgstr "Meldinger"
@@ -700,7 +704,7 @@ msgid "Date"
 msgstr "Dato"
 
 msgid "There are no submissions!"
-msgstr ""
+msgstr "Det er ingen innsendelser!"
 
 msgid "Filter by codename"
 msgstr "Filtrer etter kodenavn"
@@ -792,15 +796,11 @@ msgstr "Takk for at du sendte inn informasjon. Kom gjerne tilbake for å se ette
 msgid "Thanks! We received your message."
 msgstr "Takk! Vi mottok meldingen din."
 
-#, fuzzy
-#| msgid "Thanks! We received your message."
 msgid "Thanks! We received your file."
-msgstr "Takk! Vi mottok meldingen din."
+msgstr "Takk! Vi mottok filen din."
 
-#, fuzzy
-#| msgid "Thanks! We received your message."
 msgid "Thanks! We received your file and message."
-msgstr "Takk! Vi mottok meldingen din."
+msgstr "Takk! Vi mottok filen og meldingen din."
 
 msgid "Reply deleted"
 msgstr "Svar slettet"
@@ -844,10 +844,8 @@ msgstr "Logg inn med kodenavn…"
 msgid "Powered by"
 msgstr "Drevet av"
 
-#, fuzzy
-#| msgid "Please note: Sharing sensitive documents may put you at risk, even when using Tor and SecureDrop."
 msgid "Please note: Sharing sensitive information may put you at risk, even when using Tor and SecureDrop."
-msgstr "Obs: Deling av sensitive dokumenter kan innebære risiko for deg, også når du bruker Tor og SecureDrop."
+msgstr "Obs: Deling av sensitive informasjon kan innebære risiko for deg, også når du bruker Tor og SecureDrop."
 
 msgid "SecureDrop is a project of Freedom of the Press Foundation."
 msgstr "SecureDrop er et prosjekt drevet av Freedom of the Press Foundation."
