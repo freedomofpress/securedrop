@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SecureDrop 0.6~rc2\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2022-05-06 21:11+0000\n"
+"PO-Revision-Date: 2022-09-28 05:27+0000\n"
 "Last-Translator: ff98sha <ff98sha@163.com>\n"
 "Language-Team: Chinese (Simplified) <https://weblate.securedrop.org/projects/securedrop/securedrop/zh_Hans/>\n"
 "Language: zh_Hans\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.11.2\n"
+"X-Generator: Weblate 4.14.1\n"
 "Generated-By: Babel 2.5.1\n"
 
 msgid "Name too long"
@@ -462,8 +462,6 @@ msgstr "未读"
 msgid "Read"
 msgstr "读取"
 
-#, fuzzy
-#| msgid "Uploaded Document"
 msgid "Uploaded File"
 msgstr "已上传的文件"
 
@@ -512,6 +510,16 @@ msgid ""
 "All files, messages, and replies will also be deleted when their account is deleted.\n"
 "</p>"
 msgstr ""
+"<p>\n"
+"删除 <b>{source}</b> 的账号后：\n"
+"</p>\n"
+"<ul>\n"
+"<li>他们无法再用代号登录\n"
+"<li>你的组织将无法发送回复给他们\n"
+"</ul>\n"
+"<p>\n"
+"所有文件、消息、回复都将被删除。\n"
+"</p>"
 
 msgid "Yes, Delete Source Account"
 msgstr "是的，删除线人帐号"
@@ -552,8 +560,6 @@ msgstr "更新图标"
 msgid "Submission Preferences"
 msgstr "提交设置"
 
-#, fuzzy
-#| msgid "Prevent sources from uploading documents. Sources will still be able to send messages."
 msgid "Prevent sources from uploading files. Sources will still be able to send messages."
 msgstr "阻止线人上传文件，其将仍可发送信息。"
 
@@ -677,10 +683,8 @@ msgstr "去星"
 msgid "Designation"
 msgstr "指定"
 
-#, fuzzy
-#| msgid "Filename"
 msgid "Files"
-msgstr "文件名"
+msgstr "文件"
 
 msgid "Messages"
 msgstr "消息"
@@ -689,7 +693,7 @@ msgid "Date"
 msgstr "日期"
 
 msgid "There are no submissions!"
-msgstr ""
+msgstr "暂无未读内容！"
 
 msgid "Filter by codename"
 msgstr "按代号筛选"
@@ -781,15 +785,11 @@ msgstr "感谢您向我们提供此信息。请稍后回来查看回复。"
 msgid "Thanks! We received your message."
 msgstr "万分感谢！我们收到了您的信息。"
 
-#, fuzzy
-#| msgid "Thanks! We received your message."
 msgid "Thanks! We received your file."
-msgstr "万分感谢！我们收到了您的信息。"
+msgstr "万分感谢！我们收到了您的文件。"
 
-#, fuzzy
-#| msgid "Thanks! We received your message."
 msgid "Thanks! We received your file and message."
-msgstr "万分感谢！我们收到了您的信息。"
+msgstr "万分感谢！我们收到了您的文件和消息。"
 
 msgid "Reply deleted"
 msgstr "回复已删除"
@@ -833,10 +833,8 @@ msgstr "查询代号···"
 msgid "Powered by"
 msgstr "技术支持"
 
-#, fuzzy
-#| msgid "Please note: Sharing sensitive documents may put you at risk, even when using Tor and SecureDrop."
 msgid "Please note: Sharing sensitive information may put you at risk, even when using Tor and SecureDrop."
-msgstr "请注意：分享敏感文档可能会让您危在旦夕，即便您正使用 Tor 和 SecureDrop。"
+msgstr "请注意：分享敏感信息可能会让您危在旦夕，即便您正使用 Tor 和 SecureDrop。"
 
 msgid "SecureDrop is a project of Freedom of the Press Foundation."
 msgstr "SecureDrop 是媒体自由基金会的项目。"
