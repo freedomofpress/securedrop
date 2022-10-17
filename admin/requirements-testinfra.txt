@@ -99,12 +99,6 @@ execnet==1.7.1 \
     --hash=sha256:cacb9df31c9680ec5f95553976c4da484d407e85e41c83cb812aa014f0eddc50 \
     --hash=sha256:d4efd397930c46415f62f8a31388d6be4f27a91d7550eb79bc64a756e0056547
     # via pytest-xdist
-importlib-metadata==2.0.0 \
-    --hash=sha256:77a540690e24b0305878c37ffd421785a6f7e53c8b5720d211b211de8d0e95da \
-    --hash=sha256:cefa1a2f919b866c5beb7c9f7b0ebb4061f30a8a9bf16d609b000e2dfaceb9c3
-    # via
-    #   pluggy
-    #   pytest
 iniconfig==1.1.1 \
     --hash=sha256:011e24c64b7f47f6ebd835bb12a743f2fbe9a26d4cecaa7f53bc4f35ee9da8b3 \
     --hash=sha256:bc3af051d7d14b2ee5ef9969666def0cd1a000e121eaea580d4a313df4b37f32
@@ -278,10 +272,6 @@ wcwidth==0.2.5 \
     --hash=sha256:beb4802a9cebb9144e99086eff703a642a13d6a0052920003a230f3294bbe784 \
     --hash=sha256:c4d647b99872929fdb7bdcaa4fbe7f01413ed3d98077df798530e5b04f116c83
     # via prompt-toolkit
-zipp==3.4.0 \
-    --hash=sha256:102c24ef8f171fd729d46599845e95c7ab894a4cf45f5de11a44cc7444fb1108 \
-    --hash=sha256:ed5eee1974372595f9e416cc7bbeeb12335201d8081ca8a0743c954d4446e5cb
-    # via importlib-metadata
 
 # The following packages are considered to be unsafe in a requirements file:
 setuptools==56.0.0 \
