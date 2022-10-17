@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SecureDrop 0.5-rc4\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2022-05-06 21:11+0000\n"
-"Last-Translator: Benet (BennyBeat) R. i Camps <bennybeat@gmail.com>\n"
+"PO-Revision-Date: 2022-09-28 07:20+0000\n"
+"Last-Translator: John Smith <ecron_89@hotmail.com>\n"
 "Language-Team: Catalan <https://weblate.securedrop.org/projects/securedrop/securedrop/ca/>\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.11.2\n"
+"X-Generator: Weblate 4.14.1\n"
 "Generated-By: Babel 2.4.0\n"
 
 msgid "Name too long"
@@ -472,10 +472,8 @@ msgstr "Per llegir"
 msgid "Read"
 msgstr "Llegit"
 
-#, fuzzy
-#| msgid "Uploaded Document"
 msgid "Uploaded File"
-msgstr "Document penjat"
+msgstr "Fitxer penjat"
 
 msgid "Reply"
 msgstr "Respon"
@@ -505,7 +503,7 @@ msgid "An encryption key will be generated for the source the next time they log
 msgstr "Es generarà una clau per a la font la següent vegada que iniciï sessió, després d'això podreu respondre-hi aquí."
 
 msgid "Delete Source Account"
-msgstr "Suprimeix el compte font"
+msgstr "Supressió del compte de la font"
 
 msgid "Are you sure?"
 msgstr "N'esteu segur?"
@@ -522,6 +520,16 @@ msgid ""
 "All files, messages, and replies will also be deleted when their account is deleted.\n"
 "</p>"
 msgstr ""
+"<p>\n"
+"En suprimir el compte de <b>{source}</b>:\n"
+"</p>\n"
+"<ul>\n"
+"<li>no podrà tornar a iniciar sessió amb el seu nom en clau\n"
+"<li>la vostra organització no podrà enviar respostes\n"
+"</ul>\n"
+"<p>\n"
+"Tots els fitxers, missatges i respostes també se suprimiran en eliminar el seu compte.\n"
+"</p>"
 
 msgid "Yes, Delete Source Account"
 msgstr "Sí, suprimeix el compte font"
@@ -562,10 +570,8 @@ msgstr "ACTUALITZA EL LOGOTIP"
 msgid "Submission Preferences"
 msgstr "Preferències de l'enviament"
 
-#, fuzzy
-#| msgid "Prevent sources from uploading documents. Sources will still be able to send messages."
 msgid "Prevent sources from uploading files. Sources will still be able to send messages."
-msgstr "Evita que les fonts puguin pujar documents. Les fonts encara podran enviar missatges."
+msgstr "Evita que les fonts puguin pujar fitxers. Les fonts encara podran enviar missatges."
 
 msgid "Prevent sources from sending initial messages shorter than the minimum required length:"
 msgstr "Evita que les fonts enviïn missatges inicials més curts que la longitud mínima requerida:"
@@ -687,10 +693,8 @@ msgstr "Desmarca"
 msgid "Designation"
 msgstr "Designació"
 
-#, fuzzy
-#| msgid "Filename"
 msgid "Files"
-msgstr "Nom del fitxer"
+msgstr "Fitxers"
 
 msgid "Messages"
 msgstr "Missatges"
@@ -699,7 +703,7 @@ msgid "Date"
 msgstr "Data"
 
 msgid "There are no submissions!"
-msgstr ""
+msgstr "No hi ha cap enviament."
 
 msgid "Filter by codename"
 msgstr "Filtra per nom en clau"
@@ -791,15 +795,11 @@ msgstr "Gràcies per enviar-nos aquesta informació. Comproveu més endavant si 
 msgid "Thanks! We received your message."
 msgstr "Gràcies! Hem rebut el missatge."
 
-#, fuzzy
-#| msgid "Thanks! We received your message."
 msgid "Thanks! We received your file."
-msgstr "Gràcies! Hem rebut el missatge."
+msgstr "Gràcies! Hem rebut el fitxer."
 
-#, fuzzy
-#| msgid "Thanks! We received your message."
 msgid "Thanks! We received your file and message."
-msgstr "Gràcies! Hem rebut el missatge."
+msgstr "Gràcies! Hem rebut el fitxer i el missatge."
 
 msgid "Reply deleted"
 msgstr "S'ha suprimit la resposta"
@@ -843,10 +843,8 @@ msgstr "Cerca un nom en clau..."
 msgid "Powered by"
 msgstr "Funciona amb"
 
-#, fuzzy
-#| msgid "Please note: Sharing sensitive documents may put you at risk, even when using Tor and SecureDrop."
 msgid "Please note: Sharing sensitive information may put you at risk, even when using Tor and SecureDrop."
-msgstr "Atenció: Si compartiu documents sensibles, podríeu posar-vos en risc, fins i tot utilitzant el Tor i el SecureDrop."
+msgstr "Atenció: Si compartiu informació delicada, podríeu posar-vos en risc, fins i tot utilitzant el Tor i el SecureDrop."
 
 msgid "SecureDrop is a project of Freedom of the Press Foundation."
 msgstr "El SecureDrop és un projecte de la Fundació «Freedom of the Press»."
