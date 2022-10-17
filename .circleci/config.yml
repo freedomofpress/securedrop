@@ -205,27 +205,22 @@ jobs:
 
   updater-gui-tests:
     docker:
-      - image: cimg/python:3.8
+      - image: debian:bullseye
     steps:
       - checkout
-
       - run:
-          name: Install libqt5designer5
-          command: sudo apt-get update --allow-releaseinfo-change && sudo apt-get install -y libqt5designer5
-
-      - run:
-          name: Install requirements
+          name: Install dependencies
           command: |
+            apt update && apt-get install -y libqt5designer5 python3-venv
             cd journalist_gui
             python3 -m venv .venv/ && source .venv/bin/activate
             pip install --require-hashes -r dev-requirements.txt
-
       - run:
           name: Run tests
           command: |
             cd journalist_gui
-            python3 -m venv .venv/ && source .venv/bin/activate
-            QT_QPA_PLATFORM=offscreen python3 test_gui.py -v $2>/dev/null
+            source .venv/bin/activate
+            QT_QPA_PLATFORM=offscreen python3 test_gui.py -v
 
   static-analysis-and-no-known-cves:
     machine:
