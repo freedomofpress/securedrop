@@ -1,5 +1,5 @@
 ---
-securedrop_version: "2.5.0~rc4"
+securedrop_version: "2.5.0"
 ossec_version: "3.6.0"
 keyring_version: "0.1.6"
 config_version: "0.1.4"

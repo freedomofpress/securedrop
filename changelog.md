@@ -1,35 +1,11 @@
 # Changelog
 
-## 2.5.0~rc4
-
-## Web Applications
-
-* Fixed new password functionality to require admins to authenticate if changing their own password (#6627)
-* Fixed i18n.json, restoring Arabic as a supported language (#6614)
-
-## CI
-
-* Removed an external CI dependency by bundling the Codecov GPG key (#6612, #6626)
-
-## 2.5.0~rc3
+## 2.5.0
 
 ### Web Applications
 
-* Allowed Apache to generate Python bytecode to address an installation-time edge case (#6602)
-
-## 2.5.0~rc2
-
-### Web Applications
-
-* Fixed missing AppArmor entry for new `sessions` module (#6584)
-* Changed installation logic to generate Python bytecode during installation (#6591)
-
-## 2.5.0~rc1
-
-### Web Applications
-
-* Added unified Redis-based session handling for the Journalist Interface and API (#6403)
-* Added supported languages list and updated i18n tooling to process all langiuages available in Weblate (#6557, #6566)
+* Added unified Redis-based session handling for the Journalist Interface and API (#6403, #6584)
+* Added supported languages list and updated i18n tooling to process all languages available in Weblate (#6557, #6566, #6614)
 * Fixed double character escaping of organisation names in the Source and Journalist Interface (#6550)
 * Removed SASS from build process, added pure CSS for both web applications (#6529)
 * Updated string referencing submissions to use consistent terminology (#6543)
@@ -39,6 +15,8 @@
 * Removed support for runtime asset minification (#6425)
 * Updated wordlists to replace potentially offensive terms (#6442)
 * Fixed string localization error (#6465)
+* Updated installation logic to generate Python bytecode during installation (#6591, #6602)
+* Fixed new password functionality to require admins to authenticate if changing their own password (#6627)
 
 ### Operations
 
@@ -63,6 +41,7 @@
 
 * Added static code analysis via semgrep (#6479)
 * Updated pagelayout test to address intermittent CI failure (#6470)
+* Removed an external CI dependency by bundling the Codecov GPG key (#6612, #6626)
 
 ## 2.4.2
 
