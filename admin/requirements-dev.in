@@ -1,13 +1,13 @@
 coverage>=5.0  # #6091
 d2to1
-flake8
+flake8>=5.0.4
 flaky
 mock
 pbr
 pip>=21.1
 pip-tools>=6.1.0
 py>=1.10.0
-pylint>=2.7.0
+pylint>=2.15.04
 pytest==3.2.0
 requests>=2.26.0
 tox

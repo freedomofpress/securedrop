@@ -1,5 +1,5 @@
-# debian:buster 2020-08-04
-FROM debian@sha256:1e74c92df240634a39d050a5e23fb18f45df30846bb222f543414da180b47a5d
+# debian:bullseye 2022-10-04
+FROM debian@sha256:9b0e3056b8cd8630271825665a0613cc27829d6a24906dc0122b3b4834312f7d
 ARG USER_NAME
 ENV USER_NAME ${USER_NAME:-root}
 ARG USER_ID
@@ -9,7 +9,7 @@ ENV LC_ALL C.UTF-8
 ENV LANG C.UTF-8
 
 RUN apt-get update && \
-    apt-get install -y python3 sudo lsb-release gnupg2 git
+    apt-get install -y python3 sudo gnupg2 git
 RUN if test $USER_NAME != root ; then useradd --no-create-home --home-dir /tmp --uid $USER_ID $USER_NAME && echo "$USER_NAME ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers ; fi
 
 WORKDIR /opt/admin
