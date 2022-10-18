@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SecureDrop 0.4.3\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2022-05-23 14:11+0000\n"
+"PO-Revision-Date: 2022-09-29 12:57+0000\n"
 "Last-Translator: deeplow <deeplower@protonmail.com>\n"
 "Language-Team: Portuguese (Portugal) <https://weblate.securedrop.org/projects/securedrop/securedrop/pt_PT/>\n"
 "Language: pt_PT\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.11.2\n"
+"X-Generator: Weblate 4.14.1\n"
 "Generated-By: Babel 2.4.0\n"
 
 msgid "Name too long"
@@ -472,10 +472,8 @@ msgstr "Por Ler"
 msgid "Read"
 msgstr "Lida"
 
-#, fuzzy
-#| msgid "Uploaded Document"
 msgid "Uploaded File"
-msgstr "Documento Carregado"
+msgstr "Ficheiro Carregado"
 
 msgid "Reply"
 msgstr "Responder"
@@ -522,6 +520,16 @@ msgid ""
 "All files, messages, and replies will also be deleted when their account is deleted.\n"
 "</p>"
 msgstr ""
+"<p>\n"
+"Ao eliminar a conta da fonte <b>{source}</b> irá:\n"
+"</p>\n"
+"<ul>\n"
+"<li>impedi-la de iniciar sessão com o seu come-código no futuro\n"
+"<li>impedir a sua organização de lhe enviar respostas\n"
+"</ul>\n"
+"<p>\n"
+"Todos os ficheiros, mensagens e respostas serão eliminados com a eliminação da conta da fonte .\n"
+"</p>"
 
 msgid "Yes, Delete Source Account"
 msgstr "Sim, Eliminar Conta da Fonte"
@@ -562,10 +570,8 @@ msgstr "ALTERAR LOGÓTIPO"
 msgid "Submission Preferences"
 msgstr "Definições de Envio"
 
-#, fuzzy
-#| msgid "Prevent sources from uploading documents. Sources will still be able to send messages."
 msgid "Prevent sources from uploading files. Sources will still be able to send messages."
-msgstr "Impedir que fontes submetam documentos. As fontes continuarão a poder enviar mensagens."
+msgstr "Impedir que fontes submetam ficheiros. As fontes continuarão a poder enviar mensagens."
 
 msgid "Prevent sources from sending initial messages shorter than the minimum required length:"
 msgstr "Impede que fontes enviem mensagens iniciais mais curtas que o tamanho mínimo obrigatório:"
@@ -687,10 +693,8 @@ msgstr "Remover dos favoritos"
 msgid "Designation"
 msgstr "Designação"
 
-#, fuzzy
-#| msgid "Filename"
 msgid "Files"
-msgstr "Nome do ficheiro"
+msgstr "Ficheiros"
 
 msgid "Messages"
 msgstr "Mensagens"
@@ -699,7 +703,7 @@ msgid "Date"
 msgstr "Data"
 
 msgid "There are no submissions!"
-msgstr ""
+msgstr "Ainda nada foi submetido!"
 
 msgid "Filter by codename"
 msgstr "Filtrar por nome-código"
@@ -791,15 +795,11 @@ msgstr "Obrigado por nos enviar esta informação. Por favor, volte mais tarde p
 msgid "Thanks! We received your message."
 msgstr "Obrigado! Recebemos a sua mensagem."
 
-#, fuzzy
-#| msgid "Thanks! We received your message."
 msgid "Thanks! We received your file."
-msgstr "Obrigado! Recebemos a sua mensagem."
+msgstr "Obrigado! Recebemos o seu ficheiro."
 
-#, fuzzy
-#| msgid "Thanks! We received your message."
 msgid "Thanks! We received your file and message."
-msgstr "Obrigado! Recebemos a sua mensagem."
+msgstr "Obrigado! Recebemos o seu ficheiro e mensagem."
 
 msgid "Reply deleted"
 msgstr "Resposta eliminada"
@@ -843,10 +843,8 @@ msgstr "Procurar um nome-código..."
 msgid "Powered by"
 msgstr "Este site utiliza o"
 
-#, fuzzy
-#| msgid "Please note: Sharing sensitive documents may put you at risk, even when using Tor and SecureDrop."
 msgid "Please note: Sharing sensitive information may put you at risk, even when using Tor and SecureDrop."
-msgstr "Atenção: Partilhar documentos sensíveis pode colocá-lo em risco, mesmo usando o Tor e SecureDrop."
+msgstr "Atenção: Partilhar informação sensível pode colocá-lo em risco, mesmo usando o Tor e SecureDrop."
 
 msgid "SecureDrop is a project of Freedom of the Press Foundation."
 msgstr "SecureDrop é um projeto da Freedom of the Press Foundation."
