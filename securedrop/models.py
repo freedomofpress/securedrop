@@ -8,6 +8,7 @@ from io import BytesIO
 from logging import Logger
 from typing import Any, Callable, Dict, List, Optional, Union
 
+import argon2
 import pyotp
 import qrcode
 
@@ -20,7 +21,6 @@ from encryption import EncryptionManager, GpgKeyNotFoundError
 from flask import url_for
 from flask_babel import gettext, ngettext
 from markupsafe import Markup
-from passlib.hash import argon2
 from passphrases import PassphraseGenerator
 from pyotp import HOTP, TOTP
 from sqlalchemy import Boolean, Column, DateTime, ForeignKey, Integer, LargeBinary, String
@@ -35,7 +35,7 @@ LOGIN_HARDENING = True
 if os.environ.get("SECUREDROP_ENV") == "test":
     LOGIN_HARDENING = False
 
-ARGON2_PARAMS = dict(memory_cost=2**16, rounds=4, parallelism=2)
+ARGON2_PARAMS = {"memory_cost": 2**16, "time_cost": 4, "parallelism": 2, "type": argon2.Type.ID}
 
 # Required length for hex-format HOTP secrets as input by users
 HOTP_SECRET_LENGTH = 40  # 160 bits == 40 hex digits (== 32 ascii-encoded chars in db)
@@ -479,10 +479,11 @@ class Journalist(db.Model):
 
         self.check_password_acceptable(passphrase)
 
+        hasher = argon2.PasswordHasher(**ARGON2_PARAMS)
         # "migrate" from the legacy case
         if not self.passphrase_hash:
-            self.passphrase_hash = argon2.using(**ARGON2_PARAMS).hash(passphrase)
-            # passlib creates one merged field that embeds randomly generated
+            self.passphrase_hash = hasher.hash(passphrase)
+            # argon2 creates one merged field that embeds randomly generated
             # salt in the output like $alg$salt$hash
             self.pw_hash = None
             self.pw_salt = None
@@ -491,7 +492,7 @@ class Journalist(db.Model):
         if self.passphrase_hash and self.valid_password(passphrase):
             return
 
-        self.passphrase_hash = argon2.using(**ARGON2_PARAMS).hash(passphrase)
+        self.passphrase_hash = hasher.hash(passphrase)
 
     def set_name(self, first_name: Optional[str], last_name: Optional[str]) -> None:
         if first_name:
@@ -550,9 +551,13 @@ class Journalist(db.Model):
         # No check on minimum password length here because some passwords
         # may have been set prior to setting the mininum password length.
 
+        hasher = argon2.PasswordHasher(**ARGON2_PARAMS)
         if self.passphrase_hash:
             # default case
-            is_valid = argon2.verify(passphrase, self.passphrase_hash)
+            try:
+                is_valid = hasher.verify(self.passphrase_hash, passphrase)
+            except argon2.exceptions.VerificationError:
+                is_valid = False
         else:
             # legacy support
             if self.pw_salt is None:
@@ -567,13 +572,28 @@ class Journalist(db.Model):
                 self._scrypt_hash(passphrase, self.pw_salt), self.pw_hash
             )
 
-        # migrate new passwords
-        if is_valid and not self.passphrase_hash:
-            self.passphrase_hash = argon2.using(**ARGON2_PARAMS).hash(passphrase)
-            # passlib creates one merged field that embeds randomly generated
-            # salt in the output like $alg$salt$hash
+        # If the passphrase isn't valid, bail out now
+        if not is_valid:
+            return False
+        # From here on we can assume the passphrase was valid
+
+        # Perform migration checks
+        needs_update = False
+        if self.passphrase_hash:
+            # Check if the hash needs an update
+            if hasher.check_needs_rehash(self.passphrase_hash):
+                self.passphrase_hash = hasher.hash(passphrase)
+                needs_update = True
+        else:
+            # Migrate to an argon2 hash, which creates one merged field
+            # that embeds randomly generated salt in the output like
+            # $alg$salt$hash
+            self.passphrase_hash = hasher.hash(passphrase)
             self.pw_salt = None
             self.pw_hash = None
+            needs_update = True
+
+        if needs_update:
             db.session.add(self)
             db.session.commit()
 

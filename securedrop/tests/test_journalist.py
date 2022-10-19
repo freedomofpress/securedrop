@@ -2617,6 +2617,7 @@ def test_passphrase_migration_on_verification(journalist_app):
 
     # check that the migration happened
     assert journalist.passphrase_hash is not None
+    assert journalist.passphrase_hash.startswith("$argon2")
     assert journalist.pw_salt is None
     assert journalist.pw_hash is None
 
@@ -2639,11 +2640,25 @@ def test_passphrase_migration_on_reset(journalist_app):
 
     # check that the migration happened
     assert journalist.passphrase_hash is not None
+    assert journalist.passphrase_hash.startswith("$argon2")
     assert journalist.pw_salt is None
     assert journalist.pw_hash is None
 
     # check that that a verification post-migration works
     assert journalist.valid_password(VALID_PASSWORD)
+
+
+def test_passphrase_argon2i_migration(test_journo):
+    """verify argon2i hashes work and then are migrated to argon2id"""
+    journalist = test_journo["journalist"]
+    # But use our password hash
+    journalist.passphrase_hash = (
+        "$argon2i$v=19$m=65536,t=4,p=2$JfFkLIJ2ogPUDI19XiBzHA$kaKNVckLLQNNBnmllMWqXg"
+    )
+    db.session.add(journalist)
+    db.session.commit()
+    assert journalist.valid_password("correct horse battery staple profanity oil chewy")
+    assert journalist.passphrase_hash.startswith("$argon2id$")
 
 
 def test_journalist_reply_view(journalist_app, test_source, test_journo, app_storage):
@@ -3054,22 +3069,12 @@ def test_bulk_delete_works_when_files_absent(
 
 
 def test_login_with_invalid_password_doesnt_call_argon2(mocker, test_journo):
-    mock_argon2 = mocker.patch("models.argon2.verify")
+    mock_argon2 = mocker.patch("models.argon2.PasswordHasher")
     invalid_pw = "a" * (Journalist.MAX_PASSWORD_LEN + 1)
 
     with pytest.raises(InvalidPasswordLength):
         Journalist.login(test_journo["username"], invalid_pw, TOTP(test_journo["otp_secret"]).now())
     assert not mock_argon2.called
-
-
-def test_valid_login_calls_argon2(mocker, test_journo):
-    mock_argon2 = mocker.patch("models.argon2.verify")
-    Journalist.login(
-        test_journo["username"],
-        test_journo["password"],
-        TOTP(test_journo["otp_secret"]).now(),
-    )
-    assert mock_argon2.called
 
 
 def test_render_locales(config, journalist_app, test_journo, test_source):
