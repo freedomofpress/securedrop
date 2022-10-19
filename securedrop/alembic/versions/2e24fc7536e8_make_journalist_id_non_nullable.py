@@ -8,10 +8,10 @@ Create Date: 2022-01-12 19:31:06.186285
 import os
 import uuid
 
+import argon2
 import pyotp
 import sqlalchemy as sa
 from alembic import op
-from passlib.hash import argon2
 
 # raise the errors if we're not in production
 raise_errors = os.environ.get("SECUREDROP_ENV", "prod") != "prod"
@@ -33,7 +33,7 @@ depends_on = None
 
 def generate_passphrase_hash() -> str:
     passphrase = PassphraseGenerator.get_default().generate_passphrase()
-    return argon2.using(**ARGON2_PARAMS).hash(passphrase)
+    return argon2.PasswordHasher(**ARGON2_PARAMS).hash(passphrase)
 
 
 def create_deleted() -> int:

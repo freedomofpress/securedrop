@@ -2617,6 +2617,7 @@ def test_passphrase_migration_on_verification(journalist_app):
 
     # check that the migration happened
     assert journalist.passphrase_hash is not None
+    assert journalist.passphrase_hash.startswith("$argon2")
     assert journalist.pw_salt is None
     assert journalist.pw_hash is None
 
@@ -2639,6 +2640,7 @@ def test_passphrase_migration_on_reset(journalist_app):
 
     # check that the migration happened
     assert journalist.passphrase_hash is not None
+    assert journalist.passphrase_hash.startswith("$argon2")
     assert journalist.pw_salt is None
     assert journalist.pw_hash is None
 
@@ -3054,7 +3056,7 @@ def test_bulk_delete_works_when_files_absent(
 
 
 def test_login_with_invalid_password_doesnt_call_argon2(mocker, test_journo):
-    mock_argon2 = mocker.patch("models.argon2.verify")
+    mock_argon2 = mocker.patch("models.argon2.PasswordHasher")
     invalid_pw = "a" * (Journalist.MAX_PASSWORD_LEN + 1)
 
     with pytest.raises(InvalidPasswordLength):
@@ -3063,7 +3065,7 @@ def test_login_with_invalid_password_doesnt_call_argon2(mocker, test_journo):
 
 
 def test_valid_login_calls_argon2(mocker, test_journo):
-    mock_argon2 = mocker.patch("models.argon2.verify")
+    mock_argon2 = mocker.patch("models.argon2.PasswordHasher")
     Journalist.login(
         test_journo["username"],
         test_journo["password"],

@@ -220,10 +220,6 @@ markupsafe==2.0.1 \
 mod-wsgi==4.6.7 \
     --hash=sha256:b788abaf0b903a64a7bb8dae609f2e4790c87e6f3d716aa6bc97936410fcbfcc
     # via -r requirements/python3/securedrop-app-code-requirements.in
-passlib==1.7.1 \
-    --hash=sha256:3d948f64138c25633613f303bcc471126eae67c04d5e3f6b7b8ce6242f8653e0 \
-    --hash=sha256:43526aea08fa32c6b6dbbbe9963c4c767285b78147b7437597f992812f69d280
-    # via -r requirements/python3/securedrop-app-code-requirements.in
 pretty-bad-protocol==3.1.1 \
     --hash=sha256:fb73797eb6344e3680c919e2af367f9a019ee7c189d3ed7f5d843edde911f73b
     # via -r requirements/python3/securedrop-app-code-requirements.in
