@@ -35,7 +35,7 @@ LOGIN_HARDENING = True
 if os.environ.get("SECUREDROP_ENV") == "test":
     LOGIN_HARDENING = False
 
-ARGON2_PARAMS = {"memory_cost": 2**16, "time_cost": 4, "parallelism": 2, "type": argon2.Type.I}
+ARGON2_PARAMS = {"memory_cost": 2**16, "time_cost": 4, "parallelism": 2, "type": argon2.Type.ID}
 
 # Required length for hex-format HOTP secrets as input by users
 HOTP_SECRET_LENGTH = 40  # 160 bits == 40 hex digits (== 32 ascii-encoded chars in db)
@@ -572,13 +572,28 @@ class Journalist(db.Model):
                 self._scrypt_hash(passphrase, self.pw_salt), self.pw_hash
             )
 
-        # migrate new passwords
-        if is_valid and not self.passphrase_hash:
+        # If the passphrase isn't valid, bail out now
+        if not is_valid:
+            return False
+        # From here on we can assume the passphrase was valid
+
+        # Perform migration checks
+        needs_update = False
+        if self.passphrase_hash:
+            # Check if the hash needs an update
+            if hasher.check_needs_rehash(self.passphrase_hash):
+                self.passphrase_hash = hasher.hash(passphrase)
+                needs_update = True
+        else:
+            # Migrate to an argon2 hash, which creates one merged field
+            # that embeds randomly generated salt in the output like
+            # $alg$salt$hash
             self.passphrase_hash = hasher.hash(passphrase)
-            # argon2 creates one merged field that embeds randomly generated
-            # salt in the output like $alg$salt$hash
             self.pw_salt = None
             self.pw_hash = None
+            needs_update = True
+
+        if needs_update:
             db.session.add(self)
             db.session.commit()
 
