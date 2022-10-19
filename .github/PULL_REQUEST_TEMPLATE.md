@@ -22,6 +22,21 @@ Any special considerations for deployment? Consider both:
 
 ## Checklist
 
+### Security Checklist
+
+Do any of the changes made allow a malicious user to:
+
+- [ ] pretend to be a different user? (Spoofing / Authenticity)
+- [ ] modify data used by the system? (Tampering / Integrity)
+- [ ] deny that they performed an action to change the system's state? (Repudiation / Non-repudiability)
+- [ ] extract information that should be kept secret? (Information disclosure / Confidentiality)
+- [ ] exhaust system resources such that the system is no longer functioning as intended? (Denial of Service / Availability)
+- [ ] increase their ability to work with system resources? (Elevation of Privilege / Authorization)
+
+#### If yes, please list what mechanisms are in place for mitigation and/or prevention:
+
+List any protective mechanisms here
+
 ### If you made changes to the server application code:
 
 - [ ] Linting (`make lint`) and tests (`make test`) pass in the development container
