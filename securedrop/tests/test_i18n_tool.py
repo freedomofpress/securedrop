@@ -417,6 +417,8 @@ class TestI18NTool(object):
         )
         assert "l10n: updated Dutch (nl)" in r()
         assert "l10n: updated German (de_DE)" not in r()
+
+        # The translator is credited in Git history.
         message = subprocess.check_output(
             ["git", "--no-pager", "-C", "securedrop", "show"],
             cwd=d,
