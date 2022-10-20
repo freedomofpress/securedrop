@@ -119,7 +119,14 @@ class I18NTool:
                 log.warning("messages translations are already up to date")
 
         if args.compile and len(os.listdir(args.translations_dir)) > 1:
-            subprocess.check_call(["pybabel", "compile", "--directory", args.translations_dir])
+            # Suppress all pybabel to hide warnings (e.g.
+            # https://github.com/python-babel/babel/issues/566) and verbose "compiling..." messages
+            subprocess.run(
+                ["pybabel", "compile", "--directory", args.translations_dir],
+                check=True,
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
+            )
 
     def translate_desktop(self, args: argparse.Namespace) -> None:
         messages_file = Path(args.translations_dir).absolute() / "desktop.pot"
