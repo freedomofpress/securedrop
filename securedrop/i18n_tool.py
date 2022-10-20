@@ -389,7 +389,10 @@ class I18NTool:
 
         log_command.extend([args.target, "--", path])
 
-        log_lines = subprocess.check_output(log_command, encoding="utf-8").strip().splitlines()
+        # NB. We use an explicit str.split("\n") here because str.splitlines() splits on a
+        # set of characters that includes the \x1e "record separator" we pass to "git log
+        # --format" in log_command.  See #6648.
+        log_lines = subprocess.check_output(log_command, encoding="utf-8").strip().split("\n")
         path_changes = [c.split("\x1e") for c in log_lines]
         path_changes = [
             c

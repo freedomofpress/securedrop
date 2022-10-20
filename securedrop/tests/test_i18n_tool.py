@@ -392,7 +392,9 @@ class TestI18NTool(object):
         subprocess.check_call(["git", "add", str(po_file)], **k)
         subprocess.check_call(["git", "config", "user.email", "somone@else.com"], **k)
         subprocess.check_call(["git", "config", "user.name", "Someone Else"], **k)
-        subprocess.check_call(["git", "commit", "-m", "translation change", str(po_file)], **k)
+        subprocess.check_call(
+            ["git", "commit", "-m", "Translated using Weblate", str(po_file)], **k
+        )
 
         k = {"cwd": join(d, "securedrop")}
         subprocess.check_call(["git", "config", "user.email", "somone@else.com"], **k)
@@ -417,6 +419,8 @@ class TestI18NTool(object):
         )
         assert "l10n: updated Dutch (nl)" in r()
         assert "l10n: updated German (de_DE)" not in r()
+
+        # The translator is credited in Git history.
         message = subprocess.check_output(
             ["git", "--no-pager", "-C", "securedrop", "show"],
             cwd=d,
@@ -424,3 +428,18 @@ class TestI18NTool(object):
         )
         assert "Someone Else" in message
         assert "Loïc" not in message
+
+        # The "list-translators" command correctly reads the translator from Git history.
+        caplog.clear()
+        i18n_tool.I18NTool().main(
+            [
+                "--verbose",
+                "list-translators",
+                "--all",
+                "--root",
+                join(str(tmpdir), "securedrop"),
+                "--url",
+                join(str(tmpdir), "i18n"),
+            ]
+        )
+        assert "Someone Else" in caplog.text
