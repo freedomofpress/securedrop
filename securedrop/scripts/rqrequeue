@@ -6,7 +6,6 @@ import logging
 import sys
 import time
 
-sys.path.insert(0, "/opt/venvs/securedrop-app-code/lib/python3.8/site-packages")  # noqa: E402
 sys.path.insert(0, "/var/www/securedrop")  # noqa: E402
 
 from sdconfig import config
