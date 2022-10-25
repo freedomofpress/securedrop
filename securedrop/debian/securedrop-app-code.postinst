@@ -96,6 +96,16 @@ adjust_wsgi_configuration() {
     fi
 }
 
+migrate_crontab() {
+    # If there is no www-data cron and a root cron, migrate
+    if ! crontab -u www-data -l && crontab -u root -l; then
+        # Install the root crontab for www-data
+        crontab -u root -l | crontab -u www-data -
+        # Clear root crontab
+        crontab -u root -r
+    fi
+}
+
 #
 #
 refresh_bytecode() {
@@ -194,6 +204,8 @@ case "$1" in
         # shellcheck disable=SC2024
         sudo -u www-data gpg2 --homedir=/var/lib/securedrop/keys --batch --import < /var/lib/securedrop/keys/secring.gpg
     fi
+
+    migrate_crontab
 
     # /var/www/securedrop should be owned by root and world-readable.
     # Permissions on specific files will be loosened after

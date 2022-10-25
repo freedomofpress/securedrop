@@ -12,6 +12,7 @@
   cron:
     name: Cleanup SecureDrop temporary directory.
     job: "{{ securedrop_code }}/manage.py clean-tmp"
+    user: www-data
     special_time: daily
   tags:
     - cron
@@ -20,6 +21,7 @@
   cron:
     name: Update the number of submissions in the past 24h
     job: "{{ securedrop_code }}/manage.py were-there-submissions-today"
+    user: www-data
     minute: "0"
     # 0 -> 23, 1 -> 0, 2 -> 1, ... 23 -> 22
     hour: "{{ (daily_reboot_time + 23) % 24 }}"
