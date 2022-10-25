@@ -1,21 +1,13 @@
-# ubuntu 20.04 image from 2022-08-01
-FROM ubuntu@sha256:a06ae92523384c2cd182dcfe7f8b2bf09075062e937d5653d7d0db0375ad2221
-ARG USER_NAME
-ENV USER_NAME ${USER_NAME:-root}
-ARG USER_ID
-ENV USER_ID ${USER_ID:-0}
+FROM securedrop-slim-focal-py3
 
-RUN apt-get update && apt-get install -y \
-                       libgtk2.0 apache2-dev coreutils devscripts vim \
-                       python3-pip python3-all python3-venv virtualenv libpython3.8-dev libssl-dev \
-                       gnupg2 redis-server git xvfb curl wget \
-                       x11vnc enchant libffi-dev sqlite3 gettext sudo \
-                       # For html5validator.  Used only in "app-page-layout-tests", but we can live
-                       # with its being installed along with everything else since it will be
-                       # cached along with everything else too.
-                       default-jdk \
-                       libasound2 libdbus-glib-1-2 libgtk2.0-0 libfontconfig1 libxrender1 \
-                       libcairo-gobject2 libgtk-3-0 libstartup-notification0 tor basez
+RUN apt-get install -y \
+    libgtk2.0 devscripts xvfb x11vnc \
+    # For html5validator.  Used only in "app-page-layout-tests", but we can live
+    # with its being installed along with everything else since it will be
+    # cached along with everything else too.
+    default-jdk \
+    libasound2 libdbus-glib-1-2 libgtk2.0-0 libfontconfig1 libxrender1 \
+    libcairo-gobject2 libgtk-3-0 libstartup-notification0
 
 # Current versions of the test browser software. Tor Browser is based
 # on a specific version of Firefox, noted in Help > About Tor Browser.
@@ -58,16 +50,8 @@ RUN wget https://github.com/mozilla/geckodriver/releases/download/${GECKODRIVER_
     tar -zxvf geckodriver*tar.gz && chmod +x geckodriver && mv geckodriver /bin && \
     rm -f mozilla.keyring geckodriver-${GECKODRIVER_VERSION}-linux64.tar.gz.asc geckodriver-${GECKODRIVER_VERSION}-linux64.tar.gz
 
-COPY requirements requirements
-RUN python3 -m venv /opt/venvs/securedrop-app-code && \
-    /opt/venvs/securedrop-app-code/bin/pip3 install --no-deps --require-hashes -r requirements/python3/docker-requirements.txt && \
-    /opt/venvs/securedrop-app-code/bin/pip3 install --no-deps --require-hashes -r requirements/python3/test-requirements.txt && \
-    /opt/venvs/securedrop-app-code/bin/pip3 install --no-deps --require-hashes -r requirements/python3/securedrop-app-code-requirements.txt 
-
-RUN if test $USER_NAME != root ; then useradd --no-create-home --home-dir /tmp --uid $USER_ID $USER_NAME && echo "$USER_NAME ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers ; fi && \
-    cp -r /root/.local /tmp/ && chmod +x /tmp/.local/tbb/tor-browser_en-US/Browser/firefox && chmod -R 777 /tmp/.local && \
-    chown -R $USER_NAME.$USER_NAME /tmp/.local/ && \
-    chown -R $USER_NAME.$USER_NAME /opt/venvs/securedrop-app-code/
+RUN cp -r /root/.local /tmp/ && chmod +x /tmp/.local/tbb/tor-browser_en-US/Browser/firefox && chmod -R 777 /tmp/.local && \
+    chown -R $USER_NAME.$USER_NAME /tmp/.local/
 
 STOPSIGNAL SIGKILL
 

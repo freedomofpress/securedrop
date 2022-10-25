@@ -9,9 +9,9 @@ set -eu
 export PATH="/opt/venvs/securedrop-app-code/bin:$PATH"
 
 TOPLEVEL=$(git rev-parse --show-toplevel)
-BASE_OS="${BASE_OS:-focal}"
 USE_TOR="${USE_TOR:-}"
 USE_PODMAN="${USE_PODMAN:-}"
+SLIM_BUILD="${SLIM_BUILD:-}"
 DOCKER_RUN_ARGUMENTS="${DOCKER_RUN_ARGUMENTS:-}"
 
 # Allow opting into using podman with USE_PODMAN=1
@@ -38,13 +38,19 @@ get_port_offset() {
 }
 
 function docker_image() {
+    if [ "${DOCKER_BUILD_VERBOSE:-'false'}" = "true" ]; then
+        out="/dev/stdout"
+    else
+        out="/dev/null"
+    fi
+
     $DOCKER_BIN build \
            ${DOCKER_BUILD_ARGUMENTS:-} \
            --build-arg=USER_ID="$(id -u)" \
            --build-arg=USER_NAME="${USER:-root}" \
-           -t "securedrop-test-${1}-py3" \
-           --file "${TOPLEVEL}/securedrop/dockerfiles/${1}/python3/Dockerfile" \
-           "${TOPLEVEL}/securedrop"
+           -t "${1}" \
+           --file "${TOPLEVEL}/securedrop/dockerfiles/focal/python3/${2}" \
+           "${TOPLEVEL}/securedrop" > $out
 }
 
 function docker_run() {
@@ -64,11 +70,12 @@ function docker_run() {
     if [ "${DOCKER_BUILD_VERBOSE:-'false'}" = "true" ]
     then
         echo "************************************************************"
-        echo "Exposed Docker ports will be available on localhost with"
-        echo "Port offset: $port_offset"
-        echo "Source interface: $SD_HOSTPORT_SI"
-        echo "Journalist interface: $SD_HOSTPORT_JI"
-        echo "VNC: $SD_HOSTPORT_VNC"
+        echo "Exposed services will be available on localhost at"
+        echo "Source interface: http://127.0.0.1:$SD_HOSTPORT_SI"
+        echo "Journalist interface: http://127.0.0.1:$SD_HOSTPORT_JI"
+        if  [[ -z "${SLIM_BUILD}" ]]; then
+            echo "VNC: port $SD_HOSTPORT_VNC"
+        fi
         echo "************************************************************"
     fi
 
@@ -108,19 +115,19 @@ function docker_run() {
            -e LANG=C.UTF-8 \
            -e TEST_LOCALES \
            -e PATH \
-           -e BASE_OS=$BASE_OS \
+           -e BASE_OS="focal" \
            --user "${USER:-root}" \
            --volume "${TOPLEVEL}:${TOPLEVEL}" \
            --workdir "${TOPLEVEL}/securedrop" \
            --name "${SD_CONTAINER}" \
-           -ti $DOCKER_RUN_ARGUMENTS "securedrop-test-${1}-py3" "${@:2}"
+           -ti $DOCKER_RUN_ARGUMENTS "${1}" "${@:2}"
 }
 
-if [ "${DOCKER_BUILD_VERBOSE:-'false'}" = "true" ]
-then
-   docker_image $BASE_OS
-else
-   docker_image $BASE_OS >/dev/null
+image="securedrop-slim-focal-py3"
+docker_image "$image" "SlimDockerfile"
+if  [[ -z "${SLIM_BUILD}" ]]; then
+    image="securedrop-test-focal-py3"
+    docker_image "$image" "Dockerfile"
 fi
 
-docker_run $BASE_OS "$@"
+docker_run "$image" "$@"

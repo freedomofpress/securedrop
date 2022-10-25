@@ -1,0 +1,25 @@
+# ubuntu 20.04 image from 2022-08-01
+FROM ubuntu@sha256:a06ae92523384c2cd182dcfe7f8b2bf09075062e937d5653d7d0db0375ad2221
+ARG USER_NAME
+ENV USER_NAME ${USER_NAME:-root}
+ARG USER_ID
+ENV USER_ID ${USER_ID:-0}
+
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get install -y \
+                       apache2-dev coreutils vim \
+                       python3-pip python3-all python3-venv virtualenv python3-dev libssl-dev \
+                       gnupg2 redis-server git curl wget \
+                       enchant libffi-dev sqlite3 gettext sudo tor basez
+
+COPY requirements requirements
+RUN python3 -m venv /opt/venvs/securedrop-app-code && \
+    /opt/venvs/securedrop-app-code/bin/pip3 install --no-deps --require-hashes -r requirements/python3/docker-requirements.txt && \
+    /opt/venvs/securedrop-app-code/bin/pip3 install --no-deps --require-hashes -r requirements/python3/test-requirements.txt && \
+    /opt/venvs/securedrop-app-code/bin/pip3 install --no-deps --require-hashes -r requirements/python3/securedrop-app-code-requirements.txt
+
+RUN if test $USER_NAME != root ; then useradd --no-create-home --home-dir /tmp --uid $USER_ID $USER_NAME && echo "$USER_NAME ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers ; fi && \
+    chown -R $USER_NAME.$USER_NAME /opt/venvs/securedrop-app-code/
+
+STOPSIGNAL SIGKILL
+
+EXPOSE 8080 8081 5909
