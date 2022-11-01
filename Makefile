@@ -64,7 +64,7 @@ update-pip-requirements: update-admin-pip-requirements update-python3-requiremen
 .PHONY: check-black
 check-black: ## Check Python source code formatting with black
 	@echo "███ Running black check..."
-	@black --check --diff setup.py securedrop \
+	@black --check --diff securedrop \
                 install_files \
                 journalist_gui \
                 molecule \
@@ -73,7 +73,7 @@ check-black: ## Check Python source code formatting with black
 
 .PHONY: black
 black: ## Update Python source code formatting with black
-	@black setup.py securedrop \
+	@black securedrop \
                 install_files \
                 journalist_gui \
                 molecule \
@@ -82,7 +82,7 @@ black: ## Update Python source code formatting with black
 .PHONY: check-isort
 check-isort: ## Check Python import organization with isort
 	@echo "███ Running isort check..."
-	@isort --check-only --diff setup.py securedrop \
+	@isort --check-only --diff securedrop \
                 install_files \
                 journalist_gui \
                 molecule \
@@ -91,7 +91,7 @@ check-isort: ## Check Python import organization with isort
 
 .PHONY: isort
 isort: ## Update Python import organization with isort
-	@isort setup.py securedrop \
+	@isort securedrop \
                 install_files \
                 journalist_gui \
                 molecule \

@@ -1,9 +1,0 @@
-securedrop-ossec-agent: new-package-should-close-itp-bug
-securedrop-ossec-agent: embedded-library
-securedrop-ossec-agent: embedded-zlib
-seucredrop-ossec-agent: possible-gpl-code-linked-with-openssl
-securedrop-ossec-agent: executable-is-not-world-readable
-securedrop-ossec-agent: non-standard-dir-perm
-securedrop-ossec-agent: file-in-unusual-dir
-securedrop-ossec-agent: non-standard-file-perm
-securedrop-ossec-agent: non-standard-dir-in-var

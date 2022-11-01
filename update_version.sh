@@ -66,7 +66,7 @@ export DEBEMAIL="${DEBEMAIL:-securedrop@freedom.press}"
 export DEBFULLNAME="${DEBFULLNAME:-SecureDrop Team}"
 
 # Update the Focal changelog in the Debian package
-dch -b -v "${NEW_VERSION}+focal" -D focal -c install_files/ansible-base/roles/build-securedrop-app-code-deb-pkg/files/changelog-focal
+dch -b -v "${NEW_VERSION}+focal" -D focal -c securedrop/debian/changelog
 # Commit the change
 # Due to `set -e`, providing an empty commit message here will cause the script to abort early.
 git commit -a

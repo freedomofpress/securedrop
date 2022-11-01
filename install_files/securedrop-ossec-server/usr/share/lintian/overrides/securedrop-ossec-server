@@ -1,7 +1,0 @@
-securedrop-ossec-server: embedded-library
-securedrop-ossec-server: embedded-zlib
-securedrop-ossec-server: possible-gpl-code-linked-with-openssl
-securedrop-ossec-server: new-package-should-close-itp-bug
-securedrop-ossec-server: possibly-insecure-handling-of-tmp-files-in-maintainer-script
-securedrop-ossec-server: non-standard-dir-in-var
-securedrop-ossec-server: file-in-unusual-dir

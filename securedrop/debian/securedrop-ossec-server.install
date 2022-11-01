@@ -1,0 +1,2 @@
+debian/ossec-common/var /
+debian/ossec-server/var /

@@ -2,25 +2,11 @@
 # Directory for creating the sdist tarball
 securedrop_app_code_prep_dir: "/tmp/{{ securedrop_app_code_deb }}-prep"
 
-# Directory for storing the filtered application code files. These files
-# are "filtered" via an `.rsync-filter` file in the src directory.
-securedrop_code_filtered: "{{ securedrop_app_code_prep_dir }}/var/www/securedrop"
-
-securedrop_translation_pip_requirements: "{{ securedrop_code_filtered }}/requirements/python3/translation-requirements.txt"
-securedrop_pip_requirements: "{{ securedrop_code_filtered }}/requirements/python3/securedrop-app-code-requirements.txt"
-
 # SecureDrop code installation directory
 securedrop_code: /var/www/securedrop
 
 # Location of the application storage on disk, including database.
 securedrop_data: /var/lib/securedrop
-
-# Configuration files for SecureDrop systemd services
-systemd_services:
-  - securedrop_rqrequeue.service
-  - securedrop_rqworker.service
-  - securedrop_shredder.service
-  - securedrop_source_deleter.service
 
 # SecureDrop rq worker log directory
 securedrop_worker_log_dir: /var/log/securedrop_worker
@@ -29,7 +15,11 @@ securedrop_worker_log_dir: /var/log/securedrop_worker
 securedrop_user: "www-data"
 
 # Directory for building the Debian package
-securedrop_app_code_deb_dir: "/tmp/{{ securedrop_app_code_deb }}"
+securedrop_app_code_deb_dir: "/tmp/securedrop-build"
+
+securedrop_translation_pip_requirements: "{{ securedrop_app_code_deb_dir }}/requirements/python3/translation-requirements.txt"
+securedrop_pip_requirements: "{{ securedrop_app_code_deb_dir }}/requirements/python3/securedrop-app-code-requirements.txt"
+
 
 securedrop_app_rsync_opts:
   - "--chmod=u=rwX,g=rX,o=rX"

@@ -1,0 +1,7 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: securedrop
+Source: https://github.com/freedomofpress/securedrop
+
+Files: *
+Copyright: 2013- Aaron Swartz, James Dolan, Freedom of the Press Foundation, and SecureDrop contributors
+License: AGPL-3.0-or-later

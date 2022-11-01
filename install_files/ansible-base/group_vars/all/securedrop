@@ -18,13 +18,6 @@ remote_host_ref: "{{ ansible_host|default(inventory_hostname) }}"
 # is used on the build VM to pull in required packages.
 development_dependencies: []
 
-# These profiles are referenced by multiple machines, such as Application Server
-# for direct copying at install time, and the build machine for including them
-# in the deb packages.
-apparmor_profiles:
-  - usr.sbin.tor
-  - usr.sbin.apache2
-
 # Installing the securedrop-app-code.deb package
 securedrop_target_distribution: focal
 securedrop_app_code_deb: "securedrop-app-code_{{ securedrop_version }}+{{ securedrop_target_distribution }}_amd64" # do not enter .deb extension

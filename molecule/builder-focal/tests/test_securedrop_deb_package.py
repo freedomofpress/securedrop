@@ -65,7 +65,6 @@ def make_deb_paths() -> Dict[str, Path]:
         securedrop_version=securedrop_test_vars["securedrop_version"],
         ossec_version=securedrop_test_vars["ossec_version"],
         keyring_version=securedrop_test_vars["keyring_version"],
-        config_version=securedrop_test_vars["config_version"],
         grsec_version=grsec_version,
         securedrop_target_distribution=securedrop_test_vars["securedrop_target_distribution"],
     )
@@ -190,8 +189,14 @@ def test_deb_package_control_fields(host: Host, deb: Path) -> None:
     c = host.run("dpkg-deb --field {}".format(deb))
 
     assert "Maintainer: SecureDrop Team <securedrop@freedom.press>" in c.stdout
-    # The securedrop-config package is architecture indepedent
-    if package_name == "securedrop-config":
+    arch_all = (
+        "securedrop-config",
+        "securedrop-keyring",
+        "securedrop-ossec-agent",
+        "securedrop-ossec-server",
+    )
+    # Some packages are architecture independent
+    if package_name in arch_all:
         assert "Architecture: all" in c.stdout
     else:
         assert "Architecture: amd64" in c.stdout
@@ -275,28 +280,25 @@ def test_deb_package_contains_expected_conffiles(host: Host, deb: Path):
     conffiles, which would break unattended updates to critical package
     functionality such as AppArmor profiles. This test validates overrides
     in the build logic to unset those conffiles.
+
+    The same applies to `securedrop-config` too.
     """
-    # For the securedrop-app-code package:
-    if deb.name.startswith("securedrop-app-code"):
-        mktemp = host.run("mktemp -d")
-        tmpdir = mktemp.stdout.strip()
-        # The `--raw-extract` flag includes `DEBIAN/` dir with control files
-        host.run("dpkg-deb --raw-extract {} {}".format(deb, tmpdir))
-        conffiles_path = os.path.join(tmpdir, "DEBIAN", "conffiles")
-        f = host.file(conffiles_path)
+    if not deb.name.startswith(("securedrop-app-code", "securedrop-config")):
+        return
 
-        assert f.is_file
+    mktemp = host.run("mktemp -d")
+    tmpdir = mktemp.stdout.strip()
+    # The `--raw-extract` flag includes `DEBIAN/` dir with control files
+    host.run("dpkg-deb --raw-extract {} {}".format(deb, tmpdir))
+    conffiles_path = os.path.join(tmpdir, "DEBIAN", "conffiles")
+    f = host.file(conffiles_path)
 
-        conffiles = f.content_string.rstrip()
+    assert f.is_file
 
-        # No files are currently allow-listed to be conffiles
-        assert conffiles == ""
+    conffiles = f.content_string.rstrip()
 
-    # For the securedrop-config package, we want to ensure there are no
-    # conffiles so securedrop_additions.sh is squashed every time
-    if deb.name.startswith("securedrop-config"):
-        c = host.run("dpkg-deb -I {}".format(deb))
-        assert "conffiles" not in c.stdout
+    # No files are currently allow-listed to be conffiles
+    assert conffiles == ""
 
 
 def test_securedrop_app_code_contains_css(securedrop_app_code_contents: str) -> None:
@@ -412,7 +414,6 @@ def test_control_helper_files_are_present(host: Host):
         "postrm",
         "preinst",
         "prerm",
-        "templates",
     ]
     c = host.run("dpkg-deb --info {}".format(deb_paths["securedrop_app_code"]))
     for wanted_file in wanted_files:
@@ -525,6 +526,6 @@ def test_app_package_does_not_contain_custom_logo(
 ) -> None:
     """
     Inspect the package contents to ensure custom_logo.png is not present. This
-    is because custom_logo.png superceeds logo.png.
+    is because custom_logo.png supersedes logo.png.
     """
     assert "/var/www/static/i/custom_logo.png" not in securedrop_app_code_contents
