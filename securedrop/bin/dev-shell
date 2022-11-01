@@ -117,7 +117,7 @@ function docker_run() {
            -e PATH \
            -e BASE_OS="focal" \
            --user "${USER:-root}" \
-           --volume "${TOPLEVEL}:${TOPLEVEL}" \
+           --volume "${TOPLEVEL}:${TOPLEVEL}:Z" \
            --workdir "${TOPLEVEL}/securedrop" \
            --name "${SD_CONTAINER}" \
            -ti $DOCKER_RUN_ARGUMENTS "${1}" "${@:2}"

@@ -31,7 +31,7 @@ function docker_run() {
         docker run \
             --rm \
             --user "${USER:-root}" \
-            --volume "${TOPLEVEL}:/sd-root" \
+            --volume "${TOPLEVEL}:/sd-root:Z" \
             --workdir "/sd-root/admin" \
             -ti ${DOCKER_RUN_ARGUMENTS:-} securedrop-admin "$@"
     else
