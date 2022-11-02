@@ -28,25 +28,25 @@ update-admin-pip-requirements:  ## Update admin requirements.
 .PHONY: update-python3-requirements
 update-python3-requirements:  ## Update Python 3 requirements with pip-compile.
 	@echo "███ Updating Python 3 requirements files..."
-	@$(DEVSHELL) pip-compile --generate-hashes \
+	@SLIM_BUILD=1 $(DEVSHELL) pip-compile --generate-hashes \
 		--allow-unsafe \
 		--output-file requirements/python3/develop-requirements.txt \
 		../admin/requirements-ansible.in \
 		../admin/requirements.in \
 		requirements/python3/develop-requirements.in
-	@$(DEVSHELL) pip-compile --generate-hashes \
+	@SLIM_BUILD=1 $(DEVSHELL) pip-compile --generate-hashes \
 		--allow-unsafe \
 		--output-file requirements/python3/test-requirements.txt \
 		requirements/python3/test-requirements.in
-	@$(DEVSHELL) pip-compile --generate-hashes \
+	@SLIM_BUILD=1 $(DEVSHELL) pip-compile --generate-hashes \
 				--allow-unsafe \
 		--output-file requirements/python3/securedrop-app-code-requirements.txt \
 		requirements/python3/securedrop-app-code-requirements.in
-	@$(DEVSHELL) pip-compile --generate-hashes \
+	@SLIM_BUILD=1 $(DEVSHELL) pip-compile --generate-hashes \
 		--allow-unsafe \
 		--output-file requirements/python3/docker-requirements.txt \
 		requirements/python3/docker-requirements.in
-	@$(DEVSHELL) pip-compile --generate-hashes \
+	@SLIM_BUILD=1 $(DEVSHELL) pip-compile --generate-hashes \
 		--allow-unsafe \
 		--output-file requirements/python3/translation-requirements.txt \
 		requirements/python3/translation-requirements.in
