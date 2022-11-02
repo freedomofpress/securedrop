@@ -13,7 +13,7 @@
 {% endif %}
 
   <input id="codename-show-checkbox" type="checkbox" role="button"{% if not new %} checked {% endif -%}
-    aria-label="{{ gettext('Make Codename Visible on the Display') }}" aria-controls="codename">
+    aria-label="{{ gettext('Reveal Codename') }}" aria-controls="codename">
 
   <mark id="codename" lang="en-US" dir="ltr"{% if not new %}
     aria-describedby="codename-instructions codename-explanation"{% endif %}><span>{{ codename }}</span></mark>
