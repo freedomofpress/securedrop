@@ -24,7 +24,7 @@
         {% endif %}
         <a href="#main">{{ gettext('Skip to main content') }}</a>
         {% block header %}
-        <h1><a aria-label="{{ gettext('Return to Main View') }}"  href="{% if is_user_logged_in %}{{ url_for('main.lookup') }}{% else %}{{ url_for('main.index') }}{% endif %}">
+        <h1><a aria-label="{% if is_user_logged_in %}{{ gettext('Return to Submission Page') }}{% else %}{{ gettext('Return to Home Page') }}{% endif %}"  href="{% if is_user_logged_in %}{{ url_for('main.lookup') }}{% else %}{{ url_for('main.index') }}{% endif %}">
           <img src="{{ g.logo }}" alt="{{ g.organization_name }} logo">
         </a></h1>
         {% include 'locales.html' %}
