@@ -54,7 +54,7 @@ Production code dependencies are defined in:
 
 - `admin/requirements.in`
 - `admin/requirements-ansible.in`
-- `securedrop/requirements/python3/securedrop-app-code-requirements.in`
+- `securedrop/requirements/python3/requirements.in`
 
 If you changed another `requirements.in` file that applies only to development
 or testing environments, then no diff review is required, and you can skip

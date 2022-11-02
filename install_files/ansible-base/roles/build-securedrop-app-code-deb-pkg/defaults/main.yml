@@ -18,7 +18,7 @@ securedrop_user: "www-data"
 securedrop_app_code_deb_dir: "/tmp/securedrop-build"
 
 securedrop_translation_pip_requirements: "{{ securedrop_app_code_deb_dir }}/requirements/python3/translation-requirements.txt"
-securedrop_pip_requirements: "{{ securedrop_app_code_deb_dir }}/requirements/python3/securedrop-app-code-requirements.txt"
+securedrop_pip_requirements: "{{ securedrop_app_code_deb_dir }}/requirements/python3/requirements.txt"
 
 
 securedrop_app_rsync_opts:
