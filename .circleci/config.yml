@@ -332,16 +332,12 @@ workflows:
               ignore:
                 - /i18n-.*/
                 - /update-builder-.*/
-          requires:
-            - lint
       - updater-gui-tests:
           filters:
             branches:
               ignore:
                 - /i18n-.*/
                 - /update-builder-.*/
-          requires:
-            - lint
       - static-analysis-and-no-known-cves:
           requires:
             - lint
