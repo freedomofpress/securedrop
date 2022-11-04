@@ -46,13 +46,6 @@ apparmor_enforce:
     - "/usr/sbin/apache2//HANDLING_UNTRUSTED_INPUT"
     - "/usr/sbin/tor"
 
-app_directories:
-  - /var/www/securedrop
-  - /var/lib/securedrop
-  - /var/lib/securedrop/store
-  - /var/lib/securedrop/keys
-  - /var/lib/securedrop/tmp
-
 tor_services:
   - name: journalistv3
     ports:

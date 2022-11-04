@@ -164,7 +164,7 @@ case "$1" in
     configure)
 
     # Ensure SecureDrop's necessary directories are created
-    for dir in /var/lib/securedrop/{,tmp,shredder,store,keys,/keys/private-keys-v1.d,/keys/openpgp-revocs.d,backups} /var/www/securedrop; do
+    for dir in /var/lib/securedrop/{,tmp,shredder,store,keys,/keys/private-keys-v1.d,/keys/openpgp-revocs.d,backups}; do
       mkdir -p "$dir"
       chmod 0700 "$dir"
     done
@@ -192,11 +192,24 @@ case "$1" in
         gpg2 --homedir=/var/lib/securedrop/keys --batch --import < /var/lib/securedrop/keys/secring.gpg
     fi
 
-    chown -R www-data:www-data /var/lib/securedrop /var/www/securedrop
+    chown -R www-data:www-data /var/lib/securedrop
 
-    chown -R www-data:www-data /var/www/securedrop
-    chown www-data:www-data /var/www/journalist.wsgi
-    chown www-data:www-data /var/www/source.wsgi
+    # /var/www/securedrop should be owned by root and world-readable.
+    # Permissions on specific files will be loosened after
+    chown -R root:root /var/www/securedrop
+    chmod 755 /var/www/securedrop
+    # Make sure config.py is owned by root and readable by www-data,
+    # but not world-readable
+    if [ -f "/var/www/securedrop/config.py" ]; then
+        chown root:www-data /var/www/securedrop/config.py
+        chmod 640 /var/www/securedrop/config.py
+    fi
+    # And logo needs to be writable by webserver user
+    # If there's no custom logo yet, copy the default in its place
+    if [ ! -f "/var/www/securedrop/static/i/custom_logo.png" ]; then
+        cp /var/www/securedrop/static/i/logo.png /var/www/securedrop/static/i/custom_logo.png
+    fi
+    chown www-data:www-data /var/www/securedrop/static/i/custom_logo.png
 
     # No Python code should be executed before this
     refresh_bytecode
