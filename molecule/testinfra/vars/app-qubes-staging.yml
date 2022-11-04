@@ -34,13 +34,6 @@ pip_deps:
 
 apparmor_complain: []
 
-app_directories:
-  - /var/www/securedrop
-  - /var/lib/securedrop
-  - /var/lib/securedrop/store
-  - /var/lib/securedrop/keys
-  - /var/lib/securedrop/tmp
-
 tor_services:
   - name: journalistv3
     ports:
