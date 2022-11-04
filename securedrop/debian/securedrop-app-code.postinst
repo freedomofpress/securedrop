@@ -169,35 +169,37 @@ case "$1" in
       chmod 0700 "$dir"
     done
 
+    chown -R www-data:www-data /var/lib/securedrop
+
     # Ensure required gpg-agent.conf is in place, see #4013.
     if [ -e "/var/lib/securedrop/keys/gpg-agent.conf" ]; then
 
         # gpg-agent.conf does exist, update it if needed.
         if ! grep -qE '^allow-loopback-pinentry$' /var/lib/securedrop/keys/gpg-agent.conf; then
-            echo allow-loopback-pinentry >> /var/lib/securedrop/keys/gpg-agent.conf
+            echo allow-loopback-pinentry | sudo -u www-data tee -a /var/lib/securedrop/keys/gpg-agent.conf
         fi
         if ! grep -qE '^default-cache-ttl 0$' /var/lib/securedrop/keys/gpg-agent.conf; then
-            echo 'default-cache-ttl 0' >> /var/lib/securedrop/keys/gpg-agent.conf
+            echo 'default-cache-ttl 0' | sudo -u www-data tee -a /var/lib/securedrop/keys/gpg-agent.conf
         fi
 
     else
         # gpg-agent.conf does not yet exist, create it.
-        echo allow-loopback-pinentry > /var/lib/securedrop/keys/gpg-agent.conf
-        echo 'default-cache-ttl 0' >> /var/lib/securedrop/keys/gpg-agent.conf
+        echo allow-loopback-pinentry | sudo -u www-data tee /var/lib/securedrop/keys/gpg-agent.conf
+        echo 'default-cache-ttl 0' | sudo -u www-data tee -a /var/lib/securedrop/keys/gpg-agent.conf
     fi
 
     # Migrate private keyring to gpg2.1 if needed
     if [ ! -d "/var/lib/securedrop/keys/private-keys-v1.d" ]; then
         # Then we should migrate the keyring
-        gpg2 --homedir=/var/lib/securedrop/keys --batch --import < /var/lib/securedrop/keys/secring.gpg
+        # shellcheck disable=SC2024
+        sudo -u www-data gpg2 --homedir=/var/lib/securedrop/keys --batch --import < /var/lib/securedrop/keys/secring.gpg
     fi
-
-    chown -R www-data:www-data /var/lib/securedrop
 
     # /var/www/securedrop should be owned by root and world-readable.
     # Permissions on specific files will be loosened after
     chown -R root:root /var/www/securedrop
     chmod 755 /var/www/securedrop
+
     # Make sure config.py is owned by root and readable by www-data,
     # but not world-readable
     if [ -f "/var/www/securedrop/config.py" ]; then
