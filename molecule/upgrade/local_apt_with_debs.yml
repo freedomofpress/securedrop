@@ -16,7 +16,7 @@
     src: "distributions.j2"
     dest: "/var/repos/conf/distributions"
 
-- name: Run reprepo
+- name: Run reprepro
   shell: |
     find {{dpkg_dir}} -type f -name '*.deb' -exec reprepro includedeb "{{rep_dist}}" '{}' \;
   environment:

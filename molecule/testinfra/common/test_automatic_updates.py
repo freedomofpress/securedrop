@@ -114,7 +114,7 @@ def test_unattended_securedrop_specific(host):
 
 def test_unattended_upgrades_functional(host):
     """
-    Ensure unatteded-upgrades completes successfully and ensures all packages
+    Ensure unattended-upgrades completes successfully and ensures all packages
     are up-to-date.
     """
     c = host.run("sudo unattended-upgrades --dry-run --debug")
@@ -175,7 +175,7 @@ def test_apt_daily_upgrade_timer_schedule(host):
 
 def test_reboot_required_cron(host):
     """
-    Unatteded-upgrades does not reboot the system if the updates don't require it.
+    Unattended-upgrades does not reboot the system if the updates don't require it.
     However, we use daily reboots for SecureDrop to ensure memory is cleared periodically.
     Here, we ensure that reboot-required flag is dropped twice daily to ensure the system
     is rebooted every day at the scheduled time.

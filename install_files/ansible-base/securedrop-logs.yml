@@ -94,7 +94,7 @@
         --batch --yes
         "{{ log_tarball_filename }}"
       environment:
-        GNUPG_HOME: /home/amensia/.gnupg
+        GNUPG_HOME: /home/amnesia/.gnupg
 
     - name: Delete local unencrypted log tarballs.
       become: no

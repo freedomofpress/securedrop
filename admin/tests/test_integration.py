@@ -511,7 +511,7 @@ def test_sdconfig_enable_https_on_source_interface():
 
 
 # The following is the minimal git configuration which can be used to fetch
-# from the SecureDrop Github repository. We want to use this because the
+# from the SecureDrop GitHub repository. We want to use this because the
 # developers may have the git setup to fetch from git@github.com: instead
 # of the https, and that requires authentication information.
 GIT_CONFIG = """[core]

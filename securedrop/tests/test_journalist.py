@@ -2580,7 +2580,7 @@ def test_passphrase_migration_on_verification(journalist_app):
     assert journalist.pw_salt is None
     assert journalist.pw_hash is None
 
-    # check that that a verification post-migration works
+    # check that a verification post-migration works
     assert journalist.valid_password(VALID_PASSWORD)
 
 
@@ -2603,7 +2603,7 @@ def test_passphrase_migration_on_reset(journalist_app):
     assert journalist.pw_salt is None
     assert journalist.pw_hash is None
 
-    # check that that a verification post-migration works
+    # check that a verification post-migration works
     assert journalist.valid_password(VALID_PASSWORD)
 
 
@@ -3759,7 +3759,7 @@ def test_app_error_handlers_defined(journalist_app):
 
 
 def test_lazy_deleted_journalist_creation(journalist_app):
-    """test lazy creation of "deleted" jousrnalist works"""
+    """test lazy creation of "deleted" journalist works"""
     not_found = Journalist.query.filter_by(username="deleted").one_or_none()
     assert not_found is None, "deleted journalist doesn't exist yet"
     deleted = Journalist.get_deleted()
@@ -3787,7 +3787,7 @@ def test_journalist_deletion(journalist_app, app_storage):
     db.session.commit()
     # Only one login attempt in the table
     assert len(JournalistLoginAttempt.query.all()) == 1
-    # And four SeenReplys
+    # And four SeenReply instances
     assert len(SeenReply.query.all()) == 4
     # Delete the journalists
     journalist.delete()

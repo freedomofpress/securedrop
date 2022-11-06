@@ -344,7 +344,7 @@ workflows:
       - staging-test-with-rebase:
           filters:
             branches:
-              # Ignore needs to be here explicitely as only clause introduced in PR #6086 might be removed afterwards.
+              # Ignore needs to be here explicitly as only clause introduced in PR #6086 might be removed afterwards.
               ignore: /i18n-.*/
               only: /(stg-|release\/).*/
           requires:

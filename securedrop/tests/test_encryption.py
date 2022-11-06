@@ -344,7 +344,7 @@ def import_journalist_private_key(
         fingerprints=journalist_secret_key_fingerprint, secret=True, subkeys=False
     )
 
-    # Double check that the journlist private key was removed
+    # Double check that the journalist private key was removed
     is_journalist_secret_key_available = False
     for key in encryption_mgr._gpg.list_keys(secret=True):
         for uid in key["uids"]:

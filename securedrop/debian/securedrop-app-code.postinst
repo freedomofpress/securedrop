@@ -253,7 +253,7 @@ case "$1" in
     # Munge Apache config while service is stopped.
     adjust_wsgi_configuration
 
-    # Add TLS1.3 configruation to the source configruation if required
+    # Add TLS1.3 configuration to the source configuration if required
     update_to_tls13
 
     # Apply Q4-2021 header updates

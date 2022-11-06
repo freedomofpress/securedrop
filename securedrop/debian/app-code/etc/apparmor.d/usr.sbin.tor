@@ -49,7 +49,7 @@
   /var/lib/tor/services/client_keys.tmp rw,
   /var/lib/tor/services/hostname w,
   /var/lib/tor/services/hostname.tmp rw,
-  /var/lib/tor/sevices/private_key rw,
+  /var/lib/tor/services/private_key rw,
   /var/lib/tor/services/private_key.tmp rw,
   /var/lib/tor/services/sourcev3/ w,
   /var/lib/tor/services/sourcev3/hostname rw,

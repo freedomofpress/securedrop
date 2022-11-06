@@ -23,7 +23,7 @@
     get_attributes: no
   register: sd_reboot_file_check
 
-- name: Delete reboot file from intereferring with future runs
+- name: Delete reboot file from interfering with future runs
   file:
     path: "{{ securedrop_cond_reboot_file }}"
     state: absent

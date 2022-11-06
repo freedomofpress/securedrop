@@ -209,7 +209,7 @@ class SessionInterface(FlaskSessionInterface):
             self.redis.setex(name=self.key_prefix + session.sid, value=val, time=expires)
         elif session.modified:
             # To prevent race conditions where session is delete by an admin in the middle of a req
-            # accept to save the session object if and only if alrady exists using the xx flag
+            # accept to save the session object if and only if already exists using the xx flag
             self.redis.set(name=self.key_prefix + session.sid, value=val, ex=expires, xx=True)
         if not session.is_api and (session.new or session.to_regenerate):
             response.headers.add("Vary", "Cookie")

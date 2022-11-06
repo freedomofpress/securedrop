@@ -41,7 +41,7 @@ class UpgradeTester:
                  VALUES (:uuid, :journalist_id, :source_id, :filename,
                         :size, :checksum, :deleted_by_source);"""
             db.engine.execute(text(sql), **params)
-            # Insert two SeenReplys corresponding to the just-inserted reply, which also
+            # Insert two SeenReply instances corresponding to the just-inserted reply, which also
             # verifies our handling of duplicate keys.
             for _ in range(2):
                 db.engine.execute(

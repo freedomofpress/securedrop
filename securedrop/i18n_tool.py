@@ -41,7 +41,7 @@ class I18NTool:
     #
     # name: English name of the language to the documentation, not for
     #       display in the interface.
-    # desktop: The language code used for dekstop icons.
+    # desktop: The language code used for desktop icons.
     #
     with open(I18N_CONF) as i18n_conf:
         conf = json.load(i18n_conf)

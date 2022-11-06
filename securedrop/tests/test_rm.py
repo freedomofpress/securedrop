@@ -27,7 +27,7 @@ def test_shred(config):
     testfile = "test_shred.txt"
     content = "abc123\n"
 
-    # non-existent target should raise an exception
+    # nonexistent target should raise an exception
     with pytest.raises(EnvironmentError):
         rm.shred(os.path.abspath(os.path.join(config.TEMP_DIR, "nonexistentshredtarget")))
 

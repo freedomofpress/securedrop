@@ -1,6 +1,6 @@
 ---
   # Ansible doesn't support notifying handlers based on file existence, results,
-  # e.g. via registered `stat` results, only only on changed=true task results,
+  # e.g. via registered `stat` results, only on changed=true task results,
   # so let's craft a task that returns changed=true if-and-only-if a file exists.
 - name: Check if reboot is required due to inactive grsecurity lock.
   command: /bin/true
