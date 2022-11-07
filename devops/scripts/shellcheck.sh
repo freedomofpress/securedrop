@@ -16,7 +16,7 @@ function run_native_or_in_docker () {
     if [ "$(command -v shellcheck)" ]; then
         shellcheck -x --exclude="$EXCLUDE_RULES" "$@"
     else
-        $DOCKER_BIN run --rm -v "$(pwd):/sd" -w /sd \
+        $DOCKER_BIN run --rm -v "$(pwd):/sd:Z" -w /sd \
             -t docker.io/koalaman/shellcheck:v0.4.7 \
             -x --exclude=$EXCLUDE_RULES "$@"
     fi
