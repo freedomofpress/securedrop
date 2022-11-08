@@ -3,7 +3,9 @@
 
 set -eu
 
-export REPOROOT="${REPOROOT:-$(git rev-parse --show-toplevel)}"
+cd ..
+export REPOROOT="${REPOROOT:-$PWD}"
+git config --global --add safe.directory "$REPOROOT"
 
 cd "${REPOROOT}/securedrop"
 
