@@ -24,6 +24,14 @@ else
     DOCKER_BIN="docker"
 fi
 
+# Whenever we're not on the platform we expect, explicitly tell Docker what
+# platform we need
+# This is also relevant for CI, as the --platform argument is only available
+# from Docker API 1.32 onward, while at the time of writing CI still on API 1.23
+if [[ "$(uname -sm)" != "Linux x86_64" ]]; then
+    DOCKER_RUN_ARGUMENTS="${DOCKER_RUN_ARGUMENTS} --platform linux/amd64"
+fi
+
 ## Get an integer offset for exposed ports, to support multiple containers
 get_port_offset() {
     tries=0
