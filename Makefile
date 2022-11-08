@@ -274,6 +274,9 @@ clean:  ## DANGER! Delete all uncommitted files, virtual machines, Onion address
 	@$(SDROOT)/devops/clean
 	@echo
 
+.PHONY: otp
+otp: ## Show (and opportunistically copy) the current development OTP (to the clipboard)
+	@$(SDROOT)/devops/scripts/otp-code.sh
 
 #########
 #
