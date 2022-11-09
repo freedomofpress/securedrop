@@ -31,7 +31,6 @@
     state: latest
   async: 500
   poll: 10
-  when: not install_local_packages|default(False)
   tags:
     - apt
     - grsec
