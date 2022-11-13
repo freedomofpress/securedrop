@@ -8,7 +8,7 @@ set -eo pipefail
 if [[ -n "$PY_FILES" ]]; then
     # set up the virtualenv if it's not already available
     if [[ ! -v VIRTUAL_ENV ]]; then
-        make venv && source .venv/bin/activate
+        source .venv/bin/activate
     fi
     echo "Checking:"
     echo "$PY_FILES"
