@@ -296,7 +296,7 @@ def test_i18n():
     ):
         with app.app_context():
             db.create_all()
-        assert list(i18n.LOCALES.keys()) == test_config.SUPPORTED_LOCALES
+        assert list(app.config["LOCALES"].keys()) == test_config.SUPPORTED_LOCALES
         verify_i18n(app)
 
 
@@ -311,7 +311,6 @@ def test_no_usable_fallback_locale():
     test_config = create_config_for_i18n_test(
         default_locale=NEVER_LOCALE, supported_locales=[NEVER_LOCALE]
     )
-    i18n.USABLE_LOCALES = set()
 
     with pytest.raises(ValueError, match="in the set of usable locales"):
         journalist_app_module.create_app(test_config)

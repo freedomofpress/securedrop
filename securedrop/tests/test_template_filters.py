@@ -2,7 +2,6 @@ import subprocess
 from datetime import datetime, timedelta
 from pathlib import Path
 
-import i18n
 import i18n_tool
 import journalist_app
 import source_app
@@ -110,6 +109,6 @@ def do_test(create_app):
     with app.app_context():
         db.create_all()
 
-    assert list(i18n.LOCALES.keys()) == test_config.SUPPORTED_LOCALES
+    assert list(app.config["LOCALES"].keys()) == test_config.SUPPORTED_LOCALES
     verify_filesizeformat(app)
     verify_rel_datetime_format(app)
