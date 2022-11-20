@@ -7,9 +7,8 @@ mock
 pathlib2
 pillow>=9.0.1  # for CVE-2022-{22817,24303}
 pip-tools>=6.1.0
-py>=1.10.0
-pytest>=6.1.1
-pytest-xdist>=2.1.0
+pytest>=7.2.0
+pytest-xdist>=3.0.2
 pluggy>=0.13.1
 pytest-cov
 pytest-mock
