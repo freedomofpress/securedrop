@@ -1,6 +1,6 @@
 FROM securedrop-slim-focal-py3
 
-RUN apt-get install -y \
+RUN apt-get update  && apt-get install -y \
     libgtk2.0 devscripts xvfb x11vnc \
     # For html5validator.  Used only in "app-page-layout-tests", but we can live
     # with its being installed along with everything else since it will be

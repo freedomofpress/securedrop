@@ -292,12 +292,12 @@ jobs:
 
   deb-tests:
     docker:
-      - image: cimg/python:3.8
+      - image: debian:bullseye
     environment:
       LC_ALL: C.UTF-8
       LANG: C.UTF-8
     steps:
-      - run: sudo apt-get update && sudo apt-get install -y make virtualenv enchant jq python3-dev build-essential rsync
+      - run: apt-get update && apt-get install -y git docker.io make virtualenv enchant-2 jq python3-dev build-essential rsync
       - checkout
       - setup_remote_docker
       - run:
