@@ -8,7 +8,7 @@ SECUREDROP_TARGET_DISTRIBUTION = os.environ.get("SECUREDROP_TARGET_DISTRIBUTION"
 testinfra_hosts = ["docker://{}-sd-sec-update".format(SECUREDROP_TARGET_DISTRIBUTION)]
 
 
-def test_should_run():
+def should_run():
     command = ["git", "describe", "--all"]
     version = check_output(command).decode("utf8")[0:-1]
     candidates = (
@@ -24,7 +24,7 @@ def test_should_run():
         return False
 
 
-@pytest.mark.skipif(not test_should_run(), reason="Only tested for RCs and builder updates")
+@pytest.mark.skipif(not should_run(), reason="Only tested for RCs and builder updates")
 def test_ensure_no_updates_avail(host):
     """
     Test to make sure that there are no security-updates in the
