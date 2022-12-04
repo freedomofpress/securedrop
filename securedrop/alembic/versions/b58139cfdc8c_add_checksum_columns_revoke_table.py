@@ -14,7 +14,7 @@ raise_errors = os.environ.get("SECUREDROP_ENV", "prod") != "prod"
 try:
     from journalist_app import create_app
     from models import Reply, Submission
-    from sdconfig import config
+    from sdconfig import SecureDropConfig
     from store import Storage, queued_add_checksum_for_file
     from worker import create_queue
 except:  # noqa
@@ -46,6 +46,7 @@ def upgrade() -> None:
     )
 
     try:
+        config = SecureDropConfig.get_current()
         app = create_app(config)
 
         # we need an app context for the rq worker extension to work properly

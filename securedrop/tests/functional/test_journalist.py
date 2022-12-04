@@ -20,16 +20,16 @@ from typing import Generator, Tuple
 from uuid import uuid4
 
 import pytest
+from sdconfig import SecureDropConfig
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.keys import Keys
+from tests.factories import SecureDropConfigFactory
 from tests.functional.app_navigators.journalist_app_nav import JournalistAppNavigator
 from tests.functional.conftest import (
     SdServersFixtureResult,
     create_source_and_submission,
     spawn_sd_servers,
 )
-from tests.functional.factories import SecureDropConfigFactory
-from tests.functional.sd_config_v2 import SecureDropConfig
 
 
 class TestJournalist:

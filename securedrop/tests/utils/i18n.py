@@ -11,7 +11,7 @@ from babel.messages.catalog import Catalog
 from babel.messages.pofile import read_po
 from bs4 import BeautifulSoup
 from flask_babel import force_locale
-from sdconfig import SDConfig
+from sdconfig import SecureDropConfig
 
 
 @functools.lru_cache(maxsize=None)
@@ -73,7 +73,7 @@ def page_language(page_text: str) -> Optional[str]:
 
 @contextlib.contextmanager
 def xfail_untranslated_messages(
-    config: SDConfig, locale: str, msgids: Iterable[str]
+    config: SecureDropConfig, locale: str, msgids: Iterable[str]
 ) -> Generator[None, None, None]:
     """
     Trigger pytest.xfail for untranslated strings.

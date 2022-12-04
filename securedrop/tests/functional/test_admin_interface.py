@@ -5,17 +5,17 @@ from uuid import uuid4
 
 import pytest
 from models import Journalist
+from sdconfig import SecureDropConfig
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.firefox.webdriver import WebDriver
 from selenium.webdriver.support import expected_conditions
+from tests.factories import SecureDropConfigFactory
 from tests.functional.app_navigators.journalist_app_nav import JournalistAppNavigator
 from tests.functional.app_navigators.source_app_nav import SourceAppNavigator
 from tests.functional.conftest import SdServersFixtureResult, spawn_sd_servers
 from tests.functional.db_session import get_database_session
-from tests.functional.factories import SecureDropConfigFactory
-from tests.functional.sd_config_v2 import SecureDropConfig
 
 
 class TestAdminInterfaceAddUser:

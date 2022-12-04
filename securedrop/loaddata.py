@@ -32,7 +32,7 @@ from models import (
     Submission,
 )
 from passphrases import PassphraseGenerator
-from sdconfig import config
+from sdconfig import SecureDropConfig
 from source_user import create_source_user
 from specialstrings import strings
 from sqlalchemy.exc import IntegrityError
@@ -371,6 +371,7 @@ def load(args: argparse.Namespace) -> None:
     if not os.environ.get("SECUREDROP_ENV"):
         os.environ["SECUREDROP_ENV"] = "dev"
 
+    config = SecureDropConfig.get_current()
     app = journalist_app.create_app(config)
     with app.app_context():
         journalists = create_default_journalists()

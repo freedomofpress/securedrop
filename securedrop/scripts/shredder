@@ -12,7 +12,7 @@ import time
 sys.path.insert(0, "/var/www/securedrop")  # noqa: E402
 
 import journalist_app
-from sdconfig import config
+from sdconfig import SecureDropConfig
 from store import Storage
 
 
@@ -51,6 +51,7 @@ def main():
 
 
 if __name__ == "__main__":
+    config = SecureDropConfig.get_current()
     app = journalist_app.create_app(config)
     with app.app_context():
         main()

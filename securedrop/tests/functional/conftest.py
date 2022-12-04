@@ -12,11 +12,11 @@ from uuid import uuid4
 import pytest
 import requests
 from models import Journalist
+from sdconfig import SecureDropConfig
 from selenium.webdriver.firefox.webdriver import WebDriver
 from source_user import SourceUser
+from tests.factories import SecureDropConfigFactory
 from tests.functional.db_session import get_database_session
-from tests.functional.factories import SecureDropConfigFactory
-from tests.functional.sd_config_v2 import SecureDropConfig
 from tests.functional.web_drivers import WebDriverTypeEnum, get_web_driver
 
 
@@ -45,16 +45,13 @@ def _get_unused_port() -> int:
 def _start_source_server(port: int, config_to_use: SecureDropConfig) -> None:
     # This function will be called in a separate Process that runs the source app
     # Modify the sdconfig module in the app's memory so that it mirrors the supplied config
-    # Do this BEFORE importing any other module of the application so the modified config is
-    # what eventually gets imported by the app's code
     import sdconfig
-
-    sdconfig.config = config_to_use  # type: ignore
-
-    # Then start the source app
     from source_app import create_app
 
-    source_app = create_app(config_to_use)  # type: ignore
+    sdconfig._current_config = config_to_use
+
+    # Then start the source app
+    source_app = create_app(config_to_use)
     source_app.run(port=port, debug=True, use_reloader=False, threaded=True)
 
 
@@ -65,20 +62,17 @@ def _start_journalist_server(
 ) -> None:
     # This function will be called in a separate Process that runs the journalist app
     # Modify the sdconfig module in the app's memory so that it mirrors the supplied config
-    # Do this BEFORE importing any other module of the application so the modified config is
-    # what eventually gets imported by the app's code
     import sdconfig
-
-    sdconfig.config = config_to_use  # type: ignore
-
-    # Then start the journalist app
     from journalist_app import create_app
+
+    sdconfig._current_config = config_to_use
 
     # Some tests require a specific state to be set (such as having a submission)
     if journalist_app_setup_callback:
         journalist_app_setup_callback(config_to_use)
 
-    journalist_app = create_app(config_to_use)  # type: ignore
+    # Then start the journalist app
+    journalist_app = create_app(config_to_use)
     journalist_app.run(port=port, debug=True, use_reloader=False, threaded=True)
 
 

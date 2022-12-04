@@ -35,12 +35,11 @@ from journalist_app.utils import (
     mark_seen,
 )
 from models import Reply, Submission
-from sdconfig import SDConfig
 from sqlalchemy.orm.exc import NoResultFound
 from store import Storage
 
 
-def make_blueprint(config: SDConfig) -> Blueprint:
+def make_blueprint() -> Blueprint:
     view = Blueprint("col", __name__)
 
     @view.route("/add_star/<filesystem_id>", methods=("POST",))

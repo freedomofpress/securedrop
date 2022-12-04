@@ -27,7 +27,7 @@ from babel.core import (
 )
 from flask import Flask, current_app, g, request, session
 from flask_babel import Babel
-from sdconfig import FALLBACK_LOCALE, SDConfig
+from sdconfig import FALLBACK_LOCALE, SecureDropConfig
 
 
 class RequestLocaleInfo:
@@ -99,7 +99,7 @@ class RequestLocaleInfo:
         return get_locale_identifier(parse_locale(str(self.locale)), sep="-")
 
 
-def configure_babel(config: SDConfig, app: Flask) -> Babel:
+def configure_babel(config: SecureDropConfig, app: Flask) -> Babel:
     """
     Set up Flask-Babel according to the SecureDrop configuration.
     """
@@ -128,7 +128,7 @@ def parse_locale_set(codes: List[str]) -> Set[Locale]:
     return {Locale.parse(code) for code in codes}
 
 
-def validate_locale_configuration(config: SDConfig, babel: Babel) -> Set[Locale]:
+def validate_locale_configuration(config: SecureDropConfig, babel: Babel) -> Set[Locale]:
     """
     Check that configured locales are available in the filesystem and therefore usable by
     Babel.  Warn about configured locales that are not usable, unless we're left with
@@ -161,7 +161,7 @@ def validate_locale_configuration(config: SDConfig, babel: Babel) -> Set[Locale]
 
 
 def map_locale_display_names(
-    config: SDConfig, usable_locales: Set[Locale]
+    config: SecureDropConfig, usable_locales: Set[Locale]
 ) -> OrderedDict[str, RequestLocaleInfo]:
     """
     Create a map of locale identifiers to names for display.
@@ -192,13 +192,13 @@ def map_locale_display_names(
     return locale_map
 
 
-def configure(config: SDConfig, app: Flask) -> None:
+def configure(config: SecureDropConfig, app: Flask) -> None:
     babel = configure_babel(config, app)
     usable_locales = validate_locale_configuration(config, babel)
     app.config["LOCALES"] = map_locale_display_names(config, usable_locales)
 
 
-def get_locale(config: SDConfig) -> str:
+def get_locale(config: SecureDropConfig) -> str:
     """
     Return the best supported locale for a request.
 
@@ -253,7 +253,7 @@ def get_accepted_languages() -> List[str]:
     return accept_languages
 
 
-def set_locale(config: SDConfig) -> None:
+def set_locale(config: SecureDropConfig) -> None:
     """
     Update locale info in request and session.
     """

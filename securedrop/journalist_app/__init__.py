@@ -1,9 +1,6 @@
-# -*- coding: utf-8 -*-
-
-import typing
 from datetime import datetime
-from os import path
 from pathlib import Path
+from typing import Any, Optional, Tuple, Union
 
 import i18n
 import template_filters
@@ -16,19 +13,9 @@ from journalist_app import account, admin, api, col, main
 from journalist_app.sessions import Session, session
 from journalist_app.utils import get_source
 from models import InstanceConfig
-from werkzeug.exceptions import default_exceptions
-
-# https://www.python.org/dev/peps/pep-0484/#runtime-or-type-checking
-if typing.TYPE_CHECKING:
-    # flake8 can not understand type annotation yet.
-    # That is why all type annotation relative import
-    # statements has to be marked as noqa.
-    # http://flake8.pycqa.org/en/latest/user/error-codes.html?highlight=f401
-    from typing import Any, Optional, Tuple, Union  # noqa: F401
-
-    from sdconfig import SDConfig  # noqa: F401
-    from werkzeug import Response  # noqa: F401
-    from werkzeug.exceptions import HTTPException  # noqa: F401
+from sdconfig import SecureDropConfig
+from werkzeug import Response
+from werkzeug.exceptions import HTTPException, default_exceptions
 
 _insecure_views = ["main.login", "static"]
 _insecure_api_views = ["api.get_token", "api.get_endpoints"]
@@ -52,11 +39,11 @@ def get_logo_url(app: Flask) -> str:
     raise FileNotFoundError
 
 
-def create_app(config: "SDConfig") -> Flask:
+def create_app(config: SecureDropConfig) -> Flask:
     app = Flask(
         __name__,
-        template_folder=config.JOURNALIST_TEMPLATES_DIR,
-        static_folder=path.join(config.SECUREDROP_ROOT, "static"),
+        template_folder=str(config.JOURNALIST_TEMPLATES_DIR.absolute()),
+        static_folder=config.STATIC_DIR.absolute(),
     )
 
     app.config.from_object(config.JOURNALIST_APP_FLASK_CONFIG_CLS)
@@ -86,8 +73,8 @@ def create_app(config: "SDConfig") -> Flask:
         return redirect(url_for("main.login"))
 
     def _handle_http_exception(
-        error: "HTTPException",
-    ) -> "Tuple[Union[Response, str], Optional[int]]":
+        error: HTTPException,
+    ) -> Tuple[Union[Response, str], Optional[int]]:
         # Workaround for no blueprint-level 404/5 error handlers, see:
         # https://github.com/pallets/flask/issues/503#issuecomment-71383286
         # TODO: clean up API error handling such that all except 404/5s are
@@ -117,7 +104,7 @@ def create_app(config: "SDConfig") -> Flask:
         InstanceConfig.get_default(refresh=True)
 
     @app.before_request
-    def setup_g() -> "Optional[Response]":
+    def setup_g() -> Optional[Response]:
         """Store commonly used values in Flask's special g object"""
 
         i18n.set_locale(config)
@@ -149,11 +136,11 @@ def create_app(config: "SDConfig") -> Flask:
 
         return None
 
-    app.register_blueprint(main.make_blueprint(config))
-    app.register_blueprint(account.make_blueprint(config), url_prefix="/account")
-    app.register_blueprint(admin.make_blueprint(config), url_prefix="/admin")
-    app.register_blueprint(col.make_blueprint(config), url_prefix="/col")
-    api_blueprint = api.make_blueprint(config)
+    app.register_blueprint(main.make_blueprint())
+    app.register_blueprint(account.make_blueprint(), url_prefix="/account")
+    app.register_blueprint(admin.make_blueprint(), url_prefix="/admin")
+    app.register_blueprint(col.make_blueprint(), url_prefix="/col")
+    api_blueprint = api.make_blueprint()
     app.register_blueprint(api_blueprint, url_prefix="/api/v1")
     csrf.exempt(api_blueprint)
 

@@ -8,7 +8,7 @@ import time
 
 sys.path.insert(0, "/var/www/securedrop")  # noqa: E402
 
-from sdconfig import config
+from sdconfig import SecureDropConfig
 from worker import requeue_interrupted_jobs
 
 
@@ -36,6 +36,7 @@ def main():
 
     logging.basicConfig(format="%(asctime)s %(levelname)s %(message)s", level=level)
 
+    config = SecureDropConfig.get_current()
     if args.interval:
         requeue_threshold = datetime.datetime.now()
         logging.info("Running every %s seconds.", args.interval)

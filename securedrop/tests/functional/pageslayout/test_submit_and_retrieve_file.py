@@ -1,5 +1,3 @@
-from pathlib import Path
-
 import pytest
 from encryption import EncryptionManager
 from selenium.common.exceptions import NoSuchElementException
@@ -53,7 +51,7 @@ class TestSubmitAndRetrieveFile:
         apps_sd_config = sd_servers_with_clean_state.config_in_use
         retrieved_message = journ_app_nav.journalist_downloads_first_message(
             encryption_mgr_to_use_for_decryption=EncryptionManager(
-                gpg_key_dir=Path(apps_sd_config.GPG_KEY_DIR),
+                gpg_key_dir=apps_sd_config.GPG_KEY_DIR,
                 journalist_key_fingerprint=apps_sd_config.JOURNALIST_KEY,
             )
         )

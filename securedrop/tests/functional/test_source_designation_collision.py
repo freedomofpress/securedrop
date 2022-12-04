@@ -1,9 +1,9 @@
 from pathlib import Path
 
 import pytest
+from tests.factories import SecureDropConfigFactory
 from tests.functional.app_navigators.source_app_nav import SourceAppNavigator
 from tests.functional.conftest import spawn_sd_servers
-from tests.functional.factories import SecureDropConfigFactory
 
 
 @pytest.fixture(scope="session")
