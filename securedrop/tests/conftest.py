@@ -7,10 +7,10 @@ import signal
 import subprocess
 from os import path
 from pathlib import Path
-from tempfile import TemporaryDirectory
 from typing import Any, Dict, Generator, Tuple
 from unittest import mock
 from unittest.mock import PropertyMock
+from uuid import uuid4
 
 import models
 import pretty_bad_protocol as gnupg
@@ -24,12 +24,12 @@ from hypothesis import settings
 from journalist_app import create_app as create_journalist_app
 from passphrases import PassphraseGenerator
 from pyotp import TOTP
-from sdconfig import SDConfig
+from sdconfig import DEFAULT_SECUREDROP_ROOT, SecureDropConfig
 from source_app import create_app as create_source_app
 from source_user import _SourceScryptManager, create_source_user
 from store import Storage
 from tests import utils
-from tests.functional.sd_config_v2 import DEFAULT_SECUREDROP_ROOT
+from tests.factories import SecureDropConfigFactory
 from tests.utils import i18n
 
 # Quiet down gnupg output. (See Issue #2595)
@@ -127,40 +127,24 @@ def setup_journalist_key_and_gpg_folder() -> Generator[Tuple[str, Path], None, N
 def config(
     setup_journalist_key_and_gpg_folder: Tuple[str, Path],
     setup_rqworker: Tuple[str, str],
-) -> Generator[SDConfig, None, None]:
-    config = SDConfig()
+) -> Generator[SecureDropConfig, None, None]:
     journalist_key_fingerprint, gpg_key_dir = setup_journalist_key_and_gpg_folder
-    config.GPG_KEY_DIR = str(gpg_key_dir)
-    config.JOURNALIST_KEY = journalist_key_fingerprint
+    worker_name, _ = setup_rqworker
+    config = SecureDropConfigFactory.create(
+        SECUREDROP_DATA_ROOT=Path(f"/tmp/sd-tests/conftest-{uuid4()}"),
+        GPG_KEY_DIR=gpg_key_dir,
+        JOURNALIST_KEY=journalist_key_fingerprint,
+        SUPPORTED_LOCALES=i18n.get_test_locales(),
+        RQ_WORKER_NAME=worker_name,
+    )
 
-    # Setup the filesystem for the application
-    with TemporaryDirectory() as data_dir_name:
-        data_dir = Path(data_dir_name)
-        config.SECUREDROP_DATA_ROOT = str(data_dir)
-
-        store_dir = data_dir / "store"
-        store_dir.mkdir()
-        config.STORE_DIR = str(store_dir)
-
-        tmp_dir = data_dir / "tmp"
-        tmp_dir.mkdir()
-        config.TEMP_DIR = str(tmp_dir)
-
-        # Create the db file
-        sqlite_db_path = data_dir / "db.sqlite"
-        config.DATABASE_FILE = str(sqlite_db_path)
-        subprocess.check_call(["sqlite3", config.DATABASE_FILE, ".databases"])
-
-        config.SUPPORTED_LOCALES = i18n.get_test_locales()
-
-        # Set this newly-created config as the "global" config
-        with mock.patch.object(sdconfig, "config", config):
-
-            yield config
+    # Set this newly-created config as the current config
+    with mock.patch.object(sdconfig.SecureDropConfig, "get_current", return_value=config):
+        yield config
 
 
 @pytest.fixture(scope="function")
-def alembic_config(config: SDConfig) -> str:
+def alembic_config(config: SecureDropConfig) -> str:
     base_dir = path.join(path.dirname(__file__), "..")
     migrations_dir = path.join(base_dir, "alembic")
     ini = configparser.ConfigParser()
@@ -169,26 +153,20 @@ def alembic_config(config: SDConfig) -> str:
     ini.set("alembic", "script_location", path.join(migrations_dir))
     ini.set("alembic", "sqlalchemy.url", config.DATABASE_URI)
 
-    alembic_path = path.join(config.SECUREDROP_DATA_ROOT, "alembic.ini")
+    alembic_path = config.SECUREDROP_DATA_ROOT / "alembic.ini"
     with open(alembic_path, "w") as f:
         ini.write(f)
 
-    return alembic_path
+    return str(alembic_path)
 
 
 @pytest.fixture(scope="function")
-def app_storage(config: SDConfig) -> "Storage":
-    return Storage(config.STORE_DIR, config.TEMP_DIR)
+def app_storage(config: SecureDropConfig) -> "Storage":
+    return Storage(str(config.STORE_DIR), str(config.TEMP_DIR))
 
 
 @pytest.fixture(scope="function")
-def source_app(config: SDConfig, app_storage: Storage) -> Generator[Flask, None, None]:
-    config.SOURCE_APP_FLASK_CONFIG_CLS.TESTING = True
-    config.SOURCE_APP_FLASK_CONFIG_CLS.USE_X_SENDFILE = False
-
-    # Disable CSRF checks to make writing tests easier
-    config.SOURCE_APP_FLASK_CONFIG_CLS.WTF_CSRF_ENABLED = False
-
+def source_app(config: SecureDropConfig, app_storage: Storage) -> Generator[Flask, None, None]:
     with mock.patch("store.Storage.get_default") as mock_storage_global:
         mock_storage_global.return_value = app_storage
         app = create_source_app(config)
@@ -203,13 +181,7 @@ def source_app(config: SDConfig, app_storage: Storage) -> Generator[Flask, None,
 
 
 @pytest.fixture(scope="function")
-def journalist_app(config: SDConfig, app_storage: Storage) -> Generator[Flask, None, None]:
-    config.JOURNALIST_APP_FLASK_CONFIG_CLS.TESTING = True
-    config.JOURNALIST_APP_FLASK_CONFIG_CLS.USE_X_SENDFILE = False
-
-    # Disable CSRF checks to make writing tests easier
-    config.JOURNALIST_APP_FLASK_CONFIG_CLS.WTF_CSRF_ENABLED = False
-
+def journalist_app(config: SecureDropConfig, app_storage: Storage) -> Generator[Flask, None, None]:
     with mock.patch("store.Storage.get_default") as mock_storage_global:
         mock_storage_global.return_value = app_storage
         app = create_journalist_app(config)

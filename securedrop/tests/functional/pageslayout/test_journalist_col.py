@@ -20,11 +20,11 @@ from typing import Generator, Tuple
 from uuid import uuid4
 
 import pytest
+from sdconfig import SecureDropConfig
+from tests.factories import SecureDropConfigFactory
 from tests.functional.app_navigators.journalist_app_nav import JournalistAppNavigator
 from tests.functional.conftest import SdServersFixtureResult, spawn_sd_servers
-from tests.functional.factories import SecureDropConfigFactory
 from tests.functional.pageslayout.utils import list_locales, save_screenshot_and_html
-from tests.functional.sd_config_v2 import SecureDropConfig
 
 
 def _create_source_and_submission_and_delete_source_key(config_in_use: SecureDropConfig) -> None:

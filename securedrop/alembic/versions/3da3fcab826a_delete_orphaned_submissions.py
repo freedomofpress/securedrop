@@ -17,7 +17,7 @@ raise_errors = os.environ.get("SECUREDROP_ENV", "prod") != "prod"
 
 try:
     from journalist_app import create_app
-    from sdconfig import config
+    from sdconfig import SecureDropConfig
     from store import NoFileFoundException, Storage, TooManyFilesException
 except ImportError:
     # This is a fresh install, and config.py has not been created yet.
@@ -49,6 +49,7 @@ def upgrade() -> None:
     replies = conn.execute(sa.text(raw_sql_grab_orphaned_objects("replies"))).fetchall()
 
     try:
+        config = SecureDropConfig.get_current()
         app = create_app(config)
         with app.app_context():
             for submission in submissions:

@@ -1,5 +1,3 @@
-from pathlib import Path
-
 from encryption import EncryptionManager
 from tests.functional.app_navigators.journalist_app_nav import JournalistAppNavigator
 from tests.functional.app_navigators.source_app_nav import SourceAppNavigator
@@ -42,7 +40,7 @@ class TestSubmitAndRetrieveMessage:
         servers_sd_config = sd_servers_with_clean_state.config_in_use
         retrieved_message = journ_app_nav.journalist_downloads_first_message(
             encryption_mgr_to_use_for_decryption=EncryptionManager(
-                gpg_key_dir=Path(servers_sd_config.GPG_KEY_DIR),
+                gpg_key_dir=servers_sd_config.GPG_KEY_DIR,
                 journalist_key_fingerprint=servers_sd_config.JOURNALIST_KEY,
             )
         )

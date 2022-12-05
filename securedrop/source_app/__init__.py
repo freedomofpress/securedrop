@@ -1,6 +1,5 @@
 import os
 import time
-from os import path
 from pathlib import Path
 from typing import Optional, Tuple
 
@@ -14,7 +13,7 @@ from flask_babel import gettext
 from flask_wtf.csrf import CSRFError, CSRFProtect
 from models import InstanceConfig
 from request_that_secures_file_uploads import RequestThatSecuresFileUploads
-from sdconfig import SDConfig
+from sdconfig import SecureDropConfig
 from source_app import api, info, main
 from source_app.decorators import ignore_static
 from source_app.utils import clear_session_and_redirect_to_logged_out_page
@@ -36,11 +35,11 @@ def get_logo_url(app: Flask) -> str:
     raise FileNotFoundError
 
 
-def create_app(config: SDConfig) -> Flask:
+def create_app(config: SecureDropConfig) -> Flask:
     app = Flask(
         __name__,
-        template_folder=config.SOURCE_TEMPLATES_DIR,
-        static_folder=path.join(config.SECUREDROP_ROOT, "static"),
+        template_folder=str(config.SOURCE_TEMPLATES_DIR.absolute()),
+        static_folder=config.STATIC_DIR.absolute(),
     )
     app.request_class = RequestThatSecuresFileUploads
     app.config.from_object(config.SOURCE_APP_FLASK_CONFIG_CLS)
@@ -118,7 +117,7 @@ def create_app(config: SDConfig) -> Flask:
 
     # Obscure the creation time of source private keys by touching them all
     # on startup.
-    private_keys = Path(config.GPG_KEY_DIR) / "private-keys-v1.d"
+    private_keys = config.GPG_KEY_DIR / "private-keys-v1.d"
     now = time.time()
     for entry in os.scandir(private_keys):
         if not entry.is_file() or not entry.name.endswith(".key"):

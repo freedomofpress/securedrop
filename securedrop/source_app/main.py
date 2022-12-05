@@ -24,7 +24,7 @@ from flask import (
 from flask_babel import gettext
 from models import InstanceConfig, Reply, Submission, get_one_or_else
 from passphrases import DicewarePassphrase, PassphraseGenerator
-from sdconfig import SDConfig
+from sdconfig import SecureDropConfig
 from source_app.decorators import login_required
 from source_app.forms import LoginForm, SubmissionForm
 from source_app.session_manager import SessionManager
@@ -45,7 +45,7 @@ from source_user import (
 from store import Storage
 
 
-def make_blueprint(config: SDConfig) -> Blueprint:
+def make_blueprint(config: SecureDropConfig) -> Blueprint:
     view = Blueprint("main", __name__)
 
     @view.route("/")

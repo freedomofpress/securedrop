@@ -85,6 +85,7 @@ def test_journalist_filters():
 
 def do_test(create_app):
     test_config = create_config_for_i18n_test(supported_locales=["en_US", "fr_FR"])
+
     i18n_dir = Path(__file__).absolute().parent / "i18n"
     i18n_tool.I18NTool().main(
         [

@@ -31,12 +31,11 @@ from models import (
     Submission,
 )
 from passphrases import PassphraseGenerator
-from sdconfig import SDConfig
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm.exc import NoResultFound
 
 
-def make_blueprint(config: SDConfig) -> Blueprint:
+def make_blueprint() -> Blueprint:
     view = Blueprint("admin", __name__)
 
     @view.route("/", methods=("GET", "POST"))

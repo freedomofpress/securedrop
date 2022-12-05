@@ -25,13 +25,12 @@ from journalist_app.forms import ReplyForm
 from journalist_app.sessions import session
 from journalist_app.utils import bulk_delete, download, get_source, validate_user
 from models import Reply, SeenReply, Source, SourceStar, Submission
-from sdconfig import SDConfig
 from sqlalchemy.orm import joinedload
 from sqlalchemy.sql import func
 from store import Storage
 
 
-def make_blueprint(config: SDConfig) -> Blueprint:
+def make_blueprint() -> Blueprint:
     view = Blueprint("main", __name__)
 
     @view.route("/login", methods=("GET", "POST"))

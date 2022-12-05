@@ -11,7 +11,9 @@ from alembic.config import Config as AlembicConfig
 from alembic.script import ScriptDirectory
 from db import db
 from journalist_app import create_app
+from sdconfig import SecureDropConfig
 from sqlalchemy import text
+from tests.utils.db_helper import reset_database
 
 MIGRATION_PATH = path.join(path.dirname(__file__), "..", "alembic", "versions")
 
@@ -20,6 +22,13 @@ ALL_MIGRATIONS = [
 ]
 
 WHITESPACE_REGEX = re.compile(r"\s+")
+
+
+@pytest.fixture(scope="function")
+def _reset_db(config: SecureDropConfig) -> None:
+    # The config fixture creates all the models in the DB, but most alembic tests expect an
+    #  empty DB, so we reset the DB via this fixture
+    reset_database(config.DATABASE_FILE)
 
 
 def list_migrations(cfg_path, head):
@@ -108,10 +117,7 @@ def test_alembic_head_matches_db_models(journalist_app, alembic_config, config):
     """
     models_schema = get_schema(journalist_app)
 
-    os.remove(config.DATABASE_FILE)
-
-    # Create database file
-    subprocess.check_call(["sqlite3", config.DATABASE_FILE, ".databases"])
+    reset_database(config.DATABASE_FILE)
     upgrade(alembic_config, "head")
 
     # Recreate the app to get a new SQLALCHEMY_DATABASE_URI
@@ -126,13 +132,13 @@ def test_alembic_head_matches_db_models(journalist_app, alembic_config, config):
 
 
 @pytest.mark.parametrize("migration", ALL_MIGRATIONS)
-def test_alembic_migration_up_and_down(alembic_config, config, migration):
+def test_alembic_migration_up_and_down(alembic_config, config, migration, _reset_db):
     upgrade(alembic_config, migration)
     downgrade(alembic_config, "base")
 
 
 @pytest.mark.parametrize("migration", ALL_MIGRATIONS)
-def test_schema_unchanged_after_up_then_downgrade(alembic_config, config, migration):
+def test_schema_unchanged_after_up_then_downgrade(alembic_config, config, migration, _reset_db):
     # Create the app here. Using a fixture will init the database.
     app = create_app(config)
 
@@ -164,7 +170,7 @@ def test_schema_unchanged_after_up_then_downgrade(alembic_config, config, migrat
 
 
 @pytest.mark.parametrize("migration", ALL_MIGRATIONS)
-def test_upgrade_with_data(alembic_config, config, migration):
+def test_upgrade_with_data(alembic_config, config, migration, _reset_db):
     migrations = list_migrations(alembic_config, migration)
     if len(migrations) == 1:
         # Degenerate case where there is no data for the first migration
@@ -190,7 +196,7 @@ def test_upgrade_with_data(alembic_config, config, migration):
 
 
 @pytest.mark.parametrize("migration", ALL_MIGRATIONS)
-def test_downgrade_with_data(alembic_config, config, migration):
+def test_downgrade_with_data(alembic_config, config, migration, _reset_db):
     # Upgrade to the target
     upgrade(alembic_config, migration)
 

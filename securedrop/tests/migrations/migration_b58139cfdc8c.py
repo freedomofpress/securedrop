@@ -126,7 +126,7 @@ class UpgradeTester(Helper):
 
         # as this class requires access to the Storage object, which is no longer
         # attached to app, we create it here and mock the call to return it below.
-        self.storage = Storage(config.STORE_DIR, config.TEMP_DIR)
+        self.storage = Storage(str(config.STORE_DIR), str(config.TEMP_DIR))
 
     def load_data(self):
         global DATA

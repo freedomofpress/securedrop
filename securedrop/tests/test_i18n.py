@@ -31,9 +31,8 @@ from db import db
 from flask import render_template, render_template_string, request, session
 from flask_babel import gettext
 from i18n import parse_locale_set
-from sdconfig import FALLBACK_LOCALE
-from tests.functional.factories import SecureDropConfigFactory
-from tests.functional.sd_config_v2 import DEFAULT_SECUREDROP_ROOT, SecureDropConfig
+from sdconfig import DEFAULT_SECUREDROP_ROOT, FALLBACK_LOCALE, SecureDropConfig
+from tests.factories import SecureDropConfigFactory
 from werkzeug.datastructures import Headers
 
 NEVER_LOCALE = "eo"  # Esperanto
