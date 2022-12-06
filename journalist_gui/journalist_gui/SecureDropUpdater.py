@@ -10,9 +10,9 @@ import pexpect
 from PyQt5 import QtGui, QtWidgets
 from PyQt5.QtCore import QThread, pyqtSignal
 
-from journalist_gui import resources_rc, strings, updaterUI  # noqa
+from journalist_gui import resources_rc, strings, updaterUI
 
-FLAG_LOCATION = "/home/amnesia/Persistent/.securedrop/securedrop_update.flag"  # noqa
+FLAG_LOCATION = "/home/amnesia/Persistent/.securedrop/securedrop_update.flag"
 ESCAPE_POD = re.compile(r"\x1B\[[0-?]*[ -/]*[@-~]")
 
 
@@ -25,7 +25,7 @@ def password_is_set():
     return True
 
 
-def prevent_second_instance(app: QtWidgets.QApplication, name: str) -> None:  # noqa
+def prevent_second_instance(app: QtWidgets.QApplication, name: str) -> None:
 
     # Null byte triggers abstract namespace
     IDENTIFIER = "\0" + name

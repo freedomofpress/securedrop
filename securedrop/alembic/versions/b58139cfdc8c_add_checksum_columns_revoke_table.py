@@ -17,7 +17,7 @@ try:
     from sdconfig import SecureDropConfig
     from store import Storage, queued_add_checksum_for_file
     from worker import create_queue
-except:  # noqa
+except:
     if raise_errors:
         raise
 
@@ -85,7 +85,7 @@ def upgrade() -> None:
                     full_path,
                     app.config["SQLALCHEMY_DATABASE_URI"],
                 )
-    except:  # noqa
+    except:
         if raise_errors:
             raise
 

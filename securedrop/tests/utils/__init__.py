@@ -1,7 +1,7 @@
 from pyotp import TOTP
 
-from . import asynchronous  # noqa
-from . import db_helper  # noqa
+from . import asynchronous
+from . import db_helper
 
 
 def flaky_filter_xfail(err, *args):

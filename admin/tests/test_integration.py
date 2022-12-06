@@ -155,48 +155,46 @@ def verify_username_prompt(child):
 
 def verify_reboot_prompt(child):
     child.expect(rb"Daily reboot time of the server \(24\-hour clock\):", timeout=2)
-    assert ANSI_ESCAPE.sub("", child.buffer.decode("utf-8")).strip() == "4"  # noqa: E501
+    assert ANSI_ESCAPE.sub("", child.buffer.decode("utf-8")).strip() == "4"
 
 
 def verify_ipv4_appserver_prompt(child):
-    child.expect(rb"Local IPv4 address for the Application Server\:", timeout=2)  # noqa: E501
+    child.expect(rb"Local IPv4 address for the Application Server\:", timeout=2)
     # Expected default
-    assert ANSI_ESCAPE.sub("", child.buffer.decode("utf-8")).strip() == "10.20.2.2"  # noqa: E501
+    assert ANSI_ESCAPE.sub("", child.buffer.decode("utf-8")).strip() == "10.20.2.2"
 
 
 def verify_ipv4_monserver_prompt(child):
     child.expect(rb"Local IPv4 address for the Monitor Server\:", timeout=2)
     # Expected default
-    assert ANSI_ESCAPE.sub("", child.buffer.decode("utf-8")).strip() == "10.20.3.2"  # noqa: E501
+    assert ANSI_ESCAPE.sub("", child.buffer.decode("utf-8")).strip() == "10.20.3.2"
 
 
 def verify_hostname_app_prompt(child):
     child.expect(rb"Hostname for Application Server\:", timeout=2)
-    assert ANSI_ESCAPE.sub("", child.buffer.decode("utf-8")).strip() == "app"  # noqa: E501
+    assert ANSI_ESCAPE.sub("", child.buffer.decode("utf-8")).strip() == "app"
 
 
 def verify_hostname_mon_prompt(child):
     child.expect(rb"Hostname for Monitor Server\:", timeout=2)
-    assert ANSI_ESCAPE.sub("", child.buffer.decode("utf-8")).strip() == "mon"  # noqa: E501
+    assert ANSI_ESCAPE.sub("", child.buffer.decode("utf-8")).strip() == "mon"
 
 
 def verify_dns_prompt(child):
     child.expect(rb"DNS server\(s\):", timeout=2)
-    assert (
-        ANSI_ESCAPE.sub("", child.buffer.decode("utf-8")).strip() == "8.8.8.8 8.8.4.4"
-    )  # noqa: E501
+    assert ANSI_ESCAPE.sub("", child.buffer.decode("utf-8")).strip() == "8.8.8.8 8.8.4.4"
 
 
 def verify_app_gpg_key_prompt(child):
     child.expect(
         rb"Local filepath to public key for SecureDrop Application GPG public key\:", timeout=2
-    )  # noqa: E501
+    )
 
 
 def verify_https_prompt(child):
     child.expect(
         rb"Whether HTTPS should be enabled on Source Interface \(requires EV cert\)\:", timeout=2
-    )  # noqa: E501
+    )
 
 
 def verify_https_cert_prompt(child):
@@ -208,64 +206,54 @@ def verify_https_cert_key_prompt(child):
 
 
 def verify_https_cert_chain_file_prompt(child):
-    child.expect(rb"Local filepath to HTTPS certificate chain file\:", timeout=2)  # noqa: E501
+    child.expect(rb"Local filepath to HTTPS certificate chain file\:", timeout=2)
 
 
 def verify_app_gpg_fingerprint_prompt(child):
-    child.expect(
-        rb"Full fingerprint for the SecureDrop Application GPG Key\:", timeout=2
-    )  # noqa: E501
+    child.expect(rb"Full fingerprint for the SecureDrop Application GPG Key\:", timeout=2)
 
 
 def verify_ossec_gpg_key_prompt(child):
-    child.expect(rb"Local filepath to OSSEC alerts GPG public key\:", timeout=2)  # noqa: E501
+    child.expect(rb"Local filepath to OSSEC alerts GPG public key\:", timeout=2)
 
 
 def verify_ossec_gpg_fingerprint_prompt(child):
-    child.expect(
-        rb"Full fingerprint for the OSSEC alerts GPG public key\:", timeout=2
-    )  # noqa: E501
+    child.expect(rb"Full fingerprint for the OSSEC alerts GPG public key\:", timeout=2)
 
 
 def verify_admin_email_prompt(child):
-    child.expect(rb"Admin email address for receiving OSSEC alerts\:", timeout=2)  # noqa: E501
+    child.expect(rb"Admin email address for receiving OSSEC alerts\:", timeout=2)
 
 
 def verify_journalist_gpg_key_prompt(child):
-    child.expect(
-        rb"Local filepath to journalist alerts GPG public key \(optional\)\:", timeout=2
-    )  # noqa: E501
+    child.expect(rb"Local filepath to journalist alerts GPG public key \(optional\)\:", timeout=2)
 
 
 def verify_journalist_fingerprint_prompt(child):
     child.expect(
         rb"Full fingerprint for the journalist alerts GPG public key \(optional\)\:", timeout=2
-    )  # noqa: E501
+    )
 
 
 def verify_journalist_email_prompt(child):
-    child.expect(
-        rb"Email address for receiving journalist alerts \(optional\)\:", timeout=2
-    )  # noqa: E501
+    child.expect(rb"Email address for receiving journalist alerts \(optional\)\:", timeout=2)
 
 
 def verify_smtp_relay_prompt(child):
     child.expect(rb"SMTP relay for sending OSSEC alerts\:", timeout=2)
     # Expected default
-    assert (
-        ANSI_ESCAPE.sub("", child.buffer.decode("utf-8")).strip() == "smtp.gmail.com"
-    )  # noqa: E501
+    assert ANSI_ESCAPE.sub("", child.buffer.decode("utf-8")).strip() == "smtp.gmail.com"
 
 
 def verify_smtp_port_prompt(child):
     child.expect(rb"SMTP port for sending OSSEC alerts\:", timeout=2)
-    assert ANSI_ESCAPE.sub("", child.buffer.decode("utf-8")).strip() == "587"  # noqa: E501
+    assert ANSI_ESCAPE.sub("", child.buffer.decode("utf-8")).strip() == "587"
 
 
 def verify_sasl_domain_prompt(child):
     child.expect(rb"SASL domain for sending OSSEC alerts\:", timeout=2)
     # Expected default
-    assert ANSI_ESCAPE.sub("", child.buffer.decode("utf-8")).strip() == "gmail.com"  # noqa: E501
+    assert ANSI_ESCAPE.sub("", child.buffer.decode("utf-8")).strip() == "gmail.com"
 
 
 def verify_sasl_username_prompt(child):
@@ -278,11 +266,11 @@ def verify_sasl_password_prompt(child):
 
 def verify_ssh_over_lan_prompt(child):
     child.expect(rb"will be available over LAN only\:", timeout=2)
-    assert ANSI_ESCAPE.sub("", child.buffer.decode("utf-8")).strip() == "yes"  # noqa: E501
+    assert ANSI_ESCAPE.sub("", child.buffer.decode("utf-8")).strip() == "yes"
 
 
 def verify_locales_prompt(child):
-    child.expect(rb"Space separated list of additional locales to support")  # noqa: E501
+    child.expect(rb"Space separated list of additional locales to support")
 
 
 def verify_install_has_valid_config():
@@ -364,7 +352,7 @@ def test_sdconfig_on_first_run():
 
     with open(
         os.path.join(SD_DIR, "install_files/ansible-base/group_vars/all/site-specific")
-    ) as fobj:  # noqa: E501
+    ) as fobj:
         data = fobj.read()
     assert data == OUTPUT1
 
@@ -430,7 +418,7 @@ def test_sdconfig_enable_journalist_alerts():
 
     with open(
         os.path.join(SD_DIR, "install_files/ansible-base/group_vars/all/site-specific")
-    ) as fobj:  # noqa: E501
+    ) as fobj:
         data = fobj.read()
     assert JOURNALIST_ALERT_OUTPUT == data
 
@@ -503,7 +491,7 @@ def test_sdconfig_enable_https_on_source_interface():
 
     with open(
         os.path.join(SD_DIR, "install_files/ansible-base/group_vars/all/site-specific")
-    ) as fobj:  # noqa: E501
+    ) as fobj:
         data = fobj.read()
     assert HTTPS_OUTPUT == data
 
@@ -588,9 +576,7 @@ def test_check_for_update_when_updates_needed(securedrop_git_repo):
 @flaky(max_runs=3)
 def test_check_for_update_when_updates_not_needed(securedrop_git_repo):
     # Determine latest production tag using GitHub release object
-    github_url = (
-        "https://api.github.com/repos/freedomofpress/securedrop/releases/latest"  # noqa: E501
-    )
+    github_url = "https://api.github.com/repos/freedomofpress/securedrop/releases/latest"
     latest_release = requests.get(github_url).json()
     latest_tag = str(latest_release["tag_name"])
 
@@ -661,9 +647,7 @@ def test_update_with_duplicate_branch_and_tag(securedrop_git_repo):
     gpgdir = os.path.join(os.path.expanduser("~"), ".gnupg")
     set_reliable_keyserver(gpgdir)
 
-    github_url = (
-        "https://api.github.com/repos/freedomofpress/securedrop/releases/latest"  # noqa: E501
-    )
+    github_url = "https://api.github.com/repos/freedomofpress/securedrop/releases/latest"
     latest_release = requests.get(github_url).json()
     latest_tag = str(latest_release["tag_name"])
 

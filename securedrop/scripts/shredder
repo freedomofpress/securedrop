@@ -9,7 +9,7 @@ import logging
 import sys
 import time
 
-sys.path.insert(0, "/var/www/securedrop")  # noqa: E402
+sys.path.insert(0, "/var/www/securedrop")
 
 import journalist_app
 from sdconfig import SecureDropConfig

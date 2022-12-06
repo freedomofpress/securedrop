@@ -28,7 +28,7 @@ def test_apache_headers_journalist_interface(host, header, value):
     "apache_opt",
     [
         "<VirtualHost {}:8080>".format(securedrop_test_vars.apache_listening_address),
-        "WSGIDaemonProcess journalist processes=2 threads=30 display-name=%{{GROUP}} python-path={}".format(  # noqa
+        "WSGIDaemonProcess journalist processes=2 threads=30 display-name=%{{GROUP}} python-path={}".format(
             securedrop_test_vars.securedrop_code
         ),
         (

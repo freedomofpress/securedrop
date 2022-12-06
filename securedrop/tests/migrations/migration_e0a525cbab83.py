@@ -123,7 +123,7 @@ class UpgradeTester:
             assert len(replies) == self.JOURNO_NUM - 1
 
             for reply in replies:
-                assert reply.deleted_by_source == False  # noqa
+                assert reply.deleted_by_source == False
 
 
 class DowngradeTester:

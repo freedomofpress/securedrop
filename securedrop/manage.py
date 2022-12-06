@@ -18,19 +18,19 @@ from typing import List, Optional
 from flask.ctx import AppContext
 from passphrases import PassphraseGenerator
 
-sys.path.insert(0, "/var/www/securedrop")  # noqa: E402
+sys.path.insert(0, "/var/www/securedrop")
 
-import qrcode  # noqa: E402
-from sqlalchemy.orm.exc import NoResultFound  # noqa: E402
+import qrcode
+from sqlalchemy.orm.exc import NoResultFound
 
 if not os.environ.get("SECUREDROP_ENV"):
-    os.environ["SECUREDROP_ENV"] = "dev"  # noqa
+    os.environ["SECUREDROP_ENV"] = "dev"
 
 
-from db import db  # noqa: E402
-from management import SecureDropConfig, app_context  # noqa: E402
-from management.run import run  # noqa: E402
-from management.submissions import (  # noqa: E402
+from db import db
+from management import SecureDropConfig, app_context
+from management.run import run
+from management.submissions import (
     add_check_db_disconnect_parser,
     add_check_fs_disconnect_parser,
     add_delete_db_disconnect_parser,
@@ -39,7 +39,7 @@ from management.submissions import (  # noqa: E402
     add_list_fs_disconnect_parser,
     add_were_there_submissions_today,
 )
-from models import FirstOrLastNameError, InvalidUsernameException, Journalist  # noqa: E402
+from models import FirstOrLastNameError, InvalidUsernameException, Journalist
 
 logging.basicConfig(format="%(asctime)s %(levelname)s %(message)s")
 log = logging.getLogger(__name__)
