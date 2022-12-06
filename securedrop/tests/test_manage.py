@@ -1,12 +1,9 @@
-# -*- coding: utf-8 -*-
-
 import argparse
 import datetime
 import io
 import logging
 import os
 import time
-from pathlib import Path
 
 import manage
 import mock
@@ -145,9 +142,7 @@ def test_reset(journalist_app, test_journo, alembic_config, config):
         args = argparse.Namespace(store_dir=config.STORE_DIR)
         # We have to override the hardcoded alembic .ini file because during testing
         # the value in the .ini doesn't exist.
-        return_value = manage.reset(
-            args=args, alembic_ini_path=Path(alembic_config), context=context
-        )
+        return_value = manage.reset(args=args, alembic_ini_path=alembic_config, context=context)
 
         assert return_value == 0
         assert config.DATABASE_FILE.exists()

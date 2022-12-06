@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # flake8: noqa: E741
 import base64
 import binascii
@@ -13,7 +12,6 @@ from pathlib import Path
 from typing import Tuple
 
 import journalist_app as journalist_app_module
-import models
 import pytest
 from db import db
 from encryption import EncryptionManager, GpgKeyNotFoundError
@@ -45,6 +43,8 @@ from sqlalchemy.sql.expression import func
 from store import Storage
 from tests import utils
 from tests.factories import SecureDropConfigFactory
+from tests.functional.db_session import get_database_session
+from tests.utils import login_journalist
 from tests.utils.i18n import (
     get_plural_tests,
     get_test_locales,
@@ -61,49 +61,51 @@ VALID_PASSWORD = "correct horse battery staple generic passphrase hooray"
 VALID_PASSWORD_2 = "another correct horse battery staple generic passphrase"
 
 
-def _login_user(app, username, password, otp_secret, success=True):
-    resp = app.post(
-        url_for("main.login"),
-        data={
-            "username": username,
-            "password": password,
-            "token": TOTP(otp_secret).now(),
-        },
-        follow_redirects=True,
-    )
-    assert resp.status_code == 200
-    assert (session.get_user() is not None) == success
-
-
 @pytest.mark.parametrize("otp_secret", ["", "GA", "GARBAGE", "JHCOGO7VCER3EJ4"])
 def test_user_with_invalid_otp_secret_cannot_login(journalist_app, otp_secret):
-    # Create a user with whitespace at the end of the username
-    with journalist_app.app_context():
-        new_username = "badotp" + otp_secret
-        user, password = utils.db_helper.init_journalist(is_admin=False)
+    # Create a user with an invalid OTP secret
+    with get_database_session(journalist_app.config["SQLALCHEMY_DATABASE_URI"]) as db_session:
+        username = "badotp"
+        password = PassphraseGenerator.get_default().generate_passphrase()
+        user = Journalist(
+            username=username,
+            password=password,
+        )
         user.otp_secret = otp_secret
-        user.username = new_username
-        db.session.add(user)
-        db.session.commit()
+        db_session.add(user)
+        db_session.commit()
 
     # Verify that user is *not* able to login successfully
     with journalist_app.test_client() as app:
-        _login_user(app, new_username, password, otp_secret, success=False)
+        resp = app.post(
+            "/login",
+            data={
+                "username": username,
+                "password": password,
+                "token": TOTP(otp_secret).now(),
+            },
+            follow_redirects=True,
+        )
+        assert resp.status_code == 200
+        assert session.get_user() is None
 
 
 def test_user_with_whitespace_in_username_can_login(journalist_app):
     # Create a user with whitespace at the end of the username
-    with journalist_app.app_context():
+    with get_database_session(journalist_app.config["SQLALCHEMY_DATABASE_URI"]) as db_session:
         username_with_whitespace = "journalist "
-        user, password = utils.db_helper.init_journalist(is_admin=False)
+        password = PassphraseGenerator.get_default().generate_passphrase()
+        user = Journalist(
+            username=username_with_whitespace,
+            password=password,
+        )
+        db_session.add(user)
+        db_session.commit()
         otp_secret = user.otp_secret
-        user.username = username_with_whitespace
-        db.session.add(user)
-        db.session.commit()
 
     # Verify that user is able to login successfully
     with journalist_app.test_client() as app:
-        _login_user(app, username_with_whitespace, password, otp_secret)
+        login_journalist(app, username_with_whitespace, password, otp_secret)
 
 
 def test_reply_error_logging(journalist_app, test_journo, test_source):
@@ -111,7 +113,7 @@ def test_reply_error_logging(journalist_app, test_journo, test_source):
     exception_msg = "Potentially sensitive content!"
 
     with journalist_app.test_client() as app:
-        _login_user(
+        login_journalist(
             app,
             test_journo["username"],
             test_journo["password"],
@@ -144,7 +146,7 @@ def test_reply_error_flashed_message(config, journalist_app, test_journo, test_s
     exception_class = StaleDataError
 
     with journalist_app.test_client() as app:
-        _login_user(
+        login_journalist(
             app,
             test_journo["username"],
             test_journo["password"],
@@ -172,7 +174,7 @@ def test_reply_error_flashed_message(config, journalist_app, test_journo, test_s
 @pytest.mark.parametrize("locale", get_test_locales())
 def test_empty_replies_are_rejected(config, journalist_app, test_journo, test_source, locale):
     with journalist_app.test_client() as app:
-        _login_user(
+        login_journalist(
             app,
             test_journo["username"],
             test_journo["password"],
@@ -194,7 +196,7 @@ def test_empty_replies_are_rejected(config, journalist_app, test_journo, test_so
 @pytest.mark.parametrize("locale", get_test_locales())
 def test_nonempty_replies_are_accepted(config, journalist_app, test_journo, test_source, locale):
     with journalist_app.test_client() as app:
-        _login_user(
+        login_journalist(
             app,
             test_journo["username"],
             test_journo["password"],
@@ -219,7 +221,7 @@ def test_successful_reply_marked_as_seen_by_sender(
 ):
     with journalist_app.test_client() as app:
         journo = test_journo["journalist"]
-        _login_user(app, journo.username, test_journo["password"], test_journo["otp_secret"])
+        login_journalist(app, journo.username, test_journo["password"], test_journo["otp_secret"])
 
         seen_reply = SeenReply.query.filter_by(journalist_id=journo.id).one_or_none()
         assert not seen_reply
@@ -248,52 +250,46 @@ def test_unauthorized_access_redirects_to_login(journalist_app):
 @flaky(rerun_filter=utils.flaky_filter_xfail)
 @pytest.mark.parametrize("locale", get_test_locales())
 def test_login_throttle(config, journalist_app, test_journo, locale):
-    # Overwrite the default value used during testing
-    original_hardening = models.LOGIN_HARDENING
-    models.LOGIN_HARDENING = True
-    try:
-        with journalist_app.test_client() as app:
-            with InstrumentedApp(app) as ins:
-                for _ in range(Journalist._MAX_LOGIN_ATTEMPTS_PER_PERIOD):
-                    resp = app.post(
-                        url_for("main.login"),
-                        data=dict(
-                            username=test_journo["username"],
-                            password="invalid",
-                            token="invalid",
-                        ),
-                    )
-                    assert resp.status_code == 200
-                    text = resp.data.decode("utf-8")
-                    assert "Login failed" in text
-
+    with journalist_app.test_client() as app:
+        with InstrumentedApp(app) as ins:
+            for _ in range(Journalist._MAX_LOGIN_ATTEMPTS_PER_PERIOD):
                 resp = app.post(
-                    url_for("main.login", l=locale),
+                    url_for("main.login"),
                     data=dict(
                         username=test_journo["username"],
                         password="invalid",
                         token="invalid",
                     ),
                 )
-                assert page_language(resp.data) == language_tag(locale)
-                msgids = [
-                    "Login failed.",
-                    "Please wait at least {num} second before logging in again.",
-                ]
-                with xfail_untranslated_messages(config, locale, msgids):
-                    ins.assert_message_flashed(
-                        "{} {}".format(
-                            gettext(msgids[0]),
-                            ngettext(
-                                msgids[1],
-                                "Please wait at least {num} seconds before logging in again.",
-                                Journalist._LOGIN_ATTEMPT_PERIOD,
-                            ).format(num=Journalist._LOGIN_ATTEMPT_PERIOD),
-                        ),
-                        "error",
-                    )
-    finally:
-        models.LOGIN_HARDENING = original_hardening
+                assert resp.status_code == 200
+                text = resp.data.decode("utf-8")
+                assert "Login failed" in text
+
+            resp = app.post(
+                url_for("main.login", l=locale),
+                data=dict(
+                    username=test_journo["username"],
+                    password="invalid",
+                    token="invalid",
+                ),
+            )
+            assert page_language(resp.data) == language_tag(locale)
+            msgids = [
+                "Login failed.",
+                "Please wait at least {num} second before logging in again.",
+            ]
+            with xfail_untranslated_messages(config, locale, msgids):
+                ins.assert_message_flashed(
+                    "{} {}".format(
+                        gettext(msgids[0]),
+                        ngettext(
+                            msgids[1],
+                            "Please wait at least {num} seconds before logging in again.",
+                            Journalist._LOGIN_ATTEMPT_PERIOD,
+                        ).format(num=Journalist._LOGIN_ATTEMPT_PERIOD),
+                    ),
+                    "error",
+                )
 
 
 @flaky(rerun_filter=utils.flaky_filter_xfail)
@@ -301,28 +297,9 @@ def test_login_throttle(config, journalist_app, test_journo, locale):
 def test_login_throttle_is_not_global(config, journalist_app, test_journo, test_admin, locale):
     """The login throttling should be per-user, not global. Global login
     throttling can prevent all users logging into the application."""
-
-    original_hardening = models.LOGIN_HARDENING
-    # Overwrite the default value used during testing
-    # Note that this may break other tests if doing parallel testing
-    models.LOGIN_HARDENING = True
-    try:
-        with journalist_app.test_client() as app:
-            with InstrumentedApp(app) as ins:
-                for _ in range(Journalist._MAX_LOGIN_ATTEMPTS_PER_PERIOD):
-                    resp = app.post(
-                        url_for("main.login", l=locale),
-                        data=dict(
-                            username=test_journo["username"],
-                            password="invalid",
-                            token="invalid",
-                        ),
-                    )
-                    assert page_language(resp.data) == language_tag(locale)
-                    msgids = ["Login failed."]
-                    with xfail_untranslated_messages(config, locale, msgids):
-                        assert gettext(msgids[0]) in resp.data.decode("utf-8")
-
+    with journalist_app.test_client() as app:
+        with InstrumentedApp(app) as ins:
+            for _ in range(Journalist._MAX_LOGIN_ATTEMPTS_PER_PERIOD):
                 resp = app.post(
                     url_for("main.login", l=locale),
                     data=dict(
@@ -332,39 +309,50 @@ def test_login_throttle_is_not_global(config, journalist_app, test_journo, test_
                     ),
                 )
                 assert page_language(resp.data) == language_tag(locale)
-                msgids = [
-                    "Login failed.",
-                    "Please wait at least {num} second before logging in again.",
-                ]
+                msgids = ["Login failed."]
                 with xfail_untranslated_messages(config, locale, msgids):
-                    ins.assert_message_flashed(
-                        "{} {}".format(
-                            gettext(msgids[0]),
-                            ngettext(
-                                msgids[1],
-                                "Please wait at least {num} seconds before logging in again.",
-                                Journalist._LOGIN_ATTEMPT_PERIOD,
-                            ).format(num=Journalist._LOGIN_ATTEMPT_PERIOD),
-                        ),
-                        "error",
-                    )
+                    assert gettext(msgids[0]) in resp.data.decode("utf-8")
 
-            # A different user should be able to login
             resp = app.post(
                 url_for("main.login", l=locale),
                 data=dict(
-                    username=test_admin["username"],
-                    password=test_admin["password"],
-                    token=TOTP(test_admin["otp_secret"]).now(),
+                    username=test_journo["username"],
+                    password="invalid",
+                    token="invalid",
                 ),
-                follow_redirects=True,
             )
             assert page_language(resp.data) == language_tag(locale)
-            msgids = ["All Sources"]
+            msgids = [
+                "Login failed.",
+                "Please wait at least {num} second before logging in again.",
+            ]
             with xfail_untranslated_messages(config, locale, msgids):
-                assert gettext(msgids[0]) in resp.data.decode("utf-8")
-    finally:
-        models.LOGIN_HARDENING = original_hardening
+                ins.assert_message_flashed(
+                    "{} {}".format(
+                        gettext(msgids[0]),
+                        ngettext(
+                            msgids[1],
+                            "Please wait at least {num} seconds before logging in again.",
+                            Journalist._LOGIN_ATTEMPT_PERIOD,
+                        ).format(num=Journalist._LOGIN_ATTEMPT_PERIOD),
+                    ),
+                    "error",
+                )
+
+        # A different user should be able to login
+        resp = app.post(
+            url_for("main.login", l=locale),
+            data=dict(
+                username=test_admin["username"],
+                password=test_admin["password"],
+                token=TOTP(test_admin["otp_secret"]).now(),
+            ),
+            follow_redirects=True,
+        )
+        assert page_language(resp.data) == language_tag(locale)
+        msgids = ["All Sources"]
+        with xfail_untranslated_messages(config, locale, msgids):
+            assert gettext(msgids[0]) in resp.data.decode("utf-8")
 
 
 @flaky(rerun_filter=utils.flaky_filter_xfail)
@@ -505,10 +493,10 @@ def test_user_lacks_link_to_admin_index_page_in_index_page(journalist_app, test_
     assert '<a href="/admin/" id="link-admin-index">' not in text
 
 
-def test_admin_logout_redirects_to_index(journalist_app, test_admin):
+def test_admin_logout_redirects_to_index(config, journalist_app, test_admin):
     with journalist_app.test_client() as app:
         with InstrumentedApp(journalist_app) as ins:
-            _login_user(
+            login_journalist(
                 app,
                 test_admin["username"],
                 test_admin["password"],
@@ -518,10 +506,10 @@ def test_admin_logout_redirects_to_index(journalist_app, test_admin):
             ins.assert_redirects(resp, url_for("main.index"))
 
 
-def test_user_logout_redirects_to_index(journalist_app, test_journo):
+def test_user_logout_redirects_to_index(config, journalist_app, test_journo):
     with journalist_app.test_client() as app:
         with InstrumentedApp(journalist_app) as ins:
-            _login_user(
+            login_journalist(
                 app,
                 test_journo["username"],
                 test_journo["password"],
@@ -535,7 +523,7 @@ def test_user_logout_redirects_to_index(journalist_app, test_journo):
 @pytest.mark.parametrize("locale", get_test_locales())
 def test_admin_index(config, journalist_app, test_admin, locale):
     with journalist_app.test_client() as app:
-        _login_user(
+        login_journalist(
             app,
             test_admin["username"],
             test_admin["password"],
@@ -556,7 +544,7 @@ def test_admin_delete_user(config, journalist_app, test_admin, test_journo, loca
         assert Journalist.query.get(test_journo["id"]) is not None
 
     with journalist_app.test_client() as app:
-        _login_user(
+        login_journalist(
             app,
             test_admin["username"],
             test_admin["password"],
@@ -589,7 +577,7 @@ def test_admin_cannot_delete_self(config, journalist_app, test_admin, test_journ
         assert Journalist.query.get(test_journo["id"]) is not None
 
     with journalist_app.test_client() as app:
-        _login_user(
+        login_journalist(
             app,
             test_admin["username"],
             test_admin["password"],
@@ -639,7 +627,9 @@ def test_admin_cannot_edit_own_password_without_validation(
     mocked_error_logger = mocker.patch("journalist.app.logger.error")
 
     with journalist_app.test_client() as app:
-        _login_user(app, test_admin["username"], test_admin["password"], test_admin["otp_secret"])
+        login_journalist(
+            app, test_admin["username"], test_admin["password"], test_admin["otp_secret"]
+        )
 
         resp = app.post(
             url_for("admin.new_password", user_id=test_admin["id"], l=locale),
@@ -659,7 +649,7 @@ def test_admin_edits_user_password_success_response(
     config, journalist_app, test_admin, test_journo, locale
 ):
     with journalist_app.test_client() as app:
-        _login_user(
+        login_journalist(
             app,
             test_admin["username"],
             test_admin["password"],
@@ -689,7 +679,7 @@ def test_admin_edits_user_password_session_invalidate(
 ):
     # Start the journalist session.
     with journalist_app.test_client() as app:
-        _login_user(
+        login_journalist(
             app,
             test_journo["username"],
             test_journo["password"],
@@ -698,7 +688,7 @@ def test_admin_edits_user_password_session_invalidate(
 
         # Change the journalist password via an admin session.
         with journalist_app.test_client() as admin_app:
-            _login_user(
+            login_journalist(
                 admin_app,
                 test_admin["username"],
                 test_admin["password"],
@@ -726,7 +716,7 @@ def test_admin_deletes_invalid_user_404(journalist_app, test_admin):
         invalid_id = db.session.query(func.max(Journalist.id)).scalar() + 1
 
     with journalist_app.test_client() as app:
-        _login_user(
+        login_journalist(
             app,
             test_admin["username"],
             test_admin["password"],
@@ -743,7 +733,7 @@ def test_admin_deletes_deleted_user_403(journalist_app, test_admin):
         deleted_id = deleted.id
 
     with journalist_app.test_client() as app:
-        _login_user(
+        login_journalist(
             app,
             test_admin["username"],
             test_admin["password"],
@@ -759,7 +749,7 @@ def test_admin_edits_user_password_error_response(
     config, journalist_app, test_admin, test_journo, locale
 ):
     with journalist_app.test_client() as app:
-        _login_user(
+        login_journalist(
             app,
             test_admin["username"],
             test_admin["password"],
@@ -786,129 +776,94 @@ def test_admin_edits_user_password_error_response(
 @flaky(rerun_filter=utils.flaky_filter_xfail)
 @pytest.mark.parametrize("locale", get_test_locales())
 def test_user_edits_password_success_response(config, journalist_app, test_journo, locale):
-    original_hardening = models.LOGIN_HARDENING
-    try:
-        # Set this to false because we login then immediately reuse the same
-        # token when authenticating to change the password. This triggers login
-        # hardening measures.
-        models.LOGIN_HARDENING = False
+    with journalist_app.test_client() as app:
+        login_journalist(
+            app, test_journo["username"], test_journo["password"], test_journo["otp_secret"]
+        )
+        token = TOTP(test_journo["otp_secret"]).now()
+        resp = app.post(
+            url_for("account.new_password", l=locale),
+            data=dict(
+                current_password=test_journo["password"],
+                token=token,
+                password=VALID_PASSWORD_2,
+            ),
+            follow_redirects=True,
+        )
 
-        with journalist_app.test_client() as app:
-            _login_user(
-                app,
-                test_journo["username"],
-                test_journo["password"],
-                test_journo["otp_secret"],
-            )
+        msgids = [
+            "Password updated. Don't forget to save it in your KeePassX database. New password:"
+        ]
+        with xfail_untranslated_messages(config, locale, msgids):
+            resp_text = resp.data.decode("utf-8")
+            assert escape(gettext(msgids[0])) in resp_text
+            assert VALID_PASSWORD_2 in resp_text
+
+
+def test_user_edits_password_expires_session(journalist_app, test_journo):
+    with journalist_app.test_client() as app:
+        login_journalist(
+            app, test_journo["username"], test_journo["password"], test_journo["otp_secret"]
+        )
+        assert "uid" in session
+
+        with InstrumentedApp(journalist_app) as ins:
             token = TOTP(test_journo["otp_secret"]).now()
             resp = app.post(
-                url_for("account.new_password", l=locale),
+                url_for("account.new_password"),
                 data=dict(
                     current_password=test_journo["password"],
                     token=token,
                     password=VALID_PASSWORD_2,
                 ),
-                follow_redirects=True,
             )
 
-            msgids = [
-                "Password updated. Don't forget to save it in your KeePassX database. New password:"
-            ]
-            with xfail_untranslated_messages(config, locale, msgids):
-                resp_text = resp.data.decode("utf-8")
-                assert escape(gettext(msgids[0])) in resp_text
-                assert VALID_PASSWORD_2 in resp_text
-    finally:
-        models.LOGIN_HARDENING = original_hardening
+            ins.assert_redirects(resp, url_for("main.login"))
 
-
-def test_user_edits_password_expires_session(journalist_app, test_journo):
-    original_hardening = models.LOGIN_HARDENING
-    try:
-        # Set this to false because we login then immediately reuse the same
-        # token when authenticating to change the password. This triggers login
-        # hardening measures.
-        models.LOGIN_HARDENING = False
-        with journalist_app.test_client() as app:
-            _login_user(
-                app,
-                test_journo["username"],
-                test_journo["password"],
-                test_journo["otp_secret"],
-            )
-            assert "uid" in session
-
-            with InstrumentedApp(journalist_app) as ins:
-                token = TOTP(test_journo["otp_secret"]).now()
-                resp = app.post(
-                    url_for("account.new_password"),
-                    data=dict(
-                        current_password=test_journo["password"],
-                        token=token,
-                        password=VALID_PASSWORD_2,
-                    ),
-                )
-
-                ins.assert_redirects(resp, url_for("main.login"))
-
-            # verify the session was expired after the password was changed
-            assert session.uid is None and session.user is None
-    finally:
-        models.LOGIN_HARDENING = original_hardening
+        # verify the session was expired after the password was changed
+        assert session.uid is None and session.user is None
 
 
 @flaky(rerun_filter=utils.flaky_filter_xfail)
 @pytest.mark.parametrize("locale", get_test_locales())
 def test_user_edits_password_error_response(config, journalist_app, test_journo, locale):
-    original_hardening = models.LOGIN_HARDENING
-    try:
-        # Set this to false because we login then immediately reuse the same
-        # token when authenticating to change the password. This triggers login
-        # hardening measures.
-        models.LOGIN_HARDENING = False
+    with journalist_app.test_client() as app:
+        login_journalist(
+            app, test_journo["username"], test_journo["password"], test_journo["otp_secret"]
+        )
 
-        with journalist_app.test_client() as app:
-            _login_user(
-                app,
-                test_journo["username"],
-                test_journo["password"],
-                test_journo["otp_secret"],
-            )
+        # patch token verification because there are multiple commits
+        # to the database and this isolates the one we want to fail
+        with patch.object(Journalist, "verify_token", return_value=True):
+            with patch.object(db.session, "commit", side_effect=[None, None, Exception()]):
+                with InstrumentedApp(journalist_app) as ins:
+                    resp = app.post(
+                        url_for("account.new_password", l=locale),
+                        data=dict(
+                            current_password=test_journo["password"],
+                            token="mocked",
+                            password=VALID_PASSWORD_2,
+                        ),
+                        follow_redirects=True,
+                    )
 
-            # patch token verification because there are multiple commits
-            # to the database and this isolates the one we want to fail
-            with patch.object(Journalist, "verify_token", return_value=True):
-                with patch.object(db.session, "commit", side_effect=[None, Exception()]):
-                    with InstrumentedApp(journalist_app) as ins:
-                        resp = app.post(
-                            url_for("account.new_password", l=locale),
-                            data=dict(
-                                current_password=test_journo["password"],
-                                token="mocked",
-                                password=VALID_PASSWORD_2,
-                            ),
-                            follow_redirects=True,
+                    assert page_language(resp.data) == language_tag(locale)
+                    msgids = [
+                        (
+                            "There was an error, and the new password might not have been "
+                            "saved correctly. To prevent you from getting locked "
+                            "out of your account, you should reset your password again."
                         )
-
-                        assert page_language(resp.data) == language_tag(locale)
-                        msgids = [
-                            (
-                                "There was an error, and the new password might not have been "
-                                "saved correctly. To prevent you from getting locked "
-                                "out of your account, you should reset your password again."
-                            )
-                        ]
-                        with xfail_untranslated_messages(config, locale, msgids):
-                            ins.assert_message_flashed(gettext(msgids[0]), "error")
-    finally:
-        models.LOGIN_HARDENING = original_hardening
+                    ]
+                    with xfail_untranslated_messages(config, locale, msgids):
+                        ins.assert_message_flashed(gettext(msgids[0]), "error")
 
 
 @flaky(rerun_filter=utils.flaky_filter_xfail)
 @pytest.mark.parametrize("locale", get_test_locales())
 def test_admin_add_user_when_username_already_taken(config, journalist_app, test_admin, locale):
     with journalist_app.test_client() as client:
-        _login_user(
+        login_journalist(
             client,
             test_admin["username"],
             test_admin["password"],
@@ -982,7 +937,7 @@ def test_admin_edits_user_password_too_long_warning(journalist_app, test_admin, 
     )
 
     with journalist_app.test_client() as app:
-        _login_user(
+        login_journalist(
             app,
             test_admin["username"],
             test_admin["password"],
@@ -1007,13 +962,13 @@ def test_admin_edits_user_password_too_long_warning(journalist_app, test_admin, 
             )
 
 
-def test_user_edits_password_too_long_warning(journalist_app, test_journo):
+def test_user_edits_password_too_long_warning(config, journalist_app, test_journo):
     overly_long_password = VALID_PASSWORD + "a" * (
         Journalist.MAX_PASSWORD_LEN - len(VALID_PASSWORD) + 1
     )
 
     with journalist_app.test_client() as app:
-        _login_user(
+        login_journalist(
             app,
             test_journo["username"],
             test_journo["password"],
@@ -1048,7 +1003,7 @@ def test_admin_add_user_password_too_long_warning(config, journalist_app, test_a
         Journalist.MAX_PASSWORD_LEN - len(VALID_PASSWORD) + 1
     )
     with journalist_app.test_client() as app:
-        _login_user(
+        login_journalist(
             app,
             test_admin["username"],
             test_admin["password"],
@@ -1082,7 +1037,7 @@ def test_admin_add_user_password_too_long_warning(config, journalist_app, test_a
 def test_admin_add_user_first_name_too_long_warning(config, journalist_app, test_admin, locale):
     with journalist_app.test_client() as app:
         overly_long_name = "a" * (Journalist.MAX_NAME_LEN + 1)
-        _login_user(
+        login_journalist(
             app,
             test_admin["username"],
             test_admin["password"],
@@ -1115,7 +1070,7 @@ def test_admin_add_user_first_name_too_long_warning(config, journalist_app, test
 def test_admin_add_user_last_name_too_long_warning(config, journalist_app, test_admin, locale):
     with journalist_app.test_client() as app:
         overly_long_name = "a" * (Journalist.MAX_NAME_LEN + 1)
-        _login_user(
+        login_journalist(
             app,
             test_admin["username"],
             test_admin["password"],
@@ -1152,7 +1107,7 @@ def test_admin_edits_user_invalid_username_deleted(
     username to deleted"""
     new_username = "deleted"
     with journalist_app.test_client() as app:
-        _login_user(
+        login_journalist(
             app,
             test_admin["username"],
             test_admin["password"],
@@ -1180,7 +1135,7 @@ def test_admin_edits_user_invalid_username_deleted(
 def test_admin_resets_user_hotp_format_non_hexa(journalist_app, test_admin, test_journo):
 
     with journalist_app.test_client() as app:
-        _login_user(
+        login_journalist(
             app,
             test_admin["username"],
             test_admin["password"],
@@ -1221,7 +1176,7 @@ def test_admin_resets_user_hotp_format_too_short(
 ):
 
     with journalist_app.test_client() as app:
-        _login_user(
+        login_journalist(
             app,
             test_admin["username"],
             test_admin["password"],
@@ -1258,7 +1213,7 @@ def test_admin_resets_user_hotp_format_too_short(
 
 def test_admin_resets_user_hotp(journalist_app, test_admin, test_journo):
     with journalist_app.test_client() as app:
-        _login_user(
+        login_journalist(
             app,
             test_admin["username"],
             test_admin["password"],
@@ -1294,7 +1249,7 @@ def test_admin_resets_user_hotp_error(mocker, journalist_app, test_admin, test_j
     old_secret = test_journo["otp_secret"]
 
     with journalist_app.test_client() as app:
-        _login_user(
+        login_journalist(
             app,
             test_admin["username"],
             test_admin["password"],
@@ -1336,7 +1291,7 @@ def test_user_resets_hotp(journalist_app, test_journo):
     assert new_secret != old_secret
 
     with journalist_app.test_client() as app:
-        _login_user(
+        login_journalist(
             app,
             test_journo["username"],
             test_journo["password"],
@@ -1363,7 +1318,7 @@ def test_user_resets_user_hotp_format_non_hexa(journalist_app, test_journo):
 
     non_hexa_secret = "0123456789ABCDZZ0123456789ABCDEF01234567"
     with journalist_app.test_client() as app:
-        _login_user(
+        login_journalist(
             app,
             test_journo["username"],
             test_journo["password"],
@@ -1394,7 +1349,7 @@ def test_user_resets_user_hotp_error(mocker, journalist_app, test_journo):
     mocked_error_logger = mocker.patch("journalist.app.logger.error")
 
     with journalist_app.test_client() as app:
-        _login_user(
+        login_journalist(
             app,
             test_journo["username"],
             test_journo["password"],
@@ -1431,7 +1386,7 @@ def test_admin_resets_user_totp(journalist_app, test_admin, test_journo):
     old_secret = test_journo["otp_secret"]
 
     with journalist_app.test_client() as app:
-        _login_user(
+        login_journalist(
             app,
             test_admin["username"],
             test_admin["password"],
@@ -1455,7 +1410,7 @@ def test_user_resets_totp(journalist_app, test_journo):
     old_secret = test_journo["otp_secret"]
 
     with journalist_app.test_client() as app:
-        _login_user(
+        login_journalist(
             app,
             test_journo["username"],
             test_journo["password"],
@@ -1478,7 +1433,7 @@ def test_user_resets_totp(journalist_app, test_journo):
 @pytest.mark.parametrize("locale", get_test_locales())
 def test_admin_resets_hotp_with_missing_otp_secret_key(config, journalist_app, test_admin, locale):
     with journalist_app.test_client() as app:
-        _login_user(
+        login_journalist(
             app,
             test_admin["username"],
             test_admin["password"],
@@ -1497,7 +1452,7 @@ def test_admin_resets_hotp_with_missing_otp_secret_key(config, journalist_app, t
 
 def test_admin_new_user_2fa_redirect(journalist_app, test_admin, test_journo):
     with journalist_app.test_client() as app:
-        _login_user(
+        login_journalist(
             app,
             test_admin["username"],
             test_admin["password"],
@@ -1517,7 +1472,7 @@ def test_http_get_on_admin_new_user_two_factor_page(
     config, journalist_app, test_admin, test_journo, locale
 ):
     with journalist_app.test_client() as app:
-        _login_user(
+        login_journalist(
             app,
             test_admin["username"],
             test_admin["password"],
@@ -1537,7 +1492,7 @@ def test_http_get_on_admin_new_user_two_factor_page(
 @pytest.mark.parametrize("locale", get_test_locales())
 def test_http_get_on_admin_add_user_page(config, journalist_app, test_admin, locale):
     with journalist_app.test_client() as app:
-        _login_user(
+        login_journalist(
             app,
             test_admin["username"],
             test_admin["password"],
@@ -1554,7 +1509,7 @@ def test_admin_add_user(journalist_app, test_admin):
     username = "dellsberg"
 
     with journalist_app.test_client() as app:
-        _login_user(
+        login_journalist(
             app,
             test_admin["username"],
             test_admin["password"],
@@ -1584,7 +1539,7 @@ def test_admin_add_user_with_invalid_username(config, journalist_app, test_admin
     username = "deleted"
 
     with journalist_app.test_client() as app:
-        _login_user(
+        login_journalist(
             app,
             test_admin["username"],
             test_admin["password"],
@@ -1664,7 +1619,7 @@ def test_deleted_user_cannot_login_exception(journalist_app, locale):
 @pytest.mark.parametrize("locale", get_test_locales())
 def test_admin_add_user_without_username(config, journalist_app, test_admin, locale):
     with journalist_app.test_client() as app:
-        _login_user(
+        login_journalist(
             app,
             test_admin["username"],
             test_admin["password"],
@@ -1695,7 +1650,7 @@ def test_admin_add_user_too_short_username(config, journalist_app, test_admin, l
     username = "a" * (Journalist.MIN_USERNAME_LEN - 1)
 
     with journalist_app.test_client() as app:
-        _login_user(
+        login_journalist(
             app,
             test_admin["username"],
             test_admin["password"],
@@ -1736,7 +1691,7 @@ def test_admin_add_user_too_short_username(config, journalist_app, test_admin, l
 )
 def test_admin_add_user_yubikey_odd_length(config, journalist_app, test_admin, locale, secret):
     with journalist_app.test_client() as app:
-        _login_user(
+        login_journalist(
             app,
             test_admin["username"],
             test_admin["password"],
@@ -1774,7 +1729,7 @@ def test_admin_add_user_yubikey_odd_length(config, journalist_app, test_admin, l
 )
 def test_admin_add_user_yubikey_blank_secret(config, journalist_app, test_admin, locale, secret):
     with journalist_app.test_client() as app:
-        _login_user(
+        login_journalist(
             app,
             test_admin["username"],
             test_admin["password"],
@@ -1808,7 +1763,7 @@ def test_admin_add_user_yubikey_valid_length(config, journalist_app, test_admin,
     otp = "1234567890123456789012345678901234567890"
 
     with journalist_app.test_client() as app:
-        _login_user(
+        login_journalist(
             app,
             test_admin["username"],
             test_admin["password"],
@@ -1844,7 +1799,7 @@ def test_admin_add_user_yubikey_correct_length_with_whitespace(
     otp = "12 34 56 78 90 12 34 56 78 90 12 34 56 78 90 12 34 56 78 90"
 
     with journalist_app.test_client() as app:
-        _login_user(
+        login_journalist(
             app,
             test_admin["username"],
             test_admin["password"],
@@ -1876,7 +1831,7 @@ def test_admin_sets_user_to_admin(journalist_app, test_admin):
     new_user = "admin-set-user-to-admin-test"
 
     with journalist_app.test_client() as app:
-        _login_user(
+        login_journalist(
             app,
             test_admin["username"],
             test_admin["password"],
@@ -1914,7 +1869,7 @@ def test_admin_renames_user(journalist_app, test_admin):
     new_user = "admin-renames-user-test"
 
     with journalist_app.test_client() as app:
-        _login_user(
+        login_journalist(
             app,
             test_admin["username"],
             test_admin["password"],
@@ -1951,7 +1906,7 @@ def test_admin_adds_first_name_last_name_to_user(journalist_app, test_admin):
     new_user = "admin-first-name-last-name-user-test"
 
     with journalist_app.test_client() as app:
-        _login_user(
+        login_journalist(
             app,
             test_admin["username"],
             test_admin["password"],
@@ -1989,7 +1944,7 @@ def test_admin_adds_invalid_first_last_name_to_user(config, journalist_app, test
     with journalist_app.test_client() as client:
         new_user = "admin-invalid-first-name-last-name-user-test"
 
-        _login_user(
+        login_journalist(
             client,
             test_admin["username"],
             test_admin["password"],
@@ -2042,7 +1997,7 @@ def test_admin_add_user_integrity_error(config, journalist_app, test_admin, mock
     )
 
     with journalist_app.test_client() as app:
-        _login_user(
+        login_journalist(
             app,
             test_admin["username"],
             test_admin["password"],
@@ -2079,7 +2034,7 @@ def test_admin_add_user_integrity_error(config, journalist_app, test_admin, mock
 @pytest.mark.parametrize("locale", get_test_locales())
 def test_prevent_document_uploads(config, journalist_app, test_admin, locale):
     with journalist_app.test_client() as app:
-        _login_user(
+        login_journalist(
             app,
             test_admin["username"],
             test_admin["password"],
@@ -2110,7 +2065,7 @@ def test_prevent_document_uploads(config, journalist_app, test_admin, locale):
 @pytest.mark.parametrize("locale", get_test_locales())
 def test_no_prevent_document_uploads(config, journalist_app, test_admin, locale):
     with journalist_app.test_client() as app:
-        _login_user(
+        login_journalist(
             app,
             test_admin["username"],
             test_admin["password"],
@@ -2138,7 +2093,7 @@ def test_no_prevent_document_uploads(config, journalist_app, test_admin, locale)
 
 def test_prevent_document_uploads_invalid(journalist_app, test_admin):
     with journalist_app.test_client() as app:
-        _login_user(
+        login_journalist(
             app,
             test_admin["username"],
             test_admin["password"],
@@ -2167,9 +2122,9 @@ def test_prevent_document_uploads_invalid(journalist_app, test_admin):
             assert InstanceConfig.get_current().allow_document_uploads is False
 
 
-def test_message_filtering(config, journalist_app, test_admin):
+def test_message_filtering(journalist_app, test_admin):
     with journalist_app.test_client() as app:
-        _login_user(
+        login_journalist(
             app,
             test_admin["username"],
             test_admin["password"],
@@ -2241,7 +2196,7 @@ def test_orgname_default_set(journalist_app, test_admin):
     with patch.object(InstanceConfig, "get_current") as iMock:
         with journalist_app.test_client() as app:
             iMock.return_value = dummy_current()
-            _login_user(
+            login_journalist(
                 app,
                 test_admin["username"],
                 test_admin["password"],
@@ -2255,7 +2210,7 @@ def test_orgname_default_set(journalist_app, test_admin):
 def test_orgname_valid_succeeds(config, journalist_app, test_admin, locale):
     test_name = "Walden Inquirer"
     with journalist_app.test_client() as app:
-        _login_user(
+        login_journalist(
             app,
             test_admin["username"],
             test_admin["password"],
@@ -2280,7 +2235,7 @@ def test_orgname_valid_succeeds(config, journalist_app, test_admin, locale):
 @pytest.mark.parametrize("locale", get_test_locales())
 def test_orgname_null_fails(config, journalist_app, test_admin, locale):
     with journalist_app.test_client() as app:
-        _login_user(
+        login_journalist(
             app,
             test_admin["username"],
             test_admin["password"],
@@ -2306,7 +2261,7 @@ def test_orgname_null_fails(config, journalist_app, test_admin, locale):
 def test_orgname_oversized_fails(config, journalist_app, test_admin, locale):
     test_name = "1234567812345678123456781234567812345678123456781234567812345678a"
     with journalist_app.test_client() as app:
-        _login_user(
+        login_journalist(
             app,
             test_admin["username"],
             test_admin["password"],
@@ -2358,7 +2313,7 @@ def test_logo_upload_with_valid_image_succeeds(config, journalist_app, test_admi
         )
 
         with journalist_app.test_client() as app:
-            _login_user(
+            login_journalist(
                 app,
                 test_admin["username"],
                 test_admin["password"],
@@ -2395,7 +2350,7 @@ def test_logo_upload_with_valid_image_succeeds(config, journalist_app, test_admi
 @pytest.mark.parametrize("locale", get_test_locales())
 def test_logo_upload_with_invalid_filetype_fails(config, journalist_app, test_admin, locale):
     with journalist_app.test_client() as app:
-        _login_user(
+        login_journalist(
             app,
             test_admin["username"],
             test_admin["password"],
@@ -2426,7 +2381,7 @@ def test_logo_upload_save_fails(config, journalist_app, test_admin, locale):
 
     try:
         with journalist_app.test_client() as app:
-            _login_user(
+            login_journalist(
                 app,
                 test_admin["username"],
                 test_admin["password"],
@@ -2466,7 +2421,7 @@ def test_logo_upload_save_fails(config, journalist_app, test_admin, locale):
 def test_creation_of_ossec_test_log_event(journalist_app, test_admin, mocker):
     mocked_error_logger = mocker.patch("journalist.app.logger.error")
     with journalist_app.test_client() as app:
-        _login_user(
+        login_journalist(
             app,
             test_admin["username"],
             test_admin["password"],
@@ -2481,7 +2436,7 @@ def test_creation_of_ossec_test_log_event(journalist_app, test_admin, mocker):
 @pytest.mark.parametrize("locale", get_test_locales())
 def test_logo_upload_with_empty_input_field_fails(config, journalist_app, test_admin, locale):
     with journalist_app.test_client() as app:
-        _login_user(
+        login_journalist(
             app,
             test_admin["username"],
             test_admin["password"],
@@ -2511,7 +2466,7 @@ def test_admin_page_restriction_http_gets(journalist_app, test_journo):
     ]
 
     with journalist_app.test_client() as app:
-        _login_user(
+        login_journalist(
             app,
             test_journo["username"],
             test_journo["password"],
@@ -2534,7 +2489,7 @@ def test_admin_page_restriction_http_posts(journalist_app, test_journo):
         url_for("admin.delete_user", user_id=test_journo["id"]),
     ]
     with journalist_app.test_client() as app:
-        _login_user(
+        login_journalist(
             app,
             test_journo["username"],
             test_journo["password"],
@@ -2582,7 +2537,7 @@ def test_user_authorization_for_posts(journalist_app):
 @pytest.mark.parametrize("locale", get_test_locales())
 def test_incorrect_current_password_change(config, journalist_app, test_journo, locale):
     with journalist_app.test_client() as app:
-        _login_user(
+        login_journalist(
             app,
             test_journo["username"],
             test_journo["password"],
@@ -2697,7 +2652,7 @@ def test_too_long_user_password_change(config, journalist_app, test_journo, loca
     )
 
     with journalist_app.test_client() as app:
-        _login_user(
+        login_journalist(
             app,
             test_journo["username"],
             test_journo["password"],
@@ -2725,7 +2680,7 @@ def test_too_long_user_password_change(config, journalist_app, test_journo, loca
 @pytest.mark.parametrize("locale", get_test_locales())
 def test_valid_user_password_change(config, journalist_app, test_journo, locale):
     with journalist_app.test_client() as app:
-        _login_user(
+        login_journalist(
             app,
             test_journo["username"],
             test_journo["password"],
@@ -2754,7 +2709,7 @@ def test_valid_user_password_change(config, journalist_app, test_journo, locale)
 @pytest.mark.parametrize("locale", get_test_locales())
 def test_valid_user_first_last_name_change(config, journalist_app, test_journo, locale):
     with journalist_app.test_client() as app:
-        _login_user(
+        login_journalist(
             app,
             test_journo["username"],
             test_journo["password"],
@@ -2781,7 +2736,7 @@ def test_valid_user_first_last_name_change(config, journalist_app, test_journo, 
 def test_valid_user_invalid_first_last_name_change(config, journalist_app, test_journo, locale):
     with journalist_app.test_client() as app:
         overly_long_name = "a" * (Journalist.MAX_NAME_LEN + 1)
-        _login_user(
+        login_journalist(
             app,
             test_journo["username"],
             test_journo["password"],
@@ -2806,7 +2761,7 @@ def test_regenerate_totp(journalist_app, test_journo):
     old_secret = test_journo["otp_secret"]
 
     with journalist_app.test_client() as app:
-        _login_user(
+        login_journalist(
             app,
             test_journo["username"],
             test_journo["password"],
@@ -2830,7 +2785,7 @@ def test_edit_hotp(journalist_app, test_journo):
     valid_secret = "DEADBEEF01234567DEADBEEF01234567DADEFEEB"
 
     with journalist_app.test_client() as app:
-        _login_user(
+        login_journalist(
             app,
             test_journo["username"],
             test_journo["password"],
@@ -3116,7 +3071,7 @@ def test_render_locales(
         url_end = url_end[url_end.index("/") + 1 :]
 
         with app.test_client() as app:
-            _login_user(app, journo_user.username, journo_pw, journo_user.otp_secret)
+            login_journalist(app, journo_user.username, journo_pw, journo_user.otp_secret)
             resp = app.get(url + "?l=fr_FR")
 
         # check that links to i18n URLs are/aren't present
@@ -3138,7 +3093,7 @@ def test_download_selected_submissions_and_replies(
     selected.sort()
 
     with journalist_app.test_client() as app:
-        _login_user(app, journo.username, test_journo["password"], test_journo["otp_secret"])
+        login_journalist(app, journo.username, test_journo["password"], test_journo["otp_secret"])
         resp = app.post(
             "/bulk",
             data=dict(
@@ -3212,7 +3167,7 @@ def test_download_selected_submissions_and_replies_previously_seen(
     db.session.commit()
 
     with journalist_app.test_client() as app:
-        _login_user(app, journo.username, test_journo["password"], test_journo["otp_secret"])
+        login_journalist(app, journo.username, test_journo["password"], test_journo["otp_secret"])
         resp = app.post(
             "/bulk",
             data=dict(
@@ -3283,7 +3238,7 @@ def test_download_selected_submissions_previously_downloaded(
         db.session.commit()
 
     with journalist_app.test_client() as app:
-        _login_user(app, journo.username, test_journo["password"], test_journo["otp_secret"])
+        login_journalist(app, journo.username, test_journo["password"], test_journo["otp_secret"])
         resp = app.post(
             "/bulk",
             data=dict(
@@ -3354,7 +3309,7 @@ def test_download_selected_submissions_missing_files(
     journo = Journalist.query.get(test_journo["id"])
 
     with journalist_app.test_client() as app:
-        _login_user(app, journo.username, test_journo["password"], test_journo["otp_secret"])
+        login_journalist(app, journo.username, test_journo["password"], test_journo["otp_secret"])
         resp = app.post(
             url_for("main.bulk"),
             data=dict(
@@ -3393,7 +3348,7 @@ def test_download_single_submission_missing_file(
     missing_file = selected_missing_files[0]
 
     with journalist_app.test_client() as app:
-        _login_user(app, journo.username, test_journo["password"], test_journo["otp_secret"])
+        login_journalist(app, journo.username, test_journo["password"], test_journo["otp_secret"])
         resp = app.get(
             url_for(
                 "col.download_single_file",
@@ -3424,7 +3379,7 @@ def test_download_unread_all_sources(journalist_app, test_journo, app_storage):
     bulk = utils.db_helper.bulk_setup_for_seen_only(journo, app_storage)
 
     with journalist_app.test_client() as app:
-        _login_user(app, journo.username, test_journo["password"], test_journo["otp_secret"])
+        login_journalist(app, journo.username, test_journo["password"], test_journo["otp_secret"])
 
         # Select all sources supplied from bulk_download_setup
         selected = []
@@ -3500,7 +3455,7 @@ def test_download_all_selected_sources(journalist_app, test_journo, app_storage)
     bulk = utils.db_helper.bulk_setup_for_seen_only(journo, app_storage)
 
     with journalist_app.test_client() as app:
-        _login_user(app, journo.username, test_journo["password"], test_journo["otp_secret"])
+        login_journalist(app, journo.username, test_journo["password"], test_journo["otp_secret"])
 
         # Select all sources supplied from bulk_download_setup
         selected = []
@@ -3567,7 +3522,7 @@ def test_download_all_selected_sources(journalist_app, test_journo, app_storage)
 
 def test_single_source_is_successfully_starred(journalist_app, test_journo, test_source):
     with journalist_app.test_client() as app:
-        _login_user(
+        login_journalist(
             app,
             test_journo["username"],
             test_journo["password"],
@@ -3584,7 +3539,7 @@ def test_single_source_is_successfully_starred(journalist_app, test_journo, test
 
 def test_single_source_is_successfully_unstarred(journalist_app, test_journo, test_source):
     with journalist_app.test_client() as app:
-        _login_user(
+        login_journalist(
             app,
             test_journo["username"],
             test_journo["password"],
@@ -3605,7 +3560,7 @@ def test_single_source_is_successfully_unstarred(journalist_app, test_journo, te
 
 @flaky(rerun_filter=utils.flaky_filter_xfail)
 @pytest.mark.parametrize("locale", get_test_locales())
-def test_journalist_session_expiration(config, journalist_app, test_journo, locale):
+def test_journalist_session_expiration(journalist_app, test_journo, locale):
     # set the expiration to be very short
     journalist_app.session_interface.lifetime = 1
     with journalist_app.test_client() as app:
@@ -3664,7 +3619,7 @@ def test_csrf_error_page(config, journalist_app, locale):
 def test_col_process_aborts_with_bad_action(journalist_app, test_journo):
     """If the action is not a valid choice, a 500 should occur"""
     with journalist_app.test_client() as app:
-        _login_user(
+        login_journalist(
             app,
             test_journo["username"],
             test_journo["password"],
@@ -3692,7 +3647,7 @@ def test_col_process_successfully_deletes_multiple_sources(
     utils.db_helper.submit(app_storage, source_3, 1)
 
     with journalist_app.test_client() as app:
-        _login_user(
+        login_journalist(
             app,
             test_journo["username"],
             test_journo["password"],
@@ -3723,7 +3678,7 @@ def test_col_process_successfully_stars_sources(
     utils.db_helper.submit(app_storage, test_source["source"], 1)
 
     with journalist_app.test_client() as app:
-        _login_user(
+        login_journalist(
             app,
             test_journo["username"],
             test_journo["password"],
@@ -3745,7 +3700,7 @@ def test_col_process_successfully_unstars_sources(
     utils.db_helper.submit(app_storage, test_source["source"], 1)
 
     with journalist_app.test_client() as app:
-        _login_user(
+        login_journalist(
             app,
             test_journo["username"],
             test_journo["password"],
@@ -3778,7 +3733,7 @@ def test_source_with_null_last_updated(journalist_app, test_journo, test_files):
     db.session.commit()
 
     with journalist_app.test_client() as app:
-        _login_user(
+        login_journalist(
             app,
             test_journo["username"],
             test_journo["password"],

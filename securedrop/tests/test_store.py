@@ -1,9 +1,9 @@
-# -*- coding: utf-8 -*-
 import io
 import logging
 import os
 import re
 import stat
+import time
 import zipfile
 from pathlib import Path
 from tempfile import TemporaryDirectory
@@ -15,10 +15,10 @@ from db import db
 from journalist_app import create_app
 from models import Reply, Submission
 from passphrases import PassphraseGenerator
+from rq.job import Job
 from source_user import create_source_user
 from store import Storage, async_add_checksum_for_file, queued_add_checksum_for_file
-
-from . import utils
+from tests import utils
 
 
 @pytest.fixture(scope="function")
@@ -261,6 +261,29 @@ def test_add_checksum_for_file(config, app_storage, db_model):
         assert db_obj.checksum == "sha256:" + expected_hash
 
 
+def _wait_for_redis_worker(job: Job, timeout: int = 60) -> None:
+    """Raise an error if the Redis job doesn't complete successfully
+    before a timeout.
+
+    :param rq.job.Job job: A Redis job to wait for.
+
+    :param int timeout: Seconds to wait for the job to finish.
+
+    :raises: An :exc:`AssertionError`.
+    """
+    # This is an arbitrarily defined value in the SD codebase and not something from rqworker
+    redis_success_return_value = "success"
+
+    start_time = time.time()
+    while time.time() - start_time < timeout:
+        if job.result == redis_success_return_value:
+            return
+        elif job.result not in (None, redis_success_return_value):
+            assert False, "Redis worker failed!"
+        time.sleep(0.1)
+    assert False, "Redis worker timed out!"
+
+
 @pytest.mark.parametrize("db_model", [Submission, Reply])
 def test_async_add_checksum_for_file(config, app_storage, db_model):
     """
@@ -299,7 +322,7 @@ def test_async_add_checksum_for_file(config, app_storage, db_model):
 
         job = async_add_checksum_for_file(db_obj, app_storage)
 
-    utils.asynchronous.wait_for_redis_worker(job, timeout=5)
+    _wait_for_redis_worker(job, timeout=5)
 
     with app.app_context():
         # requery to get a new object
