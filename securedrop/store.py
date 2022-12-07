@@ -12,6 +12,7 @@ from pathlib import Path
 import rm
 from encryption import EncryptionManager
 from flask import current_app
+from rq.job import Job
 from sdconfig import SecureDropConfig
 from secure_tempfile import SecureTemporaryFile
 from sqlalchemy import create_engine
@@ -380,7 +381,7 @@ class Storage:
         return filename
 
 
-def async_add_checksum_for_file(db_obj: "Union[Submission, Reply]", storage: Storage) -> str:
+def async_add_checksum_for_file(db_obj: "Union[Submission, Reply]", storage: Storage) -> Job:
     config = SecureDropConfig.get_current()
     return create_queue(config.RQ_WORKER_NAME).enqueue(
         queued_add_checksum_for_file,

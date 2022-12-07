@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import base64
 import binascii
 import datetime
@@ -30,10 +29,6 @@ from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
 from store import Storage
 
 _default_instance_config: Optional["InstanceConfig"] = None
-
-LOGIN_HARDENING = True
-if os.environ.get("SECUREDROP_ENV") == "test":
-    LOGIN_HARDENING = False
 
 ARGON2_PARAMS = {"memory_cost": 2**16, "time_cost": 4, "parallelism": 2, "type": argon2.Type.ID}
 
@@ -714,15 +709,15 @@ class Journalist(db.Model):
         # From here to the return the order of statements is very important
         token = user._format_token(token)
 
-        if LOGIN_HARDENING:
-            cls.throttle_login(user)
+        # Login hardening measures
+        cls.throttle_login(user)
+        # Prevent TOTP token reuse
+        if user.last_token is not None:
+            # For type checking
+            assert isinstance(token, str)
+            if pyotp.utils.compare_digest(token, user.last_token):
+                raise BadTokenException("previously used two-factor code " "{}".format(token))
 
-            # Prevent TOTP token reuse
-            if user.last_token is not None:
-                # For type checking
-                assert isinstance(token, str)
-                if pyotp.utils.compare_digest(token, user.last_token):
-                    raise BadTokenException("previously used two-factor code " "{}".format(token))
         if not user.verify_token(token):
             raise BadTokenException("invalid two-factor code")
 

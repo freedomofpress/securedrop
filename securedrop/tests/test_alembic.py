@@ -40,11 +40,11 @@ def list_migrations(cfg_path, head):
 
 
 def upgrade(alembic_config, migration):
-    subprocess.check_call(["alembic", "upgrade", migration], cwd=path.dirname(alembic_config))
+    subprocess.check_call(["alembic", "upgrade", migration], cwd=alembic_config.parent)
 
 
 def downgrade(alembic_config, migration):
-    subprocess.check_call(["alembic", "downgrade", migration], cwd=path.dirname(alembic_config))
+    subprocess.check_call(["alembic", "downgrade", migration], cwd=alembic_config.parent)
 
 
 def get_schema(app):

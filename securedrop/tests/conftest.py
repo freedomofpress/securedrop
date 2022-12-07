@@ -12,7 +12,6 @@ from unittest import mock
 from unittest.mock import PropertyMock
 from uuid import uuid4
 
-import models
 import pretty_bad_protocol as gnupg
 import psutil
 import pytest
@@ -59,18 +58,6 @@ def pytest_collection_modifyitems(config, items):
     for item in items:
         if "pagelayout" in item.keywords:
             item.add_marker(skip_page_layout)
-
-
-@pytest.fixture
-def hardening(request):
-    hardening = models.LOGIN_HARDENING
-
-    def finalizer():
-        models.LOGIN_HARDENING = hardening
-
-    request.addfinalizer(finalizer)
-    models.LOGIN_HARDENING = True
-    return None
 
 
 def insecure_scrypt() -> Generator[None, None, None]:
@@ -144,7 +131,7 @@ def config(
 
 
 @pytest.fixture(scope="function")
-def alembic_config(config: SecureDropConfig) -> str:
+def alembic_config(config: SecureDropConfig) -> Generator[Path, None, None]:
     base_dir = path.join(path.dirname(__file__), "..")
     migrations_dir = path.join(base_dir, "alembic")
     ini = configparser.ConfigParser()
@@ -157,7 +144,19 @@ def alembic_config(config: SecureDropConfig) -> str:
     with open(alembic_path, "w") as f:
         ini.write(f)
 
-    return str(alembic_path)
+    # The alembic tests require the SECUREDROP_ENV env variable to be set to "test"
+    # because alembic migrations are run in a separate process that reads
+    # the config.py separately; hence the config fixture doesn't get applied
+    # and without this, the alembic process will use the "prod" value of
+    # SECUREDROP_DATA_ROOT that is defined in the config.py.example
+    previous_env_value = os.getenv("SECUREDROP_ENV", default="")
+    os.environ["SECUREDROP_ENV"] = "test"
+
+    try:
+        yield alembic_path
+
+    finally:
+        os.environ["SECUREDROP_ENV"] = previous_env_value
 
 
 @pytest.fixture(scope="function")
