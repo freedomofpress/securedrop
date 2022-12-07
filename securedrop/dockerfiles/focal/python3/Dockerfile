@@ -28,14 +28,14 @@ ENV TOR_RELEASE_KEY_FINGERPRINT "EF6E286DDA85EA2A4BA7DE684E2C6E8793298290"
 RUN curl -s https://openpgpkey.torproject.org/.well-known/openpgpkey/torproject.org/hu/kounek7zrdx745qydx6p59t9mqjpuhdf | gpg2 --import -
 
 # Fetch latest TBB version (obtained from https://github.com/micahflee/torbrowser-launcher/blob/develop/torbrowser_launcher/common.py#L198) and install Tor Browser
-RUN TBB_VERSION=$(curl -s https://aus1.torproject.org/torbrowser/update_3/release/Linux_x86_64-gcc3/x/en-US | grep -oP '(?<=appVersion=")[^"]*' | head -1) && \
-    wget https://www.torproject.org/dist/torbrowser/${TBB_VERSION}/tor-browser-linux64-${TBB_VERSION}_en-US.tar.xz && \
-    wget https://www.torproject.org/dist/torbrowser/${TBB_VERSION}/tor-browser-linux64-${TBB_VERSION}_en-US.tar.xz.asc && \
+RUN TBB_VERSION=$(curl -s https://aus1.torproject.org/torbrowser/update_3/release/Linux_x86_64-gcc3/x/ALL | grep -oP '(?<=appVersion=")[^"]*' | head -1) && \
+    wget https://www.torproject.org/dist/torbrowser/${TBB_VERSION}/tor-browser-linux64-${TBB_VERSION}_ALL.tar.xz && \
+    wget https://www.torproject.org/dist/torbrowser/${TBB_VERSION}/tor-browser-linux64-${TBB_VERSION}_ALL.tar.xz.asc && \
     gpg2 --output ./tor.keyring --export ${TOR_RELEASE_KEY_FINGERPRINT} && \
-    gpgv --keyring ./tor.keyring tor-browser-linux64-${TBB_VERSION}_en-US.tar.xz.asc tor-browser-linux64-${TBB_VERSION}_en-US.tar.xz && \
-    tar -xvJf tor-browser-linux64-${TBB_VERSION}_en-US.tar.xz && \
-    mkdir -p /root/.local/tbb && mv tor-browser_en-US /root/.local/tbb && \
-    rm -f tor.keyring tor-browser-linux64-${TBB_VERSION}_en-US.tar.xz.asc tor-browser-linux64-${TBB_VERSION}_en-US.tar.xz 
+    gpgv --keyring ./tor.keyring tor-browser-linux64-${TBB_VERSION}_ALL.tar.xz.asc tor-browser-linux64-${TBB_VERSION}_ALL.tar.xz && \
+    tar -xvJf tor-browser-linux64-${TBB_VERSION}_ALL.tar.xz && \
+    mkdir -p /root/.local/tbb && mv tor-browser /root/.local/tbb && \
+    rm -f tor.keyring tor-browser-linux64-${TBB_VERSION}_ALL.tar.xz.asc tor-browser-linux64-${TBB_VERSION}_ALL.tar.xz
 
 # Import Mozilla release signing key
 ENV MOZILLA_RELEASE_KEY_FINGERPRINT "14F26682D0916CDD81E37B6D61B7B526D98F0353"
@@ -65,7 +65,7 @@ RUN python3 -m venv /opt/venvs/securedrop-app-code && \
     /opt/venvs/securedrop-app-code/bin/pip3 install --no-deps --require-hashes -r requirements/python3/securedrop-app-code-requirements.txt 
 
 RUN if test $USER_NAME != root ; then useradd --no-create-home --home-dir /tmp --uid $USER_ID $USER_NAME && echo "$USER_NAME ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers ; fi && \
-    cp -r /root/.local /tmp/ && chmod +x /tmp/.local/tbb/tor-browser_en-US/Browser/firefox && chmod -R 777 /tmp/.local && \
+    cp -r /root/.local /tmp/ && chmod +x /tmp/.local/tbb/tor-browser/Browser/firefox && chmod -R 777 /tmp/.local && \
     chown -R $USER_NAME.$USER_NAME /tmp/.local/ && \
     chown -R $USER_NAME.$USER_NAME /opt/venvs/securedrop-app-code/
 
