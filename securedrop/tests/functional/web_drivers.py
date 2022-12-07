@@ -17,7 +17,7 @@ from tbselenium.tbdriver import TorBrowserDriver
 _LOGFILE_PATH = abspath(join(dirname(realpath(__file__)), "../log/driver.log"))
 _FIREFOX_PATH = "/usr/bin/firefox/firefox"
 
-_TBB_PATH = abspath(expanduser("~/.local/tbb/tor-browser_en-US/"))
+_TBB_PATH = abspath(expanduser("~/.local/tbb/tor-browser/"))
 os.environ["TBB_PATH"] = _TBB_PATH
 
 LOGGER.setLevel(logging.WARNING)
