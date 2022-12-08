@@ -4,10 +4,10 @@ from datetime import datetime, timedelta, timezone
 from flask import Response, url_for
 from flask.sessions import session_json_serializer
 from itsdangerous import URLSafeTimedSerializer
-from pyotp import TOTP
 from redis import Redis
 from tests.utils import login_journalist
 from tests.utils.api_helper import get_api_headers
+from two_factor import TOTP
 
 redis = Redis()
 

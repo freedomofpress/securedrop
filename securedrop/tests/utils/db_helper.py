@@ -90,33 +90,6 @@ def reply(storage, journalist, source, num_replies):
     return replies
 
 
-def mock_verify_token(testcase):
-    """Patch a :class:`unittest.TestCase` (or derivative class) so TOTP
-    token verification always succeeds.
-
-    :param unittest.TestCase testcase: The test case for which to patch
-                                       TOTP verification.
-    """
-    patcher = mock.patch("Journalist.verify_token")
-    testcase.addCleanup(patcher.stop)
-    testcase.mock_journalist_verify_token = patcher.start()
-    testcase.mock_journalist_verify_token.return_value = True
-
-
-def mark_downloaded(*submissions):
-    """Mark *submissions* as downloaded in the database.
-
-    :param Submission submissions: One or more submissions that
-                                      should be marked as downloaded.
-    """
-    for submission in submissions:
-        submission.downloaded = True
-    db.session.commit()
-
-
-# {Source,Submission}
-
-
 def init_source(storage):
     """Initialize a source: create their database record, the
     filesystem directory that stores their submissions & replies,

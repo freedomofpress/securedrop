@@ -9,8 +9,8 @@ import os
 import uuid
 
 import argon2
-import pyotp
 import sqlalchemy as sa
+import two_factor
 from alembic import op
 
 # raise the errors if we're not in production
@@ -53,7 +53,7 @@ def create_deleted() -> int:
         ).bindparams(
             uuid=str(uuid.uuid4()),
             passphrase_hash=generate_passphrase_hash(),
-            otp_secret=pyotp.random_base32(),
+            otp_secret=two_factor.random_base32(),
         )
     )
     # Get the autoincrement ID back

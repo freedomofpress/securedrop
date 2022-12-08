@@ -2,8 +2,8 @@ import flask
 import models
 from db import db
 from flask.testing import FlaskClient
-from pyotp import TOTP
 from tests.utils import asynchronous, db_helper  # noqa: F401
+from two_factor import TOTP
 
 
 def flaky_filter_xfail(err, *args):

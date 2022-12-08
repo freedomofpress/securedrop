@@ -227,7 +227,7 @@ def _add_user(is_admin: bool = False, context: Optional[AppContext] = None) -> i
             if not otp_secret:
                 # Print the QR code for FreeOTP
                 print("\nScan the QR code below with FreeOTP:\n")
-                uri = user.totp.provisioning_uri(username, issuer_name="SecureDrop")
+                uri = user.totp.get_provisioning_uri(username)
                 qr = qrcode.QRCode()
                 qr.add_data(uri)
                 qr.print_ascii(tty=sys.stdout.isatty())

@@ -7,7 +7,7 @@ from db import db
 from encryption import EncryptionManager
 from flask import url_for
 from models import Journalist, Reply, Source, SourceStar, Submission
-from pyotp import TOTP
+from two_factor import TOTP
 
 from .utils.api_helper import get_api_headers
 
