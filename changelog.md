@@ -2,6 +2,11 @@
 
 ## 2.6.0~rc1
 
+## 2.5.1
+
+### Security
+
+* Users and permissions: /var/www/securedrop is now root-owned, but world-readable. Python code, including manage.py, is all executed as the www-data user.
 
 ## 2.5.0
 
