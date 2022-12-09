@@ -6,13 +6,6 @@ tor_services:
   - sourcev3
   - journalistv3
 
-app_directories:
-  - /var/www/securedrop
-  - /var/lib/securedrop
-  - /var/lib/securedrop/store
-  - /var/lib/securedrop/keys
-  - /var/lib/securedrop/tmp
-
 apparmor_enforce:
   focal:
     - "sbin/dhclient"

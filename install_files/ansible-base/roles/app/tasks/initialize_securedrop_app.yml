@@ -39,12 +39,15 @@
   tags:
     - securedrop_config
 
+# config.py is installed with permissions so it is only
+# writable by root, readable by www-data, and access denied
+# to any other user.
 - name: Set ownership and permissions on config.py.
   file:
     dest: "{{ securedrop_code }}/config.py"
-    owner: "{{ securedrop_user }}"
-    group: "{{ securedrop_user }}"
-    mode: "0600"
+    owner: "root"
+    group: "www-data"
+    mode: "0640"
   tags:
     - permissions
     - securedrop_config

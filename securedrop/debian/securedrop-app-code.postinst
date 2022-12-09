@@ -38,28 +38,28 @@ database_migration() {
     cd '/var/www/securedrop/'
 
     # `alembic current` outputs nothing if the DB isn't under version control.
-    if [ -z "$(${SDBIN}/alembic current)" ]; then
+    if [ -z "$(sudo -u www-data ${SDBIN}/alembic current)" ]; then
         sqlite_tables=$(sqlite3 "$database_file" .tables)
 
         if ! echo "$sqlite_tables" | grep -q journalists; then
             # This is a fresh install, run the full migrations.
-            ${SDBIN}/alembic upgrade head
+            sudo -u www-data ${SDBIN}/alembic upgrade head
         else
             # This is an old install, so mark that the schema is up to date
             # as of the version of migration 15ac9509fc68_init.py when we first
             # started version controlling the database.
-            ${SDBIN}/alembic stamp 15ac9509fc68
+            sudo -u www-data ${SDBIN}/alembic stamp 15ac9509fc68
         fi
     fi
 
     db_backup="/var/lib/securedrop/backups/$(date +%Y-%m-%d-%H-%M-%S)-db.sqlite"
 
-    if ! ${SDBIN}/alembic current | grep -q '(head)'; then
-        cp /var/lib/securedrop/db.sqlite "$db_backup"
+    if ! sudo -u www-data ${SDBIN}/alembic current | grep -q '(head)'; then
+        sudo -u www-data cp /var/lib/securedrop/db.sqlite "$db_backup"
     fi
 
-    if ${SDBIN}/alembic upgrade head; then
-        rm -f "$db_backup"
+    if sudo -u www-data ${SDBIN}/alembic upgrade head; then
+        sudo -u www-data rm -f "$db_backup"
     else
         echo "Error migrating database: Backup saved to $db_backup" >&2
         return 1
@@ -93,6 +93,16 @@ adjust_wsgi_configuration() {
         if grep -qP '^WSGIProcessGroup journalist' "$journalist_conf"; then
             perl -pi -e 's/^WSGIProcessGroup journalist.*\n//' "$journalist_conf"
         fi
+    fi
+}
+
+migrate_crontab() {
+    # If there is no www-data cron and a root cron, migrate
+    if ! crontab -u www-data -l && crontab -u root -l; then
+        # Install the root crontab for www-data
+        crontab -u root -l | crontab -u www-data -
+        # Clear root crontab
+        crontab -u root -r
     fi
 }
 
@@ -164,39 +174,56 @@ case "$1" in
     configure)
 
     # Ensure SecureDrop's necessary directories are created
-    for dir in /var/lib/securedrop/{,tmp,shredder,store,keys,/keys/private-keys-v1.d,/keys/openpgp-revocs.d,backups} /var/www/securedrop; do
+    for dir in /var/lib/securedrop/{,tmp,shredder,store,keys,/keys/private-keys-v1.d,/keys/openpgp-revocs.d,backups}; do
       mkdir -p "$dir"
       chmod 0700 "$dir"
     done
+
+    chown -R www-data:www-data /var/lib/securedrop
 
     # Ensure required gpg-agent.conf is in place, see #4013.
     if [ -e "/var/lib/securedrop/keys/gpg-agent.conf" ]; then
 
         # gpg-agent.conf does exist, update it if needed.
         if ! grep -qE '^allow-loopback-pinentry$' /var/lib/securedrop/keys/gpg-agent.conf; then
-            echo allow-loopback-pinentry >> /var/lib/securedrop/keys/gpg-agent.conf
+            echo allow-loopback-pinentry | sudo -u www-data tee -a /var/lib/securedrop/keys/gpg-agent.conf
         fi
         if ! grep -qE '^default-cache-ttl 0$' /var/lib/securedrop/keys/gpg-agent.conf; then
-            echo 'default-cache-ttl 0' >> /var/lib/securedrop/keys/gpg-agent.conf
+            echo 'default-cache-ttl 0' | sudo -u www-data tee -a /var/lib/securedrop/keys/gpg-agent.conf
         fi
 
     else
         # gpg-agent.conf does not yet exist, create it.
-        echo allow-loopback-pinentry > /var/lib/securedrop/keys/gpg-agent.conf
-        echo 'default-cache-ttl 0' >> /var/lib/securedrop/keys/gpg-agent.conf
+        echo allow-loopback-pinentry | sudo -u www-data tee /var/lib/securedrop/keys/gpg-agent.conf
+        echo 'default-cache-ttl 0' | sudo -u www-data tee -a /var/lib/securedrop/keys/gpg-agent.conf
     fi
 
     # Migrate private keyring to gpg2.1 if needed
     if [ ! -d "/var/lib/securedrop/keys/private-keys-v1.d" ]; then
         # Then we should migrate the keyring
-        gpg2 --homedir=/var/lib/securedrop/keys --batch --import < /var/lib/securedrop/keys/secring.gpg
+        # shellcheck disable=SC2024
+        sudo -u www-data gpg2 --homedir=/var/lib/securedrop/keys --batch --import < /var/lib/securedrop/keys/secring.gpg
     fi
 
-    chown -R www-data:www-data /var/lib/securedrop /var/www/securedrop
+    migrate_crontab
 
-    chown -R www-data:www-data /var/www/securedrop
-    chown www-data:www-data /var/www/journalist.wsgi
-    chown www-data:www-data /var/www/source.wsgi
+    # /var/www/securedrop should be owned by root and world-readable.
+    # Permissions on specific files will be loosened after
+    chown -R root:root /var/www/securedrop
+    chmod 755 /var/www/securedrop
+
+    # Make sure config.py is owned by root and readable by www-data,
+    # but not world-readable
+    if [ -f "/var/www/securedrop/config.py" ]; then
+        chown root:www-data /var/www/securedrop/config.py
+        chmod 640 /var/www/securedrop/config.py
+    fi
+    # And logo needs to be writable by webserver user
+    # If there's no custom logo yet, copy the default in its place
+    if [ ! -f "/var/www/securedrop/static/i/custom_logo.png" ]; then
+        cp /var/www/securedrop/static/i/logo.png /var/www/securedrop/static/i/custom_logo.png
+    fi
+    chown www-data:www-data /var/www/securedrop/static/i/custom_logo.png
 
     # No Python code should be executed before this
     refresh_bytecode
@@ -211,9 +238,6 @@ case "$1" in
     # set to "enforce", then apache2 will fail to restart, since it lacks
     # the ability to send signals to unconfined peers.
     service apache2 stop
-
-    # Point Apache to our bundled mod_wsgi
-    ${SDBIN}/mod_wsgi-express module-config > /etc/apache2/mods-available/wsgi.load
 
     # and make sure it's enabled
     a2enmod wsgi
