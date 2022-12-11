@@ -54,14 +54,7 @@ class SecureDropConfig:
 
     SECUREDROP_DATA_ROOT: Path
 
-    DATABASE_ENGINE: str
-    DATABASE_FILE: Path
-
-    # The following fields cannot be None if the DB engine is NOT sqlite
-    DATABASE_USERNAME: Optional[str]
-    DATABASE_PASSWORD: Optional[str]
-    DATABASE_HOST: Optional[str]
-    DATABASE_NAME: Optional[str]
+    DATABASE_FILE: Path  # Path to the sqlite DB file
 
     SECUREDROP_ROOT: Path
     STATIC_DIR: Path
@@ -91,31 +84,7 @@ class SecureDropConfig:
 
     @property
     def DATABASE_URI(self) -> str:
-        if self.DATABASE_ENGINE == "sqlite":
-            db_uri = f"{self.DATABASE_ENGINE}:///{self.DATABASE_FILE}"
-
-        else:
-            if self.DATABASE_USERNAME is None:
-                raise RuntimeError("Missing DATABASE_USERNAME entry from config.py")
-            if self.DATABASE_PASSWORD is None:
-                raise RuntimeError("Missing DATABASE_PASSWORD entry from config.py")
-            if self.DATABASE_HOST is None:
-                raise RuntimeError("Missing DATABASE_HOST entry from config.py")
-            if self.DATABASE_NAME is None:
-                raise RuntimeError("Missing DATABASE_NAME entry from config.py")
-
-            db_uri = (
-                self.DATABASE_ENGINE
-                + "://"
-                + self.DATABASE_USERNAME
-                + ":"
-                + self.DATABASE_PASSWORD
-                + "@"
-                + self.DATABASE_HOST
-                + "/"
-                + self.DATABASE_NAME
-            )
-        return db_uri
+        return f"sqlite:///{self.DATABASE_FILE}"
 
     @classmethod
     def get_current(cls) -> "SecureDropConfig":
@@ -136,12 +105,6 @@ def _parse_config_from_file(config_module_name: str) -> SecureDropConfig:
     # Parse the local config; as there are SD instances with very old config files
     # the parsing logic here has to assume some values might be missing, and hence
     # set default values for such config entries
-    final_db_engine = getattr(config_from_local_file, "DATABASE_ENGINE", "sqlite")
-    final_db_username = getattr(config_from_local_file, "DATABASE_USERNAME", None)
-    final_db_password = getattr(config_from_local_file, "DATABASE_PASSWORD", None)
-    final_db_host = getattr(config_from_local_file, "DATABASE_HOST", None)
-    final_db_name = getattr(config_from_local_file, "DATABASE_NAME", None)
-
     final_default_locale = getattr(config_from_local_file, "DEFAULT_LOCALE", FALLBACK_LOCALE)
     final_supp_locales = getattr(config_from_local_file, "SUPPORTED_LOCALES", [FALLBACK_LOCALE])
     final_sess_expiration_mins = getattr(config_from_local_file, "SESSION_EXPIRATION_MINUTES", 120)
@@ -234,12 +197,7 @@ def _parse_config_from_file(config_module_name: str) -> SecureDropConfig:
         SCRYPT_PARAMS=final_scrypt_params,
         SECUREDROP_DATA_ROOT=final_securedrop_data_root,
         SECUREDROP_ROOT=final_securedrop_root,
-        DATABASE_ENGINE=final_db_engine,
         DATABASE_FILE=final_db_file,
-        DATABASE_USERNAME=final_db_username,
-        DATABASE_PASSWORD=final_db_password,
-        DATABASE_HOST=final_db_host,
-        DATABASE_NAME=final_db_name,
         STATIC_DIR=final_static_dir,
         TRANSLATION_DIRS=final_transl_dir,
         SOURCE_TEMPLATES_DIR=final_source_tmpl_dir,
