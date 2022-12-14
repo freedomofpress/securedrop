@@ -89,9 +89,9 @@ def test_securedrop_application_test_journalist_key(host):
     securedrop_config = host.file("{}/config.py".format(securedrop_test_vars.securedrop_code))
     with host.sudo():
         assert securedrop_config.is_file
-        assert securedrop_config.user == securedrop_test_vars.securedrop_user
+        assert securedrop_config.user == securedrop_test_vars.securedrop_code_owner
         assert securedrop_config.group == securedrop_test_vars.securedrop_user
-        assert securedrop_config.mode == 0o600
+        assert securedrop_config.mode == 0o640
         assert securedrop_config.contains(
             "^JOURNALIST_KEY = '65A1B5FF195B56353CC63DFFCC40EF1228271441'$"
         )
