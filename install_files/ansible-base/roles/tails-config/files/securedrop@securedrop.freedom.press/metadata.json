@@ -1,0 +1,11 @@
+{
+  "name": "SecureDrop",
+  "description": "SecureDrop Utility Menu",
+  "uuid": "securedrop@securedrop.freedom.press",
+  "shell-version": [
+    "40",
+    "41",
+    "42",
+    "43"
+  ]
+}
