@@ -13,6 +13,7 @@ securedrop_venv_site_packages: /opt/venvs/securedrop-app-code/lib/python{}/site-
 securedrop_code: /var/www/securedrop
 securedrop_data: /var/lib/securedrop
 securedrop_user: www-data
+securedrop_code_owner: root
 
 app_hostname: app
 monitor_hostname: mon
