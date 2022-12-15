@@ -15,7 +15,7 @@ const _ = ExtensionUtils.gettext;
 const Indicator = GObject.registerClass(
 class Indicator extends PanelMenu.Button {
     _init() {
-        super._init(0.0, _('SecureDrop'));
+        super._init(0.0, 'SecureDrop');
 
         let icon = new St.Icon({
             icon_name: 'package-x-generic-symbolic',
@@ -23,7 +23,7 @@ class Indicator extends PanelMenu.Button {
         });
         
         let label = new St.Label({
-            text: _('SecureDrop'),
+            text: 'SecureDrop',
             y_expand: true,
             y_align: Clutter.ActorAlign.CENTER,
         });
@@ -36,38 +36,48 @@ class Indicator extends PanelMenu.Button {
         topBox.add_child(label);
         this.add_child(topBox);
 
-        let source = new PopupMenu.PopupMenuItem(_('Launch Source Interface'));
+        let source = new PopupMenu.PopupMenuItem('Launch Source Interface');
         source.connect('activate', () => {
-            Util.trySpawnCommandLine(`SADDR=\`cat ~/Persistent/securedrop/install_files/ansible-base/app-sourcev3-ths\` &&  tor-browser $SADDR`);
+            let [ok, out, err, exit] = GLib.spawn_command_line_sync('/bin/bash -c "cat ~/Persistent/securedrop/install_files/ansible-base/app-sourcev3-ths"');
+       	    if (out.length > 0) {
+       	    	Util.spawn(['tor-browser', out.toString()]);
+       	    } else {
+       	    	Util.trySpawnCommandLine('notify-send "Unable to find Source Interface Onion Address"');
+       	    }
         });
         
-        let journalist = new PopupMenu.PopupMenuItem(_('Launch Journalist Interface'));
+        let journalist = new PopupMenu.PopupMenuItem('Launch Journalist Interface');
         journalist.connect('activate', () => {
-            Util.trySpawnCommandLine(`JADDR=\`cut -d: f1 ~/Persistent/securedrop/install_files/ansible-base/app-journalist.auth_private\` &&  tor-browser "${JADDR}.onion"`);
+       	    let [ok, out, err, exit] = GLib.spawn_command_line_sync('/bin/bash -c "cut -d: -f1 ~/Persistent/securedrop/install_files/ansible-base/app-journalist.auth_private"');
+       	    if (out.length > 0) {
+       	    	Util.spawn(['tor-browser', out.toString() + '.onion']);
+       	    } else {
+       	    	Util.trySpawnCommandLine('notify-send "Unable to find Journalist Interface Onion Address"');
+       	    }
         });
         
         let admin_label = new St.Label({
-            text: _('Admin Actions'),
+            text: 'Admin Actions',
             y_expand: true,
             y_align: Clutter.ActorAlign.START,
         });
         
-        let updates = new PopupMenu.PopupMenuItem(_('Check for SecureDrop Updates'));
+        let updates = new PopupMenu.PopupMenuItem('Check for SecureDrop Updates');
         updates.connect('activate', () => {
-            Util.trySpawnCommandLine(``);
+            Util.spawn(['python3', '/home/amnesia/Persistent/securedrop/journalist_gui/SecureDropUpdater']);
         });
         
-        let app_server_ssh = new PopupMenu.PopupMenuItem(_('SSH into the App Server'));
+        let app_server_ssh = new PopupMenu.PopupMenuItem('SSH into the App Server');
         app_server_ssh.connect('activate', () => {
             Util.trySpawnCommandLine(`gnome-terminal -- ssh app`);
         });
         
-        let mon_server_ssh = new PopupMenu.PopupMenuItem(_('SSH into the Monitor Server'));
+        let mon_server_ssh = new PopupMenu.PopupMenuItem('SSH into the Monitor Server');
         mon_server_ssh.connect('activate', () => {
             Util.trySpawnCommandLine(`gnome-terminal -- ssh mon`);
         });
         
-        let keypass = new PopupMenu.PopupMenuItem(_('Open KeePassXC Password Vault'));
+        let keypass = new PopupMenu.PopupMenuItem('Open KeePassXC Password Vault');
         keypass.connect('activate', () => {
             Util.trySpawnCommandLine(`keepassxc`);
         });
