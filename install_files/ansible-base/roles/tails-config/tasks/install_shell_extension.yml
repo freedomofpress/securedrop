@@ -33,5 +33,5 @@
     group: amnesia
     
 - name: Enable the new GNOME Shell extension
-  become: yes
+  become: no
   command: gnome-extensions enable securedrop@securedrop.freedom.press
