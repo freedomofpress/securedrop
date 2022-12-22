@@ -15,7 +15,7 @@
     dest: "{{ tails_config_live_dotfiles }}/.local/share/gnome-shell/extensions/securedrop@securedrop.freedom.press/"
     owner: amnesia
     group: amnesia
-    
+
 - name: Copy the extension CSS to the extension directory
   become: yes
   copy:
@@ -23,7 +23,7 @@
     dest: "{{ tails_config_live_dotfiles }}/.local/share/gnome-shell/extensions/securedrop@securedrop.freedom.press/"
     owner: amnesia
     group: amnesia
-    
+
 - name: Copy the extension itself to the extension directory
   become: yes
   copy:
@@ -31,7 +31,7 @@
     dest: "{{ tails_config_live_dotfiles }}/.local/share/gnome-shell/extensions/securedrop@securedrop.freedom.press"
     owner: amnesia
     group: amnesia
-    
+
 - name: Enable the new GNOME Shell extension
   become: no
   command: gnome-extensions enable securedrop@securedrop.freedom.press
