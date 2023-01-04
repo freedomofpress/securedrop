@@ -40,11 +40,12 @@
   </td>
   <td class="unread">
     {% if source.num_unread > 0 %}
-    <a class="btn small icon download" href="/download_unread/{{ source.filesystem_id }}">
+    <a class="btn small icon download" href="/download_unread/{{ source.filesystem_id }}" 
+      aria-label="{{ ngettext('1 unread', '{num} unread', source.num_unread).format(num=source.num_unread) }}">
       {{ ngettext('1 unread', '{num} unread', source.num_unread).format(num=source.num_unread) }}
     </a>
     {% else %}
-    <span class="visually-hidden">
+    <span class="visually-hidden" >
       {{ ngettext('1 unread', '{num} unread', source.num_unread).format(num=source.num_unread) }}
     </span>
     {% endif %}
