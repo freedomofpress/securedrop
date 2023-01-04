@@ -17,7 +17,7 @@ venv_instructions() {
 }
 
 function virtualenv_bootstrap() {
-    PYTHON_VERSION=3
+    PYTHON_VERSION="3.8"
     VIRTUAL_ENV="${VIRTUAL_ENV:-}"  # Just to get around all the "set -u"
     if [ -n "$VIRTUAL_ENV" ]
     then
@@ -48,12 +48,12 @@ function virtualenv_bootstrap() {
 
         if [ ! -d "$VENV" ]
         then
-            p=$(which "python${PYTHON_VERSION}")
-            echo "Creating Python ${PYTHON_VERSION} virtualenv in ${VENV}"
+            p=$(command -v "python${PYTHON_VERSION}" 2> /dev/null || command -v python3)
+            echo "Creating ${p} virtualenv in ${VENV}"
             virtualenv -p "${p}" "${VENV}"
         fi
 
-        "${VENV}/bin/pip" install -q -r "securedrop/requirements/python${PYTHON_VERSION}/develop-requirements.txt"
+        "${VENV}/bin/pip" install -q -r "securedrop/requirements/python3/develop-requirements.txt"
 
         . "${VENV}/bin/activate"
    fi

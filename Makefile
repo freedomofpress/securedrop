@@ -19,6 +19,7 @@ DEVSHELL := $(SDBIN)/dev-shell
 venv: hooks  ## Provision a Python 3 virtualenv for development.
 	@echo "███ Preparing Python 3 virtual environment..."
 	@$(SDROOT)/devops/scripts/boot-strap-venv.sh
+	@echo "Make sure to run: source .venv/bin/activate"
 	@echo
 
 .PHONY: update-admin-pip-requirements
