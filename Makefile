@@ -417,7 +417,7 @@ vagrant-package:  ## Package a Vagrant box of the last stable SecureDrop release
 # Explanation of the below shell command should it ever break.
 # 1. Set the field separator to ":  ##" and any make targets that might appear between : and ##
 # 2. Use sed-like syntax to remove the make targets
-# 3. Format the split fields into $$1) the target name (in blue) and $$2) the target descrption
+# 3. Format the split fields into $$1) the target name (in blue) and $$2) the target description
 # 4. Pass this file as an arg to awk
 # 5. Sort it alphabetically
 # 6. Format columns with colon as delimiter.

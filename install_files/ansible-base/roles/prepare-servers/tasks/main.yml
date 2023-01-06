@@ -1,5 +1,5 @@
 ---
-# Ensures that prequisite packages for anssible and securedrop-admin install
+# Ensures that prerequisite packages for ansible and securedrop-admin install
 # are present
 #
 # Fix for CVE-2019-3462 (see https://justi.cz/security/2019/01/22/apt-rce.html)

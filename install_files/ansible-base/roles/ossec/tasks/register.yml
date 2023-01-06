@@ -14,7 +14,7 @@
 - name: Set host fact for OSSEC registration state.
   set_fact:
     ossec_agent_already_registered: "{{ app_ip+' is available.' in hostvars[groups.securedrop_monitor_server.0].ossec_list_agents_result.stdout }}"
-  # No "delegate_to", so that *both* hosts are aware of registration stauts via set_fact.
+  # No "delegate_to", so that *both* hosts are aware of registration status via set_fact.
 
 - name: Find existing ossec remote IDs
   find:
@@ -142,7 +142,7 @@
 
 # Contact the OSSEC server and ensure that the authd process
 # is not running. Declaring these as tasks rather than handlers
-# to ensure that the the cleanup happens every time, in case
+# to ensure that the cleanup happens every time, in case
 # authd was somehow left running, e.g. if playbook was interrupted.
 - name: Check if authd process is running on Monitor Server.
   command: pgrep ossec-authd

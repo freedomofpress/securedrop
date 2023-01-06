@@ -1,6 +1,6 @@
 ---
 # Playbook to update SecureDrop VMs configured with the latest stable release
-# to use the release candiate packages from apt-test.freedom.press (rather
+# to use the release candidate packages from apt-test.freedom.press (rather
 # than apt.freedom.press). Updates the apt repo pubkey with a testing pubkey,
 # and alters the apt source lists to point to the test server.
 #

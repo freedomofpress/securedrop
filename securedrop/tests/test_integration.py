@@ -681,7 +681,7 @@ def test_login_after_regenerate_hotp(journalist_app, test_journo):
             ins.assert_redirects(resp, "/account/2fa")
 
             resp = app.post("/account/2fa", data=dict(token=HOTP(b32_otp_secret).at(0)))
-            # successful verificaton should redirect to /account/account
+            # successful verification should redirect to /account/account
             ins.assert_redirects(resp, "/account/account")
 
         # log out

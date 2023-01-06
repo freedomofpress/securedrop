@@ -439,10 +439,10 @@ var SUPPORTED_ALGS = 4 | 2 | 1;
 	 *
 	 * @private
 	 * @param {Array.<number>} binarray Array of integers to be converted to
-	 *   hexidecimal representation
+	 *   hexadecimal representation
 	 * @param {{outputUpper : boolean, b64Pad : string}} formatOpts Hash list
 	 *   containing validated output formatting options
-	 * @return {string} Hexidecimal representation of the parameter in string
+	 * @return {string} Hexadecimal representation of the parameter in string
 	 *   form
 	 */
 	function binb2hex(binarray, formatOpts)
@@ -1769,7 +1769,7 @@ var SUPPORTED_ALGS = 4 | 2 | 1;
 		};
 
 		/**
-		 * Returns the the HMAC in the specified format using the key given by
+		 * Returns the HMAC in the specified format using the key given by
 		 * a previous setHMACKey call.
 		 *
 		 * @expose

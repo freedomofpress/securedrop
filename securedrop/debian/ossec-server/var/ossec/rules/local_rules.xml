@@ -74,7 +74,7 @@
 </group>
 
 <!--
-  fwupd auto-updates realted rules.
+  fwupd auto-updates related rules.
 -->
 
 <group name="fwupd">

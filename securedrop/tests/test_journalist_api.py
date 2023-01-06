@@ -107,7 +107,7 @@ def test_user_cannot_get_an_api_token_with_wrong_2fa_token(journalist_app, test_
         assert response.json["error"] == "Forbidden"
 
 
-def test_user_cannot_get_an_api_token_with_no_passphase_field(journalist_app, test_journo):
+def test_user_cannot_get_an_api_token_with_no_passphrase_field(journalist_app, test_journo):
     with journalist_app.test_client() as app:
         valid_token = TOTP(test_journo["otp_secret"]).now()
         response = app.post(

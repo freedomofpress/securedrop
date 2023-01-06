@@ -23,7 +23,7 @@ def test_apache_apt_packages(host, package):
 def test_apache_security_config_deprecated(host):
     """
     Ensure that /etc/apache2/security is absent, since it was setting
-    redundant options already presentin /etc/apache2/apache2.conf.
+    redundant options already present in /etc/apache2/apache2.conf.
     See #643 for discussion.
     """
     assert not host.file("/etc/apache2/security").exists

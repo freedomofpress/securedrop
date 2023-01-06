@@ -82,7 +82,7 @@ def test_session_login(journalist_app, test_journo):
 
         # Finally load the main page
         resp = app.get(url_for("main.index"))
-        # And expect a successfull status code
+        # And expect a successful status code
         assert resp.status_code == 200
 
 
@@ -94,7 +94,7 @@ def test_session_renew(journalist_app, test_journo):
         login_journalist(
             app, test_journo["username"], test_journo["password"], test_journo["otp_secret"]
         )
-        # Then check session existance, signature, and redis payload
+        # Then check session existence, signature, and redis payload
         session_cookie = _session_from_cookiejar(app.cookie_jar, journalist_app)
         assert session_cookie is not None
 
@@ -185,11 +185,11 @@ def test_session_admin_change_password_logout(journalist_app, test_journo, test_
         )
         # Then the password change has been successful
         assert resp.status_code == 302
-        # Then the journalis (non-admin) user session does no longer exist in redis
+        # Then the journalist (non-admin) user session does no longer exist in redis
         assert (redis.get(journalist_app.config["SESSION_KEY_PREFIX"] + sid)) is None
 
     with journalist_app.test_client() as app:
-        # Add our original cookie back in to the session, and try to re-use it
+        # Add our original cookie back into the session, and try to re-use it
         app.set_cookie(
             "localhost.localdomain",
             "js",
@@ -308,7 +308,7 @@ def test_session_api_login(journalist_app, test_journo):
         response = app.get(
             url_for("api.get_current_user"), headers=get_api_headers(resp.json["token"])
         )
-        # Then the reuqest is successful and the correct journalist id is returned
+        # Then the request is successful and the correct journalist id is returned
         assert response.status_code == 200
         assert response.json["uuid"] == test_journo["uuid"]
 
@@ -405,7 +405,7 @@ def test_session_bad_signature(journalist_app, test_journo):
         signer = URLSafeTimedSerializer(
             journalist_app.secret_key, journalist_app.config["SESSION_SIGNER_SALT"]
         )
-        # Given a valid token signed with the corrects secret key and tje Journalist Interface salt
+        # Given a valid token signed with the corrects secret key and the Journalist Interface salt
         token_not_api_salt = signer.dumps(sid)
 
         # When requesting an authenticated endpoint with such token
@@ -437,7 +437,7 @@ def test_session_race_condition(mocker, journalist_app, test_journo):
         # When manually setting the journalist uid in session
         session["uid"] = test_journo["id"]
 
-        # When manually builfing a Flask repsonse object
+        # When manually building a Flask response object
         app.response = Response()
         # When manually calling save_session() to write the session in redis
         journalist_app.session_interface.save_session(journalist_app, session, app.response)

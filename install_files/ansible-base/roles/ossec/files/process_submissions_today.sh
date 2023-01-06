@@ -98,7 +98,7 @@ function test_handle_notification() {
     shopt -s -o xtrace
     PS4='${BASH_SOURCE[0]}:$LINENO: ${FUNCNAME[0]}:  '
 
-    echo BUGOUS | handle_notification test_send_encrypted_alarm | \
+    echo BOGUS | handle_notification test_send_encrypted_alarm | \
         tee /dev/stderr | \
         grep -q 'failed to find 0/1 submissions boolean' || exit 1
 

@@ -130,7 +130,7 @@ def make_blueprint() -> Blueprint:
     def download_single_file(filesystem_id: str, fn: str) -> werkzeug.Response:
         """
         Marks the file being download (the file being downloaded is either a submission message,
-        submission file attachement, or journalist reply) as seen by the current logged-in user and
+        submission file attachment, or journalist reply) as seen by the current logged-in user and
         send the file to a client to be saved or opened.
         """
         if ".." in fn or fn.startswith("/"):
