@@ -38,6 +38,7 @@ ruamel.yaml>=0.16.10
 safety>2.2.0
 semgrep>=0.98.0
 setuptools>=56.0.0
+shellcheck-py
 testinfra>=5.3.1
 urllib3>=1.26.5
 yamllint

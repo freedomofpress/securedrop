@@ -141,10 +141,6 @@ shellcheck:  ## Lint shell scripts.
 	@$(SDROOT)/devops/scripts/shellcheck.sh
 	@echo
 
-.PHONY: shellcheckclean
-shellcheckclean:  ## Clean up temporary container associated with shellcheck target.
-	@docker rm -f $(SDROOT)/shellcheck-targets
-
 .PHONY: typelint
 typelint:  ## Run mypy type linting.
 	@echo "███ Running mypy type checking..."

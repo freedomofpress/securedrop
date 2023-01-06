@@ -44,6 +44,7 @@ function send_encrypted_alert() {
     # Try to encrypt the alert message. We'll inspect the exit status of the
     # pipeline to decide whether to send the alert text, or the default
     # failure message.
+    # shellcheck disable=SC2086
     encrypted_alert_text="$(printf "%s" "${ossec_alert_text}" | \
         /usr/bin/formail -I '' | \
         /usr/bin/gpg $compression --homedir /var/ossec/.gnupg --trust-model always -ear "$gpg_fpr")"

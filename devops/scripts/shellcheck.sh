@@ -2,25 +2,7 @@
 
 set -e
 
-USE_PODMAN="${USE_PODMAN:-}"
-
-# Allow opting into using podman with USE_PODMAN=1
-if  [[ -n "${USE_PODMAN}" ]]; then
-    DOCKER_BIN="podman"
-else
-    DOCKER_BIN="docker"
-fi
-
-function run_native_or_in_docker () {
-    EXCLUDE_RULES="SC1090,SC1091,SC2001,SC2064,SC2181,SC1117"
-    if [ "$(command -v shellcheck)" ]; then
-        shellcheck -x --exclude="$EXCLUDE_RULES" "$@"
-    else
-        $DOCKER_BIN run --rm -v "$(pwd):/sd:Z" -w /sd \
-            -t docker.io/koalaman/shellcheck:v0.4.7 \
-            -x --exclude=$EXCLUDE_RULES "$@"
-    fi
-}
+EXCLUDE_RULES="SC1090,SC1091,SC2001,SC2064,SC2181,SC1117"
 
 # Omitting:
 # - the `.git/` directory since its hooks won't pass # validation, and
@@ -57,6 +39,7 @@ FILES=$(find "." \
 # Turn the multiline find output into a single space-separated line
 FILES=$(echo "$FILES" | tr '\n' ' ')
 
-# Intentionally unquoted so each file is passed as its own argument
+shellcheck --version
+# $FILES intentionally unquoted so each file is passed as its own argument
 # shellcheck disable=SC2086
-run_native_or_in_docker $FILES
+shellcheck -x --exclude="$EXCLUDE_RULES" $FILES

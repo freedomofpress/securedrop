@@ -845,6 +845,12 @@ sh==1.12.14 \
     # via
     #   molecule
     #   python-gilt
+shellcheck-py==0.9.0.2 \
+    --hash=sha256:1c29aa5864cc937f037b84b8e6b13b7016d25a45f7a07a1f1f16d38e387c76b4 \
+    --hash=sha256:6a1be188d0a7183fc4bfcf52087512d879519bb6beb67d76927e0331edb45eb1 \
+    --hash=sha256:bbaaba3044d266e793964e391c8caad4fcccafcd64e63de24e9b87a31a0c7aff \
+    --hash=sha256:ddb9b9fd4750d726b9ac24df8b63599dc742c8749477bcdfd4ed639b22de21ae
+    # via -r requirements/python3/develop-requirements.in
 shellingham==1.3.2 \
     --hash=sha256:576c1982bea0ba82fb46c36feb951319d7f42214a82634233f58b40d858a751e \
     --hash=sha256:7f6206ae169dc1a03af8a138681b3f962ae61cc93ade84d0585cca3aaf770044
