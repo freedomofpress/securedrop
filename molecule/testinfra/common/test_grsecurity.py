@@ -1,5 +1,4 @@
 import difflib
-import io
 import os
 import warnings
 
@@ -52,9 +51,9 @@ def test_generic_kernels_absent(host, package):
     # Can't use the TestInfra Package module to check state=absent,
     # so let's check by shelling out to `dpkg -l`. Dpkg will automatically
     # honor simple regex in package names.
-    c = host.run("dpkg -l {}".format(package))
+    c = host.run(f"dpkg -l {package}")
     assert c.rc == 1
-    error_text = "dpkg-query: no packages found matching {}".format(package)
+    error_text = f"dpkg-query: no packages found matching {package}"
     assert error_text in c.stderr.strip()
 
 
@@ -124,7 +123,7 @@ def test_grsecurity_paxtest(host):
         # https://github.com/freedomofpress/securedrop/issues/1039
         if host.system_info.codename == "focal":
             memcpy_result = "Vulnerable"
-        with io.open(paxtest_template_path, "r") as f:
+        with open(paxtest_template_path) as f:
             paxtest_template = Template(f.read().rstrip())
             paxtest_expected = paxtest_template.render(memcpy_result=memcpy_result)
 
@@ -204,10 +203,10 @@ def test_wireless_disabled_in_kernel_config(host, kernel_opts):
     """
     kernel_version = host.run("uname -r").stdout.strip()
     with host.sudo():
-        kernel_config_path = "/boot/config-{}".format(kernel_version)
+        kernel_config_path = f"/boot/config-{kernel_version}"
         kernel_config = host.file(kernel_config_path).content_string
 
-        line = "# CONFIG_{} is not set".format(kernel_opts)
+        line = f"# CONFIG_{kernel_opts} is not set"
         assert line in kernel_config or kernel_opts not in kernel_config
 
 
@@ -226,10 +225,10 @@ def test_kernel_options_enabled_config(host, kernel_opts):
 
     kernel_version = host.run("uname -r").stdout.strip()
     with host.sudo():
-        kernel_config_path = "/boot/config-{}".format(kernel_version)
+        kernel_config_path = f"/boot/config-{kernel_version}"
         kernel_config = host.file(kernel_config_path).content_string
 
-        line = "{}=y".format(kernel_opts)
+        line = f"{kernel_opts}=y"
         assert line in kernel_config
 
 

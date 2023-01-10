@@ -6,7 +6,7 @@ SECUREDROP_TARGET_DISTRIBUTION = os.environ.get("SECUREDROP_TARGET_DISTRIBUTION"
 SECUREDROP_PYTHON_VERSION = os.environ.get("SECUREDROP_PYTHON_VERSION", "3.8")
 DH_VIRTUALENV_VERSION = "1.2.2"
 
-testinfra_hosts = ["docker://{}-sd-app".format(SECUREDROP_TARGET_DISTRIBUTION)]
+testinfra_hosts = [f"docker://{SECUREDROP_TARGET_DISTRIBUTION}-sd-app"]
 
 
 @pytest.mark.xfail(reason="This check conflicts with the concept of pegging" "dependencies")
@@ -29,7 +29,7 @@ def test_python_version(host):
     we must be careful not to change Python as well.
     """
     c = host.run("python3 --version")
-    version_string = "Python {}".format(SECUREDROP_PYTHON_VERSION)
+    version_string = f"Python {SECUREDROP_PYTHON_VERSION}"
     assert c.stdout.startswith(version_string)
 
 
@@ -38,6 +38,6 @@ def test_dh_virtualenv(host):
     Confirm the expected version of dh-virtualenv is found.
     """
     expected_version = DH_VIRTUALENV_VERSION
-    version_string = "dh_virtualenv {}".format(expected_version)
+    version_string = f"dh_virtualenv {expected_version}"
     c = host.run("dh_virtualenv --version")
     assert c.stdout.startswith(version_string)

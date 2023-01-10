@@ -71,7 +71,7 @@ def delete_disconnected_db_submissions(args: argparse.Namespace) -> None:
         if not args.force:
             remove = input("Enter 'y' to delete all submissions missing files: ") == "y"
         if remove:
-            print("Removing submission IDs {}...".format(ids))
+            print(f"Removing submission IDs {ids}...")
             db.session.query(Submission).filter(Submission.id.in_(ids)).delete(
                 synchronize_session="fetch"
             )
@@ -152,13 +152,13 @@ def delete_disconnected_fs_submissions(args: argparse.Namespace) -> None:
         for i, f in enumerate(disconnected_files, 1):
             remove = args.force
             if not args.force:
-                remove = input("Enter 'y' to delete {}: ".format(f)) == "y"
+                remove = input(f"Enter 'y' to delete {f}: ") == "y"
             if remove:
                 filesize = os.stat(f).st_size
                 if i > 1:
                     eta = filesize / rate
-                    eta_msg = " (ETA to remove {:d} bytes: {:.0f}s )".format(filesize, eta)
-                print("Securely removing file {}/{} {}{}...".format(i, filecount, f, eta_msg))
+                    eta_msg = f" (ETA to remove {filesize:d} bytes: {eta:.0f}s )"
+                print(f"Securely removing file {i}/{filecount} {f}{eta_msg}...")
                 start = time.time()
                 secure_delete(f)
                 file_elapsed = time.time() - start
@@ -171,7 +171,7 @@ def delete_disconnected_fs_submissions(args: argparse.Namespace) -> None:
                     )
                 )
             else:
-                print("Not removing {}.".format(f))
+                print(f"Not removing {f}.")
 
 
 def were_there_submissions_today(

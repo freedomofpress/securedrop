@@ -1,4 +1,3 @@
-# -*- mode: python; coding: utf-8 -*-
 #
 # Copyright (C) 2013-2018 Freedom of the Press Foundation & al
 # Copyright (C) 2018 Loic Dachary <loic@dachary.org>
@@ -26,7 +25,6 @@ instances.
 import argparse
 import base64
 import functools
-import io
 import ipaddress
 import json
 import logging
@@ -154,7 +152,7 @@ class SiteConfig:
     class ValidatePath(Validator):
         def __init__(self, basedir: str) -> None:
             self.basedir = basedir
-            super(SiteConfig.ValidatePath, self).__init__()
+            super().__init__()
 
         def validate(self, document: Document) -> bool:
             if document.text == "":
@@ -168,7 +166,7 @@ class SiteConfig:
         def validate(self, document: Document) -> bool:
             if document.text == "":
                 return True
-            return super(SiteConfig.ValidateOptionalPath, self).validate(document)
+            return super().validate(document)
 
     class ValidateYesNo(Validator):
         def validate(self, document: Document) -> bool:
@@ -192,7 +190,7 @@ class SiteConfig:
         def validate(self, document: Document) -> bool:
             if document.text == "":
                 return True
-            return super(SiteConfig.ValidateOptionalFingerprint, self).validate(document)
+            return super().validate(document)
 
     class ValidateInt(Validator):
         def validate(self, document: Document) -> bool:
@@ -200,7 +198,7 @@ class SiteConfig:
                 return True
             raise ValidationError(message="Must be an integer")
 
-    class Locales(object):
+    class Locales:
         def __init__(self, appdir: str) -> None:
             self.translation_dir = os.path.realpath(os.path.join(appdir, "translations"))
 
@@ -216,7 +214,7 @@ class SiteConfig:
             present = SiteConfig.Locales(basedir).get_translations()
             self.available = present & supported
 
-            super(SiteConfig.ValidateLocales, self).__init__()
+            super().__init__()
 
         def validate(self, document: Document) -> bool:
             desired = document.text.split()
@@ -252,7 +250,7 @@ class SiteConfig:
 
     class ValidateOSSECEmail(ValidateEmail):
         def validate(self, document: Document) -> bool:
-            super(SiteConfig.ValidateOSSECEmail, self).validate(document)
+            super().validate(document)
             text = document.text
             if "ossec@ossec.test" != text:
                 return True
@@ -264,7 +262,7 @@ class SiteConfig:
         def validate(self, document: Document) -> bool:
             if document.text == "":
                 return True
-            return super(SiteConfig.ValidateOptionalEmail, self).validate(document)
+            return super().validate(document)
 
     def __init__(self, args: argparse.Namespace) -> None:
         self.args = args
@@ -604,9 +602,9 @@ class SiteConfig:
             except subprocess.CalledProcessError as e:
                 sdlog.debug(e.output)
                 raise FingerprintException(
-                    "fingerprint {} ".format(fingerprint)
+                    f"fingerprint {fingerprint} "
                     + "does not match "
-                    + "the public key {}".format(public_key)
+                    + f"the public key {public_key}"
                 )
         return True
 
@@ -631,7 +629,7 @@ class SiteConfig:
         return os.path.exists(self.args.site_config)
 
     def save(self) -> None:
-        with io.open(self.args.site_config, "w") as site_config_file:
+        with open(self.args.site_config, "w") as site_config_file:
             yaml.safe_dump(self.config, site_config_file, default_flow_style=False)
 
     def clean_config(self, config: Dict) -> Dict:
@@ -683,14 +681,14 @@ class SiteConfig:
         to current specifications.
         """
         try:
-            with io.open(self.args.site_config) as site_config_file:
+            with open(self.args.site_config) as site_config_file:
                 c = yaml.safe_load(site_config_file)
                 return self.clean_config(c) if validate else c
-        except IOError:
+        except OSError:
             sdlog.error("Config file missing, re-run with sdconfig")
             raise
         except yaml.YAMLError:
-            sdlog.error("There was an issue processing {}".format(self.args.site_config))
+            sdlog.error(f"There was an issue processing {self.args.site_config}")
             raise
 
 
@@ -736,10 +734,10 @@ def update_check_required(cmd_name: str) -> Callable[[_FuncT], _FuncT]:
                     "You are not running the most recent signed SecureDrop release "
                     "on this workstation."
                 )
-                sdlog.error("Latest available version: {}".format(latest_tag))
+                sdlog.error(f"Latest available version: {latest_tag}")
 
                 if branch_status is not None:
-                    sdlog.error("Current branch status: {}".format(branch_status))
+                    sdlog.error(f"Current branch status: {branch_status}")
                 else:
                     sdlog.error("Problem determining current branch status.")
 
@@ -805,7 +803,7 @@ def find_or_generate_new_torv3_keys(args: argparse.Namespace) -> int:
     """
     secret_key_path = os.path.join(args.ansible_path, "tor_v3_keys.json")
     if os.path.exists(secret_key_path):
-        print("Tor v3 onion service keys already exist in: {}".format(secret_key_path))
+        print(f"Tor v3 onion service keys already exist in: {secret_key_path}")
         return 0
     # No old keys, generate and store them first
     app_journalist_public_key, app_journalist_private_key = generate_new_v3_keys()
@@ -823,7 +821,7 @@ def find_or_generate_new_torv3_keys(args: argparse.Namespace) -> int:
     }
     with open(secret_key_path, "w") as fobj:
         json.dump(tor_v3_service_info, fobj, indent=4)
-    print("Tor v3 onion service keys generated and stored in: {}".format(secret_key_path))
+    print(f"Tor v3 onion service keys generated and stored in: {secret_key_path}")
     return 0
 
 
@@ -886,7 +884,7 @@ def restore_securedrop(args: argparse.Namespace) -> int:
     ]
 
     ansible_cmd_extras = [
-        "restore_file='{}'".format(restore_file_basename),
+        f"restore_file='{restore_file_basename}'",
     ]
 
     if args.restore_skip_tor:
@@ -904,10 +902,8 @@ def run_tails_config(args: argparse.Namespace) -> int:
     """Configure Tails environment post SD install"""
     sdlog.info("Configuring Tails workstation environment")
     sdlog.info(
-        (
-            "You'll be prompted for the temporary Tails admin password,"
-            " which was set on Tails login screen"
-        )
+        "You'll be prompted for the temporary Tails admin password,"
+        " which was set on Tails login screen"
     )
     ansible_cmd = [
         os.path.join(args.ansible_path, "securedrop-tails.yml"),
@@ -1034,7 +1030,7 @@ def update(args: argparse.Namespace) -> int:
         ):
             # Finally, we check that there is no branch of the same name
             # prior to reporting success.
-            cmd = ["git", "show-ref", "--heads", "--verify", "refs/heads/{}".format(latest_tag)]
+            cmd = ["git", "show-ref", "--heads", "--verify", f"refs/heads/{latest_tag}"]
             try:
                 # We expect this to produce a non-zero exit code, which
                 # will produce a subprocess.CalledProcessError
@@ -1063,7 +1059,7 @@ def update(args: argparse.Namespace) -> int:
     git_checkout_cmd = ["git", "checkout", latest_tag]
     subprocess.check_call(git_checkout_cmd, cwd=args.root)
 
-    sdlog.info("Updated to SecureDrop {}.".format(latest_tag))
+    sdlog.info(f"Updated to SecureDrop {latest_tag}.")
     return 0
 
 
@@ -1213,10 +1209,10 @@ def main(argv: List[str]) -> None:
             print("Process was interrupted.")
             sys.exit(EXIT_INTERRUPT)
         except subprocess.CalledProcessError as e:
-            print("ERROR (run with -v for more): {msg}".format(msg=e), file=sys.stderr)
+            print(f"ERROR (run with -v for more): {e}", file=sys.stderr)
             sys.exit(EXIT_SUBPROCESS_ERROR)
         except Exception as e:
-            raise SystemExit("ERROR (run with -v for more): {msg}".format(msg=e))
+            raise SystemExit(f"ERROR (run with -v for more): {e}")
     if return_code == 0:
         sys.exit(EXIT_SUCCESS)
     else:

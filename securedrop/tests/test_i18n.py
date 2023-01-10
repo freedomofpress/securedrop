@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 #
 # SecureDrop whistleblower submission system
 # Copyright (C) 2017 Loic Dachary <loic@dachary.org>
@@ -300,7 +299,7 @@ def test_i18n():
 
 
 def test_parse_locale_set():
-    assert parse_locale_set([FALLBACK_LOCALE]) == set([Locale.parse(FALLBACK_LOCALE)])
+    assert parse_locale_set([FALLBACK_LOCALE]) == {Locale.parse(FALLBACK_LOCALE)}
 
 
 def test_no_usable_fallback_locale():

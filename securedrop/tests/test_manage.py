@@ -1,12 +1,11 @@
 import argparse
 import datetime
-import io
 import logging
 import os
 import time
+from unittest import mock
 
 import manage
-import mock
 from management import submissions
 from models import Journalist, db
 from passphrases import PassphraseGenerator
@@ -180,7 +179,7 @@ def test_clean_tmp_do_nothing(caplog):
 def test_clean_tmp_too_young(config, caplog):
     args = argparse.Namespace(days=24 * 60 * 60, directory=config.TEMP_DIR, verbose=logging.DEBUG)
     # create a file
-    io.open(os.path.join(config.TEMP_DIR, "FILE"), "a").close()
+    open(os.path.join(config.TEMP_DIR, "FILE"), "a").close()
 
     manage.setup_verbosity(args)
     manage.clean_tmp(args)
@@ -190,7 +189,7 @@ def test_clean_tmp_too_young(config, caplog):
 def test_clean_tmp_removed(config, caplog):
     args = argparse.Namespace(days=0, directory=config.TEMP_DIR, verbose=logging.DEBUG)
     fname = os.path.join(config.TEMP_DIR, "FILE")
-    with io.open(fname, "a"):
+    with open(fname, "a"):
         old = time.time() - 24 * 60 * 60
         os.utime(fname, (old, old))
     manage.setup_verbosity(args)
@@ -214,8 +213,8 @@ def test_were_there_submissions_today(source_app, config, app_storage):
         source.last_updated = datetime.datetime.utcnow() - datetime.timedelta(hours=24 * 2)
         db.session.commit()
         submissions.were_there_submissions_today(args, context)
-        assert io.open(count_file).read() == "0"
+        assert open(count_file).read() == "0"
         source.last_updated = datetime.datetime.utcnow()
         db.session.commit()
         submissions.were_there_submissions_today(args, context)
-        assert io.open(count_file).read() == "1"
+        assert open(count_file).read() == "1"

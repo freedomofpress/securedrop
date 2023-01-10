@@ -58,7 +58,7 @@ def test_apparmor_ensure_not_disabled(host, profile):
     Polling aa-status only checks the last config that was loaded,
     this ensures it wont be disabled on reboot.
     """
-    f = host.file("/etc/apparmor.d/disabled/usr.sbin.{}".format(profile))
+    f = host.file(f"/etc/apparmor.d/disabled/usr.sbin.{profile}")
     with host.sudo():
         assert not f.exists
 
@@ -68,7 +68,7 @@ def test_app_apparmor_complain(host, complain_pkg):
     """Ensure app-armor profiles are in complain mode for staging"""
     with host.sudo():
         awk = "awk '/[0-9]+ profiles.*complain." "/{flag=1;next}/^[0-9]+.*/{flag=0}flag'"
-        c = host.check_output("aa-status | {}".format(awk))
+        c = host.check_output(f"aa-status | {awk}")
         assert complain_pkg in c
 
 
@@ -83,7 +83,7 @@ def test_app_apparmor_complain_count(host):
 def test_apparmor_enforced(host, aa_enforced):
     awk = "awk '/[0-9]+ profiles.*enforce./" "{flag=1;next}/^[0-9]+.*/{flag=0}flag'"
     with host.sudo():
-        c = host.check_output("aa-status | {}".format(awk))
+        c = host.check_output(f"aa-status | {awk}")
         assert aa_enforced in c
 
 

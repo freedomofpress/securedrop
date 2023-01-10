@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 #
 # SecureDrop whistleblower submission system
 # Copyright (C) 2017 Loic Dachary <loic@dachary.org>
@@ -20,13 +19,13 @@
 import argparse
 import os
 import subprocess
+from unittest import mock
 
 import bootstrap
-import mock
 import pytest
 
 
-class TestSecureDropAdmin(object):
+class TestSecureDropAdmin:
     def test_verbose(self, capsys):
         bootstrap.setup_logger(verbose=True)
         bootstrap.sdlog.debug("VISIBLE")

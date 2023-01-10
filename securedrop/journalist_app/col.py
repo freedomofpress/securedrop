@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from pathlib import Path
 
 import werkzeug
@@ -145,7 +143,7 @@ def make_blueprint() -> Blueprint:
                 ),
                 "error",
             )
-            current_app.logger.error("File {} not found".format(file))
+            current_app.logger.error(f"File {file} not found")
             return redirect(url_for("col.col", filesystem_id=filesystem_id))
 
         # mark as seen by the current user
@@ -161,7 +159,7 @@ def make_blueprint() -> Blueprint:
                 message = Submission.query.filter(Submission.filename == fn).one()
                 mark_seen([message], journalist)
         except NoResultFound as e:
-            current_app.logger.error("Could not mark {} as seen: {}".format(fn, e))
+            current_app.logger.error(f"Could not mark {fn} as seen: {e}")
 
         return send_file(
             Storage.get_default().path(filesystem_id, fn),

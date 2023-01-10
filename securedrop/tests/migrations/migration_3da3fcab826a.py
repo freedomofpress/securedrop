@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import os
 import random
 from uuid import uuid4

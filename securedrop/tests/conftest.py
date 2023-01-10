@@ -368,5 +368,5 @@ def _stop_test_rqworker(worker_pid_file: Path) -> None:
 def _get_pid_from_file(pid_file_name: Path) -> int:
     try:
         return int(open(pid_file_name).read())
-    except IOError:
+    except OSError:
         return -1

@@ -1,4 +1,3 @@
-# -*- mode: python; coding: utf-8 -*-
 #
 # Copyright (C) 2013-2018 Freedom of the Press Foundation & al
 # Copyright (C) 2018 Loic Dachary <loic@dachary.org>
@@ -53,9 +52,8 @@ def run_command(command: List[str]) -> Iterator[bytes]:
     """
     popen = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     if popen.stdout is None:
-        raise EnvironmentError("Could not run command: None stdout")
-    for stdout_line in iter(popen.stdout.readline, b""):
-        yield stdout_line
+        raise OSError("Could not run command: None stdout")
+    yield from iter(popen.stdout.readline, b"")
     popen.stdout.close()
     return_code = popen.wait()
     if return_code:
@@ -111,10 +109,8 @@ def install_apt_dependencies(args: argparse.Namespace) -> None:
     """
     sdlog.info("Installing SecureDrop Admin dependencies")
     sdlog.info(
-        (
-            "You'll be prompted for the temporary Tails admin password,"
-            " which was set on Tails login screen"
-        )
+        "You'll be prompted for the temporary Tails admin password,"
+        " which was set on Tails login screen"
     )
 
     apt_command = [
@@ -142,7 +138,7 @@ def install_apt_dependencies(args: argparse.Namespace) -> None:
         # under Tails 2.x. If updates are being applied, don't try to pile
         # on with more apt requests.
         sdlog.error(
-            ("Failed to install apt dependencies. Check network" " connection and try again.")
+            "Failed to install apt dependencies. Check network" " connection and try again."
         )
         raise
 
@@ -181,7 +177,7 @@ def envsetup(args: argparse.Namespace, virtualenv_dir: str = VENV_DIR) -> None:
             )
         except subprocess.CalledProcessError as e:
             sdlog.debug(e.output)
-            sdlog.error(("Unable to create virtualenv. Check network settings" " and try again."))
+            sdlog.error("Unable to create virtualenv. Check network settings" " and try again.")
             sdlog.debug("Cleaning up virtualenv")
             if os.path.exists(virtualenv_dir):
                 shutil.rmtree(virtualenv_dir)
@@ -234,23 +230,21 @@ def install_pip_dependencies(
         "only-if-needed",
     ]
 
-    sdlog.info("Checking {} for securedrop-admin".format(desc))
+    sdlog.info(f"Checking {desc} for securedrop-admin")
     try:
         pip_output = subprocess.check_output(
             maybe_torify() + pip_install_cmd, stderr=subprocess.STDOUT
         )
     except subprocess.CalledProcessError as e:
         sdlog.debug(e.output)
-        sdlog.error(
-            ("Failed to install {}. Check network" " connection and try again.".format(desc))
-        )
+        sdlog.error("Failed to install {}. Check network" " connection and try again.".format(desc))
         raise
 
     sdlog.debug(pip_output)
     if "Successfully installed" in str(pip_output):
-        sdlog.info("{} for securedrop-admin upgraded".format(desc))
+        sdlog.info(f"{desc} for securedrop-admin upgraded")
     else:
-        sdlog.info("{} for securedrop-admin are up-to-date".format(desc))
+        sdlog.info(f"{desc} for securedrop-admin are up-to-date")
 
 
 def parse_argv(argv: List[str]) -> argparse.Namespace:

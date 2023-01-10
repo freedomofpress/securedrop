@@ -1,4 +1,3 @@
-import io
 import operator
 import os
 from base64 import urlsafe_b64encode
@@ -118,7 +117,7 @@ def make_blueprint(config: SecureDropConfig) -> Blueprint:
                     source_app_storage=Storage.get_default(),
                 )
             except (SourcePassphraseCollisionError, SourceDesignationCollisionError) as e:
-                current_app.logger.error("Could not create a source: {}".format(e))
+                current_app.logger.error(f"Could not create a source: {e}")
                 flash_msg(
                     "error",
                     None,
@@ -159,7 +158,7 @@ def make_blueprint(config: SecureDropConfig) -> Blueprint:
                 reply.filename,
             )
             try:
-                with io.open(reply_path, "rb") as f:
+                with open(reply_path, "rb") as f:
                     contents = f.read()
                 decrypted_reply = EncryptionManager.get_default().decrypt_journalist_reply(
                     for_source_user=logged_in_source, ciphertext_in=contents

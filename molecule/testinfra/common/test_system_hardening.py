@@ -65,7 +65,7 @@ def test_blacklisted_kernel_modules(host, kernel_module):
         assert kernel_module not in c.stdout
 
     f = host.file("/etc/modprobe.d/blacklist.conf")
-    assert f.contains("^blacklist {}$".format(kernel_module))
+    assert f.contains(f"^blacklist {kernel_module}$")
 
 
 def test_swap_disabled(host):
@@ -124,7 +124,7 @@ def test_sshd_config(host, sshd_opts):
 
     sshd_config_file = host.file("/etc/ssh/sshd_config").content_string
 
-    line = "{} {}".format(sshd_opts[0], sshd_opts[1])
+    line = f"{sshd_opts[0]} {sshd_opts[1]}"
     assert line in sshd_config_file
 
 

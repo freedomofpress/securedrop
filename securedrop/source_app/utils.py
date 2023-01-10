@@ -93,14 +93,14 @@ def check_url_file(path: str, regexp: str) -> "Optional[str]":
     files in /var/lib/securedrop (as the Apache user can't read Tor config)
     """
     try:
-        f = open(path, "r")
+        f = open(path)
         contents = f.readline().strip()
         f.close()
         if re.match(regexp, contents):
             return contents
         else:
             return None
-    except IOError:
+    except OSError:
         return None
 
 

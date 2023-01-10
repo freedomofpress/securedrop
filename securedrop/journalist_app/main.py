@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Union
@@ -141,7 +140,7 @@ def make_blueprint() -> Blueprint:
             return redirect(url_for("col.col", filesystem_id=g.filesystem_id))
 
         g.source.interaction_count += 1
-        filename = "{0}-{1}-reply.gpg".format(
+        filename = "{}-{}-reply.gpg".format(
             g.source.interaction_count, g.source.journalist_filename
         )
         EncryptionManager.get_default().encrypt_journalist_reply(

@@ -98,7 +98,7 @@ def test_gpg_key_in_keyring(host):
 
 def test_ensure_logo(host):
     """ensure default logo header file exists"""
-    f = host.file("{}/static/i/logo.png".format(sdvars.securedrop_code))
+    f = host.file(f"{sdvars.securedrop_code}/static/i/logo.png")
     with host.sudo():
         assert f.mode == 0o644
         assert f.user == "root"
@@ -109,7 +109,7 @@ def test_securedrop_tmp_clean_cron(host):
     """Ensure securedrop tmp clean cron job in place"""
     with host.sudo():
         cronlist = host.run("crontab -u www-data -l").stdout
-        cronjob = "@daily {}/manage.py clean-tmp".format(sdvars.securedrop_code)
+        cronjob = f"@daily {sdvars.securedrop_code}/manage.py clean-tmp"
         assert cronjob in cronlist
 
 

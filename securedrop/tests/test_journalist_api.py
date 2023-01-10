@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import json
 import random
 from datetime import datetime
@@ -1020,16 +1019,16 @@ def test_malformed_auth_token(journalist_app, journalist_api_token):
 
     with journalist_app.test_client() as app:
         # precondition to ensure token is even valid
-        resp = app.get(url, headers={"Authorization": "Token {}".format(journalist_api_token)})
+        resp = app.get(url, headers={"Authorization": f"Token {journalist_api_token}"})
         assert resp.status_code == 200
 
-        resp = app.get(url, headers={"Authorization": "not-token {}".format(journalist_api_token)})
+        resp = app.get(url, headers={"Authorization": f"not-token {journalist_api_token}"})
         assert resp.status_code == 403
 
         resp = app.get(url, headers={"Authorization": journalist_api_token})
         assert resp.status_code == 403
 
-        resp = app.get(url, headers={"Authorization": "too many {}".format(journalist_api_token)})
+        resp = app.get(url, headers={"Authorization": f"too many {journalist_api_token}"})
         assert resp.status_code == 403
 
 

@@ -55,7 +55,7 @@ def get_one_or_else(
         )
         failure_method(500)
     except NoResultFound as e:
-        logger.error("Found none when one was expected: %s" % (e,))
+        logger.error(f"Found none when one was expected: {e}")
         failure_method(404)
 
 
@@ -338,14 +338,14 @@ class FirstOrLastNameError(Exception):
     """Generic error for names that are invalid."""
 
     def __init__(self, msg: str) -> None:
-        super(FirstOrLastNameError, self).__init__(msg)
+        super().__init__(msg)
 
 
 class InvalidNameLength(FirstOrLastNameError):
     """Raised when attempting to create a Journalist with an invalid name length."""
 
     def __init__(self) -> None:
-        super(InvalidNameLength, self).__init__(gettext("Name too long"))
+        super().__init__(gettext("Name too long"))
 
 
 class LoginThrottledException(Exception):
@@ -451,7 +451,7 @@ class Journalist(db.Model):
             self.set_hotp_secret(otp_secret)
 
     def __repr__(self) -> str:
-        return "<Journalist {0}{1}>".format(self.username, " [admin]" if self.is_admin else "")
+        return "<Journalist {}{}>".format(self.username, " [admin]" if self.is_admin else "")
 
     def _scrypt_hash(self, password: str, salt: bytes) -> bytes:
         backend = default_backend()
@@ -557,7 +557,7 @@ class Journalist(db.Model):
             # legacy support
             if self.pw_salt is None:
                 raise ValueError(
-                    "Should never happen: pw_salt is none for legacy Journalist {}".format(self.id)
+                    f"Should never happen: pw_salt is none for legacy Journalist {self.id}"
                 )
 
             # For type checking
@@ -609,14 +609,14 @@ class Journalist(db.Model):
         if self.is_totp:
             return pyotp.TOTP(self.otp_secret)
         else:
-            raise ValueError("{} is not using TOTP".format(self))
+            raise ValueError(f"{self} is not using TOTP")
 
     @property
     def hotp(self) -> "HOTP":
         if not self.is_totp:
             return pyotp.HOTP(self.otp_secret)
         else:
-            raise ValueError("{} is not using HOTP".format(self))
+            raise ValueError(f"{self} is not using HOTP")
 
     @property
     def shared_secret_qrcode(self) -> Markup:

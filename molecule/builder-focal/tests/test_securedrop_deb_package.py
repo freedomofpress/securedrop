@@ -8,7 +8,7 @@ import yaml
 from testinfra.host import Host
 
 SECUREDROP_TARGET_DISTRIBUTION = os.environ.get("SECUREDROP_TARGET_DISTRIBUTION")
-testinfra_hosts = ["docker://{}-sd-dpkg-verification".format(SECUREDROP_TARGET_DISTRIBUTION)]
+testinfra_hosts = [f"docker://{SECUREDROP_TARGET_DISTRIBUTION}-sd-dpkg-verification"]
 
 
 def extract_package_name_from_filepath(filepath: str) -> str:
@@ -164,9 +164,9 @@ def test_deb_packages_appear_installable(host: Host, deb: Path) -> None:
 
     # sudo is required to call `dpkg --install`, even as dry-run.
     with host.sudo():
-        c = host.run("dpkg --install --dry-run {}".format(deb))
-        assert "Selecting previously unselected package {}".format(package_name) in c.stdout
-        regex = "Preparing to unpack [./]+{} ...".format(re.escape(deb.name))
+        c = host.run(f"dpkg --install --dry-run {deb}")
+        assert f"Selecting previously unselected package {package_name}" in c.stdout
+        regex = f"Preparing to unpack [./]+{re.escape(deb.name)} ..."
         assert re.search(regex, c.stdout, re.M)
         assert c.rc == 0
 
@@ -181,7 +181,7 @@ def test_deb_package_control_fields(host: Host, deb: Path) -> None:
     """
     package_name = extract_package_name_from_filepath(str(deb))
     # The `--field` option will display all fields if none are specified.
-    c = host.run("dpkg-deb --field {}".format(deb))
+    c = host.run(f"dpkg-deb --field {deb}")
 
     assert "Maintainer: SecureDrop Team <securedrop@freedom.press>" in c.stdout
     arch_all = (
@@ -196,14 +196,14 @@ def test_deb_package_control_fields(host: Host, deb: Path) -> None:
     else:
         assert "Architecture: amd64" in c.stdout
 
-    assert "Package: {}".format(package_name) in c.stdout
+    assert f"Package: {package_name}" in c.stdout
     assert c.rc == 0
 
 
 @pytest.mark.parametrize("deb", deb_paths.values())
 def test_deb_package_control_fields_homepage(host: Host, deb: Path):
     # The `--field` option will display all fields if none are specified.
-    c = host.run("dpkg-deb --field {}".format(deb))
+    c = host.run(f"dpkg-deb --field {deb}")
     # The OSSEC source packages will have a different homepage;
     # all other packages should set securedrop.org as homepage.
     if deb.name.startswith("ossec-"):
@@ -284,7 +284,7 @@ def test_deb_package_contains_expected_conffiles(host: Host, deb: Path):
     mktemp = host.run("mktemp -d")
     tmpdir = mktemp.stdout.strip()
     # The `--raw-extract` flag includes `DEBIAN/` dir with control files
-    host.run("dpkg-deb --raw-extract {} {}".format(deb, tmpdir))
+    host.run(f"dpkg-deb --raw-extract {deb} {tmpdir}")
     conffiles_path = os.path.join(tmpdir, "DEBIAN", "conffiles")
     f = host.file(conffiles_path)
 
@@ -349,7 +349,7 @@ def test_deb_package_lintian(host: Host, deb: Path, tag: str):
     """
     Ensures lintian likes our Debian packages.
     """
-    c = host.run("lintian --tags {} --no-tag-display-limit {}".format(tag, deb))
+    c = host.run(f"lintian --tags {tag} --no-tag-display-limit {deb}")
     assert len(c.stdout) == 0
 
 
@@ -410,7 +410,7 @@ def test_jinja_files_not_present(host: Host, deb: Path):
     as-is into the debian packages.
     """
 
-    c = host.run("dpkg-deb --contents {}".format(deb))
+    c = host.run(f"dpkg-deb --contents {deb}")
     # There shouldn't be any files with a .j2 ending
     assert not re.search(r"^.*\.j2$", c.stdout, re.M)
 
@@ -433,7 +433,7 @@ def test_ossec_binaries_are_present_agent(host: Host):
     c = host.run("dpkg-deb -c {}".format(deb_paths["ossec_agent"]))
     for wanted_file in wanted_files:
         assert re.search(
-            r"^.* .{}$".format(wanted_file),
+            rf"^.* .{wanted_file}$",
             c.stdout,
             re.M,
         )
@@ -474,7 +474,7 @@ def test_ossec_binaries_are_present_server(host: Host):
     c = host.run("dpkg-deb --contents {}".format(deb_paths["ossec_server"]))
     for wanted_file in wanted_files:
         assert re.search(
-            r"^.* .{}$".format(wanted_file),
+            rf"^.* .{wanted_file}$",
             c.stdout,
             re.M,
         )
@@ -494,7 +494,7 @@ def test_config_package_contains_expected_files(host: Host) -> None:
     c = host.run("dpkg-deb --contents {}".format(deb_paths["securedrop_config"]))
     for wanted_file in wanted_files:
         assert re.search(
-            r"^.* .{}$".format(wanted_file),
+            rf"^.* .{wanted_file}$",
             c.stdout,
             re.M,
         )

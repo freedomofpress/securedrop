@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-import io
 import os
 
 import pytest
@@ -56,7 +54,7 @@ def test_read_write_unicode():
 def test_file_seems_encrypted():
     f = SecureTemporaryFile("/tmp")
     f.write(MESSAGE)
-    with io.open(f.filepath, "rb") as fh:
+    with open(f.filepath, "rb") as fh:
         contents = fh.read()
 
     assert MESSAGE.encode("utf-8") not in contents

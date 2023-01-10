@@ -1,9 +1,7 @@
 #!/opt/venvs/securedrop-app-code/bin/python
-# -*- coding: utf-8 -*-
 
 import argparse
 import glob
-import io
 import json
 import logging
 import os
@@ -102,7 +100,7 @@ class I18NTool:
                 self.file_is_modified(str(messages_file))
                 and len(os.listdir(args.translations_dir)) > 1
             ):
-                tglob = "{}/*/LC_MESSAGES/*.po".format(args.translations_dir)
+                tglob = f"{args.translations_dir}/*/LC_MESSAGES/*.po"
                 for translation in glob.iglob(tglob):
                     subprocess.check_call(
                         [
@@ -217,7 +215,7 @@ class I18NTool:
         parser.add_argument(
             "--translations-dir",
             default=translations_dir,
-            help="Base directory for translation files (default {})".format(translations_dir),
+            help=f"Base directory for translation files (default {translations_dir})",
         )
         parser.add_argument(
             "--version",
@@ -230,7 +228,7 @@ class I18NTool:
         parser.add_argument(
             "--sources",
             default=sources,
-            help="Source files and directories to extract (default {})".format(sources),
+            help=f"Source files and directories to extract (default {sources})",
         )
 
     def set_translate_messages_parser(self, subps: _SubParsersAction) -> None:
@@ -244,7 +242,7 @@ class I18NTool:
         parser.add_argument(
             "--mapping",
             default=mapping,
-            help="Mapping of files to consider (default {})".format(mapping),
+            help=f"Mapping of files to consider (default {mapping})",
         )
         parser.set_defaults(func=self.translate_messages)
 
@@ -269,7 +267,7 @@ class I18NTool:
         )
         # nosemgrep: python.lang.security.audit.subprocess-shell-true.subprocess-shell-true
         if subprocess.call(cmd, shell=True):  # nosec
-            if "docker" in io.open("/proc/1/cgroup").read():
+            if "docker" in open("/proc/1/cgroup").read():
                 log.error(
                     "remember ~/.gitconfig does not exist "
                     "in the dev-shell Docker container, "
@@ -284,7 +282,7 @@ class I18NTool:
             l10n_content += "* " + info["name"] + " (``" + code + "``)\n"
         includes = abspath(join(args.docs_repo_dir, "docs/includes"))
         l10n_txt = join(includes, "l10n.txt")
-        io.open(l10n_txt, mode="w").write(l10n_content)
+        open(l10n_txt, mode="w").write(l10n_content)
         self.require_git_email_name(includes)
         if self.file_is_modified(l10n_txt):
             subprocess.check_call(["git", "add", "l10n.txt"], cwd=includes)
@@ -355,7 +353,7 @@ class I18NTool:
                 desktop_code = info["desktop"]
                 path = join(
                     LOCALE_DIR["desktop"],
-                    "{l}.po".format(l=desktop_code),  # noqa: E741
+                    f"{desktop_code}.po",  # noqa: E741
                 )
                 add(path)
             except KeyError:
@@ -400,7 +398,7 @@ class I18NTool:
             if len(c) > 1 and c[2] != since_commit and self.translated_commit_re.match(c[1])
         ]
         log.debug("Path changes for %s: %s", path, path_changes)
-        translators = set([c[0] for c in path_changes])
+        translators = {c[0] for c in path_changes}
         log.debug("Translators for %s: %s", path, translators)
         return translators
 
@@ -586,9 +584,9 @@ class I18NTool:
             print("Listing all translators who have ever helped")
         else:
             since = args.since if args.since else self.get_last_release(args.root)
-            print("Listing translators who have helped since {}".format(since))
+            print(f"Listing translators who have helped since {since}")
         for code, info in sorted(self.supported_languages.items()):
-            translators = set([])
+            translators = set()
             paths = [
                 app_template.format(LOCALE_DIR["securedrop"], code),
                 desktop_template.format(info["desktop"]),
@@ -598,7 +596,7 @@ class I18NTool:
                     t = self.translators(args, path, since)
                     translators.update(t)
                 except Exception as e:
-                    print("Could not check git history of {}: {}".format(path, e), file=sys.stderr)
+                    print(f"Could not check git history of {path}: {e}", file=sys.stderr)
             print(
                 "{} ({}):{}".format(
                     code,

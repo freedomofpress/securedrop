@@ -17,9 +17,9 @@ def test_apache_headers_journalist_interface(host, header, value):
     assert f.user == "root"
     assert f.group == "root"
     assert f.mode == 0o644
-    header_unset = "Header onsuccess unset {}".format(header)
+    header_unset = f"Header onsuccess unset {header}"
     assert f.contains(header_unset)
-    header_set = 'Header always set {} "{}"'.format(header, value)
+    header_set = f'Header always set {header} "{value}"'
     assert f.contains(header_set)
 
 
@@ -27,7 +27,7 @@ def test_apache_headers_journalist_interface(host, header, value):
 @pytest.mark.parametrize(
     "apache_opt",
     [
-        "<VirtualHost {}:8080>".format(securedrop_test_vars.apache_listening_address),
+        f"<VirtualHost {securedrop_test_vars.apache_listening_address}:8080>",
         "WSGIDaemonProcess journalist processes=2 threads=30 display-name=%{{GROUP}} python-path={}".format(  # noqa
             securedrop_test_vars.securedrop_code
         ),
@@ -37,7 +37,7 @@ def test_apache_headers_journalist_interface(host, header, value):
         ),
         "WSGIPassAuthorization On",
         'Header set Cache-Control "no-store"',
-        "Alias /static {}/static".format(securedrop_test_vars.securedrop_code),
+        f"Alias /static {securedrop_test_vars.securedrop_code}/static",
         "XSendFile        On",
         "LimitRequestBody 524288000",
         "XSendFilePath    /var/lib/securedrop/store/",
@@ -60,7 +60,7 @@ def test_apache_config_journalist_interface(host, apache_opt):
     assert f.user == "root"
     assert f.group == "root"
     assert f.mode == 0o644
-    regex = "^{}$".format(re.escape(apache_opt))
+    regex = f"^{re.escape(apache_opt)}$"
     assert re.search(regex, f.content_string, re.M)
 
 
@@ -148,5 +148,5 @@ def test_apache_config_journalist_interface_access_control(host, apache_opt):
     Verifies the access control directives for the Journalist Interface.
     """
     f = host.file("/etc/apache2/sites-available/journalist.conf")
-    regex = "^{}$".format(re.escape(apache_opt))
+    regex = f"^{re.escape(apache_opt)}$"
     assert re.search(regex, f.content_string, re.M)

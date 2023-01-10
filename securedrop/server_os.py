@@ -3,7 +3,7 @@ import functools
 FOCAL_VERSION = "20.04"
 
 
-@functools.lru_cache()
+@functools.lru_cache
 def get_os_release() -> str:
     with open("/etc/os-release") as f:
         os_release = f.readlines()

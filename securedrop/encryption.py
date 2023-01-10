@@ -116,7 +116,7 @@ class EncryptionManager:
         try:
             self.get_journalist_public_key()
         except GpgKeyNotFoundError:
-            raise EnvironmentError(
+            raise OSError(
                 f"The journalist public key with fingerprint {journalist_key_fingerprint}"
                 f" has not been imported into GPG."
             )

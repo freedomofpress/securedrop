@@ -54,7 +54,7 @@ def test_sources_list(host, repo):
     assert f.is_file
     assert f.user == "root"
     assert f.mode == 0o644
-    repo_regex = "^{}$".format(re.escape(repo_config))
+    repo_regex = f"^{re.escape(repo_config)}$"
     assert f.contains(repo_regex)
 
 
@@ -70,7 +70,7 @@ apt_config_options = {
     "APT::Periodic::Enable": "1",
     "Unattended-Upgrade::AutoFixInterruptedDpkg": "true",
     "Unattended-Upgrade::Automatic-Reboot": "true",
-    "Unattended-Upgrade::Automatic-Reboot-Time": "{}:00".format(test_vars.daily_reboot_time),
+    "Unattended-Upgrade::Automatic-Reboot-Time": f"{test_vars.daily_reboot_time}:00",
     "Unattended-Upgrade::Automatic-Reboot-WithUsers": "true",
     "Unattended-Upgrade::Origins-Pattern": [
         "origin=${distro_id},archive=${distro_codename}",
@@ -88,7 +88,7 @@ def test_unattended_upgrades_config(host, k, v):
     """
     # Dump apt config to inspect end state, apt will build config
     # from all conf files on disk, e.g. 80securedrop.
-    c = host.run("apt-config dump --format '%v%n' {}".format(k))
+    c = host.run(f"apt-config dump --format '%v%n' {k}")
     assert c.rc == 0
     # Some values are lists, so support that in the params
     if hasattr(v, "__getitem__"):
@@ -158,7 +158,7 @@ def test_apt_daily_timer_schedule(host):
     """
     t = (int(test_vars.daily_reboot_time) - OFFSET_UPDATE) % 24
     c = host.run("systemctl show apt-daily.timer")
-    assert "TimersCalendar={ OnCalendar=*-*-* " + "{:02d}".format(t) + ":00:00 ;" in c.stdout
+    assert "TimersCalendar={ OnCalendar=*-*-* " + f"{t:02d}" + ":00:00 ;" in c.stdout
     assert "RandomizedDelayUSec=20m" in c.stdout
 
 
@@ -169,7 +169,7 @@ def test_apt_daily_upgrade_timer_schedule(host):
     """
     t = (int(test_vars.daily_reboot_time) - OFFSET_UPGRADE) % 24
     c = host.run("systemctl show apt-daily-upgrade.timer")
-    assert "TimersCalendar={ OnCalendar=*-*-* " + "{:02d}".format(t) + ":00:00 ;" in c.stdout
+    assert "TimersCalendar={ OnCalendar=*-*-* " + f"{t:02d}" + ":00:00 ;" in c.stdout
     assert "RandomizedDelayUSec=20m" in c.stdout
 
 

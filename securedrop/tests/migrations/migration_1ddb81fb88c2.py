@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from db import db
 from journalist_app import create_app
 from sqlalchemy import text

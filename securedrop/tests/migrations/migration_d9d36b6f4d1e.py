@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import secrets
 
 import pytest

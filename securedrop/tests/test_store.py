@@ -1,4 +1,3 @@
-import io
 import logging
 import os
 import re
@@ -42,7 +41,7 @@ def create_file_in_source_dir(base_dir, filesystem_id, filename):
     os.makedirs(source_directory)
 
     file_path = os.path.join(source_directory, filename)
-    with io.open(file_path, "a"):
+    with open(file_path, "a"):
         os.utime(file_path, None)
 
     return source_directory, file_path
@@ -119,7 +118,7 @@ def test_verify_in_store_dir(test_storage):
     with pytest.raises(store.PathException) as e:
         path = test_storage.storage_path + "_backup"
         test_storage.verify(path)
-        assert e.message == "Path not valid in store: {}".format(path)
+        assert e.message == f"Path not valid in store: {path}"
 
 
 def test_verify_store_path_not_absolute(test_storage):
@@ -137,7 +136,7 @@ def test_verify_rejects_symlinks(test_storage):
         os.symlink("/foo", link)
         with pytest.raises(store.PathException) as e:
             test_storage.verify(link)
-            assert e.message == "Path not valid in store: {}".format(link)
+            assert e.message == f"Path not valid in store: {link}"
     finally:
         os.unlink(link)
 
@@ -181,7 +180,7 @@ def test_verify_invalid_file_extension_in_sourcedir_raises_exception(test_storag
     with pytest.raises(store.PathException) as e:
         test_storage.verify(file_path)
 
-    assert "Path not valid in store: {}".format(file_path) in str(e)
+    assert f"Path not valid in store: {file_path}" in str(e)
 
 
 def test_verify_invalid_filename_in_sourcedir_raises_exception(test_storage):
@@ -192,7 +191,7 @@ def test_verify_invalid_filename_in_sourcedir_raises_exception(test_storage):
 
     with pytest.raises(store.PathException) as e:
         test_storage.verify(file_path)
-        assert e.message == "Path not valid in store: {}".format(file_path)
+        assert e.message == f"Path not valid in store: {file_path}"
 
 
 def test_get_zip(journalist_app, test_source, app_storage, config):
@@ -207,7 +206,7 @@ def test_get_zip(journalist_app, test_source, app_storage, config):
         archivefile_contents = archive.namelist()
 
     for archived_file, actual_file in zip(archivefile_contents, filenames):
-        with io.open(actual_file, "rb") as f:
+        with open(actual_file, "rb") as f:
             actual_file_content = f.read()
         zipped_file_content = archive.read(archived_file)
         assert zipped_file_content == actual_file_content
@@ -379,7 +378,7 @@ def test_shredder_deletes_symlinks(journalist_app, app_storage, caplog):
     link = os.path.abspath(os.path.join(app_storage.shredder_path, "foo"))
     os.symlink(link_target, link)
     app_storage.clear_shredder()
-    assert "Deleting link {} to {}".format(link, link_target) in caplog.text
+    assert f"Deleting link {link} to {link_target}" in caplog.text
     assert not os.path.exists(link)
 
 
@@ -396,6 +395,6 @@ def test_shredder_shreds(journalist_app, app_storage, caplog):
         f.write("testdata\n")
 
     app_storage.clear_shredder()
-    assert "Securely deleted file 1/1: {}".format(testfile) in caplog.text
+    assert f"Securely deleted file 1/1: {testfile}" in caplog.text
     assert not os.path.isfile(testfile)
     assert not os.path.isdir(testdir)

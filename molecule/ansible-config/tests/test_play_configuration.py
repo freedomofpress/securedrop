@@ -1,4 +1,3 @@
-import io
 import os
 
 import pytest
@@ -58,7 +57,7 @@ def test_max_fail_percentage(host, playbook):
     the parameter, but we'll play it safe and require it everywhere,
     to avoid mistakes down the road.
     """
-    with io.open(playbook, "r") as f:
+    with open(playbook) as f:
         playbook_yaml = yaml.safe_load(f)
         # Descend into playbook list structure to validate play attributes.
         for play in playbook_yaml:
@@ -74,7 +73,7 @@ def test_any_errors_fatal(host, playbook):
     to "0", doing so ensures that any errors will cause an immediate failure
     on the playbook.
     """
-    with io.open(playbook, "r") as f:
+    with open(playbook) as f:
         playbook_yaml = yaml.safe_load(f)
         # Descend into playbook list structure to validate play attributes.
         for play in playbook_yaml:
@@ -89,7 +88,7 @@ def test_locale(host, playbook):
     The securedrop-prod and securedrop-staging playbooks should
     control the locale in the host environment by setting LC_ALL=C.
     """
-    with io.open(os.path.join(ANSIBLE_BASE, playbook), "r") as f:
+    with open(os.path.join(ANSIBLE_BASE, playbook)) as f:
         playbook_yaml = yaml.safe_load(f)
         for play in playbook_yaml:
             assert "environment" in play

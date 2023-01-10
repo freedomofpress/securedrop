@@ -9,7 +9,7 @@ import testinfra
 SKIP_REASON = "unimplemented, see GH#3689"
 
 
-class TestBase(object):
+class TestBase:
     @pytest.fixture(autouse=True)
     def only_mon_staging_sudo(self, host):
         if host.backend.host != "mon-staging":
@@ -47,22 +47,16 @@ class TestBase(object):
     # legacy only found in /etc/init.d such as postfix
     #
     def service_started(self, host, name):
-        assert self.run(host, "service {name} start".format(name=name))
-        assert self.wait_for_command(
-            host, "service {name} status | grep -q 'is running'".format(name=name)
-        )
+        assert self.run(host, f"service {name} start")
+        assert self.wait_for_command(host, f"service {name} status | grep -q 'is running'")
 
     def service_restarted(self, host, name):
-        assert self.run(host, "service {name} restart".format(name=name))
-        assert self.wait_for_command(
-            host, "service {name} status | grep -q 'is running'".format(name=name)
-        )
+        assert self.run(host, f"service {name} restart")
+        assert self.wait_for_command(host, f"service {name} status | grep -q 'is running'")
 
     def service_stopped(self, host, name):
-        assert self.run(host, "service {name} stop".format(name=name))
-        assert self.wait_for_command(
-            host, "service {name} status | grep -q 'not running'".format(name=name)
-        )
+        assert self.run(host, f"service {name} stop")
+        assert self.wait_for_command(host, f"service {name} status | grep -q 'not running'")
 
 
 class TestJournalistMail(TestBase):
@@ -79,10 +73,8 @@ class TestJournalistMail(TestBase):
             self.ansible(host, "copy", "dest=/tmp/{f} src={d}/{f}".format(f=f, d=current_dir))
             assert self.run(host, "/var/ossec/process_submissions_today.sh forget")
             assert self.run(host, "postsuper -d ALL")
-            assert self.run(host, "cat /tmp/{f} | mail -s 'abc' root@localhost".format(f=f))
-            assert self.wait_for_command(
-                host, "mailq | grep -q {destination}@ossec.test".format(destination=destination)
-            )
+            assert self.run(host, f"cat /tmp/{f} | mail -s 'abc' root@localhost")
+            assert self.wait_for_command(host, f"mailq | grep -q {destination}@ossec.test")
         self.service_stopped(host, "postfix")
 
     @pytest.mark.skip(reason=SKIP_REASON)
@@ -96,12 +88,12 @@ class TestJournalistMail(TestBase):
     def test_send_encrypted_alert(self, host):
         self.service_started(host, "postfix")
         src = "../../install_files/ansible-base/roles/ossec/files/" "test_admin_key.sec"
-        self.ansible(host, "copy", "dest=/tmp/test_admin_key.sec src={src}".format(src=src))
+        self.ansible(host, "copy", f"dest=/tmp/test_admin_key.sec src={src}")
 
         self.run(host, "gpg  --homedir /var/ossec/.gnupg" " --import /tmp/test_admin_key.sec")
 
         def trigger(who, payload):
-            assert self.run(host, "! mailq | grep -q {who}@ossec.test".format(who=who))
+            assert self.run(host, f"! mailq | grep -q {who}@ossec.test")
             assert self.run(
                 host,
                 """
@@ -111,7 +103,7 @@ class TestJournalistMail(TestBase):
                     who=who, payload=payload
                 ),
             )
-            assert self.wait_for_command(host, "mailq | grep -q {who}@ossec.test".format(who=who))
+            assert self.wait_for_command(host, f"mailq | grep -q {who}@ossec.test")
 
         #
         # encrypted mail to journalist or ossec contact

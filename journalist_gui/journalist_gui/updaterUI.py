@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 # Form implementation generated from reading ui file 'journalist_gui/mainwindow.ui'
 #
 # Created by: PyQt5 UI code generator 5.10
@@ -9,7 +7,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
-class Ui_MainWindow(object):
+class Ui_MainWindow:
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(400, 500)

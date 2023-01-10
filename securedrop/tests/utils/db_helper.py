@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Testing utilities that involve database (and often related
 filesystem) interaction.
 """
@@ -10,8 +9,8 @@ import random
 import subprocess
 from pathlib import Path
 from typing import Dict, List
+from unittest import mock
 
-import mock
 from db import db
 from encryption import EncryptionManager
 from journalist_app.utils import mark_seen
@@ -73,7 +72,7 @@ def reply(storage, journalist, source, num_replies):
     replies = []
     for _ in range(num_replies):
         source.interaction_count += 1
-        fname = "{}-{}-reply.gpg".format(source.interaction_count, source.journalist_filename)
+        fname = f"{source.interaction_count}-{source.journalist_filename}-reply.gpg"
 
         EncryptionManager.get_default().encrypt_journalist_reply(
             for_source_with_filesystem_id=source.filesystem_id,

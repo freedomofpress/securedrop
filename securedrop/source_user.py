@@ -109,7 +109,7 @@ def create_source_user(
     except IntegrityError:
         db_session.rollback()
         raise SourcePassphraseCollisionError(
-            "Passphrase already used by another Source (filesystem_id {})".format(filesystem_id)
+            f"Passphrase already used by another Source (filesystem_id {filesystem_id})"
         )
 
     # Create the source's folder

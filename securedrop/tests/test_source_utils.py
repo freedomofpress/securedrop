@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import json
 import os
 
@@ -17,7 +16,7 @@ def test_check_url_file(config):
 
         def write_url_file(path, content):
             url_file = open(path, "w")
-            url_file.write("{}\n".format(content))
+            url_file.write(f"{content}\n")
 
         url_path = "test_source_url"
 

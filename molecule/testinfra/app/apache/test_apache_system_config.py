@@ -66,7 +66,7 @@ def test_apache_config_settings(host, apache_opt):
     assert f.user == "root"
     assert f.group == "root"
     assert f.mode == 0o644
-    assert re.search("^{}$".format(re.escape(apache_opt)), f.content_string, re.M)
+    assert re.search(f"^{re.escape(apache_opt)}$", f.content_string, re.M)
 
 
 @pytest.mark.parametrize(
@@ -125,8 +125,8 @@ def test_apache_modules_present(host, apache_module):
     disabled modules.
     """
     with host.sudo():
-        c = host.run("/usr/sbin/a2query -m {}".format(apache_module))
-        assert "{} (enabled".format(apache_module) in c.stdout
+        c = host.run(f"/usr/sbin/a2query -m {apache_module}")
+        assert f"{apache_module} (enabled" in c.stdout
         assert c.rc == 0
 
 
@@ -147,8 +147,8 @@ def test_apache_modules_absent(host, apache_module):
     A separate test will check for disabled modules.
     """
     with host.sudo():
-        c = host.run("/usr/sbin/a2query -m {}".format(apache_module))
-        assert "No module matches {} (disabled".format(apache_module) in c.stderr
+        c = host.run(f"/usr/sbin/a2query -m {apache_module}")
+        assert f"No module matches {apache_module} (disabled" in c.stderr
         assert c.rc == 32
 
 

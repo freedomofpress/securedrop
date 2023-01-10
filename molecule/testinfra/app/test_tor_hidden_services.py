@@ -54,7 +54,7 @@ def test_tor_service_hostnames(host, tor_service):
             )
             assert client_auth.is_file
         else:
-            assert re.search("^{}$".format(ths_hostname_regex_v3), f.content_string)
+            assert re.search(f"^{ths_hostname_regex_v3}$", f.content_string)
 
 
 @pytest.mark.skip_in_prod
@@ -78,10 +78,10 @@ def test_tor_services_config(host, tor_service):
     except IndexError:
         local_port = remote_port
 
-    port_regex = "HiddenServicePort {} 127.0.0.1:{}".format(remote_port, local_port)
+    port_regex = f"HiddenServicePort {remote_port} 127.0.0.1:{local_port}"
 
-    assert f.contains("^{}$".format(dir_regex))
-    assert f.contains("^{}$".format(port_regex))
+    assert f.contains(f"^{dir_regex}$")
+    assert f.contains(f"^{port_regex}$")
 
     # Check for block in file, to ensure declaration order
     service_regex = "\n".join([dir_regex, port_regex])

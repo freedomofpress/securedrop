@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # flake8: noqa: E741
 import gzip
 import os
@@ -10,6 +9,7 @@ from datetime import datetime, timedelta, timezone
 from io import BytesIO, StringIO
 from pathlib import Path
 from unittest import mock
+from unittest.mock import ANY, patch
 
 import pytest
 import version
@@ -19,7 +19,6 @@ from flaky import flaky
 from flask import escape, g, request, session, url_for
 from flask_babel import gettext
 from journalist_app.utils import delete_collection
-from mock import ANY, patch
 from models import InstanceConfig, Reply, Source
 from passphrases import PassphraseGenerator
 from source_app import api as source_app_api

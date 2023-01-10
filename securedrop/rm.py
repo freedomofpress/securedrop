@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 #
 # SecureDrop whistleblower submission system
 # Copyright (C) 2017 Loic Dachary <loic@dachary.org>
@@ -39,7 +38,7 @@ def shred(path: str, delete: bool = True) -> None:
     """
 
     if not os.path.exists(path):
-        raise EnvironmentError(path)
+        raise OSError(path)
 
     if not os.path.isfile(path):
         raise ValueError("The shred function only works on files.")
@@ -95,7 +94,7 @@ def check_secure_delete_capability() -> bool:
     try:
         subprocess.check_output(["shred", "--help"])
         return True
-    except EnvironmentError as e:
+    except OSError as e:
         if e.errno != errno.ENOENT:
             raise
         logging.error("The shred utility is missing.")

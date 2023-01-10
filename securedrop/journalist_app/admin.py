@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import binascii
 import os
 from typing import Optional, Union
@@ -329,9 +327,7 @@ def make_blueprint() -> Blueprint:
         if user_id == session.get_uid():
             # Do not flash because the interface already has safe guards.
             # It can only happen by manually crafting a POST request
-            current_app.logger.error(
-                "Admin {} tried to delete itself".format(session.get_user().username)
-            )
+            current_app.logger.error(f"Admin {session.get_user().username} tried to delete itself")
             abort(403)
         elif not user:
             current_app.logger.error(
@@ -344,7 +340,7 @@ def make_blueprint() -> Blueprint:
             # Do not flash because the interface does not expose this.
             # It can only happen by manually crafting a POST request
             current_app.logger.error(
-                'Admin {} tried to delete "deleted" user'.format(session.get_user().username)
+                f'Admin {session.get_user().username} tried to delete "deleted" user'
             )
             abort(403)
         else:

@@ -51,7 +51,7 @@ class DevServerProcess(subprocess.Popen):  # pragma: no cover
         self.cmd = cmd
         self.color = color
 
-        super(DevServerProcess, self).__init__(  # type: ignore
+        super().__init__(  # type: ignore
             self.cmd,
             stdin=subprocess.PIPE,
             stdout=subprocess.PIPE,
@@ -60,7 +60,7 @@ class DevServerProcess(subprocess.Popen):  # pragma: no cover
         )
 
     def print_label(self, to: TextIO) -> None:
-        label = "\n => {} <= \n\n".format(self.label)
+        label = f"\n => {self.label} <= \n\n"
         if to.isatty():
             label = colorize(label, self.color, True)
         to.write(label)

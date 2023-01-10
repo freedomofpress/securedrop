@@ -168,7 +168,7 @@ class TailsconfigThread(QThread):
 
 class UpdaterApp(QtWidgets.QMainWindow, updaterUI.Ui_MainWindow):
     def __init__(self, parent=None):
-        super(UpdaterApp, self).__init__(parent)
+        super().__init__(parent)
         self.setupUi(self)
         self.statusbar.setSizeGripEnabled(False)
         self.output = strings.initial_text_box

@@ -1,5 +1,4 @@
 #!/opt/venvs/securedrop-app-code/bin/python
-# -*- coding: utf-8 -*-
 
 """
 Loads test data into the SecureDrop database.
@@ -49,7 +48,7 @@ def fraction(s: str) -> float:
     f = float(s)
     if 0 <= f <= 1:
         return f
-    raise ValueError("{} should be a float between 0 and 1".format(s))
+    raise ValueError(f"{s} should be a float between 0 and 1")
 
 
 def non_negative_int(s: str) -> int:
@@ -59,7 +58,7 @@ def non_negative_int(s: str) -> int:
     f = float(s)
     if f.is_integer() and f >= 0:
         return int(f)
-    raise ValueError("{} is not a non-negative integer".format(s))
+    raise ValueError(f"{s} is not a non-negative integer")
 
 
 def random_bool() -> bool:
@@ -220,7 +219,7 @@ def add_reply(
     Adds a single reply to a source.
     """
     record_source_interaction(source)
-    fname = "{}-{}-reply.gpg".format(source.interaction_count, source.journalist_filename)
+    fname = f"{source.interaction_count}-{source.journalist_filename}-reply.gpg"
     EncryptionManager.get_default().encrypt_journalist_reply(
         for_source_with_filesystem_id=source.filesystem_id,
         reply_in=next(replies),

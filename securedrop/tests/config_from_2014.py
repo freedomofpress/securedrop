@@ -8,7 +8,7 @@ import os
 
 
 # Default values for production, may be overridden later based on environment
-class FlaskConfig(object):
+class FlaskConfig:
     DEBUG = False
     TESTING = False
     WTF_CSRF_ENABLED = True
