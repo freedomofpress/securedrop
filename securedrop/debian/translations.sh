@@ -14,7 +14,6 @@ python3 -m venv /tmp/securedrop-app-code-i18n-ve
 
 # Install dependencies
 /tmp/securedrop-app-code-i18n-ve/bin/pip3 install --no-deps --no-binary :all: --require-hashes -r requirements/python3/translation-requirements.txt
-/tmp/securedrop-app-code-i18n-ve/bin/pip3 install --no-deps --no-binary :all: --require-hashes -r requirements/python3/securedrop-app-code-requirements.txt
 
 # Compile the translations, need to have a placeholder config.py that we clean up
 export PYTHONDONTWRITEBYTECODE="true"

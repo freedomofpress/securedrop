@@ -35,7 +35,7 @@ override_dh_strip_nondeterminism:
 	dh_strip_nondeterminism $@
 
 override_dh_virtualenv:
-	cp requirements/python3/securedrop-app-code-requirements.txt requirements.txt
+	cp requirements/python3/requirements.txt requirements.txt
 	dh_virtualenv \
 		--package=securedrop-app-code \
 		--python=/usr/bin/python3 \
