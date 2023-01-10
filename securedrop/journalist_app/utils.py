@@ -473,7 +473,7 @@ def set_diceware_password(
                     "<p>{message} <span><code>{password}</code></span></p>".format(
                         message=Markup.escape(
                             gettext(
-                                "Password updated. Don't forget to save it in your KeePassX database. "  # noqa: E501
+                                "Password updated. Don't forget to save it in your KeePassX database. "
                                 "New password:"
                             )
                         ),

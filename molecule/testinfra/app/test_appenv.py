@@ -8,8 +8,10 @@ testinfra_hosts = [sdvars.app_hostname]
 @pytest.mark.parametrize("exp_pip_pkg", sdvars.pip_deps)
 def test_app_pip_deps(host, exp_pip_pkg):
     """Ensure expected package versions are installed"""
-    cmd = "{}/bin/python3 -c \"from importlib.metadata import version; print(version('{}'))\"".format(  # noqa
-        sdvars.securedrop_venv, exp_pip_pkg["name"]
+    cmd = (
+        "{}/bin/python3 -c \"from importlib.metadata import version; print(version('{}'))\"".format(
+            sdvars.securedrop_venv, exp_pip_pkg["name"]
+        )
     )
     result = host.run(cmd)
     assert result.stdout.strip() == exp_pip_pkg["version"]

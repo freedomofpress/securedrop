@@ -27,7 +27,7 @@ def test_apache_headers_source_interface(host, header, value):
     "apache_opt",
     [
         "<VirtualHost {}:80>".format(securedrop_test_vars.apache_listening_address),
-        "WSGIDaemonProcess source  processes=2 threads=30 display-name=%{{GROUP}} python-path={}".format(  # noqa
+        "WSGIDaemonProcess source  processes=2 threads=30 display-name=%{{GROUP}} python-path={}".format(
             securedrop_test_vars.securedrop_code
         ),
         "WSGIProcessGroup source",

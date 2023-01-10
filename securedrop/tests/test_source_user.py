@@ -121,10 +121,10 @@ class TestSourceScryptManager:
         gpg_secret = scrypt_mgr.derive_source_gpg_secret(passphrase)
 
         # It succeeds and the right values are returned
-        expected_filesystem_id = "7A7N4GSAB6NRZLUYOTHVYWJGOYIFS24TRC5FQQUSSXCWTF7MJQ7W3QTQLHUFHTKHYO3ONKJ6RSWPS6OI2PFCIW3KI4UZVKGZ3GAIKXI="  # noqa: E501
+        expected_filesystem_id = "7A7N4GSAB6NRZLUYOTHVYWJGOYIFS24TRC5FQQUSSXCWTF7MJQ7W3QTQLHUFHTKHYO3ONKJ6RSWPS6OI2PFCIW3KI4UZVKGZ3GAIKXI="
         assert expected_filesystem_id == filesystem_id
 
-        expected_gpg_secret = "AWCRZVPA6YTQ2A3552LZJW3VO7L3ZONDFT6A6VPRGPGQQSNENRLA3EVRW4LZYNSUV5QIKNFZMJ2BMOVORG43ZETV5ZCRQKLJNOC2BXY="  # noqa: E501
+        expected_gpg_secret = "AWCRZVPA6YTQ2A3552LZJW3VO7L3ZONDFT6A6VPRGPGQQSNENRLA3EVRW4LZYNSUV5QIKNFZMJ2BMOVORG43ZETV5ZCRQKLJNOC2BXY="
         assert expected_gpg_secret == gpg_secret
 
     def test_get_default(self):

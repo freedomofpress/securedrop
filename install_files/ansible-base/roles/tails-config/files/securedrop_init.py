@@ -18,9 +18,7 @@ path_torrc_additions = "/home/amnesia/Persistent/.securedrop/torrc_additions"
 path_torrc_backup = "/etc/tor/torrc.bak"
 path_torrc = "/etc/tor/torrc"
 path_desktop = "/home/amnesia/Desktop/"
-path_persistent_desktop = (
-    "/lib/live/mount/persistence/TailsData_unlocked/dotfiles/Desktop/"  # noqa: E501
-)
+path_persistent_desktop = "/lib/live/mount/persistence/TailsData_unlocked/dotfiles/Desktop/"
 path_securedrop_root = "/home/amnesia/Persistent/securedrop"
 path_securedrop_admin_venv = os.path.join(path_securedrop_root, "admin/.venv3/bin/python")
 path_securedrop_admin_init = os.path.join(
@@ -132,7 +130,7 @@ if is_tails:
 # reacquire uid0 and notify the user
 os.setresuid(0, 0, -1)
 os.setresgid(0, 0, -1)
-success_message = "You can now access the Journalist Interface.\nIf you are an admin, you can now SSH to the servers."  # noqa: E501
+success_message = "You can now access the Journalist Interface.\nIf you are an admin, you can now SSH to the servers."
 subprocess.call(["tails-notify-user", "SecureDrop successfully auto-configured!", success_message])
 
 # As the amnesia user, check for SecureDrop workstation updates.

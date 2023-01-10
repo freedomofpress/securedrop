@@ -1,4 +1,4 @@
-# flake8: noqa: E741
+# -*- coding: utf-8 -*-
 import base64
 import binascii
 import io

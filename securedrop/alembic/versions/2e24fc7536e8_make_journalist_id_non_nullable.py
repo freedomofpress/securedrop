@@ -19,7 +19,7 @@ raise_errors = os.environ.get("SECUREDROP_ENV", "prod") != "prod"
 try:
     from models import ARGON2_PARAMS
     from passphrases import PassphraseGenerator
-except:  # noqa
+except:
     if raise_errors:
         raise
 

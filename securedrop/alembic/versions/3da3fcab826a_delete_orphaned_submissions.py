@@ -103,7 +103,7 @@ def upgrade() -> None:
                     )
                 except TooManyFilesException:
                     pass
-    except:  # noqa
+    except:
         if raise_errors:
             raise
 

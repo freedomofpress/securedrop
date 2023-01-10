@@ -29,7 +29,7 @@ EXAMPLES = """
 
 HAS_REQUESTS = True
 try:
-    import requests  # lgtm [py/unused-import] # noqa: F401
+    import requests  # lgtm [py/unused-import]
 except ImportError:
     HAS_REQUESTS = False
 
@@ -66,7 +66,7 @@ class OSSECURLs:
 
 
 def main():
-    module = AnsibleModule(  # noqa: F405
+    module = AnsibleModule(
         argument_spec=dict(
             ossec_version=dict(default="3.6.0"),
         ),
@@ -96,6 +96,6 @@ def main():
         module.fail_json(msg=msg)
 
 
-from ansible.module_utils.basic import *  # noqa E402,F403
+from ansible.module_utils.basic import *
 
 main()
