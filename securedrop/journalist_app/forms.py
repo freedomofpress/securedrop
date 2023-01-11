@@ -24,7 +24,7 @@ class RequiredIf(DataRequired):
         other_field_name: str,
         custom_message: typing.Optional[str] = None,
         *args: Any,
-        **kwargs: Any
+        **kwargs: Any,
     ) -> None:
 
         self.other_field_name = other_field_name
