@@ -75,20 +75,12 @@ black: ## Update Python source code formatting with black
 .PHONY: check-isort
 check-isort: ## Check Python import organization with isort
 	@echo "███ Running isort check..."
-	@isort --check-only --diff securedrop \
-                install_files \
-                journalist_gui \
-                molecule \
-                admin
+	@isort --check-only --diff .
 	@echo
 
 .PHONY: isort
 isort: ## Update Python import organization with isort
-	@isort securedrop \
-                install_files \
-                journalist_gui \
-                molecule \
-                admin
+	@isort .
 
 .PHONY: ansible-config-lint
 ansible-config-lint: ## Run custom Ansible linting tasks.
