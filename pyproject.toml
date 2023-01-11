@@ -1,6 +1,7 @@
 [tool.black]
 line-length = 100
 exclude = "securedrop/config.py"
+extend-exclude = ".venv"
 
 [tool.isort]
 line_length = 100
