@@ -48,11 +48,11 @@ class OSSECURLs:
 
     @property
     def ossec_tarball_filename(self):
-        return "ossec-hids-{}.tar.gz".format(self.ossec_version)
+        return f"ossec-hids-{self.ossec_version}.tar.gz"
 
     @property
     def ossec_tarball_url(self):
-        return self.REPO_URL + "/archive/{}.tar.gz".format(self.ossec_version)
+        return self.REPO_URL + f"/archive/{self.ossec_version}.tar.gz"
 
     @property
     def ossec_signature_url(self):
@@ -62,7 +62,7 @@ class OSSECURLs:
 
     @property
     def ossec_signature_filename(self):
-        return "ossec-hids-{}.tar.gz.asc".format(self.ossec_version)
+        return f"ossec-hids-{self.ossec_version}.tar.gz.asc"
 
 
 def main():

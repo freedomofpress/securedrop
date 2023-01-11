@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Taken from: flask_testing.utils
 
@@ -61,9 +60,7 @@ class InstrumentedApp:
             if _message == message and _category == category:
                 return True
 
-        raise AssertionError(
-            "Message '{}' in category '{}' wasn't flashed".format(message, category)
-        )
+        raise AssertionError(f"Message '{message}' in category '{category}' wasn't flashed")
 
     def assert_template_used(self, name, tmpl_name_attribute="name"):
         """
@@ -116,7 +113,7 @@ class InstrumentedApp:
         try:
             assert self.get_context_variable(name) == value, message
         except ContextVariableDoesNotExist:
-            pytest.fail(message or "Context variable does not exist: {}".format(name))
+            pytest.fail(message or f"Context variable does not exist: {name}")
 
     def assert_redirects(self, response, location, message=None):
         """

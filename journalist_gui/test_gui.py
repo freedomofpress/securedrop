@@ -75,7 +75,7 @@ class AppTestCase(unittest.TestCase):
 
 class WindowTestCase(AppTestCase):
     def setUp(self):
-        super(WindowTestCase, self).setUp()
+        super().setUp()
         self.window = UpdaterApp()
         self.window.show()
         QTest.qWaitForWindowExposed(self.window)

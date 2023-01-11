@@ -329,19 +329,19 @@ def make_blueprint() -> Blueprint:
             for file_uuid in request.json.get("files", []):
                 f = Submission.query.filter(Submission.uuid == file_uuid).one_or_none()
                 if f is None or not f.is_file:
-                    abort(404, "file not found: {}".format(file_uuid))
+                    abort(404, f"file not found: {file_uuid}")
                 targets.add(f)
 
             for message_uuid in request.json.get("messages", []):
                 m = Submission.query.filter(Submission.uuid == message_uuid).one_or_none()
                 if m is None or not m.is_message:
-                    abort(404, "message not found: {}".format(message_uuid))
+                    abort(404, f"message not found: {message_uuid}")
                 targets.add(m)
 
             for reply_uuid in request.json.get("replies", []):
                 r = Reply.query.filter(Reply.uuid == reply_uuid).one_or_none()
                 if r is None:
-                    abort(404, "reply not found: {}".format(reply_uuid))
+                    abort(404, f"reply not found: {reply_uuid}")
                 targets.add(r)
 
             # now mark everything seen.

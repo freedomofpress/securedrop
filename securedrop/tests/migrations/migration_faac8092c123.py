@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-
-
 class UpgradeTester:
     """This migration has no upgrade because it is only the enabling of
     pragmas which do not affect database contents.

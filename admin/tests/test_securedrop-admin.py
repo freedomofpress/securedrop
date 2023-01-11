@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 #
 # SecureDrop whistleblower submission system
 # Copyright (C) 2017- Freedom of the Press Foundation and SecureDrop
@@ -19,14 +18,13 @@
 #
 
 import argparse
-import io
 import json
 import os
 import subprocess
 import textwrap
 from os.path import basename, dirname, exists, join
+from unittest import mock
 
-import mock
 import pytest
 import securedrop_admin
 import yaml
@@ -34,13 +32,13 @@ from flaky import flaky
 from prompt_toolkit.validation import ValidationError
 
 
-class Document(object):
+class Document:
     def __init__(self, text):
         self.text = text
 
 
 @flaky
-class TestSecureDropAdmin(object):
+class TestSecureDropAdmin:
     def test_verbose(self, capsys):
         securedrop_admin.setup_logger(verbose=True)
         securedrop_admin.sdlog.debug("VISIBLE")
@@ -494,7 +492,7 @@ class TestSecureDropAdmin(object):
                 assert e.value.code == securedrop_admin.EXIT_INTERRUPT
 
 
-class TestSiteConfig(object):
+class TestSiteConfig:
     def test_exists(self, tmpdir):
         args = argparse.Namespace(
             site_config="DOES_NOT_EXIST",
@@ -689,7 +687,7 @@ class TestSiteConfig(object):
         var2: val2
         """
         )
-        assert expected == io.open(site_config_path).read()
+        assert expected == open(site_config_path).read()
 
     def test_validate_gpg_key(self, tmpdir, caplog):
         args = argparse.Namespace(

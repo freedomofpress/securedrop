@@ -61,7 +61,7 @@ def create_app(config: SecureDropConfig) -> Flask:
         def default(self, obj: "Any") -> "Any":
             if isinstance(obj, datetime):
                 return obj.strftime(API_DATETIME_FORMAT)
-            super(JSONEncoder, self).default(obj)
+            super().default(obj)
 
     app.json_encoder = JSONEncoder
 

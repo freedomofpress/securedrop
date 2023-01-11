@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import binascii
 import os
 from datetime import datetime, timezone
@@ -45,7 +44,7 @@ def commit_account_changes(user: Journalist) -> None:
                 gettext("An unexpected error occurred! Please " "inform your admin."),
                 "error",
             )
-            current_app.logger.error("Account changes for '{}' failed: {}".format(user, e))
+            current_app.logger.error(f"Account changes for '{user}' failed: {e}")
             db.session.rollback()
         else:
             flash(gettext("Account updated."), "success")
@@ -90,7 +89,7 @@ def validate_user(
         LoginThrottledException,
         InvalidPasswordLength,
     ) as e:
-        current_app.logger.error("Login for '{}' failed: {}".format(username, e))
+        current_app.logger.error(f"Login for '{username}' failed: {e}")
         login_flashed_msg = error_message if error_message else gettext("Login failed.")
 
         if isinstance(e, LoginThrottledException):
@@ -161,9 +160,7 @@ def validate_hotp_secret(user: Journalist, otp_secret: str) -> bool:
                 gettext("An unexpected error occurred! " "Please inform your admin."),
                 "error",
             )
-            current_app.logger.error(
-                "set_hotp_secret '{}' (id {}) failed: {}".format(otp_secret, user.id, e)
-            )
+            current_app.logger.error(f"set_hotp_secret '{otp_secret}' (id {user.id}) failed: {e}")
             return False
     return True
 

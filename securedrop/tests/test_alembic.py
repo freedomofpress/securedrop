@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import os
 import re
 import subprocess
@@ -181,7 +179,7 @@ def test_upgrade_with_data(alembic_config, config, migration, _reset_db):
     upgrade(alembic_config, last_migration)
 
     # Dynamic module import
-    mod_name = "tests.migrations.migration_{}".format(migration)
+    mod_name = f"tests.migrations.migration_{migration}"
     mod = __import__(mod_name, fromlist=["UpgradeTester"])
 
     # Load the test data
@@ -201,7 +199,7 @@ def test_downgrade_with_data(alembic_config, config, migration, _reset_db):
     upgrade(alembic_config, migration)
 
     # Dynamic module import
-    mod_name = "tests.migrations.migration_{}".format(migration)
+    mod_name = f"tests.migrations.migration_{migration}"
     mod = __import__(mod_name, fromlist=["DowngradeTester"])
 
     # Load the test data

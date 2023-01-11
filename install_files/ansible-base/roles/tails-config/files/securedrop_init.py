@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 
 import grp
-import io
 import os
 import pwd
 import subprocess
@@ -43,28 +42,28 @@ path_onion_auth_dir = "/var/lib/tor/onion_auth"
 
 # load torrc_additions
 if os.path.isfile(path_torrc_additions):
-    with io.open(path_torrc_additions) as f:
+    with open(path_torrc_additions) as f:
         torrc_additions = f.read()
 else:
-    sys.exit("Error opening {0} for reading".format(path_torrc_additions))
+    sys.exit(f"Error opening {path_torrc_additions} for reading")
 
 # load torrc
 if os.path.isfile(path_torrc_backup):
-    with io.open(path_torrc_backup) as f:
+    with open(path_torrc_backup) as f:
         torrc = f.read()
 else:
     if os.path.isfile(path_torrc):
-        with io.open(path_torrc) as f:
+        with open(path_torrc) as f:
             torrc = f.read()
     else:
-        sys.exit("Error opening {0} for reading".format(path_torrc))
+        sys.exit(f"Error opening {path_torrc} for reading")
 
     # save a backup
-    with io.open(path_torrc_backup, "w") as f:
+    with open(path_torrc_backup, "w") as f:
         f.write(torrc)
 
 # append the additions
-with io.open(path_torrc, "w") as f:
+with open(path_torrc, "w") as f:
     f.write(torrc + torrc_additions)
 
 # check for v3 aths files
@@ -108,11 +107,11 @@ env = os.environ.copy()
 env["XDG_CURRENT_DESKTOP"] = "GNOME"
 env["DESKTOP_SESSION"] = "default"
 env["DISPLAY"] = ":1"
-env["XDG_RUNTIME_DIR"] = "/run/user/{}".format(amnesia_uid)
+env["XDG_RUNTIME_DIR"] = f"/run/user/{amnesia_uid}"
 env["XDG_DATA_DIR"] = "/usr/share/gnome:/usr/local/share/:/usr/share/"
 env["HOME"] = "/home/amnesia"
 env["LOGNAME"] = "amnesia"
-env["DBUS_SESSION_BUS_ADDRESS"] = "unix:path=/run/user/{}/bus".format(amnesia_uid)
+env["DBUS_SESSION_BUS_ADDRESS"] = f"unix:path=/run/user/{amnesia_uid}/bus"
 
 # remove existing shortcut, recreate symlink and change metadata attribute
 # to trust .desktop
@@ -202,7 +201,7 @@ if tails_current_version:
                     "/etc/ssl/certs/DST_Root_CA_X3.pem",
                     pem_file.name,
                 ],
-                universal_newlines=True,
+                text=True,
                 env=env,
             )
 
@@ -226,7 +225,7 @@ if tails_current_version:
         except subprocess.CalledProcessError:
             sys.exit(0)  # Don't break tailsconfig trying to fix this
 
-        except IOError:
+        except OSError:
             sys.exit(0)
 
         finally:

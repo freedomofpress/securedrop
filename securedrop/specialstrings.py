@@ -1,6 +1,6 @@
 strings = [
     """This is a test message without markup!""",
-    """This is a test message with markup and characters such as \, \\, \', \" and ". """
+    """This is a test message with markup and characters such as \\, \\, \', \" and ". """
     + """<strong>This text should not be bold</strong>!""",  # noqa: W605, E501
     """~!@#$%^&*()_+{}|:"<>?~!@#$%^&*()_+{}|:"<>?~!@#$%^&*()_+{}|:"<>?~!@#$%""",
     """Ω≈ç√∫˜µ≤≥÷

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import random
 import uuid
 from typing import Any, Dict

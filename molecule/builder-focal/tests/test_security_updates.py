@@ -5,7 +5,7 @@ from subprocess import check_output
 import pytest
 
 SECUREDROP_TARGET_DISTRIBUTION = os.environ.get("SECUREDROP_TARGET_DISTRIBUTION")
-testinfra_hosts = ["docker://{}-sd-sec-update".format(SECUREDROP_TARGET_DISTRIBUTION)]
+testinfra_hosts = [f"docker://{SECUREDROP_TARGET_DISTRIBUTION}-sd-sec-update"]
 
 
 def test_should_run():

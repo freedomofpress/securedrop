@@ -32,9 +32,9 @@ def test_tor_keyring_absent(host):
     # so let's check by shelling out to `dpkg -l`. Dpkg will automatically
     # honor simple regex in package names.
     package = "deb.torproject.org-keyring"
-    c = host.run("dpkg -l {}".format(package))
+    c = host.run(f"dpkg -l {package}")
     assert c.rc == 1
-    error_text = "dpkg-query: no packages found matching {}".format(package)
+    error_text = f"dpkg-query: no packages found matching {package}"
     assert error_text in c.stderr.strip()
 
 
@@ -76,7 +76,7 @@ def test_tor_repo_absent(host, repo_pattern):
     in that repo. We're mirroring it to avoid breakage caused by
     untested updates (which has broken prod twice to date).
     """
-    cmd = "grep -rF '{}' /etc/apt/".format(repo_pattern)
+    cmd = f"grep -rF '{repo_pattern}' /etc/apt/"
     c = host.run(cmd)
     # Grep returns non-zero when no matches, and we want no matches.
     assert c.rc != 0

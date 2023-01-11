@@ -1,11 +1,9 @@
-# -*- coding: utf-8 -*-
-import io
 import os
 import random
 import uuid
 from os import path
+from unittest import mock
 
-import mock
 from db import db
 from journalist_app import create_app
 from sqlalchemy import text
@@ -48,7 +46,7 @@ class Helper:
         if self.source_id is not None:
             raise RuntimeError("Source already created")
 
-        self.source_filesystem_id = "aliruhglaiurhgliaurg-{}".format(self.counter)
+        self.source_filesystem_id = f"aliruhglaiurhgliaurg-{self.counter}"
         params = {
             "filesystem_id": self.source_filesystem_id,
             "uuid": str(uuid.uuid4()),
@@ -148,7 +146,7 @@ class UpgradeTester(Helper):
                     if not path.exists(dirname):
                         os.mkdir(dirname)
 
-                    with io.open(full_path, "wb") as f:
+                    with open(full_path, "wb") as f:
                         f.write(DATA)
 
     def check_upgrade(self):

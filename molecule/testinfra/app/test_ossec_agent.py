@@ -16,7 +16,7 @@ def test_hosts_files(host):
     mon_host = sdvars.monitor_hostname
 
     assert f.contains(r"^127.0.0.1\s*localhost")
-    assert f.contains(r"^{}\s*{}\s*securedrop-monitor-server-alias$".format(mon_ip, mon_host))
+    assert f.contains(rf"^{mon_ip}\s*{mon_host}\s*securedrop-monitor-server-alias$")
 
 
 def test_ossec_service_start_style(host):

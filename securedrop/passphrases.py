@@ -38,7 +38,7 @@ class PassphraseGenerator:
         self._language_to_words = language_to_words
         if self._fallback_language not in self._language_to_words:
             raise InvalidWordListError(
-                "Missing words list for fallback language '{}'".format(self._fallback_language)
+                f"Missing words list for fallback language '{self._fallback_language}'"
             )
 
         # Validate each words list

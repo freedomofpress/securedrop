@@ -23,7 +23,7 @@ def test_apache_default_docroot_is_absent(host):
         "coreutils",
         "gnupg2",
         "libapache2-mod-xsendfile",
-        "libpython{}".format(python_version),
+        f"libpython{python_version}",
         "paxctld",
         "python3",
         "redis-server",
@@ -57,7 +57,7 @@ def test_securedrop_application_test_locale(host):
     """
     Ensure both SecureDrop DEFAULT_LOCALE and SUPPORTED_LOCALES are present.
     """
-    securedrop_config = host.file("{}/config.py".format(securedrop_test_vars.securedrop_code))
+    securedrop_config = host.file(f"{securedrop_test_vars.securedrop_code}/config.py")
     with host.sudo():
         assert securedrop_config.is_file
         assert securedrop_config.contains("^DEFAULT_LOCALE")
@@ -72,9 +72,7 @@ def test_securedrop_application_test_journalist_key(host):
     Ensure the SecureDrop Application GPG public key file is present.
     This is a test-only pubkey provided in the repository strictly for testing.
     """
-    pubkey_file = host.file(
-        "{}/test_journalist_key.pub".format(securedrop_test_vars.securedrop_data)
-    )
+    pubkey_file = host.file(f"{securedrop_test_vars.securedrop_data}/test_journalist_key.pub")
     # sudo is only necessary when testing against app hosts, since the
     # permissions are tighter. Let's elevate privileges so we're sure
     # we can read the correct file attributes and test them.
@@ -86,7 +84,7 @@ def test_securedrop_application_test_journalist_key(host):
 
     # Let's make sure the corresponding fingerprint is specified
     # in the SecureDrop app configuration.
-    securedrop_config = host.file("{}/config.py".format(securedrop_test_vars.securedrop_code))
+    securedrop_config = host.file(f"{securedrop_test_vars.securedrop_code}/config.py")
     with host.sudo():
         assert securedrop_config.is_file
         assert securedrop_config.user == securedrop_test_vars.securedrop_code_owner
@@ -105,7 +103,7 @@ def test_securedrop_application_sqlite_db(host):
     # sudo is necessary under the App hosts, which have restrictive file
     # permissions on the doc root. Not technically necessary under dev host.
     with host.sudo():
-        f = host.file("{}/db.sqlite".format(securedrop_test_vars.securedrop_data))
+        f = host.file(f"{securedrop_test_vars.securedrop_data}/db.sqlite")
         assert f.is_file
         assert f.user == securedrop_test_vars.securedrop_user
         assert f.group == securedrop_test_vars.securedrop_user

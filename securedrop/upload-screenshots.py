@@ -107,7 +107,7 @@ class WeblateUploader:
         self.session = requests.Session()
         headers = {
             "User-Agent": self.user_agent,
-            "Authorization": "Token {}".format(token),
+            "Authorization": f"Token {token}",
         }
         self.session.headers.update(headers)
 
@@ -130,7 +130,7 @@ class WeblateUploader:
             screenshots += screenshots_page["results"]
             request_count += 1
             if request_count >= self.request_limit:
-                msg = "Request limit of {} exceeded. Aborting.".format(self.request_limit)
+                msg = f"Request limit of {self.request_limit} exceeded. Aborting."
                 raise RequestLimitError(msg)
         return screenshots
 
@@ -168,7 +168,7 @@ class WeblateUploader:
             image = {"image": open(file, "rb")}
 
             if existing_screenshot_url is not None:
-                print("Replacing existing screenshot {}".format(basename))
+                print(f"Replacing existing screenshot {basename}")
                 response = self.session.post(existing_screenshot_url, files=image)
                 response.raise_for_status()
             else:
@@ -177,14 +177,12 @@ class WeblateUploader:
                     "project_slug": "securedrop",
                     "component_slug": "securedrop",
                 }
-                print("Uploading new screenshot {}".format(basename))
+                print(f"Uploading new screenshot {basename}")
                 response = self.session.post(self.screenshots_endpoint, files=image, data=fields)
                 response.raise_for_status()
 
-        result_url = urljoin(
-            self.base_url, "screenshots/{}/{}".format(self.project, self.component)
-        )
-        print("Upload complete. Visit {} to review the results.".format(result_url))
+        result_url = urljoin(self.base_url, f"screenshots/{self.project}/{self.component}")
+        print(f"Upload complete. Visit {result_url} to review the results.")
 
 
 class BadOrMissingTokenError(Exception):

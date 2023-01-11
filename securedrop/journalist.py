@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from encryption import EncryptionManager, GpgKeyNotFoundError
 from execution import asynchronous
 from journalist_app import create_app

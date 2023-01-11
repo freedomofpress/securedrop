@@ -1,6 +1,4 @@
-# -*- coding: utf-8 -*-
 import base64
-import io
 import os
 from tempfile import _TemporaryFileWrapper  # type: ignore
 from typing import Optional, Union
@@ -13,7 +11,7 @@ from cryptography.hazmat.primitives.ciphers.modes import CTR
 from pretty_bad_protocol._util import _STREAMLIKE_TYPES
 
 
-class SecureTemporaryFile(_TemporaryFileWrapper, object):
+class SecureTemporaryFile(_TemporaryFileWrapper):
     """Temporary file that provides on-the-fly encryption.
 
     Buffering large submissions in memory as they come in requires too
@@ -53,9 +51,9 @@ class SecureTemporaryFile(_TemporaryFileWrapper, object):
         data = base64.urlsafe_b64encode(os.urandom(32))
         self.tmp_file_id = data.decode("utf-8").strip("=")
 
-        self.filepath = os.path.join(store_dir, "{}.aes".format(self.tmp_file_id))
-        self.file = io.open(self.filepath, "w+b")
-        super(SecureTemporaryFile, self).__init__(self.file, self.filepath)
+        self.filepath = os.path.join(store_dir, f"{self.tmp_file_id}.aes")
+        self.file = open(self.filepath, "w+b")
+        super().__init__(self.file, self.filepath)
 
     def create_key(self) -> None:
         """Generates a unique, pseudorandom AES key, stored ephemerally in
@@ -135,7 +133,7 @@ class SecureTemporaryFile(_TemporaryFileWrapper, object):
 
         # Since tempfile._TemporaryFileWrapper.close() does other cleanup,
         # (i.e. deleting the temp file on disk), we need to call it also.
-        super(SecureTemporaryFile, self).close()
+        super().close()
 
 
 # python-gnupg will not recognize our SecureTemporaryFile as a stream-like type

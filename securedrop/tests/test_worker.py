@@ -82,7 +82,7 @@ def test_job_interruption(config, caplog):
 
         # the running job should not be requeued
         worker.requeue_interrupted_jobs(queue_name)
-        skipped = "Skipping job {}, which is already being run by worker {}".format(job.id, w.key)
+        skipped = f"Skipping job {job.id}, which is already being run by worker {w.key}"
         assert skipped in caplog.text
 
         # kill the process group, to kill the worker and its workhorse
@@ -93,7 +93,7 @@ def test_job_interruption(config, caplog):
         # after killing the worker, the interrupted job should be requeued
         worker.requeue_interrupted_jobs(queue_name)
         print(caplog.text)
-        assert "Requeuing job {}".format(job) in caplog.text
+        assert f"Requeuing job {job}" in caplog.text
         assert len(q.get_job_ids()) == 1
     finally:
         q.delete()
@@ -132,7 +132,7 @@ def test_worker_for_job(config):
 
         logging.debug(
             [
-                "{}: state={}, job={}".format(w.pid, w.get_state(), w.get_current_job_id())
+                f"{w.pid}: state={w.get_state()}, job={w.get_current_job_id()}"
                 for w in worker.rq_workers(q)
             ]
         )

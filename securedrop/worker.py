@@ -73,11 +73,11 @@ def requeue_interrupted_jobs(queue_name: str) -> None:
     started_job_registry = StartedJobRegistry(queue=queue)
 
     queued_job_ids = queue.get_job_ids()
-    logging.debug("queued jobs: {}".format(queued_job_ids))
+    logging.debug(f"queued jobs: {queued_job_ids}")
     started_job_ids = started_job_registry.get_job_ids()
-    logging.debug("started jobs: {}".format(started_job_ids))
+    logging.debug(f"started jobs: {started_job_ids}")
     job_ids = [j for j in started_job_ids if j not in queued_job_ids]
-    logging.debug("candidate job ids: {}".format(job_ids))
+    logging.debug(f"candidate job ids: {job_ids}")
 
     if not job_ids:
         logging.debug("No interrupted jobs found in started job registry.")

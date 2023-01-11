@@ -6,9 +6,9 @@ import zipfile
 from base64 import b32encode
 from binascii import unhexlify
 from io import BytesIO
+from unittest import mock
 
 import journalist_app as journalist_app_module
-import mock
 from bs4 import BeautifulSoup
 from db import db
 from encryption import EncryptionManager
@@ -464,10 +464,7 @@ def test_delete_collection(mocker, source_app, journalist_app, test_journo):
         assert resp.status_code == 200
 
         text = resp.data.decode("utf-8")
-        assert (
-            escape("The account and data for the source {} have been deleted.".format(col_name))
-            in text
-        )
+        assert escape(f"The account and data for the source {col_name} have been deleted.") in text
 
         assert "There are no submissions!" in text
 
@@ -517,7 +514,7 @@ def test_delete_collections(mocker, journalist_app, source_app, test_journo):
         )
         assert resp.status_code == 200
         text = resp.data.decode("utf-8")
-        assert "The accounts and all data for {} sources".format(num_sources) in text
+        assert f"The accounts and all data for {num_sources} sources" in text
 
         # simulate the source_deleter's work
         journalist_app_module.utils.purge_deleted_sources()

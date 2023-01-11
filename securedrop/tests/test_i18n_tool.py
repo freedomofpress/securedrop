@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-
-import io
 import os
 import shutil
 import signal
@@ -8,14 +5,14 @@ import subprocess
 import time
 from os.path import abspath, dirname, exists, getmtime, join, realpath
 from pathlib import Path
+from unittest.mock import patch
 
 import i18n_tool
 import pytest
-from mock import patch
 from tests.test_i18n import set_msg_translation_in_po_file
 
 
-class TestI18NTool(object):
+class TestI18NTool:
     def setup(self):
         self.dir = abspath(dirname(realpath(__file__)))
 
@@ -48,7 +45,7 @@ class TestI18NTool(object):
         )
         messages_file = join(str(tmpdir), "desktop.pot")
         assert exists(messages_file)
-        with io.open(messages_file) as fobj:
+        with open(messages_file) as fobj:
             pot = fobj.read()
             assert "SecureDrop Source Interfaces" in pot
         # pretend this happened a few seconds ago
@@ -113,11 +110,11 @@ class TestI18NTool(object):
             ]
         )
         assert old_messages_mtime == getmtime(messages_file)
-        with io.open(po_file) as fobj:
+        with open(po_file) as fobj:
             po = fobj.read()
             assert "SecureDrop Source Interfaces" in po
             assert "SecureDrop Journalist Interfaces" not in po
-        with io.open(i18n_file) as fobj:
+        with open(i18n_file) as fobj:
             i18n = fobj.read()
             assert "SOURCE FR" in i18n
 
@@ -141,7 +138,7 @@ class TestI18NTool(object):
         i18n_tool.I18NTool().main(args)
         messages_file = join(str(tmpdir), "messages.pot")
         assert exists(messages_file)
-        with io.open(messages_file, "rb") as fobj:
+        with open(messages_file, "rb") as fobj:
             pot = fobj.read()
             assert b"code hello i18n" in pot
             assert b"template hello i18n" in pot
@@ -174,7 +171,7 @@ class TestI18NTool(object):
         assert not exists(mo_file)
         i18n_tool.I18NTool().main(args)
         assert exists(mo_file)
-        with io.open(mo_file, mode="rb") as fobj:
+        with open(mo_file, mode="rb") as fobj:
             mo = fobj.read()
             assert b"code hello i18n" in mo
             assert b"template hello i18n" in mo
@@ -198,7 +195,7 @@ class TestI18NTool(object):
         )
         messages_file = join(str(tmpdir), "messages.pot")
         assert exists(messages_file)
-        with io.open(messages_file) as fobj:
+        with open(messages_file) as fobj:
             pot = fobj.read()
             assert "code hello i18n" in pot
 
@@ -257,7 +254,7 @@ class TestI18NTool(object):
             ]
         )
         assert current_po_mtime == getmtime(po_file)
-        with io.open(mo_file, mode="rb") as fobj:
+        with open(mo_file, mode="rb") as fobj:
             mo = fobj.read()
             assert b"code hello i18n" in mo
             assert b"template hello i18n" not in mo

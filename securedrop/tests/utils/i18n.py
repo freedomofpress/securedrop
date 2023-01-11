@@ -60,7 +60,7 @@ def message_catalog(translation_dir: Path, locale: str) -> Catalog:
     >>> german.get("Password").string
     'Passwort'
     """
-    return read_po(open((translation_dir / locale / "LC_MESSAGES" / "messages.po")))
+    return read_po(open(translation_dir / locale / "LC_MESSAGES" / "messages.po"))
 
 
 def page_language(page_text: str) -> Optional[str]:
@@ -95,7 +95,7 @@ def xfail_untranslated_messages(
             for msgid in msgids:
                 m = catalog.get(msgid)
                 if not m:
-                    pytest.xfail("locale {} message catalog lacks msgid: {}".format(locale, msgid))
+                    pytest.xfail(f"locale {locale} message catalog lacks msgid: {msgid}")
                 if not m.string:
-                    pytest.xfail("locale {} has no translation for msgid: {}".format(locale, msgid))
+                    pytest.xfail(f"locale {locale} has no translation for msgid: {msgid}")
         yield

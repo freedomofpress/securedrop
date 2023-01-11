@@ -23,7 +23,7 @@ def test_release_manager_upgrade_channel(host):
     config_path = "/etc/update-manager/release-upgrades"
     assert host.file(config_path).is_file
 
-    raw_output = host.check_output("grep '^Prompt' {}".format(config_path))
+    raw_output = host.check_output(f"grep '^Prompt' {config_path}")
     _, channel = raw_output.split("=")
 
     assert channel == "never"

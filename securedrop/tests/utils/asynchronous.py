@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Testing utilities to block on and react to the success, failure, or
 timeout of asynchronous processes.
 """

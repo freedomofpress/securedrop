@@ -6,7 +6,6 @@
 # print a warning and exit.
 #
 
-from __future__ import print_function
 
 import os
 import re
@@ -18,7 +17,7 @@ def get_tor_versions(path):
     Determine which service versions are offered in the given torrc.
     """
     service_re = re.compile(r"HiddenServiceDir\s+(?:.*)/(.*)")
-    versions = set([])
+    versions = set()
     with open(path) as f:
         for line in f:
             m = service_re.match(line)
