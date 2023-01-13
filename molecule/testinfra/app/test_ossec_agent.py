@@ -25,7 +25,7 @@ def test_ossec_service_start_style(host):
     """
     with host.sudo():
         c = host.check_output("systemctl status ossec")
-        assert "/etc/systemd/system/ossec.service" in c
+        assert "/lib/systemd/system/ossec.service" in c
 
 
 def test_hosts_duplicate(host):

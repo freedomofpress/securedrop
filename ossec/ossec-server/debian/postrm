@@ -1,4 +1,5 @@
 #!/bin/sh
+# shellcheck disable=SC2143
 # postrm script for securedrop-monitor
 #
 # see: dh_installdeb(1)
