@@ -1,11 +1,12 @@
-Source: ossec.net
+Source: ossec-agent
 Section: web
 Priority: optional
 Maintainer: SecureDrop Team <securedrop@freedom.press>
-Homepage: http://ossec.net
+Homepage: https://ossec.net
+Standards-Version: 4.5.1
+
 Package: ossec-agent
-Version: {{ ossec_version }}+{{ securedrop_target_distribution }}
 Architecture: amd64
-Depends: libc6,libssl1.1,expect,inotify-tools,adduser
 Conflicts: ossec-server
+Depends: libc6, libssl1.1, expect, inotify-tools, adduser
 Description: Installs the generic ossec agent

@@ -1,4 +1,5 @@
 #!/bin/sh
+# shellcheck disable=SC2174
 # postinst script for monitor server package
 #
 # see: dh_installdeb(1)

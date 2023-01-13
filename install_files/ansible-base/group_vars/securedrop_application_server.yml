@@ -10,7 +10,7 @@ local_deb_packages:
   - "securedrop-config_{{ securedrop_version }}+{{ securedrop_target_distribution }}_all.deb"
   - "securedrop-ossec-agent_3.6.0+{{ securedrop_version }}+{{ securedrop_target_distribution }}_all.deb"
   - "{{ securedrop_app_code_deb }}.deb"
-  - "ossec-agent-3.6.0+{{ securedrop_target_distribution }}-amd64.deb"
+  - "ossec-agent_3.6.0+{{ securedrop_target_distribution }}_amd64.deb"
 
 # Configuring the tor onion services
 tor_instances_v3:
