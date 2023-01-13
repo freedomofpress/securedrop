@@ -1,0 +1,20 @@
+#!/usr/bin/make -f
+include /usr/share/dpkg/pkg-info.mk
+
+HUMAN_DATE := $(shell date --utc --date="@${SOURCE_DATE_EPOCH}")
+
+%:
+	dh $@ --with systemd
+
+override_dh_install:
+	cp debian/preloaded-vars.conf etc/preloaded-vars.conf
+	# Disable JIT (TODO, ask upstream to make this configurable)
+	sed -i s/USE_PCRE2_JIT=yes/USE_PCRE2_JIT=no/ src/Makefile
+	bash ./install.sh
+	# Override date to be reproducible
+	sed -i "s/DATE=\".*\"/DATE=\"${HUMAN_DATE}\"/" /var/ossec/etc/ossec-init.conf
+	# TODO: /etc/resolv.conf pollution!
+	rm /var/ossec/etc/client.keys
+	mkdir -p debian/tmp/var/
+	cp -Rv /var/ossec debian/tmp/var/
+	dh_install
