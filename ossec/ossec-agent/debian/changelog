@@ -1,26 +1,27 @@
-ossec-server (3.6.0) unstable; urgency=low
+ossec-agent (3.6.0+focal) focal; urgency=low
 
   [ SecureDrop Team ]
   * Release Notes https://github.com/ossec/ossec-hids/releases/tag/3.6.0
 
- -- SecureDrop Team <securedrop@freedom.press>  Mon, 13 Apr 2020 15:22:54 -0400
+ -- SecureDrop Team <securedrop@freedom.press>  Mon, 13 Apr 2020 14:53:21 -0400
 
-ossec-server (3.0.0) unstable; urgency=low
+ossec-agent (3.0.0) unstable; urgency=low
 
   [ SecureDrop Team ]
   * Release Notes https://github.com/ossec/ossec-hids/releases/tag/3.0.0
 
  -- SecureDrop Team <securedrop@freedom.press>  Tue, 21 Aug 2018 10:43:47 -0700
 
-ossec-server (2.8.2) unstable; urgency=low
+ossec-agent (2.8.2) unstable; urgency=low
 
   [ SecureDrop Team ]
   * Release Notes https://github.com/ossec/ossec-hids/releases/tag/2.8.2
 
  -- SecureDrop Team <securedrop@freedom.press>  Thu, 11 Jun 2015 16:43:47 -0700
 
-ossec-server (0.2.1-1) unstable; urgency=low
+ossec-agent (2.8.1) unstable; urgency=low
 
+  [ James Dolan ]
   * Initial release
 
- -- James Dolan <securedrop@freedom.press>  Fri, 14 Mar 2014 15:52:47 -0700
+ -- James Dolan <securedrop@pressfreedomfoundation.org>  Fri, 14 Mar 2014 15:46:57 -0700
