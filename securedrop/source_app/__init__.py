@@ -17,6 +17,7 @@ from sdconfig import SecureDropConfig
 from source_app import api, info, main
 from source_app.decorators import ignore_static
 from source_app.utils import clear_session_and_redirect_to_logged_out_page
+from utils import create_get_descriptive_title_function
 
 
 def get_logo_url(app: Flask) -> str:
@@ -70,6 +71,9 @@ def create_app(config: SecureDropConfig) -> Flask:
     app.jinja_env.globals["version"] = version.__version__
     # Exported to source templates for being included in instructions
     app.jinja_env.globals["submission_key_fpr"] = config.JOURNALIST_KEY
+    app.jinja_env.globals["get_descriptive_title"] = create_get_descriptive_title_function(
+        app.logger
+    )
     app.jinja_env.filters["rel_datetime_format"] = template_filters.rel_datetime_format
     app.jinja_env.filters["nl2br"] = template_filters.nl2br
     app.jinja_env.filters["filesizeformat"] = template_filters.filesizeformat

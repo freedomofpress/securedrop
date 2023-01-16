@@ -14,6 +14,7 @@ from journalist_app.sessions import Session, session
 from journalist_app.utils import get_source
 from models import InstanceConfig
 from sdconfig import SecureDropConfig
+from utils import create_get_descriptive_title_function
 from werkzeug import Response
 from werkzeug.exceptions import HTTPException, default_exceptions
 
@@ -94,6 +95,9 @@ def create_app(config: SecureDropConfig) -> Flask:
     app.jinja_env.trim_blocks = True
     app.jinja_env.lstrip_blocks = True
     app.jinja_env.globals["version"] = version.__version__
+    app.jinja_env.globals["get_descriptive_title"] = create_get_descriptive_title_function(
+        app.logger
+    )
     app.jinja_env.filters["rel_datetime_format"] = template_filters.rel_datetime_format
     app.jinja_env.filters["filesizeformat"] = template_filters.filesizeformat
     app.jinja_env.filters["html_datetime_format"] = template_filters.html_datetime_format

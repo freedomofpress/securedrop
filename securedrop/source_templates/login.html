@@ -3,7 +3,7 @@
 
 {% include 'flashed.html' %}
 
-<h2>{{ gettext('Enter Codename') }}</h2>
+<h1>{{ gettext('Enter Codename') }}</h1>
 
 <form method="post" action="{{ url_for('main.login') }}" autocomplete="off">
   <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">

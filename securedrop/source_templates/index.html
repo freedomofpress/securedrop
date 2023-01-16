@@ -3,9 +3,9 @@
 
 <head>
   {% if g.organization_name == "SecureDrop" %}
-  <title>{{ g.organization_name }} | {{ gettext('Protecting Journalists and Sources') }}</title>
+  <title>{{ gettext('Portal') }} | {{ g.organization_name }} | {{ gettext('Protecting Journalists and Sources') }}</title>
   {% else %}
-  <title>{{ g.organization_name }} | {{ gettext('SecureDrop') }}</title>
+  <title>{{ gettext('Portal') }} | {{ g.organization_name }} | {{ gettext('SecureDrop') }}</title>
   {% endif %}
 
   <link rel="stylesheet" href="/static/css/source.css">
