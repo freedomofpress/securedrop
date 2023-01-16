@@ -220,7 +220,7 @@ class SessionInterface(FlaskSessionInterface):
                 domain=domain,
                 path=path,
                 secure=secure,
-                **conditional_cookie_kwargs  # type: ignore
+                **conditional_cookie_kwargs,  # type: ignore
             )
 
     def logout_user(self, uid: int) -> None:

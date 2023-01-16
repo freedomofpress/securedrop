@@ -65,38 +65,22 @@ update-pip-requirements: update-admin-pip-requirements update-python3-requiremen
 .PHONY: check-black
 check-black: ## Check Python source code formatting with black
 	@echo "███ Running black check..."
-	@black --check --diff securedrop \
-                install_files \
-                journalist_gui \
-                molecule \
-                admin
+	@black --check --diff .
 	@echo
 
 .PHONY: black
 black: ## Update Python source code formatting with black
-	@black securedrop \
-                install_files \
-                journalist_gui \
-                molecule \
-                admin
+	@black securedrop .
 
 .PHONY: check-isort
 check-isort: ## Check Python import organization with isort
 	@echo "███ Running isort check..."
-	@isort --check-only --diff securedrop \
-                install_files \
-                journalist_gui \
-                molecule \
-                admin
+	@isort --check-only --diff .
 	@echo
 
 .PHONY: isort
 isort: ## Update Python import organization with isort
-	@isort securedrop \
-                install_files \
-                journalist_gui \
-                molecule \
-                admin
+	@isort .
 
 .PHONY: ansible-config-lint
 ansible-config-lint: ## Run custom Ansible linting tasks.
