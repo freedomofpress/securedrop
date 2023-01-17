@@ -7,7 +7,7 @@ OSSEC_VERSION = "3.6.0"
 SECUREDROP_ROOT = Path(
     subprocess.check_output(["git", "rev-parse", "--show-toplevel"]).decode().strip()
 )
-BUILD_DIRECTORY = SECUREDROP_ROOT / "build"
+BUILD_DIRECTORY = SECUREDROP_ROOT / "build/focal"
 
 
 def test_ossec_binaries_are_present_agent():
