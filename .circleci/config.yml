@@ -291,19 +291,22 @@ jobs:
           path: ~/sd/junit
 
   deb-tests:
-    docker:
-      - image: debian:bullseye
+    machine:
+      image: ubuntu-2004:202010-01
+      enabled: true
     environment:
-      LC_ALL: C.UTF-8
-      LANG: C.UTF-8
+      DOCKER_API_VERSION: 1.23
+      BASE_OS: focal
     steps:
-      - run: apt-get update && apt-get install -y git docker.io make virtualenv enchant-2 jq python3-dev build-essential rsync
       - checkout
-      - setup_remote_docker
       - run:
-          name: Test Debian package build
+          name: Build debs
           command: |
-            make ci-deb-tests
+            make build-debs
+      - run:
+          name: Build OSSEC debs
+          command: |
+            make build-debs-ossec
 
 workflows:
   version: 2
@@ -355,13 +358,7 @@ workflows:
           filters:
             branches:
               only: /i18n-.*/
-      - deb-tests:
-          filters:
-            branches:
-              only:
-                - /update-builder-.*/
-          requires:
-            - lint
+      - deb-tests
 
   nightly:
     triggers:

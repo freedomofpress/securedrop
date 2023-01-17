@@ -1,10 +1,9 @@
-# ubuntu:focal-20210921
-FROM ubuntu@sha256:3555f4996aea6be945ae1532fa377c88f4b3b9e6d93531f47af5d78a7d5e3761
-
+FROM ubuntu:focal
 
 # additional meta-data makes it easier to clean up, find
 LABEL org="Freedom of the Press"
 LABEL image_name="focal-sd-builder-app"
+
 ARG DEBIAN_FRONTEND=noninteractive
 RUN apt-get -y update && apt-get upgrade -y && apt-get install -y \
         apache2-dev \
@@ -18,6 +17,7 @@ RUN apt-get -y update && apt-get upgrade -y && apt-get install -y \
         gnupg2 \
         inotify-tools \
         libffi-dev \
+        libpcre2-dev \
         libssl-dev \
         make \
         python3-all \
@@ -30,10 +30,11 @@ RUN apt-get -y update && apt-get upgrade -y && apt-get install -y \
         sudo \
         tzdata \
         libevent-dev \
-        unzip
+        unzip \
+        zlib1g-dev
 
 
-# TEMPORARY: install dh-virtualenv from Jammy Ubuntu release, pending focal package:
+# Install dh-virtualenv from Jammy Ubuntu release because there's no focal package
 # https://github.com/spotify/dh-virtualenv/issues/298
 RUN echo "deb http://archive.ubuntu.com/ubuntu/ jammy universe main" > /etc/apt/sources.list.d/ubuntu-jammy.list
 COPY dh-virtualenv.pref /etc/apt/preferences.d/
@@ -49,11 +50,18 @@ RUN TMPDIR=`mktemp -d` && cd ${TMPDIR} \
         && curl --proto '=https' --tlsv1.2 -OO -sSf https://static.rust-lang.org/rustup/archive/${RUSTUP_VERSION}/x86_64-unknown-linux-gnu/rustup-init \
         && echo "${RUSTUP_INIT_SHA256} *rustup-init" | sha256sum -c - \
         && chmod +x rustup-init \
-        && ./rustup-init --default-toolchain=${RUST_VERSION} -y \
+        && ./rustup-init --default-toolchain=${RUST_VERSION} --profile minimal -y \
         && cd && rm -rf ${TMPDIR}
 
-RUN echo "source $HOME/.cargo/env" >> $HOME/.bashrc
+# Warm the cargo index ("empty-library" is reserved by the Rust project)
+# see https://github.com/rust-lang/cargo/issues/10319 and https://github.com/rust-lang/cargo/issues/3377
+RUN /root/.cargo/bin/cargo install empty-library ||:
 
-RUN mkdir -p /tmp/build
-RUN apt-get clean \
-        && rm -rf /var/lib/apt/lists/*
+# Turn the ossec key into a keyring
+COPY OSSEC-ARCHIVE-KEY.asc /tmp/OSSEC-ARCHIVE-KEY.asc
+RUN gpg --import /tmp/OSSEC-ARCHIVE-KEY.asc && gpg --export > /ossec.gpg \
+        && rm -rf /tmp/OSSEC-ARCHIVE-KEY.asc /root/.gnupg
+
+COPY build-debs-ossec.sh /build-debs-ossec
+COPY build-debs-securedrop.sh /build-debs-securedrop
+COPY dep-check.sh /dep-check
