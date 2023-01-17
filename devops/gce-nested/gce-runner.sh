@@ -57,4 +57,5 @@ copy_securedrop_repo
 trap fetch_junit_test_results EXIT
 
 ssh_gce "make build-debs-notest"
+ssh_gce "make build-debs-ossec-notest"
 ssh_gce "make staging"

@@ -8,7 +8,7 @@ import pytest
 SECUREDROP_ROOT = Path(
     subprocess.check_output(["git", "rev-parse", "--show-toplevel"]).decode().strip()
 )
-DEB_PATHS = list((SECUREDROP_ROOT / "build").glob("*.deb"))
+DEB_PATHS = list((SECUREDROP_ROOT / "build/focal").glob("*.deb"))
 
 
 @pytest.fixture(scope="module")
