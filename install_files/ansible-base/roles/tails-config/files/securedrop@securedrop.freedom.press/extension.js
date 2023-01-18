@@ -17,10 +17,11 @@ class Indicator extends PanelMenu.Button {
     _init() {
         super._init(0.0, 'SecureDrop');
 
-        // Check for SSH keys - if they don't exist, this is a Journalist workstation
+        // Check for SSH onion service client authentication keys -
+        // if they don't exist, this is a Journalist workstation
         // (and therefore the admin options should remain hidden)
         let is_admin = false;
-        let [ok, out, err, exit] = GLib.spawn_command_line_sync('/bin/bash -c "test -f ~/Persistent/securedrop/install_files/ansible-base/app-ssh.auth_private"');
+        let [ok, out, err, exit] = GLib.spawn_command_line_sync('/bin/bash -c "test -f ~/Persistent/securedrop/install_files/ansible-base/tor_v3_keys.json"');
         if (exit == 0) {
             is_admin = true;
         }
