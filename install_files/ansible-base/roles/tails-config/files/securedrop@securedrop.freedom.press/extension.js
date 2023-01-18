@@ -93,9 +93,9 @@ class Indicator extends PanelMenu.Button {
         
         this.menu.addMenuItem(source);
         this.menu.addMenuItem(journalist);
+        this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
+        this.menu.addMenuItem(updates);
         if (is_admin) {
-            this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
-            this.menu.addMenuItem(updates);
             this.menu.addMenuItem(app_server_ssh);
             this.menu.addMenuItem(mon_server_ssh);
         }
