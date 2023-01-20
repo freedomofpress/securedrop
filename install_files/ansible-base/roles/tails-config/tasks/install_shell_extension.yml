@@ -1,5 +1,5 @@
 ---
-- name: Create the SecureDrop GNOME Shell Extension directory
+- name: Create the SecureDrop GNOME Shell Extension directory in Persistent Storage
   become: yes
   file:
     path: "{{ tails_config_live_dotfiles }}/.local/share/gnome-shell/extensions/securedrop@securedrop.freedom.press"
@@ -7,16 +7,49 @@
     mode: "0755"
     owner: amnesia
     group: amnesia
+    
+- name: Create the SecureDrop GNOME Shell Extension directory in the running system
+  become: yes
+  file:
+    path: "/home/amnesia/.local/share/gnome-shell/extensions/securedrop@securedrop.freedom.press"
+    state: directory
+    mode: "0755"
+    owner: amnesia
+    group: amnesia
 
-- name: Copy the extension metadata to the extension directory
+- name: Copy the extension metadata to the extension directory in Persistent Storage
   become: yes
   copy:
     src: securedrop@securedrop.freedom.press/metadata.json
     dest: "{{ tails_config_live_dotfiles }}/.local/share/gnome-shell/extensions/securedrop@securedrop.freedom.press/"
     owner: amnesia
     group: amnesia
+    
+- name: Copy the extension metadata to the extension directory in the running system
+  become: yes
+  copy:
+    src: securedrop@securedrop.freedom.press/metadata.json
+    dest: "/home/amnesia/.local/share/gnome-shell/extensions/securedrop@securedrop.freedom.press/"
+    owner: amnesia
+    group: amnesia
+    
+- name: Copy the extension metadata to the extension directory in Persistent Storage
+  become: yes
+  copy:
+    src: securedrop@securedrop.freedom.press/metadata.json
+    dest: "{{ tails_config_live_dotfiles }}/.local/share/gnome-shell/extensions/securedrop@securedrop.freedom.press/"
+    owner: amnesia
+    group: amnesia
+    
+- name: Copy the extension metadata to the extension directory in the running system
+  become: yes
+  copy:
+    src: securedrop@securedrop.freedom.press/metadata.json
+    dest: "/home/amnesia/.local/share/gnome-shell/extensions/securedrop@securedrop.freedom.press/"
+    owner: amnesia
+    group: amnesia
 
-- name: Copy the extension CSS to the extension directory
+- name: Copy the extension CSS to the extension directory in Persistent Storage
   become: yes
   copy:
     src: securedrop@securedrop.freedom.press/stylesheet.css
@@ -24,11 +57,27 @@
     owner: amnesia
     group: amnesia
 
-- name: Copy the extension itself to the extension directory
+- name: Copy the extension CSS to the extension directory in the running system
+  become: yes
+  copy:
+    src: securedrop@securedrop.freedom.press/stylesheet.css
+    dest: "/home/amnesia/.local/share/gnome-shell/extensions/securedrop@securedrop.freedom.press/"
+    owner: amnesia
+    group: amnesia
+    
+- name: Copy the extension itself to the extension directory in Persistent Storage
   become: yes
   copy:
     src: securedrop@securedrop.freedom.press/extension.js
     dest: "{{ tails_config_live_dotfiles }}/.local/share/gnome-shell/extensions/securedrop@securedrop.freedom.press"
+    owner: amnesia
+    group: amnesia
+    
+- name: Copy the extension itself to the extension directory in the running system
+  become: yes
+  copy:
+    src: securedrop@securedrop.freedom.press/extension.js
+    dest: "/home/amnesia/.local/share/gnome-shell/extensions/securedrop@securedrop.freedom.press"
     owner: amnesia
     group: amnesia
 
