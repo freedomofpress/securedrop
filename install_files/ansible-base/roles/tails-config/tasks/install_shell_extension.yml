@@ -7,7 +7,7 @@
     mode: "0755"
     owner: amnesia
     group: amnesia
-    
+
 - name: Create the SecureDrop GNOME Shell Extension directory in the running system
   become: yes
   file:
@@ -24,7 +24,7 @@
     dest: "{{ tails_config_live_dotfiles }}/.local/share/gnome-shell/extensions/securedrop@securedrop.freedom.press/"
     owner: amnesia
     group: amnesia
-    
+
 - name: Copy the extension metadata to the extension directory in the running system
   become: yes
   copy:
@@ -32,7 +32,7 @@
     dest: "/home/amnesia/.local/share/gnome-shell/extensions/securedrop@securedrop.freedom.press/"
     owner: amnesia
     group: amnesia
-    
+
 - name: Copy the extension metadata to the extension directory in Persistent Storage
   become: yes
   copy:
@@ -40,7 +40,7 @@
     dest: "{{ tails_config_live_dotfiles }}/.local/share/gnome-shell/extensions/securedrop@securedrop.freedom.press/"
     owner: amnesia
     group: amnesia
-    
+
 - name: Copy the extension metadata to the extension directory in the running system
   become: yes
   copy:
@@ -64,7 +64,7 @@
     dest: "/home/amnesia/.local/share/gnome-shell/extensions/securedrop@securedrop.freedom.press/"
     owner: amnesia
     group: amnesia
-    
+
 - name: Copy the extension itself to the extension directory in Persistent Storage
   become: yes
   copy:
@@ -72,7 +72,7 @@
     dest: "{{ tails_config_live_dotfiles }}/.local/share/gnome-shell/extensions/securedrop@securedrop.freedom.press"
     owner: amnesia
     group: amnesia
-    
+
 - name: Copy the extension itself to the extension directory in the running system
   become: yes
   copy:

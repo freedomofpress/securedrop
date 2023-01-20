@@ -78,12 +78,18 @@ class Indicator extends PanelMenu.Button {
         
         let app_server_ssh = new PopupMenu.PopupMenuItem('SSH into the App Server');
         app_server_ssh.connect('activate', () => {
-            Util.trySpawnCommandLine(`gnome-terminal -- ssh app`);
+            let [ok, out, err, exit] = GLib.spawn_command_line_sync('/bin/bash -c "awk -v FS="app_hostname: " 'NF>1{print $2}' /home/amnesia/Persistent/securedrop/install_files/ansible-base/group_vars/all/site-specific"');
+       	    if (out.length > 0) {
+                Util.trySpawnCommandLine(`gnome-terminal -- ssh ` + out);
+       	    }
         });
         
         let mon_server_ssh = new PopupMenu.PopupMenuItem('SSH into the Monitor Server');
         mon_server_ssh.connect('activate', () => {
-            Util.trySpawnCommandLine(`gnome-terminal -- ssh mon`);
+            let [ok, out, err, exit] = GLib.spawn_command_line_sync('/bin/bash -c "awk -v FS="monitor_hostname: " 'NF>1{print $2}' /home/amnesia/Persistent/securedrop/install_files/ansible-base/group_vars/all/site-specific"');
+       	    if (out.length > 0) {
+                Util.trySpawnCommandLine(`gnome-terminal -- ssh ` + out);
+       	    }
         });
         
         let keypass = new PopupMenu.PopupMenuItem('Open KeePassXC Password Vault');
