@@ -1,0 +1,23 @@
+name: CI
+on: [push, pull_request]
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  updater-gui-tests:
+    runs-on: ubuntu-latest
+    container: debian:bullseye
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install dependencies
+        run: |
+          apt-get update && apt-get install -y libqt5designer5 python3-venv
+          cd journalist_gui
+          python3 -m venv .venv/ && source .venv/bin/activate
+          pip install --require-hashes -r dev-requirements.txt
+      - name: Run tests
+        run: |
+          cd journalist_gui
+          source .venv/bin/activate
+          QT_QPA_PLATFORM=offscreen python3 test_gui.py -v
