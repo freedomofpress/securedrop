@@ -1021,9 +1021,9 @@ whichcraft==0.4.1 \
 wrapt==1.12.1 \
     --hash=sha256:b62ffa81fb85f4332a4f609cab4ac40709470da05643a082ec1eb88e6d9b97d7
     # via astroid
-yamllint==1.17.0 \
-    --hash=sha256:67173339f28868260ce5912abfefa10e115ceb1d2ac1c4d8c7acc8c4ef6c9a8a \
-    --hash=sha256:70a6f8316851254e197a6231c35577be29fa2fbe2c77390a54c9a50217cdaa13
+yamllint==1.29.0 \
+    --hash=sha256:5153bf9f8205aa9dc6af6217e38bd4f5baf09d9a7c6f4ae1e23f90d9c00c49c5 \
+    --hash=sha256:66a755d5fbcbb8831f1a9568676329b5bac82c37995bcc9afd048b6459f9fa48
     # via
     #   -r requirements/python3/develop-requirements.in
     #   molecule
@@ -1048,3 +1048,4 @@ setuptools==56.0.0 \
     #   jsonschema
     #   safety
     #   selinux
+    #   yamllint
