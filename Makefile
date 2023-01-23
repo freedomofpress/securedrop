@@ -134,7 +134,7 @@ typelint:  ## Run mypy type linting.
 .PHONY: yamllint
 yamllint:  ## Lint YAML files (does not validate syntax!).
 	@echo "███ Linting YAML files..."
-	@$(SDROOT)/devops/scripts/yaml-lint.sh
+	@yamllint --strict .
 	@echo
 
 .PHONY: lint
