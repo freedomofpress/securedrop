@@ -48,6 +48,7 @@ class Indicator extends PanelMenu.Button {
         let source = new PopupMenu.PopupMenuItem('Launch Source Interface');
         source.connect('activate', () => {
             let [ok, out, err, exit] = GLib.spawn_command_line_sync('/bin/bash -c "cat ~/Persistent/securedrop/install_files/ansible-base/app-sourcev3-ths"');
+            out = out.trim();
        	    if (out.length == 62 && out.toString().endsWith(".onion")) {
        	    	Util.spawn(['tor-browser', out.toString()]);
        	    } else {
@@ -58,6 +59,7 @@ class Indicator extends PanelMenu.Button {
         let journalist = new PopupMenu.PopupMenuItem('Launch Journalist Interface');
         journalist.connect('activate', () => {
        	    let [ok, out, err, exit] = GLib.spawn_command_line_sync('/bin/bash -c "cut -d: -f1 ~/Persistent/securedrop/install_files/ansible-base/app-journalist.auth_private"');
+       	    out = out.trim();
        	    if (out.length == 56) {
        	    	Util.spawn(['tor-browser', out.toString() + '.onion']);
        	    } else {
@@ -78,7 +80,8 @@ class Indicator extends PanelMenu.Button {
         
         let app_server_ssh = new PopupMenu.PopupMenuItem('SSH into the App Server');
         app_server_ssh.connect('activate', () => {
-            let [ok, out, err, exit] = GLib.spawn_command_line_sync('/bin/bash -c "awk -v FS="app_hostname: " 'NF>1{print $2}' /home/amnesia/Persistent/securedrop/install_files/ansible-base/group_vars/all/site-specific"');
+       	    let command = "awk -v FS='app_hostname: ' 'NF>1{print $2}' /home/amnesia/Persistent/securedrop/install_files/ansible-base/group_vars/all/site-specific";
+            let [ok, out, err, exit] = GLib.spawn_command_line_sync(command);
        	    if (out.length > 0) {
                 Util.trySpawnCommandLine(`gnome-terminal -- ssh ` + out);
        	    }
@@ -86,7 +89,8 @@ class Indicator extends PanelMenu.Button {
         
         let mon_server_ssh = new PopupMenu.PopupMenuItem('SSH into the Monitor Server');
         mon_server_ssh.connect('activate', () => {
-            let [ok, out, err, exit] = GLib.spawn_command_line_sync('/bin/bash -c "awk -v FS="monitor_hostname: " 'NF>1{print $2}' /home/amnesia/Persistent/securedrop/install_files/ansible-base/group_vars/all/site-specific"');
+            let command = "awk -v FS='monitor_hostname: ' 'NF>1{print $2}' /home/amnesia/Persistent/securedrop/install_files/ansible-base/group_vars/all/site-specific";
+            let [ok, out, err, exit] = GLib.spawn_command_line_sync(command);
        	    if (out.length > 0) {
                 Util.trySpawnCommandLine(`gnome-terminal -- ssh ` + out);
        	    }
