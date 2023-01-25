@@ -10,6 +10,11 @@ const Main = imports.ui.main;
 const PanelMenu = imports.ui.panelMenu;
 const PopupMenu = imports.ui.popupMenu;
 
+const source_interface_address = "{{ item.0.source_interface_address }}";
+const journalist_interface_address = "{{ item.0.journalist_interface_address }}";
+const app_server_hostname = "{{ item.0.app_hostname }}";
+const mon_server_hostname = "{{ item.0.mon_hostname }}";
+
 const _ = ExtensionUtils.gettext;
 
 const Indicator = GObject.registerClass(
@@ -47,24 +52,12 @@ class Indicator extends PanelMenu.Button {
 
         let source = new PopupMenu.PopupMenuItem('Launch Source Interface');
         source.connect('activate', () => {
-            let [ok, out, err, exit] = GLib.spawn_command_line_sync('/bin/bash -c "cat ~/Persistent/securedrop/install_files/ansible-base/app-sourcev3-ths"');
-            out = out.trim();
-       	    if (out.length == 62 && out.toString().endsWith(".onion")) {
-       	    	Util.spawn(['tor-browser', out.toString()]);
-       	    } else {
-       	    	Util.trySpawnCommandLine('notify-send "Unable to find Source Interface Onion Address"');
-       	    }
+    	    Util.spawn(['tor-browser', source_interface_address]);
         });
         
         let journalist = new PopupMenu.PopupMenuItem('Launch Journalist Interface');
         journalist.connect('activate', () => {
-       	    let [ok, out, err, exit] = GLib.spawn_command_line_sync('/bin/bash -c "cut -d: -f1 ~/Persistent/securedrop/install_files/ansible-base/app-journalist.auth_private"');
-       	    out = out.trim();
-       	    if (out.length == 56) {
-       	    	Util.spawn(['tor-browser', out.toString() + '.onion']);
-       	    } else {
-       	    	Util.trySpawnCommandLine('notify-send "Unable to find Journalist Interface Onion Address"');
-       	    }
+       	    Util.spawn(['tor-browser', source_interface_address]);
         });
         
         let admin_label = new St.Label({
@@ -80,20 +73,12 @@ class Indicator extends PanelMenu.Button {
         
         let app_server_ssh = new PopupMenu.PopupMenuItem('SSH into the App Server');
         app_server_ssh.connect('activate', () => {
-       	    let command = "awk -v FS='app_hostname: ' 'NF>1{print $2}' /home/amnesia/Persistent/securedrop/install_files/ansible-base/group_vars/all/site-specific";
-            let [ok, out, err, exit] = GLib.spawn_command_line_sync(command);
-       	    if (out.length > 0) {
-                Util.trySpawnCommandLine(`gnome-terminal -- ssh ` + out);
-       	    }
+            Util.trySpawnCommandLine(`gnome-terminal -- ssh ` + app_server_hostname);
         });
         
         let mon_server_ssh = new PopupMenu.PopupMenuItem('SSH into the Monitor Server');
         mon_server_ssh.connect('activate', () => {
-            let command = "awk -v FS='monitor_hostname: ' 'NF>1{print $2}' /home/amnesia/Persistent/securedrop/install_files/ansible-base/group_vars/all/site-specific";
-            let [ok, out, err, exit] = GLib.spawn_command_line_sync(command);
-       	    if (out.length > 0) {
-                Util.trySpawnCommandLine(`gnome-terminal -- ssh ` + out);
-       	    }
+            Util.trySpawnCommandLine(`gnome-terminal -- ssh ` + mon_server_hostname);
         });
         
         let keypass = new PopupMenu.PopupMenuItem('Open KeePassXC Password Vault');

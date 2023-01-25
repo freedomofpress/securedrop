@@ -1,21 +1,59 @@
 ---
-- name: Create the SecureDrop GNOME Shell Extension directory in Persistent Storage
-  become: yes
-  file:
-    path: "{{ tails_config_live_dotfiles }}/.local/share/gnome-shell/extensions/securedrop@securedrop.freedom.press"
-    state: directory
-    mode: "0755"
-    owner: amnesia
-    group: amnesia
+- name: Check for v3 Source Interface file
+  stat:
+    path: app-sourcev3-ths
+  register: v3_source_file
 
-- name: Create the SecureDrop GNOME Shell Extension directory in the running system
+- name: Check for v3 Journalist Interface file
+  stat:
+    path: app-journalist.auth_private
+  register: v3_journalist_file
+
+- name: Check for site specific file
+  stat:
+    path: group_vars/all/site-specific
+  register: site_specific_file
+
+- name: Look up v3 Source Interface URL.
+  command: grep -Po '.{56}\.onion' app-sourcev3-ths
+  changed_when: false
+  register: sourcev3_interface_lookup_result
+  when: v3_source_file.stat.exists == true
+
+- name: Look up v3 Journalist Interface URL.
+  command: awk -F ':' '{print $1 ".onion"}' app-journalist.auth_private
+  changed_when: false
+  register: journalistv3_interface_lookup_result
+  when: v3_source_file.stat.exists == true
+
+- name: Look up app server hostname
+  command: "awk -v FS='app_hostname: ' 'NF>1{print $2}' group_vars/all/site-specific"
+  changed_when: false
+  register: app_server_lookup_result
+  when: site_specific_file.stat.exists == true
+
+- name: Look up mon server hostname
+  command: "awk -v FS='monitor_hostname: ' 'NF>1{print $2}' /home/amnesia/Persistent/securedrop/install_files/ansible-base/group_vars/all/site-specific"
+  changed_when: false
+  register: mon_server_lookup_result
+  when: site_specific_file.stat.exists == true
+
+- name: Create the SecureDrop GNOME Shell Extension directories
+  file:
+    state: directory
+    path: "{{ item }}"
+  with_items: "{{ tails_config_extension_directories }}"
+
+- name: Set normal user ownership on subset of directories.
   become: yes
   file:
-    path: "/home/amnesia/.local/share/gnome-shell/extensions/securedrop@securedrop.freedom.press"
     state: directory
-    mode: "0755"
+    path: "{{ item }}"
     owner: amnesia
     group: amnesia
+  # Only set normal user ownership for files in ~amnesia.
+  when: item.startswith(tails_config_amnesia_home)
+  with_items: "{{ tails_config_extension_directories }}"
 
 - name: Copy the extension metadata to the extension directory in Persistent Storage
   become: yes
@@ -65,21 +103,43 @@
     owner: amnesia
     group: amnesia
 
-- name: Copy the extension itself to the extension directory in Persistent Storage
-  become: yes
-  copy:
-    src: securedrop@securedrop.freedom.press/extension.js
-    dest: "{{ tails_config_live_dotfiles }}/.local/share/gnome-shell/extensions/securedrop@securedrop.freedom.press"
-    owner: amnesia
-    group: amnesia
+- name: Set the right variable for source
+  set_fact:
+    source_iface: "{{ sourcev3_interface_lookup_result }}"
 
-- name: Copy the extension itself to the extension directory in the running system
+- name: Set the right variable for journalist
+  set_fact:
+    journalist_iface: "{{ journalistv3_interface_lookup_result }}"
+
+- name: Set the right variable for app server hostname
+  set_fact:
+    app_hostname: "{{ app_server_lookup_result }}"
+
+- name: Set the right variable for app server hostname
+  set_fact:
+    mon_hostname: "{{ mon_server_lookup_result }}"
+
+- name: Assemble interface information for extension
+  set_fact:
+    _securedrop_extension_info:
+      - src: extension.js.in
+        filename: extension.js
+        source_interface_address: "{{ source_iface.stdout }}"
+        journalist_interface_address: "{{ journalist_iface.stdout }}"
+        app_hostname: "{{ app_hostname.stdout }}"
+        mon_hostname: "{{ mon_hostname.stdout }}"
+
+- name: Create SecureDrop extension
   become: yes
-  copy:
-    src: securedrop@securedrop.freedom.press/extension.js
-    dest: "/home/amnesia/.local/share/gnome-shell/extensions/securedrop@securedrop.freedom.press"
+  template:
+    src: "{{ item.0.src }}"
+    dest: "{{ item.1 }}/{{ item.0.filename }}"
     owner: amnesia
     group: amnesia
+    mode: "0700"
+  with_nested:
+    - "{{ _securedrop_extension_info }}"
+    - "{{ tails_config_extension_directories }}"
 
 - name: Enable the new GNOME Shell extension
   become: no
