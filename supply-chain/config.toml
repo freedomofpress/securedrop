@@ -1,0 +1,61 @@
+
+# cargo-vet config file
+
+[imports.firefox]
+url = "https://hg.mozilla.org/mozilla-central/raw-file/tip/supply-chain/audits.toml"
+
+[policy.js-sys]
+criteria = []
+notes = "WASM-only"
+
+[policy.redox_syscall]
+criteria = []
+notes = "Redox OS-only"
+
+[policy.redox_users]
+criteria = []
+notes = "Redox OS-only"
+
+[policy.redwood]
+audit-as-crates-io = false
+
+[policy.wasi]
+criteria = []
+notes = "WASM-only"
+
+[policy.wasm-bindgen]
+criteria = []
+notes = "WASM-only"
+
+[policy.winapi]
+criteria = []
+notes = "Windows-only"
+
+[policy.windows-sys]
+criteria = []
+notes = "Windows-only"
+
+[policy.windows_aarch64_gnullvm]
+criteria = []
+notes = "Windows-only"
+
+[policy.windows_aarch64_msvc]
+criteria = []
+notes = "Windows-only"
+
+[policy.windows_i686_gnu]
+criteria = []
+notes = "Windows-only"
+
+[policy.windows_x86_64_gnu]
+criteria = []
+notes = "Windows-only"
+
+[policy.windows_x86_64_gnullvm]
+criteria = []
+notes = "Windows-only"
+
+[policy.windows_x86_64_msvc]
+criteria = []
+notes = "Windows-only"
+

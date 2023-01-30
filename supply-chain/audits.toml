@@ -1,0 +1,14 @@
+
+# cargo-vet audits file
+
+[[audits.libc]]
+who = "Kunal Mehta <legoktm@debian.org>"
+criteria = "safe-to-deploy"
+version = "0.2.126"
+notes = "Managed by Rust project"
+
+[[audits.rustversion]]
+who = "Kunal Mehta <legoktm@debian.org>"
+criteria = "safe-to-deploy"
+delta = "1.0.9 -> 1.0.11"
+
