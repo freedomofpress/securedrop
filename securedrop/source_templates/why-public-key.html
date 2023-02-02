@@ -1,4 +1,7 @@
 {% extends "base.html" %}
+
+{% block tab_title %}{{ gettext("Why download the team's public key?") }}{% endblock %}
+
 {% block body %}
 <h2>{{ gettext("Why download the team's public key?") }}</h2>
 <p>{{ gettext("SecureDrop encrypts files and messages after they are submitted. Encrypting messages and files before submission can provide an extra layer of security before your data reaches the SecureDrop server.") }}

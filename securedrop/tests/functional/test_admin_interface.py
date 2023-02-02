@@ -487,7 +487,7 @@ class TestAdminInterfaceEditConfig:
         journ_app_nav.admin_visits_system_config_page()
 
         # When they update the organization's name
-        assert "SecureDrop" == journ_app_nav.driver.title
+        assert "SecureDrop" in journ_app_nav.driver.title
         journ_app_nav.driver.find_element_by_id("organization_name").clear()
         new_org_name = "Walden Inquirer"
         journ_app_nav.nav_helper.safe_send_keys_by_id("organization_name", new_org_name)
@@ -495,7 +495,7 @@ class TestAdminInterfaceEditConfig:
         self._admin_submits_instance_settings_form(journ_app_nav)
 
         # Then it succeeds
-        assert new_org_name == journ_app_nav.driver.title
+        assert new_org_name in journ_app_nav.driver.title
 
         # And then, when a source user logs into the source app
         source_app_nav = SourceAppNavigator(

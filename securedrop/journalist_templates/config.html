@@ -1,4 +1,7 @@
 {% extends "base.html" %}
+
+{% block tab_title %}{{ gettext('Instance Configuration') }}{% endblock %}
+
 {% block body %}
 <nav class="back" aria-labelledby="back-link">
   <a id="back-link" href="/admin">{{ gettext('Back to admin interface') }}</a>

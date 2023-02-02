@@ -1,4 +1,13 @@
 {% extends "base.html" %}
+
+{% block tab_title %}
+{% if user %}
+{{ gettext('Edit user "{user}"').format(user=user.username) }}
+{% else %}
+{{ gettext('Edit your account') }}
+{% endif %}
+{% endblock %}
+
 {% block body %}
 
 {% if user %}

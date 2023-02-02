@@ -1,4 +1,7 @@
 {% extends "base.html" %}
+
+{% block tab_title %}{{ error.name }}{% endblock %}
+
 {% block body %}
 <h1>{{ error.code }}: {{ error.name }}</h1>
 {% if error.description %}

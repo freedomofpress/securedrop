@@ -228,7 +228,10 @@ def verify_i18n(app):
             assert 'hreflang="fr-FR"' in locales
 
         c.get("/?l=ar")
-        base = render_template("base.html")
+        # We have to render a template that inherits from "base.html" so that "tab_title" will be
+        # set.  But we're just checking that when a page is rendered in an RTL language the
+        # directionality is correct, so it doesn't matter which template we render.
+        base = render_template("error.html", error={})
         assert 'dir="rtl"' in base
 
 
