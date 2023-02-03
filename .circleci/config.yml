@@ -51,7 +51,7 @@ common-steps:
       paths:
         - /caches/layers.tar
 
-version: 2
+version: 2.1
 jobs:
   lint:
     machine:
