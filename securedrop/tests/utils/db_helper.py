@@ -9,7 +9,6 @@ import random
 import subprocess
 from pathlib import Path
 from typing import Dict, List
-from unittest import mock
 
 from db import db
 from encryption import EncryptionManager
