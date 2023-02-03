@@ -319,7 +319,10 @@ workflows:
   version: 2
   securedrop_ci:
     jobs:
-      - lint
+      - lint:
+          context:
+            - circleci-slack
+          <<: *slack-fail-post-step
       - app-tests:
           filters:
             branches:
@@ -328,6 +331,9 @@ workflows:
                 - /update-builder-.*/
           requires:
             - lint
+          context:
+            - circleci-slack
+          <<: *slack-fail-post-step
       - app-page-layout-tests:
           filters:
             branches:
@@ -336,21 +342,33 @@ workflows:
                 - /update-builder-.*/
           requires:
             - lint
+          context:
+            - circleci-slack
+          <<: *slack-fail-post-step
       - admin-tests:
           filters:
             branches:
               ignore:
                 - /i18n-.*/
                 - /update-builder-.*/
+          context:
+            - circleci-slack
+          <<: *slack-fail-post-step
       - updater-gui-tests:
           filters:
             branches:
               ignore:
                 - /i18n-.*/
                 - /update-builder-.*/
+          context:
+            - circleci-slack
+          <<: *slack-fail-post-step
       - static-analysis-and-no-known-cves:
           requires:
             - lint
+          context:
+            - circleci-slack
+          <<: *slack-fail-post-step
       - staging-test-with-rebase:
           filters:
             branches:
@@ -359,12 +377,18 @@ workflows:
               only: /(stg-|release\/).*/
           requires:
             - lint
+          context:
+            - circleci-slack
+          <<: *slack-fail-post-step
       - translation-tests:
           requires:
             - lint
           filters:
             branches:
               only: /i18n-.*/
+          context:
+            - circleci-slack
+          <<: *slack-fail-post-step
       - deb-tests:
           filters:
             branches:
@@ -372,6 +396,9 @@ workflows:
                 - /update-builder-.*/
           requires:
             - lint
+          context:
+            - circleci-slack
+          <<: *slack-fail-post-step
 
   nightly:
     triggers:
