@@ -52,6 +52,16 @@ common-steps:
         - /caches/layers.tar
 
 version: 2.1
+orbs:
+  slack: circleci/slack@4.4.4
+
+slack-fail-post-step: &slack-fail-post-step
+  post-steps:
+    - slack/notify:
+        channel: C01EY9C1X45
+        event: fail
+        template: basic_fail_1
+
 jobs:
   lint:
     machine:
