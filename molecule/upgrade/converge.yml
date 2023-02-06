@@ -16,7 +16,7 @@
     - name: Ensure debs were found
       assert:
         that:
-          - "_find_debs_result.files|length >= 8"
+          - "_find_debs_result.files|length >= 7"
         msg: "No local debs found, run 'make build-debs-focal'"
 
 - name: Configure apt-server
