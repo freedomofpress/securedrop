@@ -5,6 +5,7 @@ from models import Source
 from sdconfig import SecureDropConfig
 
 config = SecureDropConfig.get_current()
+# app is imported by journalist.wsgi
 app = create_app(config)
 
 
