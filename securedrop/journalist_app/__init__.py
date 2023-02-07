@@ -80,8 +80,8 @@ def create_app(config: SecureDropConfig) -> Flask:
         # TODO: clean up API error handling such that all except 404/5s are
         # registered in the blueprint and 404/5s are handled at the application
         # level.
-        handler = list(app.error_handler_spec["api"][error.code].values())[0]
-        if request.path.startswith("/api/") and handler:
+        if request.path.startswith("/api/"):
+            handler = list(app.error_handler_spec["api"][error.code].values())[0]
             return handler(error)  # type: ignore
 
         return render_template("error.html", error=error), error.code
