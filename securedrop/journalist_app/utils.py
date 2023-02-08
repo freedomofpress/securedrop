@@ -11,10 +11,7 @@ from flask import Markup, abort, current_app, escape, flash, redirect, send_file
 from flask_babel import gettext, ngettext
 from journalist_app.sessions import session
 from models import (
-    HOTP_SECRET_LENGTH,
-    BadTokenException,
     FirstOrLastNameError,
-    InvalidOTPSecretException,
     InvalidPasswordLength,
     InvalidUsernameException,
     Journalist,
@@ -32,6 +29,7 @@ from models import (
 )
 from sqlalchemy.exc import IntegrityError
 from store import Storage, add_checksum_for_file
+from two_factor import HOTP, OtpSecretInvalid, OtpTokenInvalid
 
 
 def commit_account_changes(user: Journalist) -> None:
@@ -83,8 +81,8 @@ def validate_user(
         return Journalist.login(username, password, token)
     except (
         InvalidUsernameException,
-        InvalidOTPSecretException,
-        BadTokenException,
+        OtpSecretInvalid,
+        OtpTokenInvalid,
         WrongPasswordException,
         LoginThrottledException,
         InvalidPasswordLength,
@@ -102,7 +100,7 @@ def validate_user(
                 "Please wait at least {num} seconds before logging in again.",
                 period,
             ).format(num=period)
-        elif isinstance(e, InvalidOTPSecretException):
+        elif isinstance(e, OtpSecretInvalid):
             login_flashed_msg += " "
             login_flashed_msg += gettext(
                 "Your 2FA details are invalid" " - please contact an administrator to reset them."
@@ -133,7 +131,7 @@ def validate_hotp_secret(user: Journalist, otp_secret: str) -> bool:
     strip_whitespace = otp_secret.replace(" ", "")
     secret_length = len(strip_whitespace)
 
-    if secret_length != HOTP_SECRET_LENGTH:
+    if secret_length != HOTP.SECRET_HEX_LENGTH:
         flash(
             ngettext(
                 "HOTP secrets are 40 characters long - you have entered {num}.",

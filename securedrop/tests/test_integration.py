@@ -3,8 +3,6 @@ import os
 import random
 import re
 import zipfile
-from base64 import b32encode
-from binascii import unhexlify
 from io import BytesIO
 from unittest import mock
 
@@ -14,13 +12,12 @@ from db import db
 from encryption import EncryptionManager
 from flask import escape
 from journalist_app.sessions import session
-from pyotp import HOTP, TOTP
 from source_app.session_manager import SessionManager
 from store import Storage
 from tests import utils
 from tests.test_encryption import import_journalist_private_key
 from tests.utils import login_journalist
-from tests.utils.instrument import InstrumentedApp
+from two_factor import TOTP
 
 # Seed the RNG for deterministic testing
 random.seed("ಠ_ಠ")
@@ -659,44 +656,6 @@ def test_user_change_password(journalist_app, test_journo):
     with journalist_app.test_client() as app:
         # login with new credentials
         login_journalist(app, test_journo["username"], new_pw, test_journo["otp_secret"])
-
-
-def test_login_after_regenerate_hotp(journalist_app, test_journo):
-    """Test that journalists can login after resetting their HOTP 2fa"""
-
-    otp_secret = "0123456789abcdef0123456789abcdef01234567"
-    b32_otp_secret = b32encode(unhexlify(otp_secret))
-
-    # edit hotp
-    with journalist_app.test_client() as app:
-        login_journalist(
-            app, test_journo["username"], test_journo["password"], test_journo["otp_secret"]
-        )
-        with InstrumentedApp(journalist_app) as ins:
-            resp = app.post("/account/reset-2fa-hotp", data=dict(otp_secret=otp_secret))
-            # valid otp secrets should redirect
-            ins.assert_redirects(resp, "/account/2fa")
-
-            resp = app.post("/account/2fa", data=dict(token=HOTP(b32_otp_secret).at(0)))
-            # successful verification should redirect to /account/account
-            ins.assert_redirects(resp, "/account/account")
-
-        # log out
-        app.get("/logout")
-
-    # start a new client/context to be sure we've cleared the session
-    with journalist_app.test_client() as app:
-        with InstrumentedApp(journalist_app) as ins:
-            # login with new 2fa secret should redirect to index page
-            resp = app.post(
-                "/login",
-                data=dict(
-                    username=test_journo["username"],
-                    password=test_journo["password"],
-                    token=HOTP(b32_otp_secret).at(1),
-                ),
-            )
-            ins.assert_redirects(resp, "/")
 
 
 def test_prevent_document_uploads(source_app, journalist_app, test_admin):

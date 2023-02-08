@@ -318,6 +318,7 @@
   /var/www/securedrop/template_filters.py r,
   /var/www/securedrop/translations/ r,
   /var/www/securedrop/translations/** r,
+  /var/www/securedrop/two_factor.py r,
   /var/www/securedrop/server_os.py r,
   /var/www/securedrop/version.py r,
   /var/www/securedrop/wordlists/ r,

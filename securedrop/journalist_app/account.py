@@ -12,6 +12,7 @@ from journalist_app.utils import (
     validate_user,
 )
 from passphrases import PassphraseGenerator
+from two_factor import OtpTokenInvalid
 
 
 def make_blueprint() -> Blueprint:
@@ -49,13 +50,15 @@ def make_blueprint() -> Blueprint:
     def new_two_factor() -> Union[str, werkzeug.Response]:
         if request.method == "POST":
             token = request.form["token"]
-            if session.get_user().verify_token(token):
+            try:
+                session.get_user().verify_2fa_token(token)
                 flash(
                     gettext("Your two-factor credentials have been reset successfully."),
                     "notification",
                 )
                 return redirect(url_for("account.edit"))
-            else:
+
+            except OtpTokenInvalid:
                 flash(
                     gettext("There was a problem verifying the two-factor code. Please try again."),
                     "error",

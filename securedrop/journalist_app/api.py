@@ -12,8 +12,6 @@ from flask import Blueprint, abort, jsonify, request
 from journalist_app import utils
 from journalist_app.sessions import session
 from models import (
-    BadTokenException,
-    InvalidOTPSecretException,
     InvalidUsernameException,
     Journalist,
     LoginThrottledException,
@@ -26,6 +24,7 @@ from models import (
 from sqlalchemy import Column
 from sqlalchemy.exc import IntegrityError
 from store import NotEncrypted, Storage
+from two_factor import OtpSecretInvalid, OtpTokenInvalid
 from werkzeug.exceptions import default_exceptions
 
 
@@ -114,8 +113,8 @@ def make_blueprint() -> Blueprint:
         except (
             LoginThrottledException,
             InvalidUsernameException,
-            BadTokenException,
-            InvalidOTPSecretException,
+            OtpSecretInvalid,
+            OtpTokenInvalid,
             WrongPasswordException,
         ):
             return abort(403, "Token authentication failed.")

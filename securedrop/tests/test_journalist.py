@@ -35,7 +35,6 @@ from models import (
     Submission,
 )
 from passphrases import PassphraseGenerator
-from pyotp import TOTP
 from source_user import create_source_user
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm.exc import StaleDataError
@@ -53,41 +52,13 @@ from tests.utils.i18n import (
     xfail_untranslated_messages,
 )
 from tests.utils.instrument import InstrumentedApp
+from two_factor import TOTP
 
 # Smugly seed the RNG for deterministic testing
 random.seed(r"¯\_(ツ)_/¯")
 
 VALID_PASSWORD = "correct horse battery staple generic passphrase hooray"
 VALID_PASSWORD_2 = "another correct horse battery staple generic passphrase"
-
-
-@pytest.mark.parametrize("otp_secret", ["", "GA", "GARBAGE", "JHCOGO7VCER3EJ4"])
-def test_user_with_invalid_otp_secret_cannot_login(journalist_app, otp_secret):
-    # Create a user with an invalid OTP secret
-    with get_database_session(journalist_app.config["SQLALCHEMY_DATABASE_URI"]) as db_session:
-        username = "badotp"
-        password = PassphraseGenerator.get_default().generate_passphrase()
-        user = Journalist(
-            username=username,
-            password=password,
-        )
-        user.otp_secret = otp_secret
-        db_session.add(user)
-        db_session.commit()
-
-    # Verify that user is *not* able to login successfully
-    with journalist_app.test_client() as app:
-        resp = app.post(
-            "/login",
-            data={
-                "username": username,
-                "password": password,
-                "token": TOTP(otp_secret).now(),
-            },
-            follow_redirects=True,
-        )
-        assert resp.status_code == 200
-        assert session.get_user() is None
 
 
 def test_user_with_whitespace_in_username_can_login(journalist_app):
@@ -834,7 +805,7 @@ def test_user_edits_password_error_response(config, journalist_app, test_journo,
 
         # patch token verification because there are multiple commits
         # to the database and this isolates the one we want to fail
-        with patch.object(Journalist, "verify_token", return_value=True):
+        with patch.object(Journalist, "verify_2fa_token", return_value="token"):
             with patch.object(db.session, "commit", side_effect=[None, None, Exception()]):
                 with InstrumentedApp(journalist_app) as ins:
                     resp = app.post(

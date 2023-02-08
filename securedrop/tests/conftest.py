@@ -22,7 +22,6 @@ from flask import Flask, url_for
 from hypothesis import settings
 from journalist_app import create_app as create_journalist_app
 from passphrases import PassphraseGenerator
-from pyotp import TOTP
 from sdconfig import DEFAULT_SECUREDROP_ROOT, SecureDropConfig
 from source_app import create_app as create_source_app
 from source_user import _SourceScryptManager, create_source_user
@@ -30,6 +29,7 @@ from store import Storage
 from tests import utils
 from tests.factories import SecureDropConfigFactory
 from tests.utils import i18n
+from two_factor import TOTP
 
 # Quiet down gnupg output. (See Issue #2595)
 GNUPG_LOG_LEVEL = os.environ.get("GNUPG_LOG_LEVEL", "ERROR")

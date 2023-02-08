@@ -5,8 +5,8 @@ from binascii import unhexlify
 from random import randint
 from typing import Callable, Dict, Iterable, Optional, Tuple
 
-import pyotp
 import requests
+import two_factor
 from encryption import EncryptionManager
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver import ActionChains
@@ -53,8 +53,8 @@ class JournalistAppNavigator:
 
         self.nav_helper.safe_send_keys_by_css_selector('input[name="username"]', username)
         self.nav_helper.safe_send_keys_by_css_selector('input[name="password"]', password)
-        otp = pyotp.TOTP(otp_secret)
-        self.nav_helper.safe_send_keys_by_css_selector('input[name="token"]', str(otp.now()))
+        otp = two_factor.TOTP(otp_secret)
+        self.nav_helper.safe_send_keys_by_css_selector('input[name="token"]', otp.now())
 
         if should_submit_login_form:
             self.nav_helper.safe_click_by_css_selector('button[type="submit"]')
@@ -290,9 +290,9 @@ class JournalistAppNavigator:
             # We created an hotp user
             otp_secret = hotp_secret
             hotp_secret_as_hex = unhexlify(hotp_secret.replace(" ", ""))
-            hotp_secret_as_b64 = base64.b32encode(hotp_secret_as_hex).decode("ascii")
-            hotp = pyotp.HOTP(hotp_secret_as_b64)
-            current_2fa_code = hotp.at(0)
+            hotp_secret_as_b32 = base64.b32encode(hotp_secret_as_hex).decode("ascii")
+            hotp = two_factor.HOTP(hotp_secret_as_b32)
+            current_2fa_code = hotp.generate(0)
         else:
             # We created a totp user
             otp_secret = (
@@ -300,8 +300,8 @@ class JournalistAppNavigator:
                 .text.strip()
                 .replace(" ", "")
             )
-            totp = pyotp.TOTP(otp_secret)
-            current_2fa_code = str(totp.now())
+            totp = two_factor.TOTP(otp_secret)
+            current_2fa_code = totp.now()
 
         self.nav_helper.safe_send_keys_by_css_selector('input[name="token"]', current_2fa_code)
 

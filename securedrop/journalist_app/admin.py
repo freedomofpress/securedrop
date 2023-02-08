@@ -31,6 +31,7 @@ from models import (
 from passphrases import PassphraseGenerator
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm.exc import NoResultFound
+from two_factor import OtpTokenInvalid
 
 
 def make_blueprint() -> Blueprint:
@@ -223,7 +224,8 @@ def make_blueprint() -> Blueprint:
 
         if request.method == "POST":
             token = request.form["token"]
-            if user.verify_token(token):
+            try:
+                user.verify_2fa_token(token)
                 flash(
                     gettext(
                         'The two-factor code for user "{user}" was verified ' "successfully."
@@ -231,7 +233,8 @@ def make_blueprint() -> Blueprint:
                     "notification",
                 )
                 return redirect(url_for("admin.index"))
-            else:
+
+            except OtpTokenInvalid:
                 flash(
                     gettext("There was a problem verifying the two-factor code. Please try again."),
                     "error",
