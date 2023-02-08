@@ -118,12 +118,15 @@ def create_app(config: SecureDropConfig) -> Flask:
     # Obscure the creation time of source private keys by touching them all
     # on startup.
     private_keys = config.GPG_KEY_DIR / "private-keys-v1.d"
-    now = time.time()
-    for entry in os.scandir(private_keys):
-        if not entry.is_file() or not entry.name.endswith(".key"):
-            continue
-        os.utime(entry.path, times=(now, now))
-        # So the ctime is also updated
-        os.chmod(entry.path, entry.stat().st_mode)
+    # The folder may not exist yet in some dev/testing setups,
+    # and if it doesn't exist there's no mtime to obscure.
+    if private_keys.is_dir():
+        now = time.time()
+        for entry in os.scandir(private_keys):
+            if not entry.is_file() or not entry.name.endswith(".key"):
+                continue
+            os.utime(entry.path, times=(now, now))
+            # So the ctime is also updated
+            os.chmod(entry.path, entry.stat().st_mode)
 
     return app

@@ -21,7 +21,7 @@ def test_app_wsgi(host):
     f = host.file("/var/www/source.wsgi")
     with host.sudo():
         assert f.is_file
-        assert f.mode == 0o640
+        assert f.mode == 0o644
         assert f.user == "root"
         assert f.group == "root"
         assert f.contains("^import logging$")
