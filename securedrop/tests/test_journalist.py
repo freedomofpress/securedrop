@@ -6,7 +6,8 @@ import os
 import random
 import time
 import zipfile
-from base64 import b64decode
+from base64 import b32encode, b64decode
+from binascii import unhexlify
 from io import BytesIO
 from pathlib import Path
 from typing import Tuple
@@ -19,6 +20,8 @@ from encryption import EncryptionManager, GpgKeyNotFoundError
 from flaky import flaky
 from flask import escape, g, url_for
 from flask_babel import gettext, ngettext
+from journalist_app.account import _NEW_OTP_IS_TOTP, _NEW_OTP_SECRET
+from journalist_app.admin import _ADMIN_NEW_OTP_IS_TOTP, _ADMIN_NEW_OTP_SECRET
 from journalist_app.sessions import session
 from journalist_app.utils import mark_seen
 from models import (
@@ -52,7 +55,7 @@ from tests.utils.i18n import (
     xfail_untranslated_messages,
 )
 from tests.utils.instrument import InstrumentedApp
-from two_factor import TOTP
+from two_factor import HOTP, TOTP
 
 # Smugly seed the RNG for deterministic testing
 random.seed(r"¯\_(ツ)_/¯")
@@ -1183,6 +1186,9 @@ def test_admin_resets_user_hotp_format_too_short(
 
 
 def test_admin_resets_user_hotp(journalist_app, test_admin, test_journo):
+    journo = Journalist.query.get(test_journo["id"])
+    old_secret = journo.otp_secret
+
     with journalist_app.test_client() as app:
         login_journalist(
             app,
@@ -1191,25 +1197,29 @@ def test_admin_resets_user_hotp(journalist_app, test_admin, test_journo):
             test_admin["otp_secret"],
         )
 
-        journo = test_journo["journalist"]
-        old_secret = journo.otp_secret
-
         valid_secret = "DEADBEEF01234567DEADBEEF01234567DEADBEEF"
         with InstrumentedApp(journalist_app) as ins:
             resp = app.post(
                 url_for("admin.reset_two_factor_hotp"),
-                data=dict(uid=test_journo["id"], otp_secret=valid_secret),
+                data=dict(uid=journo.id, otp_secret=valid_secret),
             )
 
-            # fetch altered DB object
-            journo = Journalist.query.get(journo.id)
-
-            new_secret = journo.otp_secret
-            assert old_secret != new_secret
-            assert not journo.is_totp
+            b32_otp_secret = b32encode(unhexlify(session[_ADMIN_NEW_OTP_SECRET])).decode("ascii")
+            token = HOTP(b32_otp_secret).generate(0)
+            resp2 = app.post(
+                url_for("admin.new_user_two_factor", uid=journo.id),
+                data=dict(token=token),
+            )
 
             # Redirect to admin 2FA view
             ins.assert_redirects(resp, url_for("admin.new_user_two_factor", uid=journo.id))
+
+    # fetch altered DB object
+    new_secret = Journalist.query.get(journo.id).otp_secret
+
+    assert old_secret != new_secret
+    assert new_secret == b32_otp_secret
+    assert not journo.is_totp
 
 
 def test_admin_resets_user_hotp_error(mocker, journalist_app, test_admin, test_journo):
@@ -1254,8 +1264,44 @@ def test_admin_resets_user_hotp_error(mocker, journalist_app, test_admin, test_j
     )
 
 
+def test_admin_resets_user_hotp_invalid_token(journalist_app, test_admin, test_journo):
+    journo = Journalist.query.get(test_journo["id"])
+    old_secret = journo.otp_secret
+
+    with journalist_app.test_client() as app:
+        login_journalist(
+            app,
+            test_admin["username"],
+            test_admin["password"],
+            test_admin["otp_secret"],
+        )
+
+        valid_secret = "DEADBEEF01234567DEADBEEF01234567DEADBEEF"
+        invalid_token = "invalid_token"
+        with InstrumentedApp(journalist_app) as ins:
+            resp = app.post(
+                url_for("admin.reset_two_factor_hotp"),
+                data=dict(uid=test_journo["id"], otp_secret=valid_secret),
+            )
+
+            app.post(
+                url_for("admin.new_user_two_factor", uid=test_journo["id"]),
+                data=dict(token=invalid_token),
+            )
+
+            # Redirect to admin 2FA view
+            ins.assert_redirects(resp, url_for("admin.new_user_two_factor", uid=journo.id))
+
+    # fetch altered DB object
+    journo = Journalist.query.get(journo.id)
+    new_secret = journo.otp_secret
+
+    # secret should not be changed
+    assert old_secret == new_secret
+
+
 def test_user_resets_hotp(journalist_app, test_journo):
-    old_secret = test_journo["otp_secret"]
+    old_secret = Journalist.query.get(test_journo["id"]).otp_secret
     new_secret = "0123456789ABCDEF0123456789ABCDEF01234567"
 
     # Precondition
@@ -1274,6 +1320,14 @@ def test_user_resets_hotp(journalist_app, test_journo):
                 url_for("account.reset_two_factor_hotp"),
                 data=dict(otp_secret=new_secret),
             )
+
+            b32_otp_secret = b32encode(unhexlify(session[_NEW_OTP_SECRET])).decode("ascii")
+            token = HOTP(b32_otp_secret).generate(0)
+            resp2 = app.post(
+                url_for("account.new_two_factor"),
+                data=dict(token=token),
+            )
+
             # should redirect to verification page
             ins.assert_redirects(resp, url_for("account.new_two_factor"))
 
@@ -1282,6 +1336,38 @@ def test_user_resets_hotp(journalist_app, test_journo):
     new_secret = user.otp_secret
 
     assert old_secret != new_secret
+    assert new_secret == b32_otp_secret
+
+
+def test_user_resets_hotp_invalid_token(journalist_app, test_journo):
+    old_secret = Journalist.query.get(test_journo["id"]).otp_secret
+    new_secret = "0123456789ABCDEF0123456789ABCDEF01234567"
+    invalid_token = "invalid_token"
+
+    with journalist_app.test_client() as app:
+        login_journalist(
+            app,
+            test_journo["username"],
+            test_journo["password"],
+            test_journo["otp_secret"],
+        )
+
+        with InstrumentedApp(journalist_app) as ins:
+            resp = app.post(
+                url_for("account.reset_two_factor_hotp"),
+                data=dict(otp_secret=new_secret),
+            )
+
+            app.post(url_for("account.new_two_factor"), data=dict(token=invalid_token))
+
+            # should redirect to verification page
+            ins.assert_redirects(resp, url_for("account.new_two_factor"))
+
+    # Re-fetch journalist to get fresh DB instance
+    user = Journalist.query.get(test_journo["id"])
+    new_secret = user.otp_secret
+
+    assert old_secret == new_secret
 
 
 def test_user_resets_user_hotp_format_non_hexa(journalist_app, test_journo):
@@ -1368,13 +1454,56 @@ def test_admin_resets_user_totp(journalist_app, test_admin, test_journo):
             resp = app.post(
                 url_for("admin.reset_two_factor_totp"), data=dict(uid=test_journo["id"])
             )
+
+            totp_secret = session[_ADMIN_NEW_OTP_SECRET]
+            token = TOTP(totp_secret).now()
+            resp2 = app.post(
+                url_for("admin.new_user_two_factor", uid=test_journo["id"]),
+                data=dict(token=token),
+            )
+
+            ins.assert_redirects(resp, url_for("admin.new_user_two_factor", uid=test_journo["id"]))
+            ins.assert_redirects(resp2, url_for("admin.index"))
+
+    # Re-fetch journalist to get fresh DB instance
+    user = Journalist.query.get(test_journo["id"])
+    new_secret = user.otp_secret
+
+    # Check that the secret has been updated
+    assert new_secret != old_secret
+    assert new_secret == totp_secret
+
+
+def test_admin_resets_user_totp_invalid_token(journalist_app, test_admin, test_journo):
+    old_secret = test_journo["otp_secret"]
+    invalid_token = "invalid_token"
+
+    with journalist_app.test_client() as app:
+        login_journalist(
+            app,
+            test_admin["username"],
+            test_admin["password"],
+            test_admin["otp_secret"],
+        )
+
+        with InstrumentedApp(journalist_app) as ins:
+            resp = app.post(
+                url_for("admin.reset_two_factor_totp"), data=dict(uid=test_journo["id"])
+            )
+
+            app.post(
+                url_for("admin.new_user_two_factor", uid=test_journo["id"]),
+                data=dict(token=invalid_token),
+            )
+
             ins.assert_redirects(resp, url_for("admin.new_user_two_factor", uid=test_journo["id"]))
 
     # Re-fetch journalist to get fresh DB instance
     user = Journalist.query.get(test_journo["id"])
     new_secret = user.otp_secret
 
-    assert new_secret != old_secret
+    # Check that the secret has not been changed
+    assert new_secret == old_secret
 
 
 def test_user_resets_totp(journalist_app, test_journo):
@@ -1390,6 +1519,42 @@ def test_user_resets_totp(journalist_app, test_journo):
 
         with InstrumentedApp(journalist_app) as ins:
             resp = app.post(url_for("account.reset_two_factor_totp"))
+
+            totp_secret = session[_NEW_OTP_SECRET]
+            token = TOTP(totp_secret).now()
+            resp2 = app.post(url_for("account.new_two_factor"), data=dict(token=token))
+
+            # should redirect to verification page
+            ins.assert_redirects(resp, url_for("account.new_two_factor"))
+
+            # should redirect to account edit page
+            ins.assert_redirects(resp2, url_for("account.edit"))
+
+    # Re-fetch journalist to get fresh DB instance
+    user = Journalist.query.get(test_journo["id"])
+    new_secret = user.otp_secret
+
+    assert new_secret != old_secret
+    assert new_secret == totp_secret
+
+
+def test_user_resets_totp_invalid_token(journalist_app, test_journo):
+    old_secret = test_journo["otp_secret"]
+    invalid_token = "invalid_token"
+
+    with journalist_app.test_client() as app:
+        login_journalist(
+            app,
+            test_journo["username"],
+            test_journo["password"],
+            test_journo["otp_secret"],
+        )
+
+        with InstrumentedApp(journalist_app) as ins:
+            resp = app.post(url_for("account.reset_two_factor_totp"))
+
+            app.post(url_for("account.new_two_factor"), data=dict(token=invalid_token))
+
             # should redirect to verification page
             ins.assert_redirects(resp, url_for("account.new_two_factor"))
 
@@ -1397,7 +1562,8 @@ def test_user_resets_totp(journalist_app, test_journo):
     user = Journalist.query.get(test_journo["id"])
     new_secret = user.otp_secret
 
-    assert new_secret != old_secret
+    # secret should not have changed
+    assert new_secret == old_secret
 
 
 @flaky(rerun_filter=utils.flaky_filter_xfail)
@@ -2726,56 +2892,6 @@ def test_valid_user_invalid_first_last_name_change(config, journalist_app, test_
                 ins.assert_message_flashed(
                     gettext(msgids[0]).format(message=gettext("Name too long")), "error"
                 )
-
-
-def test_regenerate_totp(journalist_app, test_journo):
-    old_secret = test_journo["otp_secret"]
-
-    with journalist_app.test_client() as app:
-        login_journalist(
-            app,
-            test_journo["username"],
-            test_journo["password"],
-            test_journo["otp_secret"],
-        )
-
-        with InstrumentedApp(journalist_app) as ins:
-            resp = app.post(url_for("account.reset_two_factor_totp"))
-
-            new_secret = Journalist.query.get(test_journo["id"]).otp_secret
-
-            # check that totp is different
-            assert new_secret != old_secret
-
-            # should redirect to verification page
-            ins.assert_redirects(resp, url_for("account.new_two_factor"))
-
-
-def test_edit_hotp(journalist_app, test_journo):
-    old_secret = test_journo["otp_secret"]
-    valid_secret = "DEADBEEF01234567DEADBEEF01234567DADEFEEB"
-
-    with journalist_app.test_client() as app:
-        login_journalist(
-            app,
-            test_journo["username"],
-            test_journo["password"],
-            test_journo["otp_secret"],
-        )
-
-        with InstrumentedApp(journalist_app) as ins:
-            resp = app.post(
-                url_for("account.reset_two_factor_hotp"),
-                data=dict(otp_secret=valid_secret),
-            )
-
-            new_secret = Journalist.query.get(test_journo["id"]).otp_secret
-
-            # check that totp is different
-            assert new_secret != old_secret
-
-            # should redirect to verification page
-            ins.assert_redirects(resp, url_for("account.new_two_factor"))
 
 
 def test_delete_data_deletes_submissions_retaining_source(

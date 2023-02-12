@@ -31,7 +31,11 @@ from models import (
 from passphrases import PassphraseGenerator
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm.exc import NoResultFound
-from two_factor import OtpTokenInvalid
+from two_factor import OtpTokenInvalid, random_base32
+
+
+_ADMIN_NEW_OTP_IS_TOTP = "admin_new_otp_is_totp"
+_ADMIN_NEW_OTP_SECRET = "admin_new_otp_secret"
 
 
 def make_blueprint() -> Blueprint:
@@ -222,10 +226,21 @@ def make_blueprint() -> Blueprint:
     def new_user_two_factor() -> Union[str, werkzeug.Response]:
         user = Journalist.query.get(request.args["uid"])
 
+        # Update the user with the new OTP secret, if set. If the user enters a valid token,
+        # the new secret is committed. Otherwise, the secret is rolled back after the request
+        # completes.
+        if _ADMIN_NEW_OTP_IS_TOTP in session and _ADMIN_NEW_OTP_SECRET in session:
+            if session[_ADMIN_NEW_OTP_IS_TOTP]:
+                user.set_totp_secret(session[_ADMIN_NEW_OTP_SECRET])
+            else:
+                user.set_hotp_secret(session[_ADMIN_NEW_OTP_SECRET])
+
         if request.method == "POST":
             token = request.form["token"]
             try:
                 user.verify_2fa_token(token)
+
+                db.session.commit()
                 flash(
                     gettext(
                         'The two-factor code for user "{user}" was verified ' "successfully."
@@ -235,21 +250,23 @@ def make_blueprint() -> Blueprint:
                 return redirect(url_for("admin.index"))
 
             except OtpTokenInvalid:
+                db.session.rollback()
                 flash(
                     gettext("There was a problem verifying the two-factor code. Please try again."),
                     "error",
                 )
 
-        return render_template("admin_new_user_two_factor.html", user=user)
+        page = render_template("admin_new_user_two_factor.html", user=user)
+        db.session.rollback()
+        return page
 
     @view.route("/reset-2fa-totp", methods=["POST"])
     @admin_required
     def reset_two_factor_totp() -> werkzeug.Response:
         uid = request.form["uid"]
         user = Journalist.query.get(uid)
-        user.is_totp = True
-        user.regenerate_totp_shared_secret()
-        db.session.commit()
+        session[_ADMIN_NEW_OTP_IS_TOTP] = True
+        session[_ADMIN_NEW_OTP_SECRET] = random_base32()
         return redirect(url_for("admin.new_user_two_factor", uid=user.id))
 
     @view.route("/reset-2fa-hotp", methods=["POST"])
@@ -261,7 +278,8 @@ def make_blueprint() -> Blueprint:
         if otp_secret:
             if not validate_hotp_secret(user, otp_secret):
                 return render_template("admin_edit_hotp_secret.html", uid=user.id)
-            db.session.commit()
+            session[_ADMIN_NEW_OTP_IS_TOTP] = False
+            session[_ADMIN_NEW_OTP_SECRET] = otp_secret
             return redirect(url_for("admin.new_user_two_factor", uid=user.id))
         else:
             return render_template("admin_edit_hotp_secret.html", uid=user.id)

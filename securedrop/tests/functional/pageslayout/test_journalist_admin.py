@@ -15,13 +15,10 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-import logging
 import time
 from pathlib import Path
-from typing import Callable
 
 import pytest
-from selenium.common.exceptions import TimeoutException
 from selenium.webdriver import ActionChains
 from tests.functional.app_navigators.journalist_app_nav import JournalistAppNavigator
 from tests.functional.pageslayout.utils import list_locales, save_screenshot_and_html
@@ -80,34 +77,26 @@ class TestAdminLayoutAddAndEditUser:
         save_screenshot_and_html(journ_app_nav.driver, locale, "journalist-admin_edit_hotp_secret")
 
         # Then the admin resets the new journalist's hotp
-        def _admin_visits_reset_2fa_hotp_step() -> None:
-            # 2FA reset buttons show a tooltip with explanatory text on hover.
-            # Also, confirm the text on the tooltip is the correct one.
-            hotp_reset_button = journ_app_nav.driver.find_elements_by_id("reset-two-factor-hotp")[0]
-            hotp_reset_button.location_once_scrolled_into_view
-            ActionChains(journ_app_nav.driver).move_to_element(hotp_reset_button).perform()
+        # 2FA reset buttons show a tooltip with explanatory text on hover.
+        # Also, confirm the text on the tooltip is the correct one.
+        hotp_reset_button = journ_app_nav.driver.find_elements_by_id("reset-two-factor-hotp")[0]
+        hotp_reset_button.location_once_scrolled_into_view
+        ActionChains(journ_app_nav.driver).move_to_element(hotp_reset_button).perform()
 
-            time.sleep(1)
+        time.sleep(1)
 
-            tip_opacity = journ_app_nav.driver.find_elements_by_css_selector(
-                "#button-reset-two-factor-hotp span.tooltip"
-            )[0].value_of_css_property("opacity")
-            tip_text = journ_app_nav.driver.find_elements_by_css_selector(
-                "#button-reset-two-factor-hotp span.tooltip"
-            )[0].text
-            assert tip_opacity == "1"
+        tip_opacity = journ_app_nav.driver.find_elements_by_css_selector(
+            "#button-reset-two-factor-hotp span.tooltip"
+        )[0].value_of_css_property("opacity")
+        tip_text = journ_app_nav.driver.find_elements_by_css_selector(
+            "#button-reset-two-factor-hotp span.tooltip"
+        )[0].text
+        assert tip_opacity == "1"
 
-            if not journ_app_nav.accept_languages:
-                assert (
-                    tip_text == "Reset two-factor authentication for security keys, like a YubiKey"
-                )
+        if not journ_app_nav.accept_languages:
+            assert tip_text == "Reset two-factor authentication for security keys, like a YubiKey"
 
-            journ_app_nav.nav_helper.safe_click_by_id("button-reset-two-factor-hotp")
-
-        # Run the above step in a retry loop
-        self._retry_2fa_pop_ups(
-            journ_app_nav, _admin_visits_reset_2fa_hotp_step, "reset-two-factor-hotp"
-        )
+        journ_app_nav.nav_helper.safe_click_by_id("button-reset-two-factor-hotp")
 
         # Wait for it to succeed
         journ_app_nav.nav_helper.wait_for(
@@ -151,71 +140,35 @@ class TestAdminLayoutAddAndEditUser:
         # Then the admin resets the second journalist's totp
         journ_app_nav.admin_visits_user_edit_page(username_of_journalist_to_edit=new_user_username)
 
-        def _admin_visits_reset_2fa_totp_step() -> None:
-            totp_reset_button = journ_app_nav.driver.find_elements_by_id("reset-two-factor-totp")[0]
-            assert "/admin/reset-2fa-totp" in totp_reset_button.get_attribute("action")
-            # 2FA reset buttons show a tooltip with explanatory text on hover.
-            # Also, confirm the text on the tooltip is the correct one.
-            totp_reset_button = journ_app_nav.driver.find_elements_by_css_selector(
-                "#button-reset-two-factor-totp"
-            )[0]
-            totp_reset_button.location_once_scrolled_into_view
-            ActionChains(journ_app_nav.driver).move_to_element(totp_reset_button).perform()
+        totp_reset_button = journ_app_nav.driver.find_elements_by_id("reset-two-factor-totp")[0]
+        assert "/admin/reset-2fa-totp" in totp_reset_button.get_attribute("action")
+        # 2FA reset buttons show a tooltip with explanatory text on hover.
+        # Also, confirm the text on the tooltip is the correct one.
+        totp_reset_button = journ_app_nav.driver.find_elements_by_css_selector(
+            "#button-reset-two-factor-totp"
+        )[0]
+        totp_reset_button.location_once_scrolled_into_view
+        ActionChains(journ_app_nav.driver).move_to_element(totp_reset_button).perform()
 
-            time.sleep(1)
+        time.sleep(1)
 
-            tip_opacity = journ_app_nav.driver.find_elements_by_css_selector(
-                "#button-reset-two-factor-totp span.tooltip"
-            )[0].value_of_css_property("opacity")
-            tip_text = journ_app_nav.driver.find_elements_by_css_selector(
-                "#button-reset-two-factor-totp span.tooltip"
-            )[0].text
+        tip_opacity = journ_app_nav.driver.find_elements_by_css_selector(
+            "#button-reset-two-factor-totp span.tooltip"
+        )[0].value_of_css_property("opacity")
+        tip_text = journ_app_nav.driver.find_elements_by_css_selector(
+            "#button-reset-two-factor-totp span.tooltip"
+        )[0].text
 
-            assert tip_opacity == "1"
-            if not journ_app_nav.accept_languages:
-                expected_text = "Reset two-factor authentication for mobile apps, such as FreeOTP"
-                assert tip_text == expected_text
+        assert tip_opacity == "1"
+        if not journ_app_nav.accept_languages:
+            expected_text = "Reset two-factor authentication for mobile apps, such as FreeOTP"
+            assert tip_text == expected_text
 
-            journ_app_nav.nav_helper.safe_click_by_id("button-reset-two-factor-totp")
-
-        # Run the above step in a retry loop
-        self._retry_2fa_pop_ups(
-            journ_app_nav, _admin_visits_reset_2fa_totp_step, "reset-two-factor-totp"
-        )
+        journ_app_nav.nav_helper.safe_click_by_id("button-reset-two-factor-totp")
 
         # Then it succeeds
         # Take a screenshot
         save_screenshot_and_html(journ_app_nav.driver, locale, "journalist-admin_edit_totp_secret")
-
-    @staticmethod
-    def _retry_2fa_pop_ups(
-        journ_app_nav: JournalistAppNavigator, navigation_step: Callable, button_to_click: str
-    ) -> None:
-        """Clicking on Selenium alerts can be flaky. We need to retry them if they timeout."""
-        for i in range(15):
-            try:
-                try:
-                    # This is the button we click to trigger the alert.
-                    journ_app_nav.nav_helper.wait_for(
-                        lambda: journ_app_nav.driver.find_elements_by_id(button_to_click)[0]
-                    )
-                except IndexError:
-                    # If the button isn't there, then the alert is up from the last
-                    # time we attempted to run this test. Switch to it and accept it.
-                    journ_app_nav.nav_helper.alert_wait()
-                    journ_app_nav.nav_helper.alert_accept()
-                    break
-
-                # The alert isn't up. Run the rest of the logic.
-                navigation_step()
-
-                journ_app_nav.nav_helper.alert_wait()
-                journ_app_nav.nav_helper.alert_accept()
-                break
-            except TimeoutException:
-                # Selenium has failed to click, and the confirmation
-                # alert didn't happen. We'll try again.
-                logging.info("Selenium has failed to click; retrying.")
 
 
 @pytest.mark.parametrize("locale", list_locales())

@@ -578,6 +578,10 @@ class Journalist(db.Model):
     def regenerate_totp_shared_secret(self) -> None:
         self.otp_secret = two_factor.random_base32()
 
+    def set_totp_secret(self, otp_secret: str) -> None:
+        self.is_totp = True
+        self.otp_secret = otp_secret
+
     def set_hotp_secret(self, otp_secret: str) -> None:
         self.otp_secret = base64.b32encode(binascii.unhexlify(otp_secret.replace(" ", ""))).decode(
             "ascii"

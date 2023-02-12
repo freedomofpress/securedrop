@@ -95,9 +95,6 @@ class TestJournalistLayoutAccount:
 
         reset_form.submit()
 
-        alert = journ_app_nav.driver.switch_to_alert()
-        alert.accept()
-
     def test_account_new_two_factor_totp(
         self, locale, sd_servers_with_clean_state, firefox_web_driver
     ):
