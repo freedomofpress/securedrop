@@ -14,7 +14,6 @@ from journalist_app.utils import (
 from passphrases import PassphraseGenerator
 from two_factor import OtpTokenInvalid, random_base32
 
-
 _NEW_OTP_IS_TOTP = "new_otp_is_totp"
 _NEW_OTP_SECRET = "new_otp_secret"
 

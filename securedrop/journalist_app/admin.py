@@ -33,7 +33,6 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm.exc import NoResultFound
 from two_factor import OtpTokenInvalid, random_base32
 
-
 _ADMIN_NEW_OTP_IS_TOTP = "admin_new_otp_is_totp"
 _ADMIN_NEW_OTP_SECRET = "admin_new_otp_secret"
 
