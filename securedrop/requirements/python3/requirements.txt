@@ -291,9 +291,9 @@ sqlalchemy==1.3.3 \
     #   -r requirements/python3/requirements.in
     #   alembic
     #   flask-sqlalchemy
-werkzeug==2.0.2 \
-    --hash=sha256:63d3dc1cf60e7b7e35e97fa9861f7397283b75d765afcaefd993d6046899de8f \
-    --hash=sha256:aa2bb6fc8dee8d6c504c0ac1e7f5f7dc5810a9903e793b6f715a9f015bdadb9a
+werkzeug==2.2.3 \
+    --hash=sha256:2e1ccc9417d4da358b9de6f174e3ac094391ea1d4fbef2d667865d819dfd0afe \
+    --hash=sha256:56433961bc1f12533306c624f3be5e744389ac61d722175d543e1751285da612
     # via
     #   -r requirements/python3/requirements.in
     #   flask
