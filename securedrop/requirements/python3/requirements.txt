@@ -118,9 +118,9 @@ flask-babel==2.0.0 \
     --hash=sha256:e6820a052a8d344e178cdd36dd4bb8aea09b4bda3d5f9fa9f008df2c7f2f5468 \
     --hash=sha256:f9faf45cdb2e1a32ea2ec14403587d4295108f35017a7821a2b1acb8cfd9257d
     # via -r requirements/python3/requirements.in
-flask-sqlalchemy==2.4.0 \
-    --hash=sha256:0c9609b0d72871c540a7945ea559c8fdf5455192d2db67219509aed680a3d45a \
-    --hash=sha256:8631bbea987bc3eb0f72b1f691d47bd37ceb795e73b59ab48586d76d75a7c605
+flask-sqlalchemy==2.5.1 \
+    --hash=sha256:2bda44b43e7cacb15d4e05ff3cc1f8bc97936cc464623424102bfc2c35e95912 \
+    --hash=sha256:f12c3d4cc5cc7fdcc148b9527ea05671718c3ea45d50c7e732cceb33f574b390
     # via -r requirements/python3/requirements.in
 flask-wtf==1.0.0 \
     --hash=sha256:01feccfc395405cea48a3f36c23f0d766e2cc6fd2a5a065ad50ad3e5827ec797 \
