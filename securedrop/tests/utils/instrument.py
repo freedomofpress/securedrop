@@ -9,8 +9,6 @@ Flask unittest integration.
 """
 
 
-from urllib.parse import urljoin, urlparse
-
 import pytest
 from flask import message_flashed, template_rendered
 
@@ -118,22 +116,14 @@ class InstrumentedApp:
         except ContextVariableDoesNotExist:
             pytest.fail(message or "Context variable does not exist: {}".format(name))
 
-    def assert_redirects(self, response, location, message=None):
+    def assert_redirects(self, response, expected_location, message=None):
         """
         Checks if response is an HTTP redirect to the
         given location.
 
         :param response: Flask response
-        :param location: relative URL path to SERVER_NAME or an absolute URL
+        :param location: relative URL path or an absolute URL
         """
-        parts = urlparse(location)
-
-        if parts.netloc:
-            expected_location = location
-        else:
-            server_name = self.app.config.get("SERVER_NAME") or "localhost.localdomain"
-            expected_location = urljoin("http://%s" % server_name, location)
-
         valid_status_codes = (301, 302, 303, 305, 307)
         valid_status_code_str = ", ".join([str(code) for code in valid_status_codes])
         not_redirect = "HTTP Status {} expected but got {}".format(

@@ -2282,7 +2282,7 @@ def test_orgname_null_fails(config, journalist_app, test_admin, locale):
             test_admin["password"],
             test_admin["otp_secret"],
         )
-        form = journalist_app_module.forms.OrgNameForm(organization_name=None)
+        form = journalist_app_module.forms.OrgNameForm(organization_name="")
         assert InstanceConfig.get_current().organization_name == "SecureDrop"
         with InstrumentedApp(journalist_app) as ins:
             resp = app.post(
