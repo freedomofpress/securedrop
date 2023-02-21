@@ -78,9 +78,7 @@ def create_app(config: "SDConfig") -> Flask:
 
     app.json_encoder = JSONEncoder
 
-    # TODO: enable type checking once upstream Flask fix is available. See:
-    # https://github.com/pallets/flask/issues/4295
-    @app.errorhandler(CSRFError)  # type: ignore
+    @app.errorhandler(CSRFError)
     def handle_csrf_error(e: CSRFError) -> "Response":
         app.logger.error("The CSRF token is invalid.")
         msg = gettext("You have been logged out due to inactivity.")
