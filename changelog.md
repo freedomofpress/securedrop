@@ -1,13 +1,15 @@
 # Changelog
 
+
 ## 2.5.2~rc1
 
 ### Web applications
 - updated dependencies:
-  - cryptography from 3.4.7 to 39.0.1 (#6746, #6751)
   - werkzeug from 2.0.2 to 2.2.3, markupsafe from 2.0.1 to 2.1.2, Flask-SQLAlchemy from 2.4.0
  to 2.5.1 (#6752)
+  - cryptography from 3.4.7 to 39.0.1 (#6746, #6751)
   - certifi from 2017.7.27.1 to 2022-12.07 (#6708)
+  - flask from 2.0.2 to 2.0.3 (#6624)
 
 ### Development
 - Fixed staging app creation in source.wsgi, added application smoke test in testinfra (#6742)
