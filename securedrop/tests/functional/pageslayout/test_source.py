@@ -17,7 +17,7 @@
 #
 import pytest
 from tests.functional.app_navigators.source_app_nav import SourceAppNavigator
-from tests.functional.pageslayout.utils import list_locales, save_screenshot_and_html
+from tests.functional.pageslayout.utils import list_locales, save_static_data
 
 
 @pytest.mark.parametrize("locale", list_locales())
@@ -37,26 +37,24 @@ class TestSourceLayout:
 
         # Take a screenshot of the "account created" page
         source_app_nav.source_clicks_submit_documents_on_homepage()
-        save_screenshot_and_html(source_app_nav.driver, locale, "source-generate")
+        save_static_data(source_app_nav.driver, locale, "source-generate")
 
         # Take a screenshot of showing the codename hint
         source_app_nav.source_continues_to_submit_page()
         source_app_nav.source_retrieves_codename_from_hint()
-        save_screenshot_and_html(source_app_nav.driver, locale, "source-lookup-shows-codename")
+        save_static_data(source_app_nav.driver, locale, "source-lookup-shows-codename")
 
         # Take a screenshot of entering text in the message field
         source_app_nav.nav_helper.safe_send_keys_by_id("msg", "Secret message éè")
-        save_screenshot_and_html(source_app_nav.driver, locale, "source-submission_entered_text")
+        save_static_data(source_app_nav.driver, locale, "source-submission_entered_text")
 
         # Take a screenshot of submitting a file
         source_app_nav.source_submits_a_file()
-        save_screenshot_and_html(source_app_nav.driver, locale, "source-lookup")
+        save_static_data(source_app_nav.driver, locale, "source-lookup")
 
         # Take a screenshot of doing a second submission
         source_app_nav.source_submits_a_message()
-        save_screenshot_and_html(
-            source_app_nav.driver, locale, "source-next_submission_flashed_message"
-        )
+        save_static_data(source_app_nav.driver, locale, "source-next_submission_flashed_message")
 
     def test_login(self, locale, sd_servers_with_clean_state, tor_browser_web_driver):
         # Given a source user accessing the app from their browser
@@ -70,10 +68,10 @@ class TestSourceLayout:
 
         # Take a screenshot of the login page
         source_app_nav.source_chooses_to_login()
-        save_screenshot_and_html(source_app_nav.driver, locale, "source-login")
+        save_static_data(source_app_nav.driver, locale, "source-login")
 
         # Take a screenshot of entering text in the login form
         source_app_nav.nav_helper.safe_send_keys_by_id(
             "codename", "ascension hypertext concert synopses"
         )
-        save_screenshot_and_html(source_app_nav.driver, locale, "source-enter-codename-in-login")
+        save_static_data(source_app_nav.driver, locale, "source-enter-codename-in-login")
