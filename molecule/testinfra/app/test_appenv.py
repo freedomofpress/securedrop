@@ -105,16 +105,9 @@ def test_ensure_logo(host):
         assert f.group == "root"
 
 
-def test_securedrop_tmp_clean_cron(host):
-    """Ensure securedrop tmp clean cron job in place"""
-    with host.sudo():
-        cronlist = host.run("crontab -u www-data -l").stdout
-        cronjob = f"@daily {sdvars.securedrop_code}/manage.py clean-tmp"
-        assert cronjob in cronlist
-
-
-def test_empty_root_crontab(host):
-    """Ensure root crontab is empty"""
+@pytest.mark.parameterize("user", ("root", "www-data"))
+def test_empty_crontabs(host, user):
+    """Ensure root + www-data crontabs are empty"""
     with host.sudo():
         # Returns exit code 1 when it's empty
-        host.run_expect([1], "crontab -u root -l")
+        host.run_expect([1], f"crontab -u {user} -l")

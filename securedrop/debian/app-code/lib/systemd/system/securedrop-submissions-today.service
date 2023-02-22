@@ -1,0 +1,12 @@
+[Unit]
+Description=Update the number of submissions in the past 24h
+
+[Service]
+ExecStart=/var/www/securedrop/manage.py were-there-submissions-today
+PrivateDevices=yes
+PrivateTmp=yes
+ProtectSystem=full
+ReadOnlyDirectories=/
+ReadWriteDirectories=/var/lib/securedrop
+User=www-data
+WorkingDirectory=/var/www/securedrop

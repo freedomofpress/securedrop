@@ -1,0 +1,9 @@
+[Unit]
+Description=Run clean-tmp daily
+
+[Timer]
+OnCalendar=daily
+Persistent=true
+
+[Install]
+WantedBy=timers.target
