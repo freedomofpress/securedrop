@@ -17,7 +17,7 @@
 #
 import pytest
 from tests.functional.app_navigators.journalist_app_nav import JournalistAppNavigator
-from tests.functional.pageslayout.utils import list_locales, save_screenshot_and_html
+from tests.functional.pageslayout.utils import list_locales, save_static_data
 
 
 @pytest.mark.parametrize("locale", list_locales())
@@ -33,7 +33,7 @@ class TestJournalistLayout:
             accept_languages=locale_with_commas,
         )
         journ_app_nav.driver.get(f"{sd_servers.journalist_app_base_url}/login")
-        save_screenshot_and_html(journ_app_nav.driver, locale, "journalist-login")
+        save_static_data(journ_app_nav.driver, locale, "journalist-login")
 
         # And they log into the app and are an admin
         assert sd_servers.journalist_is_admin
@@ -42,19 +42,17 @@ class TestJournalistLayout:
             password=sd_servers.journalist_password,
             otp_secret=sd_servers.journalist_otp_secret,
         )
-        save_screenshot_and_html(journ_app_nav.driver, locale, "journalist-index_no_documents")
+        save_static_data(journ_app_nav.driver, locale, "journalist-index_no_documents")
         # The documentation uses an identical screenshot with a different name:
         # https://github.com/freedomofpress/securedrop-docs/blob/main/docs/images/manual
         # /screenshots/journalist-admin_index_no_documents.png
         # So we take the same screenshot again here
         # TODO(AD): Update the documentation to use a single screenshot
-        save_screenshot_and_html(
-            journ_app_nav.driver, locale, "journalist-admin_index_no_documents"
-        )
+        save_static_data(journ_app_nav.driver, locale, "journalist-admin_index_no_documents")
 
         # Take a screenshot of the edit account page
         journ_app_nav.journalist_visits_edit_account()
-        save_screenshot_and_html(journ_app_nav.driver, locale, "journalist-edit_account_user")
+        save_static_data(journ_app_nav.driver, locale, "journalist-edit_account_user")
 
     def test_index_entered_text(self, locale, sd_servers, firefox_web_driver):
         # Given an SD server
@@ -73,7 +71,7 @@ class TestJournalistLayout:
             otp_secret="2HGGVF5VPHWMCAYQ",
             should_submit_login_form=False,
         )
-        save_screenshot_and_html(journ_app_nav.driver, locale, "journalist-index_with_text")
+        save_static_data(journ_app_nav.driver, locale, "journalist-index_with_text")
 
     def test_index_with_submission_and_select_documents(
         self, locale, sd_servers_with_submitted_file, firefox_web_driver
@@ -93,20 +91,20 @@ class TestJournalistLayout:
             password=sd_servers_with_submitted_file.journalist_password,
             otp_secret=sd_servers_with_submitted_file.journalist_otp_secret,
         )
-        save_screenshot_and_html(journ_app_nav.driver, locale, "journalist-index")
+        save_static_data(journ_app_nav.driver, locale, "journalist-index")
         # The documentation uses an identical screenshot with a different name:
         # https://github.com/freedomofpress/securedrop-docs/blob/main/docs/images/manual
         # /screenshots/journalist-index_javascript.png
         # So we take the same screenshot again here
         # TODO(AD): Update the documentation to use a single screenshot
-        save_screenshot_and_html(journ_app_nav.driver, locale, "journalist-index_javascript")
+        save_static_data(journ_app_nav.driver, locale, "journalist-index_javascript")
 
         # Take a screenshot of the source's page
         journ_app_nav.journalist_selects_the_first_source()
         checkboxes = journ_app_nav.get_submission_checkboxes_on_current_page()
         for checkbox in checkboxes:
             checkbox.click()
-        save_screenshot_and_html(
+        save_static_data(
             journ_app_nav.driver, locale, "journalist-clicks_on_source_and_selects_documents"
         )
 
@@ -115,7 +113,7 @@ class TestJournalistLayout:
             reply_content="Thanks for the documents."
             " Can you submit more information about the main program?"
         )
-        save_screenshot_and_html(journ_app_nav.driver, locale, "journalist-composes_reply")
+        save_static_data(journ_app_nav.driver, locale, "journalist-composes_reply")
 
     def test_fail_to_visit_admin(self, locale, sd_servers, firefox_web_driver):
         # Given an SD server
@@ -128,9 +126,7 @@ class TestJournalistLayout:
         )
         # Take a screenshot of them trying to force-browse to the admin interface
         journ_app_nav.driver.get(f"{sd_servers.journalist_app_base_url}/admin")
-        save_screenshot_and_html(
-            journ_app_nav.driver, locale, "journalist-code-fail_to_visit_admin"
-        )
+        save_static_data(journ_app_nav.driver, locale, "journalist-code-fail_to_visit_admin")
 
     def test_fail_login(self, locale, sd_servers, firefox_web_driver):
         # Given an SD server
@@ -149,10 +145,10 @@ class TestJournalistLayout:
             otp_secret="2HGGVF5VPHWMCAYQ",
             should_submit_login_form=True,
         )
-        save_screenshot_and_html(journ_app_nav.driver, locale, "journalist-code-fail_login")
+        save_static_data(journ_app_nav.driver, locale, "journalist-code-fail_login")
         # The documentation uses an identical screenshot with a different name:
         # https://github.com/freedomofpress/securedrop-docs/blob/main/docs/images/manual
         # /screenshots/journalist-code-fail_login_many.png
         # So we take the same screenshot again here
         # TODO(AD): Update the documentation to use a single screenshot
-        save_screenshot_and_html(journ_app_nav.driver, locale, "journalist-code-fail_login_many")
+        save_static_data(journ_app_nav.driver, locale, "journalist-code-fail_login_many")

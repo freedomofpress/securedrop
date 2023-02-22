@@ -10,7 +10,8 @@ _SCREENSHOTS_DIR = (Path(__file__).parent / "screenshots").absolute()
 _HTML_DIR = (Path(__file__).parent / "html").absolute()
 
 
-def save_screenshot_and_html(driver: WebDriver, locale: str, test_name: str) -> None:
+def save_static_data(driver: WebDriver, locale: str, test_name: str) -> None:
+    """Save a screenshot and a copy of the static HTML."""
     # Save a screenshot
     locale_screenshot_dir = _SCREENSHOTS_DIR / locale
     locale_screenshot_dir.mkdir(parents=True, exist_ok=True)
