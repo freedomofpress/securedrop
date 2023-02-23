@@ -3,9 +3,9 @@ Pin: release a=focal
 Pin-Priority: 500
 
 Package: dh-virtualenv libjs-sphinxdoc sphinx-rtd-theme-common
-Pin: release a=impish
+Pin: release a=jammy
 Pin-Priority: 700
 
 Package: *
-Pin: release a=impish
+Pin: release a=jammy
 Pin-Priority: 1
