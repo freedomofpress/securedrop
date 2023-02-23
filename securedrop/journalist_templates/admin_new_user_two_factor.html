@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 
+{% block tab_title %}{{ gettext('Enable FreeOTP') }}{% endblock %}
+
 {% block body %}
 {% if user.is_totp %}
 <h1>{{ gettext('Enable FreeOTP') }}</h1>

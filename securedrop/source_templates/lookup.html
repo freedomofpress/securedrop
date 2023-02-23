@@ -1,6 +1,14 @@
 {% extends "base.html" %}
 {% import 'utils.html' as utils %}
 
+{% block tab_title %}
+{% if allow_document_uploads %}
+{{ gettext('Submit Files or Messages') }}
+{% else %}
+{{ gettext('Submit Messages') }}
+{% endif %}
+{% endblock %}
+
 {% block body %}
 {% include 'flashed.html' %}
 

@@ -1,4 +1,7 @@
 {% extends "base.html" %}
+
+{% block tab_title %}{{ gettext('You Should Use Tor Browser') }}{% endblock %}
+
 {% block body %}
 <h2>{{ gettext('You Should Use Tor Browser') }}</h2>
 <p>{{ gettext('If you are not using Tor Browser, you <strong>may not be anonymous</strong>.') }}</p>

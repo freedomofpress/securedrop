@@ -1,4 +1,7 @@
 {% extends "base.html" %}
+
+{% block tab_title %}{{ gettext('Additional Action Required') }}{% endblock %}
+
 {% block body %}
 <nav>
   <a href="{{ url_for('main.login') }}" class="btn" aria-label="{{ gettext('Log In') }}">

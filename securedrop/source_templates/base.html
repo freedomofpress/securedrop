@@ -6,9 +6,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex,nofollow">
   {% if g.organization_name == "SecureDrop" %}
-  <title>{{ g.organization_name }} | {{ gettext('Protecting Journalists and Sources') }}</title>
+  <title>{% block tab_title required %}{% endblock %} | {{ g.organization_name }} | {{ gettext('Protecting Journalists and Sources') }}</title>
   {% else %}
-  <title>{{ g.organization_name }} | {{ gettext('SecureDrop') }}</title>
+  <title>{{ self.tab_title() }} | {{ g.organization_name }} | {{ gettext('SecureDrop') }}</title>
   {% endif %}
 
   <link rel="stylesheet" href="/static/css/source.css">
