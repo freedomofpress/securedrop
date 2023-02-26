@@ -1,0 +1,15 @@
+#!/bin/bash
+
+set -euo pipefail
+
+export PATH="/opt/venvs/securedrop-app-code/bin:$PATH"
+
+cd ..
+export REPOROOT="${REPOROOT:-$PWD}"
+git config --global --add safe.directory "$REPOROOT"
+cd "${REPOROOT}/securedrop"
+
+PYTHONPATH=".:${PYTHONPATH:-}"
+export PYTHONPATH
+
+python3 -c 'from tests.functional.pageslayout.accessibility import summarize_accessibility_results; summarize_accessibility_results()'
