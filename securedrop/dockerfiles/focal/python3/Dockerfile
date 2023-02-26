@@ -7,7 +7,8 @@ RUN apt-get update  && apt-get install -y \
     # cached along with everything else too.
     default-jdk \
     libasound2 libdbus-glib-1-2 libgtk2.0-0 libfontconfig1 libxrender1 \
-    libcairo-gobject2 libgtk-3-0 libstartup-notification0
+    libcairo-gobject2 libgtk-3-0 libstartup-notification0 npm && \
+    npm install --global html_codesniffer
 
 # Current versions of the test browser software. Tor Browser is based
 # on a specific version of Firefox, noted in Help > About Tor Browser.
