@@ -21,13 +21,13 @@ from encryption import EncryptionManager
 from flask import Flask, url_for
 from hypothesis import settings
 from journalist_app import create_app as create_journalist_app
-from passphrases import PassphraseGenerator
 from sdconfig import DEFAULT_SECUREDROP_ROOT, SecureDropConfig
 from source_app import create_app as create_source_app
-from source_user import _SourceScryptManager, create_source_user
+from source_user import _SourceScryptManager
 from store import Storage
 from tests import utils
-from tests.factories import SecureDropConfigFactory
+from tests.factories.configs_factories import SecureDropConfigFactory
+from tests.factories.models_factories import SourceFactory
 from tests.utils import i18n
 from two_factor import TOTP
 
@@ -230,20 +230,11 @@ def test_admin(journalist_app: Flask) -> Dict[str, Any]:
 @pytest.fixture(scope="function")
 def test_source(journalist_app: Flask, app_storage: Storage) -> Dict[str, Any]:
     with journalist_app.app_context():
-        passphrase = PassphraseGenerator.get_default().generate_passphrase()
-        source_user = create_source_user(
-            db_session=db.session,
-            source_passphrase=passphrase,
-            source_app_storage=app_storage,
-        )
-        EncryptionManager.get_default().generate_source_key_pair(source_user)
-        source = source_user.get_db_record()
+        source = SourceFactory.create(db.session, app_storage)
         return {
-            "source_user": source_user,
-            # TODO(AD): Eventually the next keys could be removed as they are in source_user
             "source": source,
-            "codename": passphrase,
-            "filesystem_id": source_user.filesystem_id,
+            # TODO(AD): Eventually the next keys could be removed as they are in source
+            "filesystem_id": source.filesystem_id,
             "uuid": source.uuid,
             "id": source.id,
         }

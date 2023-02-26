@@ -3,7 +3,6 @@ import socket
 import time
 from contextlib import contextmanager
 from dataclasses import dataclass
-from datetime import datetime, timezone
 from io import BytesIO
 from pathlib import Path
 from typing import Any, Callable, Generator, Optional, Tuple
@@ -14,8 +13,7 @@ import requests
 from models import Journalist
 from sdconfig import SecureDropConfig
 from selenium.webdriver.firefox.webdriver import WebDriver
-from source_user import SourceUser
-from tests.factories import SecureDropConfigFactory
+from tests.factories.configs_factories import SecureDropConfigFactory
 from tests.functional.db_session import get_database_session
 from tests.functional.web_drivers import WebDriverTypeEnum, get_web_driver
 
@@ -264,7 +262,7 @@ def sd_servers_with_submitted_file(
         yield sd_servers_result
 
 
-def create_source_and_submission(config_in_use: SecureDropConfig) -> Tuple[SourceUser, Path]:
+def create_source_and_submission(config_in_use: SecureDropConfig) -> Tuple[str, Path]:
     """Directly create a source and a submission within the app.
 
     Some tests for the journalist app require a submission to already be present, and this
@@ -275,45 +273,34 @@ def create_source_and_submission(config_in_use: SecureDropConfig) -> Tuple[Sourc
     """
     # This function will be called in a separate Process that runs the app
     # Hence the late imports
-    from encryption import EncryptionManager
     from models import Submission
-    from passphrases import PassphraseGenerator
-    from source_user import create_source_user
     from store import Storage, add_checksum_for_file
+    from tests.factories.models_factories import SourceFactory
     from tests.functional.db_session import get_database_session
 
     # Create a source
-    passphrase = PassphraseGenerator.get_default().generate_passphrase()
     with get_database_session(database_uri=config_in_use.DATABASE_URI) as db_session:
-        source_user = create_source_user(
-            db_session=db_session,
-            source_passphrase=passphrase,
-            source_app_storage=Storage.get_default(),
-        )
-        source_db_record = source_user.get_db_record()
-        EncryptionManager.get_default().generate_source_key_pair(source_user)
+        source = SourceFactory.create(db_session, Storage.get_default(), pending=False)
 
         # Create a file submission from this source
-        source_db_record.interaction_count += 1
+        source.interaction_count += 1
         app_storage = Storage.get_default()
         encrypted_file_name = app_storage.save_file_submission(
-            filesystem_id=source_user.filesystem_id,
-            count=source_db_record.interaction_count,
-            journalist_filename=source_db_record.journalist_filename,
+            filesystem_id=source.filesystem_id,
+            count=source.interaction_count,
+            journalist_filename=source.journalist_filename,
             filename="filename.txt",
             stream=BytesIO(b"File with S3cr3t content"),
         )
-        submission = Submission(source_db_record, encrypted_file_name, app_storage)
+        submission = Submission(source, encrypted_file_name, app_storage)
         db_session.add(submission)
-        source_db_record.pending = False
-        source_db_record.last_updated = datetime.now(timezone.utc)
         db_session.commit()
 
-        submission_file_path = app_storage.path(source_user.filesystem_id, submission.filename)
+        submission_file_path = app_storage.path(source.filesystem_id, submission.filename)
         add_checksum_for_file(
             session=db_session,
             db_obj=submission,
             file_path=submission_file_path,
         )
 
-        return source_user, Path(submission_file_path)
+        return source.filesystem_id, Path(submission_file_path)

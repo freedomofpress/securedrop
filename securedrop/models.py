@@ -22,10 +22,22 @@ from flask import url_for
 from flask_babel import gettext, ngettext
 from markupsafe import Markup
 from passphrases import PassphraseGenerator
-from sqlalchemy import Boolean, Column, DateTime, ForeignKey, Integer, LargeBinary, String
+from sqlalchemy import (
+    Boolean,
+    Column,
+    DateTime,
+    ForeignKey,
+    Integer,
+    LargeBinary,
+    String,
+    and_,
+    exists,
+)
 from sqlalchemy.exc import IntegrityError
+from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.orm import Query, backref, relationship
 from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
+from sqlalchemy.sql import ColumnElement
 from store import Storage
 
 _default_instance_config: Optional["InstanceConfig"] = None
@@ -58,11 +70,15 @@ class Source(db.Model):
     uuid = Column(String(36), unique=True, nullable=False)
     filesystem_id = Column(String(96), unique=True, nullable=False)
     journalist_designation = Column(String(255), nullable=False)
+
+    # TODO(AD): last_updated is meant to be None until the source submits something (#3862).
+    #  It being None is essentially the same as the "pending" field. Having two ways to track the
+    #  same thing adds complexity/confusion. I think we should make last_updated non-nullable
     last_updated = Column(DateTime)
+
     star = relationship("SourceStar", uselist=False, backref="source")
 
-    # sources are "pending" and don't get displayed to journalists until they
-    # submit something
+    # sources are "pending" and don't get displayed to journalists until they submit something
     pending = Column(Boolean, default=True)
 
     # keep track of how many interactions have happened, for filenames
@@ -99,7 +115,7 @@ class Source(db.Model):
     def collection(self) -> "List[Union[Submission, Reply]]":
         """Return the list of submissions and replies for this source, sorted
         in ascending order by the filename/interaction count."""
-        collection = []  # type: List[Union[Submission, Reply]]
+        collection: List[Union[Submission, Reply]] = []
         collection.extend(self.submissions)
         collection.extend(self.replies)
         collection.sort(key=lambda x: int(x.filename.split("-")[0]))
@@ -119,6 +135,19 @@ class Source(db.Model):
         except GpgKeyNotFoundError:
             return None
 
+    # Getting rid of SourceStar and using just a regular Source.is_starred boolean column would
+    # be a lot simpler...
+    @hybrid_property
+    def is_starred(self) -> bool:
+        if self.star and self.star.starred:
+            return True
+        else:
+            return False
+
+    @is_starred.expression  # type: ignore
+    def is_starred(self) -> ColumnElement:
+        return exists().where(and_(self.id == SourceStar.source_id, SourceStar.starred.is_(True)))
+
     def to_json(self) -> "Dict[str, object]":
         docs_msg_count = self.documents_messages_count()
 
@@ -127,17 +156,12 @@ class Source(db.Model):
         else:
             last_updated = datetime.datetime.now(tz=datetime.timezone.utc)
 
-        if self.star and self.star.starred:
-            starred = True
-        else:
-            starred = False
-
         json_source = {
             "uuid": self.uuid,
             "url": url_for("api.single_source", source_uuid=self.uuid),
             "journalist_designation": self.journalist_designation,
             "is_flagged": False,
-            "is_starred": starred,
+            "is_starred": self.is_starred,
             "last_updated": last_updated,
             "interaction_count": self.interaction_count,
             "key": {
@@ -219,7 +243,7 @@ class Submission(db.Model):
             "size": self.size,
             "is_file": self.is_file,
             "is_message": self.is_message,
-            "is_read": self.seen,
+            "is_read": self.downloaded,
             "uuid": self.uuid,
             "download_url": url_for(
                 "api.download_submission",
@@ -231,17 +255,6 @@ class Submission(db.Model):
             "seen_by": list(seen_by),
         }
         return json_submission
-
-    @property
-    def seen(self) -> bool:
-        """
-        If the submission has been downloaded or seen by any journalist, then the submission is
-        considered seen.
-        """
-        if self.downloaded or self.seen_files.count() or self.seen_messages.count():
-            return True
-
-        return False
 
 
 class Reply(db.Model):

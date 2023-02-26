@@ -3,7 +3,7 @@ from pathlib import Path
 from typing import Generator, Tuple
 
 import pytest
-from tests.factories import SecureDropConfigFactory
+from tests.factories.configs_factories import SecureDropConfigFactory
 from tests.functional.app_navigators.source_app_nav import SourceAppNavigator
 from tests.functional.conftest import SdServersFixtureResult, spawn_sd_servers
 from tests.functional.pageslayout.utils import list_locales, save_static_data

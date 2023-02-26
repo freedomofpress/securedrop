@@ -21,7 +21,7 @@ from uuid import uuid4
 
 import pytest
 from sdconfig import SecureDropConfig
-from tests.factories import SecureDropConfigFactory
+from tests.factories.configs_factories import SecureDropConfigFactory
 from tests.functional.app_navigators.journalist_app_nav import JournalistAppNavigator
 from tests.functional.conftest import SdServersFixtureResult, spawn_sd_servers
 from tests.functional.pageslayout.utils import list_locales, save_static_data
@@ -33,8 +33,8 @@ def _create_source_and_submission_and_delete_source_key(config_in_use: SecureDro
     from encryption import EncryptionManager
     from tests.functional.conftest import create_source_and_submission
 
-    source_user, _ = create_source_and_submission(config_in_use)
-    EncryptionManager.get_default().delete_source_key_pair(source_user.filesystem_id)
+    source_filesystem_id, _ = create_source_and_submission(config_in_use)
+    EncryptionManager.get_default().delete_source_key_pair(source_filesystem_id)
 
 
 @pytest.fixture(scope="function")

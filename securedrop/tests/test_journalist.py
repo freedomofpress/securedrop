@@ -41,7 +41,7 @@ from sqlalchemy.orm.exc import StaleDataError
 from sqlalchemy.sql.expression import func
 from store import Storage
 from tests import utils
-from tests.factories import SecureDropConfigFactory
+from tests.factories.configs_factories import SecureDropConfigFactory
 from tests.functional.db_session import get_database_session
 from tests.utils import login_journalist
 from tests.utils.i18n import (
@@ -2793,125 +2793,12 @@ def test_delete_data_deletes_submissions_retaining_source(
 
         assert len(source.collection) == 4
 
-        journalist_app_module.utils.delete_source_files(test_source["filesystem_id"])
+        journalist_app_module.utils.delete_source_files(source)
 
         res = Source.query.filter_by(id=test_source["id"]).one_or_none()
         assert res is not None
 
         assert len(source.collection) == 0
-
-
-def test_delete_source_deletes_submissions(journalist_app, test_journo, test_source, app_storage):
-    """Verify that when a source is deleted, the submissions that
-    correspond to them are also deleted."""
-
-    with journalist_app.app_context():
-        source = Source.query.get(test_source["id"])
-        journo = Journalist.query.get(test_journo["id"])
-
-        utils.db_helper.submit(app_storage, source, 2)
-        utils.db_helper.reply(app_storage, journo, source, 2)
-
-        journalist_app_module.utils.delete_collection(test_source["filesystem_id"])
-
-        res = Source.query.filter_by(id=test_source["id"]).one_or_none()
-        assert res is None
-
-
-def test_delete_collection_updates_db(journalist_app, test_journo, test_source, app_storage):
-    """
-    Verify that when a source is deleted, the Source record is deleted and all records associated
-    with the source are deleted.
-    """
-
-    with journalist_app.app_context():
-        source = Source.query.get(test_source["id"])
-        journo = Journalist.query.get(test_journo["id"])
-        files = utils.db_helper.submit(app_storage, source, 2)
-        mark_seen(files, journo)
-        messages = utils.db_helper.submit(app_storage, source, 2)
-        mark_seen(messages, journo)
-        replies = utils.db_helper.reply(app_storage, journo, source, 2)
-        mark_seen(replies, journo)
-
-        journalist_app_module.utils.delete_collection(test_source["filesystem_id"])
-
-        # Verify no source record exists
-        source_result = Source.query.filter_by(id=source.id).all()
-        assert not source_result
-
-        # Verify no submission from the deleted source exist
-        submissions_result = Submission.query.filter_by(source_id=source.id).all()
-        assert not submissions_result
-
-        # Verify no replies to the deleted source exist
-        replies_result = Reply.query.filter_by(source_id=source.id).all()
-        assert not replies_result
-
-        # Verify no seen records about the deleted files, messages, or replies exist
-        for file in files:
-            seen_file = SeenFile.query.filter_by(
-                file_id=file.id, journalist_id=journo.id
-            ).one_or_none()
-            assert not seen_file
-
-        for message in messages:
-            seen_message = SeenMessage.query.filter_by(
-                message_id=message.id, journalist_id=journo.id
-            ).one_or_none()
-            assert not seen_message
-
-        for reply in replies:
-            seen_reply = SeenReply.query.filter_by(
-                reply_id=reply.id, journalist_id=journo.id
-            ).one_or_none()
-            assert not seen_reply
-
-
-def test_delete_source_deletes_source_key(journalist_app, test_source, test_journo, app_storage):
-    """Verify that when a source is deleted, the PGP key that corresponds
-    to them is also deleted."""
-
-    with journalist_app.app_context():
-        source = Source.query.get(test_source["id"])
-        journo = Journalist.query.get(test_journo["id"])
-
-        utils.db_helper.submit(app_storage, source, 2)
-        utils.db_helper.reply(app_storage, journo, source, 2)
-
-        # Source key exists
-        encryption_mgr = EncryptionManager.get_default()
-        assert encryption_mgr.get_source_key_fingerprint(test_source["filesystem_id"])
-
-        journalist_app_module.utils.delete_collection(test_source["filesystem_id"])
-
-        # Source key no longer exists
-        with pytest.raises(GpgKeyNotFoundError):
-            encryption_mgr.get_source_key_fingerprint(test_source["filesystem_id"])
-
-
-def test_delete_source_deletes_docs_on_disk(
-    journalist_app, test_source, test_journo, config, app_storage
-):
-    """Verify that when a source is deleted, the encrypted documents that
-    exist on disk is also deleted."""
-
-    with journalist_app.app_context():
-        source = Source.query.get(test_source["id"])
-        journo = Journalist.query.get(test_journo["id"])
-
-        utils.db_helper.submit(app_storage, source, 2)
-        utils.db_helper.reply(app_storage, journo, source, 2)
-
-        dir_source_docs = os.path.join(config.STORE_DIR, test_source["filesystem_id"])
-        assert os.path.exists(dir_source_docs)
-
-        journalist_app_module.utils.delete_collection(test_source["filesystem_id"])
-
-        def assertion():
-            assert not os.path.exists(dir_source_docs)
-
-        utils.asynchronous.wait_for_assertion(assertion)
 
 
 def test_bulk_delete_deletes_db_entries(

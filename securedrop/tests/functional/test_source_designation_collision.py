@@ -1,7 +1,7 @@
 from pathlib import Path
 
 import pytest
-from tests.factories import SecureDropConfigFactory
+from tests.factories.configs_factories import SecureDropConfigFactory
 from tests.functional.app_navigators.source_app_nav import SourceAppNavigator
 from tests.functional.conftest import spawn_sd_servers
 

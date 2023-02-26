@@ -5,6 +5,7 @@ from db import db
 from management import submissions
 from models import Submission
 from tests import utils
+from tests.factories.models_factories import SourceFactory
 
 
 def test_delete_disconnected_db_submissions(journalist_app, app_storage, config):
@@ -12,7 +13,7 @@ def test_delete_disconnected_db_submissions(journalist_app, app_storage, config)
     Test that Submission records without corresponding files are deleted.
     """
     with journalist_app.app_context():
-        source, _ = utils.db_helper.init_source(app_storage)
+        source = SourceFactory.create(db.session, app_storage)
         source_id = source.id
 
         # make two submissions
@@ -42,7 +43,8 @@ def test_delete_disconnected_fs_submissions(journalist_app, app_storage, config)
     """
     Test that files in the store without corresponding Submission records are deleted.
     """
-    source, _ = utils.db_helper.init_source(app_storage)
+    with journalist_app.app_context():
+        source = SourceFactory.create(db.session, app_storage)
 
     # make two submissions
     utils.db_helper.submit(app_storage, source, 2)

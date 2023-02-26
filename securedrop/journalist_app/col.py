@@ -1,6 +1,7 @@
 from pathlib import Path
 
 import werkzeug
+from actions.sources_actions import DeleteSingleSourceAction, GetSingleSourceAction
 from db import db
 from encryption import EncryptionManager, GpgKeyNotFoundError
 from flask import (
@@ -26,8 +27,6 @@ from journalist_app.utils import (
     col_download_unread,
     col_star,
     col_un_star,
-    delete_collection,
-    get_source,
     make_star_false,
     make_star_true,
     mark_seen,
@@ -55,7 +54,7 @@ def make_blueprint() -> Blueprint:
     @view.route("/<filesystem_id>")
     def col(filesystem_id: str) -> str:
         form = ReplyForm()
-        source = get_source(filesystem_id)
+        source = GetSingleSourceAction(db_session=db.session, filesystem_id=filesystem_id).perform()
         try:
             EncryptionManager.get_default().get_source_public_key(filesystem_id)
             source.has_key = True
@@ -67,12 +66,9 @@ def make_blueprint() -> Blueprint:
     @view.route("/delete/<filesystem_id>", methods=("POST",))
     def delete_single(filesystem_id: str) -> werkzeug.Response:
         """deleting a single collection from its /col page"""
-        source = get_source(filesystem_id)
-        try:
-            delete_collection(filesystem_id)
-        except GpgKeyNotFoundError as e:
-            current_app.logger.error("error deleting collection: %s", e)
-            abort(500)
+        source = GetSingleSourceAction(db_session=db.session, filesystem_id=filesystem_id).perform()
+        source_designation = source.journalist_designation
+        DeleteSingleSourceAction(db_session=db.session, source=source).perform()
 
         flash(
             Markup(
@@ -80,8 +76,9 @@ def make_blueprint() -> Blueprint:
                     # Translators: Precedes a message confirming the success of an operation.
                     escape(gettext("Success!")),
                     escape(
-                        gettext("The account and data for the source {} have been deleted.").format(
-                            source.journalist_designation
+                        gettext(
+                            f"The account and data for the source {source_designation}"
+                            f" have been deleted."
                         )
                     ),
                 )
