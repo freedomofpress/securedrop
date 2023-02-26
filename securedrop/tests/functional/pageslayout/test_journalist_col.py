@@ -21,7 +21,7 @@ from uuid import uuid4
 
 import pytest
 from sdconfig import SecureDropConfig
-from tests.factories import SecureDropConfigFactory
+from tests.factories.configs_factories import SecureDropConfigFactory
 from tests.functional.app_navigators.journalist_app_nav import JournalistAppNavigator
 from tests.functional.conftest import SdServersFixtureResult, spawn_sd_servers
 from tests.functional.pageslayout.utils import list_locales, save_screenshot_and_html

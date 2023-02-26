@@ -27,7 +27,7 @@ from source_app import create_app as create_source_app
 from source_user import _SourceScryptManager, create_source_user
 from store import Storage
 from tests import utils
-from tests.factories import SecureDropConfigFactory
+from tests.factories.configs_factories import SecureDropConfigFactory
 from tests.utils import i18n
 from two_factor import TOTP
 
@@ -227,6 +227,7 @@ def test_admin(journalist_app: Flask) -> Dict[str, Any]:
         }
 
 
+# TODO: Combine with factory
 @pytest.fixture(scope="function")
 def test_source(journalist_app: Flask, app_storage: Storage) -> Dict[str, Any]:
     with journalist_app.app_context():

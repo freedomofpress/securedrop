@@ -7,6 +7,8 @@ from uuid import UUID
 
 import flask
 import werkzeug
+
+from actions.sources_actions import SearchSourcesAction
 from db import db
 from flask import Blueprint, abort, jsonify, request
 from journalist_app import utils
@@ -121,7 +123,7 @@ def make_blueprint() -> Blueprint:
 
     @api.route("/sources", methods=["GET"])
     def get_all_sources() -> Tuple[flask.Response, int]:
-        sources = Source.query.filter_by(pending=False, deleted_at=None).all()
+        sources = SearchSourcesAction(db_session=db.session).perform()
         return jsonify({"sources": [source.to_json() for source in sources]}), 200
 
     @api.route("/sources/<source_uuid>", methods=["GET", "DELETE"])

@@ -15,7 +15,7 @@ from models import Journalist
 from sdconfig import SecureDropConfig
 from selenium.webdriver.firefox.webdriver import WebDriver
 from source_user import SourceUser
-from tests.factories import SecureDropConfigFactory
+from tests.factories.configs_factories import SecureDropConfigFactory
 from tests.functional.db_session import get_database_session
 from tests.functional.web_drivers import WebDriverTypeEnum, get_web_driver
 

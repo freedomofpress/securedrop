@@ -71,6 +71,9 @@ class Source(db.Model):
     # when deletion of the source was requested
     deleted_at = Column(DateTime)
 
+    submissions = relationship("Submission", back_populates="source", uselist=True)
+    replies = relationship("Reply", back_populates="source", uselist=True)
+
     def __init__(self, filesystem_id: str, journalist_designation: str) -> None:
         self.filesystem_id = filesystem_id
         self.journalist_designation = journalist_designation
@@ -99,7 +102,7 @@ class Source(db.Model):
     def collection(self) -> "List[Union[Submission, Reply]]":
         """Return the list of submissions and replies for this source, sorted
         in ascending order by the filename/interaction count."""
-        collection = []  # type: List[Union[Submission, Reply]]
+        collection: List[Union[Submission, Reply]] = []
         collection.extend(self.submissions)
         collection.extend(self.replies)
         collection.sort(key=lambda x: int(x.filename.split("-")[0]))
@@ -119,6 +122,13 @@ class Source(db.Model):
         except GpgKeyNotFoundError:
             return None
 
+    @property
+    def is_starred(self) -> bool:
+        if self.star and self.star.starred:
+            return True
+        else:
+            return False
+
     def to_json(self) -> "Dict[str, object]":
         docs_msg_count = self.documents_messages_count()
 
@@ -127,17 +137,12 @@ class Source(db.Model):
         else:
             last_updated = datetime.datetime.now(tz=datetime.timezone.utc)
 
-        if self.star and self.star.starred:
-            starred = True
-        else:
-            starred = False
-
         json_source = {
             "uuid": self.uuid,
             "url": url_for("api.single_source", source_uuid=self.uuid),
             "journalist_designation": self.journalist_designation,
             "is_flagged": False,
-            "is_starred": starred,
+            "is_starred": self.is_starred,
             "last_updated": last_updated,
             "interaction_count": self.interaction_count,
             "key": {
@@ -162,7 +167,7 @@ class Submission(db.Model):
     id = Column(Integer, primary_key=True)
     uuid = Column(String(36), unique=True, nullable=False)
     source_id = Column(Integer, ForeignKey("sources.id"))
-    source = relationship("Source", backref=backref("submissions", order_by=id, cascade="delete"))
+    source = relationship("Source", back_populates="submissions", cascade="delete", uselist=False)
 
     filename = Column(String(255), nullable=False)
     size = Column(Integer, nullable=False)
@@ -250,10 +255,10 @@ class Reply(db.Model):
     uuid = Column(String(36), unique=True, nullable=False)
 
     journalist_id = Column(Integer, ForeignKey("journalists.id"), nullable=False)
-    journalist = relationship("Journalist", backref=backref("replies", order_by=id))
+    journalist = relationship("Journalist", back_populates="replies", uselist=False)
 
     source_id = Column(Integer, ForeignKey("sources.id"))
-    source = relationship("Source", backref=backref("replies", order_by=id, cascade="delete"))
+    source = relationship("Source", back_populates="replies", cascade="delete", uselist=False)
 
     filename = Column(String(255), nullable=False)
     size = Column(Integer, nullable=False)
@@ -401,6 +406,8 @@ class Journalist(db.Model):
     login_attempts = relationship(
         "JournalistLoginAttempt", backref="journalist", cascade="all, delete"
     )
+
+    replies = relationship("Reply", back_populates="journalist", uselist=True)
 
     MIN_USERNAME_LEN = 3
     MIN_NAME_LEN = 0

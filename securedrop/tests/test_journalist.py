@@ -41,7 +41,7 @@ from sqlalchemy.orm.exc import StaleDataError
 from sqlalchemy.sql.expression import func
 from store import Storage
 from tests import utils
-from tests.factories import SecureDropConfigFactory
+from tests.factories.configs_factories import SecureDropConfigFactory
 from tests.functional.db_session import get_database_session
 from tests.utils import login_journalist
 from tests.utils.i18n import (
