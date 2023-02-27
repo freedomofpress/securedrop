@@ -317,6 +317,24 @@ jobs:
           name: Build OSSEC debs
           command: |
             make build-debs-ossec
+      - run:
+          name: Second round of builds
+          command: |
+            # TODO: use reprotest in the future
+            mv build/focal build/focal-first
+            make build-debs-notest
+            make build-debs-ossec-notest
+            mv build/focal build/focal-second
+      - run:
+          name: Run diffoscope
+          command: |
+            sha256sum build/focal-*/*.deb
+            # FIXME: securedrop-app-code isn't reproducible
+            for pkg in ossec-agent ossec-server securedrop-config securedrop-keyring securedrop-ossec-agent securedrop-ossec-server
+            do
+                echo "Checking ${pkg}..."
+                ./.venv/bin/diffoscope build/focal-first/${pkg}*.deb build/focal-second/${pkg}*.deb
+            done
 
 workflows:
   version: 2
