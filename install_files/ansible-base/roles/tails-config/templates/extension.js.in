@@ -32,7 +32,7 @@ class Indicator extends PanelMenu.Button {
         }
 
         let icon = new St.Icon({
-            icon_name: 'package-x-generic-symbolic',
+            icon_name: 'securedrop-symbolic',
             style_class: 'system-status-icon',
         });
         
