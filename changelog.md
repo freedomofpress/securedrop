@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.6.0~rc1
+
+
+
 ## 2.5.2
 
 ### Web applications
