@@ -85,6 +85,11 @@ class Indicator extends PanelMenu.Button {
         keypass.connect('activate', () => {
             Util.trySpawnCommandLine(`keepassxc`);
         });
+
+        let filebrowser = new PopupMenu.PopupMenuItem(_('Open File Browser'));
+        filebrowser.connect('activate', () => {
+            Util.trySpawnCommandLine(`xdg-open /home/amnesia/Persistent`);
+        });
         
         this.menu.addMenuItem(source);
         this.menu.addMenuItem(journalist);
@@ -96,6 +101,7 @@ class Indicator extends PanelMenu.Button {
         }
         this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
         this.menu.addMenuItem(keypass);
+        this.menu.addMenuItem(filebrowser);
     }
 });
 
