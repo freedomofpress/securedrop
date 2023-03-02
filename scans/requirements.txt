@@ -1,0 +1,4 @@
+urllib3<1.25,>=1.21.1
+zapcli
+pyotp
+selenium

@@ -260,6 +260,66 @@ jobs:
             DOCKER_BUILD_ARGUMENTS="--cache-from securedrop-test-focal-py3:${fromtag:-latest}" securedrop/bin/dev-shell \
                   bash -c "pip3 install -U -q --upgrade pip && pip3 install -U -q --upgrade semgrep && make -C .. semgrep"
 
+  zap-vulnerability-scan:
+    machine:
+      image: ubuntu-2004:202010-01
+      enabled: true
+    environment:
+      DOCKER_API_VERSION: 1.23
+      BASE_OS: focal
+    parallelism: 3
+    steps:
+      - checkout
+      - *rebaseontarget
+      - *createcachedir
+      - *restorecache
+      - *loadimagelayers
+      - *dockerimagebuild
+      - *saveimagelayers
+      - *savecache
+
+      - run:
+          name: Install dependencies
+          command: |
+            sudo systemctl stop apt-daily.service
+            sudo systemctl kill --kill-who=all apt-daily.service
+            while ! (systemctl list-units --all apt-daily.service | egrep -q '(dead|failed)') do sleep 1; done
+            ( sudo apt-get update || sudo apt-get update )
+            sudo apt-get install -y openjdk-17-jre-headless wget firefox
+            export GECKODRIVER_VER=v0.30.0
+            wget https://github.com/mozilla/geckodriver/releases/download/${GECKODRIVER_VER}/geckodriver-${GECKODRIVER_VER}-linux64.tar.gz -O /tmp/geckodriver.tar.gz
+            cd /tmp
+            tar -xvzf geckodriver.tar.gz
+            sudo install geckodriver /usr/local/bin
+            wget https://github.com/zaproxy/zaproxy/releases/download/v2.11.1/ZAP_2_11_1_unix.sh -O /tmp/zap_installer.sh
+            chmod u+x /tmp/zap_installer.sh
+            sudo /tmp/zap_installer.sh -q
+            zap.sh -cmd -addoninstall jython
+            cd ~/project; ls
+            pip3 install -r scans/requirements.txt
+
+      - run:
+          name: Run dev instance
+          command: |
+            fromtag=$(docker images |grep securedrop-test-focal-py3 |head -n1 |awk '{print $2}')
+            DOCKER_BUILD_ARGUMENTS="--cache-from securedrop-test-focal-py3:${fromtag:-latest}" make dev-detatched
+          background: true
+
+      - run:
+          name: Run zap daemon
+          command: zap.sh -daemon -port 8090 -config api.disablekey=true -config hud.enabled=false -config hud.enabledForDesktop=false
+          background: true
+
+      - run:
+          name: Run zap
+          command: python3 ~/project/scans/zapscan.py
+
+      - store_test_results:
+          path: ~/project/jrn_report.html
+
+      - store_artifacts:
+          path: ~/project/src_report.html
+
   staging-test-with-rebase:
     machine:
       image: ubuntu-2004:202010-01
@@ -362,6 +422,14 @@ workflows:
                 - /update-builder-.*/
           requires:
             - lint
+      - zap-vulnerability-scan:
+          requires:
+            - lint
+          filters:
+            branches:
+              ignore:
+                - /i18n-.*/
+                - /update-builder-.*/
 
   nightly:
     triggers:
