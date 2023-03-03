@@ -107,7 +107,7 @@
   become: yes
   copy:
     src: securedrop-symbolic.png
-    dest: "{{ tails_config_live_dotfiles }}/.local/share/icons/"
+    dest: "{{ tails_config_live_dotfiles }}/.local/share/gnome-shell/extensions/securedrop@securedrop.freedom.press/icons/"
     owner: amnesia
     group: amnesia
     
@@ -115,7 +115,7 @@
   become: yes
   copy:
     src: securedrop-symbolic.png
-    dest: "/home/amnesia/.local/share/icons/"
+    dest: "/home/amnesia/.local/share/gnome-shell/extensions/securedrop@securedrop.freedom.press/icons/"
     owner: amnesia
     group: amnesia
 

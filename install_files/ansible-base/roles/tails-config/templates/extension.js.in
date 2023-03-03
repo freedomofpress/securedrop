@@ -2,13 +2,17 @@
 
 const GETTEXT_DOMAIN = 'securedrop';
 
-const {Clutter, GObject, GLib, St } = imports.gi;
+const {Clutter, GObject, GLib } = imports.gi;
 
 const Util = imports.misc.util;
 const ExtensionUtils = imports.misc.extensionUtils;
 const Main = imports.ui.main;
 const PanelMenu = imports.ui.panelMenu;
 const PopupMenu = imports.ui.popupMenu;
+
+const St = imports.gi.St;
+const CurrentExtension = imports.misc.extensionUtils.getCurrentExtension();
+const Gio = imports.gi.Gio;
 
 const source_interface_address = "{{ item.0.source_interface_address }}";
 const journalist_interface_address = "{{ item.0.journalist_interface_address }}";
@@ -30,11 +34,9 @@ class Indicator extends PanelMenu.Button {
         if (exit == 0) {
             is_admin = true;
         }
-
-        let icon = new St.Icon({
-            icon_name: 'securedrop-symbolic',
-            style_class: 'system-status-icon',
-        });
+        
+        let gicon = Gio.icon_new_for_string(CurrentExtension.path + "/icons/securedrop-symbolic.png");
+	let icon = new St.Icon({ gicon });
         
         let label = new St.Label({
             text: 'SecureDrop',
