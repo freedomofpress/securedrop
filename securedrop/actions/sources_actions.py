@@ -1,4 +1,4 @@
-from abc import abstractmethod
+from abc import abstractmethod, ABC
 from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum
@@ -9,14 +9,14 @@ from sqlalchemy.orm import Session
 import models
 
 
-@dataclass
+@dataclass(frozen=True)
 class PaginationConfig:
     # TODO: Validate and reject negative numbers
     page_size: int
     page_number: int
 
 
-class SupportsPagination:
+class SupportsPagination(ABC):
 
     @abstractmethod
     def create_query(self):
