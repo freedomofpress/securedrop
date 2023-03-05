@@ -13,6 +13,8 @@ import qrcode
 
 # Using svg because it doesn't require additional dependencies
 import qrcode.image.svg
+from sqlalchemy.ext.hybrid import hybrid_property
+
 import two_factor
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives.kdf import scrypt
@@ -22,7 +24,7 @@ from flask import url_for
 from flask_babel import gettext, ngettext
 from markupsafe import Markup
 from passphrases import PassphraseGenerator
-from sqlalchemy import Boolean, Column, DateTime, ForeignKey, Integer, LargeBinary, String
+from sqlalchemy import Boolean, Column, DateTime, ForeignKey, Integer, LargeBinary, String, and_, exists
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Query, backref, relationship
 from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
@@ -122,12 +124,18 @@ class Source(db.Model):
         except GpgKeyNotFoundError:
             return None
 
-    @property
+    # Getting rid of SourceStar and using just a regular Source.is_starred boolean column would
+    # be a lot simpler...
+    @hybrid_property
     def is_starred(self) -> bool:
         if self.star and self.star.starred:
             return True
         else:
             return False
+
+    @is_starred.expression
+    def is_starred(cls):
+        return exists().where(and_(cls.id == SourceStar.source_id, SourceStar.starred == True))
 
     def to_json(self) -> "Dict[str, object]":
         docs_msg_count = self.documents_messages_count()

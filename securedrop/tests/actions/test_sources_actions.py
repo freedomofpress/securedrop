@@ -17,15 +17,15 @@ class TestSearchSourcesAction:
     def test(self, app_db_session, app_storage):
         # Given an app with some sources in different states
         some_sources = SourceFactory.create_batch(
-            app_db_session, app_storage, number=3, pending=False
+            app_db_session, app_storage, records_count=3, pending=False
         )
         # Including some sources that haven't submitted anything yet
         SourceFactory.create_batch(
-            app_db_session, app_storage, number=4, pending=True
+            app_db_session, app_storage, records_count=4, pending=True
         )
         # And some sources that were deleted
         SourceFactory.create_batch(
-            app_db_session, app_storage, number=3, deleted_at=datetime.utcnow()
+            app_db_session, app_storage, records_count=3, deleted_at=datetime.utcnow()
         )
 
         # When searching for all sources, then it succeeds
@@ -38,12 +38,12 @@ class TestSearchSourcesAction:
     def test_filter_by_is_pending(self, app_db_session, app_storage):
         # Given an app with sources that are pending
         created_pending_sources = SourceFactory.create_batch(
-            app_db_session, app_storage, number=4, pending=True
+            app_db_session, app_storage, records_count=4, pending=True
         )
 
         # And some other sources that are NOT pending
         created_non_pending_sources = SourceFactory.create_batch(
-            app_db_session, app_storage, number=3, pending=False
+            app_db_session, app_storage, records_count=3, pending=False
         )
 
         # When searching for all pending sources, then it succeeds
@@ -69,15 +69,15 @@ class TestSearchSourcesAction:
     def test_filter_by_is_starred(self, app_db_session, app_storage):
         # Given an app with sources that are starred
         created_starred_sources = SourceFactory.create_batch(
-            app_db_session, app_storage, number=4, is_starred=True
+            app_db_session, app_storage, records_count=4, is_starred=True
         )
         # And some other sources that have never been starred
         created_non_starred_sources = SourceFactory.create_batch(
-            app_db_session, app_storage, number=3, is_starred=False
+            app_db_session, app_storage, records_count=3, is_starred=False
         )
         # And some other sources that were starred and then un-starred
         created_starred_then_un_starred_sources = SourceFactory.create_batch(
-            app_db_session, app_storage, number=3, is_starred=True
+            app_db_session, app_storage, records_count=2, is_starred=True
         )
         for src in created_starred_then_un_starred_sources:
             src.star.starred = False

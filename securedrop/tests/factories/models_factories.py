@@ -46,14 +46,14 @@ class SourceFactory:
         cls,
         db_session,
         app_storage,
-        number: int,  # TODO: better name
+        records_count: int,
         *,
         pending: bool = False,
         is_starred: bool = False,
         deleted_at: Optional[datetime] = None,
     ) -> List[models.Source]:
         created_sources = []
-        for _ in range(number):
+        for _ in range(records_count):
             source = cls.create(
                 db_session, app_storage, pending=pending, deleted_at=deleted_at, is_starred=is_starred,
             )
