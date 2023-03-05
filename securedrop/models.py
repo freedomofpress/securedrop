@@ -232,7 +232,7 @@ class Submission(db.Model):
             "size": self.size,
             "is_file": self.is_file,
             "is_message": self.is_message,
-            "is_read": self.seen,
+            "is_read": self.downloaded,
             "uuid": self.uuid,
             "download_url": url_for(
                 "api.download_submission",
@@ -244,17 +244,6 @@ class Submission(db.Model):
             "seen_by": list(seen_by),
         }
         return json_submission
-
-    @property
-    def seen(self) -> bool:
-        """
-        If the submission has been downloaded or seen by any journalist, then the submission is
-        considered seen.
-        """
-        if self.downloaded or self.seen_files.count() or self.seen_messages.count():
-            return True
-
-        return False
 
 
 class Reply(db.Model):

@@ -4,6 +4,8 @@ from typing import Union
 
 import store
 import werkzeug
+
+from actions.sources_actions import SearchSourcesAction
 from db import db
 from encryption import EncryptionManager
 from flask import (
@@ -65,57 +67,29 @@ def make_blueprint() -> Blueprint:
 
     @view.route("/")
     def index() -> str:
-        # Gather the count of unread submissions for each source
-        # ID. This query will be joined in the queries for starred and
-        # unstarred sources below, and the unread counts added to
-        # their result sets as an extra column.
-        unread_stmt = (
-            db.session.query(Submission.source_id, func.count("*").label("num_unread"))
-            .filter_by(seen_files=None, seen_messages=None)
-            .group_by(Submission.source_id)
-            .subquery()
+        # Fetch all sources
+        all_sources = SearchSourcesAction(db_session=db.session).perform()
+
+        # Add "num_unread" attributes to the source entities
+        # First gather the count of unread submissions for each source ID
+        # TODO(AD): Remove this and add support for pagination; switch to a (hybrid?) property
+        unread_submission_counts_results = (
+            db.session.query(Submission.source_id, func.count("*"))
+            .filter_by(downloaded=False)
+            .group_by(Submission.source_id).all()
         )
+        source_ids_to_unread_submission_counts = {
+            source_id: subs_count for source_id, subs_count in unread_submission_counts_results
+        }
+        # TODO(AD): Remove this dynamically-added attribute; switch to a (hybrid?) property
+        for source in all_sources:
+            source.num_unread = source_ids_to_unread_submission_counts.get(source.id, 0)
 
-        # Query for starred sources, along with their unread
-        # submission counts.
-        starred = (
-            db.session.query(Source, unread_stmt.c.num_unread)
-            .filter_by(pending=False, deleted_at=None)
-            .filter(Source.last_updated.isnot(None))
-            .filter(SourceStar.starred.is_(True))
-            .outerjoin(SourceStar)
-            .options(joinedload(Source.submissions))
-            .options(joinedload(Source.star))
-            .outerjoin(unread_stmt, Source.id == unread_stmt.c.source_id)
-            .order_by(Source.last_updated.desc())
-            .all()
+        response = render_template(
+            "index.html",
+            unstarred=[src for src in all_sources if not src.is_starred],
+            starred=[src for src in all_sources if src.is_starred],
         )
-
-        # Now, add "num_unread" attributes to the source entities.
-        for source, num_unread in starred:
-            source.num_unread = num_unread or 0
-        starred = [source for source, num_unread in starred]
-
-        # Query for sources without stars, along with their unread
-        # submission counts.
-        unstarred = (
-            db.session.query(Source, unread_stmt.c.num_unread)
-            .filter_by(pending=False, deleted_at=None)
-            .filter(Source.last_updated.isnot(None))
-            .filter(~Source.star.has(SourceStar.starred.is_(True)))
-            .options(joinedload(Source.submissions))
-            .options(joinedload(Source.star))
-            .outerjoin(unread_stmt, Source.id == unread_stmt.c.source_id)
-            .order_by(Source.last_updated.desc())
-            .all()
-        )
-
-        # Again, add "num_unread" attributes to the source entities.
-        for source, num_unread in unstarred:
-            source.num_unread = num_unread or 0
-        unstarred = [source for source, num_unread in unstarred]
-
-        response = render_template("index.html", unstarred=unstarred, starred=starred)
         return response
 
     @view.route("/reply", methods=("POST",))

@@ -1,9 +1,8 @@
-from actions.sources import SearchSourcesAction
+from actions.sources_actions import SearchSourcesAction
 from db import db
 from encryption import EncryptionManager, GpgKeyNotFoundError
 from execution import asynchronous
 from journalist_app import create_app
-from models import Source
 from sdconfig import SecureDropConfig
 
 config = SecureDropConfig.get_current()
