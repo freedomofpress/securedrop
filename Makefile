@@ -286,7 +286,7 @@ validate-test-html:
 accessibility-summary:
 	@echo "███ Processing accessibility results..."
 	@$(DEVSHELL) $(SDBIN)/summarize-accessibility-info
-	less securedrop/tests/functional/pageslayout/accessibility-info/summary.txt
+	cat securedrop/tests/functional/pageslayout/accessibility-info/summary.txt
 
 .PHONY: docker-vnc
 docker-vnc:  ## Open a VNC connection to a running Docker instance.
