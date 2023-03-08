@@ -162,6 +162,8 @@ jobs:
             fromtag=$(docker images |grep securedrop-test-focal-py3 |head -n1 |awk '{print $2}')
             DOCKER_BUILD_ARGUMENTS="--cache-from securedrop-test-focal-py3:${fromtag:-latest}" \
               make validate-test-html || true
+            DOCKER_BUILD_ARGUMENTS="--cache-from securedrop-test-focal-py3:${fromtag:-latest}" \
+              make accessibility-summary || true
 
       - store_test_results:
           path: ~/project/test-results

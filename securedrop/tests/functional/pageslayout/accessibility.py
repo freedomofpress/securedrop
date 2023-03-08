@@ -172,7 +172,6 @@ def summarize_accessibility_results() -> None:
 
         # save the data to a convenient file
         with open(_ACCESSIBILITY_DIR / "summary.txt", "w") as summary_file:
-            summary_file.write(f"See full output in {_ACCESSIBILITY_DIR}\n\n")
             for name in sorted(summary.keys()):
                 summary_file.write(name + ":\n")
                 for message_type in ["errors", "reviews"]:
