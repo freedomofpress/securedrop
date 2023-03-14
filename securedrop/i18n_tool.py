@@ -27,6 +27,7 @@ I18N_CONF = os.path.join(os.path.dirname(__file__), "i18n.json")
 LOCALE_DIR = {
     "securedrop": "securedrop/translations",
     "desktop": "install_files/ansible-base/roles/tails-config/templates",
+    "extension": "install_files/ansible-base/roles/tails-config/templates",
 }
 
 
@@ -246,7 +247,8 @@ class I18NTool:
             "translate-messages", help=("Update and compile " "source and template translations")
         )
         translations_dir = join(dirname(realpath(__file__)), "translations")
-        sources = ".,source_templates,journalist_templates"
+        extension_location = join(dirname(realpath(__file__)), "..", LOCALE_DIR["extension"])
+        sources = join(".,source_templates,journalist_templates,",extension_location)
         self.set_translate_parser(parser, translations_dir, sources)
         mapping = "babel.cfg"
         parser.add_argument(

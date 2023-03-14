@@ -157,6 +157,16 @@
     - "{{ _securedrop_extension_info }}"
     - "{{ tails_config_extension_directories }}"
 
+- name: Add extension translations in Persistent Storage
+  synchronize:
+    src: "{{ tails_config_amnesia_persistent }}/securedrop/securedrop/translations/"
+    dest: "{{ tails_config_live_dotfiles }}/.local/share/gnome-shell/extensions/securedrop@securedrop.freedom.press/po/"
+
+- name: Add extension translations in the running system
+  synchronize:
+    src: "{{ tails_config_amnesia_persistent }}/securedrop/securedrop/translations/"
+    dest: "/home/amnesia/.local/share/gnome-shell/extensions/securedrop@securedrop.freedom.press/po/"
+
 - name: Enable the new GNOME Shell extension
   become: no
   command: gnome-extensions enable securedrop@securedrop.freedom.press
