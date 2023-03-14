@@ -26,6 +26,8 @@ if [[ $status == 42 ]]; then
     echo "Rebuilding container to update dependencies"
     $OCI_BIN rmi fpf.local/sd-server-builder
     $OCI_BIN build -t fpf.local/sd-server-builder builder/ --no-cache
+    $OCI_BIN run --rm $OCI_RUN_ARGUMENTS \
+        --entrypoint "/dep-check" fpf.local/sd-server-builder || status=$?
 fi
 
 if [[ $status != 0 ]]; then

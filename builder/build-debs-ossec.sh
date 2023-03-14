@@ -23,7 +23,6 @@ cp -Rv /src/ossec/ossec-"${VARIANT}"/debian debian
 dpkg-buildpackage -us -uc
 
 # Copy the built artifacts back and print checksums
-mkdir -p /src/build/focal
 mv -v ../*.{buildinfo,changes,deb,tar.gz} /src/build/focal
 cd /src/build/focal
 sha256sum ./*

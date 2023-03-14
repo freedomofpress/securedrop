@@ -29,6 +29,8 @@ cd "$(git rev-parse --show-toplevel)"
 
 . ./builder/image_prep.sh
 
+mkdir -p build/focal
+
 if [[ $WHAT == "ossec" ]]; then
     # We need to build each variant separately because it dirties the container
     $OCI_BIN run --rm $OCI_RUN_ARGUMENTS \
