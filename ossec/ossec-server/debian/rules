@@ -22,3 +22,16 @@ override_dh_install:
 	mkdir -p debian/tmp/var/
 	cp -Rv /var/ossec debian/tmp/var/
 	dh_install
+
+override_dh_fixperms:
+	dh_fixperms
+	# Fix up permissions to match old packaging
+	chmod 640 debian/ossec-server/var/ossec/rules/*.xml
+	chmod 640 debian/ossec-server/var/ossec/etc/*
+	chmod 440 debian/ossec-server/var/ossec/etc/localtime
+	chmod 440 debian/ossec-server/var/ossec/etc/resolv.conf
+	chmod 640 debian/ossec-server/var/ossec/etc/shared/*.txt
+	chmod 550 debian/ossec-server/var/ossec/bin/*
+	chmod 550 debian/ossec-server/var/ossec/agentless/*
+	chmod 550 debian/ossec-server/var/ossec/active-response/bin/*.sh
+	chmod 640 debian/ossec-server/var/ossec/logs/*
