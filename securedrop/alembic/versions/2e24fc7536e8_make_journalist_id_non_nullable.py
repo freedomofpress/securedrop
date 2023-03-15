@@ -71,8 +71,8 @@ def migrate_nulls() -> None:
     needs_migration = []
     conn = op.get_bind()
     for table in tables:
-        result = conn.execute(  # nosec
-            f"SELECT 1 FROM {table} WHERE journalist_id IS NULL;"
+        result = conn.execute(
+            f"SELECT 1 FROM {table} WHERE journalist_id IS NULL;"  # nosec
         ).first()
         if result is not None:
             needs_migration.append(table)
@@ -89,7 +89,7 @@ def migrate_nulls() -> None:
         # unique key violations.
         op.execute(
             sa.text(
-                f"UPDATE OR IGNORE {table} SET journalist_id=:journalist_id "
+                f"UPDATE OR IGNORE {table} SET journalist_id=:journalist_id "  # nosec
                 "WHERE journalist_id IS NULL;"
             ).bindparams(journalist_id=deleted_id)
         )

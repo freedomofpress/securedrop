@@ -588,7 +588,7 @@ def test_check_for_update_when_updates_not_needed(securedrop_git_repo):
     github_url = (
         "https://api.github.com/repos/freedomofpress/securedrop/releases/latest"  # noqa: E501
     )
-    latest_release = requests.get(github_url).json()
+    latest_release = requests.get(github_url, timeout=60).json()
     latest_tag = str(latest_release["tag_name"])
 
     subprocess.check_call(["git", "checkout", latest_tag])
@@ -661,7 +661,7 @@ def test_update_with_duplicate_branch_and_tag(securedrop_git_repo):
     github_url = (
         "https://api.github.com/repos/freedomofpress/securedrop/releases/latest"  # noqa: E501
     )
-    latest_release = requests.get(github_url).json()
+    latest_release = requests.get(github_url, timeout=60).json()
     latest_tag = str(latest_release["tag_name"])
 
     # Create a branch with the same name as a tag.
