@@ -37,10 +37,13 @@ class Indicator extends PanelMenu.Button {
         
         let gicon = Gio.icon_new_for_string(CurrentExtension.path + "/icons/securedrop-symbolic.png");
 	let icon = new St.Icon({ gicon });
+	icon.icon_size = 18;
+	icon.height = 18;
+	icon.width = 18;
         
         let label = new St.Label({
             text: 'SecureDrop',
-            y_expand: true,
+            y_expand: false,
             y_align: Clutter.ActorAlign.CENTER,
         });
         
@@ -59,7 +62,7 @@ class Indicator extends PanelMenu.Button {
         
         let journalist = new PopupMenu.PopupMenuItem('Launch Journalist Interface');
         journalist.connect('activate', () => {
-       	    Util.spawn(['tor-browser', source_interface_address]);
+       	    Util.spawn(['tor-browser', journalist_interface_address]);
         });
         
         let admin_label = new St.Label({
@@ -116,7 +119,11 @@ class Extension {
 
     enable() {
         this._indicator = new Indicator();
-        let pos = Main.sessionMode.panel.left.indexOf('appMenu');
+        
+        // Position is a zero-based index of where to put the extension 
+        // in the status bar. Index 3, in Tails, would be to the right
+        // of the 'Places' Menu (Activites, Applicatons, Places, SD)
+        let pos = 3;
         if ('apps-menu' in Main.panel.statusArea)
             pos++;
         Main.panel.addToStatusArea(this._uuid, this._indicator, pos, 'left');
