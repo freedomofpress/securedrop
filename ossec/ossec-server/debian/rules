@@ -1,0 +1,37 @@
+#!/usr/bin/make -f
+include /usr/share/dpkg/pkg-info.mk
+
+HUMAN_DATE := $(shell date --utc --date="@${SOURCE_DATE_EPOCH}")
+
+%:
+	dh $@
+
+override_dh_install:
+	cp debian/preloaded-vars.conf etc/preloaded-vars.conf
+	# Disable JIT (TODO, ask upstream to make this configurable)
+	sed -i s/USE_PCRE2_JIT=yes/USE_PCRE2_JIT=no/ src/Makefile
+	bash ./install.sh
+	# Override date to be reproducible
+	sed -i "s/DATE=\".*\"/DATE=\"${HUMAN_DATE}\"/" /var/ossec/etc/ossec-init.conf
+	# Override hostname to be reproducible
+	sed -i "s/<email_from>ossecm@.*<\/email_from>/<email_from>ossecm@sd-ossec-builder<\/email_from>/" /var/ossec/etc/ossec.conf
+	# Use a fixed resolv.conf instead of whatever the container might have from the host
+	# TODO: these obviously don't work, what is this file supposed to be used for?
+	echo 'nameserver 10.139.1.1\nnameserver 10.139.1.2' > /var/ossec/etc/resolv.conf
+	rm /var/ossec/etc/client.keys
+	mkdir -p debian/tmp/var/
+	cp -Rv /var/ossec debian/tmp/var/
+	dh_install
+
+override_dh_fixperms:
+	dh_fixperms
+	# Fix up permissions to match old packaging
+	chmod 640 debian/ossec-server/var/ossec/rules/*.xml
+	chmod 640 debian/ossec-server/var/ossec/etc/*
+	chmod 440 debian/ossec-server/var/ossec/etc/localtime
+	chmod 440 debian/ossec-server/var/ossec/etc/resolv.conf
+	chmod 640 debian/ossec-server/var/ossec/etc/shared/*.txt
+	chmod 550 debian/ossec-server/var/ossec/bin/*
+	chmod 550 debian/ossec-server/var/ossec/agentless/*
+	chmod 550 debian/ossec-server/var/ossec/active-response/bin/*.sh
+	chmod 640 debian/ossec-server/var/ossec/logs/*

@@ -1,0 +1,221 @@
+#!/bin/sh
+# shellcheck disable=SC2174
+# postinst script for monitor server package
+#
+# see: dh_installdeb(1)
+set -e
+set -x
+# summary of how this script can be called:
+#        * <postinst> `configure' <most-recently-configured-version>
+#        * <old-postinst> `abort-upgrade' <new version>
+#        * <conflictor's-postinst> `abort-remove' `in-favour' <package>
+#          <new-version>
+#        * <postinst> `abort-remove'
+#        * <deconfigured's-postinst> `abort-deconfigure' `in-favour'
+#          <failed-install-package> <version> `removing'
+#          <conflicting-package> <version>
+# for details, see http://www.debian.org/doc/debian-policy/ or
+# the debian-policy package
+
+case "$1" in
+    configure)
+        # create OSSEC users and set file permissions
+        OSSEC_HOME="/var/ossec"
+        USER="ossec"
+        USER_MAIL="ossecm"
+        USER_REM="ossecr"
+        GROUP="ossec"
+        OSSEC_HIDS_TMP_DIR="/tmp/ossec-hids"
+
+        OSMYSHELL="/sbin/nologin"
+        if [ ! -f ${OSMYSHELL} ]; then
+            if [ -f "/bin/false" ]; then
+                OSMYSHELL="/bin/false"
+            fi
+        fi
+        mkdir -m 550 -p ${OSSEC_HOME}
+        mkdir -p ${OSSEC_HOME}/active-response/bin
+        mkdir -m 750 -p ${OSSEC_HOME}/stats
+        mkdir -p ${OSSEC_HOME}/rules/translated/pure_ftpd
+        mkdir -p ${OSSEC_HOME}/rules/translated
+        mkdir -p ${OSSEC_HOME}/rules/log-entries
+        mkdir -p ${OSSEC_HOME}/agentless
+        mkdir -m 700 -p ${OSSEC_HOME}/.ssh
+        mkdir -m 770 -p ${OSSEC_HOME}/etc/shared
+        mkdir -p ${OSSEC_HOME}/bin
+        mkdir -m 750 -p ${OSSEC_HOME}/queue/fts
+        mkdir -m 755 -p ${OSSEC_HOME}/queue/agent-info
+        mkdir -m 755 -p ${OSSEC_HOME}/queue/agentless
+        mkdir -m 755 -p ${OSSEC_HOME}/queue/rids
+        mkdir -m 750 -p ${OSSEC_HOME}/queue/syscheck
+        mkdir -m 770 -p ${OSSEC_HOME}/queue/alerts
+        mkdir -m 750 -p ${OSSEC_HOME}/queue/diff
+        mkdir -m 750 -p ${OSSEC_HOME}/queue/rootcheck
+        mkdir -m 770 -p ${OSSEC_HOME}/queue/ossec
+        mkdir -m 770 -p ${OSSEC_HOME}/var/run
+        mkdir -m 750 -p ${OSSEC_HOME}/logs
+        mkdir -p ${OSSEC_HOME}/logs/firewall
+        mkdir -p ${OSSEC_HOME}/logs/archives
+        mkdir -p ${OSSEC_HOME}/logs/alerts
+        mkdir -p ${OSSEC_HOME}/tmp
+        mkdir -p ${OSSEC_HOME}/.gnupg
+
+        if ! getent group | grep -q "^ossec"
+        then
+            groupadd --system ossec
+        fi
+        if ! getent passwd | grep -q "^ossec"
+        then
+            useradd -d ${OSSEC_HOME} -s ${OSMYSHELL} -g ${GROUP} ${USER}
+        fi
+        if ! getent passwd | grep -q "^ossecm"
+        then
+            useradd -d ${OSSEC_HOME} -s ${OSMYSHELL} -g ${GROUP} ${USER_MAIL}
+        fi
+        if ! getent passwd | grep -q "^ossecr"
+        then
+            useradd -d ${OSSEC_HOME} -s ${OSMYSHELL} -g ${GROUP} ${USER_REM}
+        fi
+
+        # Default for all directories
+        chmod -R 550 ${OSSEC_HOME}
+        chown -R root:${GROUP} ${OSSEC_HOME}
+
+        # AnalysisD needs to write to alerts: log, mail and cmds
+        chown -R ${USER}:${GROUP} ${OSSEC_HOME}/queue/alerts
+        chmod -R 770 ${OSSEC_HOME}/queue/alerts
+
+        # To the ossec queue (default for analysisd to read)
+        chown -R ${USER}:${GROUP} ${OSSEC_HOME}/queue/ossec
+        chmod -R 770 ${OSSEC_HOME}/queue/ossec
+
+        # To the ossec fts queue
+        chown -R ${USER}:${GROUP} ${OSSEC_HOME}/queue/fts
+        chmod -R 750 ${OSSEC_HOME}/queue/fts
+        chmod 740 ${OSSEC_HOME}/queue/fts/* > /dev/null 2>&1 || true
+
+        # To the ossec syscheck/rootcheck queue
+        chown -R ${USER}:${GROUP} ${OSSEC_HOME}/queue/syscheck
+        chmod -R 750 ${OSSEC_HOME}/queue/syscheck
+        chmod 740 ${OSSEC_HOME}/queue/syscheck/* > /dev/null 2>&1 || true
+
+        chown -R ${USER}:${GROUP} ${OSSEC_HOME}/queue/rootcheck
+        chmod -R 750 ${OSSEC_HOME}/queue/rootcheck
+        chmod 740 ${OSSEC_HOME}/queue/rootcheck/* > /dev/null 2>&1 || true
+
+        chown -R ${USER}:${GROUP} ${OSSEC_HOME}/queue/diff
+        chmod -R 750 ${OSSEC_HOME}/queue/diff
+        chmod 740 ${OSSEC_HOME}/queue/diff/* > /dev/null 2>&1 || true
+
+        chown -R ${USER_REM}:${GROUP} ${OSSEC_HOME}/queue/agent-info
+        chmod -R 755 ${OSSEC_HOME}/queue/agent-info
+        chmod 744 ${OSSEC_HOME}/queue/agent-info/* > /dev/null 2>&1 || true
+        chown -R ${USER_REM}:${GROUP} ${OSSEC_HOME}/queue/rids
+        chmod -R 755 ${OSSEC_HOME}/queue/rids
+        chmod 744 ${OSSEC_HOME}/queue/rids/* > /dev/null 2>&1 || true
+
+        chown -R ${USER}:${GROUP} ${OSSEC_HOME}/queue/agentless
+        chmod -R 755 ${OSSEC_HOME}/queue/agentless
+        chmod 744 ${OSSEC_HOME}/queue/agentless/* > /dev/null 2>&1 || true
+
+        # For the stats directory
+        chown -R ${USER}:${GROUP} ${OSSEC_HOME}/stats
+        chmod -R 750 ${OSSEC_HOME}/stats
+
+        # For the logging user
+        chown -R ${USER}:${GROUP} ${OSSEC_HOME}/logs
+        chmod -R 750 ${OSSEC_HOME}/logs
+        touch ${OSSEC_HOME}/logs/ossec.log
+        chown ${USER}:${GROUP} ${OSSEC_HOME}/logs/ossec.log
+        chmod 664 ${OSSEC_HOME}/logs/ossec.log
+
+        # Backup previous rules
+        if [ -d ${OSSEC_HOME}/rules/ ]; then
+            mkdir ${OSSEC_HOME}/rules/backup-rules.$$
+            cp -pr ${OSSEC_HOME}/rules/*.xml ${OSSEC_HOME}/rules/backup-rules.$$/
+        fi
+
+
+        # restore the local rules
+        if [ -f ${OSSEC_HIDS_TMP_DIR}/local_rules.xml ]; then
+            mv ${OSSEC_HIDS_TMP_DIR}/local_rules.xml ${OSSEC_HOME}/rules/local_rules.xml
+        fi
+
+        chown -R root:${GROUP} ${OSSEC_HOME}/rules
+        chmod -R 550 ${OSSEC_HOME}/rules
+
+
+        # For the etc dir
+        chmod 550 ${OSSEC_HOME}/etc
+        chown -R root:${GROUP} ${OSSEC_HOME}/etc
+        if [ -f /etc/localtime ]; then
+            cp -pL /etc/localtime ${OSSEC_HOME}/etc/;
+            chmod 555 ${OSSEC_HOME}/etc/localtime
+            chown root:${GROUP} ${OSSEC_HOME}/etc/localtime
+        fi
+
+        if [ -f /etc/TIMEZONE ]; then
+            cp -p /etc/TIMEZONE ${OSSEC_HOME}/etc/;
+            chmod 555 ${OSSEC_HOME}/etc/TIMEZONE
+        fi
+
+        # For the /var/run
+        chmod 770 ${OSSEC_HOME}/var/run
+        chown root:${GROUP} ${OSSEC_HOME}/var/run
+
+        # More files
+        chown root:${GROUP} ${OSSEC_HOME}/etc/decoder.xml
+        chown root:${GROUP} ${OSSEC_HOME}/etc/local_decoder.xml >/dev/null 2>&1 || true
+        chown root:${GROUP} ${OSSEC_HOME}/etc/internal_options.conf
+        chown root:${GROUP} ${OSSEC_HOME}/etc/local_internal_options.conf >/dev/null 2>&1 || true
+        chown root:${GROUP} ${OSSEC_HOME}/etc/client.keys >/dev/null 2>&1 || true
+        chown root:${GROUP} ${OSSEC_HOME}/etc/shared/*
+        chown root:${GROUP} ${OSSEC_HOME}/agentless/*
+        chown ${USER}:${GROUP} ${OSSEC_HOME}/.gnupg
+        chown ${USER}:${GROUP} ${OSSEC_HOME}/.ssh
+
+        chmod 440 ${OSSEC_HOME}/etc/decoder.xml
+        chmod 440 ${OSSEC_HOME}/etc/local_decoder.xml >/dev/null 2>&1 || true
+        chmod 440 ${OSSEC_HOME}/etc/internal_options.conf
+        chmod 440 ${OSSEC_HOME}/etc/local_internal_options.conf >/dev/null 2>&1 || true
+        chmod 440 ${OSSEC_HOME}/etc/client.keys >/dev/null 2>&1 || true
+        chmod 550 ${OSSEC_HOME}/etc
+        chmod 770 ${OSSEC_HOME}/etc/shared
+        chmod 440 ${OSSEC_HOME}/etc/shared/*
+        chmod 550 ${OSSEC_HOME}/agentless/*
+        chmod 700 ${OSSEC_HOME}/.ssh
+
+        rm ${OSSEC_HOME}/etc/shared/merged.mg >/dev/null 2>&1 || true
+        chmod 755 ${OSSEC_HOME}/active-response/bin/*
+        chown root:${GROUP} ${OSSEC_HOME}/active-response/bin/*
+        chown root:${GROUP} ${OSSEC_HOME}/bin/*
+        chmod 550 ${OSSEC_HOME}/bin/*
+        chown root:${GROUP} ${OSSEC_HOME}/etc/ossec.conf
+        chmod 440 ${OSSEC_HOME}/etc/ossec.conf
+        chmod 700 ${OSSEC_HOME}/.gnupg
+
+        if [ -x /etc/init.d/ossec ]; then
+            update-rc.d -f ossec defaults
+            invoke-rc.d ossec restart
+        fi
+
+        if [ -d ${OSSEC_HIDS_TMP_DIR} ]; then
+            rm -r ${OSSEC_HIDS_TMP_DIR}
+        fi
+    ;;
+
+    abort-upgrade|abort-remove|abort-deconfigure)
+    ;;
+
+    *)
+        echo "postinst called with unknown argument \`$1'" >&2
+        exit 1
+    ;;
+esac
+
+# dh_installdeb will replace this with shell code automatically
+# generated by other debhelper scripts.
+
+#DEBHELPER#
+
+exit 0

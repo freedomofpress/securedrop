@@ -1,0 +1,12 @@
+Source: ossec-server
+Section: web
+Priority: optional
+Maintainer: SecureDrop Team <securedrop@freedom.press>
+Homepage: https://ossec.net
+Standards-Version: 4.5.1
+
+Package: ossec-server
+Architecture: amd64
+Conflicts: ossec-agent
+Depends: libc6 (>=2.7), libssl1.1, adduser, expect, inotify-tools
+Description: Installs generic OSSEC server

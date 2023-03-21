@@ -346,15 +346,27 @@ endif
 ###########
 
 .PHONY: build-debs
-build-debs: ## Build and test SecureDrop Debian packages (for Focal)
-	@echo "Building SecureDrop Debian packages for Focal..."
-	@$(SDROOT)/devops/scripts/build-debs.sh
+build-debs: ## Build and test SecureDrop Debian packages
+	@echo "Building SecureDrop Debian packages..."
+	@$(SDROOT)/builder/build-debs.sh
 	@echo
 
 .PHONY: build-debs-notest
-build-debs-notest: ## Build SecureDrop Debian packages (for Focal) without running tests.
-	@echo "Building SecureDrop Debian packages for Focal; skipping tests..."
-	@$(SDROOT)/devops/scripts/build-debs.sh notest
+build-debs-notest: ## Build SecureDrop Debian packages without running tests.
+	@echo "Building SecureDrop Debian packages, skipping tests..."
+	@NOTEST=1 $(SDROOT)/builder/build-debs.sh
+	@echo
+
+.PHONY: build-debs-ossec
+build-debs-ossec: ## Build OSSEC Debian packages
+	@echo "Building OSSEC Debian packages"
+	@WHAT=ossec $(SDROOT)/builder/build-debs.sh
+	@echo
+
+.PHONY: build-debs-ossec-notest
+build-debs-ossec-notest: ## Build OSSEC Debian packages without running tests
+	@echo "Building OSSEC Debian packages, skipping tests..."
+	@NOTEST=1 WHAT=ossec $(SDROOT)/builder/build-debs.sh
 	@echo
 
 
