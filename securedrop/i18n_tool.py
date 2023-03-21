@@ -248,7 +248,7 @@ class I18NTool:
         )
         translations_dir = join(dirname(realpath(__file__)), "translations")
         extension_location = join(dirname(realpath(__file__)), "..", LOCALE_DIR["extension"])
-        sources = join(".,source_templates,journalist_templates,",extension_location)
+        sources = join(".,source_templates,journalist_templates,", extension_location)
         self.set_translate_parser(parser, translations_dir, sources)
         mapping = "babel.cfg"
         parser.add_argument(

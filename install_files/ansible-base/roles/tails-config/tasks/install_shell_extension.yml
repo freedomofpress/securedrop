@@ -102,7 +102,7 @@
     dest: "/home/amnesia/.local/share/gnome-shell/extensions/securedrop@securedrop.freedom.press/"
     owner: amnesia
     group: amnesia
-    
+
 - name: Copy the symbolic icon used for the shell extension in Persistent Storage
   become: yes
   copy:
@@ -110,7 +110,7 @@
     dest: "{{ tails_config_live_dotfiles }}/.local/share/gnome-shell/extensions/securedrop@securedrop.freedom.press/icons/"
     owner: amnesia
     group: amnesia
-    
+
 - name: Copy the symbolic icon used for the shell extension in the running system
   become: yes
   copy:
