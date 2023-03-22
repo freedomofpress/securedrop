@@ -1,13 +1,12 @@
-from time import sleep
-import pyotp
-from subprocess import run
 from enum import Enum
+from subprocess import run
+from time import sleep
 
+import pyotp
+from selenium.common.exceptions import NoSuchElementException, WebDriverException
 from selenium.webdriver import Firefox, FirefoxOptions
-from selenium.webdriver.common.proxy import Proxy
 from selenium.webdriver.common.by import By
-from selenium.common.exceptions import WebDriverException, NoSuchElementException
-
+from selenium.webdriver.common.proxy import Proxy
 
 # Test credentials from docs
 # https://developers.securedrop.org/en/latest/setup_development.html#using-the-docker-environment

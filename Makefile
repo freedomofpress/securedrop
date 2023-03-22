@@ -241,7 +241,7 @@ dev:  ## Run the development server in a Docker container.
 .PHONY: dev-detatched
 dev-detatched:  ## Run the development server in a Docker container without attatching tty.
 	@echo "███ Starting development server..."
-	@OFFSET_PORTS='false' DETATCHED='true' DOCKER_BUILD_VERBOSE='true' $(DEVSHELL) $(SDBIN)/run
+	@OFFSET_PORTS='false' DOCKER_BUILD_VERBOSE='true' $(DEVSHELL) $(SDBIN)/run
 	@echo
 
 .PHONY: dev-tor

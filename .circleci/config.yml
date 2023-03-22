@@ -267,7 +267,6 @@ jobs:
     environment:
       DOCKER_API_VERSION: 1.23
       BASE_OS: focal
-    parallelism: 3
     steps:
       - checkout
       - *rebaseontarget
@@ -280,6 +279,8 @@ jobs:
 
       - run:
           name: Install dependencies
+          # Installs ZAP dependencies
+          # also has a first step which requires ensuring that apt-daily isn't running to free the lock on updates, allowing us to update and install freely
           command: |
             sudo systemctl stop apt-daily.service
             sudo systemctl kill --kill-who=all apt-daily.service
@@ -287,7 +288,8 @@ jobs:
             ( sudo apt-get update || sudo apt-get update )
             sudo apt-get install -y openjdk-17-jre-headless wget firefox
             export GECKODRIVER_VER=v0.30.0
-            wget https://github.com/mozilla/geckodriver/releases/download/${GECKODRIVER_VER}/geckodriver-${GECKODRIVER_VER}-linux64.tar.gz -O /tmp/geckodriver.tar.gz
+            export GECKODRIVER_URL="https://github.com/mozilla/geckodriver/releases/download/${GECKODRIVER_VER}/geckodriver-${GECKODRIVER_VER}-linux64.tar.gz"
+            wget $GECKODRIVER_URL -O /tmp/geckodriver.tar.gz
             cd /tmp
             tar -xvzf geckodriver.tar.gz
             sudo install geckodriver /usr/local/bin
