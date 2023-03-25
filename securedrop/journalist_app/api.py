@@ -8,7 +8,8 @@ from uuid import UUID
 import flask
 import werkzeug
 
-from actions.sources_actions import SearchSourcesAction
+from actions.exceptions import NotFoundError
+from actions.sources_actions import SearchSourcesAction, DeleteSingleSourceAction, GetSingleSourceAction
 from db import db
 from flask import Blueprint, abort, jsonify, request
 from journalist_app import utils
@@ -129,25 +130,27 @@ def make_blueprint() -> Blueprint:
     @api.route("/sources/<source_uuid>", methods=["GET", "DELETE"])
     def single_source(source_uuid: str) -> Tuple[flask.Response, int]:
         if request.method == "GET":
-            source = get_or_404(Source, source_uuid, column=Source.uuid)
+            source = GetSingleSourceAction(db_session=db.session, uuid=source_uuid).perform()
             return jsonify(source.to_json()), 200
         elif request.method == "DELETE":
-            source = get_or_404(Source, source_uuid, column=Source.uuid)
-            utils.delete_collection(source.filesystem_id)
+            source = GetSingleSourceAction(db_session=db.session, uuid=source_uuid).perform()
+            DeleteSingleSourceAction(
+                db_session=db.session, source=source
+            ).perform()
             return jsonify({"message": "Source and submissions deleted"}), 200
         else:
             abort(405)
 
     @api.route("/sources/<source_uuid>/add_star", methods=["POST"])
     def add_star(source_uuid: str) -> Tuple[flask.Response, int]:
-        source = get_or_404(Source, source_uuid, column=Source.uuid)
+        source = GetSingleSourceAction(db_session=db.session, uuid=source_uuid).perform()
         utils.make_star_true(source.filesystem_id)
         db.session.commit()
         return jsonify({"message": "Star added"}), 201
 
     @api.route("/sources/<source_uuid>/remove_star", methods=["DELETE"])
     def remove_star(source_uuid: str) -> Tuple[flask.Response, int]:
-        source = get_or_404(Source, source_uuid, column=Source.uuid)
+        source = GetSingleSourceAction(db_session=db.session, uuid=source_uuid).perform()
         utils.make_star_false(source.filesystem_id)
         db.session.commit()
         return jsonify({"message": "Star removed"}), 200
@@ -162,15 +165,15 @@ def make_blueprint() -> Blueprint:
     @api.route("/sources/<source_uuid>/conversation", methods=["DELETE"])
     def source_conversation(source_uuid: str) -> Tuple[flask.Response, int]:
         if request.method == "DELETE":
-            source = get_or_404(Source, source_uuid, column=Source.uuid)
-            utils.delete_source_files(source.filesystem_id)
+            source = GetSingleSourceAction(db_session=db.session, uuid=source_uuid).perform()
+            utils.delete_source_files(source)
             return jsonify({"message": "Source data deleted"}), 200
         else:
             abort(405)
 
     @api.route("/sources/<source_uuid>/submissions", methods=["GET"])
     def all_source_submissions(source_uuid: str) -> Tuple[flask.Response, int]:
-        source = get_or_404(Source, source_uuid, column=Source.uuid)
+        source = GetSingleSourceAction(db_session=db.session, uuid=source_uuid).perform()
         return (
             jsonify({"submissions": [submission.to_json() for submission in source.submissions]}),
             200,
@@ -178,13 +181,13 @@ def make_blueprint() -> Blueprint:
 
     @api.route("/sources/<source_uuid>/submissions/<submission_uuid>/download", methods=["GET"])
     def download_submission(source_uuid: str, submission_uuid: str) -> flask.Response:
-        get_or_404(Source, source_uuid, column=Source.uuid)
+        GetSingleSourceAction(db_session=db.session, uuid=source_uuid).perform()
         submission = get_or_404(Submission, submission_uuid, column=Submission.uuid)
         return utils.serve_file_with_etag(submission)
 
     @api.route("/sources/<source_uuid>/replies/<reply_uuid>/download", methods=["GET"])
     def download_reply(source_uuid: str, reply_uuid: str) -> flask.Response:
-        get_or_404(Source, source_uuid, column=Source.uuid)
+        GetSingleSourceAction(db_session=db.session, uuid=source_uuid).perform()
         reply = get_or_404(Reply, reply_uuid, column=Reply.uuid)
 
         return utils.serve_file_with_etag(reply)
@@ -195,11 +198,11 @@ def make_blueprint() -> Blueprint:
     )
     def single_submission(source_uuid: str, submission_uuid: str) -> Tuple[flask.Response, int]:
         if request.method == "GET":
-            get_or_404(Source, source_uuid, column=Source.uuid)
+            GetSingleSourceAction(db_session=db.session, uuid=source_uuid).perform()
             submission = get_or_404(Submission, submission_uuid, column=Submission.uuid)
             return jsonify(submission.to_json()), 200
         elif request.method == "DELETE":
-            get_or_404(Source, source_uuid, column=Source.uuid)
+            GetSingleSourceAction(db_session=db.session, uuid=source_uuid).perform()
             submission = get_or_404(Submission, submission_uuid, column=Submission.uuid)
             utils.delete_file_object(submission)
             return jsonify({"message": "Submission deleted"}), 200
@@ -209,13 +212,13 @@ def make_blueprint() -> Blueprint:
     @api.route("/sources/<source_uuid>/replies", methods=["GET", "POST"])
     def all_source_replies(source_uuid: str) -> Tuple[flask.Response, int]:
         if request.method == "GET":
-            source = get_or_404(Source, source_uuid, column=Source.uuid)
+            source = GetSingleSourceAction(db_session=db.session, uuid=source_uuid).perform()
             return (
                 jsonify({"replies": [reply.to_json() for reply in source.replies]}),
                 200,
             )
         elif request.method == "POST":
-            source = get_or_404(Source, source_uuid, column=Source.uuid)
+            source = GetSingleSourceAction(db_session=db.session, uuid=source_uuid).perform()
             if request.json is None:
                 abort(400, "please send requests in valid JSON")
 
@@ -279,7 +282,7 @@ def make_blueprint() -> Blueprint:
 
     @api.route("/sources/<source_uuid>/replies/<reply_uuid>", methods=["GET", "DELETE"])
     def single_reply(source_uuid: str, reply_uuid: str) -> Tuple[flask.Response, int]:
-        get_or_404(Source, source_uuid, column=Source.uuid)
+        GetSingleSourceAction(db_session=db.session, uuid=source_uuid).perform()
         reply = get_or_404(Reply, reply_uuid, column=Reply.uuid)
         if request.method == "GET":
             return jsonify(reply.to_json()), 200
@@ -366,6 +369,10 @@ def make_blueprint() -> Blueprint:
         session.destroy()
         return jsonify({"message": "Your token has been revoked."}), 200
 
+    @api.errorhandler(NotFoundError)
+    def handle_not_found(e: NotFoundError) -> Tuple[str, int]:
+        return "", 404
+
     def _handle_api_http_exception(
         error: werkzeug.exceptions.HTTPException,
     ) -> Tuple[flask.Response, int]:
@@ -378,4 +385,5 @@ def make_blueprint() -> Blueprint:
     for code in default_exceptions:
         api.errorhandler(code)(_handle_api_http_exception)
 
+    api.register_error_handler()
     return api

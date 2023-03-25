@@ -13,22 +13,19 @@ from unittest.mock import ANY, patch
 
 import pytest
 import version
+from actions.sources_actions import DeleteSingleSourceAction
 from db import db
 from encryption import EncryptionManager
-from flaky import flaky
 from flask import escape, g, request, session, url_for
-from flask_babel import gettext
-from journalist_app.utils import delete_collection
 from models import InstanceConfig, Reply, Source
 from passphrases import PassphraseGenerator
 from source_app import api as source_app_api
-from source_app import get_logo_url, session_manager
+from source_app import get_logo_url
 from source_app.session_manager import SessionManager
 
-from . import utils
-from .utils.db_helper import new_codename, submit
-from .utils.i18n import get_test_locales, language_tag, page_language, xfail_untranslated_messages
-from .utils.instrument import InstrumentedApp
+from tests import utils
+from tests.utils.db_helper import new_codename, submit
+from tests.utils.instrument import InstrumentedApp
 
 GENERATE_DATA = {"tor2web_check": 'href="fake.onion"'}
 
@@ -829,7 +826,9 @@ def test_source_is_deleted_while_logged_in(source_app):
 
         # Now that the source is logged in, the journalist deletes the source
         source_user = SessionManager.get_logged_in_user(db_session=db.session)
-        delete_collection(source_user.filesystem_id)
+        DeleteSingleSourceAction(
+            db_session=db.session, source=source_user.get_db_record()
+        ).perform()
 
         # Source attempts to continue to navigate
         resp = app.get(url_for("main.lookup"), follow_redirects=True)

@@ -1,8 +1,14 @@
 from datetime import datetime
+from pathlib import Path
+from typing import List
 
 import pytest
 
-from actions.sources_actions import SearchSourcesAction, SearchSourcesFilters
+import models
+from actions.sources_actions import SearchSourcesAction, SearchSourcesFilters, DeleteSingleSourceAction
+from encryption import EncryptionManager, GpgKeyNotFoundError
+from journalist_app.utils import mark_seen
+from tests import utils
 from tests.factories.models_factories import SourceFactory
 from tests.functional.db_session import get_database_session
 
@@ -109,3 +115,97 @@ class TestSearchSourcesAction:
         assert expected_non_starred_source_ids == {
             src.id for src in returned_non_starred_sources
         }
+
+    def test_filter_by_is_deleted(self, app_db_session, app_storage):
+        # Given an app with sources that are deleted
+        created_deleted_sources = SourceFactory.create_batch(
+            app_db_session, app_storage, records_count=4, deleted_at=datetime.utcnow()
+        )
+
+        # And some other sources that are NOT deleted
+        created_non_deleted_sources = SourceFactory.create_batch(
+            app_db_session, app_storage, records_count=3, deleted_at=None
+        )
+
+        # When searching for all deleted sources, then it succeeds
+        returned_deleted_sources = SearchSourcesAction(
+            db_session=app_db_session, filters=SearchSourcesFilters(filter_by_is_deleted=True),
+        ).perform()
+
+        # And the expected sources were returned
+        assert {src.id for src in returned_deleted_sources} == {
+            src.id for src in created_deleted_sources
+        }
+
+        # And when searching for all NON-deleted sources, then it succeeds
+        returned_non_pending_sources = SearchSourcesAction(
+            db_session=app_db_session, filters=SearchSourcesFilters(filter_by_is_deleted=False),
+        ).perform()
+
+        # And the expected sources were returned
+        assert {src.id for src in returned_non_pending_sources} == {
+            src.id for src in created_non_deleted_sources
+        }
+
+
+class TestDeleteSingleSourceAction:
+
+    def test(self, app_db_session, app_storage, test_journo):
+        # Given an app with some sources including one source to delete
+        source = SourceFactory.create(app_db_session, app_storage)
+        SourceFactory.create(app_db_session, app_storage)
+
+        # And the source has an encryption key
+        encryption_mgr = EncryptionManager.get_default()
+        assert encryption_mgr.get_source_key_fingerprint(source.filesystem_id)
+
+        # And the source has some submissions, messages and replies
+        journo = test_journo["journalist"]
+        all_submissions = utils.db_helper.submit(
+            app_storage, source, 2, submission_type="file"
+        )
+        all_messages = utils.db_helper.submit(
+            app_storage, source, 2, submission_type="message"
+        )
+        all_replies = utils.db_helper.reply(app_storage, journo, source, 2)
+        assert app_db_session.query(models.Submission).filter_by(source_id=source.id).all()
+        assert app_db_session.query(models.Reply).filter_by(source_id=source.id).all()
+
+        # And the submissions, messages and replies have been seen
+        mark_seen(all_submissions, journo)
+        mark_seen(all_messages, journo)
+        mark_seen(all_replies, journo)
+        assert app_db_session.query(models.SeenFile).filter_by(journalist_id=journo.id).all()
+        assert app_db_session.query(models.SeenMessage).filter_by(journalist_id=journo.id).all()
+        assert app_db_session.query(models.SeenReply).filter_by(journalist_id=journo.id).all()
+
+        # And the submissions point to existing files
+        all_submissions_file_paths: List[Path] = []
+        for submission in all_submissions:
+            submission_file_path = Path(app_storage.path(source.filesystem_id, submission.filename))
+            assert submission_file_path.exists()
+            all_submissions_file_paths.append(submission_file_path)
+        assert all_submissions_file_paths
+
+        # When deleting the source, then it succeeds
+        DeleteSingleSourceAction(db_session=app_db_session, source=source).perform()
+
+        # And the source's key was deleted
+        with pytest.raises(GpgKeyNotFoundError):
+            encryption_mgr.get_source_key_fingerprint(source.filesystem_id)
+
+        # And the source's submissions, replies and messages were deleted
+        assert not app_db_session.query(models.Submission).filter_by(source_id=source.id).all()
+        assert not app_db_session.query(models.Reply).filter_by(source_id=source.id).all()
+
+        # And the submissions' files were deleted
+        for file_path in all_submissions_file_paths:
+            assert not file_path.exists()
+
+        # And the records to track whether messages have been seen were deleted
+        assert not app_db_session.query(models.SeenFile).filter_by(journalist_id=journo.id).all()
+        assert not app_db_session.query(models.SeenMessage).filter_by(journalist_id=journo.id).all()
+        assert not app_db_session.query(models.SeenReply).filter_by(journalist_id=journo.id).all()
+
+        # And the source's DB record was deleted
+        assert app_db_session.query(models.Source).get(source.id) is None

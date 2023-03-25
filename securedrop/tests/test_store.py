@@ -15,9 +15,9 @@ from journalist_app import create_app
 from models import Reply, Submission
 from passphrases import PassphraseGenerator
 from rq.job import Job
-from source_user import create_source_user
 from store import Storage, async_add_checksum_for_file, queued_add_checksum_for_file
 from tests import utils
+from tests.factories.models_factories import SourceFactory
 
 
 @pytest.fixture(scope="function")
@@ -227,12 +227,7 @@ def test_add_checksum_for_file(config, app_storage, db_model):
 
     with app.app_context():
         db.create_all()
-        source_user = create_source_user(
-            db_session=db.session,
-            source_passphrase=PassphraseGenerator.get_default().generate_passphrase(),
-            source_app_storage=test_storage,
-        )
-        source = source_user.get_db_record()
+        source = SourceFactory.create(db.session, app_storage)
         target_file_path = test_storage.path(source.filesystem_id, "1-foo-msg.gpg")
         test_message = b"hash me!"
         expected_hash = "f1df4a6d8659471333f7f6470d593e0911b4d487856d88c83d2d187afa195927"
@@ -296,12 +291,7 @@ def test_async_add_checksum_for_file(config, app_storage, db_model):
 
     with app.app_context():
         db.create_all()
-        source_user = create_source_user(
-            db_session=db.session,
-            source_passphrase=PassphraseGenerator.get_default().generate_passphrase(),
-            source_app_storage=app_storage,
-        )
-        source = source_user.get_db_record()
+        source = SourceFactory.create(db.session, app_storage)
         target_file_path = app_storage.path(source.filesystem_id, "1-foo-msg.gpg")
         test_message = b"hash me!"
         expected_hash = "f1df4a6d8659471333f7f6470d593e0911b4d487856d88c83d2d187afa195927"

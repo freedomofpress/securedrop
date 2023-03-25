@@ -5,7 +5,7 @@ from typing import Union
 import store
 import werkzeug
 
-from actions.sources_actions import SearchSourcesAction
+from actions.sources_actions import SearchSourcesAction, GetSingleSourceAction
 from db import db
 from encryption import EncryptionManager
 from flask import (
@@ -208,16 +208,18 @@ def make_blueprint() -> Blueprint:
 
     @view.route("/download_unread/<filesystem_id>")
     def download_unread_filesystem_id(filesystem_id: str) -> werkzeug.Response:
+        # TODO: Error handler
+        source = GetSingleSourceAction(db_session=db.session, filesystem_id=filesystem_id).perform()
         unseen_submissions = (
-            Submission.query.join(Source)
-            .filter(Source.deleted_at.is_(None), Source.filesystem_id == filesystem_id)
+            Submission.query
+            .filter(Source.id == source.id)
             .filter(~Submission.seen_files.any(), ~Submission.seen_messages.any())
             .all()
         )
         if len(unseen_submissions) == 0:
             flash(gettext("No unread submissions for this source."), "error")
             return redirect(url_for("col.col", filesystem_id=filesystem_id))
-        source = get_source(filesystem_id)
+
         return download(source.journalist_filename, unseen_submissions)
 
     return view

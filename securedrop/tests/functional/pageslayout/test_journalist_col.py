@@ -33,8 +33,8 @@ def _create_source_and_submission_and_delete_source_key(config_in_use: SecureDro
     from encryption import EncryptionManager
     from tests.functional.conftest import create_source_and_submission
 
-    source_user, _ = create_source_and_submission(config_in_use)
-    EncryptionManager.get_default().delete_source_key_pair(source_user.filesystem_id)
+    source, _ = create_source_and_submission(config_in_use)
+    EncryptionManager.get_default().delete_source_key_pair(source.filesystem_id)
 
 
 @pytest.fixture(scope="function")

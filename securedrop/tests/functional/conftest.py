@@ -11,6 +11,8 @@ from uuid import uuid4
 
 import pytest
 import requests
+
+import models
 from models import Journalist
 from sdconfig import SecureDropConfig
 from selenium.webdriver.firefox.webdriver import WebDriver
@@ -264,7 +266,7 @@ def sd_servers_with_submitted_file(
         yield sd_servers_result
 
 
-def create_source_and_submission(config_in_use: SecureDropConfig) -> Tuple[SourceUser, Path]:
+def create_source_and_submission(config_in_use: SecureDropConfig) -> Tuple[models.Source, Path]:
     """Directly create a source and a submission within the app.
 
     Some tests for the journalist app require a submission to already be present, and this
@@ -275,29 +277,20 @@ def create_source_and_submission(config_in_use: SecureDropConfig) -> Tuple[Sourc
     """
     # This function will be called in a separate Process that runs the app
     # Hence the late imports
-    from encryption import EncryptionManager
     from models import Submission
-    from passphrases import PassphraseGenerator
-    from source_user import create_source_user
     from store import Storage, add_checksum_for_file
+    from tests.factories.models_factories import SourceFactory
     from tests.functional.db_session import get_database_session
 
     # Create a source
-    passphrase = PassphraseGenerator.get_default().generate_passphrase()
     with get_database_session(database_uri=config_in_use.DATABASE_URI) as db_session:
-        source_user = create_source_user(
-            db_session=db_session,
-            source_passphrase=passphrase,
-            source_app_storage=Storage.get_default(),
-        )
-        source_db_record = source_user.get_db_record()
-        EncryptionManager.get_default().generate_source_key_pair(source_user)
+        source_db_record = SourceFactory.create(db_session, Storage.get_default())
 
         # Create a file submission from this source
         source_db_record.interaction_count += 1
         app_storage = Storage.get_default()
         encrypted_file_name = app_storage.save_file_submission(
-            filesystem_id=source_user.filesystem_id,
+            filesystem_id=source_db_record.filesystem_id,
             count=source_db_record.interaction_count,
             journalist_filename=source_db_record.journalist_filename,
             filename="filename.txt",
@@ -316,4 +309,4 @@ def create_source_and_submission(config_in_use: SecureDropConfig) -> Tuple[Sourc
             file_path=submission_file_path,
         )
 
-        return source_user, Path(submission_file_path)
+        return source_db_record, Path(submission_file_path)

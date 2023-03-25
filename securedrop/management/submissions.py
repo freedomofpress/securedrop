@@ -6,7 +6,7 @@ import time
 from argparse import _SubParsersAction
 from typing import List, Optional
 
-from actions.sources_actions import SearchSourcesAction
+from actions.sources_actions import SearchSourcesAction, SearchSourcesFilters
 from db import db
 from flask.ctx import AppContext
 from management import app_context
@@ -181,7 +181,9 @@ def were_there_submissions_today(
     with context or app_context():
         source_updated_today = SearchSourcesAction(
             db_session=db.session,
-            filter_by_was_updated_after=datetime.datetime.utcnow() - datetime.timedelta(hours=24)
+            filters=SearchSourcesFilters(
+                filter_by_was_updated_after=datetime.datetime.utcnow() - datetime.timedelta(hours=24)
+            ),
         ).create_query().first()
         was_one_source_updated_today = source_updated_today is not None
 

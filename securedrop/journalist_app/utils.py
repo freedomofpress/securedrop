@@ -5,6 +5,11 @@ from typing import List, Optional, Union
 
 import flask
 import werkzeug
+
+import models
+from actions.exceptions import NotFoundError
+from actions.sources_actions import SearchSourcesAction, SearchSourcesFilters, DeleteSingleSourceAction, \
+    GetSingleSourceAction
 from db import db
 from encryption import EncryptionManager, GpgKeyNotFoundError
 from flask import Markup, abort, current_app, escape, flash, redirect, send_file, url_for
@@ -346,16 +351,14 @@ def col_delete(cols_selected: List[str]) -> werkzeug.Response:
     return redirect(url_for("main.index"))
 
 
-def delete_source_files(filesystem_id: str) -> None:
+def delete_source_files(source: models.Source) -> None:
     """deletes submissions and replies for specified source"""
-    source = get_source(filesystem_id, include_deleted=True)
-    if source is not None:
-        # queue all files for deletion and remove them from the database
-        for f in source.collection:
-            try:
-                delete_file_object(f)
-            except Exception:
-                pass
+    # queue all files for deletion and remove them from the database
+    for f in source.collection:
+        try:
+            delete_file_object(f)
+        except Exception:
+            pass
 
 
 def col_delete_data(cols_selected: List[str]) -> werkzeug.Response:
@@ -374,7 +377,14 @@ def col_delete_data(cols_selected: List[str]) -> werkzeug.Response:
     else:
 
         for filesystem_id in cols_selected:
-            delete_source_files(filesystem_id)
+            try:
+                source = GetSingleSourceAction(
+                    db_session=db.session, filesystem_id=filesystem_id
+                ).perform()
+            except NotFoundError:
+                pass
+            else:
+                delete_source_files(source)
 
         flash(
             Markup(
@@ -390,37 +400,20 @@ def col_delete_data(cols_selected: List[str]) -> werkzeug.Response:
     return redirect(url_for("main.index"))
 
 
-def delete_collection(filesystem_id: str) -> None:
-    """deletes source account including files and reply key"""
-    # Delete the source's collection of submissions
-    path = Storage.get_default().path(filesystem_id)
-    if os.path.exists(path):
-        Storage.get_default().move_to_shredder(path)
-
-    # Delete the source's reply keypair, if it exists
-    try:
-        EncryptionManager.get_default().delete_source_key_pair(filesystem_id)
-    except GpgKeyNotFoundError:
-        pass
-
-    # Delete their entry in the db
-    source = get_source(filesystem_id, include_deleted=True)
-    db.session.delete(source)
-    db.session.commit()
-
-
 def purge_deleted_sources() -> None:
+    """Deletes all Sources with a non-null `deleted_at` attribute.
     """
-    Deletes all Sources with a non-null `deleted_at` attribute.
-    """
-    sources = Source.query.filter(Source.deleted_at.isnot(None)).order_by(Source.deleted_at).all()
-    if sources:
-        current_app.logger.info("Purging deleted sources (%s)", len(sources))
-    for source in sources:
+    all_sources_to_delete = SearchSourcesAction(
+        db_session=db.session, filters=SearchSourcesFilters(filter_by_is_deleted=True)
+    ).perform()
+    if all_sources_to_delete:
+        current_app.logger.info(f"Purging deleted sources {len(all_sources_to_delete)}")
+
+    for source in all_sources_to_delete:
         try:
-            delete_collection(source.filesystem_id)
-        except Exception as e:
-            current_app.logger.error("Error deleting source %s: %s", source.uuid, e)
+            DeleteSingleSourceAction(db_session=db.session, source=source).perform()
+        except Exception:
+            current_app.logger.exception(f"Error deleting source {source.uuid}")
 
 
 def set_name(user: Journalist, first_name: Optional[str], last_name: Optional[str]) -> None:
@@ -496,10 +489,9 @@ def set_diceware_password(
     return True
 
 
+# TODO(AD): This is only used once; move this to the file where it's used
 def col_download_unread(cols_selected: List[str]) -> werkzeug.Response:
-    """
-    Download all unseen submissions from all selected sources.
-    """
+    """Download all unseen submissions from all selected sources."""
     unseen_submissions = (
         Submission.query.join(Source)
         .filter(Source.deleted_at.is_(None), Source.filesystem_id.in_(cols_selected))
@@ -514,18 +506,16 @@ def col_download_unread(cols_selected: List[str]) -> werkzeug.Response:
     return download("unread", unseen_submissions)
 
 
+# TODO(AD): This is only used once; move this to the file where it's used
 def col_download_all(cols_selected: List[str]) -> werkzeug.Response:
     """Download all submissions from all selected sources."""
-    submissions = []  # type: List[Union[Source, Submission]]
-    for filesystem_id in cols_selected:
-        id = (
-            Source.query.filter(Source.filesystem_id == filesystem_id)
-            .filter_by(deleted_at=None)
-            .one()
-            .id
-        )
-        submissions += Submission.query.filter(Submission.source_id == id).all()
-    return download("all", submissions)
+    all_submissions = (
+        Submission.query.join(Source)
+        .filter(Source.deleted_at.is_(None), Source.filesystem_id.in_(cols_selected))
+        .all()
+    )
+
+    return download("all", all_submissions)
 
 
 def serve_file_with_etag(db_obj: Union[Reply, Submission]) -> flask.Response:

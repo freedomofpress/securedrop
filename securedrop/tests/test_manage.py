@@ -8,8 +8,7 @@ from unittest import mock
 import manage
 from management import submissions
 from models import Journalist, db
-from passphrases import PassphraseGenerator
-from source_user import create_source_user
+from tests.factories.models_factories import SourceFactory
 
 YUBIKEY_HOTP = [
     "cb a0 5f ad 41 a2 ff 4e eb 53 56 3a 1b f7 23 2e ce fc dc",
@@ -204,12 +203,7 @@ def test_were_there_submissions_today(source_app, config, app_storage):
         args = argparse.Namespace(data_root=data_root, verbose=logging.DEBUG)
 
         count_file = os.path.join(data_root, "submissions_today.txt")
-        source_user = create_source_user(
-            db_session=db.session,
-            source_passphrase=PassphraseGenerator.get_default().generate_passphrase(),
-            source_app_storage=app_storage,
-        )
-        source = source_user.get_db_record()
+        source = SourceFactory.create(db.session, app_storage)
         source.last_updated = datetime.datetime.utcnow() - datetime.timedelta(hours=24 * 2)
         db.session.commit()
         submissions.were_there_submissions_today(args, context)
