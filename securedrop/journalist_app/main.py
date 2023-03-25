@@ -212,7 +212,7 @@ def make_blueprint() -> Blueprint:
         source = GetSingleSourceAction(db_session=db.session, filesystem_id=filesystem_id).perform()
         unseen_submissions = (
             Submission.query
-            .filter(Source.id == source.id)
+            .filter(Submission.source_id == source.id)
             .filter(~Submission.seen_files.any(), ~Submission.seen_messages.any())
             .all()
         )
