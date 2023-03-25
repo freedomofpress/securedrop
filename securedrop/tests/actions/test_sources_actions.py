@@ -5,6 +5,7 @@ from typing import List
 import pytest
 
 import models
+from actions.pagination import PaginationConfig
 from actions.sources_actions import SearchSourcesAction, SearchSourcesFilters, DeleteSingleSourceAction
 from encryption import EncryptionManager, GpgKeyNotFoundError
 from journalist_app.utils import mark_seen
@@ -146,6 +147,28 @@ class TestSearchSourcesAction:
         assert {src.id for src in returned_non_pending_sources} == {
             src.id for src in created_non_deleted_sources
         }
+
+    def test_paginate_results_with_config(self, app_db_session, app_storage):
+        # Given an app with some sources
+        all_sources = SourceFactory.create_batch(app_db_session, app_storage, records_count=10)
+
+        # When searching for the first page of all sources, then it succeeds
+        first_page_of_sources = SearchSourcesAction(db_session=app_db_session).perform(
+            paginate_results_with_config=PaginationConfig(page_number=0, page_size=3)
+        )
+
+        # And the expected sources were returned
+        expected_source_ids = {src.id for src in all_sources[0:3]}
+        assert {src.id for src in first_page_of_sources} == expected_source_ids
+
+        # And when searching for the second page of all sources, then it succeeds
+        second_page_of_sources = SearchSourcesAction(db_session=app_db_session).perform(
+            paginate_results_with_config=PaginationConfig(page_number=1, page_size=3)
+        )
+
+        # And the expected sources were returned
+        expected_source_ids = {src.id for src in all_sources[3:6]}
+        assert {src.id for src in second_page_of_sources} == expected_source_ids
 
 
 class TestDeleteSingleSourceAction:

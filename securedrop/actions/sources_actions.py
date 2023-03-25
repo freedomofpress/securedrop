@@ -63,13 +63,6 @@ class SearchSourcesAction(SupportsPagination):
 
         return query
 
-    def perform(self, paginate_results_with_config: Optional[PaginationConfig] = None):
-        query = self.create_query()
-        if paginate_results_with_config:
-            # TODO:
-            pass
-
-        return query.all()
 
 
 class GetSingleSourceAction:
