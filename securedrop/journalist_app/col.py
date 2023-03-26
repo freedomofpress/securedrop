@@ -1,7 +1,6 @@
 from pathlib import Path
 
 import werkzeug
-
 from actions.sources_actions import DeleteSingleSourceAction
 from db import db
 from encryption import EncryptionManager, GpgKeyNotFoundError
@@ -78,7 +77,10 @@ def make_blueprint() -> Blueprint:
                     # Translators: Precedes a message confirming the success of an operation.
                     escape(gettext("Success!")),
                     escape(
-                        gettext(f"The account and data for the source {source_designation} have been deleted.")
+                        gettext(
+                            f"The account and data for the source {source_designation}"
+                            f" have been deleted."
+                        )
                     ),
                 )
             ),

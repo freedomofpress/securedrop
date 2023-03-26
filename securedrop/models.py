@@ -13,9 +13,6 @@ import qrcode
 
 # Using svg because it doesn't require additional dependencies
 import qrcode.image.svg
-from sqlalchemy.ext.hybrid import hybrid_property
-from sqlalchemy.sql import ColumnElement
-
 import two_factor
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives.kdf import scrypt
@@ -25,10 +22,22 @@ from flask import url_for
 from flask_babel import gettext, ngettext
 from markupsafe import Markup
 from passphrases import PassphraseGenerator
-from sqlalchemy import Boolean, Column, DateTime, ForeignKey, Integer, LargeBinary, String, and_, exists
+from sqlalchemy import (
+    Boolean,
+    Column,
+    DateTime,
+    ForeignKey,
+    Integer,
+    LargeBinary,
+    String,
+    and_,
+    exists,
+)
 from sqlalchemy.exc import IntegrityError
+from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.orm import Query, backref, relationship
 from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
+from sqlalchemy.sql import ColumnElement
 from store import Storage
 
 _default_instance_config: Optional["InstanceConfig"] = None
@@ -135,8 +144,8 @@ class Source(db.Model):
             return False
 
     @is_starred.expression
-    def _is_starred_expression(cls) -> ColumnElement:
-        return exists().where(and_(cls.id == SourceStar.source_id, SourceStar.starred == True))
+    def is_starred(cls) -> ColumnElement:
+        return exists().where(and_(cls.id == SourceStar.source_id, SourceStar.starred.is_(True)))
 
     def to_json(self) -> "Dict[str, object]":
         docs_msg_count = self.documents_messages_count()

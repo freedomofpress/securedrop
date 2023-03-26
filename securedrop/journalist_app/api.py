@@ -7,9 +7,12 @@ from uuid import UUID
 
 import flask
 import werkzeug
-
 from actions.exceptions import NotFoundError
-from actions.sources_actions import SearchSourcesAction, DeleteSingleSourceAction, GetSingleSourceAction
+from actions.sources_actions import (
+    DeleteSingleSourceAction,
+    GetSingleSourceAction,
+    SearchSourcesAction,
+)
 from db import db
 from flask import Blueprint, abort, jsonify, request
 from journalist_app import utils
@@ -20,7 +23,6 @@ from models import (
     LoginThrottledException,
     Reply,
     SeenReply,
-    Source,
     Submission,
     WrongPasswordException,
 )
@@ -134,9 +136,7 @@ def make_blueprint() -> Blueprint:
             return jsonify(source.to_json()), 200
         elif request.method == "DELETE":
             source = GetSingleSourceAction(db_session=db.session, uuid=source_uuid).perform()
-            DeleteSingleSourceAction(
-                db_session=db.session, source=source
-            ).perform()
+            DeleteSingleSourceAction(db_session=db.session, source=source).perform()
             return jsonify({"message": "Source and submissions deleted"}), 200
         else:
             abort(405)
@@ -370,8 +370,8 @@ def make_blueprint() -> Blueprint:
         return jsonify({"message": "Your token has been revoked."}), 200
 
     @api.errorhandler(NotFoundError)
-    def handle_not_found(e: NotFoundError) -> Tuple[str, int]:
-        return "", 404
+    def handle_not_found_error(e: NotFoundError) -> Tuple[flask.Response, int]:
+        return jsonify({"message": "Not Found."}), 404
 
     def _handle_api_http_exception(
         error: werkzeug.exceptions.HTTPException,
@@ -385,5 +385,4 @@ def make_blueprint() -> Blueprint:
     for code in default_exceptions:
         api.errorhandler(code)(_handle_api_http_exception)
 
-    api.register_error_handler()
     return api

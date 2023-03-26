@@ -39,20 +39,20 @@ class TestEncryptionManager:
 
         # And the newly-created key's fingerprint was added to Redis
         fingerprint_in_redis = encryption_mgr._redis.hget(
-            encryption_mgr.REDIS_FINGERPRINT_HASH, source_filesystem_id
+            encryption_mgr.REDIS_FINGERPRINT_HASH, source_user.filesystem_id
         )
         assert fingerprint_in_redis
         source_key_fingerprint = encryption_mgr.get_source_key_fingerprint(
-            source_filesystem_id
+            source_user.filesystem_id
         )
         assert fingerprint_in_redis == source_key_fingerprint
 
         # And the user's newly-generated public key can be retrieved
-        assert encryption_mgr.get_source_public_key(source_filesystem_id)
+        assert encryption_mgr.get_source_public_key(source_user.filesystem_id)
 
         # And the key has a hardcoded creation date to avoid leaking information about when sources
         # first created their account
-        source_key_details = encryption_mgr._get_source_key_details(source_filesystem_id)
+        source_key_details = encryption_mgr._get_source_key_details(source_user.filesystem_id)
         assert source_key_details
         creation_date = _parse_gpg_date_string(source_key_details["date"])
         assert creation_date.date() == EncryptionManager.DEFAULT_KEY_CREATION_DATE

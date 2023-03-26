@@ -22,7 +22,6 @@ from passphrases import PassphraseGenerator
 from source_app import api as source_app_api
 from source_app import get_logo_url
 from source_app.session_manager import SessionManager
-
 from tests import utils
 from tests.utils.db_helper import new_codename, submit
 from tests.utils.instrument import InstrumentedApp

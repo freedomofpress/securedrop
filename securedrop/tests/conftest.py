@@ -21,10 +21,9 @@ from encryption import EncryptionManager
 from flask import Flask, url_for
 from hypothesis import settings
 from journalist_app import create_app as create_journalist_app
-from passphrases import PassphraseGenerator
 from sdconfig import DEFAULT_SECUREDROP_ROOT, SecureDropConfig
 from source_app import create_app as create_source_app
-from source_user import _SourceScryptManager, create_source_user
+from source_user import _SourceScryptManager
 from store import Storage
 from tests import utils
 from tests.factories.configs_factories import SecureDropConfigFactory
@@ -232,15 +231,10 @@ def test_admin(journalist_app: Flask) -> Dict[str, Any]:
 def test_source(journalist_app: Flask, app_storage: Storage) -> Dict[str, Any]:
     with journalist_app.app_context():
         source = SourceFactory.create(db.session, app_storage)
-        source_user = create_source_user(
-            db_session=db.session,
-            source_passphrase=passphrase,
-            source_app_storage=app_storage,
-        )
         return {
             "source": source,
             # TODO(AD): Eventually the next keys could be removed as they are in source
-            "filesystem_id": source_user.filesystem_id,
+            "filesystem_id": source.filesystem_id,
             "uuid": source.uuid,
             "id": source.id,
         }

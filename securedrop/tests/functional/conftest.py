@@ -9,14 +9,12 @@ from pathlib import Path
 from typing import Any, Callable, Generator, Optional, Tuple
 from uuid import uuid4
 
+import models
 import pytest
 import requests
-
-import models
 from models import Journalist
 from sdconfig import SecureDropConfig
 from selenium.webdriver.firefox.webdriver import WebDriver
-from source_user import SourceUser
 from tests.factories.configs_factories import SecureDropConfigFactory
 from tests.functional.db_session import get_database_session
 from tests.functional.web_drivers import WebDriverTypeEnum, get_web_driver
@@ -284,29 +282,29 @@ def create_source_and_submission(config_in_use: SecureDropConfig) -> Tuple[model
 
     # Create a source
     with get_database_session(database_uri=config_in_use.DATABASE_URI) as db_session:
-        source_db_record = SourceFactory.create(db_session, Storage.get_default())
+        source = SourceFactory.create(db_session, Storage.get_default())
 
         # Create a file submission from this source
-        source_db_record.interaction_count += 1
+        source.interaction_count += 1
         app_storage = Storage.get_default()
         encrypted_file_name = app_storage.save_file_submission(
-            filesystem_id=source_db_record.filesystem_id,
-            count=source_db_record.interaction_count,
-            journalist_filename=source_db_record.journalist_filename,
+            filesystem_id=source.filesystem_id,
+            count=source.interaction_count,
+            journalist_filename=source.journalist_filename,
             filename="filename.txt",
             stream=BytesIO(b"File with S3cr3t content"),
         )
-        submission = Submission(source_db_record, encrypted_file_name, app_storage)
+        submission = Submission(source, encrypted_file_name, app_storage)
         db_session.add(submission)
-        source_db_record.pending = False
-        source_db_record.last_updated = datetime.now(timezone.utc)
+        source.pending = False
+        source.last_updated = datetime.now(timezone.utc)
         db_session.commit()
 
-        submission_file_path = app_storage.path(source_user.filesystem_id, submission.filename)
+        submission_file_path = app_storage.path(source.filesystem_id, submission.filename)
         add_checksum_for_file(
             session=db_session,
             db_obj=submission,
             file_path=submission_file_path,
         )
 
-        return source_db_record, Path(submission_file_path)
+        return source, Path(submission_file_path)

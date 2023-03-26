@@ -1,4 +1,4 @@
-from abc import abstractmethod, ABC
+from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from typing import Optional
 
@@ -18,18 +18,18 @@ class PaginationConfig:
 
 
 class SupportsPagination(ABC):
-
     @abstractmethod
     def create_query(self) -> Query:
         pass
-
 
     def perform(self, paginate_results_with_config: Optional[PaginationConfig] = None):
         query = self.create_query()
 
         if paginate_results_with_config:
-            offset = paginate_results_with_config.page_size * paginate_results_with_config.page_number
+            offset = (
+                paginate_results_with_config.page_size * paginate_results_with_config.page_number
+            )
             limit = paginate_results_with_config.page_size
-            query = query.offset(offset).limit(limit).all()
+            query = query.offset(offset).limit(limit)
 
         return query.all()

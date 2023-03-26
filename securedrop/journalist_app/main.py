@@ -4,8 +4,7 @@ from typing import Union
 
 import store
 import werkzeug
-
-from actions.sources_actions import SearchSourcesAction, GetSingleSourceAction
+from actions.sources_actions import GetSingleSourceAction, SearchSourcesAction
 from db import db
 from encryption import EncryptionManager
 from flask import (
@@ -25,8 +24,7 @@ from flask_babel import gettext
 from journalist_app.forms import ReplyForm
 from journalist_app.sessions import session
 from journalist_app.utils import bulk_delete, download, get_source, validate_user
-from models import Reply, SeenReply, Source, SourceStar, Submission
-from sqlalchemy.orm import joinedload
+from models import Reply, SeenReply, Submission
 from sqlalchemy.sql import func
 from store import Storage
 
@@ -76,7 +74,8 @@ def make_blueprint() -> Blueprint:
         unread_submission_counts_results = (
             db.session.query(Submission.source_id, func.count("*"))
             .filter_by(downloaded=False)
-            .group_by(Submission.source_id).all()
+            .group_by(Submission.source_id)
+            .all()
         )
         source_ids_to_unread_submission_counts = {
             source_id: subs_count for source_id, subs_count in unread_submission_counts_results
@@ -211,8 +210,7 @@ def make_blueprint() -> Blueprint:
         # TODO: Error handler
         source = GetSingleSourceAction(db_session=db.session, filesystem_id=filesystem_id).perform()
         unseen_submissions = (
-            Submission.query
-            .filter(Submission.source_id == source.id)
+            Submission.query.filter(Submission.source_id == source.id)
             .filter(~Submission.seen_files.any(), ~Submission.seen_messages.any())
             .all()
         )

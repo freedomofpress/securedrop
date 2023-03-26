@@ -1,17 +1,18 @@
 import binascii
-import os
 from datetime import datetime, timezone
 from typing import List, Optional, Union
 
 import flask
-import werkzeug
-
 import models
+import werkzeug
 from actions.exceptions import NotFoundError
-from actions.sources_actions import SearchSourcesAction, SearchSourcesFilters, DeleteSingleSourceAction, \
-    GetSingleSourceAction
+from actions.sources_actions import (
+    DeleteSingleSourceAction,
+    GetSingleSourceAction,
+    SearchSourcesAction,
+    SearchSourcesFilters,
+)
 from db import db
-from encryption import EncryptionManager, GpgKeyNotFoundError
 from flask import Markup, abort, current_app, escape, flash, redirect, send_file, url_for
 from flask_babel import gettext, ngettext
 from journalist_app.sessions import session
@@ -401,8 +402,7 @@ def col_delete_data(cols_selected: List[str]) -> werkzeug.Response:
 
 
 def purge_deleted_sources() -> None:
-    """Deletes all Sources with a non-null `deleted_at` attribute.
-    """
+    """Deletes all Sources with a non-null `deleted_at` attribute."""
     all_sources_to_delete = SearchSourcesAction(
         db_session=db.session, filters=SearchSourcesFilters(filter_by_is_deleted=True)
     ).perform()

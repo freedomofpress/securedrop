@@ -55,7 +55,11 @@ class SourceFactory:
         created_sources = []
         for _ in range(records_count):
             source = cls.create(
-                db_session, app_storage, pending=pending, deleted_at=deleted_at, is_starred=is_starred,
+                db_session,
+                app_storage,
+                pending=pending,
+                deleted_at=deleted_at,
+                is_starred=is_starred,
             )
             created_sources.append(source)
         return created_sources

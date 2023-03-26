@@ -2,11 +2,14 @@ from datetime import datetime
 from pathlib import Path
 from typing import List
 
-import pytest
-
 import models
+import pytest
 from actions.pagination import PaginationConfig
-from actions.sources_actions import SearchSourcesAction, SearchSourcesFilters, DeleteSingleSourceAction
+from actions.sources_actions import (
+    DeleteSingleSourceAction,
+    SearchSourcesAction,
+    SearchSourcesFilters,
+)
 from encryption import EncryptionManager, GpgKeyNotFoundError
 from journalist_app.utils import mark_seen
 from tests import utils
@@ -27,9 +30,7 @@ class TestSearchSourcesAction:
             app_db_session, app_storage, records_count=3, pending=False
         )
         # Including some sources that haven't submitted anything yet
-        SourceFactory.create_batch(
-            app_db_session, app_storage, records_count=4, pending=True
-        )
+        SourceFactory.create_batch(app_db_session, app_storage, records_count=4, pending=True)
         # And some sources that were deleted
         SourceFactory.create_batch(
             app_db_session, app_storage, records_count=3, deleted_at=datetime.utcnow()
@@ -55,7 +56,8 @@ class TestSearchSourcesAction:
 
         # When searching for all pending sources, then it succeeds
         returned_pending_sources = SearchSourcesAction(
-            db_session=app_db_session, filters=SearchSourcesFilters(filter_by_is_pending=True),
+            db_session=app_db_session,
+            filters=SearchSourcesFilters(filter_by_is_pending=True),
         ).perform()
 
         # And the expected sources were returned
@@ -65,7 +67,8 @@ class TestSearchSourcesAction:
 
         # And when searching for all NON-pending sources, then it succeeds
         returned_non_pending_sources = SearchSourcesAction(
-            db_session=app_db_session, filters=SearchSourcesFilters(filter_by_is_pending=False),
+            db_session=app_db_session,
+            filters=SearchSourcesFilters(filter_by_is_pending=False),
         ).perform()
 
         # And the expected sources were returned
@@ -92,7 +95,8 @@ class TestSearchSourcesAction:
 
         # When searching for all starred sources, then it succeeds
         returned_starred_sources = SearchSourcesAction(
-            db_session=app_db_session, filters=SearchSourcesFilters(filter_by_is_starred=True),
+            db_session=app_db_session,
+            filters=SearchSourcesFilters(filter_by_is_starred=True),
         ).perform()
 
         # And the expected sources were returned
@@ -102,7 +106,8 @@ class TestSearchSourcesAction:
 
         # And when searching for all NON-starred sources, then it succeeds
         returned_non_starred_sources = SearchSourcesAction(
-            db_session=app_db_session, filters=SearchSourcesFilters(filter_by_is_starred=False),
+            db_session=app_db_session,
+            filters=SearchSourcesFilters(filter_by_is_starred=False),
         ).perform()
 
         # And the expected sources were returned
@@ -110,12 +115,8 @@ class TestSearchSourcesAction:
         expected_non_starred_source_ids.update(
             {src.id for src in created_starred_then_un_starred_sources}
         )
-        expected_non_starred_source_ids.update(
-            {src.id for src in created_non_starred_sources}
-        )
-        assert expected_non_starred_source_ids == {
-            src.id for src in returned_non_starred_sources
-        }
+        expected_non_starred_source_ids.update({src.id for src in created_non_starred_sources})
+        assert expected_non_starred_source_ids == {src.id for src in returned_non_starred_sources}
 
     def test_filter_by_is_deleted(self, app_db_session, app_storage):
         # Given an app with sources that are deleted
@@ -130,7 +131,8 @@ class TestSearchSourcesAction:
 
         # When searching for all deleted sources, then it succeeds
         returned_deleted_sources = SearchSourcesAction(
-            db_session=app_db_session, filters=SearchSourcesFilters(filter_by_is_deleted=True),
+            db_session=app_db_session,
+            filters=SearchSourcesFilters(filter_by_is_deleted=True),
         ).perform()
 
         # And the expected sources were returned
@@ -140,7 +142,8 @@ class TestSearchSourcesAction:
 
         # And when searching for all NON-deleted sources, then it succeeds
         returned_non_pending_sources = SearchSourcesAction(
-            db_session=app_db_session, filters=SearchSourcesFilters(filter_by_is_deleted=False),
+            db_session=app_db_session,
+            filters=SearchSourcesFilters(filter_by_is_deleted=False),
         ).perform()
 
         # And the expected sources were returned
@@ -172,7 +175,6 @@ class TestSearchSourcesAction:
 
 
 class TestDeleteSingleSourceAction:
-
     def test(self, app_db_session, app_storage, test_journo):
         # Given an app with some sources including one source to delete
         source = SourceFactory.create(app_db_session, app_storage)
@@ -184,12 +186,8 @@ class TestDeleteSingleSourceAction:
 
         # And the source has some submissions, messages and replies
         journo = test_journo["journalist"]
-        all_submissions = utils.db_helper.submit(
-            app_storage, source, 2, submission_type="file"
-        )
-        all_messages = utils.db_helper.submit(
-            app_storage, source, 2, submission_type="message"
-        )
+        all_submissions = utils.db_helper.submit(app_storage, source, 2, submission_type="file")
+        all_messages = utils.db_helper.submit(app_storage, source, 2, submission_type="message")
         all_replies = utils.db_helper.reply(app_storage, journo, source, 2)
         assert app_db_session.query(models.Submission).filter_by(source_id=source.id).all()
         assert app_db_session.query(models.Reply).filter_by(source_id=source.id).all()
@@ -202,16 +200,20 @@ class TestDeleteSingleSourceAction:
         assert app_db_session.query(models.SeenMessage).filter_by(journalist_id=journo.id).all()
         assert app_db_session.query(models.SeenReply).filter_by(journalist_id=journo.id).all()
 
-        # And the submissions point to existing files
-        all_submissions_file_paths: List[Path] = []
-        for submission in all_submissions:
-            submission_file_path = Path(app_storage.path(source.filesystem_id, submission.filename))
-            assert submission_file_path.exists()
-            all_submissions_file_paths.append(submission_file_path)
+        # And the submissions point to actual files
+        all_submissions_file_paths: List[Path] = [
+            Path(app_storage.path(source.filesystem_id, submission.filename))
+            for submission in all_submissions
+        ]
         assert all_submissions_file_paths
+        for file_path in all_submissions_file_paths:
+            assert file_path.exists()
 
         # When deleting the source, then it succeeds
         DeleteSingleSourceAction(db_session=app_db_session, source=source).perform()
+
+        # And the source's DB record was deleted
+        assert app_db_session.query(models.Source).get(source.id) is None
 
         # And the source's key was deleted
         with pytest.raises(GpgKeyNotFoundError):
@@ -225,10 +227,7 @@ class TestDeleteSingleSourceAction:
         for file_path in all_submissions_file_paths:
             assert not file_path.exists()
 
-        # And the records to track whether messages have been seen were deleted
+        # And the records to track whether the submissions have been seen were deleted
         assert not app_db_session.query(models.SeenFile).filter_by(journalist_id=journo.id).all()
         assert not app_db_session.query(models.SeenMessage).filter_by(journalist_id=journo.id).all()
         assert not app_db_session.query(models.SeenReply).filter_by(journalist_id=journo.id).all()
-
-        # And the source's DB record was deleted
-        assert app_db_session.query(models.Source).get(source.id) is None

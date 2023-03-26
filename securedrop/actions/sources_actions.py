@@ -4,12 +4,11 @@ from enum import Enum
 from pathlib import Path
 from typing import Optional
 
-from sqlalchemy.orm import Session
-
 import models
 from actions.exceptions import NotFoundError
-from actions.pagination import SupportsPagination, PaginationConfig
+from actions.pagination import SupportsPagination
 from encryption import EncryptionManager, GpgKeyNotFoundError
+from sqlalchemy.orm import Session
 from store import Storage
 
 
@@ -34,7 +33,7 @@ class SearchSourcesAction(SupportsPagination):
         self,
         db_session: Session,
         filters: SearchSourcesFilters = SearchSourcesFilters(),
-        order_by: Optional[SearchSourcesOrderByEnum] = None
+        order_by: Optional[SearchSourcesOrderByEnum] = None,
     ):
         self._db_session = db_session
         self._filters = filters
@@ -45,7 +44,7 @@ class SearchSourcesAction(SupportsPagination):
         query = self._db_session.query(models.Source)
 
         if self._filters.filter_by_is_deleted is True:
-            query = query.filter(models.Source.deleted_at.is_not(None))
+            query = query.filter(models.Source.deleted_at.isnot(None))
         elif self._filters.filter_by_is_deleted is False:
             query = query.filter(models.Source.deleted_at.is_(None))
         else:
@@ -59,14 +58,14 @@ class SearchSourcesAction(SupportsPagination):
             query = query.filter(models.Source.is_starred == self._filters.filter_by_is_starred)
 
         if self._filters.filter_by_was_updated_after is not None:
-            query = query.filter(models.Source.last_updated > self._filters.filter_by_was_updated_after)
+            query = query.filter(
+                models.Source.last_updated > self._filters.filter_by_was_updated_after
+            )
 
         return query
 
 
-
 class GetSingleSourceAction:
-
     def __init__(
         self,
         db_session: Session,
@@ -88,9 +87,11 @@ class GetSingleSourceAction:
         if self._uuid:
             source = self._db_session.query(models.Source).filter_by(uuid=self._uuid).one_or_none()
         elif self._filesystem_id:
-            source = self._db_session.query(models.Source).filter_by(
-                filesystem_id=self._filesystem_id
-            ).one_or_none()
+            source = (
+                self._db_session.query(models.Source)
+                .filter_by(filesystem_id=self._filesystem_id)
+                .one_or_none()
+            )
         else:
             raise ValueError("Should never happen")
 

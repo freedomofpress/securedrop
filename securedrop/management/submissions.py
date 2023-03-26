@@ -10,7 +10,7 @@ from actions.sources_actions import SearchSourcesAction, SearchSourcesFilters
 from db import db
 from flask.ctx import AppContext
 from management import app_context
-from models import Reply, Source, Submission
+from models import Reply, Submission
 from rm import secure_delete
 
 
@@ -179,12 +179,17 @@ def were_there_submissions_today(
     args: argparse.Namespace, context: Optional[AppContext] = None
 ) -> None:
     with context or app_context():
-        source_updated_today = SearchSourcesAction(
-            db_session=db.session,
-            filters=SearchSourcesFilters(
-                filter_by_was_updated_after=datetime.datetime.utcnow() - datetime.timedelta(hours=24)
-            ),
-        ).create_query().first()
+        source_updated_today = (
+            SearchSourcesAction(
+                db_session=db.session,
+                filters=SearchSourcesFilters(
+                    filter_by_was_updated_after=datetime.datetime.utcnow()
+                    - datetime.timedelta(hours=24)
+                ),
+            )
+            .create_query()
+            .first()
+        )
         was_one_source_updated_today = source_updated_today is not None
 
         count_file = os.path.join(args.data_root, "submissions_today.txt")

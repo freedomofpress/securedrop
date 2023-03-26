@@ -13,7 +13,6 @@ import store
 from db import db
 from journalist_app import create_app
 from models import Reply, Submission
-from passphrases import PassphraseGenerator
 from rq.job import Job
 from store import Storage, async_add_checksum_for_file, queued_add_checksum_for_file
 from tests import utils
