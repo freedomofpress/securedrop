@@ -54,6 +54,7 @@ def commit_account_changes(user: Journalist) -> None:
             flash(gettext("Account updated."), "success")
 
 
+# TODO: Remove
 def get_source(filesystem_id: str, include_deleted: bool = False) -> Source:
     """
     Return the Source object with `filesystem_id`
