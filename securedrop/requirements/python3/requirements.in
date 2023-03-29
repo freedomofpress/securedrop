@@ -12,7 +12,7 @@ Flask-WTF>=1.0.0
 Flask>=2.0.3,<2.1.0
 Jinja2>=3.0.0
 markupsafe>=2.0
-mod_wsgi
+mod_wsgi>=4.9.3
 pretty-bad-protocol>=3.1.1
 psutil>=5.6.6
 qrcode

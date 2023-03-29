@@ -208,8 +208,8 @@ markupsafe==2.1.2 \
     #   mako
     #   werkzeug
     #   wtforms
-mod-wsgi==4.6.7 \
-    --hash=sha256:b788abaf0b903a64a7bb8dae609f2e4790c87e6f3d716aa6bc97936410fcbfcc
+mod-wsgi==4.9.4 \
+    --hash=sha256:8e762662ea5b01afc386bbcfbaa079748eb6203ab1d6d3a3dac9237f5666cfc9
     # via -r requirements/python3/requirements.in
 pretty-bad-protocol==3.1.1 \
     --hash=sha256:fb73797eb6344e3680c919e2af367f9a019ee7c189d3ed7f5d843edde911f73b
