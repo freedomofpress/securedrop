@@ -50,6 +50,14 @@
   tags:
     - apt
 
+- name: Remove Ubuntu Advantage
+  apt:
+    name: ubuntu-advantage-tools
+    state: absent
+    purge: yes
+  tags:
+    - apt
+
 - name: Ensure dist-upgrade before SecureDrop install
   apt:
     upgrade: dist
