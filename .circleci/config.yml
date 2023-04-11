@@ -57,6 +57,12 @@ orbs:
 
 slack-fail-post-step: &slack-fail-post-step
   post-steps:
+    - run:
+        name: Slack - Skip from Forks
+        command: |
+          if [ -z "$SLACK_ACCESS_TOKEN" ]; then
+            circleci-agent step halt
+          fi
     - slack/notify:
         channel: C01EY9C1X45
         event: fail
