@@ -22,6 +22,9 @@ case "$1" in
 
     # Disable fwupd-refresh (#6204)
     systemctl is-enabled fwupd-refresh.timer && systemctl disable fwupd-refresh.timer
+    # And disable Ubuntu Pro's ua-timer and esm-cache (#6773)
+    systemctl is-enabled ua-timer.timer && systemctl disable ua-timer.timer
+    systemctl mask esm-cache
 
     ;;
     abort-upgrade|abort-remove|abort-deconfigure)
