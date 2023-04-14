@@ -109,10 +109,6 @@ migrate_crontab() {
 #
 #
 refresh_bytecode() {
-    # Remove any existing byte code files, to ensure that obsolete
-    # dependencies can't linger after they've been removed.
-    find "${SDVE}" -name '*.py[co]' -delete
-    find /var/www/securedrop -name '*.py[co]' -delete
     # Now generate the new byte-code
     py3compile "${SDVE}"
     py3compile /var/www/securedrop
