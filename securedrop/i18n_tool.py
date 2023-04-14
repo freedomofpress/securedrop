@@ -104,9 +104,19 @@ class I18NTool:
                 for translation in glob.iglob(tglob):
                     subprocess.check_call(
                         [
+                            "msgattrib",
+                            "--no-fuzzy",
+                            "--output-file",
+                            translation,
+                            translation,
+                        ]
+                    )
+                    subprocess.check_call(
+                        [
                             "msgmerge",
                             "--previous",
                             "--update",
+                            "--no-fuzzy-matching",
                             "--no-wrap",
                             translation,
                             messages_file,
