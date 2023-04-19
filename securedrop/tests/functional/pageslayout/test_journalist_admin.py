@@ -24,7 +24,7 @@ import pytest
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver import ActionChains
 from tests.functional.app_navigators.journalist_app_nav import JournalistAppNavigator
-from tests.functional.pageslayout.utils import list_locales, save_screenshot_and_html
+from tests.functional.pageslayout.utils import list_locales, save_static_data
 
 
 @pytest.mark.parametrize("locale", list_locales())
@@ -50,14 +50,14 @@ class TestAdminLayoutAddAndEditUser:
 
         # Take a screenshot of the admin interface
         journ_app_nav.admin_visits_admin_interface()
-        save_screenshot_and_html(journ_app_nav.driver, locale, "journalist-admin_interface_index")
+        save_static_data(journ_app_nav.driver, locale, "journalist-admin_interface_index")
 
         # Take screenshots of the steps for creating an hotp journalist
         def screenshot_of_add_user_hotp_form() -> None:
-            save_screenshot_and_html(journ_app_nav.driver, locale, "journalist-admin_add_user_hotp")
+            save_static_data(journ_app_nav.driver, locale, "journalist-admin_add_user_hotp")
 
         def screenshot_of_journalist_new_user_two_factor_hotp() -> None:
-            save_screenshot_and_html(
+            save_static_data(
                 journ_app_nav.driver, locale, "journalist-admin_new_user_two_factor_hotp"
             )
 
@@ -67,17 +67,17 @@ class TestAdminLayoutAddAndEditUser:
             callback_before_submitting_2fa_step=screenshot_of_journalist_new_user_two_factor_hotp,
         )
         new_user_username, new_user_pw, new_user_otp_secret = result
-        save_screenshot_and_html(journ_app_nav.driver, locale, "journalist-admin")
+        save_static_data(journ_app_nav.driver, locale, "journalist-admin")
 
         # Take a screenshot of the new journalist's edit page
         journ_app_nav.admin_visits_user_edit_page(username_of_journalist_to_edit=new_user_username)
-        save_screenshot_and_html(journ_app_nav.driver, locale, "journalist-edit_account_admin")
+        save_static_data(journ_app_nav.driver, locale, "journalist-edit_account_admin")
         # The documentation uses an identical screenshot with a different name:
         # https://github.com/freedomofpress/securedrop-docs/blob/main/docs/images/manual
         # /screenshots/journalist-admin_edit_hotp_secret.png
         # So we take the same screenshot again here
         # TODO(AD): Update the documentation to use a single screenshot
-        save_screenshot_and_html(journ_app_nav.driver, locale, "journalist-admin_edit_hotp_secret")
+        save_static_data(journ_app_nav.driver, locale, "journalist-admin_edit_hotp_secret")
 
         # Then the admin resets the new journalist's hotp
         def _admin_visits_reset_2fa_hotp_step() -> None:
@@ -135,10 +135,10 @@ class TestAdminLayoutAddAndEditUser:
 
         # Take screenshots of the steps for creating a totp journalist
         def screenshot_of_add_user_totp_form() -> None:
-            save_screenshot_and_html(journ_app_nav.driver, locale, "journalist-admin_add_user_totp")
+            save_static_data(journ_app_nav.driver, locale, "journalist-admin_add_user_totp")
 
         def screenshot_of_journalist_new_user_two_factor_totp() -> None:
-            save_screenshot_and_html(
+            save_static_data(
                 journ_app_nav.driver, locale, "journalist-admin_new_user_two_factor_totp"
             )
 
@@ -185,7 +185,7 @@ class TestAdminLayoutAddAndEditUser:
 
         # Then it succeeds
         # Take a screenshot
-        save_screenshot_and_html(journ_app_nav.driver, locale, "journalist-admin_edit_totp_secret")
+        save_static_data(journ_app_nav.driver, locale, "journalist-admin_edit_totp_secret")
 
     @staticmethod
     def _retry_2fa_pop_ups(
@@ -240,9 +240,7 @@ class TestAdminLayoutEditConfig:
         # Take a screenshot of the system config page
         journ_app_nav.admin_visits_admin_interface()
         journ_app_nav.admin_visits_system_config_page()
-        save_screenshot_and_html(
-            journ_app_nav.driver, locale, "journalist-admin_system_config_page"
-        )
+        save_static_data(journ_app_nav.driver, locale, "journalist-admin_system_config_page")
 
         # When the admin tries to upload a new logo
         current_file_path = Path(__file__).absolute().parent
@@ -259,9 +257,7 @@ class TestAdminLayoutEditConfig:
         journ_app_nav.nav_helper.wait_for(updated_image, timeout=20)
 
         # Take a screenshot
-        save_screenshot_and_html(
-            journ_app_nav.driver, locale, "journalist-admin_changes_logo_image"
-        )
+        save_static_data(journ_app_nav.driver, locale, "journalist-admin_changes_logo_image")
 
     def test_ossec_alert_button(self, locale, sd_servers, firefox_web_driver):
         # Given an SD server
@@ -294,6 +290,4 @@ class TestAdminLayoutEditConfig:
         journ_app_nav.nav_helper.wait_for(test_alert_sent)
 
         # Take a screenshot
-        save_screenshot_and_html(
-            journ_app_nav.driver, locale, "journalist-admin_ossec_alert_button"
-        )
+        save_static_data(journ_app_nav.driver, locale, "journalist-admin_ossec_alert_button")

@@ -5,12 +5,14 @@ from typing import List
 
 from PIL import Image
 from selenium.webdriver.firefox.webdriver import WebDriver
+from tests.functional.pageslayout.accessibility import sniff_accessibility_issues
 
 _SCREENSHOTS_DIR = (Path(__file__).parent / "screenshots").absolute()
 _HTML_DIR = (Path(__file__).parent / "html").absolute()
 
 
-def save_screenshot_and_html(driver: WebDriver, locale: str, test_name: str) -> None:
+def save_static_data(driver: WebDriver, locale: str, test_name: str) -> None:
+    """Save a screenshot, a copy of the static HTML, and the output of accessibility sniffs."""
     # Save a screenshot
     locale_screenshot_dir = _SCREENSHOTS_DIR / locale
     locale_screenshot_dir.mkdir(parents=True, exist_ok=True)
@@ -25,6 +27,8 @@ def save_screenshot_and_html(driver: WebDriver, locale: str, test_name: str) -> 
 
     html = driver.page_source
     (locale_html_dir / f"{test_name}.html").write_text(html)
+
+    sniff_accessibility_issues(driver, locale, test_name)
 
 
 def _autocrop_btm(img, bottom_padding=12):

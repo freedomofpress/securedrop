@@ -282,6 +282,12 @@ validate-test-html:
 	@$(DEVSHELL) html5validator tests/functional/pageslayout/html
 	@echo
 
+.PHONY: accessibility-summary
+accessibility-summary:
+	@echo "███ Processing accessibility results..."
+	@$(DEVSHELL) $(SDBIN)/summarize-accessibility-info
+	cat securedrop/tests/functional/pageslayout/accessibility-info/summary.txt
+
 .PHONY: docker-vnc
 docker-vnc:  ## Open a VNC connection to a running Docker instance.
 	@echo "███ Opening VNC connection to dev container..."

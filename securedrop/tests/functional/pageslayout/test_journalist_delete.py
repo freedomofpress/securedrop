@@ -17,7 +17,7 @@
 #
 import pytest
 from tests.functional.app_navigators.journalist_app_nav import JournalistAppNavigator
-from tests.functional.pageslayout.utils import list_locales, save_screenshot_and_html
+from tests.functional.pageslayout.utils import list_locales, save_static_data
 
 
 @pytest.mark.parametrize("locale", list_locales())
@@ -44,7 +44,7 @@ class TestJournalistLayoutDelete:
         journ_app_nav.journalist_clicks_delete_selected_link()
 
         journ_app_nav.journalist_confirm_delete_selected()
-        save_screenshot_and_html(journ_app_nav.driver, locale, "journalist-delete_none")
+        save_static_data(journ_app_nav.driver, locale, "journalist-delete_none")
 
     def test_delete_one_confirmation(
         self, locale, sd_servers_with_submitted_file, firefox_web_driver
@@ -71,7 +71,7 @@ class TestJournalistLayoutDelete:
 
         # Take a screenshot of the confirmation prompt when the journalist clicks the delete button
         journ_app_nav.journalist_clicks_delete_selected_link()
-        save_screenshot_and_html(journ_app_nav.driver, locale, "journalist-delete_one_confirmation")
+        save_static_data(journ_app_nav.driver, locale, "journalist-delete_one_confirmation")
 
     def test_delete_all_confirmation(
         self, locale, sd_servers_with_submitted_file, firefox_web_driver
@@ -95,7 +95,7 @@ class TestJournalistLayoutDelete:
 
         # Take a screenshot of the prompt when the journalist clicks the delete all button
         journ_app_nav.journalist_clicks_delete_all_and_sees_confirmation()
-        save_screenshot_and_html(journ_app_nav.driver, locale, "journalist-delete_all_confirmation")
+        save_static_data(journ_app_nav.driver, locale, "journalist-delete_all_confirmation")
 
     def test_delete_one(self, locale, sd_servers_with_submitted_file, firefox_web_driver):
         # Given an SD server with a file submitted by a source
@@ -122,7 +122,7 @@ class TestJournalistLayoutDelete:
         journ_app_nav.nav_helper.safe_click_by_id("delete-selected")
 
         # Take a screenshot
-        save_screenshot_and_html(journ_app_nav.driver, locale, "journalist-delete_one")
+        save_static_data(journ_app_nav.driver, locale, "journalist-delete_one")
 
     def test_delete_all(self, locale, sd_servers_with_submitted_file, firefox_web_driver):
         # Given an SD server with a file submitted by a source
@@ -146,4 +146,4 @@ class TestJournalistLayoutDelete:
         journ_app_nav.journalist_confirms_delete_selected()
 
         # Take a screenshot
-        save_screenshot_and_html(journ_app_nav.driver, locale, "journalist-delete_all")
+        save_static_data(journ_app_nav.driver, locale, "journalist-delete_all")

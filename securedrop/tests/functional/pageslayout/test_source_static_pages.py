@@ -1,7 +1,7 @@
 import pytest
 import requests
 from tests.functional import tor_utils
-from tests.functional.pageslayout.utils import list_locales, save_screenshot_and_html
+from tests.functional.pageslayout.utils import list_locales, save_static_data
 from tests.functional.web_drivers import WebDriverTypeEnum, get_web_driver
 from version import __version__
 
@@ -24,7 +24,7 @@ class TestSourceAppStaticPages:
             message = tor_browser_web_driver.find_element_by_id("page-not-found")
             assert message.is_displayed()
 
-            save_screenshot_and_html(tor_browser_web_driver, locale, "source-notfound")
+            save_static_data(tor_browser_web_driver, locale, "source-notfound")
 
     @pytest.mark.parametrize("locale", list_locales())
     def test_static_pages(self, locale, sd_servers):
@@ -36,13 +36,13 @@ class TestSourceAppStaticPages:
         ) as tor_browser_web_driver:
             # The user can browse to some of the app's static pages
             tor_browser_web_driver.get(f"{sd_servers.source_app_base_url}/use-tor")
-            save_screenshot_and_html(tor_browser_web_driver, locale, "source-use_tor_browser")
+            save_static_data(tor_browser_web_driver, locale, "source-use_tor_browser")
 
             tor_browser_web_driver.get(f"{sd_servers.source_app_base_url}/tor2web-warning")
-            save_screenshot_and_html(tor_browser_web_driver, locale, "source-tor2web_warning")
+            save_static_data(tor_browser_web_driver, locale, "source-tor2web_warning")
 
             tor_browser_web_driver.get(f"{sd_servers.source_app_base_url}/why-public-key")
-            save_screenshot_and_html(tor_browser_web_driver, locale, "source-why_journalist_key")
+            save_static_data(tor_browser_web_driver, locale, "source-why_journalist_key")
 
     def test_instance_metadata(self, sd_servers):
         # Given a source app, when fetching the instance's metadata

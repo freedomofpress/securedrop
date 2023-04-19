@@ -6,7 +6,7 @@ import pytest
 from tests.factories import SecureDropConfigFactory
 from tests.functional.app_navigators.source_app_nav import SourceAppNavigator
 from tests.functional.conftest import SdServersFixtureResult, spawn_sd_servers
-from tests.functional.pageslayout.utils import list_locales, save_screenshot_and_html
+from tests.functional.pageslayout.utils import list_locales, save_static_data
 
 # Very short session expiration time
 SESSION_EXPIRATION_SECONDS = 3
@@ -64,4 +64,4 @@ class TestSourceAppSessionTimeout:
                 expected_text = "You were logged out due to inactivity."
                 assert expected_text in notification.text
 
-            save_screenshot_and_html(navigator.driver, locale, "source-session_timeout")
+            save_static_data(navigator.driver, locale, "source-session_timeout")

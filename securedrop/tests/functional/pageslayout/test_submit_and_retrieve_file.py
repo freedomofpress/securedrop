@@ -3,7 +3,7 @@ from encryption import EncryptionManager
 from selenium.common.exceptions import NoSuchElementException
 from tests.functional.app_navigators.journalist_app_nav import JournalistAppNavigator
 from tests.functional.app_navigators.source_app_nav import SourceAppNavigator
-from tests.functional.pageslayout.utils import list_locales, save_screenshot_and_html
+from tests.functional.pageslayout.utils import list_locales, save_static_data
 
 
 @pytest.mark.parametrize("locale", list_locales())
@@ -64,11 +64,11 @@ class TestSubmitAndRetrieveFile:
         source_app_nav.source_visits_source_homepage()
         source_app_nav.source_chooses_to_login()
         source_app_nav.source_proceeds_to_login(codename=source_codename)
-        save_screenshot_and_html(source_app_nav.driver, locale, "source-checks_for_reply")
+        save_static_data(source_app_nav.driver, locale, "source-checks_for_reply")
 
         # When they delete the journalist's reply, it succeeds
         self._source_deletes_journalist_reply(source_app_nav)
-        save_screenshot_and_html(source_app_nav.driver, locale, "source-deletes_reply")
+        save_static_data(source_app_nav.driver, locale, "source-deletes_reply")
 
     @staticmethod
     def _source_deletes_journalist_reply(navigator: SourceAppNavigator) -> None:

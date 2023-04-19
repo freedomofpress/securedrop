@@ -18,7 +18,7 @@
 import pytest
 from tbselenium.utils import disable_js
 from tests.functional.app_navigators.source_app_nav import SourceAppNavigator
-from tests.functional.pageslayout.utils import list_locales, save_screenshot_and_html
+from tests.functional.pageslayout.utils import list_locales, save_static_data
 
 
 @pytest.mark.parametrize("locale", list_locales())
@@ -37,11 +37,11 @@ class TestSourceLayoutTorBrowser:
 
             # When they first login, it succeeds
             navigator.source_visits_source_homepage()
-            save_screenshot_and_html(navigator.driver, locale, "source-index")
+            save_static_data(navigator.driver, locale, "source-index")
 
             navigator.source_clicks_submit_documents_on_homepage()
             navigator.source_continues_to_submit_page()
 
             # And when they logout, it succeeds
             navigator.source_logs_out()
-            save_screenshot_and_html(navigator.driver, locale, "source-logout_page")
+            save_static_data(navigator.driver, locale, "source-logout_page")
