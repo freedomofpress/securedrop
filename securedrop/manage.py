@@ -38,6 +38,9 @@ from management.submissions import (  # noqa: E402
     add_list_fs_disconnect_parser,
     add_were_there_submissions_today,
 )
+from management.sources import (
+    remove_pending_sources
+)
 from models import FirstOrLastNameError, InvalidUsernameException, Journalist  # noqa: E402
 
 logging.basicConfig(format="%(asctime)s %(levelname)s %(message)s")
@@ -120,10 +123,8 @@ def reset(
 def add_admin(args: argparse.Namespace) -> int:
     return _add_user(is_admin=True)
 
-
 def add_journalist(args: argparse.Namespace) -> int:
     return _add_user()
-
 
 def _get_username() -> str:
     while True:
@@ -354,6 +355,15 @@ def get_args() -> argparse.ArgumentParser:
     delete_user_subp.set_defaults(func=delete_user)
     delete_user_subp_a = subps.add_parser("delete_user", help="^")
     delete_user_subp_a.set_defaults(func=delete_user)
+
+    remove_pending_sources_subp = subps.add_parser("remove-pending-sources", help="Remove pending sources from the server.")
+    remove_pending_sources_subp.add_argument(
+        "--keep-most-recent",
+        default=100,
+        type=int,
+        help="how many of the most recent pending sources to keep"
+    )
+    remove_pending_sources_subp.set_defaults(func=remove_pending_sources)
 
     add_check_db_disconnect_parser(subps)
     add_check_fs_disconnect_parser(subps)
