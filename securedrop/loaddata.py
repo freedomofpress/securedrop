@@ -250,7 +250,6 @@ def add_source() -> Tuple[Source, str]:
         source_app_storage=Storage.get_default(),
     )
     source = source_user.get_db_record()
-    source.pending = False
     db.session.commit()
 
     # Generate source key
