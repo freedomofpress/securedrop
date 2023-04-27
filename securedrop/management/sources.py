@@ -1,20 +1,13 @@
 import argparse
-import datetime
-import os
-import sys
-import time
-from argparse import _SubParsersAction
-from typing import List, Optional
+from typing import List
 
 from db import db
-from flask.ctx import AppContext
-from management import app_context
 from encryption import EncryptionManager, GpgKeyNotFoundError
+from management import app_context
 from models import Source
-from rm import secure_delete
 
 
-def remove_pending_sources (args: argparse.Namespace) -> int:
+def remove_pending_sources(args: argparse.Namespace) -> int:
     """
     Removes pending source accounts, with the option of keeping
     the n newest source accounts.
@@ -35,14 +28,21 @@ def remove_pending_sources (args: argparse.Namespace) -> int:
     print(f"Deleted {len(sources)} pending sources")
     return 0
 
+
 def find_pending_sources(keep_most_recent: int) -> List[Source]:
     """
     Finds all sources that are marked as pending
     """
     with app_context():
-    	pending_sources = Source.query.filter_by(pending=True).order_by(Source.id.desc()).offset(keep_most_recent).all()
+        pending_sources = (
+            Source.query.filter_by(pending=True)
+            .order_by(Source.id.desc())
+            .offset(keep_most_recent)
+            .all()
+        )
 
     return pending_sources
+
 
 def delete_pending_source(source: Source) -> None:
     """
