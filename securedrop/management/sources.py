@@ -21,12 +21,18 @@ def remove_pending_sources (args: argparse.Namespace) -> int:
     """
     n = args.keep_most_recent
     sources = find_pending_sources(n)
+    print(f"Found {len(sources)} pending sources")
+
+    deleted = []
     for source in sources:
         try:
             EncryptionManager.get_default().delete_source_key_pair(source.filesystem_id)
         except GpgKeyNotFoundError:
             pass
         delete_pending_source(source)
+        deleted.append(source)
+
+    print(f"Deleted {len(sources)} pending sources")
     return 0
 
 def find_pending_sources(keep_most_recent: int) -> List[Source]:
