@@ -357,41 +357,57 @@ endif
 #
 ###########
 
+SCRIPT_MESSAGE="You can now examine or commit the log at:"
+SCRIPT_OUTPUT_PREFIX=$(SDROOT)/build/$(shell date +%Y%M%d)
+SCRIPT_OUTPUT_EXT=log
+
 .PHONY: build-debs
+build-debs: OUT:=$(SCRIPT_OUTPUT_PREFIX)-securedrop.$(SCRIPT_OUTPUT_EXT)
 build-debs: ## Build and test SecureDrop Debian packages
 	@echo "Building SecureDrop Debian packages..."
 	@export TERM=dumb
 	@script \
 		--command $(SDROOT)/builder/build-debs.sh \
-		$(SDROOT)/build/$(shell date --iso-8601=seconds)-$@.log
+		$(OUT)
 	@echo
+	@echo "$(SCRIPT_MESSAGE)"
+	@echo "$(OUT)"
 
 .PHONY: build-debs-notest
+build-debs-notest: OUT:=$(SCRIPT_OUTPUT_PREFIX)-securedrop.$(SCRIPT_OUTPUT_EXT)
 build-debs-notest: ## Build SecureDrop Debian packages without running tests.
 	@echo "Building SecureDrop Debian packages, skipping tests..."
 	@export TERM=dumb
 	@NOTEST=1 script \
 		--command $(SDROOT)/builder/build-debs.sh \
-		$(SDROOT)/build/$(shell date --iso-8601=seconds)-$@.log
+		$(OUT)
 	@echo
+	@echo "$(SCRIPT_MESSAGE)"
+	@echo "$(OUT)"
 
 .PHONY: build-debs-ossec
+build-debs-ossec: OUT:=$(SCRIPT_OUTPUT_PREFIX)-securedrop-ossec.$(SCRIPT_OUTPUT_EXT)
 build-debs-ossec: ## Build OSSEC Debian packages
 	@echo "Building OSSEC Debian packages"
 	@export TERM=dumb
 	@WHAT=ossec script \
 		--command $(SDROOT)/builder/build-debs.sh \
-		$(SDROOT)/build/$(shell date --iso-8601=seconds)-$@.log
+		$(OUT)
 	@echo
+	@echo "$(SCRIPT_MESSAGE)"
+	@echo "$(OUT)"
 
 .PHONY: build-debs-ossec-notest
+build-debs-ossec-notest: OUT:=$(SCRIPT_OUTPUT_PREFIX)-securedrop-ossec.$(SCRIPT_OUTPUT_EXT)
 build-debs-ossec-notest: ## Build OSSEC Debian packages without running tests
 	@echo "Building OSSEC Debian packages, skipping tests..."
 	@export TERM=dumb
 	@NOTEST=1 WHAT=ossec script \
 	       --command $(SDROOT)/builder/build-debs.sh \
-	       $(SDROOT)/build/$(shell date --iso-8601=seconds)-$@.log
+	       $(OUT)
 	@echo
+	@echo "$(SCRIPT_MESSAGE)"
+	@echo "$(OUT)"
 
 
 ########################
