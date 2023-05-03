@@ -360,25 +360,37 @@ endif
 .PHONY: build-debs
 build-debs: ## Build and test SecureDrop Debian packages
 	@echo "Building SecureDrop Debian packages..."
-	@$(SDROOT)/builder/build-debs.sh
+	@export TERM=dumb
+	@script \
+		--command $(SDROOT)/builder/build-debs.sh \
+		$(SDROOT)/build/$(shell date --iso-8601=seconds)-$@.log
 	@echo
 
 .PHONY: build-debs-notest
 build-debs-notest: ## Build SecureDrop Debian packages without running tests.
 	@echo "Building SecureDrop Debian packages, skipping tests..."
-	@NOTEST=1 $(SDROOT)/builder/build-debs.sh
+	@export TERM=dumb
+	@NOTEST=1 script \
+		--command $(SDROOT)/builder/build-debs.sh \
+		$(SDROOT)/build/$(shell date --iso-8601=seconds)-$@.log
 	@echo
 
 .PHONY: build-debs-ossec
 build-debs-ossec: ## Build OSSEC Debian packages
 	@echo "Building OSSEC Debian packages"
-	@WHAT=ossec $(SDROOT)/builder/build-debs.sh
+	@export TERM=dumb
+	@WHAT=ossec script \
+		--command $(SDROOT)/builder/build-debs.sh \
+		$(SDROOT)/build/$(shell date --iso-8601=seconds)-$@.log
 	@echo
 
 .PHONY: build-debs-ossec-notest
 build-debs-ossec-notest: ## Build OSSEC Debian packages without running tests
 	@echo "Building OSSEC Debian packages, skipping tests..."
-	@NOTEST=1 WHAT=ossec $(SDROOT)/builder/build-debs.sh
+	@export TERM=dumb
+	@NOTEST=1 WHAT=ossec script \
+	       --command $(SDROOT)/builder/build-debs.sh \
+	       $(SDROOT)/build/$(shell date --iso-8601=seconds)-$@.log
 	@echo
 
 
