@@ -2,7 +2,6 @@ import argparse
 from typing import List
 
 from db import db
-from encryption import EncryptionManager, GpgKeyNotFoundError
 from management import app_context
 from models import Source
 
@@ -16,10 +15,6 @@ def remove_pending_sources(args: argparse.Namespace) -> int:
     print(f"Found {len(sources)} pending sources")
 
     for source in sources:
-        try:
-            EncryptionManager.get_default().delete_source_key_pair(source.filesystem_id)
-        except GpgKeyNotFoundError:
-            pass
         delete_pending_source(source)
 
     print(f"Deleted {len(sources)} pending sources")
