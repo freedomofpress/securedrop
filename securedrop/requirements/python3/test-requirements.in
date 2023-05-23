@@ -13,7 +13,7 @@ pluggy>=0.13.1
 pytest-cov
 pytest-mock
 hypothesis
-requests[socks]>=2.26.0
+requests[socks]>=2.31.0
 setuptools>=56.0.0
 selenium>=3.141.0
 tbselenium>=0.5.2
