@@ -34,7 +34,7 @@ pytest>=7.2.0
 pytest-xdist>=3.0.2
 python-vagrant
 pyyaml>=5.4.1
-requests>=2.26.0
+requests>=2.31.0
 ruamel.yaml>=0.16.10
 safety>2.2.0
 semgrep>=0.98.0
