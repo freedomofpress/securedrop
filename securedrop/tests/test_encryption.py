@@ -62,18 +62,18 @@ class TestEncryptionManager:
 
     def test_get_source_public_key(self, test_source):
         # Given a source user with a key pair in the default encryption manager
-        source_user = test_source["source_user"]
+        source_filesystem_id = test_source["filesystem_id"]
         encryption_mgr = EncryptionManager.get_default()
 
         # When using the encryption manager to fetch the source user's public key
         # It succeeds
-        source_pub_key = encryption_mgr.get_source_public_key(source_user.filesystem_id)
+        source_pub_key = encryption_mgr.get_source_public_key(source_filesystem_id)
         assert source_pub_key
         assert source_pub_key.startswith("-----BEGIN PGP PUBLIC KEY BLOCK----")
 
         # And the key's fingerprint was saved to Redis
         source_key_fingerprint = encryption_mgr._redis.hget(
-            encryption_mgr.REDIS_FINGERPRINT_HASH, source_user.filesystem_id
+            encryption_mgr.REDIS_FINGERPRINT_HASH, source_filesystem_id
         )
         assert source_key_fingerprint
 
@@ -107,22 +107,22 @@ class TestEncryptionManager:
 
     def test_delete_source_key_pair(self, source_app, test_source):
         # Given a source user with a key pair in the default encryption manager
-        source_user = test_source["source_user"]
+        source_filesystem_id = test_source["filesystem_id"]
         encryption_mgr = EncryptionManager.get_default()
 
         # When using the encryption manager to delete this source user's key pair
         # It succeeds
-        encryption_mgr.delete_source_key_pair(source_user.filesystem_id)
+        encryption_mgr.delete_source_key_pair(source_filesystem_id)
 
         # And the user's key information can no longer be retrieved
         with pytest.raises(GpgKeyNotFoundError):
-            encryption_mgr.get_source_public_key(source_user.filesystem_id)
+            encryption_mgr.get_source_public_key(source_filesystem_id)
 
         with pytest.raises(GpgKeyNotFoundError):
-            encryption_mgr.get_source_key_fingerprint(source_user.filesystem_id)
+            encryption_mgr.get_source_key_fingerprint(source_filesystem_id)
 
         with pytest.raises(GpgKeyNotFoundError):
-            encryption_mgr._get_source_key_details(source_user.filesystem_id)
+            encryption_mgr._get_source_key_details(source_filesystem_id)
 
     def test_delete_source_key_pair_on_journalist_key(self, setup_journalist_key_and_gpg_folder):
         # Given an encryption manager
@@ -143,7 +143,7 @@ class TestEncryptionManager:
         Regression test for https://github.com/freedomofpress/securedrop/issues/4294
         """
         # Given a source user with a key pair in the default encryption manager
-        source_user = test_source["source_user"]
+        source_filesystem_id = test_source["filesystem_id"]
         encryption_mgr = EncryptionManager.get_default()
 
         # And a gpg binary that will trigger the issue described in #4294
@@ -154,11 +154,11 @@ class TestEncryptionManager:
 
         # When using the encryption manager to delete this source user's key pair
         # It succeeds
-        encryption_mgr.delete_source_key_pair(source_user.filesystem_id)
+        encryption_mgr.delete_source_key_pair(source_filesystem_id)
 
         # And the user's key information can no longer be retrieved
         with pytest.raises(GpgKeyNotFoundError):
-            encryption_mgr.get_source_key_fingerprint(source_user.filesystem_id)
+            encryption_mgr.get_source_key_fingerprint(source_filesystem_id)
 
         # And the bug fix was properly triggered
         captured = capsys.readouterr()
@@ -226,12 +226,16 @@ class TestEncryptionManager:
         # For GPG 2.1+, a non-null passphrase _must_ be passed to decrypt()
         assert not encryption_mgr._gpg.decrypt(encrypted_file, passphrase="test 123").ok
 
-    def test_encrypt_and_decrypt_journalist_reply(
-        self, source_app, test_source, tmp_path, app_storage
-    ):
+    def test_encrypt_and_decrypt_journalist_reply(self, source_app, tmp_path, app_storage):
         # Given a source user with a key pair in the default encryption manager
-        source_user1 = test_source["source_user"]
+        with source_app.app_context():
+            source_user1 = create_source_user(
+                db_session=db.session,
+                source_passphrase=PassphraseGenerator.get_default().generate_passphrase(),
+                source_app_storage=app_storage,
+            )
         encryption_mgr = EncryptionManager.get_default()
+        encryption_mgr.generate_source_key_pair(source_user1)
 
         # And another source with a key pair in the default encryption manager
         with source_app.app_context():

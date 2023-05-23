@@ -5,13 +5,13 @@ from typing import Any, Optional, Tuple, Union
 import i18n
 import template_filters
 import version
+from actions.exceptions import NotFoundError
 from db import db
 from flask import Flask, abort, g, json, redirect, render_template, request, url_for
 from flask_babel import gettext
 from flask_wtf.csrf import CSRFError, CSRFProtect
 from journalist_app import account, admin, api, col, main
 from journalist_app.sessions import Session, session
-from journalist_app.utils import get_source
 from models import InstanceConfig
 from sdconfig import SecureDropConfig
 from werkzeug import Response
@@ -71,6 +71,11 @@ def create_app(config: SecureDropConfig) -> Flask:
         msg = gettext("You have been logged out due to inactivity.")
         session.destroy(("error", msg), session.get("locale"))
         return redirect(url_for("main.login"))
+
+    # Convert a NotFoundError raised by an action into a 404
+    @app.errorhandler(NotFoundError)
+    def handle_action_raised_not_found(e: NotFoundError) -> None:
+        abort(404)
 
     def _handle_http_exception(
         error: HTTPException,
@@ -132,7 +137,6 @@ def create_app(config: SecureDropConfig) -> Flask:
             filesystem_id = request.form.get("filesystem_id")
             if filesystem_id:
                 g.filesystem_id = filesystem_id  # pylint: disable=assigning-non-slot
-                g.source = get_source(filesystem_id)  # pylint: disable=assigning-non-slot
 
         return None
 

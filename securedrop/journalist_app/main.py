@@ -4,6 +4,7 @@ from typing import Union
 
 import store
 import werkzeug
+from actions.sources_actions import GetSingleSourceAction, SearchSourcesAction
 from db import db
 from encryption import EncryptionManager
 from flask import (
@@ -22,9 +23,8 @@ from flask import (
 from flask_babel import gettext
 from journalist_app.forms import ReplyForm
 from journalist_app.sessions import session
-from journalist_app.utils import bulk_delete, download, get_source, validate_user
-from models import Reply, SeenReply, Source, SourceStar, Submission
-from sqlalchemy.orm import joinedload
+from journalist_app.utils import bulk_delete, download, validate_user
+from models import Reply, SeenReply, Submission
 from sqlalchemy.sql import func
 from store import Storage
 
@@ -65,57 +65,30 @@ def make_blueprint() -> Blueprint:
 
     @view.route("/")
     def index() -> str:
-        # Gather the count of unread submissions for each source
-        # ID. This query will be joined in the queries for starred and
-        # unstarred sources below, and the unread counts added to
-        # their result sets as an extra column.
-        unread_stmt = (
-            db.session.query(Submission.source_id, func.count("*").label("num_unread"))
-            .filter_by(seen_files=None, seen_messages=None)
+        # Fetch all sources
+        all_sources = SearchSourcesAction(db_session=db.session).perform()
+
+        # Add "num_unread" attributes to the source entities
+        # First gather the count of unread submissions for each source ID
+        # TODO(AD): Remove this and add support for pagination; switch to a (hybrid?) property
+        unread_submission_counts_results = (
+            db.session.query(Submission.source_id, func.count("*"))
+            .filter_by(downloaded=False)
             .group_by(Submission.source_id)
-            .subquery()
-        )
-
-        # Query for starred sources, along with their unread
-        # submission counts.
-        starred = (
-            db.session.query(Source, unread_stmt.c.num_unread)
-            .filter_by(pending=False, deleted_at=None)
-            .filter(Source.last_updated.isnot(None))
-            .filter(SourceStar.starred.is_(True))
-            .outerjoin(SourceStar)
-            .options(joinedload(Source.submissions))
-            .options(joinedload(Source.star))
-            .outerjoin(unread_stmt, Source.id == unread_stmt.c.source_id)
-            .order_by(Source.last_updated.desc())
             .all()
         )
+        source_ids_to_unread_submission_counts = {
+            source_id: subs_count for source_id, subs_count in unread_submission_counts_results
+        }
+        # TODO(AD): Remove this dynamically-added attribute; switch to a (hybrid?) property
+        for source in all_sources:
+            source.num_unread = source_ids_to_unread_submission_counts.get(source.id, 0)
 
-        # Now, add "num_unread" attributes to the source entities.
-        for source, num_unread in starred:
-            source.num_unread = num_unread or 0
-        starred = [source for source, num_unread in starred]
-
-        # Query for sources without stars, along with their unread
-        # submission counts.
-        unstarred = (
-            db.session.query(Source, unread_stmt.c.num_unread)
-            .filter_by(pending=False, deleted_at=None)
-            .filter(Source.last_updated.isnot(None))
-            .filter(~Source.star.has(SourceStar.starred.is_(True)))
-            .options(joinedload(Source.submissions))
-            .options(joinedload(Source.star))
-            .outerjoin(unread_stmt, Source.id == unread_stmt.c.source_id)
-            .order_by(Source.last_updated.desc())
-            .all()
+        response = render_template(
+            "index.html",
+            unstarred=[src for src in all_sources if not src.is_starred],
+            starred=[src for src in all_sources if src.is_starred],
         )
-
-        # Again, add "num_unread" attributes to the source entities.
-        for source, num_unread in unstarred:
-            source.num_unread = num_unread or 0
-        unstarred = [source for source, num_unread in unstarred]
-
-        response = render_template("index.html", unstarred=unstarred, starred=starred)
         return response
 
     @view.route("/reply", methods=("POST",))
@@ -139,10 +112,11 @@ def make_blueprint() -> Blueprint:
                 flash(error, "error")
             return redirect(url_for("col.col", filesystem_id=g.filesystem_id))
 
-        g.source.interaction_count += 1
-        filename = "{}-{}-reply.gpg".format(
-            g.source.interaction_count, g.source.journalist_filename
-        )
+        source = GetSingleSourceAction(
+            db_session=db.session, filesystem_id=g.filesystem_id
+        ).perform()
+        source.interaction_count += 1
+        filename = "{}-{}-reply.gpg".format(source.interaction_count, source.journalist_filename)
         EncryptionManager.get_default().encrypt_journalist_reply(
             for_source_with_filesystem_id=g.filesystem_id,
             reply_in=form.message.data,
@@ -150,7 +124,7 @@ def make_blueprint() -> Blueprint:
         )
 
         try:
-            reply = Reply(session.get_user(), g.source, filename, Storage.get_default())
+            reply = Reply(session.get_user(), source, filename, Storage.get_default())
             db.session.add(reply)
             seen_reply = SeenReply(reply=reply, journalist=session.get_user())
             db.session.add(seen_reply)
@@ -191,7 +165,12 @@ def make_blueprint() -> Blueprint:
         action = request.form["action"]
         error_redirect = url_for("col.col", filesystem_id=g.filesystem_id)
         doc_names_selected = request.form.getlist("doc_names_selected")
-        selected_docs = [doc for doc in g.source.collection if doc.filename in doc_names_selected]
+
+        source = GetSingleSourceAction(
+            db_session=db.session, filesystem_id=g.filesystem_id
+        ).perform()
+        selected_docs = [doc for doc in source.collection if doc.filename in doc_names_selected]
+
         if selected_docs == []:
             if action == "download":
                 flash(
@@ -221,7 +200,9 @@ def make_blueprint() -> Blueprint:
             return redirect(error_redirect)
 
         if action == "download":
-            source = get_source(g.filesystem_id)
+            source = GetSingleSourceAction(
+                db_session=db.session, filesystem_id=g.filesystem_id
+            ).perform()
             return download(
                 source.journalist_filename,
                 selected_docs,
@@ -234,16 +215,17 @@ def make_blueprint() -> Blueprint:
 
     @view.route("/download_unread/<filesystem_id>")
     def download_unread_filesystem_id(filesystem_id: str) -> werkzeug.Response:
+        source = GetSingleSourceAction(db_session=db.session, filesystem_id=filesystem_id).perform()
+
         unseen_submissions = (
-            Submission.query.join(Source)
-            .filter(Source.deleted_at.is_(None), Source.filesystem_id == filesystem_id)
+            Submission.query.filter(Submission.source_id == source.id)
             .filter(~Submission.seen_files.any(), ~Submission.seen_messages.any())
             .all()
         )
         if len(unseen_submissions) == 0:
             flash(gettext("No unread submissions for this source."), "error")
             return redirect(url_for("col.col", filesystem_id=filesystem_id))
-        source = get_source(filesystem_id)
+
         return download(source.journalist_filename, unseen_submissions)
 
     return view

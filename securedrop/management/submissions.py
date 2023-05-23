@@ -6,10 +6,11 @@ import time
 from argparse import _SubParsersAction
 from typing import List, Optional
 
+from actions.sources_actions import SearchSourcesAction, SearchSourcesFilters
 from db import db
 from flask.ctx import AppContext
 from management import app_context
-from models import Reply, Source, Submission
+from models import Reply, Submission
 from rm import secure_delete
 
 
@@ -178,14 +179,21 @@ def were_there_submissions_today(
     args: argparse.Namespace, context: Optional[AppContext] = None
 ) -> None:
     with context or app_context():
-        something = (
-            db.session.query(Source)
-            .filter(Source.last_updated > datetime.datetime.utcnow() - datetime.timedelta(hours=24))
-            .count()
-            > 0
+        source_updated_today = (
+            SearchSourcesAction(
+                db_session=db.session,
+                filters=SearchSourcesFilters(
+                    filter_by_was_updated_after=datetime.datetime.utcnow()
+                    - datetime.timedelta(hours=24)
+                ),
+            )
+            .create_query()
+            .first()
         )
+        was_one_source_updated_today = source_updated_today is not None
+
         count_file = os.path.join(args.data_root, "submissions_today.txt")
-        open(count_file, "w").write(something and "1" or "0")
+        open(count_file, "w").write(was_one_source_updated_today and "1" or "0")
 
 
 def add_check_db_disconnect_parser(subps: _SubParsersAction) -> None:

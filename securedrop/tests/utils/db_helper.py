@@ -89,6 +89,7 @@ def reply(storage, journalist, source, num_replies):
     return replies
 
 
+# TODO(AD): Delete this and replace with calls to SourceFactory.create()
 def init_source(storage):
     """Initialize a source: create their database record, the
     filesystem directory that stores their submissions & replies,

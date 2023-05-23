@@ -1,7 +1,8 @@
+from actions.sources_actions import SearchSourcesAction
+from db import db
 from encryption import EncryptionManager, GpgKeyNotFoundError
 from execution import asynchronous
 from journalist_app import create_app
-from models import Source
 from sdconfig import SecureDropConfig
 
 config = SecureDropConfig.get_current()
@@ -14,7 +15,8 @@ def prime_keycache() -> None:
     """Pre-load the source public keys into Redis."""
     with app.app_context():
         encryption_mgr = EncryptionManager.get_default()
-        for source in Source.query.filter_by(pending=False, deleted_at=None).all():
+        all_sources = SearchSourcesAction(db_session=db.session).perform()
+        for source in all_sources:
             try:
                 encryption_mgr.get_source_public_key(source.filesystem_id)
             except GpgKeyNotFoundError:
