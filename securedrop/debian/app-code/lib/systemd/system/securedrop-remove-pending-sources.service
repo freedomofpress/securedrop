@@ -1,0 +1,12 @@
+[Unit]
+Description=job to remove pending SecureDrop sources daily
+
+[Service]
+ExecStart=/var/www/securedrop/manage.py remove-pending-sources
+PrivateDevices=yes
+PrivateTmp=yes
+ProtectSystem=full
+ReadOnlyDirectories=/
+ReadWriteDirectories=/var/lib/securedrop
+User=www-data
+WorkingDirectory=/var/www/securedrop
