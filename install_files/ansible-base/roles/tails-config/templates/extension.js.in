@@ -11,15 +11,18 @@ const PanelMenu = imports.ui.panelMenu;
 const PopupMenu = imports.ui.popupMenu;
 
 const St = imports.gi.St;
+const Gettext = imports.gettext;
 const CurrentExtension = imports.misc.extensionUtils.getCurrentExtension();
 const Gio = imports.gi.Gio;
+
+const Domain = Gettext.domain(GETTEXT_DOMAIN)
 
 const source_interface_address = "{{ item.0.source_interface_address }}";
 const journalist_interface_address = "{{ item.0.journalist_interface_address }}";
 const app_server_hostname = "{{ item.0.app_hostname }}";
 const mon_server_hostname = "{{ item.0.mon_hostname }}";
 
-const _ = ExtensionUtils.gettext;
+const _ = Domain.gettext;
 
 const Indicator = GObject.registerClass(
 class Indicator extends PanelMenu.Button {
@@ -55,12 +58,12 @@ class Indicator extends PanelMenu.Button {
         topBox.add_child(label);
         this.add_child(topBox);
 
-        let source = new PopupMenu.PopupMenuItem('Launch Source Interface');
+        let source = new PopupMenu.PopupMenuItem(_('Launch Source Interface'));
         source.connect('activate', () => {
     	    Util.spawn(['tor-browser', source_interface_address]);
         });
         
-        let journalist = new PopupMenu.PopupMenuItem('Launch Journalist Interface');
+        let journalist = new PopupMenu.PopupMenuItem(_('Launch Journalist Interface'));
         journalist.connect('activate', () => {
        	    Util.spawn(['tor-browser', journalist_interface_address]);
         });
@@ -71,22 +74,22 @@ class Indicator extends PanelMenu.Button {
             y_align: Clutter.ActorAlign.START,
         });
         
-        let updates = new PopupMenu.PopupMenuItem('Check for SecureDrop Updates');
+        let updates = new PopupMenu.PopupMenuItem(_('Check for SecureDrop Updates'));
         updates.connect('activate', () => {
             Util.spawn(['python3', '/home/amnesia/Persistent/securedrop/journalist_gui/SecureDropUpdater']);
         });
         
-        let app_server_ssh = new PopupMenu.PopupMenuItem('SSH into the App Server');
+        let app_server_ssh = new PopupMenu.PopupMenuItem(_('SSH into the App Server'));
         app_server_ssh.connect('activate', () => {
             Util.trySpawnCommandLine(`gnome-terminal -- ssh ` + app_server_hostname);
         });
         
-        let mon_server_ssh = new PopupMenu.PopupMenuItem('SSH into the Monitor Server');
+        let mon_server_ssh = new PopupMenu.PopupMenuItem(_('SSH into the Monitor Server'));
         mon_server_ssh.connect('activate', () => {
             Util.trySpawnCommandLine(`gnome-terminal -- ssh ` + mon_server_hostname);
         });
         
-        let keypass = new PopupMenu.PopupMenuItem('Open KeePassXC Password Vault');
+        let keypass = new PopupMenu.PopupMenuItem(_('Open KeePassXC Password Vault'));
         keypass.connect('activate', () => {
             Util.trySpawnCommandLine(`keepassxc`);
         });
