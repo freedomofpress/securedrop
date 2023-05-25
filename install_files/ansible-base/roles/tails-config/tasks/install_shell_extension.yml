@@ -63,30 +63,6 @@
     owner: amnesia
     group: amnesia
 
-- name: Copy the extension metadata to the extension directory in the running system
-  become: yes
-  copy:
-    src: securedrop@securedrop.freedom.press/metadata.json
-    dest: "/home/amnesia/.local/share/gnome-shell/extensions/securedrop@securedrop.freedom.press/"
-    owner: amnesia
-    group: amnesia
-
-- name: Copy the extension metadata to the extension directory in Persistent Storage
-  become: yes
-  copy:
-    src: securedrop@securedrop.freedom.press/metadata.json
-    dest: "{{ tails_config_live_dotfiles }}/.local/share/gnome-shell/extensions/securedrop@securedrop.freedom.press/"
-    owner: amnesia
-    group: amnesia
-
-- name: Copy the extension metadata to the extension directory in the running system
-  become: yes
-  copy:
-    src: securedrop@securedrop.freedom.press/metadata.json
-    dest: "/home/amnesia/.local/share/gnome-shell/extensions/securedrop@securedrop.freedom.press/"
-    owner: amnesia
-    group: amnesia
-
 - name: Copy the extension CSS to the extension directory in Persistent Storage
   become: yes
   copy:
@@ -95,27 +71,11 @@
     owner: amnesia
     group: amnesia
 
-- name: Copy the extension CSS to the extension directory in the running system
-  become: yes
-  copy:
-    src: securedrop@securedrop.freedom.press/stylesheet.css
-    dest: "/home/amnesia/.local/share/gnome-shell/extensions/securedrop@securedrop.freedom.press/"
-    owner: amnesia
-    group: amnesia
-
 - name: Copy the symbolic icon used for the shell extension in Persistent Storage
   become: yes
   copy:
     src: securedrop-symbolic.png
     dest: "{{ tails_config_live_dotfiles }}/.local/share/gnome-shell/extensions/securedrop@securedrop.freedom.press/icons/"
-    owner: amnesia
-    group: amnesia
-
-- name: Copy the symbolic icon used for the shell extension in the running system
-  become: yes
-  copy:
-    src: securedrop-symbolic.png
-    dest: "/home/amnesia/.local/share/gnome-shell/extensions/securedrop@securedrop.freedom.press/icons/"
     owner: amnesia
     group: amnesia
 
@@ -161,12 +121,3 @@
   synchronize:
     src: "{{ tails_config_amnesia_persistent }}/securedrop/securedrop/translations/"
     dest: "{{ tails_config_live_dotfiles }}/.local/share/gnome-shell/extensions/securedrop@securedrop.freedom.press/po/"
-
-- name: Add extension translations in the running system
-  synchronize:
-    src: "{{ tails_config_amnesia_persistent }}/securedrop/securedrop/translations/"
-    dest: "/home/amnesia/.local/share/gnome-shell/extensions/securedrop@securedrop.freedom.press/po/"
-
-- name: Enable the new GNOME Shell extension
-  become: no
-  command: gnome-extensions enable securedrop@securedrop.freedom.press

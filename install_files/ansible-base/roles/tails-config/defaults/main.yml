@@ -24,10 +24,8 @@ tails_config_desktop_icon_directories:
   - "{{ tails_config_amnesia_home }}/.local/share/applications"
   - "{{ tails_config_live_dotfiles }}/.local/share/applications"
 
-# Destination directories for storing the SecureDrop GNOME Shell
-# extension
+# Destination directories for storing the SecureDrop GNOME Shell extension
 tails_config_extension_directories:
-  - "{{ tails_config_amnesia_home }}/.local/share/gnome-shell/extensions/securedrop@securedrop.freedom.press/"
   - "{{ tails_config_live_dotfiles }}/.local/share/gnome-shell/extensions/securedrop@securedrop.freedom.press/"
 
 # Path for storing site-specific ATHS info for connecting to Journalist Interface.

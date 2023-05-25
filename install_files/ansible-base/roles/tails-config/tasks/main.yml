@@ -19,3 +19,7 @@
 
 - include: create_ssh_aliases.yml
   when: site_specific_result.stat.exists
+
+- name: Remind user to reboot
+  debug:
+    msg: "Please reboot your Workstation to take advantage of the SecureDrop Extension."
