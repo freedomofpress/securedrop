@@ -37,7 +37,7 @@ def test_deb_packages_appear_installable(deb: Path) -> None:
 
     # Normally this is called as root, but we can get away with simply
     # adding sbin to the path
-    path = os.getenv("PATH") + ":/usr/sbin"
+    path = os.getenv("PATH") + ":/usr/sbin:/sbin"
     subprocess.check_call(["dpkg", "--install", "--dry-run", deb], env={"PATH": path})
 
 
