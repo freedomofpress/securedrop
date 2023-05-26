@@ -13,5 +13,3 @@
     - securedrop_app_https_on_source_interface
 
 - include: install_and_harden_apache.yml
-
-- include: setup_cron.yml

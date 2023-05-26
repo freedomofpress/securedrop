@@ -1,0 +1,12 @@
+[Unit]
+Description=job to clean SecureDrop tmp dir daily
+
+[Service]
+ExecStart=/var/www/securedrop/manage.py clean-tmp
+PrivateDevices=yes
+PrivateTmp=yes
+ProtectSystem=full
+ReadOnlyDirectories=/
+ReadWriteDirectories=/var/lib/securedrop
+User=www-data
+WorkingDirectory=/var/www/securedrop
