@@ -180,3 +180,11 @@ def test_snapd_absent(host):
     assert not host.file("/etc/apparmor.d/usr.lib.snapd.snap-confine.real").exists
     assert not host.file("/usr/bin/snap").exists
     assert not host.file("/var/lib/snapd/snaps").exists
+
+
+def test_ubuntu_pro_disabled(host):
+    with host.sudo():
+        cmd = host.run("systemctl status esm-cache")
+        assert "Loaded: masked" in cmd.stdout
+        cmd = host.run("systemctl is-enabled ua-timer.timer")
+        assert cmd.stdout.strip() == "disabled"
