@@ -255,6 +255,40 @@ def install_pip_dependencies(
     """
     Install Python dependencies via pip into virtualenv.
     """
+
+    # Ansible version 2.9.* cannot be directly upgraded and must be removed
+    # before attempting to install a later version - so let's check for it
+    # and uninstall it if we find it!
+
+    ansible_vercheck_cmd = [
+        os.path.join(VENV_DIR, "bin", "python3"),
+        "-c",
+        "from importlib.metadata import version as v; print(v('ansible'))",
+    ]
+
+    ansible_uninstall_cmd = [
+        os.path.join(VENV_DIR, "bin", "pip3"),
+        "uninstall",
+        "-y",
+        "ansible",
+    ]
+
+    ansible_ver = subprocess.run(
+        maybe_torify() + ansible_vercheck_cmd, text=True, capture_output=True
+    )
+    if ansible_ver.stdout.startswith("2.9"):
+        sdlog.info("Ansible is out-of-date, removing it.")
+        delete_result = subprocess.run(
+            maybe_torify() + ansible_uninstall_cmd, capture_output=True, text=True
+        )
+        if delete_result.returncode != 0:
+            sdlog.error(
+                "Failed to remove old ansible version:\n"
+                f"  return num: {delete_result.returncode}\n"
+                f"  error text: {delete_result.stderr}\n"
+                "Attempting to continue."
+            )
+
     pip_install_cmd = [
         os.path.join(VENV_DIR, "bin", "pip3"),
         "install",
@@ -274,7 +308,7 @@ def install_pip_dependencies(
         )
     except subprocess.CalledProcessError as e:
         sdlog.debug(e.output)
-        sdlog.error("Failed to install {}. Check network" " connection and try again.".format(desc))
+        sdlog.error(f"Failed to install {desc}. Check network" " connection and try again.")
         raise
 
     sdlog.debug(pip_output)
