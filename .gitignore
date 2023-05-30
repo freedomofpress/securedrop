@@ -95,7 +95,7 @@ coverage.xml
 .mypy_cache/
 
 # Translations
-*.mo
+securedrop/translations/**/*.mo
 
 # Flask stuff:
 instance/
