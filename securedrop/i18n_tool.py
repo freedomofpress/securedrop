@@ -27,7 +27,6 @@ I18N_CONF = os.path.join(os.path.dirname(__file__), "i18n.json")
 LOCALE_DIR = {
     "securedrop": "securedrop/translations",
     "desktop": "install_files/ansible-base/roles/tails-config/templates",
-    "extension": "install_files/ansible-base/roles/tails-config/templates",
 }
 
 
@@ -142,9 +141,44 @@ class I18NTool:
 
         if args.extract_update:
             sources = args.sources.split(",")
+            xgettext_flags = []
+
+            # First extract from JavaScript sources via Babel ("xgettext
+            # --language=JavaScript" can't parse gettext as exposed by GNOME
+            # JavaScript):
+            js_sources = [source for source in sources if ".js" in source]
+            if js_sources:
+                xgettext_flags.append("--join-existing")
+                subprocess.check_call(
+                    [
+                        "pybabel",
+                        "extract",
+                        "--charset=utf-8",
+                        "--mapping",
+                        args.mapping,
+                        "--output",
+                        "desktop.pot",
+                        "--project=SecureDrop",
+                        "--version",
+                        args.version,
+                        "--msgid-bugs-address=securedrop@freedom.press",
+                        "--copyright-holder=Freedom of the Press Foundation",
+                        "--add-comments=Translators:",
+                        "--strip-comments",
+                        "--add-location=never",
+                        "--no-wrap",
+                        *js_sources,
+                    ],
+                    cwd=args.translations_dir,
+                )
+
+            # Then extract from desktop templates via xgettext in appending
+            # "--join-existing" mode:
+            desktop_sources = [source for source in sources if ".js" not in source]
             subprocess.check_call(
                 [
                     "xgettext",
+                    *xgettext_flags,
                     "--output=desktop.pot",
                     "--language=Desktop",
                     "--keyword",
@@ -153,7 +187,7 @@ class I18NTool:
                     args.version,
                     "--msgid-bugs-address=securedrop@freedom.press",
                     "--copyright-holder=Freedom of the Press Foundation",
-                    *sources,
+                    *desktop_sources,
                 ],
                 cwd=args.translations_dir,
             )
@@ -168,7 +202,9 @@ class I18NTool:
                     if not f.endswith(".po"):
                         continue
                     po_file = os.path.join(args.translations_dir, f)
-                    subprocess.check_call(["msgmerge", "--update", po_file, messages_file])
+                    subprocess.check_call(
+                        ["msgmerge", "--no-fuzzy-matching", "--update", po_file, messages_file]
+                    )
                 log.warning(f"messages translations updated in {messages_file}")
             else:
                 log.warning("desktop translations are already up to date")
@@ -181,7 +217,34 @@ class I18NTool:
             try:
                 open(linguas_file, "w").write(content)
 
-                for source in args.sources.split(","):
+                # First, compile each message catalog for normal gettext use.
+                # We have to iterate over them, rather than using "pybabel
+                # compile --directory", in order to replicate gettext's
+                # standard "{locale}/LC_MESSAGES/{domain}.mo" structure (like
+                # "securedrop/translations").
+                locale_dir = os.path.join(args.translations_dir, "locale")
+                for po in pos:
+                    locale = po.replace(".po", "")
+                    output_dir = os.path.join(locale_dir, locale, "LC_MESSAGES")
+                    subprocess.run(["mkdir", "--parents", output_dir], check=True)
+                    subprocess.run(
+                        [
+                            "msgfmt",
+                            "--output-file",
+                            os.path.join(output_dir, "messages.mo"),
+                            po,
+                        ],
+                        check=True,
+                        stdout=subprocess.DEVNULL,
+                        stderr=subprocess.DEVNULL,
+                        cwd=args.translations_dir,
+                    )
+
+                # Then use msgfmt to update the desktop files as usual.
+                desktop_sources = [
+                    source for source in args.sources.split(",") if ".js" not in source
+                ]
+                for source in desktop_sources:
                     target = source.rstrip(".in")
                     subprocess.check_call(
                         [
@@ -247,8 +310,7 @@ class I18NTool:
             "translate-messages", help=("Update and compile " "source and template translations")
         )
         translations_dir = join(dirname(realpath(__file__)), "translations")
-        extension_location = join(dirname(realpath(__file__)), "..", LOCALE_DIR["extension"])
-        sources = join(".,source_templates,journalist_templates,", extension_location)
+        sources = ".,source_templates,journalist_templates"
         self.set_translate_parser(parser, translations_dir, sources)
         mapping = "babel.cfg"
         parser.add_argument(
@@ -267,7 +329,19 @@ class I18NTool:
             "..",
             LOCALE_DIR["desktop"],
         )
-        sources = "desktop-journalist-icon.j2.in,desktop-source-icon.j2.in"
+        sources = ",".join(
+            [
+                "desktop-journalist-icon.j2.in",
+                "desktop-source-icon.j2.in",
+                "extension.js.in",
+            ]
+        )
+        mapping = join(dirname(realpath(__file__)), "babel.cfg")
+        parser.add_argument(
+            "--mapping",
+            default=mapping,
+            help=f"Mapping of files to consider (default {mapping})",
+        )
         self.set_translate_parser(parser, translations_dir, sources)
         parser.set_defaults(func=self.translate_desktop)
 

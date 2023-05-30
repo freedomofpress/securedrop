@@ -94,8 +94,8 @@ coverage.xml
 .hypothesis/
 .mypy_cache/
 
-# Translations
-*.mo
+# Translations compiled during packaging:
+securedrop/translations/**/*.mo
 
 # Flask stuff:
 instance/
