@@ -105,7 +105,7 @@ def test_ensure_logo(host):
         assert f.group == "root"
 
 
-@pytest.mark.parameterize("user", ("root", "www-data"))
+@pytest.mark.parametrize("user", ("root", "www-data"))
 def test_empty_crontabs(host, user):
     """Ensure root + www-data crontabs are empty"""
     with host.sudo():
