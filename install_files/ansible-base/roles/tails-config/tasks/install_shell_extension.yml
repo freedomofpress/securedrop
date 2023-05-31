@@ -119,5 +119,5 @@
 
 - name: Add extension translations in Persistent Storage
   synchronize:
-    src: "{{ tails_config_amnesia_persistent }}/securedrop/securedrop/translations/"
-    dest: "{{ tails_config_live_dotfiles }}/.local/share/gnome-shell/extensions/securedrop@securedrop.freedom.press/po/"
+    src: roles/tails-config/templates/locale/
+    dest: "{{ tails_config_live_dotfiles }}/.local/share/gnome-shell/extensions/securedrop@securedrop.freedom.press/locale/"

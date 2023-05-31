@@ -1,6 +1,6 @@
 /* exported init */
 
-const GETTEXT_DOMAIN = 'securedrop';
+const GETTEXT_DOMAIN = 'messages';
 
 const {Clutter, GObject, GLib } = imports.gi;
 
