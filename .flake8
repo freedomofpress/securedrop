@@ -10,3 +10,4 @@ exclude =
     journalist_gui/journalist_gui/resources_rc.py,
     .python3,
     admin/.tox/
+    target/
