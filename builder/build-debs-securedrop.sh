@@ -16,10 +16,6 @@ pip3 download --no-deps --require-hashes -r requirements/python3/requirements.tx
 rm -f /usr/share/python-wheels/setuptools-*.whl
 mv /tmp/requirements-download/setuptools-*.whl /usr/share/python-wheels/
 
-# Enable Rust
-HOME="/root"
-source "$HOME"/.cargo/env
-
 # Build the package
 dpkg-buildpackage -us -uc
 
