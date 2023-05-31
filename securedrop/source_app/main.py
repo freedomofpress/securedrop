@@ -175,6 +175,13 @@ def make_blueprint(config: SecureDropConfig) -> Blueprint:
         # Sort the replies by date
         replies.sort(key=operator.attrgetter("date"), reverse=True)
 
+        # If not done yet, generate a keypair to encrypt replies from the journalist
+        encryption_mgr = EncryptionManager.get_default()
+        try:
+            encryption_mgr.get_source_public_key(logged_in_source.filesystem_id)
+        except GpgKeyNotFoundError:
+            encryption_mgr.generate_source_key_pair(logged_in_source)
+
         return render_template(
             "lookup.html",
             is_user_logged_in=True,
@@ -304,13 +311,6 @@ def make_blueprint(config: SecureDropConfig) -> Blueprint:
             store.async_add_checksum_for_file(sub, Storage.get_default())
 
         normalize_timestamps(logged_in_source)
-
-        # If not done yet, generate a keypair to encrypt replies from the journalist
-        encryption_mgr = EncryptionManager.get_default()
-        try:
-            encryption_mgr.get_source_public_key(logged_in_source.filesystem_id)
-        except GpgKeyNotFoundError:
-            encryption_mgr.generate_source_key_pair(logged_in_source)
 
         return redirect(url_for("main.lookup"))
 

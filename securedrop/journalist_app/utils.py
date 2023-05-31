@@ -6,7 +6,7 @@ from typing import List, Optional, Union
 import flask
 import werkzeug
 from db import db
-from encryption import EncryptionManager, GpgKeyNotFoundError
+from encryption import EncryptionManager
 from flask import Markup, abort, current_app, escape, flash, redirect, send_file, url_for
 from flask_babel import gettext, ngettext
 from journalist_app.sessions import session
@@ -397,11 +397,8 @@ def delete_collection(filesystem_id: str) -> None:
     if os.path.exists(path):
         Storage.get_default().move_to_shredder(path)
 
-    # Delete the source's reply keypair, if it exists
-    try:
-        EncryptionManager.get_default().delete_source_key_pair(filesystem_id)
-    except GpgKeyNotFoundError:
-        pass
+    # Delete the source's reply keypair
+    EncryptionManager.get_default().delete_source_key_pair(filesystem_id)
 
     # Delete their entry in the db
     source = get_source(filesystem_id, include_deleted=True)

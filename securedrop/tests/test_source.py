@@ -14,7 +14,6 @@ from unittest.mock import ANY, patch
 import pytest
 import version
 from db import db
-from encryption import EncryptionManager
 from flaky import flaky
 from flask import escape, g, request, session, url_for
 from flask_babel import gettext
@@ -119,19 +118,16 @@ def test_generate_already_logged_in(source_app):
 
 
 def test_create_new_source(source_app):
-    """Create new source, ensuring that reply key is not created at the same time"""
     with source_app.test_client() as app:
-        with patch.object(EncryptionManager, "get_source_public_key") as get_key:
-            resp = app.post(url_for("main.generate"), data=GENERATE_DATA)
-            assert resp.status_code == 200
-            tab_id = next(iter(session["codenames"].keys()))
-            resp = app.post(url_for("main.create"), data={"tab_id": tab_id}, follow_redirects=True)
-            assert SessionManager.is_user_logged_in(db_session=db.session)
-            # should be redirected to /lookup
-            text = resp.data.decode("utf-8")
-            assert "Submit Files" in text
-            assert "codenames" not in session
-            get_key.assert_not_called()
+        resp = app.post(url_for("main.generate"), data=GENERATE_DATA)
+        assert resp.status_code == 200
+        tab_id = next(iter(session["codenames"].keys()))
+        resp = app.post(url_for("main.create"), data={"tab_id": tab_id}, follow_redirects=True)
+        assert SessionManager.is_user_logged_in(db_session=db.session)
+        # should be redirected to /lookup
+        text = resp.data.decode("utf-8")
+        assert "Submit Files" in text
+        assert "codenames" not in session
 
 
 def test_generate_as_post(source_app):
@@ -367,22 +363,18 @@ def _dummy_submission(app):
     )
 
 
-def test_initial_submission(source_app):
+def test_initial_submission_notification(source_app):
     """
     Regardless of the type of submission (message, file, or both), the
     first submission is always greeted with a notification
     reminding sources to check back later for replies.
-
-    A GPG keypair for replies should also be created.
     """
     with source_app.test_client() as app:
-        with patch.object(EncryptionManager, "generate_source_key_pair") as gen_key:
-            new_codename(app, session)
-            resp = _dummy_submission(app)
-            assert resp.status_code == 200
-            text = resp.data.decode("utf-8")
-            assert "Thank you for sending this information to us." in text
-            gen_key.assert_called_once()
+        new_codename(app, session)
+        resp = _dummy_submission(app)
+        assert resp.status_code == 200
+        text = resp.data.decode("utf-8")
+        assert "Thank you for sending this information to us." in text
 
 
 def test_submit_message(source_app):
