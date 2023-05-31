@@ -41,7 +41,7 @@ COPY dh-virtualenv.pref /etc/apt/preferences.d/
 
 RUN apt-get update && apt-get install -y dh-virtualenv
 
-ENV RUST_VERSION 1.58.1
+ENV RUST_VERSION 1.69.0
 ENV RUSTUP_VERSION 1.24.3
 ENV RUSTUP_INIT_SHA256 3dc5ef50861ee18657f9db2eeb7392f9c2a6c95c90ab41e45ab4ca71476b4338
 ENV RUSTUP_HOME /opt/rustup
@@ -58,10 +58,8 @@ RUN TMPDIR=`mktemp -d` && cd ${TMPDIR} \
         && ./rustup-init --default-toolchain=${RUST_VERSION} --profile minimal -y \
         && cd && rm -rf ${TMPDIR}
 ENV PATH "$PATH:/opt/cargo/bin/"
-
-# Warm the cargo index ("empty-library" is reserved by the Rust project)
-# see https://github.com/rust-lang/cargo/issues/10319 and https://github.com/rust-lang/cargo/issues/3377
-RUN cargo install empty-library ||:
+# TODO: Remove after we switch to 1.70.0 when it's enabled by default
+ENV CARGO_REGISTRIES_CRATES_IO_PROTOCOL sparse
 
 # Turn the ossec key into a keyring
 COPY OSSEC-ARCHIVE-KEY.asc /tmp/OSSEC-ARCHIVE-KEY.asc
