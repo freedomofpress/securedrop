@@ -5,7 +5,7 @@ wanted_apache_headers:
   Content-Security-Policy: "default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; frame-ancestors 'none';"
   Cross-Origin-Opener-Policy: "same-origin"
   Cross-Origin-Embedder-Policy: "same-origin"
-  Cross-Origin-Resource-Policy: "same-site"
+  Cross-Origin-Resource-Policy: "same-origin"
 
 securedrop_venv: /opt/venvs/securedrop-app-code
 securedrop_venv_bin: /opt/venvs/securedrop-app-code/bin

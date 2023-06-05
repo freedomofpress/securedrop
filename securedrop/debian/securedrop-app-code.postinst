@@ -161,8 +161,11 @@ update_apache2_headers(){
             sed -i '/^Header always set Cross-Origin-Opener-Policy .*/a Header onsuccess unset Cross-Origin-Embedder-Policy\nHeader always set Cross-Origin-Embedder-Policy "same-origin"' "$1"
         fi
         if ! grep -qP '^Header onsuccess unset Cross-Origin-Resource-Policy' "$1"; then
-            sed -i '/^Header always set Cross-Origin-Embedder-Policy .*/a Header onsuccess unset Cross-Origin-Resource-Policy\nHeader always set Cross-Origin-Resource-Policy "same-site"' "$1"
+            sed -i '/^Header always set Cross-Origin-Embedder-Policy .*/a Header onsuccess unset Cross-Origin-Resource-Policy\nHeader always set Cross-Origin-Resource-Policy "same-origin"' "$1"
         fi
+
+    # Update Cross-Origin-Resource-Policy header if already present (see #6768)
+    sed -i 's/^Header always set Cross-Origin-Resource-Policy "same-site"/Header always set Cross-Origin-Resource-Policy "same-origin"/g' "$1"
 }
 
 
