@@ -2,7 +2,6 @@ import os
 import re
 import typing
 from datetime import date
-from distutils.version import StrictVersion
 from io import BytesIO, StringIO
 from pathlib import Path
 from typing import Dict, List, Optional
@@ -92,18 +91,11 @@ class EncryptionManager:
         self._redis = Redis(decode_responses=True)
 
         # Instantiate the "main" GPG binary
-        gpg = gnupg.GPG(
-            binary="gpg2", homedir=str(self._gpg_key_dir), options=["--trust-model direct"]
+        self._gpg = gnupg.GPG(
+            binary="gpg2",
+            homedir=str(gpg_key_dir),
+            options=["--pinentry-mode loopback", "--trust-model direct"],
         )
-        if StrictVersion(gpg.binary_version) >= StrictVersion("2.1"):
-            # --pinentry-mode, required for SecureDrop on GPG 2.1.x+, was added in GPG 2.1.
-            self._gpg = gnupg.GPG(
-                binary="gpg2",
-                homedir=str(gpg_key_dir),
-                options=["--pinentry-mode loopback", "--trust-model direct"],
-            )
-        else:
-            self._gpg = gpg
 
         # Instantiate the GPG binary to be used for key deletion: always delete keys without
         # invoking pinentry-mode=loopback
