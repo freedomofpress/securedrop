@@ -172,56 +172,35 @@ class GPG(GPGBase):
         # The --no-use-agent and --use-agent options were deprecated in GnuPG
         # 2.x, so we should set use_agent to None here to avoid having
         # GPGBase._make_args() add either one.
-        if self.is_gpg2():
-            self.use_agent = None
+        self.use_agent = None
 
     @functools.wraps(_trust._create_trustdb)
     def create_trustdb(self):
-        if self.is_gpg2():
-            _trust._create_trustdb(self)
-        else:
-            log.info("Creating the trustdb is only available with GnuPG>=2.x")
+        _trust._create_trustdb(self)
 
     # For backward compatibility with python-gnupg<=1.3.1:
     _create_trustdb = create_trustdb
 
     @functools.wraps(_trust.fix_trustdb)
     def fix_trustdb(self, trustdb=None):
-        if self.is_gpg2():
-            _trust.fix_trustdb(self)
-        else:
-            log.info("Fixing the trustdb is only available with GnuPG>=2.x")
+        _trust.fix_trustdb(self)
 
     # For backward compatibility with python-gnupg<=1.3.1:
     _fix_trustdb = fix_trustdb
 
     @functools.wraps(_trust.import_ownertrust)
     def import_ownertrust(self, trustdb=None):
-        if self.is_gpg2():
-            _trust.import_ownertrust(self)
-        else:
-            log.info("Importing ownertrust is only available with GnuPG>=2.x")
+        _trust.import_ownertrust(self)
 
     # For backward compatibility with python-gnupg<=1.3.1:
     _import_ownertrust = import_ownertrust
 
     @functools.wraps(_trust.export_ownertrust)
     def export_ownertrust(self, trustdb=None):
-        if self.is_gpg2():
-            _trust.export_ownertrust(self)
-        else:
-            log.info("Exporting ownertrust is only available with GnuPG>=2.x")
+        _trust.export_ownertrust(self)
 
     # For backward compatibility with python-gnupg<=1.3.1:
     _export_ownertrust = export_ownertrust
-
-    def is_gpg1(self):
-        """Returns true if using GnuPG <= 1.x."""
-        return _util._is_gpg1(self.binary_version)
-
-    def is_gpg2(self):
-        """Returns true if using GnuPG >= 2.x."""
-        return _util._is_gpg2(self.binary_version)
 
     def sign(self, data, **kwargs):
         """Create a signature for a message string or file.
@@ -884,11 +863,7 @@ class GPG(GPGBase):
 
         parms = {}
 
-        ## if using GnuPG version 1.x, then set the default 'Key-Type' to
-        ## 'RSA' because it doesn't understand 'default'
         parms.setdefault("Key-Type", "default")
-        if _util._is_gpg1(self.binary_version):
-            parms.setdefault("Key-Type", "RSA")
         log.debug(
             "GnuPG v%s detected: setting default key type to %s."
             % (self.binary_version, parms["Key-Type"])

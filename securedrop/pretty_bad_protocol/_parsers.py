@@ -242,22 +242,6 @@ def _is_hex(string):
     return False
 
 
-def _is_string(thing):
-    """Python character arrays are a mess.
-
-    If Python2, check if **thing** is an :obj:`unicode` or a :obj:`str`.
-    If Python3, check if **thing** is a :obj:`str`.
-
-    :param thing: The thing to check.
-    :returns: ``True`` if **thing** is a string according to whichever version
-              of Python we're running in.
-    """
-    if _util._py3k:
-        return isinstance(thing, str)
-    else:
-        return isinstance(thing, basestring)
-
-
 def _sanitise(*args):
     """Take an arg or the key portion of a kwarg and check that it is in the
     set of allowed GPG options and flags, and that it has the correct
@@ -313,10 +297,6 @@ def _sanitise(*args):
         hex_options = _get_options_group("hex_options")
         hex_or_none_options = _get_options_group("hex_or_none_options")
 
-        if not _util._py3k:
-            if not isinstance(arg, list) and isinstance(arg, unicode):
-                arg = str(arg)
-
         try:
             flag = _is_allowed(arg)
             assert flag is not None, "_check_option(): got None for flag"
@@ -325,7 +305,7 @@ def _sanitise(*args):
         else:
             checked += flag + " "
 
-            if _is_string(value):
+            if isinstance(value, str):
                 values = value.split(" ")
                 for v in values:
                     ## these can be handled separately, without _fix_unsafe(),
@@ -471,9 +451,7 @@ def _sanitise(*args):
         for arg in args:
             ## if we're given a string with a bunch of options in it split
             ## them up and deal with them separately
-            if (not _util._py3k and isinstance(arg, basestring)) or (
-                _util._py3k and isinstance(arg, str)
-            ):
+            if isinstance(arg, str):
                 log.debug("Got arg string: %s" % arg)
                 if arg.find(" ") > 0:
                     filo = _make_filo(arg)

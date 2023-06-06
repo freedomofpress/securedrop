@@ -24,25 +24,15 @@ attribute creation and handling.
 import atexit
 import codecs
 import encodings
-
-## For AOS, the locale module will need to point to a wrapper around the
-## java.util.Locale class.
-## See https://code.patternsinthevoid.net/?p=android-locale-hack.git
 import locale
 import os
-import platform
 import re
 import shlex
 import subprocess
 import sys
 import threading
 
-## Using psutil is recommended, but since the extension doesn't run with the
-## PyPy interpreter, we'll run even if it's not present.
-try:
-    import psutil
-except ImportError:
-    psutil = None
+import psutil
 
 from . import _parsers, _util
 from ._parsers import _check_preferences, _sanitise_list
@@ -86,39 +76,23 @@ class GPGMeta(type):
         the same. (Sorry Windows users; maybe you should switch to anything
         else.)
 
-        .. note: This function will only run if the psutil_ Python extension
-            is installed. Because psutil won't run with the PyPy interpreter,
-            use of it is optional (although highly recommended).
-
-        .. _psutil: https://pypi.python.org/pypi/psutil
-
         :returns: True if there exists a gpg-agent process running under the
                   same effective user ID as that of this program. Otherwise,
                   returns False.
         """
-        if not psutil:
-            return False
-
         this_process = psutil.Process(os.getpid())
         ownership_match = False
 
-        if _util._running_windows:
-            identity = this_process.username()
-        else:
-            identity = this_process.uids
+        identity = this_process.uids
 
         for proc in psutil.process_iter():
             try:
                 # In my system proc.name & proc.is_running are methods
                 if (proc.name() == "gpg-agent") and proc.is_running():
                     log.debug("Found gpg-agent process with pid %d" % proc.pid)
-                    if _util._running_windows:
-                        if proc.username() == identity:
-                            ownership_match = True
-                    else:
-                        # proc.uids & identity are methods to
-                        if proc.uids() == identity():
-                            ownership_match = True
+                    # proc.uids & identity are methods to
+                    if proc.uids() == identity():
+                        ownership_match = True
             except psutil.Error as err:
                 # Exception when getting proc info, possibly because the
                 # process is zombie / process no longer exist. Just ignore it.
@@ -230,14 +204,9 @@ class GPGBase:
 
         try:
             assert self.binary, "Could not find binary %s" % binary
-            if _util._py3k:
-                assert isinstance(
-                    verbose, (bool, str, int)
-                ), "'verbose' must be boolean, string, or 0 <= n <= 9"
-            else:
-                assert isinstance(
-                    verbose, (bool, str, int, unicode)
-                ), "'verbose' must be boolean, string, unicode, or 0 <= n <= 9"
+            assert isinstance(
+                verbose, (bool, str, int)
+            ), "'verbose' must be boolean, string, or 0 <= n <= 9"
             assert isinstance(use_agent, bool), "'use_agent' must be boolean"
             if self.options is not None:
                 assert isinstance(self.options, list), "options not list"
@@ -621,12 +590,6 @@ class GPGBase:
         cmd = shlex.split(" ".join(self._make_args(args, passphrase)))
         log.debug("Sending command to GnuPG process:{}{}".format(os.linesep, cmd))
 
-        if platform.system() == "Windows":
-            # TODO figure out what the hell is going on there.
-            expand_shell = True
-        else:
-            expand_shell = False
-
         environment = {
             "LANGUAGE": os.environ.get("LANGUAGE") or "en",
             "GPG_TTY": os.environ.get("GPG_TTY") or "",
@@ -638,7 +601,7 @@ class GPGBase:
 
         return subprocess.Popen(
             cmd,
-            shell=expand_shell,
+            shell=False,
             stdin=subprocess.PIPE,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
@@ -877,9 +840,9 @@ class GPGBase:
         ## GnuPG process. Therefore, if the passphrase='' or passphrase=b'',
         ## we set passphrase=None.  See Issue #82:
         ## https://github.com/isislovecruft/python-gnupg/issues/82
-        if _util._is_string(passphrase):
+        if isinstance(passphrase, str):
             passphrase = passphrase if len(passphrase) > 0 else None
-        elif _util._is_bytes(passphrase):
+        elif isinstance(passphrase, (bytes, bytearray)):
             passphrase = s(passphrase) if len(passphrase) > 0 else None
         else:
             passphrase = None
@@ -1057,32 +1020,10 @@ class GPGBase:
 
             if isinstance(recipients, (list, tuple)):
                 for recp in recipients:
-                    if not _util._py3k:
-                        if isinstance(recp, unicode):
-                            try:
-                                assert _parsers._is_hex(str(recp))
-                            except AssertionError:
-                                log.info("Can't accept recipient string: %s" % recp)
-                            else:
-                                self._add_recipient_string(args, hidden_recipients, str(recp))
-                                continue
-                            ## will give unicode in 2.x as '\uXXXX\uXXXX'
-                            if isinstance(hidden_recipients, (list, tuple)):
-                                if [s for s in hidden_recipients if recp in str(s)]:
-                                    args.append("--hidden-recipient %r" % recp)
-                                else:
-                                    args.append("--recipient %r" % recp)
-                            else:
-                                args.append("--recipient %r" % recp)
-                            continue
                     if isinstance(recp, str):
                         self._add_recipient_string(args, hidden_recipients, recp)
 
-            elif (not _util._py3k) and isinstance(recp, basestring):
-                for recp in recipients.split("\x20"):
-                    self._add_recipient_string(args, hidden_recipients, recp)
-
-            elif _util._py3k and isinstance(recp, str):
+            elif isinstance(recp, str):
                 for recp in recipients.split(" "):
                     self._add_recipient_string(args, hidden_recipients, recp)
                     ## ...and now that we've proven py3k is better...

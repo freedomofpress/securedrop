@@ -20,6 +20,7 @@
 
 import codecs
 import encodings
+import io
 import os
 import random
 import re
@@ -27,72 +28,16 @@ import string
 import sys
 import threading
 from datetime import datetime
+from io import BytesIO, StringIO
 from socket import gethostname
 from time import localtime, mktime
 
 # These are all the classes which are stream-like; they are used in
 # :func:`_is_stream`.
-_STREAMLIKE_TYPES = []
-
-# These StringIO classes are actually utilised.
-try:
-    import io
-    from io import BytesIO, StringIO
-except ImportError:
-    from cStringIO import StringIO
-else:
-    # The io.IOBase type covers the above example for an open file handle in
-    # Python3, as well as both io.BytesIO and io.StringIO.
-    _STREAMLIKE_TYPES.append(io.IOBase)
-
-# The remaining StringIO classes which are imported are used to determine if a
-# object is a stream-like in :func:`_is_stream`.
-if 2 == sys.version_info[0]:
-    # Import the StringIO class from the StringIO module since it is a
-    # commonly used stream class. It is distinct from either of the
-    # StringIO's that may be loaded in the above try/except clause, so the
-    # name is prefixed with an underscore to distinguish it.
-    from StringIO import StringIO as _StringIO_StringIO
-
-    _STREAMLIKE_TYPES.append(_StringIO_StringIO)
-
-    # Import the cStringIO module to test for the cStringIO stream types,
-    # InputType and OutputType. See
-    # http://stackoverflow.com/questions/14735295/to-check-an-instance-is-stringio
-    import cStringIO as _cStringIO
-
-    _STREAMLIKE_TYPES.append(_cStringIO.InputType)
-    _STREAMLIKE_TYPES.append(_cStringIO.OutputType)
-
-    # In Python2:
-    #
-    #     >>> type(open('README.md', 'rb'))
-    #     <open file 'README.md', mode 'rb' at 0x7f9493951d20>
-    #
-    # whereas, in Python3, the `file` builtin doesn't exist and instead we get:
-    #
-    #     >>> type(open('README.md', 'rb'))
-    #     <_io.BufferedReader name='README.md'>
-    #
-    # which is covered by the above addition of io.IOBase.
-    _STREAMLIKE_TYPES.append(file)
+_STREAMLIKE_TYPES = [io.IOBase]
 
 
 from . import _logger
-
-try:
-    unicode
-    _py3k = False
-    try:
-        isinstance(__name__, basestring)
-    except NameError:
-        msg = "Sorry, python-gnupg requires a Python version with proper"
-        msg += " unicode support. Please upgrade to Python>=2.6."
-        raise SystemExit(msg)
-except NameError:
-    _py3k = True
-
-_running_windows = sys.platform.startswith("win")
 
 ## Directory shortcuts:
 ## we don't want to use this one because it writes to the install dir:
@@ -164,45 +109,28 @@ def find_encodings(enc=None, system=False):
     return coder
 
 
-if _py3k:
+def b(x):
+    """See http://python3porting.com/problems.html#nicer-solutions"""
+    coder = find_encodings()
+    if isinstance(x, bytes):
+        return coder.encode(x.decode(coder.name))[0]
+    else:
+        return coder.encode(x)[0]
 
-    def b(x):
-        """See http://python3porting.com/problems.html#nicer-solutions"""
-        coder = find_encodings()
-        if isinstance(x, bytes):
-            return coder.encode(x.decode(coder.name))[0]
-        else:
-            return coder.encode(x)[0]
 
-    def s(x):
-        if isinstance(x, str):
-            return x
-        elif isinstance(x, (bytes, bytearray)):
-            return x.decode(find_encodings().name)
-        else:
-            raise NotImplemented
-
-else:
-
-    def b(x):
-        """See http://python3porting.com/problems.html#nicer-solutions"""
+def s(x):
+    if isinstance(x, str):
         return x
-
-    def s(x):
-        if isinstance(x, basestring):
-            return x
-        elif isinstance(x, (bytes, bytearray)):
-            return x.decode(find_encodings().name)
-        else:
-            raise NotImplemented
+    elif isinstance(x, (bytes, bytearray)):
+        return x.decode(find_encodings().name)
+    else:
+        raise NotImplemented
 
 
 def binary(data):
     coder = find_encodings()
 
-    if _py3k and isinstance(data, str):
-        encoded = coder.encode(data)[0]
-    elif not _py3k and type(data) is not str:
+    if isinstance(data, str):
         encoded = coder.encode(data)[0]
     else:
         encoded = data
@@ -231,9 +159,7 @@ def _copy_data(instream, outstream):
     sent = 0
 
     while True:
-        if (_py3k and isinstance(instream, str)) or (
-            not _py3k and isinstance(instream, basestring)
-        ):
+        if isinstance(instream, str):
             data = instream[:1024]
             instream = instream[1024:]
         else:
@@ -242,16 +168,33 @@ def _copy_data(instream, outstream):
             break
 
         sent += len(data)
-        if (_py3k and isinstance(data, str)) or (not _py3k and isinstance(data, basestring)):
+        if isinstance(data, str):
             encoded = binary(data)
         else:
             encoded = data
         log.debug("Sending %d bytes of data..." % sent)
         log.debug("Encoded data (type {}):\n{}".format(type(encoded), encoded))
 
-        if not _py3k:
+        try:
+            outstream.write(bytes(encoded))
+        except TypeError as te:
+            # XXX FIXME This appears to happen because
+            # _threaded_copy_data() sometimes passes the `outstream` as an
+            # object with type <_io.BufferredWriter> and at other times
+            # with type <encodings.utf_8.StreamWriter>.  We hit the
+            # following error when the `outstream` has type
+            # <encodings.utf_8.StreamWriter>.
+            if not "convert 'bytes' object to str implicitly" in str(te):
+                log.error(str(te))
             try:
-                outstream.write(encoded)
+                outstream.write(encoded.decode())
+            except TypeError as yate:
+                # We hit the "'str' does not support the buffer interface"
+                # error in Python3 when the `outstream` is an io.BytesIO and
+                # we try to write a str to it.  We don't care about that
+                # error, we'll just try again with bytes.
+                if not "does not support the buffer interface" in str(yate):
+                    log.error(str(yate))
             except OSError as ioe:
                 # Can get 'broken pipe' errors even when all data was sent
                 if "Broken pipe" in str(ioe):
@@ -260,46 +203,16 @@ def _copy_data(instream, outstream):
                     log.exception(ioe)
                 break
             else:
-                log.debug("Wrote data type <type 'str'> to outstream.")
+                log.debug("Wrote data type <class 'str'> outstream.")
+        except OSError as ioe:
+            # Can get 'broken pipe' errors even when all data was sent
+            if "Broken pipe" in str(ioe):
+                log.error("Error sending data: Broken pipe")
+            else:
+                log.exception(ioe)
+            break
         else:
-            try:
-                outstream.write(bytes(encoded))
-            except TypeError as te:
-                # XXX FIXME This appears to happen because
-                # _threaded_copy_data() sometimes passes the `outstream` as an
-                # object with type <_io.BufferredWriter> and at other times
-                # with type <encodings.utf_8.StreamWriter>.  We hit the
-                # following error when the `outstream` has type
-                # <encodings.utf_8.StreamWriter>.
-                if not "convert 'bytes' object to str implicitly" in str(te):
-                    log.error(str(te))
-                try:
-                    outstream.write(encoded.decode())
-                except TypeError as yate:
-                    # We hit the "'str' does not support the buffer interface"
-                    # error in Python3 when the `outstream` is an io.BytesIO and
-                    # we try to write a str to it.  We don't care about that
-                    # error, we'll just try again with bytes.
-                    if not "does not support the buffer interface" in str(yate):
-                        log.error(str(yate))
-                except OSError as ioe:
-                    # Can get 'broken pipe' errors even when all data was sent
-                    if "Broken pipe" in str(ioe):
-                        log.error("Error sending data: Broken pipe")
-                    else:
-                        log.exception(ioe)
-                    break
-                else:
-                    log.debug("Wrote data type <class 'str'> outstream.")
-            except OSError as ioe:
-                # Can get 'broken pipe' errors even when all data was sent
-                if "Broken pipe" in str(ioe):
-                    log.error("Error sending data: Broken pipe")
-                else:
-                    log.exception(ioe)
-                break
-            else:
-                log.debug("Wrote data type <class 'bytes'> to outstream.")
+            log.debug("Wrote data type <class 'bytes'> to outstream.")
 
     try:
         outstream.close()
@@ -492,33 +405,6 @@ def _is_stream(input):
     return isinstance(input, tuple(_STREAMLIKE_TYPES))
 
 
-def _is_string(thing):
-    """Check that **thing** is a string. The definition of the latter depends
-    upon the Python version.
-
-    :param thing: The thing to check if it's a string.
-    :rtype: bool
-    :returns: ``True`` if **thing** is string (or unicode in Python2).
-    """
-    if _py3k and isinstance(thing, str):
-        return True
-    if not _py3k and isinstance(thing, basestring):
-        return True
-    return False
-
-
-def _is_bytes(thing):
-    """Check that **thing** is bytes.
-
-    :param thing: The thing to check if it's bytes.
-    :rtype: bool
-    :returns: ``True`` if **thing** is bytes or a bytearray.
-    """
-    if isinstance(thing, (bytes, bytearray)):
-        return True
-    return False
-
-
 def _is_list_or_tuple(instance):
     """Check that ``instance`` is a list or tuple.
 
@@ -535,30 +421,6 @@ def _is_list_or_tuple(instance):
     )
 
 
-def _is_gpg1(version):
-    """Returns True if using GnuPG version 1.x.
-
-    :param tuple version: A tuple of three integers indication major, minor,
-        and micro version numbers.
-    """
-    (major, minor, micro) = _match_version_string(version)
-    if major == 1:
-        return True
-    return False
-
-
-def _is_gpg2(version):
-    """Returns True if using GnuPG version 2.x.
-
-    :param tuple version: A tuple of three integers indication major, minor,
-        and micro version numbers.
-    """
-    (major, minor, micro) = _match_version_string(version)
-    if major == 2:
-        return True
-    return False
-
-
 def _make_binary_stream(thing, encoding=None, armor=True):
     """Encode **thing**, then make it stream/file-like.
 
@@ -567,19 +429,10 @@ def _make_binary_stream(thing, encoding=None, armor=True):
     :returns: The encoded **thing**, wrapped in an ``io.BytesIO`` (if
         available), otherwise wrapped in a ``io.StringIO``.
     """
-    if _py3k:
-        if isinstance(thing, str):
-            thing = thing.encode(encoding)
-    else:
-        if type(thing) is not str:
-            thing = thing.encode(encoding)
+    if isinstance(thing, str):
+        thing = thing.encode(encoding)
 
-    try:
-        rv = BytesIO(thing)
-    except NameError:
-        rv = StringIO(thing)
-
-    return rv
+    return BytesIO(thing)
 
 
 def _make_passphrase(length=None, save=False, file=None):
@@ -626,35 +479,6 @@ def _make_random_string(length):
     """
     chars = string.ascii_lowercase + string.ascii_uppercase + string.digits
     return "".join(random.choice(chars) for x in range(length))
-
-
-def _match_version_string(version):
-    """Sort a binary version string into major, minor, and micro integers.
-
-    :param str version: A version string in the form x.x.x
-    :raises GnuPGVersionError: if the **version** string couldn't be parsed.
-    :rtype: tuple
-
-    :returns: A 3-tuple of integers, representing the (MAJOR, MINOR, MICRO)
-        version numbers. For example::
-
-            _match_version_string("2.1.3")
-
-        would return ``(2, 1, 3)``.
-    """
-    matched = _VERSION_STRING_REGEX.match(version)
-    g = matched.groups()
-    major, minor, micro = g[0], g[2], g[4]
-
-    # If, for whatever reason, the binary didn't tell us its version, then
-    # these might be (None, None, None), and so we should avoid typecasting
-    # them when that is the case.
-    if major and minor and micro:
-        major, minor, micro = int(major), int(minor), int(micro)
-    else:
-        raise GnuPGVersionError("Could not parse GnuPG version from: %r" % version)
-
-    return (major, minor, micro)
 
 
 def _next_year():
