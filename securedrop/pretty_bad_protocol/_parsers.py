@@ -105,7 +105,7 @@ def _check_preferences(prefs, pref_type=None):
     elif isinstance(prefs, list):
         prefs = set(prefs)
     else:
-        msg = "prefs must be list of strings, or space-separated string"
+        message = "prefs must be list of strings, or space-separated string"
         log.error("parsers._check_preferences(): %s" % message)
         raise TypeError(message)
 

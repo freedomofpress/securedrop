@@ -17,11 +17,10 @@
 # FITNESS FOR A PARTICULAR PURPOSE. See the included LICENSE file for details.
 
 
-from . import _ansistrm, _logger, _meta, _parsers, _util, copyleft, gnupg
-from ._version import get_versions
+from . import _logger, _meta, _parsers, _util, copyleft, gnupg
 from .gnupg import GPG
 
-__version__ = get_versions()["version"]
+__version__ = "3.1.1"
 __authors__ = copyleft.authors
 __license__ = copyleft.full_text
 __copyleft__ = copyleft.copyright
@@ -41,5 +40,3 @@ gnupg._util = _util
 __all__ = ["GPG", "_util", "_parsers", "_meta", "_logger"]
 
 del copyleft
-del get_versions
-del _version

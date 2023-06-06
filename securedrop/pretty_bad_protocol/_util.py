@@ -124,7 +124,7 @@ def s(x):
     elif isinstance(x, (bytes, bytearray)):
         return x.decode(find_encodings().name)
     else:
-        raise NotImplemented
+        raise ValueError("got type {}, not a string nor bytes".format(type(x)))
 
 
 def binary(data):
@@ -433,52 +433,6 @@ def _make_binary_stream(thing, encoding=None, armor=True):
         thing = thing.encode(encoding)
 
     return BytesIO(thing)
-
-
-def _make_passphrase(length=None, save=False, file=None):
-    """Create a passphrase and write it to a file that only the user can read.
-
-    This is not very secure, and should not be relied upon for actual key
-    passphrases.
-
-    :param int length: The length in bytes of the string to generate.
-
-    :param file file: The file to save the generated passphrase in. If not
-        given, defaults to 'passphrase-<the real user id>-<seconds since
-        epoch>' in the top-level directory.
-    """
-    if not length:
-        length = 40
-
-    passphrase = _make_random_string(length)
-
-    if save:
-        ruid, euid, suid = os.getresuid()
-        gid = os.getgid()
-        now = mktime(localtime())
-
-        if not file:
-            filename = str("passphrase-%s-%s" % uid, now)
-            file = os.path.join(_repo, filename)
-
-        with open(file, "a") as fh:
-            fh.write(passphrase)
-            fh.flush()
-            fh.close()
-            os.chmod(file, stat.S_IRUSR | stat.S_IWUSR)
-            os.chown(file, ruid, gid)
-
-        log.warn("Generated passphrase saved to %s" % file)
-    return passphrase
-
-
-def _make_random_string(length):
-    """Returns a random lowercase, uppercase, alphanumerical string.
-
-    :param int length: The length in bytes of the string to generate.
-    """
-    chars = string.ascii_lowercase + string.ascii_uppercase + string.digits
-    return "".join(random.choice(chars) for x in range(length))
 
 
 def _next_year():

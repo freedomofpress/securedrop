@@ -19,21 +19,9 @@
 """Logging module for python-gnupg."""
 
 import logging
-import os
-import sys
 from datetime import datetime
 from functools import wraps
-
-try:
-    from logging import NullHandler
-except:
-
-    class NullHandler(logging.Handler):
-        def handle(self, record):
-            pass
-
-
-from . import _ansistrm
+from logging import NullHandler
 
 GNUPG_STATUS_LEVEL = 9
 
@@ -66,30 +54,11 @@ def create_logger(level=logging.NOTSET):
     50   CRITICAL Unhandled exceptions and tracebacks.
     ==== ======== ========================================
     """
-    _test = os.path.join(os.path.join(os.getcwd(), "pretty_bad_protocol"), "test")
-    _now = datetime.now().strftime("%Y-%m-%d_%H%M%S")
-    _fn = os.path.join(_test, "%s_test_gnupg.log" % _now)
-    _fmt = "%(relativeCreated)-4d L%(lineno)-4d:%(funcName)-18.18s %(levelname)-7.7s %(message)s"
-
     ## Add the GNUPG_STATUS_LEVEL LogRecord to all Loggers in the module:
     logging.addLevelName(GNUPG_STATUS_LEVEL, "GNUPG")
     logging.Logger.status = status
 
-    if level > logging.NOTSET:
-        logging.basicConfig(level=level, filename=_fn, filemode="a", format=_fmt)
-        logging.logThreads = True
-        if hasattr(logging, "captureWarnings"):
-            logging.captureWarnings(True)
-        colouriser = _ansistrm.ColorizingStreamHandler
-        colouriser.level_map[9] = (None, "blue", False)
-        colouriser.level_map[10] = (None, "cyan", False)
-        handler = colouriser(sys.stderr)
-        handler.setLevel(level)
-
-        formatr = logging.Formatter(_fmt)
-        handler.setFormatter(formatr)
-    else:
-        handler = NullHandler()
+    handler = NullHandler()
 
     log = logging.getLogger("gnupg")
     log.addHandler(handler)
