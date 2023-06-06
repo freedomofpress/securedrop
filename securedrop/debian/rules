@@ -17,6 +17,7 @@ override_dh_installdeb:
 	dh_installdeb
 	echo "" > ${CURDIR}/debian/securedrop-app-code/DEBIAN/conffiles
 	echo "" > ${CURDIR}/debian/securedrop-config/DEBIAN/conffiles
+	echo "" > ${CURDIR}/debian/securedrop-keyring/DEBIAN/conffiles
 
 override_dh_install:
 	# Build translations
