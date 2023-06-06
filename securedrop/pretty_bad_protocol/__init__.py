@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 #
 # This file is part of python-gnupg, a Python interface to GnuPG.
 # Copyright © 2013 Isis Lovecruft, <isis@leap.se> 0xA3ADB67A2CDB8B35
@@ -17,19 +16,12 @@
 # ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
 # FITNESS FOR A PARTICULAR PURPOSE. See the included LICENSE file for details.
 
-from __future__ import absolute_import
 
-from . import gnupg
-from . import copyleft
-from . import _ansistrm
-from . import _logger
-from . import _meta
-from . import _parsers
-from . import _util
-from .gnupg import GPG
+from . import _ansistrm, _logger, _meta, _parsers, _util, copyleft, gnupg
 from ._version import get_versions
+from .gnupg import GPG
 
-__version__ = get_versions()['version']
+__version__ = get_versions()["version"]
 __authors__ = copyleft.authors
 __license__ = copyleft.full_text
 __copyleft__ = copyleft.copyright
@@ -48,7 +40,6 @@ gnupg._util = _util
 ## gnupg.<*allofthethings*>
 __all__ = ["GPG", "_util", "_parsers", "_meta", "_logger"]
 
-del absolute_import
 del copyleft
 del get_versions
 del _version

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 #
 # This file is part of python-gnupg, a Python interface to GnuPG.
 # Copyright © 2013 Isis Lovecruft, <isis@leap.se> 0xA3ADB67A2CDB8B35
@@ -17,15 +16,15 @@
 # ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
 # FITNESS FOR A PARTICULAR PURPOSE. See the included LICENSE file for details.
 
-'''Meta and base classes for hiding internal functions, and controlling
+"""Meta and base classes for hiding internal functions, and controlling
 attribute creation and handling.
-'''
+"""
 
-from __future__ import absolute_import
 
 import atexit
 import codecs
 import encodings
+
 ## For AOS, the locale module will need to point to a wrapper around the
 ## java.util.Locale class.
 ## See https://code.patternsinthevoid.net/?p=android-locale-hack.git
@@ -45,16 +44,11 @@ try:
 except ImportError:
     psutil = None
 
-from . import _parsers
-from . import _util
-from ._util import b
-from ._util import s
+from . import _parsers, _util
+from ._parsers import _check_preferences, _sanitise_list
+from ._util import b, log, s
 
-from ._parsers import _check_preferences
-from ._parsers import _sanitise_list
-from ._util    import log
-
-_VERSION_RE = re.compile('^\d+\.\d+\.\d+$')
+_VERSION_RE = re.compile(r"^\d+\.\d+\.\d+$")
 
 
 class GPGMeta(type):
@@ -74,9 +68,9 @@ class GPGMeta(type):
         log.debug("Metaclass __new__ constructor called for %r" % cls)
         if cls._find_agent():
             ## call the normal GPG.__init__() initialiser:
-            attrs['init'] = cls.__init__
-            attrs['_remove_agent'] = True
-        return super(GPGMeta, cls).__new__(cls, name, bases, attrs)
+            attrs["init"] = cls.__init__
+            attrs["_remove_agent"] = True
+        return super().__new__(cls, name, bases, attrs)
 
     @classmethod
     def _find_agent(cls):
@@ -133,13 +127,13 @@ class GPGMeta(type):
             # Otherwise to _agent_proc will be saved not "gpg-agent" process buth an other.
             if ownership_match:
                 log.debug("Effective UIDs of this process and gpg-agent match")
-                setattr(cls, '_agent_proc', proc)
+                setattr(cls, "_agent_proc", proc)
                 return True
 
         return False
 
 
-class GPGBase(object):
+class GPGBase:
     """Base class for storing properties and controlling process initialisation.
 
     :const _result_map: A *dict* containing classes from
@@ -147,23 +141,35 @@ class GPGBase(object):
                         obtained from GnuPG commands.
     :const _decode_errors: How to handle encoding errors.
     """
-    __metaclass__  = GPGMeta
-    _decode_errors = 'strict'
-    _result_map    = { 'crypt':    _parsers.Crypt,
-                       'delete':   _parsers.DeleteResult,
-                       'generate': _parsers.GenKey,
-                       'import':   _parsers.ImportResult,
-                       'export':   _parsers.ExportResult,
-                       'list':     _parsers.ListKeys,
-                       'sign':     _parsers.Sign,
-                       'verify':   _parsers.Verify,
-                       'expire':   _parsers.KeyExpirationResult,
-                       'signing':  _parsers.KeySigningResult,
-                       'packets':  _parsers.ListPackets }
 
-    def __init__(self, binary=None, home=None, keyring=None, secring=None,
-                 use_agent=False, default_preference_list=None,
-                 ignore_homedir_permissions=False, verbose=False, options=None):
+    __metaclass__ = GPGMeta
+    _decode_errors = "strict"
+    _result_map = {
+        "crypt": _parsers.Crypt,
+        "delete": _parsers.DeleteResult,
+        "generate": _parsers.GenKey,
+        "import": _parsers.ImportResult,
+        "export": _parsers.ExportResult,
+        "list": _parsers.ListKeys,
+        "sign": _parsers.Sign,
+        "verify": _parsers.Verify,
+        "expire": _parsers.KeyExpirationResult,
+        "signing": _parsers.KeySigningResult,
+        "packets": _parsers.ListPackets,
+    }
+
+    def __init__(
+        self,
+        binary=None,
+        home=None,
+        keyring=None,
+        secring=None,
+        use_agent=False,
+        default_preference_list=None,
+        ignore_homedir_permissions=False,
+        verbose=False,
+        options=None,
+    ):
         """Create a ``GPGBase``.
 
         This class is used to set up properties for controlling the behaviour
@@ -187,30 +193,29 @@ class GPGBase(object):
                            file for secret keys.
         """
         self.ignore_homedir_permissions = ignore_homedir_permissions
-        self.binary  = _util._find_binary(binary)
+        self.binary = _util._find_binary(binary)
         self.homedir = os.path.expanduser(home) if home else _util._conf
-        pub = _parsers._fix_unsafe(keyring) if keyring else 'pubring.gpg'
-        sec = _parsers._fix_unsafe(secring) if secring else 'secring.gpg'
+        pub = _parsers._fix_unsafe(keyring) if keyring else "pubring.gpg"
+        sec = _parsers._fix_unsafe(secring) if secring else "secring.gpg"
         self.keyring = os.path.join(self._homedir, pub)
         self.secring = os.path.join(self._homedir, sec)
         self.options = list(_parsers._sanitise_list(options)) if options else None
 
         #: The version string of our GnuPG binary
-        self.binary_version = '0.0.0'
+        self.binary_version = "0.0.0"
         self.verbose = False
 
         if default_preference_list:
-            self._prefs = _check_preferences(default_preference_list, 'all')
+            self._prefs = _check_preferences(default_preference_list, "all")
         else:
-            self._prefs  = 'SHA512 SHA384 SHA256 AES256 CAMELLIA256 TWOFISH'
-            self._prefs += ' AES192 ZLIB ZIP Uncompressed'
+            self._prefs = "SHA512 SHA384 SHA256 AES256 CAMELLIA256 TWOFISH"
+            self._prefs += " AES192 ZLIB ZIP Uncompressed"
 
         encoding = locale.getpreferredencoding()
-        if encoding is None: # This happens on Jython!
+        if encoding is None:  # This happens on Jython!
             encoding = sys.stdin.encoding
-        self._encoding = encoding.lower().replace('-', '_')
-        self._filesystemencoding = encodings.normalize_encoding(
-            sys.getfilesystemencoding().lower())
+        self._encoding = encoding.lower().replace("-", "_")
+        self._filesystemencoding = encodings.normalize_encoding(sys.getfilesystemencoding().lower())
 
         # Issue #49: https://github.com/isislovecruft/python-gnupg/issues/49
         #
@@ -218,19 +223,21 @@ class GPGBase(object):
         # codecs module will choke on Unicode data, so we globally monkeypatch
         # the "strict" error handler to use the builtin `replace_errors`
         # handler:
-        codecs.register_error('strict', codecs.replace_errors)
+        codecs.register_error("strict", codecs.replace_errors)
 
-        self._keyserver = 'hkp://wwwkeys.pgp.net'
-        self.__generated_keys = os.path.join(self.homedir, 'generated-keys')
+        self._keyserver = "hkp://wwwkeys.pgp.net"
+        self.__generated_keys = os.path.join(self.homedir, "generated-keys")
 
         try:
             assert self.binary, "Could not find binary %s" % binary
             if _util._py3k:
-                assert isinstance(verbose, (bool, str, int)), \
-                    "'verbose' must be boolean, string, or 0 <= n <= 9"
+                assert isinstance(
+                    verbose, (bool, str, int)
+                ), "'verbose' must be boolean, string, or 0 <= n <= 9"
             else:
-                assert isinstance(verbose, (bool, str, int, unicode)), \
-                    "'verbose' must be boolean, string, unicode, or 0 <= n <= 9"
+                assert isinstance(
+                    verbose, (bool, str, int, unicode)
+                ), "'verbose' must be boolean, string, unicode, or 0 <= n <= 9"
             assert isinstance(use_agent, bool), "'use_agent' must be boolean"
             if self.options is not None:
                 assert isinstance(self.options, list), "options not list"
@@ -241,10 +248,9 @@ class GPGBase(object):
             self._set_verbose(verbose)
             self.use_agent = use_agent
 
-        if hasattr(self, '_agent_proc') \
-                and getattr(self, '_remove_agent', None) is True:
-            if hasattr(self, '__remove_path__'):
-                self.__remove_path__('pinentry')
+        if hasattr(self, "_agent_proc") and getattr(self, "_remove_agent", None) is True:
+            if hasattr(self, "__remove_path__"):
+                self.__remove_path__("pinentry")
 
         # Assign our self.binary_version attribute:
         self._check_sane_and_get_gpg_version()
@@ -263,11 +269,12 @@ class GPGBase(object):
         self._removed_path_entries = []
 
         log.debug("Attempting to remove %s from system PATH" % str(prog))
-        if (prog is None) or (not isinstance(prog, str)): return
+        if (prog is None) or (not isinstance(prog, str)):
+            return
 
         try:
             program = _util._which(prog)[0]
-        except (OSError, IOError, IndexError) as err:
+        except (OSError, IndexError) as err:
             log.err(str(err))
             log.err("Cannot find program '%s', not changing PATH." % prog)
             return
@@ -280,16 +287,16 @@ class GPGBase(object):
 
             ## symlink our gpg binary into $PWD if the path we are removing is
             ## the one which contains our gpg executable:
-            new_gpg_location = os.path.join(os.getcwd(), 'gpg')
+            new_gpg_location = os.path.join(os.getcwd(), "gpg")
             if gnupg_base == program_base:
                 os.symlink(self.binary, new_gpg_location)
                 self.binary = new_gpg_location
 
             ## copy the original environment so that we can put it back later:
-            env_copy = os.environ            ## this one should not be touched
-            path_copy = os.environ.pop('PATH')
+            env_copy = os.environ  ## this one should not be touched
+            path_copy = os.environ.pop("PATH")
             log.debug("Created a copy of system PATH: %r" % path_copy)
-            assert not os.environ.has_key('PATH'), "OS env kept $PATH anyway!"
+            assert not os.environ.has_key("PATH"), "OS env kept $PATH anyway!"
 
             @staticmethod
             def remove_program_from_path(path, prog_base):
@@ -303,16 +310,15 @@ class GPGBase(object):
                                       and without the program name. For
                                       example, ``prog_base='/usr/bin'``.
                 """
-                paths = path.split(':')
+                paths = path.split(":")
                 for directory in paths:
                     if directory == prog_base:
-                        log.debug("Found directory with target program: %s"
-                                  % directory)
+                        log.debug("Found directory with target program: %s" % directory)
                         path.remove(directory)
                         self._removed_path_entries.append(directory)
                 log.debug("Deleted all found instance of %s." % directory)
-                log.debug("PATH is now:%s%s" % (os.linesep, path))
-                new_path = ':'.join([p for p in path])
+                log.debug("PATH is now:{}{}".format(os.linesep, path))
+                new_path = ":".join([p for p in path])
                 return new_path
 
             @staticmethod
@@ -324,12 +330,12 @@ class GPGBase(object):
                 """
                 log.debug("Updating system path...")
                 os.environ = environment
-                new_path = ':'.join([p for p in path])
-                old = ''
-                if 'PATH' in os.environ:
-                    new_path = ':'.join([os.environ['PATH'], new_path])
-                os.environ.update({'PATH': new_path})
-                log.debug("System $PATH: %s" % os.environ['PATH'])
+                new_path = ":".join([p for p in path])
+                old = ""
+                if "PATH" in os.environ:
+                    new_path = ":".join([os.environ["PATH"], new_path])
+                os.environ.update({"PATH": new_path})
+                log.debug("System $PATH: %s" % os.environ["PATH"])
 
             modified_path = remove_program_from_path(path_copy, program_base)
             update_path(env_copy, modified_path)
@@ -341,6 +347,7 @@ class GPGBase(object):
                 if os.path.islink(symlink):
                     os.unlink(symlink)
                     log.debug("Removed binary symlink '%s'" % symlink)
+
             atexit.register(remove_symlinked_binary, new_gpg_location)
 
     @property
@@ -370,7 +377,7 @@ class GPGBase(object):
         Using BZIP2 is avoided due to not interacting well with some versions
         of GnuPG>=2.0.0.
         """
-        self._prefs = 'SHA512 SHA384 SHA256 AES256 CAMELLIA256 TWOFISH ZLIB ZIP'
+        self._prefs = "SHA512 SHA384 SHA256 AES256 CAMELLIA256 TWOFISH ZLIB ZIP"
 
     @property
     def keyserver(self):
@@ -395,7 +402,7 @@ class GPGBase(object):
     @keyserver.deleter
     def keyserver(self):
         """Reset the keyserver to the default setting."""
-        self._keyserver = 'hkp://wwwkeys.pgp.net'
+        self._keyserver = "hkp://wwwkeys.pgp.net"
 
     def _homedir_getter(self):
         """Get the directory currently being used as GnuPG's homedir.
@@ -423,8 +430,7 @@ class GPGBase(object):
                  directory to use.
         """
         if not directory:
-            log.debug("GPGBase._homedir_setter(): Using default homedir: '%s'"
-                      % _util._conf)
+            log.debug("GPGBase._homedir_setter(): Using default homedir: '%s'" % _util._conf)
             directory = _util._conf
 
         hd = _parsers._fix_unsafe(directory)
@@ -439,10 +445,9 @@ class GPGBase(object):
         else:
             try:
                 log.debug("GPGBase._homedir_setter(): checking permissions")
-                assert _util._has_readwrite(hd), \
-                    "Homedir '%s' needs read/write permissions" % hd
+                assert _util._has_readwrite(hd), "Homedir '%s' needs read/write permissions" % hd
             except AssertionError as ae:
-                msg = ("Unable to set '%s' as GnuPG homedir" % directory)
+                msg = "Unable to set '%s' as GnuPG homedir" % directory
                 log.debug("GPGBase.homedir.setter(): %s" % msg)
                 log.debug(str(ae))
                 raise RuntimeError(str(ae))
@@ -477,24 +482,21 @@ class GPGBase(object):
              directory to use.
         """
         if not directory:
-            directory = os.path.join(self.homedir, 'generated-keys')
-            log.debug("GPGBase._generated_keys_setter(): Using '%s'"
-                      % directory)
+            directory = os.path.join(self.homedir, "generated-keys")
+            log.debug("GPGBase._generated_keys_setter(): Using '%s'" % directory)
 
         hd = _parsers._fix_unsafe(directory)
         log.debug("GPGBase._generated_keys_setter(): got directory '%s'" % hd)
 
         if hd:
-            log.debug("GPGBase._generated_keys_setter(): Check exists '%s'"
-                      % hd)
+            log.debug("GPGBase._generated_keys_setter(): Check exists '%s'" % hd)
             _util._create_if_necessary(hd)
 
         try:
             log.debug("GPGBase._generated_keys_setter(): check permissions")
-            assert _util._has_readwrite(hd), \
-                "Keys dir '%s' needs read/write permissions" % hd
+            assert _util._has_readwrite(hd), "Keys dir '%s' needs read/write permissions" % hd
         except AssertionError as ae:
-            msg = ("Unable to set '%s' as generated keys dir" % directory)
+            msg = "Unable to set '%s' as generated keys dir" % directory
             log.debug("GPGBase._generated_keys_setter(): %s" % msg)
             log.debug(str(ae))
             raise RuntimeError(str(ae))
@@ -502,8 +504,7 @@ class GPGBase(object):
             log.info("Setting homedir to '%s'" % hd)
             self.__generated_keys = hd
 
-    _generated_keys = _util.InheritableProperty(_generated_keys_getter,
-                                                _generated_keys_setter)
+    _generated_keys = _util.InheritableProperty(_generated_keys_getter, _generated_keys_setter)
 
     def _check_sane_and_get_gpg_version(self):
         """Check that everything runs alright, and grab the gpg binary's
@@ -512,7 +513,7 @@ class GPGBase(object):
         :raises RuntimeError: if we cannot invoke the gpg binary.
         """
         proc = self._open_subprocess(["--list-config", "--with-colons"])
-        result = self._result_map['list'](self)
+        result = self._result_map["list"](self)
         self._read_data(proc.stdout, result)
         if proc.returncode:
             raise RuntimeError("Error invoking gpg: %s" % result.data)
@@ -520,14 +521,16 @@ class GPGBase(object):
             try:
                 proc.terminate()
             except OSError:
-                log.error(("Could neither invoke nor terminate a gpg process... "
-                           "Are you sure you specified the corrent (and full) "
-                           "path to the gpg binary?"))
+                log.error(
+                    "Could neither invoke nor terminate a gpg process... "
+                    "Are you sure you specified the corrent (and full) "
+                    "path to the gpg binary?"
+                )
 
-        version_line = result.data.partition(b':version:')[2].decode()
+        version_line = result.data.partition(b":version:")[2].decode()
         if not version_line:
             raise RuntimeError("Got invalid version line from gpg: %s\n" % result.data)
-        self.binary_version = version_line.split('\n')[0]
+        self.binary_version = version_line.split("\n")[0]
         if not _VERSION_RE.match(self.binary_version):
             raise RuntimeError("Got invalid version line from gpg: %s\n" % self.binary_version)
         log.debug("Using GnuPG version %s" % self.binary_version)
@@ -554,35 +557,39 @@ class GPGBase(object):
                                 process.
         """
         ## see TODO file, tag :io:makeargs:
-        cmd = [self.binary,
-               '--no-options --no-emit-version --no-tty --status-fd 2']
+        cmd = [self.binary, "--no-options --no-emit-version --no-tty --status-fd 2"]
 
-        if self.homedir: cmd.append('--homedir "%s"' % self.homedir)
+        if self.homedir:
+            cmd.append('--homedir "%s"' % self.homedir)
 
         if self.keyring:
-            cmd.append('--no-default-keyring --keyring %s' % self.keyring)
+            cmd.append("--no-default-keyring --keyring %s" % self.keyring)
         if self.secring:
-            cmd.append('--secret-keyring %s' % self.secring)
+            cmd.append("--secret-keyring %s" % self.secring)
 
-        if passphrase: cmd.append('--batch --passphrase-fd 0')
+        if passphrase:
+            cmd.append("--batch --passphrase-fd 0")
 
-        if self.use_agent is True: cmd.append('--use-agent')
-        elif self.use_agent is False: cmd.append('--no-use-agent')
+        if self.use_agent is True:
+            cmd.append("--use-agent")
+        elif self.use_agent is False:
+            cmd.append("--no-use-agent")
 
         # The arguments for debugging and verbosity should be placed into the
         # cmd list before the options/args in order to resolve Issue #76:
         # https://github.com/isislovecruft/python-gnupg/issues/76
         if self.verbose:
-            cmd.append('--debug-all')
+            cmd.append("--debug-all")
 
-            if (isinstance(self.verbose, str) or
-                (isinstance(self.verbose, int) and (self.verbose >= 1))):
+            if isinstance(self.verbose, str) or (
+                isinstance(self.verbose, int) and (self.verbose >= 1)
+            ):
                 # GnuPG<=1.4.18 parses the `--debug-level` command in a way
                 # that is incompatible with all other GnuPG versions. :'(
-                if self.binary_version and (self.binary_version <= '1.4.18'):
-                    cmd.append('--debug-level=%s' % self.verbose)
+                if self.binary_version and (self.binary_version <= "1.4.18"):
+                    cmd.append("--debug-level=%s" % self.verbose)
                 else:
-                    cmd.append('--debug-level %s' % self.verbose)
+                    cmd.append("--debug-level %s" % self.verbose)
 
         if self.options:
             [cmd.append(opt) for opt in iter(_sanitise_list(self.options))]
@@ -611,8 +618,8 @@ class GPGBase(object):
         """
         ## see http://docs.python.org/2/library/subprocess.html#converting-an\
         ##    -argument-sequence-to-a-string-on-windows
-        cmd = shlex.split(' '.join(self._make_args(args, passphrase)))
-        log.debug("Sending command to GnuPG process:%s%s" % (os.linesep, cmd))
+        cmd = shlex.split(" ".join(self._make_args(args, passphrase)))
+        log.debug("Sending command to GnuPG process:{}{}".format(os.linesep, cmd))
 
         if platform.system() == "Windows":
             # TODO figure out what the hell is going on there.
@@ -621,17 +628,22 @@ class GPGBase(object):
             expand_shell = False
 
         environment = {
-            'LANGUAGE': os.environ.get('LANGUAGE') or 'en',
-            'GPG_TTY': os.environ.get('GPG_TTY') or '',
-            'DISPLAY': os.environ.get('DISPLAY') or '',
-            'GPG_AGENT_INFO': os.environ.get('GPG_AGENT_INFO') or '',
-            'GPG_TTY': os.environ.get('GPG_TTY') or '',
-            'GPG_PINENTRY_PATH': os.environ.get('GPG_PINENTRY_PATH') or '',
+            "LANGUAGE": os.environ.get("LANGUAGE") or "en",
+            "GPG_TTY": os.environ.get("GPG_TTY") or "",
+            "DISPLAY": os.environ.get("DISPLAY") or "",
+            "GPG_AGENT_INFO": os.environ.get("GPG_AGENT_INFO") or "",
+            "GPG_TTY": os.environ.get("GPG_TTY") or "",
+            "GPG_PINENTRY_PATH": os.environ.get("GPG_PINENTRY_PATH") or "",
         }
 
-        return subprocess.Popen(cmd, shell=expand_shell, stdin=subprocess.PIPE,
-                                stdout=subprocess.PIPE, stderr=subprocess.PIPE,
-                                env=environment)
+        return subprocess.Popen(
+            cmd,
+            shell=expand_shell,
+            stdin=subprocess.PIPE,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            env=environment,
+        )
 
     def _read_response(self, stream, result):
         """Reads all the stderr output from GPG, taking notice only of lines
@@ -653,7 +665,7 @@ class GPGBase(object):
         userland_messages_to_ignore = []
 
         if self.ignore_homedir_permissions:
-            userland_messages_to_ignore.append('unsafe ownership on homedir')
+            userland_messages_to_ignore.append("unsafe ownership on homedir")
 
         lines = []
 
@@ -664,12 +676,12 @@ class GPGBase(object):
             lines.append(line)
             line = line.rstrip()
 
-            if line.startswith('[GNUPG:]'):
-                line = _util._deprefix(line, '[GNUPG:] ', log.status)
+            if line.startswith("[GNUPG:]"):
+                line = _util._deprefix(line, "[GNUPG:] ", log.status)
                 keyword, value = _util._separate_keyword(line)
                 result._handle_status(keyword, value)
-            elif line.startswith('gpg:'):
-                line = _util._deprefix(line, 'gpg: ')
+            elif line.startswith("gpg:"):
+                line = _util._deprefix(line, "gpg: ")
                 keyword, value = _util._separate_keyword(line)
 
                 # Silence warnings from gpg we're supposed to ignore
@@ -684,13 +696,13 @@ class GPGBase(object):
                         # Handle the gpg2 error where a missing trustdb.gpg is,
                         # for some stupid reason, considered fatal:
                         if value.find("trustdb.gpg") and value.find("No such file"):
-                            result._handle_status('NEED_TRUSTDB', '')
+                            result._handle_status("NEED_TRUSTDB", "")
             else:
                 if self.verbose:
                     log.info("%s" % line)
                 else:
                     log.debug("%s" % line)
-        result.stderr = ''.join(lines)
+        result.stderr = "".join(lines)
 
     def _read_data(self, stream, result):
         """Incrementally read from ``stream`` and store read data.
@@ -735,15 +747,15 @@ class GPGBase(object):
         the string level (or specified ``verbose=True``), we'll default to
         'basic' logging.
         """
-        string_levels = ('basic', 'advanced', 'expert', 'guru')
+        string_levels = ("basic", "advanced", "expert", "guru")
 
         if verbose is True:
             # The caller wants logging, but we need a valid --debug-level
             # for gpg. Default to "basic", and warn about the ambiguity.
-            verbose = 'basic'
+            verbose = "basic"
 
-        if (isinstance(verbose, str) and not (verbose in string_levels)):
-            verbose = 'basic'
+        if isinstance(verbose, str) and not (verbose in string_levels):
+            verbose = "basic"
 
         self.verbose = verbose
 
@@ -754,16 +766,15 @@ class GPGBase(object):
         close it before returning.
         """
         stderr = codecs.getreader(self._encoding)(process.stderr)
-        rr = threading.Thread(target=self._read_response,
-                              args=(stderr, result))
+        rr = threading.Thread(target=self._read_response, args=(stderr, result))
         rr.setDaemon(True)
-        log.debug('stderr reader: %r', rr)
+        log.debug("stderr reader: %r", rr)
         rr.start()
 
         stdout = process.stdout
         dr = threading.Thread(target=self._read_data, args=(stdout, result))
         dr.setDaemon(True)
-        log.debug('stdout reader: %r', dr)
+        log.debug("stdout reader: %r", dr)
         dr.start()
 
         dr.join()
@@ -774,7 +785,7 @@ class GPGBase(object):
         if stdin is not None:
             try:
                 stdin.close()
-            except IOError:
+            except OSError:
                 pass
         stderr.close()
         stdout.close()
@@ -803,19 +814,25 @@ class GPGBase(object):
         if not keyserver:
             keyserver = self.keyserver
 
-        args = ['--keyserver {0}'.format(keyserver),
-                '--recv-keys {0}'.format(keyids)]
-        log.info('Requesting keys from %s: %s' % (keyserver, keyids))
+        args = [f"--keyserver {keyserver}", f"--recv-keys {keyids}"]
+        log.info("Requesting keys from {}: {}".format(keyserver, keyids))
 
-        result = self._result_map['import'](self)
+        result = self._result_map["import"](self)
         proc = self._open_subprocess(args)
         self._collect_output(proc, result)
-        log.debug('recv_keys result: %r', result.__dict__)
+        log.debug("recv_keys result: %r", result.__dict__)
         return result
 
-    def _sign_file(self, file, default_key=None, passphrase=None,
-                   clearsign=True, detach=False, binary=False,
-                   digest_algo='SHA512'):
+    def _sign_file(
+        self,
+        file,
+        default_key=None,
+        passphrase=None,
+        clearsign=True,
+        detach=False,
+        binary=False,
+        digest_algo="SHA512",
+    ):
         """Create a signature for a file.
 
         :param file: The file stream (i.e. it's already been open()'d) to sign.
@@ -833,10 +850,10 @@ class GPGBase(object):
         log.debug("_sign_file():")
         if binary:
             log.info("Creating binary signature for file %s" % file)
-            args = ['--sign']
+            args = ["--sign"]
         else:
             log.info("Creating ascii-armoured signature for file %s" % file)
-            args = ['--sign --armor']
+            args = ["--sign --armor"]
 
         if clearsign:
             args.append("--clearsign")
@@ -853,7 +870,7 @@ class GPGBase(object):
 
         ## We could use _handle_io here except for the fact that if the
         ## passphrase is bad, gpg bails and you can't write the message.
-        result = self._result_map['sign'](self)
+        result = self._result_map["sign"](self)
 
         ## If the passphrase is an empty string, the message up to and
         ## including its first newline will be cut off before making it to the
@@ -872,25 +889,29 @@ class GPGBase(object):
             if passphrase:
                 _util._write_passphrase(proc.stdin, passphrase, self._encoding)
             writer = _util._threaded_copy_data(file, proc.stdin)
-        except IOError as ioe:
+        except OSError as ioe:
             log.exception("Error writing message: %s" % str(ioe))
             writer = None
         self._collect_output(proc, result, writer, proc.stdin)
         return result
 
-    def _encrypt(self, data, recipients,
-                 default_key=None,
-                 passphrase=None,
-                 armor=True,
-                 encrypt=True,
-                 symmetric=False,
-                 always_trust=True,
-                 output=None,
-                 throw_keyids=False,
-                 hidden_recipients=None,
-                 cipher_algo='AES256',
-                 digest_algo='SHA512',
-                 compress_algo='ZLIB'):
+    def _encrypt(
+        self,
+        data,
+        recipients,
+        default_key=None,
+        passphrase=None,
+        armor=True,
+        encrypt=True,
+        symmetric=False,
+        always_trust=True,
+        output=None,
+        throw_keyids=False,
+        hidden_recipients=None,
+        cipher_algo="AES256",
+        digest_algo="SHA512",
+        compress_algo="ZLIB",
+    ):
         """Encrypt the message read from the file-like object **data**.
 
         :param str data: The file or bytestream to encrypt.
@@ -991,39 +1012,48 @@ class GPGBase(object):
         ## for now.
         output_filename = None
         if output:
-            if getattr(output, 'fileno', None) is not None:
+            if getattr(output, "fileno", None) is not None:
                 ## avoid overwrite confirmation message
-                if getattr(output, 'name', None) is not None:
+                if getattr(output, "name", None) is not None:
                     output_filename = output.name
                     if os.path.exists(output.name):
                         os.remove(output.name)
-                    #args.append('--output %s' % output.name)
+                    # args.append('--output %s' % output.name)
             else:
                 output_filename = output
                 if os.path.exists(output):
                     os.remove(output)
-                #args.append('--output %s' % output)
+                # args.append('--output %s' % output)
 
-        if armor: args.append('--armor')
-        if always_trust: args.append('--always-trust')
-        if cipher_algo: args.append('--cipher-algo %s' % cipher_algo)
-        if compress_algo: args.append('--compress-algo %s' % compress_algo)
+        if armor:
+            args.append("--armor")
+        if always_trust:
+            args.append("--always-trust")
+        if cipher_algo:
+            args.append("--cipher-algo %s" % cipher_algo)
+        if compress_algo:
+            args.append("--compress-algo %s" % compress_algo)
 
         if default_key:
-            args.append('--sign')
-            args.append('--default-key %s' % default_key)
+            args.append("--sign")
+            args.append("--default-key %s" % default_key)
             if digest_algo:
-                args.append('--digest-algo %s' % digest_algo)
+                args.append("--digest-algo %s" % digest_algo)
 
         ## both can be used at the same time for an encrypted file which
         ## is decryptable with a passphrase or secretkey.
-        if symmetric: args.append('--symmetric')
-        if encrypt: args.append('--encrypt')
-        if throw_keyids: args.append('--throw-keyids')
+        if symmetric:
+            args.append("--symmetric")
+        if encrypt:
+            args.append("--encrypt")
+        if throw_keyids:
+            args.append("--throw-keyids")
 
         if len(recipients) >= 1:
-            log.debug("GPG.encrypt() called for recipients '%s' with type '%s'"
-                      % (recipients, type(recipients)))
+            log.debug(
+                "GPG.encrypt() called for recipients '%s' with type '%s'"
+                % (recipients, type(recipients))
+            )
 
             if isinstance(recipients, (list, tuple)):
                 for recp in recipients:
@@ -1032,37 +1062,35 @@ class GPGBase(object):
                             try:
                                 assert _parsers._is_hex(str(recp))
                             except AssertionError:
-                                log.info("Can't accept recipient string: %s"
-                                         % recp)
+                                log.info("Can't accept recipient string: %s" % recp)
                             else:
                                 self._add_recipient_string(args, hidden_recipients, str(recp))
                                 continue
                             ## will give unicode in 2.x as '\uXXXX\uXXXX'
                             if isinstance(hidden_recipients, (list, tuple)):
                                 if [s for s in hidden_recipients if recp in str(s)]:
-                                    args.append('--hidden-recipient %r' % recp)
+                                    args.append("--hidden-recipient %r" % recp)
                                 else:
-                                    args.append('--recipient %r' % recp)
+                                    args.append("--recipient %r" % recp)
                             else:
-                                args.append('--recipient %r' % recp)
+                                args.append("--recipient %r" % recp)
                             continue
                     if isinstance(recp, str):
                         self._add_recipient_string(args, hidden_recipients, recp)
 
             elif (not _util._py3k) and isinstance(recp, basestring):
-                for recp in recipients.split('\x20'):
+                for recp in recipients.split("\x20"):
                     self._add_recipient_string(args, hidden_recipients, recp)
 
             elif _util._py3k and isinstance(recp, str):
-                for recp in recipients.split(' '):
+                for recp in recipients.split(" "):
                     self._add_recipient_string(args, hidden_recipients, recp)
                     ## ...and now that we've proven py3k is better...
             else:
-                log.debug("Don't know what to do with recipients: %r"
-                          % recipients)
+                log.debug("Don't know what to do with recipients: %r" % recipients)
 
-        result = self._result_map['crypt'](self)
-        log.debug("Got data '%s' with type '%s'." % (data, type(data)))
+        result = self._result_map["crypt"](self)
+        log.debug("Got data '{}' with type '{}'.".format(data, type(data)))
         self._handle_io(args, data, result, passphrase=passphrase, binary=True)
         # Avoid writing raw encrypted bytes to terminal loggers and breaking
         # them in that adorable way where they spew hieroglyphics until reset:
@@ -1071,7 +1099,7 @@ class GPGBase(object):
 
         if output_filename:
             log.info("Writing encrypted output to file: %s" % output_filename)
-            with open(output_filename, 'wb') as fh:
+            with open(output_filename, "wb") as fh:
                 fh.write(result.data)
                 fh.flush()
                 log.info("Encrypted output written successfully.")
@@ -1081,8 +1109,8 @@ class GPGBase(object):
     def _add_recipient_string(self, args, hidden_recipients, recipient):
         if isinstance(hidden_recipients, (list, tuple)):
             if [s for s in hidden_recipients if recipient in str(s)]:
-                args.append('--hidden-recipient %s' % recipient)
+                args.append("--hidden-recipient %s" % recipient)
             else:
-                args.append('--recipient %s' % recipient)
+                args.append("--recipient %s" % recipient)
         else:
-            args.append('--recipient %s' % recipient)
+            args.append("--recipient %s" % recipient)

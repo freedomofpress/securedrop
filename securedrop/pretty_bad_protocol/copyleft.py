@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 #
 # This file is part of python-gnupg, a Python interface to GnuPG.
 # Copyright © 2013 Isis Lovecruft, <isis@leap.se> 0xA3ADB67A2CDB8B35
@@ -7,37 +6,32 @@
 #           © 2008-2012 Vinay Sajip
 #           © 2005 Steve Traugott
 #           © 2004 A.M. Kuchling
-# 
+#
 # This program is free software: you can redistribute it and/or modify it
 # under the terms of the GNU General Public License as published by the Free
 # Software Foundation, either version 3 of the License, or (at your option)
 # any later version.
-# 
+#
 # This program is distributed in the hope that it will be useful, but WITHOUT
 # ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
 # FITNESS FOR A PARTICULAR PURPOSE. See the included LICENSE file for details.
 
-'''copyleft.py
+"""copyleft.py
 --------------
 Copyright information for python-gnupg.
-'''
+"""
 
-from __future__ import absolute_import
 
 from . import _util
 
-
-authors = { 'lovecruft_isis': _util.author_info(
-                'Isis Agora Lovecruft', 'isis@leap.se', '0xA3ADB67A2CDB8B35'),
-
-            'sajip_vinay': _util.author_info(
-                'Vinay Sajip', 'vinay.sajip@gmail.com', '0xDE6EF0B2'),
-
-            'traugott_steve': _util.author_info(
-                'Steve Traugott', 'stevegt@terraluna.org'),
-
-            'kuchling_am': _util.author_info(
-                'A.M. Kuchling', 'amk@amk.ca'), }
+authors = {
+    "lovecruft_isis": _util.author_info(
+        "Isis Agora Lovecruft", "isis@leap.se", "0xA3ADB67A2CDB8B35"
+    ),
+    "sajip_vinay": _util.author_info("Vinay Sajip", "vinay.sajip@gmail.com", "0xDE6EF0B2"),
+    "traugott_steve": _util.author_info("Steve Traugott", "stevegt@terraluna.org"),
+    "kuchling_am": _util.author_info("A.M. Kuchling", "amk@amk.ca"),
+}
 
 copyright = """\
 Copyright © 2013 Isis Lovecruft, <isis@leap.se> 0xA3ADB67A2CDB8B35
@@ -51,7 +45,7 @@ See included LICENSE or ``print(gnupg.__license__)`` for full license."""
 
 disclaimer = """\
 This file is part of python-gnupg, a Python wrapper around GnuPG.
-%s
+{}
 
 This program is free software: you can redistribute it and/or modify it
 under the terms of the GNU General Public License as published by the Free
@@ -61,7 +55,9 @@ any later version.
 This program is distributed in the hope that it will be useful, but WITHOUT
 ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
 FITNESS FOR A PARTICULAR PURPOSE. See the included LICENSE file for details.
-""" % (copyright,)
+""".format(
+    copyright
+)
 
 txcopyright = """\
 Where stated, parts of this program were taken from Twisted, which is
@@ -746,4 +742,4 @@ ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
                          END ORIGINAL LICENSE TEXT
 """
 
-full_text = "%s\n\n%s\n\n%s" % (disclaimer, txcopyright, GPLv3_text)
+full_text = "{}\n\n{}\n\n{}".format(disclaimer, txcopyright, GPLv3_text)

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 #
 # This file is part of python-gnupg, a Python interface to GnuPG.
 # Copyright © 2013 Isis Lovecruft, <isis@leap.se> 0xA3ADB67A2CDB8B35
@@ -17,27 +16,30 @@
 # ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
 # FITNESS FOR A PARTICULAR PURPOSE. See the included LICENSE file for details.
 
-'''Functions for handling trustdb and trust calculations.
+"""Functions for handling trustdb and trust calculations.
 
 The functions within this module take an instance of :class:`gnupg.GPGBase` or
 a suitable subclass as their first argument.
-'''
+"""
 
-from __future__ import absolute_import
 
 import os
 
-from .      import _util
+from . import _util
 from ._util import log
+
 
 def _create_trustdb(cls):
     """Create the trustdb file in our homedir, if it doesn't exist."""
-    trustdb = os.path.join(cls.homedir, 'trustdb.gpg')
+    trustdb = os.path.join(cls.homedir, "trustdb.gpg")
     if not os.path.isfile(trustdb):
-        log.info("GnuPG complained that your trustdb file was missing. %s"
-                 % "This is likely due to changing to a new homedir.")
+        log.info(
+            "GnuPG complained that your trustdb file was missing. %s"
+            % "This is likely due to changing to a new homedir."
+        )
         log.info("Creating trustdb.gpg file in your GnuPG homedir.")
         cls.fix_trustdb(trustdb)
+
 
 def export_ownertrust(cls, trustdb=None):
     """Export ownertrust to a trustdb file.
@@ -50,17 +52,18 @@ def export_ownertrust(cls, trustdb=None):
                            homedir.
     """
     if trustdb is None:
-        trustdb = os.path.join(cls.homedir, 'trustdb.gpg')
+        trustdb = os.path.join(cls.homedir, "trustdb.gpg")
 
     try:
-        os.rename(trustdb, trustdb + '.bak')
-    except (OSError, IOError) as err:
+        os.rename(trustdb, trustdb + ".bak")
+    except OSError as err:
         log.debug(str(err))
 
-    export_proc = cls._open_subprocess(['--export-ownertrust'])
-    tdb = open(trustdb, 'wb')
+    export_proc = cls._open_subprocess(["--export-ownertrust"])
+    tdb = open(trustdb, "wb")
     _util._threaded_copy_data(export_proc.stdout, tdb)
     export_proc.wait()
+
 
 def import_ownertrust(cls, trustdb=None):
     """Import ownertrust from a trustdb file.
@@ -70,17 +73,18 @@ def import_ownertrust(cls, trustdb=None):
                         homedir.
     """
     if trustdb is None:
-        trustdb = os.path.join(cls.homedir, 'trustdb.gpg')
+        trustdb = os.path.join(cls.homedir, "trustdb.gpg")
 
-    import_proc = cls._open_subprocess(['--import-ownertrust'])
+    import_proc = cls._open_subprocess(["--import-ownertrust"])
 
     try:
-        tdb = open(trustdb, 'rb')
-    except (OSError, IOError):
+        tdb = open(trustdb, "rb")
+    except OSError:
         log.error("trustdb file %s does not exist!" % trustdb)
 
     _util._threaded_copy_data(tdb, import_proc.stdin)
     import_proc.wait()
+
 
 def fix_trustdb(cls, trustdb=None):
     """Attempt to repair a broken trustdb.gpg file.
@@ -104,9 +108,9 @@ def fix_trustdb(cls, trustdb=None):
                         homedir.
     """
     if trustdb is None:
-        trustdb = os.path.join(cls.homedir, 'trustdb.gpg')
-    export_proc = cls._open_subprocess(['--export-ownertrust'])
-    import_proc = cls._open_subprocess(['--import-ownertrust'])
+        trustdb = os.path.join(cls.homedir, "trustdb.gpg")
+    export_proc = cls._open_subprocess(["--export-ownertrust"])
+    import_proc = cls._open_subprocess(["--import-ownertrust"])
     _util._threaded_copy_data(export_proc.stdout, import_proc.stdin)
     export_proc.wait()
     import_proc.wait()

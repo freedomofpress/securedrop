@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 #
 # This file is part of python-gnupg, a Python interface to GnuPG.
 # Copyright © 2013 Isis Lovecruft, <isis@leap.se> 0xA3ADB67A2CDB8B35
@@ -17,22 +16,19 @@
 # ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
 # FITNESS FOR A PARTICULAR PURPOSE. See the included LICENSE file for details.
 
-'''Extra utilities for python-gnupg.'''
-
-from __future__ import absolute_import
-from datetime   import datetime
-from socket     import gethostname
-from time       import localtime
-from time       import mktime
+"""Extra utilities for python-gnupg."""
 
 import codecs
 import encodings
 import os
-import threading
 import random
 import re
 import string
 import sys
+import threading
+from datetime import datetime
+from socket import gethostname
+from time import localtime, mktime
 
 # These are all the classes which are stream-like; they are used in
 # :func:`_is_stream`.
@@ -41,8 +37,7 @@ _STREAMLIKE_TYPES = []
 # These StringIO classes are actually utilised.
 try:
     import io
-    from io import StringIO
-    from io import BytesIO
+    from io import BytesIO, StringIO
 except ImportError:
     from cStringIO import StringIO
 else:
@@ -58,12 +53,14 @@ if 2 == sys.version_info[0]:
     # StringIO's that may be loaded in the above try/except clause, so the
     # name is prefixed with an underscore to distinguish it.
     from StringIO import StringIO as _StringIO_StringIO
+
     _STREAMLIKE_TYPES.append(_StringIO_StringIO)
 
     # Import the cStringIO module to test for the cStringIO stream types,
     # InputType and OutputType. See
     # http://stackoverflow.com/questions/14735295/to-check-an-instance-is-stringio
     import cStringIO as _cStringIO
+
     _STREAMLIKE_TYPES.append(_cStringIO.InputType)
     _STREAMLIKE_TYPES.append(_cStringIO.OutputType)
 
@@ -83,14 +80,13 @@ if 2 == sys.version_info[0]:
 
 from . import _logger
 
-
 try:
     unicode
     _py3k = False
     try:
         isinstance(__name__, basestring)
     except NameError:
-        msg  = "Sorry, python-gnupg requires a Python version with proper"
+        msg = "Sorry, python-gnupg requires a Python version with proper"
         msg += " unicode support. Please upgrade to Python>=2.6."
         raise SystemExit(msg)
 except NameError:
@@ -100,33 +96,33 @@ _running_windows = sys.platform.startswith("win")
 
 ## Directory shortcuts:
 ## we don't want to use this one because it writes to the install dir:
-#_here = getabsfile(currentframe()).rsplit(os.path.sep, 1)[0]
-_here = os.path.join(os.getcwd(), 'pretty_bad_protocol')     ## current dir
-_test = os.path.join(os.path.join(_here, 'test'), 'tmp')     ## ./tests/tmp
-_user = os.environ.get('HOME')                               ## $HOME
+# _here = getabsfile(currentframe()).rsplit(os.path.sep, 1)[0]
+_here = os.path.join(os.getcwd(), "pretty_bad_protocol")  ## current dir
+_test = os.path.join(os.path.join(_here, "test"), "tmp")  ## ./tests/tmp
+_user = os.environ.get("HOME")  ## $HOME
 
 # Fix for Issue #74: we shouldn't expect that a $HOME directory is set in all
 # environs. https://github.com/isislovecruft/python-gnupg/issues/74
 if not _user:
-    _user = '/tmp/python-gnupg'
+    _user = "/tmp/python-gnupg"
     try:
         os.makedirs(_user)
-    except (OSError, IOError):
+    except OSError:
         _user = os.getcwd()
     # If we can't use $HOME, but we have (or can create) a
     # /tmp/python-gnupg/gnupghome directory, then we'll default to using
     # that. Otherwise, we'll use the current directory + /gnupghome.
-    _user = os.path.sep.join([_user, 'gnupghome'])
+    _user = os.path.sep.join([_user, "gnupghome"])
 
-_ugpg = os.path.join(_user, '.gnupg')                        ## $HOME/.gnupg
-_conf = os.path.join(os.path.join(_user, '.config'), 'python-gnupg')
-                                     ## $HOME/.config/python-gnupg
+_ugpg = os.path.join(_user, ".gnupg")  ## $HOME/.gnupg
+_conf = os.path.join(os.path.join(_user, ".config"), "python-gnupg")
+## $HOME/.config/python-gnupg
 
 ## Logger is disabled by default
 log = _logger.create_logger(0)
 
 #: Compiled regex for determining a GnuPG binary's version:
-_VERSION_STRING_REGEX = re.compile('(\d)(\.)(\d)(\.)(\d+)')
+_VERSION_STRING_REGEX = re.compile(r"(\d)(\.)(\d)(\.)(\d+)")
 
 
 class GnuPGVersionError(ValueError):
@@ -148,14 +144,14 @@ def find_encodings(enc=None, system=False):
              found in Python's encoding translation map.
     """
     if not enc:
-        enc = 'utf-8'
+        enc = "utf-8"
 
     if system:
-        if getattr(sys.stdin, 'encoding', None) is None:
+        if getattr(sys.stdin, "encoding", None) is None:
             enc = sys.stdin.encoding
             log.debug("Obtained encoding from stdin: %s" % enc)
         else:
-            enc = 'ascii'
+            enc = "ascii"
 
     ## have to have lowercase to work, see
     ## http://docs.python.org/dev/library/codecs.html#standard-encodings
@@ -169,6 +165,7 @@ def find_encodings(enc=None, system=False):
 
 
 if _py3k:
+
     def b(x):
         """See http://python3porting.com/problems.html#nicer-solutions"""
         coder = find_encodings()
@@ -184,7 +181,9 @@ if _py3k:
             return x.decode(find_encodings().name)
         else:
             raise NotImplemented
+
 else:
+
     def b(x):
         """See http://python3porting.com/problems.html#nicer-solutions"""
         return x
@@ -196,6 +195,7 @@ else:
             return x.decode(find_encodings().name)
         else:
             raise NotImplemented
+
 
 def binary(data):
     coder = find_encodings()
@@ -220,6 +220,7 @@ def author_info(name, contact=None, public_key=None):
     """
     return Storage(name=name, contact=contact, public_key=public_key)
 
+
 def _copy_data(instream, outstream):
     """Copy data from one stream to another.
 
@@ -230,8 +231,9 @@ def _copy_data(instream, outstream):
     sent = 0
 
     while True:
-        if ((_py3k and isinstance(instream, str)) or
-            (not _py3k and isinstance(instream, basestring))):
+        if (_py3k and isinstance(instream, str)) or (
+            not _py3k and isinstance(instream, basestring)
+        ):
             data = instream[:1024]
             instream = instream[1024:]
         else:
@@ -240,21 +242,20 @@ def _copy_data(instream, outstream):
             break
 
         sent += len(data)
-        if ((_py3k and isinstance(data, str)) or
-            (not _py3k and isinstance(data, basestring))):
+        if (_py3k and isinstance(data, str)) or (not _py3k and isinstance(data, basestring)):
             encoded = binary(data)
         else:
             encoded = data
         log.debug("Sending %d bytes of data..." % sent)
-        log.debug("Encoded data (type %s):\n%s" % (type(encoded), encoded))
+        log.debug("Encoded data (type {}):\n{}".format(type(encoded), encoded))
 
         if not _py3k:
             try:
                 outstream.write(encoded)
-            except IOError as ioe:
+            except OSError as ioe:
                 # Can get 'broken pipe' errors even when all data was sent
-                if 'Broken pipe' in str(ioe):
-                    log.error('Error sending data: Broken pipe')
+                if "Broken pipe" in str(ioe):
+                    log.error("Error sending data: Broken pipe")
                 else:
                     log.exception(ioe)
                 break
@@ -281,19 +282,19 @@ def _copy_data(instream, outstream):
                     # error, we'll just try again with bytes.
                     if not "does not support the buffer interface" in str(yate):
                         log.error(str(yate))
-                except IOError as ioe:
+                except OSError as ioe:
                     # Can get 'broken pipe' errors even when all data was sent
-                    if 'Broken pipe' in str(ioe):
-                        log.error('Error sending data: Broken pipe')
+                    if "Broken pipe" in str(ioe):
+                        log.error("Error sending data: Broken pipe")
                     else:
                         log.exception(ioe)
                     break
                 else:
                     log.debug("Wrote data type <class 'str'> outstream.")
-            except IOError as ioe:
+            except OSError as ioe:
                 # Can get 'broken pipe' errors even when all data was sent
-                if 'Broken pipe' in str(ioe):
-                    log.error('Error sending data: Broken pipe')
+                if "Broken pipe" in str(ioe):
+                    log.error("Error sending data: Broken pipe")
                 else:
                     log.exception(ioe)
                 break
@@ -302,10 +303,11 @@ def _copy_data(instream, outstream):
 
     try:
         outstream.close()
-    except IOError as ioe:
-        log.error("Unable to close outstream %s:\r\t%s" % (outstream, ioe))
+    except OSError as ioe:
+        log.error("Unable to close outstream {}:\r\t{}".format(outstream, ioe))
     else:
         log.debug("Closed outstream: %d bytes sent." % sent)
+
 
 def _create_if_necessary(directory):
     """Create the specified directory, if necessary.
@@ -331,6 +333,7 @@ def _create_if_necessary(directory):
             log.debug("Created directory.")
     return True
 
+
 def create_uid_email(username=None, hostname=None):
     """Create an email address suitable for a UID on a GnuPG key.
 
@@ -345,24 +348,28 @@ def create_uid_email(username=None, hostname=None):
     :returns: A string formatted as <username>@<hostname>.
     """
     if hostname:
-        hostname = hostname.replace(' ', '_')
+        hostname = hostname.replace(" ", "_")
     if not username:
-        try: username = os.environ['LOGNAME']
-        except KeyError: username = os.environ['USERNAME']
+        try:
+            username = os.environ["LOGNAME"]
+        except KeyError:
+            username = os.environ["USERNAME"]
 
-        if not hostname: hostname = gethostname()
+        if not hostname:
+            hostname = gethostname()
 
-        uid = "%s@%s" % (username.replace(' ', '_'), hostname)
+        uid = "{}@{}".format(username.replace(" ", "_"), hostname)
     else:
-        username = username.replace(' ', '_')
-        if (not hostname) and (username.find('@') == 0):
-            uid = "%s@%s" % (username, gethostname())
+        username = username.replace(" ", "_")
+        if (not hostname) and (username.find("@") == 0):
+            uid = "{}@{}".format(username, gethostname())
         elif hostname:
-            uid = "%s@%s" % (username, hostname)
+            uid = "{}@{}".format(username, hostname)
         else:
             uid = username
 
     return uid
+
 
 def _deprefix(line, prefix, callback=None):
     """Remove the prefix string from the beginning of line, if it exists.
@@ -379,18 +386,19 @@ def _deprefix(line, prefix, callback=None):
         returned. Otherwise, the original ``line`` is returned.
     """
     try:
-        assert line.upper().startswith(u''.join(prefix).upper())
+        assert line.upper().startswith("".join(prefix).upper())
     except AssertionError:
-        log.debug("Line doesn't start with prefix '%s':\n%s" % (prefix, line))
+        log.debug("Line doesn't start with prefix '{}':\n{}".format(prefix, line))
         return line
     else:
-        newline = line[len(prefix):]
+        newline = line[len(prefix) :]
         if callback is not None:
             try:
                 callback(newline)
             except Exception as exc:
                 log.exception(exc)
         return newline
+
 
 def _find_binary(binary=None):
     """Find the absolute path to the GnuPG binary.
@@ -412,25 +420,26 @@ def _find_binary(binary=None):
         if not os.path.isabs(binary):
             try:
                 found = _which(binary)
-                log.debug("Found potential binary paths: %s"
-                          % '\n'.join([path for path in found]))
+                log.debug("Found potential binary paths: %s" % "\n".join([path for path in found]))
                 found = found[0]
             except IndexError as ie:
-                log.info("Could not determine absolute path of binary: '%s'"
-                          % binary)
+                log.info("Could not determine absolute path of binary: '%s'" % binary)
         elif os.access(binary, os.X_OK):
             found = binary
     if found is None:
-        try: found = _which('gpg', abspath_only=True, disallow_symlinks=True)[0]
+        try:
+            found = _which("gpg", abspath_only=True, disallow_symlinks=True)[0]
         except IndexError as ie:
             log.error("Could not find binary for 'gpg'.")
-            try: found = _which('gpg2')[0]
+            try:
+                found = _which("gpg2")[0]
             except IndexError as ie:
                 log.error("Could not find binary for 'gpg2'.")
     if found is None:
         raise RuntimeError("GnuPG is not installed!")
 
     return found
+
 
 def _has_readwrite(path):
     """
@@ -444,6 +453,7 @@ def _has_readwrite(path):
     """
     return os.access(path, os.R_OK | os.W_OK)
 
+
 def _is_file(filename):
     """Check that the size of the thing which is supposed to be a filename has
     size greater than zero, without following symbolic links or using
@@ -455,20 +465,22 @@ def _is_file(filename):
     """
     try:
         statinfo = os.lstat(filename)
-        log.debug("lstat(%r) with type=%s gave us %r"
-                  % (repr(filename), type(filename), repr(statinfo)))
+        log.debug(
+            "lstat(%r) with type=%s gave us %r" % (repr(filename), type(filename), repr(statinfo))
+        )
         if not (statinfo.st_size > 0):
             raise ValueError("'%s' appears to be an empty file!" % filename)
     except OSError as oserr:
         log.error(oserr)
-        if filename == '-':
+        if filename == "-":
             log.debug("Got '-' for filename, assuming sys.stdin...")
             return True
-    except (ValueError, TypeError, IOError) as err:
+    except (ValueError, TypeError, OSError) as err:
         log.error(err)
     else:
         return True
     return False
+
 
 def _is_stream(input):
     """Check that the input is a byte stream.
@@ -479,6 +491,7 @@ def _is_stream(input):
     """
     return isinstance(input, tuple(_STREAMLIKE_TYPES))
 
+
 def _is_string(thing):
     """Check that **thing** is a string. The definition of the latter depends
     upon the Python version.
@@ -487,11 +500,12 @@ def _is_string(thing):
     :rtype: bool
     :returns: ``True`` if **thing** is string (or unicode in Python2).
     """
-    if (_py3k and isinstance(thing, str)):
+    if _py3k and isinstance(thing, str):
         return True
-    if (not _py3k and isinstance(thing, basestring)):
+    if not _py3k and isinstance(thing, basestring):
         return True
     return False
+
 
 def _is_bytes(thing):
     """Check that **thing** is bytes.
@@ -504,6 +518,7 @@ def _is_bytes(thing):
         return True
     return False
 
+
 def _is_list_or_tuple(instance):
     """Check that ``instance`` is a list or tuple.
 
@@ -511,7 +526,14 @@ def _is_list_or_tuple(instance):
     :rtype: bool
     :returns: True if ``instance`` is a list or tuple, False otherwise.
     """
-    return isinstance(instance, (list, tuple,))
+    return isinstance(
+        instance,
+        (
+            list,
+            tuple,
+        ),
+    )
+
 
 def _is_gpg1(version):
     """Returns True if using GnuPG version 1.x.
@@ -524,6 +546,7 @@ def _is_gpg1(version):
         return True
     return False
 
+
 def _is_gpg2(version):
     """Returns True if using GnuPG version 2.x.
 
@@ -534,6 +557,7 @@ def _is_gpg2(version):
     if major == 2:
         return True
     return False
+
 
 def _make_binary_stream(thing, encoding=None, armor=True):
     """Encode **thing**, then make it stream/file-like.
@@ -556,6 +580,7 @@ def _make_binary_stream(thing, encoding=None, armor=True):
         rv = StringIO(thing)
 
     return rv
+
 
 def _make_passphrase(length=None, save=False, file=None):
     """Create a passphrase and write it to a file that only the user can read.
@@ -580,10 +605,10 @@ def _make_passphrase(length=None, save=False, file=None):
         now = mktime(localtime())
 
         if not file:
-            filename = str('passphrase-%s-%s' % uid, now)
+            filename = str("passphrase-%s-%s" % uid, now)
             file = os.path.join(_repo, filename)
 
-        with open(file, 'a') as fh:
+        with open(file, "a") as fh:
             fh.write(passphrase)
             fh.flush()
             fh.close()
@@ -593,13 +618,15 @@ def _make_passphrase(length=None, save=False, file=None):
         log.warn("Generated passphrase saved to %s" % file)
     return passphrase
 
+
 def _make_random_string(length):
     """Returns a random lowercase, uppercase, alphanumerical string.
 
     :param int length: The length in bytes of the string to generate.
     """
     chars = string.ascii_lowercase + string.ascii_uppercase + string.digits
-    return ''.join(random.choice(chars) for x in range(length))
+    return "".join(random.choice(chars) for x in range(length))
+
 
 def _match_version_string(version):
     """Sort a binary version string into major, minor, and micro integers.
@@ -625,10 +652,10 @@ def _match_version_string(version):
     if major and minor and micro:
         major, minor, micro = int(major), int(minor), int(micro)
     else:
-        raise GnuPGVersionError("Could not parse GnuPG version from: %r" %
-                                version)
+        raise GnuPGVersionError("Could not parse GnuPG version from: %r" % version)
 
     return (major, minor, micro)
+
 
 def _next_year():
     """Get the date of today plus one year.
@@ -637,14 +664,16 @@ def _next_year():
     :returns: The date of this day next year, in the format '%Y-%m-%d'.
     """
     now = datetime.now().__str__()
-    date = now.split(' ', 1)[0]
-    year, month, day = date.split('-', 2)
-    next_year = str(int(year)+1)
-    return '-'.join((next_year, month, day))
+    date = now.split(" ", 1)[0]
+    year, month, day = date.split("-", 2)
+    next_year = str(int(year) + 1)
+    return "-".join((next_year, month, day))
+
 
 def _now():
     """Get a timestamp for right now, formatted according to ISO 8601."""
     return datetime.isoformat(datetime.now())
+
 
 def _separate_keyword(line):
     """Split the line, and return (first_word, the_rest)."""
@@ -652,8 +681,9 @@ def _separate_keyword(line):
         first, rest = line.split(None, 1)
     except ValueError:
         first = line.strip()
-        rest = ''
+        rest = ""
     return first, rest
+
 
 def _threaded_copy_data(instream, outstream):
     """Copy data from one stream to another in a separate thread.
@@ -664,16 +694,17 @@ def _threaded_copy_data(instream, outstream):
     :param instream: A byte stream to read from.
     :param file outstream: The file descriptor of a tmpfile to write to.
     """
-    copy_thread = threading.Thread(target=_copy_data,
-                                   args=(instream, outstream))
+    copy_thread = threading.Thread(target=_copy_data, args=(instream, outstream))
     copy_thread.setDaemon(True)
-    log.debug('%r, %r, %r', copy_thread, instream, outstream)
+    log.debug("%r, %r, %r", copy_thread, instream, outstream)
     copy_thread.start()
     return copy_thread
+
 
 def _utc_epoch():
     """Get the seconds since epoch."""
     return int(mktime(localtime()))
+
 
 def _which(executable, flags=os.X_OK, abspath_only=False, disallow_symlinks=False):
     """Borrowed from Twisted's :mod:twisted.python.proutils .
@@ -698,23 +729,24 @@ def _which(executable, flags=os.X_OK, abspath_only=False, disallow_symlinks=Fals
     :returns: A list of the full paths to files found, in the order in which
               they were found.
     """
+
     def _can_allow(p):
         if not os.access(p, flags):
             return False
         if abspath_only and not os.path.abspath(p):
-            log.warn('Ignoring %r (path is not absolute)', p)
+            log.warn("Ignoring %r (path is not absolute)", p)
             return False
         if disallow_symlinks and os.path.islink(p):
-            log.warn('Ignoring %r (path is a symlink)', p)
+            log.warn("Ignoring %r (path is a symlink)", p)
             return False
         return True
 
     result = []
-    exts = filter(None, os.environ.get('PATHEXT', '').split(os.pathsep))
-    path = os.environ.get('PATH', None)
+    exts = filter(None, os.environ.get("PATHEXT", "").split(os.pathsep))
+    path = os.environ.get("PATH", None)
     if path is None:
         return []
-    for p in os.environ.get('PATH', '').split(os.pathsep):
+    for p in os.environ.get("PATH", "").split(os.pathsep):
         p = os.path.join(p, executable)
         if _can_allow(p):
             result.append(p)
@@ -723,6 +755,7 @@ def _which(executable, flags=os.X_OK, abspath_only=False, disallow_symlinks=Fals
             if _can_allow(pext):
                 result.append(pext)
     return result
+
 
 def _write_passphrase(stream, passphrase, encoding):
     """Write the passphrase from memory to the GnuPG process' stdin.
@@ -733,13 +766,13 @@ def _write_passphrase(stream, passphrase, encoding):
     :param str encoding: The data encoding expected by GnuPG. Usually, this
                          is ``sys.getfilesystemencoding()``.
     """
-    passphrase = '%s\n' % passphrase
+    passphrase = "%s\n" % passphrase
     passphrase = passphrase.encode(encoding)
     stream.write(passphrase)
     log.debug("Wrote passphrase on stdin.")
 
 
-class InheritableProperty(object):
+class InheritableProperty:
     """Based on the emulation of PyProperty_Type() in Objects/descrobject.c"""
 
     def __init__(self, fget=None, fset=None, fdel=None, doc=None):
@@ -753,7 +786,7 @@ class InheritableProperty(object):
             return self
         if self.fget is None:
             raise AttributeError("unreadable attribute")
-        if self.fget.__name__ == '<lambda>' or not self.fget.__name__:
+        if self.fget.__name__ == "<lambda>" or not self.fget.__name__:
             return self.fget(obj)
         else:
             return getattr(obj, self.fget.__name__)()
@@ -761,7 +794,7 @@ class InheritableProperty(object):
     def __set__(self, obj, value):
         if self.fset is None:
             raise AttributeError("can't set attribute")
-        if self.fset.__name__ == '<lambda>' or not self.fset.__name__:
+        if self.fset.__name__ == "<lambda>" or not self.fset.__name__:
             self.fset(obj, value)
         else:
             getattr(obj, self.fset.__name__)(value)
@@ -769,7 +802,7 @@ class InheritableProperty(object):
     def __delete__(self, obj):
         if self.fdel is None:
             raise AttributeError("can't delete attribute")
-        if self.fdel.__name__ == '<lambda>' or not self.fdel.__name__:
+        if self.fdel.__name__ == "<lambda>" or not self.fdel.__name__:
             self.fdel(obj)
         else:
             getattr(obj, self.fdel.__name__)()
@@ -792,6 +825,7 @@ class Storage(dict):
         >>> o.a
         None
     """
+
     def __getattr__(self, key):
         try:
             return self[key]
@@ -808,7 +842,7 @@ class Storage(dict):
             raise AttributeError(k.args[0])
 
     def __repr__(self):
-        return '<Storage ' + dict.__repr__(self) + '>'
+        return "<Storage " + dict.__repr__(self) + ">"
 
     def __getstate__(self):
         return dict(self)

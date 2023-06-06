@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 #
 # This file is part of python-gnupg, a Python interface to GnuPG.
 # Copyright © 2013 Isis Lovecruft, <isis@leap.se> 0xA3ADB67A2CDB8B35
@@ -27,25 +26,18 @@ A Python interface to GnuPG.
 .. info:: https://github.com/isislovecruft/python-gnupg
 """
 
-from __future__ import absolute_import
-from codecs     import open as open
-
 import encodings
 import functools
 import os
 import re
 import textwrap
+from codecs import open as open
 
 #: see :pep:`328` http://docs.python.org/2.5/whatsnew/pep-328.html
-from .         import _util
-from .         import _trust
-from ._meta    import GPGBase
-from ._parsers import _fix_unsafe, KeyExpirationInterface
-from ._util    import _is_list_or_tuple
-from ._util    import _is_stream
-from ._util    import _make_binary_stream
-from ._util    import b
-from ._util    import log
+from . import _trust, _util
+from ._meta import GPGBase
+from ._parsers import KeyExpirationInterface, _fix_unsafe
+from ._util import _is_list_or_tuple, _is_stream, _make_binary_stream, b, log
 
 
 class GPG(GPGBase):
@@ -57,11 +49,19 @@ class GPG(GPGBase):
 
     #: The number of simultaneous keyids we should list operations like
     #: '--list-sigs' to:
-    _batch_limit    = 25
+    _batch_limit = 25
 
-    def __init__(self, binary=None, homedir=None, verbose=False,
-                 use_agent=False, keyring=None, secring=None,
-                 ignore_homedir_permissions=False, options=None):
+    def __init__(
+        self,
+        binary=None,
+        homedir=None,
+        verbose=False,
+        use_agent=False,
+        keyring=None,
+        secring=None,
+        ignore_homedir_permissions=False,
+        options=None,
+    ):
         """Initialize a GnuPG process wrapper.
 
         :param str binary: Name for GnuPG binary executable. If the absolute
@@ -115,7 +115,7 @@ class GPG(GPGBase):
         '/usr/bin/gpg'
         """
 
-        super(GPG, self).__init__(
+        super().__init__(
             binary=binary,
             home=homedir,
             keyring=keyring,
@@ -126,32 +126,39 @@ class GPG(GPGBase):
             ignore_homedir_permissions=ignore_homedir_permissions,
         )
 
-        log.info(textwrap.dedent("""
+        log.info(
+            textwrap.dedent(
+                """
         Initialised settings:
-        binary: %s
-        binary version: %s
-        homedir: %s
-        ignore_homedir_permissions: %s
-        keyring: %s
-        secring: %s
-        default_preference_list: %s
-        keyserver: %s
-        options: %s
-        verbose: %s
-        use_agent: %s
-        """ % (self.binary,
-               self.binary_version,
-               self.homedir,
-               self.ignore_homedir_permissions,
-               self.keyring,
-               self.secring,
-               self.default_preference_list,
-               self.keyserver, self.options,
-               str(self.verbose),
-               str(self.use_agent))))
+        binary: {}
+        binary version: {}
+        homedir: {}
+        ignore_homedir_permissions: {}
+        keyring: {}
+        secring: {}
+        default_preference_list: {}
+        keyserver: {}
+        options: {}
+        verbose: {}
+        use_agent: {}
+        """.format(
+                    self.binary,
+                    self.binary_version,
+                    self.homedir,
+                    self.ignore_homedir_permissions,
+                    self.keyring,
+                    self.secring,
+                    self.default_preference_list,
+                    self.keyserver,
+                    self.options,
+                    str(self.verbose),
+                    str(self.use_agent),
+                )
+            )
+        )
 
-        self._batch_dir = os.path.join(self.homedir, 'batch-files')
-        self._key_dir  = os.path.join(self.homedir, 'generated-keys')
+        self._batch_dir = os.path.join(self.homedir, "batch-files")
+        self._key_dir = os.path.join(self.homedir, "generated-keys")
 
         #: The keyring used in the most recently created batch file
         self.temp_keyring = None
@@ -174,6 +181,7 @@ class GPG(GPGBase):
             _trust._create_trustdb(self)
         else:
             log.info("Creating the trustdb is only available with GnuPG>=2.x")
+
     # For backward compatibility with python-gnupg<=1.3.1:
     _create_trustdb = create_trustdb
 
@@ -183,6 +191,7 @@ class GPG(GPGBase):
             _trust.fix_trustdb(self)
         else:
             log.info("Fixing the trustdb is only available with GnuPG>=2.x")
+
     # For backward compatibility with python-gnupg<=1.3.1:
     _fix_trustdb = fix_trustdb
 
@@ -192,6 +201,7 @@ class GPG(GPGBase):
             _trust.import_ownertrust(self)
         else:
             log.info("Importing ownertrust is only available with GnuPG>=2.x")
+
     # For backward compatibility with python-gnupg<=1.3.1:
     _import_ownertrust = import_ownertrust
 
@@ -201,6 +211,7 @@ class GPG(GPGBase):
             _trust.export_ownertrust(self)
         else:
             log.info("Exporting ownertrust is only available with GnuPG>=2.x")
+
     # For backward compatibility with python-gnupg<=1.3.1:
     _export_ownertrust = export_ownertrust
 
@@ -244,21 +255,19 @@ class GPG(GPGBase):
             :command:`$ gpg --with-colons --list-config digestname`.
             The default, if unspecified, is ``'SHA512'``.
         """
-        if 'default_key' in kwargs:
-            log.info("Signing message '%r' with keyid: %s"
-                     % (data, kwargs['default_key']))
+        if "default_key" in kwargs:
+            log.info("Signing message '%r' with keyid: %s" % (data, kwargs["default_key"]))
         else:
             log.warn("No 'default_key' given! Using first key on secring.")
 
-        if hasattr(data, 'read'):
+        if hasattr(data, "read"):
             result = self._sign_file(data, **kwargs)
         elif not _is_stream(data):
             stream = _make_binary_stream(data, self._encoding)
             result = self._sign_file(stream, **kwargs)
             stream.close()
         else:
-            log.warn("Unable to sign message '%s' with type %s"
-                     % (data, type(data)))
+            log.warn("Unable to sign message '%s' with type %s" % (data, type(data)))
             result = None
         return result
 
@@ -295,7 +304,7 @@ class GPG(GPGBase):
             signature. Its type will be checked with :func:`_util._is_file`.
         """
 
-        result = self._result_map['verify'](self)
+        result = self._result_map["verify"](self)
 
         if sig_file is None:
             log.debug("verify_file(): Handling embedded signature")
@@ -307,10 +316,10 @@ class GPG(GPGBase):
             if not _util._is_file(sig_file):
                 log.debug("verify_file(): '%r' is not a file" % sig_file)
                 return result
-            log.debug('verify_file(): Handling detached verification')
+            log.debug("verify_file(): Handling detached verification")
             sig_fh = None
             try:
-                sig_fh = open(sig_file, 'rb')
+                sig_fh = open(sig_file, "rb")
                 args = ["--verify %s -" % sig_fh.name]
                 proc = self._open_subprocess(args)
                 writer = _util._threaded_copy_data(file, proc.stdin)
@@ -359,10 +368,10 @@ class GPG(GPGBase):
         ## xxx need way to validate that key_data is actually a valid GPG key
         ##     it might be possible to use --list-packets and parse the output
 
-        result = self._result_map['import'](self)
-        log.info('Importing: %r', key_data[:256])
+        result = self._result_map["import"](self)
+        log.info("Importing: %r", key_data[:256])
         data = _make_binary_stream(key_data, self._encoding)
-        self._handle_io(['--import'], data, result, binary=True)
+        self._handle_io(["--import"], data, result, binary=True)
         data.close()
         return result
 
@@ -379,7 +388,7 @@ class GPG(GPGBase):
              defaults to `gnupg.GPG.keyserver`.
         """
         if keyids:
-            keys = ' '.join([key for key in keyids])
+            keys = " ".join([key for key in keyids])
             return self._recv_keys(keys, **kwargs)
         else:
             log.error("No keyids requested for --recv-keys!")
@@ -403,19 +412,19 @@ class GPG(GPGBase):
                              public key. (default: False) Same as:
                              :command:`$gpg --delete-secret-and-public-key 0x12345678`.
         """
-        which = 'keys'
+        which = "keys"
         if secret:
-            which = 'secret-keys'
+            which = "secret-keys"
         if subkeys:
-            which = 'secret-and-public-keys'
+            which = "secret-and-public-keys"
 
         if _is_list_or_tuple(fingerprints):
-            fingerprints = ' '.join(fingerprints)
+            fingerprints = " ".join(fingerprints)
 
-        args = ['--batch']
-        args.append("--delete-{0} {1}".format(which, fingerprints))
+        args = ["--batch"]
+        args.append(f"--delete-{which} {fingerprints}")
 
-        result = self._result_map['delete'](self)
+        result = self._result_map["delete"](self)
         p = self._open_subprocess(args)
         self._collect_output(p, result, stdin=p.stdin)
         return result
@@ -428,25 +437,25 @@ class GPG(GPGBase):
         :param bool secret: If True, export only the secret key.
         :param bool subkeys: If True, export the secret subkeys.
         """
-        which = ''
+        which = ""
         if subkeys:
-            which = '-secret-subkeys'
+            which = "-secret-subkeys"
         elif secret:
-            which = '-secret-keys'
+            which = "-secret-keys"
 
         if _is_list_or_tuple(keyids):
-            keyids = ' '.join(['%s' % k for k in keyids])
+            keyids = " ".join(["%s" % k for k in keyids])
 
         args = ["--armor"]
-        args.append("--export{0} {1}".format(which, keyids))
+        args.append(f"--export{which} {keyids}")
 
         p = self._open_subprocess(args)
         ## gpg --export produces no status-fd output; stdout will be empty in
         ## case of failure
-        #stdout, stderr = p.communicate()
-        result = self._result_map['export'](self)
+        # stdout, stderr = p.communicate()
+        result = self._result_map["export"](self)
         self._collect_output(p, result, stdin=p.stdin)
-        log.debug('Exported:%s%r' % (os.linesep, result.fingerprints))
+        log.debug("Exported:{}{!r}".format(os.linesep, result.fingerprints))
         return result.data.decode(self._encoding, self._decode_errors)
 
     def list_keys(self, secret=False):
@@ -469,9 +478,9 @@ class GPG(GPGBase):
         >>> assert print1 in pubkeys.fingerprints
         >>> assert print2 in pubkeys.fingerprints
         """
-        which = 'public-keys'
+        which = "public-keys"
         if secret:
-            which = 'secret-keys'
+            which = "secret-keys"
 
         args = []
         args.append("--fixed-list-mode")
@@ -486,23 +495,21 @@ class GPG(GPGBase):
         # ...nope, unless you care about expired sigs or keys (stevegt)
 
         # Get the response information
-        result = self._result_map['list'](self)
+        result = self._result_map["list"](self)
         self._collect_output(p, result, stdin=p.stdin)
-        lines = result.data.decode(self._encoding,
-                                   self._decode_errors).splitlines()
+        lines = result.data.decode(self._encoding, self._decode_errors).splitlines()
         self._parse_keys(result)
         return result
 
     def list_packets(self, raw_data):
         """List the packet contents of a file."""
         args = ["--list-packets"]
-        result = self._result_map['packets'](self)
-        self._handle_io(args, _make_binary_stream(raw_data, self._encoding),
-                        result)
+        result = self._result_map["packets"](self)
+        self._handle_io(args, _make_binary_stream(raw_data, self._encoding), result)
         return result
 
     def sign_key(self, keyid, default_key=None, passphrase=None):
-        """ sign (an imported) public key - keyid, with default secret key
+        """sign (an imported) public key - keyid, with default secret key
 
         >>> import gnupg
         >>> gpg = gnupg.GPG(homedir="doctests")
@@ -531,7 +538,7 @@ class GPG(GPGBase):
         args.extend(["--command-fd 0", "--sign-key %s" % keyid])
 
         p = self._open_subprocess(args)
-        result = self._result_map['signing'](self)
+        result = self._result_map["signing"](self)
         confirm_command = "%sy\n" % input_command
         p.stdin.write(b(confirm_command))
         self._collect_output(p, result, stdin=p.stdin)
@@ -565,8 +572,8 @@ class GPG(GPGBase):
 
         if len(keyids) > self._batch_limit:
             raise ValueError(
-                "List signatures is limited to %d keyids simultaneously"
-                % self._batch_limit)
+                "List signatures is limited to %d keyids simultaneously" % self._batch_limit
+            )
 
         args = ["--with-colons", "--fixed-list-mode"]
         arg = "--check-sigs" if check_sig else "--list-sigs"
@@ -577,29 +584,28 @@ class GPG(GPGBase):
         args.append(arg)
 
         proc = self._open_subprocess(args)
-        result = self._result_map['list'](self)
+        result = self._result_map["list"](self)
         self._collect_output(proc, result, stdin=proc.stdin)
         self._parse_keys(result)
         return result
 
     def _parse_keys(self, result):
-        lines = result.data.decode(self._encoding,
-                                   self._decode_errors).splitlines()
-        valid_keywords = 'pub uid sec fpr sub sig rev'.split()
+        lines = result.data.decode(self._encoding, self._decode_errors).splitlines()
+        valid_keywords = "pub uid sec fpr sub sig rev".split()
         for line in lines:
             if self.verbose:
                 print(line)
             log.debug("%r", line.rstrip())
             if not line:
                 break
-            L = line.strip().split(':')
+            L = line.strip().split(":")
             if not L:
                 continue
             keyword = L[0]
             if keyword in valid_keywords:
                 getattr(result, keyword)(L)
 
-    def expire(self, keyid, expiration_time='1y', passphrase=None, expire_subkeys=True):
+    def expire(self, keyid, expiration_time="1y", passphrase=None, expire_subkeys=True):
         """Changes GnuPG key expiration by passing in new time period (from now) through
             subprocess's stdin
 
@@ -623,17 +629,19 @@ class GPG(GPGBase):
         passphrase = passphrase.encode(self._encoding) if passphrase else passphrase
 
         try:
-            sub_keys_number = len(self.list_sigs(keyid)[0]['subkeys']) if expire_subkeys else 0
+            sub_keys_number = len(self.list_sigs(keyid)[0]["subkeys"]) if expire_subkeys else 0
         except IndexError:
             sub_keys_number = 0
 
-        expiration_input = KeyExpirationInterface(expiration_time, passphrase).gpg_interactive_input(sub_keys_number)
+        expiration_input = KeyExpirationInterface(
+            expiration_time, passphrase
+        ).gpg_interactive_input(sub_keys_number)
 
         args = ["--command-fd 0", "--edit-key %s" % keyid]
         p = self._open_subprocess(args)
         p.stdin.write(b(expiration_input))
 
-        result = self._result_map['expire'](self)
+        result = self._result_map["expire"](self)
         p.stdin.write(b(expiration_input))
 
         self._collect_output(p, result, stdin=p.stdin)
@@ -655,29 +663,32 @@ class GPG(GPGBase):
                   :class:`GenKey <gnupg._parsers.GenKey>` object.
         """
         args = ["--gen-key --cert-digest-algo SHA512 --batch"]
-        key = self._result_map['generate'](self)
+        key = self._result_map["generate"](self)
         f = _make_binary_stream(input, self._encoding)
         self._handle_io(args, f, key, binary=True)
         f.close()
 
         fpr = str(key.fingerprint)
         if len(fpr) == 20:
-            for d in map(lambda x: os.path.dirname(x),
-                         [self.temp_keyring, self.temp_secring]):
+            for d in map(lambda x: os.path.dirname(x), [self.temp_keyring, self.temp_secring]):
                 if not os.path.exists(d):
                     os.makedirs(d)
 
             if self.temp_keyring:
                 if os.path.isfile(self.temp_keyring):
                     prefix = os.path.join(self.temp_keyring, fpr)
-                    try: os.rename(self.temp_keyring, prefix+".pubring")
-                    except OSError as ose: log.error(str(ose))
+                    try:
+                        os.rename(self.temp_keyring, prefix + ".pubring")
+                    except OSError as ose:
+                        log.error(str(ose))
 
             if self.temp_secring:
                 if os.path.isfile(self.temp_secring):
                     prefix = os.path.join(self.temp_secring, fpr)
-                    try: os.rename(self.temp_secring, prefix+".secring")
-                    except OSError as ose: log.error(str(ose))
+                    try:
+                        os.rename(self.temp_secring, prefix + ".secring")
+                    except OSError as ose:
+                        log.error(str(ose))
 
         log.info("Key created. Fingerprint: %s" % fpr)
         key.keyring = self.temp_keyring
@@ -687,8 +698,7 @@ class GPG(GPGBase):
 
         return key
 
-    def gen_key_input(self, separate_keyring=False, save_batchfile=False,
-                      testing=False, **kwargs):
+    def gen_key_input(self, separate_keyring=False, save_batchfile=False, testing=False, **kwargs):
         """Generate a batch file for input to :meth:`~gnupg.GPG.gen_key`.
 
         The GnuPG batch file key generation feature allows unattended key
@@ -876,51 +886,58 @@ class GPG(GPGBase):
 
         ## if using GnuPG version 1.x, then set the default 'Key-Type' to
         ## 'RSA' because it doesn't understand 'default'
-        parms.setdefault('Key-Type', 'default')
+        parms.setdefault("Key-Type", "default")
         if _util._is_gpg1(self.binary_version):
-            parms.setdefault('Key-Type', 'RSA')
-        log.debug("GnuPG v%s detected: setting default key type to %s."
-                  % (self.binary_version, parms['Key-Type']))
-        parms.setdefault('Key-Length', 4096)
-        parms.setdefault('Name-Real', "Autogenerated Key")
-        parms.setdefault('Expire-Date', _util._next_year())
+            parms.setdefault("Key-Type", "RSA")
+        log.debug(
+            "GnuPG v%s detected: setting default key type to %s."
+            % (self.binary_version, parms["Key-Type"])
+        )
+        parms.setdefault("Key-Length", 4096)
+        parms.setdefault("Name-Real", "Autogenerated Key")
+        parms.setdefault("Expire-Date", _util._next_year())
 
-        name_email = kwargs.get('name_email')
+        name_email = kwargs.get("name_email")
         uidemail = _util.create_uid_email(name_email)
-        parms.setdefault('Name-Email', uidemail)
+        parms.setdefault("Name-Email", uidemail)
 
         if testing:
             ## This specific comment string is required by (some? all?)
             ## versions of GnuPG to use the insecure PRNG:
-            parms.setdefault('Name-Comment', 'insecure!')
+            parms.setdefault("Name-Comment", "insecure!")
 
         for key, val in list(kwargs.items()):
-            key = key.replace('_','-').title()
+            key = key.replace("_", "-").title()
             ## to set 'cert', 'Key-Usage' must be blank string
-            if not key in ('Key-Usage', 'Subkey-Usage'):
-                if type('')(val).strip():
+            if not key in ("Key-Usage", "Subkey-Usage"):
+                if str(val).strip():
                     parms[key] = val
 
         ## if Key-Type is 'default', make Subkey-Type also be 'default'
-        if parms['Key-Type'] == 'default':
+        if parms["Key-Type"] == "default":
             default_type = True
-            for field in ('Key-Usage', 'Subkey-Usage',):
-                try: parms.pop(field)  ## toss these out, handle manually
-                except KeyError: pass
+            for field in (
+                "Key-Usage",
+                "Subkey-Usage",
+            ):
+                try:
+                    parms.pop(field)  ## toss these out, handle manually
+                except KeyError:
+                    pass
 
         ## Key-Type must come first, followed by length
-        out  = "Key-Type: %s\n" % parms.pop('Key-Type')
-        out += "Key-Length: %d\n" % parms.pop('Key-Length')
-        if 'Subkey-Type' in parms.keys():
-            out += "Subkey-Type: %s\n" % parms.pop('Subkey-Type')
+        out = "Key-Type: %s\n" % parms.pop("Key-Type")
+        out += "Key-Length: %d\n" % parms.pop("Key-Length")
+        if "Subkey-Type" in parms.keys():
+            out += "Subkey-Type: %s\n" % parms.pop("Subkey-Type")
         else:
             if default_type:
                 out += "Subkey-Type: default\n"
-        if 'Subkey-Length' in parms.keys():
-            out += "Subkey-Length: %s\n" % parms.pop('Subkey-Length')
+        if "Subkey-Length" in parms.keys():
+            out += "Subkey-Length: %s\n" % parms.pop("Subkey-Length")
 
         for key, val in list(parms.items()):
-            out += "%s: %s\n" % (key, val)
+            out += "{}: {}\n".format(key, val)
 
         ## There is a problem where, in the batch files, if the '%%pubring'
         ## and '%%secring' are given as any static string, i.e. 'pubring.gpg',
@@ -931,9 +948,9 @@ class GPG(GPGBase):
         ## keys we had previously.
 
         if separate_keyring:
-            ring = str(uidemail + '_' + str(_util._utc_epoch()))
-            self.temp_keyring = os.path.join(self.homedir, ring+'.pubring')
-            self.temp_secring = os.path.join(self.homedir, ring+'.secring')
+            ring = str(uidemail + "_" + str(_util._utc_epoch()))
+            self.temp_keyring = os.path.join(self.homedir, ring + ".pubring")
+            self.temp_secring = os.path.join(self.homedir, ring + ".secring")
             out += "%%pubring %s\n" % self.temp_keyring
             out += "%%secring %s\n" % self.temp_secring
 
@@ -947,11 +964,11 @@ class GPG(GPGBase):
         out += "%commit\n"
 
         ## if we've been asked to save a copy of the batch file:
-        if save_batchfile and parms['Name-Email'] != uidemail:
-            asc_uid  = encodings.normalize_encoding(parms['Name-Email'])
-            filename = _fix_unsafe(asc_uid) + _util._now() + '.batch'
-            save_as  = os.path.join(self._batch_dir, filename)
-            readme = os.path.join(self._batch_dir, 'README')
+        if save_batchfile and parms["Name-Email"] != uidemail:
+            asc_uid = encodings.normalize_encoding(parms["Name-Email"])
+            filename = _fix_unsafe(asc_uid) + _util._now() + ".batch"
+            save_as = os.path.join(self._batch_dir, filename)
+            readme = os.path.join(self._batch_dir, "README")
 
             if not os.path.exists(self._batch_dir):
                 os.makedirs(self._batch_dir)
@@ -960,21 +977,23 @@ class GPG(GPGBase):
                 ## documentation from this function's docstring and sticks it
                 ## in a README file in the batch directory:
 
-                if getattr(self.gen_key_input, '__doc__', None) is not None:
+                if getattr(self.gen_key_input, "__doc__", None) is not None:
                     docs = self.gen_key_input.__doc__
                 else:
-                    docs = str() ## docstring=None if run with "python -OO"
-                links = '\n'.join(x.strip() for x in docs.splitlines()[-2:])
+                    docs = ""  ## docstring=None if run with "python -OO"
+                links = "\n".join(x.strip() for x in docs.splitlines()[-2:])
                 explain = """
 This directory was created by python-gnupg, on {}, and
 it contains saved batch files, which can be given to GnuPG to automatically
 generate keys. Please see
-{}""".format(_util.now(), links) ## sometimes python is awesome.
+{}""".format(
+                    _util.now(), links
+                )  ## sometimes python is awesome.
 
-                with open(readme, 'a+') as fh:
+                with open(readme, "a+") as fh:
                     [fh.write(line) for line in explain]
 
-            with open(save_as, 'a+') as batch_file:
+            with open(save_as, "a+") as batch_file:
                 [batch_file.write(line) for line in out]
 
         return out
@@ -1086,8 +1105,7 @@ generate keys. Please see
         stream.close()
         return result
 
-    def decrypt_file(self, filename, always_trust=False, passphrase=None,
-                     output=None):
+    def decrypt_file(self, filename, always_trust=False, passphrase=None, output=None):
         """Decrypt the contents of a file-like object ``filename`` .
 
         :param str filename: A file-like object to decrypt.
@@ -1098,16 +1116,17 @@ generate keys. Please see
         args = ["--decrypt"]
         if output:  # write the output to a file with the specified name
             if os.path.exists(output):
-                os.remove(output) # to avoid overwrite confirmation message
-            args.append('--output %s' % output)
+                os.remove(output)  # to avoid overwrite confirmation message
+            args.append("--output %s" % output)
         if always_trust:
             args.append("--always-trust")
-        result = self._result_map['crypt'](self)
+        result = self._result_map["crypt"](self)
         self._handle_io(args, filename, result, passphrase, binary=True)
-        log.debug('decrypt result: %r', result.data)
+        log.debug("decrypt result: %r", result.data)
         return result
 
-class GPGUtilities(object):
+
+class GPGUtilities:
     """Extra tools for working with GnuPG."""
 
     def __init__(self, gpg):
@@ -1121,7 +1140,7 @@ class GPGUtilities(object):
         :param bool secret: If True, search through secret keyring.
         """
         for key in self.list_keys(secret=secret):
-            for uid in key['uids']:
+            for uid in key["uids"]:
                 if re.search(email, uid):
                     return key
         raise LookupError("GnuPG public key for email %s not found!" % email)
@@ -1132,21 +1151,20 @@ class GPGUtilities(object):
         :param str subkey: The fingerprint of the subkey to search for.
         """
         for key in self.list_keys():
-            for sub in key['subkeys']:
+            for sub in key["subkeys"]:
                 if sub[0] == subkey:
                     return key
-        raise LookupError(
-            "GnuPG public key for subkey %s not found!" % subkey)
+        raise LookupError("GnuPG public key for subkey %s not found!" % subkey)
 
     def send_keys(self, keyserver, *keyids):
         """Send keys to a keyserver."""
-        result = self._result_map['list'](self)
-        log.debug('send_keys: %r', keyids)
+        result = self._result_map["list"](self)
+        log.debug("send_keys: %r", keyids)
         data = _util._make_binary_stream("", self._encoding)
-        args = ['--keyserver', keyserver, '--send-keys']
+        args = ["--keyserver", keyserver, "--send-keys"]
         args.extend(keyids)
         self._handle_io(args, data, result, binary=True)
-        log.debug('send_keys result: %r', result.__dict__)
+        log.debug("send_keys result: %r", result.__dict__)
         data.close()
         return result
 
@@ -1155,8 +1173,7 @@ class GPGUtilities(object):
         # TODO: make this support multiple keys.
         result = self._gpg.list_packets(raw_data)
         if not result.key:
-            raise LookupError(
-                "Content is not encrypted to a GnuPG key!")
+            raise LookupError("Content is not encrypted to a GnuPG key!")
         try:
             return self.find_key_by_keyid(result.key)
         except:
@@ -1173,6 +1190,8 @@ class GPGUtilities(object):
     def is_encrypted(self, raw_data):
         return self.is_encrypted_asym(raw_data) or self.is_encrypted_sym(raw_data)
 
+
 if __name__ == "__main__":
     from .test import test_gnupg
+
     test_gnupg.main()
