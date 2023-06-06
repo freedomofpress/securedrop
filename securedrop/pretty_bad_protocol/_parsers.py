@@ -62,7 +62,7 @@ def _check_keyserver(location):
         "https://",
         "ldap://",
         "mailto:",
-    ]  ## xxx feels like i´m forgetting one...
+    ]  # xxx feels like i´m forgetting one...
     for proto in protocols:
         if location.startswith(proto):
             url = location.replace(proto, "")
@@ -192,12 +192,12 @@ def _is_allowed(input):
     gnupg_options = _get_all_gnupg_options()
     allowed = _get_options_group("allowed")
 
-    ## these are the allowed options we will handle so far, all others should
-    ## be dropped. this dance is so that when new options are added later, we
-    ## merely add the to the _allowed list, and the `` _allowed.issubset``
-    ## assertion will check that GPG will recognise them
+    # these are the allowed options we will handle so far, all others should
+    # be dropped. this dance is so that when new options are added later, we
+    # merely add the to the _allowed list, and the `` _allowed.issubset``
+    # assertion will check that GPG will recognise them
     try:
-        ## check that allowed is a subset of all gnupg_options
+        # check that allowed is a subset of all gnupg_options
         assert allowed.issubset(gnupg_options)
     except AssertionError:
         raise UsageError(
@@ -205,9 +205,9 @@ def _is_allowed(input):
             % allowed.difference(gnupg_options)
         )
 
-    ## if we got a list of args, join them
-    ##
-    ## see TODO file, tag :cleanup:
+    # if we got a list of args, join them
+    #
+    # see TODO file, tag :cleanup:
     if not isinstance(input, str):
         input = " ".join([x for x in input])
 
@@ -219,10 +219,10 @@ def _is_allowed(input):
                 hyphenated = _hyphenate(input)
         else:
             hyphenated = input
-            ## xxx we probably want to use itertools.dropwhile here
+            # xxx we probably want to use itertools.dropwhile here
             try:
                 assert hyphenated in allowed
-            except AssertionError as ae:
+            except AssertionError:
                 dropped = _fix_unsafe(hyphenated)
                 log.warn("_is_allowed(): Dropping option '%s'..." % dropped)
                 raise ProtectedOption("Option '%s' not supported." % dropped)
@@ -271,7 +271,7 @@ def _sanitise(*args):
     :returns: ``sanitised``
     """
 
-    ## see TODO file, tag :cleanup:sanitise:
+    # see TODO file, tag :cleanup:sanitise:
 
     def _check_option(arg, value):
         """Check that a single ``arg`` is an allowed option.
@@ -308,8 +308,8 @@ def _sanitise(*args):
             if isinstance(value, str):
                 values = value.split(" ")
                 for v in values:
-                    ## these can be handled separately, without _fix_unsafe(),
-                    ## because they are only allowed if they pass the regex
+                    # these can be handled separately, without _fix_unsafe(),
+                    # because they are only allowed if they pass the regex
                     if (flag in none_options) and (v is None):
                         continue
 
@@ -331,15 +331,15 @@ def _sanitise(*args):
                             log.debug("Dropping keyserver: %s" % v)
                         continue
 
-                    ## the rest are strings, filenames, etc, and should be
-                    ## shell escaped:
+                    # the rest are strings, filenames, etc, and should be
+                    # shell escaped:
                     val = _fix_unsafe(v)
                     try:
-                        assert not val is None
+                        assert val is not None
                         assert not val.isspace()
-                        assert not v is None
+                        assert v is not None
                         assert not v.isspace()
-                    except:
+                    except:  # noqa: E722
                         log.debug("Dropping {} {}".format(flag, v))
                         continue
 
@@ -399,7 +399,8 @@ def _sanitise(*args):
 
         return checked.rstrip(" ")
 
-    is_flag = lambda x: x.startswith("--")
+    def is_flag(x):
+        return x.startswith("--")
 
     def _make_filo(args_string):
         filo = arg.split(" ")
@@ -415,9 +416,9 @@ def _sanitise(*args):
                 log.debug("Got arg: %s" % last)
                 if last == "--verify":
                     groups[last] = str(filo.pop())
-                    ## accept the read-from-stdin arg:
+                    # accept the read-from-stdin arg:
                     if len(filo) >= 1 and filo[len(filo) - 1] == "-":
-                        groups[last] += " - "  ## gross hack
+                        groups[last] += " - "  # gross hack
                         filo.pop()
                 else:
                     groups[last] = ""
@@ -449,8 +450,8 @@ def _sanitise(*args):
     if args is not None:
         option_groups = {}
         for arg in args:
-            ## if we're given a string with a bunch of options in it split
-            ## them up and deal with them separately
+            # if we're given a string with a bunch of options in it split
+            # them up and deal with them separately
             if isinstance(arg, str):
                 log.debug("Got arg string: %s" % arg)
                 if arg.find(" ") > 0:
@@ -992,7 +993,7 @@ class GenKey:
 
     def __init__(self, gpg):
         self._gpg = gpg
-        ## this should get changed to something more useful, like 'key_type'
+        # this should get changed to something more useful, like 'key_type'
         #: 'P':= primary, 'S':= subkey, 'B':= both
         self.type = None
         self.fingerprint = None
@@ -1368,7 +1369,7 @@ class ImportResult:
         elif key == "IMPORT_PROBLEM":
             try:
                 reason, fingerprint = value.split()
-            except:
+            except:  # noqa: E722
                 reason = value
                 fingerprint = "<unknown>"
             self.results.append(
@@ -1381,8 +1382,8 @@ class ImportResult:
         elif key == "KEYEXPIRED":
             res = {"fingerprint": None, "status": "Key expired"}
             self.results.append(res)
-        ## Accoring to docs/DETAILS L859, SIGEXPIRED is obsolete:
-        ## "Removed on 2011-02-04. This is deprecated in favor of KEYEXPIRED."
+        # Accoring to docs/DETAILS L859, SIGEXPIRED is obsolete:
+        # "Removed on 2011-02-04. This is deprecated in favor of KEYEXPIRED."
         elif key == "SIGEXPIRED":
             res = {"fingerprint": None, "status": "Signature expired"}
             self.results.append(res)
@@ -1390,7 +1391,7 @@ class ImportResult:
             raise ValueError("Unknown status message: %r" % key)
 
     def summary(self):
-        l = []
+        l = []  # noqa: E741
         l.append("%d imported" % self.counts["imported"])
         if self.counts["not_imported"]:
             l.append("%d not imported" % self.counts["not_imported"])
@@ -1554,11 +1555,13 @@ class Verify:
         #: blockchain (to prove that a GnuPG signature that Peter made was made
         #: *after* a specific point in time). These look like:
         #:
-        #: gpg: Signature notation: blockhash@bitcoin.org=000000000000000006f793d4461ee3e756ff04cc62581c96a42ed67dc233da3a
+        #: gpg: Signature notation: \
+        #: blockhash@bitcoin.org=000000000000000006f793d4461ee3e756ff04cc62581c96a42ed67dc233da3a
         #:
         #: Which python-gnupg would store as:
         #:
-        #:     Verify.notations['blockhash@bitcoin.org'] = '000000000000000006f793d4461ee3e756ff04cc62581c96a42ed67dc233da3a'
+        #:     Verify.notations['blockhash@bitcoin.org'] = \
+        #:      '000000000000000006f793d4461ee3e756ff04cc62581c96a42ed67dc233da3a'
         self.notations = {}
 
         #: This will be a str or None. If not None, it is the last
@@ -1676,7 +1679,8 @@ class Verify:
         # revoked. When this happens, GnuPG will output:
         #
         # REVKEYSIG 075BFD18B365D34C Test Expired Key <test@python-gnupg.git>
-        # VALIDSIG DAB69B05F591640B7F4DCBEA075BFD18B365D34C 2014-09-26 1411700539 0 4 0 1 2 00 4BA800F77452A6C29447FF20F4AF76ACBBE22CE2
+        # VALIDSIG DAB69B05F591640B7F4DCBEA075BFD18B365D34C 2014-09-26 1411700539 0 4 0 1 2 00 \
+        #   4BA800F77452A6C29447FF20F4AF76ACBBE22CE2
         # KEYREVOKED
         #
         # Meaning that we have a timestamp for when the signature was created,
@@ -1854,9 +1858,9 @@ class Crypt(Verify):
                 self.data_timestamp, self.data_filename = dts.split(" ", 1)
             else:
                 self.data_timestamp = dts
-            ## GnuPG gives us a hex byte for an ascii char corresponding to
-            ## the data format of the resulting plaintext,
-            ## i.e. '62'→'b':= binary data
+            # GnuPG gives us a hex byte for an ascii char corresponding to
+            # the data format of the resulting plaintext,
+            # i.e. '62'→'b':= binary data
             self.data_format = chr(int(str(fmt), 16))
         else:
             super()._handle_status(key, value)

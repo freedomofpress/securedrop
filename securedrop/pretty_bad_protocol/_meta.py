@@ -36,7 +36,7 @@ import psutil
 
 from . import _parsers, _util
 from ._parsers import _check_preferences, _sanitise_list
-from ._util import b, log, s
+from ._util import log, s
 
 _VERSION_RE = re.compile(r"^\d+\.\d+\.\d+$")
 
@@ -57,7 +57,7 @@ class GPGMeta(type):
         """Construct the initialiser for GPG"""
         log.debug("Metaclass __new__ constructor called for %r" % cls)
         if cls._find_agent():
-            ## call the normal GPG.__init__() initialiser:
+            # call the normal GPG.__init__() initialiser:
             attrs["init"] = cls.__init__
             attrs["_remove_agent"] = True
         return super().__new__(cls, name, bases, attrs)
@@ -242,30 +242,30 @@ class GPGBase:
             return
 
         try:
-            program = _util._which(prog)[0]
+            _util._which(prog)[0]
         except (OSError, IndexError) as err:
             log.err(str(err))
             log.err("Cannot find program '%s', not changing PATH." % prog)
             return
 
-        ## __remove_path__ cannot be an @classmethod in GPGMeta, because
-        ## the use_agent attribute must be set by the instance.
+        # __remove_path__ cannot be an @classmethod in GPGMeta, because
+        # the use_agent attribute must be set by the instance.
         if not self.use_agent:
             program_base = os.path.dirname(prog)
             gnupg_base = os.path.dirname(self.binary)
 
-            ## symlink our gpg binary into $PWD if the path we are removing is
-            ## the one which contains our gpg executable:
+            # symlink our gpg binary into $PWD if the path we are removing is
+            # the one which contains our gpg executable:
             new_gpg_location = os.path.join(os.getcwd(), "gpg")
             if gnupg_base == program_base:
                 os.symlink(self.binary, new_gpg_location)
                 self.binary = new_gpg_location
 
-            ## copy the original environment so that we can put it back later:
-            env_copy = os.environ  ## this one should not be touched
+            # copy the original environment so that we can put it back later:
+            env_copy = os.environ  # this one should not be touched
             path_copy = os.environ.pop("PATH")
             log.debug("Created a copy of system PATH: %r" % path_copy)
-            assert not os.environ.has_key("PATH"), "OS env kept $PATH anyway!"
+            assert "PATH" not in os.environ, "OS env kept $PATH anyway!"
 
             @staticmethod
             def remove_program_from_path(path, prog_base):
@@ -300,7 +300,6 @@ class GPGBase:
                 log.debug("Updating system path...")
                 os.environ = environment
                 new_path = ":".join([p for p in path])
-                old = ""
                 if "PATH" in os.environ:
                     new_path = ":".join([os.environ["PATH"], new_path])
                 os.environ.update({"PATH": new_path})
@@ -309,7 +308,7 @@ class GPGBase:
             modified_path = remove_program_from_path(path_copy, program_base)
             update_path(env_copy, modified_path)
 
-            ## register an _exithandler with the python interpreter:
+            # register an _exithandler with the python interpreter:
             atexit.register(update_path, env_copy, path_copy)
 
             def remove_symlinked_binary(symlink):
@@ -525,7 +524,7 @@ class GPGBase:
                                 stdin file descriptor for the attached GnuPG
                                 process.
         """
-        ## see TODO file, tag :io:makeargs:
+        # see TODO file, tag :io:makeargs:
         cmd = [self.binary, "--no-options --no-emit-version --no-tty --status-fd 2"]
 
         if self.homedir:
@@ -585,8 +584,8 @@ class GPGBase:
                                 stdin file descriptor for the attached GnuPG
                                 process.
         """
-        ## see http://docs.python.org/2/library/subprocess.html#converting-an\
-        ##    -argument-sequence-to-a-string-on-windows
+        # see http://docs.python.org/2/library/subprocess.html#converting-an\
+        #    -argument-sequence-to-a-string-on-windows
         cmd = shlex.split(" ".join(self._make_args(args, passphrase)))
         log.debug("Sending command to GnuPG process:{}{}".format(os.linesep, cmd))
 
@@ -595,7 +594,6 @@ class GPGBase:
             "GPG_TTY": os.environ.get("GPG_TTY") or "",
             "DISPLAY": os.environ.get("DISPLAY") or "",
             "GPG_AGENT_INFO": os.environ.get("GPG_AGENT_INFO") or "",
-            "GPG_TTY": os.environ.get("GPG_TTY") or "",
             "GPG_PINENTRY_PATH": os.environ.get("GPG_PINENTRY_PATH") or "",
         }
 
@@ -831,15 +829,15 @@ class GPGBase:
 
         args.append(str("--digest-algo %s" % digest_algo))
 
-        ## We could use _handle_io here except for the fact that if the
-        ## passphrase is bad, gpg bails and you can't write the message.
+        # We could use _handle_io here except for the fact that if the
+        # passphrase is bad, gpg bails and you can't write the message.
         result = self._result_map["sign"](self)
 
-        ## If the passphrase is an empty string, the message up to and
-        ## including its first newline will be cut off before making it to the
-        ## GnuPG process. Therefore, if the passphrase='' or passphrase=b'',
-        ## we set passphrase=None.  See Issue #82:
-        ## https://github.com/isislovecruft/python-gnupg/issues/82
+        # If the passphrase is an empty string, the message up to and
+        # including its first newline will be cut off before making it to the
+        # GnuPG process. Therefore, if the passphrase='' or passphrase=b'',
+        # we set passphrase=None.  See Issue #82:
+        # https://github.com/isislovecruft/python-gnupg/issues/82
         if isinstance(passphrase, str):
             passphrase = passphrase if len(passphrase) > 0 else None
         elif isinstance(passphrase, (bytes, bytearray)):
@@ -970,13 +968,13 @@ class GPGBase:
         """
         args = []
 
-        ## FIXME: GnuPG appears to ignore the --output directive when being
-        ## programmatically driven. We'll handle the IO ourselves to fix this
-        ## for now.
+        # FIXME: GnuPG appears to ignore the --output directive when being
+        # programmatically driven. We'll handle the IO ourselves to fix this
+        # for now.
         output_filename = None
         if output:
             if getattr(output, "fileno", None) is not None:
-                ## avoid overwrite confirmation message
+                # avoid overwrite confirmation message
                 if getattr(output, "name", None) is not None:
                     output_filename = output.name
                     if os.path.exists(output.name):
@@ -1003,8 +1001,8 @@ class GPGBase:
             if digest_algo:
                 args.append("--digest-algo %s" % digest_algo)
 
-        ## both can be used at the same time for an encrypted file which
-        ## is decryptable with a passphrase or secretkey.
+        # both can be used at the same time for an encrypted file which
+        # is decryptable with a passphrase or secretkey.
         if symmetric:
             args.append("--symmetric")
         if encrypt:
@@ -1026,7 +1024,7 @@ class GPGBase:
             elif isinstance(recp, str):
                 for recp in recipients.split(" "):
                     self._add_recipient_string(args, hidden_recipients, recp)
-                    ## ...and now that we've proven py3k is better...
+                    # ...and now that we've proven py3k is better...
             else:
                 log.debug("Don't know what to do with recipients: %r" % recipients)
 

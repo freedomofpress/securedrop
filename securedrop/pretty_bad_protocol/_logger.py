@@ -54,7 +54,7 @@ def create_logger(level=logging.NOTSET):
     50   CRITICAL Unhandled exceptions and tracebacks.
     ==== ======== ========================================
     """
-    ## Add the GNUPG_STATUS_LEVEL LogRecord to all Loggers in the module:
+    # Add the GNUPG_STATUS_LEVEL LogRecord to all Loggers in the module:
     logging.addLevelName(GNUPG_STATUS_LEVEL, "GNUPG")
     logging.Logger.status = status
 

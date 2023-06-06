@@ -22,29 +22,27 @@ import codecs
 import encodings
 import io
 import os
-import random
 import re
-import string
 import sys
 import threading
 from datetime import datetime
-from io import BytesIO, StringIO
+from io import BytesIO
 from socket import gethostname
 from time import localtime, mktime
+
+from . import _logger
 
 # These are all the classes which are stream-like; they are used in
 # :func:`_is_stream`.
 _STREAMLIKE_TYPES = [io.IOBase]
 
 
-from . import _logger
-
-## Directory shortcuts:
-## we don't want to use this one because it writes to the install dir:
+# Directory shortcuts:
+# we don't want to use this one because it writes to the install dir:
 # _here = getabsfile(currentframe()).rsplit(os.path.sep, 1)[0]
-_here = os.path.join(os.getcwd(), "pretty_bad_protocol")  ## current dir
-_test = os.path.join(os.path.join(_here, "test"), "tmp")  ## ./tests/tmp
-_user = os.environ.get("HOME")  ## $HOME
+_here = os.path.join(os.getcwd(), "pretty_bad_protocol")  # current dir
+_test = os.path.join(os.path.join(_here, "test"), "tmp")  # ./tests/tmp
+_user = os.environ.get("HOME")  # $HOME
 
 # Fix for Issue #74: we shouldn't expect that a $HOME directory is set in all
 # environs. https://github.com/isislovecruft/python-gnupg/issues/74
@@ -59,11 +57,11 @@ if not _user:
     # that. Otherwise, we'll use the current directory + /gnupghome.
     _user = os.path.sep.join([_user, "gnupghome"])
 
-_ugpg = os.path.join(_user, ".gnupg")  ## $HOME/.gnupg
+_ugpg = os.path.join(_user, ".gnupg")  # $HOME/.gnupg
 _conf = os.path.join(os.path.join(_user, ".config"), "python-gnupg")
-## $HOME/.config/python-gnupg
+# $HOME/.config/python-gnupg
 
-## Logger is disabled by default
+# Logger is disabled by default
 log = _logger.create_logger(0)
 
 #: Compiled regex for determining a GnuPG binary's version:
@@ -98,8 +96,8 @@ def find_encodings(enc=None, system=False):
         else:
             enc = "ascii"
 
-    ## have to have lowercase to work, see
-    ## http://docs.python.org/dev/library/codecs.html#standard-encodings
+    # have to have lowercase to work, see
+    # http://docs.python.org/dev/library/codecs.html#standard-encodings
     enc = enc.lower()
     codec_alias = encodings.normalize_encoding(enc)
 
@@ -184,7 +182,7 @@ def _copy_data(instream, outstream):
             # with type <encodings.utf_8.StreamWriter>.  We hit the
             # following error when the `outstream` has type
             # <encodings.utf_8.StreamWriter>.
-            if not "convert 'bytes' object to str implicitly" in str(te):
+            if "convert 'bytes' object to str implicitly" not in str(te):
                 log.error(str(te))
             try:
                 outstream.write(encoded.decode())
@@ -193,7 +191,7 @@ def _copy_data(instream, outstream):
                 # error in Python3 when the `outstream` is an io.BytesIO and
                 # we try to write a str to it.  We don't care about that
                 # error, we'll just try again with bytes.
-                if not "does not support the buffer interface" in str(yate):
+                if "does not support the buffer interface" not in str(yate):
                     log.error(str(yate))
             except OSError as ioe:
                 # Can get 'broken pipe' errors even when all data was sent
@@ -335,18 +333,18 @@ def _find_binary(binary=None):
                 found = _which(binary)
                 log.debug("Found potential binary paths: %s" % "\n".join([path for path in found]))
                 found = found[0]
-            except IndexError as ie:
+            except IndexError:
                 log.info("Could not determine absolute path of binary: '%s'" % binary)
         elif os.access(binary, os.X_OK):
             found = binary
     if found is None:
         try:
             found = _which("gpg", abspath_only=True, disallow_symlinks=True)[0]
-        except IndexError as ie:
+        except IndexError:
             log.error("Could not find binary for 'gpg'.")
             try:
                 found = _which("gpg2")[0]
-            except IndexError as ie:
+            except IndexError:
                 log.error("Could not find binary for 'gpg2'.")
     if found is None:
         raise RuntimeError("GnuPG is not installed!")
@@ -607,7 +605,7 @@ class Storage(dict):
     def __getattr__(self, key):
         try:
             return self[key]
-        except KeyError as k:
+        except KeyError:
             return None
 
     def __setattr__(self, key, value):

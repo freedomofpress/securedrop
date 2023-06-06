@@ -35,8 +35,8 @@ gnupg._meta = _meta
 gnupg._parsers = _parsers
 gnupg._util = _util
 
-## do not set __package__ = "gnupg", else we will end up with
-## gnupg.<*allofthethings*>
+# do not set __package__ = "gnupg", else we will end up with
+# gnupg.<*allofthethings*>
 __all__ = ["GPG", "_util", "_parsers", "_meta", "_logger"]
 
 del copyleft

@@ -344,8 +344,8 @@ class GPG(GPGBase):
         >>> seckeys = gpg.list_keys(secret=True)
         >>> assert print1 in seckeys.fingerprints
         """
-        ## xxx need way to validate that key_data is actually a valid GPG key
-        ##     it might be possible to use --list-packets and parse the output
+        # xxx need way to validate that key_data is actually a valid GPG key
+        #     it might be possible to use --list-packets and parse the output
 
         result = self._result_map["import"](self)
         log.info("Importing: %r", key_data[:256])
@@ -429,8 +429,8 @@ class GPG(GPGBase):
         args.append(f"--export{which} {keyids}")
 
         p = self._open_subprocess(args)
-        ## gpg --export produces no status-fd output; stdout will be empty in
-        ## case of failure
+        # gpg --export produces no status-fd output; stdout will be empty in
+        # case of failure
         # stdout, stderr = p.communicate()
         result = self._result_map["export"](self)
         self._collect_output(p, result, stdin=p.stdin)
@@ -476,7 +476,6 @@ class GPG(GPGBase):
         # Get the response information
         result = self._result_map["list"](self)
         self._collect_output(p, result, stdin=p.stdin)
-        lines = result.data.decode(self._encoding, self._decode_errors).splitlines()
         self._parse_keys(result)
         return result
 
@@ -877,18 +876,18 @@ class GPG(GPGBase):
         parms.setdefault("Name-Email", uidemail)
 
         if testing:
-            ## This specific comment string is required by (some? all?)
-            ## versions of GnuPG to use the insecure PRNG:
+            # This specific comment string is required by (some? all?)
+            # versions of GnuPG to use the insecure PRNG:
             parms.setdefault("Name-Comment", "insecure!")
 
         for key, val in list(kwargs.items()):
             key = key.replace("_", "-").title()
-            ## to set 'cert', 'Key-Usage' must be blank string
-            if not key in ("Key-Usage", "Subkey-Usage"):
+            # to set 'cert', 'Key-Usage' must be blank string
+            if key not in ("Key-Usage", "Subkey-Usage"):
                 if str(val).strip():
                     parms[key] = val
 
-        ## if Key-Type is 'default', make Subkey-Type also be 'default'
+        # if Key-Type is 'default', make Subkey-Type also be 'default'
         if parms["Key-Type"] == "default":
             default_type = True
             for field in (
@@ -896,11 +895,11 @@ class GPG(GPGBase):
                 "Subkey-Usage",
             ):
                 try:
-                    parms.pop(field)  ## toss these out, handle manually
+                    parms.pop(field)  # toss these out, handle manually
                 except KeyError:
                     pass
 
-        ## Key-Type must come first, followed by length
+        # Key-Type must come first, followed by length
         out = "Key-Type: %s\n" % parms.pop("Key-Type")
         out += "Key-Length: %d\n" % parms.pop("Key-Length")
         if "Subkey-Type" in parms.keys():
@@ -914,13 +913,13 @@ class GPG(GPGBase):
         for key, val in list(parms.items()):
             out += "{}: {}\n".format(key, val)
 
-        ## There is a problem where, in the batch files, if the '%%pubring'
-        ## and '%%secring' are given as any static string, i.e. 'pubring.gpg',
-        ## that file will always get rewritten without confirmation, killing
-        ## off any keys we had before. So in the case where we wish to
-        ## generate a bunch of keys and then do stuff with them, we should not
-        ## give 'pubring.gpg' as our keyring file, otherwise we will lose any
-        ## keys we had previously.
+        # There is a problem where, in the batch files, if the '%%pubring'
+        # and '%%secring' are given as any static string, i.e. 'pubring.gpg',
+        # that file will always get rewritten without confirmation, killing
+        # off any keys we had before. So in the case where we wish to
+        # generate a bunch of keys and then do stuff with them, we should not
+        # give 'pubring.gpg' as our keyring file, otherwise we will lose any
+        # keys we had previously.
 
         if separate_keyring:
             ring = str(uidemail + "_" + str(_util._utc_epoch()))
@@ -930,15 +929,15 @@ class GPG(GPGBase):
             out += "%%secring %s\n" % self.temp_secring
 
         if testing:
-            ## see TODO file, tag :compatibility:gen_key_input:
-            ##
-            ## Add version detection before the '%no-protection' flag.
+            # see TODO file, tag :compatibility:gen_key_input:
+            #
+            # Add version detection before the '%no-protection' flag.
             out += "%no-protection\n"
             out += "%transient-key\n"
 
         out += "%commit\n"
 
-        ## if we've been asked to save a copy of the batch file:
+        # if we've been asked to save a copy of the batch file:
         if save_batchfile and parms["Name-Email"] != uidemail:
             asc_uid = encodings.normalize_encoding(parms["Name-Email"])
             filename = _fix_unsafe(asc_uid) + _util._now() + ".batch"
@@ -948,14 +947,14 @@ class GPG(GPGBase):
             if not os.path.exists(self._batch_dir):
                 os.makedirs(self._batch_dir)
 
-                ## the following pulls the link to GnuPG's online batchfile
-                ## documentation from this function's docstring and sticks it
-                ## in a README file in the batch directory:
+                # the following pulls the link to GnuPG's online batchfile
+                # documentation from this function's docstring and sticks it
+                # in a README file in the batch directory:
 
                 if getattr(self.gen_key_input, "__doc__", None) is not None:
                     docs = self.gen_key_input.__doc__
                 else:
-                    docs = ""  ## docstring=None if run with "python -OO"
+                    docs = ""  # docstring=None if run with "python -OO"
                 links = "\n".join(x.strip() for x in docs.splitlines()[-2:])
                 explain = """
 This directory was created by python-gnupg, on {}, and
@@ -963,7 +962,7 @@ it contains saved batch files, which can be given to GnuPG to automatically
 generate keys. Please see
 {}""".format(
                     _util.now(), links
-                )  ## sometimes python is awesome.
+                )  # sometimes python is awesome.
 
                 with open(readme, "a+") as fh:
                     [fh.write(line) for line in explain]
@@ -1151,7 +1150,7 @@ class GPGUtilities:
             raise LookupError("Content is not encrypted to a GnuPG key!")
         try:
             return self.find_key_by_keyid(result.key)
-        except:
+        except:  # noqa: E722
             return self.find_key_by_subkey(result.key)
 
     def is_encrypted_sym(self, raw_data):
