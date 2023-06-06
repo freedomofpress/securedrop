@@ -31,6 +31,10 @@ update-python3-requirements:  ## Update Python 3 requirements with pip-compile.
 	@echo "███ Updating Python 3 requirements files..."
 	@SLIM_BUILD=1 $(DEVSHELL) pip-compile --generate-hashes \
 		--allow-unsafe \
+		--output-file requirements/python3/build-requirements.txt \
+		requirements/python3/build-requirements.in
+	@$(DEVSHELL) pip-compile --generate-hashes \
+		--allow-unsafe \
 		--output-file requirements/python3/develop-requirements.txt \
 		../admin/requirements-ansible.in \
 		../admin/requirements.in \
@@ -118,6 +122,12 @@ html-lint:  ## Validate HTML in web application template files.
 	@html_lint.py --printfilename --disable=optional_tag,extra_whitespace,indentation,names,quotation \
 		securedrop/source_templates/*.html securedrop/journalist_templates/*.html
 	@echo
+
+.PHONY: rust-lint
+rust-lint: ## Lint Rust code
+	@echo "███ Linting Rust code..."
+	cargo fmt --check
+	cargo clippy
 
 .PHONY: shellcheck
 shellcheck:  ## Lint shell scripts.
@@ -282,6 +292,11 @@ test:  ## Run the test suite in a Docker container.
 
 .PHONY: test-focal
 test-focal:  test
+
+.PHONY: rust-test
+rust-test:
+	@echo "███ Running Rust tests..."
+	cargo test
 
 .PHONY: validate-test-html
 validate-test-html:
