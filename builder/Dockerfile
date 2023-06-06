@@ -41,21 +41,25 @@ COPY dh-virtualenv.pref /etc/apt/preferences.d/
 
 RUN apt-get update && apt-get install -y dh-virtualenv
 
-ENV RUST_VERSION 1.58.1
+ENV RUST_VERSION 1.69.0
 ENV RUSTUP_VERSION 1.24.3
 ENV RUSTUP_INIT_SHA256 3dc5ef50861ee18657f9db2eeb7392f9c2a6c95c90ab41e45ab4ca71476b4338
+ENV RUSTUP_HOME /opt/rustup
+ENV CARGO_HOME /opt/cargo
 
-# Install Rust for building cryptography
+# Install Rust using the same steps as <https://github.com/rust-lang/docker-rust>
+# 1) Download rustup-init and verify it matches hardcoded checksum
+# 2) Run it to install rustup and the rustc/cargo "minimal" toolchain
+# 3) Add `/opt/cargo/bin` to $PATH, which is where cargo & rustc are installed
 RUN TMPDIR=`mktemp -d` && cd ${TMPDIR} \
         && curl --proto '=https' --tlsv1.2 -OO -sSf https://static.rust-lang.org/rustup/archive/${RUSTUP_VERSION}/x86_64-unknown-linux-gnu/rustup-init \
         && echo "${RUSTUP_INIT_SHA256} *rustup-init" | sha256sum -c - \
         && chmod +x rustup-init \
         && ./rustup-init --default-toolchain=${RUST_VERSION} --profile minimal -y \
         && cd && rm -rf ${TMPDIR}
-
-# Warm the cargo index ("empty-library" is reserved by the Rust project)
-# see https://github.com/rust-lang/cargo/issues/10319 and https://github.com/rust-lang/cargo/issues/3377
-RUN /root/.cargo/bin/cargo install empty-library ||:
+ENV PATH "$PATH:/opt/cargo/bin/"
+# TODO: Remove after we switch to 1.70.0 when it's enabled by default
+ENV CARGO_REGISTRIES_CRATES_IO_PROTOCOL sparse
 
 # Turn the ossec key into a keyring
 COPY OSSEC-ARCHIVE-KEY.asc /tmp/OSSEC-ARCHIVE-KEY.asc
