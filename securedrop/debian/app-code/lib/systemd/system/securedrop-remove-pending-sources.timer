@@ -1,0 +1,9 @@
+[Unit]
+Description=remove pending SecureDrop sources daily
+
+[Timer]
+OnCalendar=daily
+Persistent=true
+
+[Install]
+WantedBy=timers.target
