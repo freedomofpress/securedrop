@@ -136,17 +136,6 @@ def binary(data):
     return encoded
 
 
-def author_info(name, contact=None, public_key=None):
-    """Easy object-oriented representation of contributor info.
-
-    :param str name: The contributor´s name.
-    :param str contact: The contributor´s email address or contact
-                        information, if given.
-    :param str public_key: The contributor´s public keyid, if given.
-    """
-    return Storage(name=name, contact=contact, public_key=public_key)
-
-
 def _copy_data(instream, outstream):
     """Copy data from one stream to another.
 
@@ -582,47 +571,3 @@ class InheritableProperty:
             self.fdel(obj)
         else:
             getattr(obj, self.fdel.__name__)()
-
-
-class Storage(dict):
-    """A dictionary where keys are stored as class attributes.
-
-    For example, ``obj.foo`` can be used in addition to ``obj['foo']``:
-
-        >>> o = Storage(a=1)
-        >>> o.a
-        1
-        >>> o['a']
-        1
-        >>> o.a = 2
-        >>> o['a']
-        2
-        >>> del o.a
-        >>> o.a
-        None
-    """
-
-    def __getattr__(self, key):
-        try:
-            return self[key]
-        except KeyError:
-            return None
-
-    def __setattr__(self, key, value):
-        self[key] = value
-
-    def __delattr__(self, key):
-        try:
-            del self[key]
-        except KeyError as k:
-            raise AttributeError(k.args[0])
-
-    def __repr__(self):
-        return "<Storage " + dict.__repr__(self) + ">"
-
-    def __getstate__(self):
-        return dict(self)
-
-    def __setstate__(self, value):
-        for (k, v) in value.items():
-            self[k] = v

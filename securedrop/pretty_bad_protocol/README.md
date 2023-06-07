@@ -1,39 +1,18 @@
-#
-# This file is part of python-gnupg, a Python interface to GnuPG.
-# Copyright © 2013 Isis Lovecruft, <isis@leap.se> 0xA3ADB67A2CDB8B35
-#           © 2013 Andrej B.
-#           © 2013 LEAP Encryption Access Project
-#           © 2008-2012 Vinay Sajip
-#           © 2005 Steve Traugott
-#           © 2004 A.M. Kuchling
-#
-# This program is free software: you can redistribute it and/or modify it
-# under the terms of the GNU General Public License as published by the Free
-# Software Foundation, either version 3 of the License, or (at your option)
-# any later version.
-#
-# This program is distributed in the hope that it will be useful, but WITHOUT
-# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-# FITNESS FOR A PARTICULAR PURPOSE. See the included LICENSE file for details.
+pretty_bad_protocol
+===================
 
-"""copyleft.py
---------------
-Copyright information for python-gnupg.
-"""
+This is a fork of https://github.com/isislovecruft/python-gnupg/ slimmed down
+solely for SecureDrop's needs.
 
+## Original authors
+* Isis Agora Lovecruft <isis@leap.se>, 0xA3ADB67A2CDB8B35
+* Vinay Sajip <vinay.sajip@gmail.com>, 0xDE6EF0B2
+* Steve Traugott <stevegt@terraluna.org>
+* A.M. Kuchling <amk@amk.ca>
 
-from . import _util
+## License information
 
-authors = {
-    "lovecruft_isis": _util.author_info(
-        "Isis Agora Lovecruft", "isis@leap.se", "0xA3ADB67A2CDB8B35"
-    ),
-    "sajip_vinay": _util.author_info("Vinay Sajip", "vinay.sajip@gmail.com", "0xDE6EF0B2"),
-    "traugott_steve": _util.author_info("Steve Traugott", "stevegt@terraluna.org"),
-    "kuchling_am": _util.author_info("A.M. Kuchling", "amk@amk.ca"),
-}
-
-copyright = """\
+```
 Copyright © 2013 Isis Lovecruft, <isis@leap.se> 0xA3ADB67A2CDB8B35
           © 2013 Andrej B.
           © 2013 LEAP Encryption Access Project
@@ -41,11 +20,7 @@ Copyright © 2013 Isis Lovecruft, <isis@leap.se> 0xA3ADB67A2CDB8B35
           © 2005 Steve Traugott
           © 2004 A.M. Kuchling
 All rights reserved.
-See included LICENSE or ``print(gnupg.__license__)`` for full license."""
-
-disclaimer = """\
-This file is part of python-gnupg, a Python wrapper around GnuPG.
-{}
+See included LICENSE or ``print(gnupg.__license__)`` for full license.
 
 This program is free software: you can redistribute it and/or modify it
 under the terms of the GNU General Public License as published by the Free
@@ -55,11 +30,8 @@ any later version.
 This program is distributed in the hope that it will be useful, but WITHOUT
 ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
 FITNESS FOR A PARTICULAR PURPOSE. See the included LICENSE file for details.
-""".format(
-    copyright
-)
 
-txcopyright = """\
+
 Where stated, parts of this program were taken from Twisted, which is
 licensed as follows:
 
@@ -84,10 +56,8 @@ MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
 NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
 LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
 OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE."""
+WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-
-GPLv3_text = """\
                     GNU GENERAL PUBLIC LICENSE
                        Version 3, 29 June 2007
 
@@ -740,6 +710,4 @@ OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
 ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
                          END ORIGINAL LICENSE TEXT
-"""
-
-full_text = "{}\n\n{}\n\n{}".format(disclaimer, txcopyright, GPLv3_text)
+```

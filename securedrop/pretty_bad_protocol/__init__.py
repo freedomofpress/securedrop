@@ -17,18 +17,12 @@
 # FITNESS FOR A PARTICULAR PURPOSE. See the included LICENSE file for details.
 
 
-from . import _logger, _meta, _parsers, _util, copyleft, gnupg
+from . import _logger, _meta, _parsers, _util, gnupg
 from .gnupg import GPG
 
 __version__ = "3.1.1"
-__authors__ = copyleft.authors
-__license__ = copyleft.full_text
-__copyleft__ = copyleft.copyright
 
 gnupg.__version__ = __version__
-gnupg.__authors__ = __authors__
-gnupg.__licence__ = __license__
-gnupg.__copyleft__ = __copyleft__
 
 gnupg._logger = _logger
 gnupg._meta = _meta
@@ -38,5 +32,3 @@ gnupg._util = _util
 # do not set __package__ = "gnupg", else we will end up with
 # gnupg.<*allofthethings*>
 __all__ = ["GPG", "_util", "_parsers", "_meta", "_logger"]
-
-del copyleft
