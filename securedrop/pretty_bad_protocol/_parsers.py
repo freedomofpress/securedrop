@@ -21,12 +21,8 @@ options.
 """
 
 
-try:
-    from collections import OrderedDict
-except ImportError:
-    from ordereddict import OrderedDict
-
 import re
+from collections import OrderedDict
 
 from . import _util
 from ._util import log
@@ -43,7 +39,7 @@ class UsageError(Exception):
     """Raised when incorrect usage of the API occurs.."""
 
 
-def _check_keyserver(location):
+def _check_keyserver(location):  # type: ignore[no-untyped-def] # noqa
     """Check that a given keyserver is a known protocol and does not contain
     shell escape characters.
 
@@ -79,7 +75,7 @@ def _check_keyserver(location):
             return None
 
 
-def _check_preferences(prefs, pref_type=None):
+def _check_preferences(prefs, pref_type=None):  # type: ignore[no-untyped-def] # noqa
     """Check cipher, digest, and compression preference settings.
 
     MD5 is not allowed. This is `not 1994`__. SHA1 is allowed_ grudgingly_.
@@ -130,7 +126,7 @@ def _check_preferences(prefs, pref_type=None):
     return allowed
 
 
-def _fix_unsafe(shell_input):
+def _fix_unsafe(shell_input):  # type: ignore[no-untyped-def] # noqa
     """Find characters used to escape from a string into a shell, and wrap them in
     quotes if they exist. Regex pilfered from Python3 :mod:`shlex` module.
 
@@ -147,7 +143,7 @@ def _fix_unsafe(shell_input):
         return None
 
 
-def _hyphenate(input, add_prefix=False):
+def _hyphenate(input, add_prefix=False):  # type: ignore[no-untyped-def] # noqa
     """Change underscores to hyphens so that object attributes can be easily
     tranlated to GPG option names.
 
@@ -161,7 +157,7 @@ def _hyphenate(input, add_prefix=False):
     return ret
 
 
-def _is_allowed(input):
+def _is_allowed(input):  # type: ignore[no-untyped-def] # noqa
     """Check that an option or argument given to GPG is in the set of allowed
     options, the latter being a strict subset of the set of all options known
     to GPG.
@@ -231,7 +227,7 @@ def _is_allowed(input):
     return None
 
 
-def _is_hex(string):
+def _is_hex(string):  # type: ignore[no-untyped-def] # noqa
     """Check that a string is hexadecimal, with alphabetic characters
     in either upper or lower case and without whitespace.
 
@@ -242,7 +238,7 @@ def _is_hex(string):
     return False
 
 
-def _sanitise(*args):
+def _sanitise(*args):  # type: ignore[no-untyped-def] # noqa
     """Take an arg or the key portion of a kwarg and check that it is in the
     set of allowed GPG options and flags, and that it has the correct
     type. Then, attempt to escape any unsafe characters. If an option is not
@@ -273,7 +269,7 @@ def _sanitise(*args):
 
     # see TODO file, tag :cleanup:sanitise:
 
-    def _check_option(arg, value):
+    def _check_option(arg, value):  # type: ignore[no-untyped-def] # noqa
         """Check that a single ``arg`` is an allowed option.
 
         If it is allowed, quote out any escape characters in ``value``, and
@@ -399,16 +395,16 @@ def _sanitise(*args):
 
         return checked.rstrip(" ")
 
-    def is_flag(x):
+    def is_flag(x):  # type: ignore[no-untyped-def] # noqa
         return x.startswith("--")
 
-    def _make_filo(args_string):
+    def _make_filo(args_string):  # type: ignore[no-untyped-def] # noqa
         filo = arg.split(" ")
         filo.reverse()
         log.debug("_make_filo(): Converted to reverse list: %s" % filo)
         return filo
 
-    def _make_groups(filo):
+    def _make_groups(filo):  # type: ignore[no-untyped-def] # noqa
         groups = {}
         while len(filo) >= 1:
             last = filo.pop()
@@ -434,7 +430,7 @@ def _sanitise(*args):
                 groups["xxx"] = last
         return groups
 
-    def _check_groups(groups):
+    def _check_groups(groups):  # type: ignore[no-untyped-def] # noqa
         log.debug("Got groups: %s" % groups)
         checked_groups = []
         for a, v in groups.items():
@@ -472,7 +468,7 @@ def _sanitise(*args):
         log.debug("Got None for args")
 
 
-def _sanitise_list(arg_list):
+def _sanitise_list(arg_list):  # type: ignore[no-untyped-def] # noqa
     """A generator for iterating through a list of gpg options and sanitising
     them.
 
@@ -489,7 +485,7 @@ def _sanitise_list(arg_list):
                 yield safe_arg
 
 
-def _get_options_group(group=None):
+def _get_options_group(group=None):  # type: ignore[no-untyped-def] # noqa
     """Get a specific group of options which are allowed."""
 
     #: These expect a hexidecimal keyid as their argument, and can be parsed
@@ -655,7 +651,7 @@ def _get_options_group(group=None):
         return locals()[group]
 
 
-def _get_all_gnupg_options():
+def _get_all_gnupg_options():  # type: ignore[no-untyped-def] # noqa
     """Get all GnuPG options and flags.
 
     This is hardcoded within a local scope to reduce the chance of a tampered
@@ -855,7 +851,7 @@ def _get_all_gnupg_options():
     return gnupg_options
 
 
-def nodata(status_code):
+def nodata(status_code):  # type: ignore[no-untyped-def] # noqa
     """Translate NODATA status codes from GnuPG to messages."""
     lookup = {
         "1": "No armored data.",
@@ -868,7 +864,7 @@ def nodata(status_code):
             return value
 
 
-def progress(status_code):
+def progress(status_code):  # type: ignore[no-untyped-def] # noqa
     """Translate PROGRESS status codes from GnuPG to messages."""
     lookup = {
         "pk_dsa": "DSA key generation",
@@ -888,31 +884,31 @@ def progress(status_code):
 class KeyExpirationInterface:
     """Interface that guards against misuse of --edit-key combined with --command-fd"""
 
-    def __init__(self, expiration_time, passphrase=None):
+    def __init__(self, expiration_time, passphrase=None):  # type: ignore[no-untyped-def] # noqa
         self._passphrase = passphrase
         self._expiration_time = expiration_time
         self._clean_key_expiration_option()
 
-    def _clean_key_expiration_option(self):
+    def _clean_key_expiration_option(self):  # type: ignore[no-untyped-def] # noqa
         """validates the expiration option supplied"""
         allowed_entry = re.findall(r"^(\d+)(|w|m|y)$", self._expiration_time)
         if not allowed_entry:
             raise UsageError("Key expiration option: %s is not valid" % self._expiration_time)
 
-    def _input_passphrase(self, _input):
+    def _input_passphrase(self, _input):  # type: ignore[no-untyped-def] # noqa
         if self._passphrase:
             return "{}{}\n".format(_input, self._passphrase)
         return _input
 
-    def _main_key_command(self):
+    def _main_key_command(self):  # type: ignore[no-untyped-def] # noqa
         main_key_input = "expire\n%s\n" % self._expiration_time
         return self._input_passphrase(main_key_input)
 
-    def _sub_key_command(self, sub_key_number):
+    def _sub_key_command(self, sub_key_number):  # type: ignore[no-untyped-def] # noqa
         sub_key_input = "key %d\nexpire\n%s\n" % (sub_key_number, self._expiration_time)
         return self._input_passphrase(sub_key_input)
 
-    def gpg_interactive_input(self, sub_keys_number):
+    def gpg_interactive_input(self, sub_keys_number):  # type: ignore[no-untyped-def] # noqa
         """processes series of inputs normally supplied on --edit-key but passed through stdin
         this ensures that no other --edit-key command is actually passing through.
         """
@@ -929,11 +925,11 @@ class KeyExpirationResult:
     It does not really have a job, but just to conform to the API
     """
 
-    def __init__(self, gpg):
+    def __init__(self, gpg):  # type: ignore[no-untyped-def] # noqa
         self._gpg = gpg
         self.status = "ok"
 
-    def _handle_status(self, key, value):
+    def _handle_status(self, key, value):  # type: ignore[no-untyped-def] # noqa
         """Parse a status code from the attached GnuPG process.
 
         :raises: :exc:`~exceptions.ValueError` if the status message is unknown.
@@ -959,11 +955,11 @@ class KeyExpirationResult:
 class KeySigningResult:
     """Handle status messages for key singing"""
 
-    def __init__(self, gpg):
+    def __init__(self, gpg):  # type: ignore[no-untyped-def] # noqa
         self._gpg = gpg
         self.status = "ok"
 
-    def _handle_status(self, key, value):
+    def _handle_status(self, key, value):  # type: ignore[no-untyped-def] # noqa
         """Parse a status code from the attached GnuPG process.
 
         :raises: :exc:`~exceptions.ValueError` if the status message is unknown.
@@ -991,7 +987,7 @@ class GenKey:
     key's fingerprint, or a status string explaining the results.
     """
 
-    def __init__(self, gpg):
+    def __init__(self, gpg):  # type: ignore[no-untyped-def] # noqa
         self._gpg = gpg
         # this should get changed to something more useful, like 'key_type'
         #: 'P':= primary, 'S':= subkey, 'B':= both
@@ -1013,14 +1009,14 @@ class GenKey:
         #: ``separate_keyring=True``.
         self.secring = None
 
-    def __nonzero__(self):
+    def __nonzero__(self):  # type: ignore[no-untyped-def] # noqa
         if self.fingerprint:
             return True
         return False
 
     __bool__ = __nonzero__
 
-    def __str__(self):
+    def __str__(self):  # type: ignore[no-untyped-def] # noqa
         if self.fingerprint:
             return self.fingerprint
         else:
@@ -1029,7 +1025,7 @@ class GenKey:
             else:
                 return False
 
-    def _handle_status(self, key, value):
+    def _handle_status(self, key, value):  # type: ignore[no-untyped-def] # noqa
         """Parse a status code from the attached GnuPG process.
 
         :raises: :exc:`~exceptions.ValueError` if the status message is unknown.
@@ -1072,11 +1068,11 @@ class GenKey:
 class DeleteResult:
     """Handle status messages for --delete-keys and --delete-secret-keys"""
 
-    def __init__(self, gpg):
+    def __init__(self, gpg):  # type: ignore[no-untyped-def] # noqa
         self._gpg = gpg
         self.status = "ok"
 
-    def __str__(self):
+    def __str__(self):  # type: ignore[no-untyped-def] # noqa
         return self.status
 
     problem_reason = {
@@ -1085,7 +1081,7 @@ class DeleteResult:
         "3": "Ambigious specification",
     }
 
-    def _handle_status(self, key, value):
+    def _handle_status(self, key, value):  # type: ignore[no-untyped-def] # noqa
         """Parse a status code from the attached GnuPG process.
 
         :raises: :exc:`~exceptions.ValueError` if the status message is unknown.
@@ -1116,10 +1112,10 @@ class Sign:
     what = None
     status = None
 
-    def __init__(self, gpg):
+    def __init__(self, gpg):  # type: ignore[no-untyped-def] # noqa
         self._gpg = gpg
 
-    def __nonzero__(self):
+    def __nonzero__(self):  # type: ignore[no-untyped-def] # noqa
         """Override the determination for truthfulness evaluation.
 
         :rtype: bool
@@ -1129,10 +1125,10 @@ class Sign:
 
     __bool__ = __nonzero__
 
-    def __str__(self):
+    def __str__(self):  # type: ignore[no-untyped-def] # noqa
         return self.data.decode(self._gpg._encoding, self._gpg._decode_errors)
 
-    def _handle_status(self, key, value):
+    def _handle_status(self, key, value):  # type: ignore[no-untyped-def] # noqa
         """Parse a status code from the attached GnuPG process.
 
         :raises: :exc:`~exceptions.ValueError` if the status message is unknown.
@@ -1191,7 +1187,7 @@ class ListKeys(list):
     |  rvk = revocation key
     """
 
-    def __init__(self, gpg):
+    def __init__(self, gpg):  # type: ignore[no-untyped-def] # noqa
         super().__init__()
         self._gpg = gpg
         self.curkey = None
@@ -1202,7 +1198,7 @@ class ListKeys(list):
         self.certs = {}
         self.revs = {}
 
-    def key(self, args):
+    def key(self, args):  # type: ignore[no-untyped-def] # noqa
         vars = (
             """
             type trust length algo keyid date expires dummy ownertrust uid
@@ -1227,11 +1223,11 @@ class ListKeys(list):
 
     pub = sec = key
 
-    def fpr(self, args):
+    def fpr(self, args):  # type: ignore[no-untyped-def] # noqa
         self.curkey["fingerprint"] = args[9]
         self.fingerprints.append(args[9])
 
-    def uid(self, args):
+    def uid(self, args):  # type: ignore[no-untyped-def] # noqa
         uid = args[9]
         uid = ESCAPE_PATTERN.sub(lambda m: chr(int(m.group(1), 16)), uid)
         self.curkey["uids"].append(uid)
@@ -1241,7 +1237,7 @@ class ListKeys(list):
         self.certs[uid] = set()
         self.uids.append(uid)
 
-    def sig(self, args):
+    def sig(self, args):  # type: ignore[no-untyped-def] # noqa
         vars = (
             """
             type trust length algo keyid date expires dummy ownertrust uid
@@ -1255,21 +1251,21 @@ class ListKeys(list):
         if sig["trust"] == "!":
             self.certs[self.curuid].add(sig["keyid"])
 
-    def sub(self, args):
+    def sub(self, args):  # type: ignore[no-untyped-def] # noqa
         subkey = [args[4], args[11]]
         self.curkey["subkeys"].append(subkey)
 
-    def rev(self, args):
+    def rev(self, args):  # type: ignore[no-untyped-def] # noqa
         self.curkey["rev"] = {"keyid": args[4], "revtime": args[5], "uid": self.curuid}
 
-    def _handle_status(self, key, value):
+    def _handle_status(self, key, value):  # type: ignore[no-untyped-def] # noqa
         pass
 
 
 class ImportResult:
     """Parse GnuPG status messages for key import operations."""
 
-    def __init__(self, gpg):
+    def __init__(self, gpg):  # type: ignore[no-untyped-def] # noqa
         """Start parsing the results of a key import operation.
 
         :type gpg: :class:`gnupg.GPG`
@@ -1317,7 +1313,7 @@ class ImportResult:
         #: imported.
         self.results = list()
 
-    def __nonzero__(self):
+    def __nonzero__(self):  # type: ignore[no-untyped-def] # noqa
         """Override the determination for truthfulness evaluation.
 
         :rtype: bool
@@ -1331,7 +1327,7 @@ class ImportResult:
 
     __bool__ = __nonzero__
 
-    def _handle_status(self, key, value):
+    def _handle_status(self, key, value):  # type: ignore[no-untyped-def] # noqa
         """Parse a status code from the attached GnuPG process.
 
         :raises ValueError: if the status message is unknown.
@@ -1390,7 +1386,7 @@ class ImportResult:
         else:
             raise ValueError("Unknown status message: %r" % key)
 
-    def summary(self):
+    def summary(self):  # type: ignore[no-untyped-def] # noqa
         l = []  # noqa: E741
         l.append("%d imported" % self.counts["imported"])
         if self.counts["not_imported"]:
@@ -1401,7 +1397,7 @@ class ImportResult:
 class ExportResult:
     """Parse GnuPG status messages for key export operations."""
 
-    def __init__(self, gpg):
+    def __init__(self, gpg):  # type: ignore[no-untyped-def] # noqa
         """Start parsing the results of a key export operation.
 
         :type gpg: :class:`gnupg.GPG`
@@ -1421,7 +1417,7 @@ class ExportResult:
         #: exported.
         self.fingerprints = list()
 
-    def __nonzero__(self):
+    def __nonzero__(self):  # type: ignore[no-untyped-def] # noqa
         """Override the determination for truthfulness evaluation.
 
         :rtype: bool
@@ -1435,7 +1431,7 @@ class ExportResult:
 
     __bool__ = __nonzero__
 
-    def _handle_status(self, key, value):
+    def _handle_status(self, key, value):  # type: ignore[no-untyped-def] # noqa
         """Parse a status code from the attached GnuPG process.
 
         :raises ValueError: if the status message is unknown.
@@ -1450,7 +1446,7 @@ class ExportResult:
         elif key not in informational_keys:
             raise ValueError("Unknown status message: %r" % key)
 
-    def summary(self):
+    def summary(self):  # type: ignore[no-untyped-def] # noqa
         return "%d exported" % self.counts["exported"]
 
 
@@ -1500,7 +1496,7 @@ class Verify:
         "TRUST_ULTIMATE": TRUST_ULTIMATE,
     }
 
-    def __init__(self, gpg):
+    def __init__(self, gpg):  # type: ignore[no-untyped-def] # noqa
         """Create a parser for verification and certification commands.
 
         :param gpg: An instance of :class:`gnupg.GPG`.
@@ -1572,7 +1568,7 @@ class Verify:
         #: ``NOTATION_DATA``.
         self._last_notation_name = None
 
-    def __nonzero__(self):
+    def __nonzero__(self):  # type: ignore[no-untyped-def] # noqa
         """Override the determination for truthfulness evaluation.
 
         :rtype: bool
@@ -1582,7 +1578,7 @@ class Verify:
 
     __bool__ = __nonzero__
 
-    def _handle_status(self, key, value):
+    def _handle_status(self, key, value):  # type: ignore[no-untyped-def] # noqa
         """Parse a status code from the attached GnuPG process.
 
         :raises: :exc:`~exceptions.ValueError` if the status message is unknown.
@@ -1767,7 +1763,7 @@ class Crypt(Verify):
     ``--decrypt``, and ``--decrypt-files``.
     """
 
-    def __init__(self, gpg):
+    def __init__(self, gpg):  # type: ignore[no-untyped-def] # noqa
         Verify.__init__(self, gpg)
         self._gpg = gpg
         #: A string containing the encrypted or decrypted data.
@@ -1781,14 +1777,14 @@ class Crypt(Verify):
         self.data_timestamp = None
         self.data_filename = None
 
-    def __nonzero__(self):
+    def __nonzero__(self):  # type: ignore[no-untyped-def] # noqa
         if self.ok:
             return True
         return False
 
     __bool__ = __nonzero__
 
-    def __str__(self):
+    def __str__(self):  # type: ignore[no-untyped-def] # noqa
         """The str() method for a :class:`Crypt` object will automatically return the
         decoded data string, which stores the encryped or decrypted data.
 
@@ -1799,7 +1795,7 @@ class Crypt(Verify):
         """
         return self.data.decode(self._gpg._encoding, self._gpg._decode_errors)
 
-    def _handle_status(self, key, value):
+    def _handle_status(self, key, value):  # type: ignore[no-untyped-def] # noqa
         """Parse a status code from the attached GnuPG process.
 
         :raises: :exc:`~exceptions.ValueError` if the status message is unknown.
@@ -1869,7 +1865,7 @@ class Crypt(Verify):
 class ListPackets:
     """Handle status messages for --list-packets."""
 
-    def __init__(self, gpg):
+    def __init__(self, gpg):  # type: ignore[no-untyped-def] # noqa
         self._gpg = gpg
         #: A string describing the current processing status, or error, if one
         #: has occurred.
@@ -1887,7 +1883,7 @@ class ListPackets:
         #: A list of keyid's that the message has been encrypted to.
         self.encrypted_to = []
 
-    def _handle_status(self, key, value):
+    def _handle_status(self, key, value):  # type: ignore[no-untyped-def] # noqa
         """Parse a status code from the attached GnuPG process.
 
         :raises: :exc:`~exceptions.ValueError` if the status message is unknown.

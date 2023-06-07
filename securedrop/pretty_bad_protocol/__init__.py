@@ -17,17 +17,10 @@
 # FITNESS FOR A PARTICULAR PURPOSE. See the included LICENSE file for details.
 
 
-from . import _logger, _meta, _parsers, _util, gnupg
+from . import _logger, _meta, _parsers, _util
 from .gnupg import GPG
 
 __version__ = "3.1.1"
-
-gnupg.__version__ = __version__
-
-gnupg._logger = _logger
-gnupg._meta = _meta
-gnupg._parsers = _parsers
-gnupg._util = _util
 
 # do not set __package__ = "gnupg", else we will end up with
 # gnupg.<*allofthethings*>

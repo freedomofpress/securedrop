@@ -18,17 +18,13 @@
 
 """Extra utilities for python-gnupg."""
 
-import codecs
-import encodings
 import io
 import os
 import re
-import sys
 import threading
 from datetime import datetime
 from io import BytesIO
 from socket import gethostname
-from time import localtime, mktime
 
 from . import _logger
 
@@ -72,71 +68,7 @@ class GnuPGVersionError(ValueError):
     """Raised when we couldn't parse GnuPG's version info."""
 
 
-def find_encodings(enc=None, system=False):
-    """Find functions for encoding translations for a specific codec.
-
-    :param str enc: The codec to find translation functions for. It will be
-                    normalized by converting to lowercase, excluding
-                    everything which is not ascii, and hyphens will be
-                    converted to underscores.
-
-    :param bool system: If True, find encodings based on the system's stdin
-                        encoding, otherwise assume utf-8.
-
-    :raises: :exc:LookupError if the normalized codec, ``enc``, cannot be
-             found in Python's encoding translation map.
-    """
-    if not enc:
-        enc = "utf-8"
-
-    if system:
-        if getattr(sys.stdin, "encoding", None) is None:
-            enc = sys.stdin.encoding
-            log.debug("Obtained encoding from stdin: %s" % enc)
-        else:
-            enc = "ascii"
-
-    # have to have lowercase to work, see
-    # http://docs.python.org/dev/library/codecs.html#standard-encodings
-    enc = enc.lower()
-    codec_alias = encodings.normalize_encoding(enc)
-
-    codecs.register(encodings.search_function)
-    coder = codecs.lookup(codec_alias)
-
-    return coder
-
-
-def b(x):
-    """See http://python3porting.com/problems.html#nicer-solutions"""
-    coder = find_encodings()
-    if isinstance(x, bytes):
-        return coder.encode(x.decode(coder.name))[0]
-    else:
-        return coder.encode(x)[0]
-
-
-def s(x):
-    if isinstance(x, str):
-        return x
-    elif isinstance(x, (bytes, bytearray)):
-        return x.decode(find_encodings().name)
-    else:
-        raise ValueError("got type {}, not a string nor bytes".format(type(x)))
-
-
-def binary(data):
-    coder = find_encodings()
-
-    if isinstance(data, str):
-        encoded = coder.encode(data)[0]
-    else:
-        encoded = data
-
-    return encoded
-
-
-def _copy_data(instream, outstream):
+def _copy_data(instream, outstream):  # type: ignore[no-untyped-def] # noqa
     """Copy data from one stream to another.
 
     :type instream: :class:`io.BytesIO` or :class:`io.StringIO` or file
@@ -156,7 +88,7 @@ def _copy_data(instream, outstream):
 
         sent += len(data)
         if isinstance(data, str):
-            encoded = binary(data)
+            encoded = data.encode()
         else:
             encoded = data
         log.debug("Sending %d bytes of data..." % sent)
@@ -209,7 +141,7 @@ def _copy_data(instream, outstream):
         log.debug("Closed outstream: %d bytes sent." % sent)
 
 
-def _create_if_necessary(directory):
+def _create_if_necessary(directory):  # type: ignore[no-untyped-def] # noqa
     """Create the specified directory, if necessary.
 
     :param str directory: The directory to use.
@@ -234,7 +166,7 @@ def _create_if_necessary(directory):
     return True
 
 
-def create_uid_email(username=None, hostname=None):
+def create_uid_email(username=None, hostname=None):  # type: ignore[no-untyped-def] # noqa
     """Create an email address suitable for a UID on a GnuPG key.
 
     :param str username: The username portion of an email address.  If None,
@@ -271,7 +203,7 @@ def create_uid_email(username=None, hostname=None):
     return uid
 
 
-def _deprefix(line, prefix, callback=None):
+def _deprefix(line, prefix, callback=None):  # type: ignore[no-untyped-def] # noqa
     """Remove the prefix string from the beginning of line, if it exists.
 
     :param string line: A line, such as one output by GnuPG's status-fd.
@@ -300,7 +232,7 @@ def _deprefix(line, prefix, callback=None):
         return newline
 
 
-def _find_binary(binary=None):
+def _find_binary(binary=None):  # type: ignore[no-untyped-def] # noqa
     """Find the absolute path to the GnuPG binary.
 
     Also run checks that the binary is not a symlink, and check that
@@ -341,7 +273,7 @@ def _find_binary(binary=None):
     return found
 
 
-def _has_readwrite(path):
+def _has_readwrite(path):  # type: ignore[no-untyped-def] # noqa
     """
     Determine if the real uid/gid of the executing user has read and write
     permissions for a directory or a file.
@@ -354,7 +286,7 @@ def _has_readwrite(path):
     return os.access(path, os.R_OK | os.W_OK)
 
 
-def _is_file(filename):
+def _is_file(filename):  # type: ignore[no-untyped-def] # noqa
     """Check that the size of the thing which is supposed to be a filename has
     size greater than zero, without following symbolic links or using
     :func:os.path.isfile.
@@ -382,7 +314,7 @@ def _is_file(filename):
     return False
 
 
-def _is_stream(input):
+def _is_stream(input):  # type: ignore[no-untyped-def] # noqa
     """Check that the input is a byte stream.
 
     :param input: An object provided for reading from or writing to.
@@ -392,7 +324,7 @@ def _is_stream(input):
     return isinstance(input, tuple(_STREAMLIKE_TYPES))
 
 
-def _is_list_or_tuple(instance):
+def _is_list_or_tuple(instance):  # type: ignore[no-untyped-def] # noqa
     """Check that ``instance`` is a list or tuple.
 
     :param instance: The object to type check.
@@ -408,7 +340,7 @@ def _is_list_or_tuple(instance):
     )
 
 
-def _make_binary_stream(thing, encoding=None, armor=True):
+def _make_binary_stream(thing, encoding=None, armor=True):  # type: ignore[no-untyped-def] # noqa
     """Encode **thing**, then make it stream/file-like.
 
     :param thing: The thing to turn into a encoded stream.
@@ -422,7 +354,7 @@ def _make_binary_stream(thing, encoding=None, armor=True):
     return BytesIO(thing)
 
 
-def _next_year():
+def _next_year():  # type: ignore[no-untyped-def] # noqa
     """Get the date of today plus one year.
 
     :rtype: str
@@ -435,12 +367,12 @@ def _next_year():
     return "-".join((next_year, month, day))
 
 
-def _now():
+def _now():  # type: ignore[no-untyped-def] # noqa
     """Get a timestamp for right now, formatted according to ISO 8601."""
     return datetime.isoformat(datetime.now())
 
 
-def _separate_keyword(line):
+def _separate_keyword(line):  # type: ignore[no-untyped-def] # noqa
     """Split the line, and return (first_word, the_rest)."""
     try:
         first, rest = line.split(None, 1)
@@ -450,7 +382,7 @@ def _separate_keyword(line):
     return first, rest
 
 
-def _threaded_copy_data(instream, outstream):
+def _threaded_copy_data(instream, outstream):  # type: ignore[no-untyped-def] # noqa
     """Copy data from one stream to another in a separate thread.
 
     Wraps ``_copy_data()`` in a :class:`threading.Thread`.
@@ -466,12 +398,7 @@ def _threaded_copy_data(instream, outstream):
     return copy_thread
 
 
-def _utc_epoch():
-    """Get the seconds since epoch."""
-    return int(mktime(localtime()))
-
-
-def _which(executable, flags=os.X_OK, abspath_only=False, disallow_symlinks=False):
+def _which(executable, flags=os.X_OK, abspath_only=False, disallow_symlinks=False):  # type: ignore[no-untyped-def] # noqa
     """Borrowed from Twisted's :mod:twisted.python.proutils .
 
     Search PATH for executable files with the given name.
@@ -495,7 +422,7 @@ def _which(executable, flags=os.X_OK, abspath_only=False, disallow_symlinks=Fals
               they were found.
     """
 
-    def _can_allow(p):
+    def _can_allow(p):  # type: ignore[no-untyped-def] # noqa
         if not os.access(p, flags):
             return False
         if abspath_only and not os.path.abspath(p):
@@ -522,7 +449,7 @@ def _which(executable, flags=os.X_OK, abspath_only=False, disallow_symlinks=Fals
     return result
 
 
-def _write_passphrase(stream, passphrase, encoding):
+def _write_passphrase(stream, passphrase, encoding):  # type: ignore[no-untyped-def] # noqa
     """Write the passphrase from memory to the GnuPG process' stdin.
 
     :type stream: file, :class:`~io.BytesIO`, or :class:`~io.StringIO`
@@ -540,13 +467,13 @@ def _write_passphrase(stream, passphrase, encoding):
 class InheritableProperty:
     """Based on the emulation of PyProperty_Type() in Objects/descrobject.c"""
 
-    def __init__(self, fget=None, fset=None, fdel=None, doc=None):
+    def __init__(self, fget=None, fset=None, fdel=None, doc=None):  # type: ignore[no-untyped-def] # noqa
         self.fget = fget
         self.fset = fset
         self.fdel = fdel
         self.__doc__ = doc
 
-    def __get__(self, obj, objtype=None):
+    def __get__(self, obj, objtype=None):  # type: ignore[no-untyped-def] # noqa
         if obj is None:
             return self
         if self.fget is None:
@@ -556,7 +483,7 @@ class InheritableProperty:
         else:
             return getattr(obj, self.fget.__name__)()
 
-    def __set__(self, obj, value):
+    def __set__(self, obj, value):  # type: ignore[no-untyped-def] # noqa
         if self.fset is None:
             raise AttributeError("can't set attribute")
         if self.fset.__name__ == "<lambda>" or not self.fset.__name__:
@@ -564,7 +491,7 @@ class InheritableProperty:
         else:
             getattr(obj, self.fset.__name__)(value)
 
-    def __delete__(self, obj):
+    def __delete__(self, obj):  # type: ignore[no-untyped-def] # noqa
         if self.fdel is None:
             raise AttributeError("can't delete attribute")
         if self.fdel.__name__ == "<lambda>" or not self.fdel.__name__:

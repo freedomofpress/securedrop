@@ -29,7 +29,7 @@ from . import _util
 from ._util import log
 
 
-def _create_trustdb(cls):
+def _create_trustdb(cls):  # type: ignore[no-untyped-def] # noqa
     """Create the trustdb file in our homedir, if it doesn't exist."""
     trustdb = os.path.join(cls.homedir, "trustdb.gpg")
     if not os.path.isfile(trustdb):
@@ -41,7 +41,7 @@ def _create_trustdb(cls):
         cls.fix_trustdb(trustdb)
 
 
-def export_ownertrust(cls, trustdb=None):
+def export_ownertrust(cls, trustdb=None):  # type: ignore[no-untyped-def] # noqa
     """Export ownertrust to a trustdb file.
 
     If there is already a file named :file:`trustdb.gpg` in the current GnuPG
@@ -65,7 +65,7 @@ def export_ownertrust(cls, trustdb=None):
     export_proc.wait()
 
 
-def import_ownertrust(cls, trustdb=None):
+def import_ownertrust(cls, trustdb=None):  # type: ignore[no-untyped-def] # noqa
     """Import ownertrust from a trustdb file.
 
     :param str trustdb: The path to the trustdb.gpg file. If not given,
@@ -86,7 +86,7 @@ def import_ownertrust(cls, trustdb=None):
     import_proc.wait()
 
 
-def fix_trustdb(cls, trustdb=None):
+def fix_trustdb(cls, trustdb=None):  # type: ignore[no-untyped-def] # noqa
     """Attempt to repair a broken trustdb.gpg file.
 
     GnuPG>=2.0.x has this magical-seeming flag: `--fix-trustdb`. You'd think
