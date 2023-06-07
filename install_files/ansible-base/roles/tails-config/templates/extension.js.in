@@ -1,0 +1,143 @@
+/* exported init */
+
+const GETTEXT_DOMAIN = 'messages';
+
+const {Clutter, GObject, GLib } = imports.gi;
+
+const Util = imports.misc.util;
+const ExtensionUtils = imports.misc.extensionUtils;
+const Main = imports.ui.main;
+const PanelMenu = imports.ui.panelMenu;
+const PopupMenu = imports.ui.popupMenu;
+
+const St = imports.gi.St;
+const Gettext = imports.gettext;
+const CurrentExtension = imports.misc.extensionUtils.getCurrentExtension();
+const Gio = imports.gi.Gio;
+
+const Domain = Gettext.domain(GETTEXT_DOMAIN)
+
+const source_interface_address = "{{ item.0.source_interface_address }}";
+const journalist_interface_address = "{{ item.0.journalist_interface_address }}";
+const app_server_hostname = "{{ item.0.app_hostname }}";
+const mon_server_hostname = "{{ item.0.mon_hostname }}";
+
+const _ = Domain.gettext;
+
+const Indicator = GObject.registerClass(
+class Indicator extends PanelMenu.Button {
+    _init() {
+        super._init(0.0, 'SecureDrop');
+
+        // Check for SSH onion service client authentication keys -
+        // if they don't exist, this is a Journalist workstation
+        // (and therefore the admin options should remain hidden)
+        let is_admin = false;
+        let [ok, out, err, exit] = GLib.spawn_command_line_sync('/bin/bash -c "test -f ~/Persistent/securedrop/install_files/ansible-base/tor_v3_keys.json"');
+        if (exit == 0) {
+            is_admin = true;
+        }
+        
+        let gicon = Gio.icon_new_for_string(CurrentExtension.path + "/icons/securedrop-symbolic.png");
+	let icon = new St.Icon({ gicon });
+	icon.icon_size = 18;
+	icon.height = 18;
+	icon.width = 18;
+        
+        let label = new St.Label({
+            text: 'SecureDrop',
+            y_expand: false,
+            y_align: Clutter.ActorAlign.CENTER,
+        });
+        
+        let topBox = new St.BoxLayout({
+            style_class: 'panel-status-menu-box'
+        });
+        
+        topBox.add_child(icon);
+        topBox.add_child(label);
+        this.add_child(topBox);
+
+        let source = new PopupMenu.PopupMenuItem(_('Launch Source Interface'));
+        source.connect('activate', () => {
+    	    Util.spawn(['tor-browser', source_interface_address]);
+        });
+        
+        let journalist = new PopupMenu.PopupMenuItem(_('Launch Journalist Interface'));
+        journalist.connect('activate', () => {
+       	    Util.spawn(['tor-browser', journalist_interface_address]);
+        });
+        
+        let admin_label = new St.Label({
+            text: 'Admin Actions',
+            y_expand: true,
+            y_align: Clutter.ActorAlign.START,
+        });
+        
+        let updates = new PopupMenu.PopupMenuItem(_('Check for SecureDrop Updates'));
+        updates.connect('activate', () => {
+            Util.spawn(['python3', '/home/amnesia/Persistent/securedrop/journalist_gui/SecureDropUpdater']);
+        });
+        
+        let app_server_ssh = new PopupMenu.PopupMenuItem(_('SSH into the App Server'));
+        app_server_ssh.connect('activate', () => {
+            Util.trySpawnCommandLine(`gnome-terminal -- ssh ` + app_server_hostname);
+        });
+        
+        let mon_server_ssh = new PopupMenu.PopupMenuItem(_('SSH into the Monitor Server'));
+        mon_server_ssh.connect('activate', () => {
+            Util.trySpawnCommandLine(`gnome-terminal -- ssh ` + mon_server_hostname);
+        });
+        
+        let keypass = new PopupMenu.PopupMenuItem(_('Open KeePassXC Password Vault'));
+        keypass.connect('activate', () => {
+            Util.trySpawnCommandLine(`keepassxc`);
+        });
+
+        let filebrowser = new PopupMenu.PopupMenuItem(_('Open File Browser'));
+        filebrowser.connect('activate', () => {
+            Util.trySpawnCommandLine(`xdg-open /home/amnesia/Persistent`);
+        });
+        
+        this.menu.addMenuItem(source);
+        this.menu.addMenuItem(journalist);
+        this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
+        this.menu.addMenuItem(updates);
+        if (is_admin) {
+            this.menu.addMenuItem(app_server_ssh);
+            this.menu.addMenuItem(mon_server_ssh);
+        }
+        this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
+        this.menu.addMenuItem(keypass);
+        this.menu.addMenuItem(filebrowser);
+    }
+});
+
+class Extension {
+    constructor(uuid) {
+        this._uuid = uuid;
+
+        ExtensionUtils.initTranslations(GETTEXT_DOMAIN);
+    }
+
+    enable() {
+        this._indicator = new Indicator();
+        
+        // Position is a zero-based index of where to put the extension 
+        // in the status bar. Index 3, in Tails, would be to the right
+        // of the 'Places' Menu (Activites, Applicatons, Places, SD)
+        let pos = 3;
+        if ('apps-menu' in Main.panel.statusArea)
+            pos++;
+        Main.panel.addToStatusArea(this._uuid, this._indicator, pos, 'left');
+    }
+
+    disable() {
+        this._indicator.destroy();
+        this._indicator = null;
+    }
+}
+
+function init(meta) {
+    return new Extension(meta.uuid);
+}

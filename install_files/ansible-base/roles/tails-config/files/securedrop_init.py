@@ -128,6 +128,9 @@ with open("/etc/os-release") as f:
 if is_tails:
     subprocess.call(["gnome-shell-extension-tool", "-r", "desktop-icons@csoriano"], env=env)
 
+# enable the GNOME Shell Extension
+subprocess.call(["gnome-extensions", "enable", "securedrop@securedrop.freedom.press"], env=env)
+
 # reacquire uid0 and notify the user
 os.setresuid(0, 0, -1)
 os.setresgid(0, 0, -1)

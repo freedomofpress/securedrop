@@ -8,6 +8,8 @@
 
 - include: create_desktop_shortcuts.yml
 
+- include: install_shell_extension.yml
+
 - include: configure_network_hook.yml
 
 - name: Check that we are on an admin workstation

@@ -13,8 +13,29 @@ msgstr ""
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+
+msgid "Launch Source Interface"
+msgstr ""
+
+msgid "Launch Journalist Interface"
+msgstr ""
+
+msgid "Check for SecureDrop Updates"
+msgstr ""
+
+msgid "SSH into the App Server"
+msgstr ""
+
+msgid "SSH into the Monitor Server"
+msgstr ""
+
+msgid "Open KeePassXC Password Vault"
+msgstr ""
+
+msgid "Open File Browser"
+msgstr ""
 
 #: desktop-journalist-icon.j2.in:10
 msgid "SecureDrop Journalist Interface"
