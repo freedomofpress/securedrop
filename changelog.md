@@ -2,7 +2,66 @@
 
 ## 2.6.0~rc1
 
+### Web applications
+* Don't treat Tor Browser for Android as desktop Tor Browser (#6573)
+* Hash journalist passphrases using the argon2id algorithm (#6655, #6657)
+* Remove use of global i18n variables (#6420, #6681)
+* Explicitly retrieve SDConfig and make it immutable (#5761, #6563)
+* Remove "LOGIN_HARDENING" global and reduce SECUREDROP_ENV usage (#3600, #6585)
+* Officially only support SQLite as the database backend (#6700, #6707)
+* Add `<title>` blocks for better accessibility (#6313, #6738)
+* Set `Cross-Origin-Resource-Policy: same-origin` (#6768)
+* Automatically and regularly remove pending sources (#6488, #6785)
+* Dependency changes:
+  * Update mod-wsgi from 4.6.7 to 4.9.4 (#6775)
+  * Update pytz from 2017.3 to 2022.2.1 (#6569, #6571)
+  * Update pycparser from 2.20 to 2.21 (#6618, #6686)
+  * Update redis from 3.5.3 to 4.5.4 (#6783)
+  * Update requests from 2.26.0 to 2.31.0 (#6821)
+  * Update wheel from 0.33.6 to 0.38.4 (#6680)
+  * Remove passlib (#6631)
+  * Remove pyotp (#5613, #6679)
 
+### Journalist Workstation
+* Add a GNOME shell extension (#6531, #6712)
+
+### Operations
+* Update SecureDrop release key expiry date to 2024-07-08 (#6803, #6804, #6819)
+* Switch cron jobs to systemd timers (#6705, #6748, #6780)
+* Have unattended-upgrades automatically remove unused dependencies (#6762, #6791)
+* Drop securedrop-grsec metapackage, moved to kernel-builder (#6328, #6553)
+* Disable Ubuntu Pro's ua-timer and esm-cache jobs (#6773, #6781)
+* Cleanup old Python 3.5 references (#6586)
+* Cleanup manual `sys.path` additions (#6589)
+* Reorganize Debian packaging, having debhelper do most of the work and other cleanup (#6544)
+* Reorganize OSSEC packaging to use debhelper and other cleanup (#6754)
+* Use plain container for package building, not molecule (#6706, #6754)
+* 
+
+### Development
+* Remove "sh" dependency (#6547, #6562, #6580)
+* Updated development dependencies:
+  * mypy from 0.761 to 1.0.0 (#6578, #6744)
+  * pytest to 7.2.0 and pytest-xdist to 3.0.2 (#6689)
+  * pillow from 9.0.1 to 9.3.0 (#6689)
+  * shellcheck to 0.9.0, using shellcheck-py (#6715, #6719)
+* Test improvements:
+  * Create explicit fixture for rqworker (#6551)
+  * Run flake8 for alembic migrations (#6576, #6590)
+  * Enable yamllint's strict mode (#6575, #6622)
+* Test journalist GUI on Python 3.9 + bullseye for Tails 5 (#6635, #6645, )
+* Use a slimmer container for `make dev` (#6620, #6625)
+* Switch SELinux contexts when running containers (#6666)
+* Add "safe.directory" setting for dev environment on newer Git versions (#6674, #6682)
+* Make developer container compatible with Apple Silicon (#6478, #6675, #6692)
+* Add `make otp` helper to print or copy dev OTP code (#6621, #6673)
+* Configure git hooks when virtualenv is created (#6683)
+* Fix a number of spelling issues across the entire repository (#6670)
+* Have black and isort lint everything, configure via pyproject.toml (#6722)
+* Print SecureDrop Workstation `config.json` when using `make dev-tor` (#6736)
+* Verify all packages except `securedrop-app-code` are reproducible in CI (#6754)
+* Check for accessibility issues during pageslayout tests (#6745)
+* Re-sign test key so it doesn't have SHA-1 signatures (#6797)
 
 ## 2.5.2
 
