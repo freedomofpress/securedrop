@@ -1082,12 +1082,14 @@ class DeleteResult:
     }
 
     def _handle_status(self, key, value):  # type: ignore[no-untyped-def] # noqa
-        """Parse a status code from the attached GnuPG process.
-
+        """
+        Parse a status code from the attached GnuPG process.
         :raises: :exc:`~exceptions.ValueError` if the status message is unknown.
         """
         if key in ("DELETE_PROBLEM", "KEY_CONSIDERED"):
             self.status = self.problem_reason.get(value, "Unknown error: %r" % value)
+        elif key in ("PINENTRY_LAUNCHED"):
+            self.status = key.replace("_", " ").lower()
         else:
             raise ValueError("Unknown status message: %r" % key)
 
@@ -1487,6 +1489,7 @@ class Verify:
     TRUST_MARGINAL = 2
     TRUST_FULLY = 3
     TRUST_ULTIMATE = 4
+    DECRYPTION_COMPLIANCE_MODE = 23
 
     TRUST_LEVELS = {
         "TRUST_UNDEFINED": TRUST_UNDEFINED,
@@ -1494,6 +1497,8 @@ class Verify:
         "TRUST_MARGINAL": TRUST_MARGINAL,
         "TRUST_FULLY": TRUST_FULLY,
         "TRUST_ULTIMATE": TRUST_ULTIMATE,
+        # To fix https://github.com/isislovecruft/python-gnupg/issues/250 with Focal gnupg
+        "DECRYPTION_COMPLIANCE_MODE": DECRYPTION_COMPLIANCE_MODE,
     }
 
     def __init__(self, gpg):  # type: ignore[no-untyped-def] # noqa
