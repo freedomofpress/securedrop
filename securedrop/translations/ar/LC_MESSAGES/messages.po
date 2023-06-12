@@ -37,9 +37,6 @@ msgstr "اسم المستخدم غير صالح لأن هذا الاسم محج�
 msgid "Invalid username"
 msgstr "اسم المستخدم غير صالح"
 
-msgid "Invalid OTP secret"
-msgstr "OTP غير صالحة"
-
 msgid "{time} ago"
 msgstr "{time} مضت"
 
@@ -513,10 +510,8 @@ msgstr "غير مقروءة"
 msgid "Read"
 msgstr "قراءة"
 
-#, fuzzy
-#| msgid "Uploaded Document"
 msgid "Uploaded File"
-msgstr "تم رفع المستند"
+msgstr ""
 
 msgid "Reply"
 msgstr "رُدّ"
@@ -603,10 +598,8 @@ msgstr "تغيير الشعار"
 msgid "Submission Preferences"
 msgstr "تفضيلات الإرسال"
 
-#, fuzzy
-#| msgid "Prevent sources from uploading documents. Sources will still be able to send messages."
 msgid "Prevent sources from uploading files. Sources will still be able to send messages."
-msgstr "منع المصادر من رفع وثائق. سوف تظل المصادر قادرة على توجيه رسائل."
+msgstr ""
 
 msgid "Prevent sources from sending initial messages shorter than the minimum required length:"
 msgstr "منع المصادر من إرسال رسائل أولية أقصر من الحد الأدنى للطول المطلوب:"
@@ -638,6 +631,9 @@ msgstr "أرسل تنبيه OSSEC تجريبي"
 msgid "Edit user \"{user}\""
 msgstr "تعديل حساب المستخدم \"{user}\""
 
+msgid "Edit your account"
+msgstr "حرّر حسابك"
+
 msgid "Change Name and Admin Status"
 msgstr "تغيير الاسم و حالة المدير"
 
@@ -646,9 +642,6 @@ msgstr "تحديث الحساب"
 
 msgid "UPDATE"
 msgstr "تعديل"
-
-msgid "Edit your account"
-msgstr "حرّر حسابك"
 
 msgid "Change Name"
 msgstr "تغيير الاسم"
@@ -728,10 +721,8 @@ msgstr "إزالة النجمة"
 msgid "Designation"
 msgstr "تعيين رمز"
 
-#, fuzzy
-#| msgid "Filename"
 msgid "Files"
-msgstr "اسم الملف"
+msgstr ""
 
 msgid "Messages"
 msgstr "الرسائل"
@@ -832,15 +823,11 @@ msgstr "شكرا لإرسالك هذه المعلومات إلينا. تَرَق
 msgid "Thanks! We received your message."
 msgstr "شكرا! لقد تلقينا الرسالة."
 
-#, fuzzy
-#| msgid "Thanks! We received your message."
 msgid "Thanks! We received your file."
-msgstr "شكرا! لقد تلقينا الرسالة."
+msgstr ""
 
-#, fuzzy
-#| msgid "Thanks! We received your message."
 msgid "Thanks! We received your file and message."
-msgstr "شكرا! لقد تلقينا الرسالة."
+msgstr ""
 
 msgid "Reply deleted"
 msgstr "حُذِفَ الرد"
@@ -884,10 +871,8 @@ msgstr "البحث عن اسم رمزي..."
 msgid "Powered by"
 msgstr "تشغّله"
 
-#, fuzzy
-#| msgid "Please note: Sharing sensitive documents may put you at risk, even when using Tor and SecureDrop."
 msgid "Please note: Sharing sensitive information may put you at risk, even when using Tor and SecureDrop."
-msgstr "يرجى الانتباه: قد تعرّضك مشاركة وثائق حساسة للخطر وإن لجأت لتور Tor و سيكيور دروب SecureDrop."
+msgstr ""
 
 msgid "SecureDrop is a project of Freedom of the Press Foundation."
 msgstr "إن سيكيور دروب SecureDrop لمشروع من مؤسسة حرية الصحافة Freedom of the Press Foundation."
@@ -909,6 +894,9 @@ msgstr "<strong>Keep it safe.</strong> لا يوجد خيار لاستعادة �
 
 msgid "Continue"
 msgstr "الاستمرار"
+
+msgid "Welcome"
+msgstr "أهلا بك"
 
 msgid "Your Tor Browser's <a id=\"disable-js\" href=\"\"><b>Security Level</b></a> is too low. Use the <img src=\"{icon}\" alt=\"&quot;Security Level&quot;\"> button in your browser’s toolbar to change it."
 msgstr "حاليًا <a id=\"disable-js\" href=\"\"><b>مستوى الأمان</b></a> في متصفّح تور أضعف مما ينبغي. اضغط على زرّ <img src=\"{icon}\" alt=\"&quot;مستوى الأمان&quot;\"> &nbsp في شريط أدوات متصفحك لتغييرها."
@@ -955,6 +943,9 @@ msgstr "زائر متكرر"
 msgid "Already have a codename? Check for replies or submit something new."
 msgstr "هل لديك اسم رمزي؟ تحقق إن أتتك ردود أو قم بإيداع جديد."
 
+msgid "Login"
+msgstr ""
+
 msgid "Enter Codename"
 msgstr "أدخل الاسم الرمزي"
 
@@ -963,6 +954,9 @@ msgstr "أدخل اسمك الرمزي"
 
 msgid "CANCEL"
 msgstr "ألغ"
+
+msgid "Additional Action Required"
+msgstr ""
 
 msgid "One more thing..."
 msgstr "هناك أمرٌ آخر نود أن نلفت نظرك إليه..."
@@ -973,11 +967,11 @@ msgstr "اضغط على الزر <img src={icon} alt=\"\" width=\"16\" height=\"
 msgid "Submit Files or Messages"
 msgstr "إيداع ملفات أو رسائل"
 
-msgid "You can submit any kind of file, a message, or both."
-msgstr "يمكنك إيداع أي نوع من الملفات أو الرسائل، أو كليهما."
-
 msgid "Submit Messages"
 msgstr "إيداع رسائل"
+
+msgid "You can submit any kind of file, a message, or both."
+msgstr "يمكنك إيداع أي نوع من الملفات أو الرسائل، أو كليهما."
 
 msgid "If you are already familiar with GPG, you can optionally encrypt your files and messages with our <a href=\"{url}\" class=\"text-link\">public key</a> before submission. Files are encrypted as they are received by SecureDrop."
 msgstr "إذا كنت على دراية باستعمال GPG فيمكنك (اختياريا) تعمية الملفّات و&nbsp;الرسائل <a href=\"{url}\" class=\"text-link\">بمفتاحنا العلني</a> قبل إيداعها. و في كلّ الأحوال فإنّ الملفات تُعمّى تلقائيّا أثناء إيداعها عبر SecureDrop."
@@ -1032,6 +1026,9 @@ msgstr "الصفحة غير موجودة"
 
 msgid "Sorry, we couldn't locate what you requested."
 msgstr "عذرًا لم نتمكن من إيجاد المطلوب."
+
+msgid "WARNING: Proxy Service Detected"
+msgstr ""
 
 msgid "Proxy Service Detected"
 msgstr "تم اكتشاف خدمة بروكسي"
@@ -1115,6 +1112,9 @@ msgstr "<strong>هام:</strong> إذا كنت ترغب في البقاء مجه
 msgid "Back to submission page"
 msgstr "الرجوع إلى صفحة الإيداع"
 
+#~ msgid "Invalid OTP secret"
+#~ msgstr "OTP غير صالحة"
+
 #~ msgid "You have been logged out due to password change"
 #~ msgstr "تم الخروج من الحساب بسبب تغيير كلمة السر"
 
@@ -1172,9 +1172,6 @@ msgstr "الرجوع إلى صفحة الإيداع"
 #~ msgid "Why is this dangerous?"
 #~ msgstr "لماذا يُعد هذا خطيرًا؟"
 
-#~ msgid "Welcome"
-#~ msgstr "أهلا بك"
-
 #~ msgid "Please either write this codename down and keep it in a safe place, or memorize it."
 #~ msgstr "يجب عليك إمّا تدوين هذا الاسم الرمزي و&nbsp;حفظه في مكان آمن، أو التيقّن من حفظه في ذاكرتك."
 
@@ -1213,11 +1210,6 @@ msgstr "الرجوع إلى صفحة الإيداع"
 
 #~ msgid "Success"
 #~ msgstr "تم بنجاح"
-
-#, fuzzy
-#~| msgid "Enter Codename"
-#~ msgid "Refresh codename"
-#~ msgstr "أدخل الاسم الرمزي"
 
 #~ msgid "Your reply has been stored."
 #~ msgstr "لقد تم حفظ ردك."
@@ -1290,18 +1282,6 @@ msgstr "الرجوع إلى صفحة الإيداع"
 
 #~ msgid "Please rest assured that we were able to download your submission, and check back again later for a reply."
 #~ msgstr "اطمئن إلى أنّنا اتمكنّا من تنزيل الوثائق التي أودعتها، و راجعنا لاحقًا لالتماس ردّ."
-
-#, fuzzy
-#~| msgid "Must be at least {num} character long."
-#~| msgid_plural "Must be at least {num} characters long."
-#~ msgid "Must be at least one character long."
-#~ msgid_plural "Must be at least {num} characters long."
-#~ msgstr[0] "يجب ألا يحوي أي حرف."
-#~ msgstr[1] "يجب أن يحوي حرفًا واحدًا على الأقل."
-#~ msgstr[2] "يجب أن يحوي حرفين على الأقل."
-#~ msgstr[3] "يجب أن يحوي {num} حروف على الأقل."
-#~ msgstr[4] "يجب أن يحوي {num} حرفًا على الأقل."
-#~ msgstr[5] "يجب أن يحوي {num} حرفًا على الأقل."
 
 #~ msgid "<strong>Critical Security:</strong>&nbsp;&nbsp;The operating system used by your SecureDrop servers has reached its end-of-life. A manual upgrade is required to re-enable the Source Interface and remain safe. Please contact your administrator. <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Learn More</a>"
 #~ msgstr "<strong>تنبيه أمني حرج</strong>&nbsp;&nbsp;نظام التشغيل المستخدم فى خواديم SecureDrop الخاصة بك قد بلغ نهاية مدة الخدمة. لا بد من ترقيته يدويا لإعادة تفعيل واجهة المصدر والمحافظة على الأمان. من فضلك تواصل مع مسئولك<a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">لمعرفة المزيد</a>"

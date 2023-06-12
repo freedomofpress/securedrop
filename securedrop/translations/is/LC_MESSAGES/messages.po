@@ -32,9 +32,6 @@ msgstr "Þetta notandanafn er ekki gilt því það er frátekið til innri nota
 msgid "Invalid username"
 msgstr "Ógilt notandanafn"
 
-msgid "Invalid OTP secret"
-msgstr "Ógildur OTP-leynilykill"
-
 msgid "{time} ago"
 msgstr "Fyrir {time} síðan"
 
@@ -603,6 +600,9 @@ msgstr "SENDA OSSEC PRUFUVIÐVÖRUN"
 msgid "Edit user \"{user}\""
 msgstr "Breyta notandanum \"{user}\""
 
+msgid "Edit your account"
+msgstr "Breyta aðganginum þínum"
+
 msgid "Change Name and Admin Status"
 msgstr "Breyta nafni og stöðu stjórnanda"
 
@@ -611,9 +611,6 @@ msgstr "Uppfæra notandaaðgang"
 
 msgid "UPDATE"
 msgstr "UPPFÆRA"
-
-msgid "Edit your account"
-msgstr "Breyta aðganginum þínum"
 
 msgid "Change Name"
 msgstr "Breyta nafni"
@@ -867,6 +864,9 @@ msgstr "<strong>Geymdu það á öruggum stað.</strong> Það er engin önnur l
 msgid "Continue"
 msgstr "Halda áfram"
 
+msgid "Welcome"
+msgstr "Velkomin"
+
 msgid "Your Tor Browser's <a id=\"disable-js\" href=\"\"><b>Security Level</b></a> is too low. Use the <img src=\"{icon}\" alt=\"&quot;Security Level&quot;\"> button in your browser’s toolbar to change it."
 msgstr "<a id=\"disable-js\" href=\"\"><b>Öryggisstig</b></a> Tor-vafrans þíns er of vægt stillt. Notaðu <img src=\"{icon}\" alt=\"&quot;Security Level&quot;\"> hnappinn í verkfærastiku vafrans þíns til að breyta því."
 
@@ -912,6 +912,9 @@ msgstr "Endurkomu heimsókn"
 msgid "Already have a codename? Check for replies or submit something new."
 msgstr "Ertu þegar með kóðanafn? Skoðaðu  svör eða sendu inn eitthvað nýtt."
 
+msgid "Login"
+msgstr ""
+
 msgid "Enter Codename"
 msgstr "Settu inn kóðanafn"
 
@@ -920,6 +923,9 @@ msgstr "Settu inn kóðanafnið þitt"
 
 msgid "CANCEL"
 msgstr "HÆTTA VIÐ"
+
+msgid "Additional Action Required"
+msgstr ""
 
 msgid "One more thing..."
 msgstr "Eitt í viðbót..."
@@ -930,11 +936,11 @@ msgstr "Smelltu á hnappinn <img src={icon} alt=\"\" width=\"16\" height=\"16\">
 msgid "Submit Files or Messages"
 msgstr "Senda inn skrár eða skilaboð"
 
-msgid "You can submit any kind of file, a message, or both."
-msgstr "Þú getur sent inn hverskonar skrá, skilaboð, eða bæði."
-
 msgid "Submit Messages"
 msgstr "Senda inn skilaboð"
+
+msgid "You can submit any kind of file, a message, or both."
+msgstr "Þú getur sent inn hverskonar skrá, skilaboð, eða bæði."
 
 msgid "If you are already familiar with GPG, you can optionally encrypt your files and messages with our <a href=\"{url}\" class=\"text-link\">public key</a> before submission. Files are encrypted as they are received by SecureDrop."
 msgstr "Ef þú kannast nú þegar við GPG, geturðu valið að dulrita skjölin þín og skilaboð með <a href=\"{url}\" class=\"text-link\">dreifilyklinum</a> okkar áður en þú sendir þau inn. Skrár eru dulritaðar um leið og þær berast til SecureDrop."
@@ -989,6 +995,9 @@ msgstr "Síða fannst ekki"
 
 msgid "Sorry, we couldn't locate what you requested."
 msgstr "Því miður, við gátum ekki fundið það sem þú baðst um."
+
+msgid "WARNING: Proxy Service Detected"
+msgstr ""
 
 msgid "Proxy Service Detected"
 msgstr "Milliþjónn (proxy) fannst"
@@ -1072,6 +1081,9 @@ msgstr "<strong>Mikilvægt:</strong> Ef þú óskar áframhaldandi nafnleyndar, 
 msgid "Back to submission page"
 msgstr "Til baka á innsendingasíðuna"
 
+#~ msgid "Invalid OTP secret"
+#~ msgstr "Ógildur OTP-leynilykill"
+
 #~ msgid "You have been logged out due to password change"
 #~ msgstr "Útskráning vegna breytingar á lykilorði"
 
@@ -1124,9 +1136,6 @@ msgstr "Til baka á innsendingasíðuna"
 
 #~ msgid "Why is this dangerous?"
 #~ msgstr "Af hverju er þetta hættulegt?"
-
-#~ msgid "Welcome"
-#~ msgstr "Velkomin"
 
 #~ msgid "Please either write this codename down and keep it in a safe place, or memorize it."
 #~ msgstr "Þú skalt endilega skrifa þetta kóðanafn niður og geyma það á öruggum stað, eða leggja það á minnið."
@@ -1250,14 +1259,6 @@ msgstr "Til baka á innsendingasíðuna"
 
 #~ msgid "Please rest assured that we were able to download your submission, and check back again later for a reply."
 #~ msgstr "Ekki hafa neinar áhyggjur, við náðum að sækja innsendinguna þína og þú ættir því að skrá þig aftur inn síðar til að athuga með svar frá okkur."
-
-#, fuzzy
-#~| msgid "Must be at least {num} character long."
-#~| msgid_plural "Must be at least {num} characters long."
-#~ msgid "Must be at least one character long."
-#~ msgid_plural "Must be at least {num} characters long."
-#~ msgstr[0] "Verður að vera a.m.k. {num} stafur að lengd."
-#~ msgstr[1] "Verður að vera a.m.k. {num} stafa langt."
 
 #~ msgid "<strong>Critical Security:</strong>&nbsp;&nbsp;The operating system used by your SecureDrop servers has reached its end-of-life. A manual upgrade is required to re-enable the Source Interface and remain safe. Please contact your administrator. <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Learn More</a>"
 #~ msgstr "<strong>Áríðandi öryggismál:</strong>&nbsp;&nbsp;Stýrikerfið sem notað er á SecureDrop-netþjónunum þínum er komið á enda líftíma síns. Til að gæta öryggis er nauðsynlegt að framkvæma handvirka uppfærslu sem fyrst. Hafðu samband við kerfisstjórann þinn. <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Kanna nánar</a>"
