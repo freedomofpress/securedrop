@@ -33,9 +33,6 @@ msgstr "Данное имя пользователя недоступно, та�
 msgid "Invalid username"
 msgstr "Недопустимое имя пользователя"
 
-msgid "Invalid OTP secret"
-msgstr "Данные OTP некорректны"
-
 msgid "{time} ago"
 msgstr "{time} назад"
 
@@ -613,6 +610,9 @@ msgstr "ОТПРАВИТЬ ТЕСТОВОЕ ПРЕДУПРЕЖДЕНИЕ OSSEC"
 msgid "Edit user \"{user}\""
 msgstr "Редактировать пользователя \"{user}\""
 
+msgid "Edit your account"
+msgstr "Изменить свою учетную запись"
+
 msgid "Change Name and Admin Status"
 msgstr "Изменить имя и статус администратора"
 
@@ -621,9 +621,6 @@ msgstr "Обновить аккаунт"
 
 msgid "UPDATE"
 msgstr "ОБНОВИТЬ"
-
-msgid "Edit your account"
-msgstr "Изменить свою учетную запись"
 
 msgid "Change Name"
 msgstr "Изменить имя"
@@ -877,6 +874,9 @@ msgstr "<strong>Сохраняйте его в безопасности.</strong
 msgid "Continue"
 msgstr "Продолжить"
 
+msgid "Welcome"
+msgstr "Добро пожаловать"
+
 msgid "Your Tor Browser's <a id=\"disable-js\" href=\"\"><b>Security Level</b></a> is too low. Use the <img src=\"{icon}\" alt=\"&quot;Security Level&quot;\"> button in your browser’s toolbar to change it."
 msgstr "<a id=\"disable-js\" href=\"\"><b>Уровень безопасности</b></a> вашего Tor-браузера слишком низкий. Используйте кнопку <img src=\"{icon}\" alt=\"&quot;Уровень безопасности&quot;\"> на панели инструментов браузера, чтобы изменить его."
 
@@ -922,6 +922,9 @@ msgstr "Повторный визит"
 msgid "Already have a codename? Check for replies or submit something new."
 msgstr "Уже получали код? Введите для проверки ответов."
 
+msgid "Login"
+msgstr ""
+
 msgid "Enter Codename"
 msgstr "Введите кодовое имя"
 
@@ -930,6 +933,9 @@ msgstr "Введите ваше кодовое имя"
 
 msgid "CANCEL"
 msgstr "ОТМЕНИТЬ"
+
+msgid "Additional Action Required"
+msgstr ""
 
 msgid "One more thing..."
 msgstr "И еще кое-что..."
@@ -940,11 +946,11 @@ msgstr "Нажмите кнопку <img src={icon} alt=\"\" width=\"16\" height
 msgid "Submit Files or Messages"
 msgstr "Отправить файлы или сообщения"
 
-msgid "You can submit any kind of file, a message, or both."
-msgstr "Вы можете отправить любой файл, сообщение или и то, и другое."
-
 msgid "Submit Messages"
 msgstr "Отправить сообщения"
+
+msgid "You can submit any kind of file, a message, or both."
+msgstr "Вы можете отправить любой файл, сообщение или и то, и другое."
 
 msgid "If you are already familiar with GPG, you can optionally encrypt your files and messages with our <a href=\"{url}\" class=\"text-link\">public key</a> before submission. Files are encrypted as they are received by SecureDrop."
 msgstr "Если вы уже знакомы с GPG, то перед отправкой вы можете дополнительно зашифровать свои файлы и сообщения с помощью нашего <a href=\"{url}\" class=\"text-link\">публичного ключа</a>. Файлы шифруются по мере их получения SecureDrop."
@@ -999,6 +1005,9 @@ msgstr "Страница не найдена"
 
 msgid "Sorry, we couldn't locate what you requested."
 msgstr "К сожалению, мы не смогли найти то, что вы просили."
+
+msgid "WARNING: Proxy Service Detected"
+msgstr ""
 
 msgid "Proxy Service Detected"
 msgstr "Обнаружена служба прокси"
@@ -1082,6 +1091,9 @@ msgstr "<strong>Внимание:</strong> Если вы хотите сохра
 msgid "Back to submission page"
 msgstr "Вернуться на страницу отправки"
 
+#~ msgid "Invalid OTP secret"
+#~ msgstr "Данные OTP некорректны"
+
 #~ msgid "You have been logged out due to password change"
 #~ msgstr "Ваша сессия была завершена из-за смены пароля"
 
@@ -1136,9 +1148,6 @@ msgstr "Вернуться на страницу отправки"
 #~ msgid "Why is this dangerous?"
 #~ msgstr "Почему это опасно?"
 
-#~ msgid "Welcome"
-#~ msgstr "Добро пожаловать"
-
 #~ msgid "Please either write this codename down and keep it in a safe place, or memorize it."
 #~ msgstr "Пожалуйста, запишите это кодовое имя и сохраните его в надежном месте или запомните его."
 
@@ -1177,11 +1186,6 @@ msgstr "Вернуться на страницу отправки"
 
 #~ msgid "Success"
 #~ msgstr "Успех"
-
-#, fuzzy
-#~| msgid "Enter Codename"
-#~ msgid "Refresh codename"
-#~ msgstr "Введите кодовое имя"
 
 #~ msgid "Your reply has been stored."
 #~ msgstr "Ваш ответ сохранен."
@@ -1254,15 +1258,6 @@ msgstr "Вернуться на страницу отправки"
 
 #~ msgid "Please rest assured that we were able to download your submission, and check back again later for a reply."
 #~ msgstr "Мы подтверждаем, что нам удалось получить ваши данные. Зайдите позже, чтобы увидеть наш ответ."
-
-#, fuzzy
-#~| msgid "Must be at least {num} character long."
-#~| msgid_plural "Must be at least {num} characters long."
-#~ msgid "Must be at least one character long."
-#~ msgid_plural "Must be at least {num} characters long."
-#~ msgstr[0] "Должно быть не менее {num} символ."
-#~ msgstr[1] "Должно быть не менее {num} символа."
-#~ msgstr[2] "Должно быть не менее {num} символов."
 
 #~ msgid "<strong>Critical Security:</strong>&nbsp;&nbsp;The operating system used by your SecureDrop servers has reached its end-of-life. A manual upgrade is required to re-enable the Source Interface and remain safe. Please contact your administrator. <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Learn More</a>"
 #~ msgstr "<strong>Критическое предупреждение:</strong>&nbsp;&nbsp; Операционная система которая использовалась серверами SecureDrop отслужила своё. Для безопасного сохранения данных требуется срочное ручное обновление - <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Подробнее</a>"
@@ -1498,11 +1493,6 @@ msgstr "Вернуться на страницу отправки"
 #~ msgid "If you want to submit information, you are <strong>strongly advised</strong> to install <a href=\"torproject.org/download.html.en\">Tor</a> and use it to access our site safely and anonymously."
 #~ msgstr "Если вы хотите отправить информацию, <strong>настоятельно рекомендуем</strong> установить <a href=\"torproject.org/download.html.en\">Tor</a> и использовать его для безопасного и анонимного доступа к нашему сайту."
 
-#, fuzzy
-#~| msgid "docs {doc_num}"
-#~ msgid "{doc_num} docs"
-#~ msgstr "документы {doc_num}"
-
 #~ msgid "Enable Google Authenticator"
 #~ msgstr "Включить Google Authenticator"
 
@@ -1511,8 +1501,3 @@ msgstr "Вернуться на страницу отправки"
 
 #~ msgid "Tap menu, then tap \"Set up account\", then tap \"Scan a barcode\""
 #~ msgstr "Нажмите меню, затем нажмите «Настроить аккаунт», затем нажмите «Сканировать штрих-код»"
-
-#, fuzzy
-#~| msgid "ALREADY HAVE A CODENAME?"
-#~ msgid "USE NEW CODENAME"
-#~ msgstr "У ВАС УЖЕ ЕСТЬ ПСЕВДОНИМ?"

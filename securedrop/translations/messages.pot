@@ -1,12 +1,12 @@
 # Translations template for SecureDrop.
-# Copyright (C) 2022 Freedom of the Press Foundation
+# Copyright (C) 2023 Freedom of the Press Foundation
 # This file is distributed under the same license as the SecureDrop project.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2023.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: SecureDrop 2.5.0~rc1\n"
+"Project-Id-Version: SecureDrop 2.6.0~rc1\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
@@ -28,9 +28,6 @@ msgid "This username is invalid because it is reserved for internal use by the s
 msgstr ""
 
 msgid "Invalid username"
-msgstr ""
-
-msgid "Invalid OTP secret"
 msgstr ""
 
 msgid "{time} ago"
@@ -591,6 +588,9 @@ msgstr ""
 msgid "Edit user \"{user}\""
 msgstr ""
 
+msgid "Edit your account"
+msgstr ""
+
 msgid "Change Name and Admin Status"
 msgstr ""
 
@@ -598,9 +598,6 @@ msgid "Update account"
 msgstr ""
 
 msgid "UPDATE"
-msgstr ""
-
-msgid "Edit your account"
 msgstr ""
 
 msgid "Change Name"
@@ -855,6 +852,9 @@ msgstr ""
 msgid "Continue"
 msgstr ""
 
+msgid "Welcome"
+msgstr ""
+
 msgid "Your Tor Browser's <a id=\"disable-js\" href=\"\"><b>Security Level</b></a> is too low. Use the <img src=\"{icon}\" alt=\"&quot;Security Level&quot;\"> button in your browser’s toolbar to change it."
 msgstr ""
 
@@ -900,6 +900,9 @@ msgstr ""
 msgid "Already have a codename? Check for replies or submit something new."
 msgstr ""
 
+msgid "Login"
+msgstr ""
+
 msgid "Enter Codename"
 msgstr ""
 
@@ -907,6 +910,9 @@ msgid "Enter your codename"
 msgstr ""
 
 msgid "CANCEL"
+msgstr ""
+
+msgid "Additional Action Required"
 msgstr ""
 
 msgid "One more thing..."
@@ -918,10 +924,10 @@ msgstr ""
 msgid "Submit Files or Messages"
 msgstr ""
 
-msgid "You can submit any kind of file, a message, or both."
+msgid "Submit Messages"
 msgstr ""
 
-msgid "Submit Messages"
+msgid "You can submit any kind of file, a message, or both."
 msgstr ""
 
 msgid "If you are already familiar with GPG, you can optionally encrypt your files and messages with our <a href=\"{url}\" class=\"text-link\">public key</a> before submission. Files are encrypted as they are received by SecureDrop."
@@ -976,6 +982,9 @@ msgid "Page not found"
 msgstr ""
 
 msgid "Sorry, we couldn't locate what you requested."
+msgstr ""
+
+msgid "WARNING: Proxy Service Detected"
 msgstr ""
 
 msgid "Proxy Service Detected"
