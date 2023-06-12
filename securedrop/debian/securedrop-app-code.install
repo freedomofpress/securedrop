@@ -4,5 +4,6 @@ debian/app-code/var /
 COPYING alembic.ini babel.cfg config.py.example /var/www/securedrop
 *.py i18n.json /var/www/securedrop
 journalist_app journalist_templates /var/www/securedrop
+pretty_bad_protocol /var/www/securedrop
 source_app source_templates /var/www/securedrop
 alembic dictionaries management requirements static translations wordlists scripts /var/www/securedrop
