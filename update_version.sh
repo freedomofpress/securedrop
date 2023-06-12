@@ -49,9 +49,6 @@ sed -i "s@$(echo "${OLD_VERSION}" | sed 's/\./\\./g')@$NEW_VERSION@g" securedrop
 # Update the version in the Debian packages
 sed -E -i "s/^(securedrop_version: \").*/\1$NEW_VERSION\"/" install_files/ansible-base/group_vars/all/securedrop
 
-# Update the version in molecule testinfra vars
-sed -i "s@$(echo "${OLD_VERSION}" | sed 's/\./\\./g')@$NEW_VERSION@g" molecule/builder-focal/tests/vars.yml
-
 # If version doesn't have an rc designator, it's considered stable.
 # The upgrade testing logic relies on this variable.
 if [[ ! $NEW_VERSION == *~rc* ]]; then
