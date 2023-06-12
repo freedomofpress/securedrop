@@ -32,9 +32,6 @@ msgstr "Aquest nom d'usuari no és vàlid perquè és reservat per a ús intern 
 msgid "Invalid username"
 msgstr "El nom d'usuari no és vàlid"
 
-msgid "Invalid OTP secret"
-msgstr "El secret OTP no és vàlid"
-
 msgid "{time} ago"
 msgstr "fa {time}"
 
@@ -603,6 +600,9 @@ msgstr "ENVIA UNA ALERTA OSSEC DE PROVA"
 msgid "Edit user \"{user}\""
 msgstr "Edita l'usuari «{user}»"
 
+msgid "Edit your account"
+msgstr "Modifica el compte"
+
 msgid "Change Name and Admin Status"
 msgstr "Canvia el nom i l'estat de l'administració"
 
@@ -611,9 +611,6 @@ msgstr "Actualització del compte"
 
 msgid "UPDATE"
 msgstr "ACTUALITZA"
-
-msgid "Edit your account"
-msgstr "Modifica el compte"
 
 msgid "Change Name"
 msgstr "Canvia el nom"
@@ -867,6 +864,9 @@ msgstr "<strong>Mantingueu-lo segur.</strong> No hi ha cap opció de restauraci�
 msgid "Continue"
 msgstr "Continua"
 
+msgid "Welcome"
+msgstr "Us donem la benvinguda"
+
 msgid "Your Tor Browser's <a id=\"disable-js\" href=\"\"><b>Security Level</b></a> is too low. Use the <img src=\"{icon}\" alt=\"&quot;Security Level&quot;\"> button in your browser’s toolbar to change it."
 msgstr "El <a id=\"disable-js\" href=\"\"><b>nivell de seguretat</b></a> del vostre navegador Tor és massa baix. Useu el botó <img src=\"{icon}\" alt=\"&quot;Nivell de seguretat&quot;\"> de la barra d'eines del navegador per a canviar-ho."
 
@@ -912,6 +912,9 @@ msgstr "Cap novetat?"
 msgid "Already have a codename? Check for replies or submit something new."
 msgstr "Si ja teniu un nom en clau, entreu i comproveu les respostes o envieu quelcom nou."
 
+msgid "Login"
+msgstr ""
+
 msgid "Enter Codename"
 msgstr "Introduïu el nom en clau"
 
@@ -920,6 +923,9 @@ msgstr "Introduïu el vostre nom en clau"
 
 msgid "CANCEL"
 msgstr "CANCEL·LA"
+
+msgid "Additional Action Required"
+msgstr ""
 
 msgid "One more thing..."
 msgstr "Una cosa més..."
@@ -930,11 +936,11 @@ msgstr "Feu clic al botó <img src={icon} alt=\"\" width=\"16\" height=\"16\">&n
 msgid "Submit Files or Messages"
 msgstr "Envieu fitxers o missatges"
 
-msgid "You can submit any kind of file, a message, or both."
-msgstr "Podeu enviar qualsevol mena de fitxer, un missatge o totes dues coses."
-
 msgid "Submit Messages"
 msgstr "Envia missatges"
+
+msgid "You can submit any kind of file, a message, or both."
+msgstr "Podeu enviar qualsevol mena de fitxer, un missatge o totes dues coses."
 
 msgid "If you are already familiar with GPG, you can optionally encrypt your files and messages with our <a href=\"{url}\" class=\"text-link\">public key</a> before submission. Files are encrypted as they are received by SecureDrop."
 msgstr "Si esteu familiaritzat amb GPG, podeu, opcionalment, xifrar els fitxers i missatges amb la vostra <a href=\"{url}\" class=\"text-link\">clau pública</a> abans d'enviar-los. Els fitxers es xifren quan arriben al SecureDrop."
@@ -989,6 +995,9 @@ msgstr "No s'ha trobat la pàgina"
 
 msgid "Sorry, we couldn't locate what you requested."
 msgstr "No podem trobar el que demaneu."
+
+msgid "WARNING: Proxy Service Detected"
+msgstr ""
 
 msgid "Proxy Service Detected"
 msgstr "S'ha detectat un servidor intermediari"
@@ -1072,6 +1081,9 @@ msgstr "<strong>Important:</strong> si voleu romandre en l'anonimat, <strong>no<
 msgid "Back to submission page"
 msgstr "Torna a la pàgina d'enviaments"
 
+#~ msgid "Invalid OTP secret"
+#~ msgstr "El secret OTP no és vàlid"
+
 #~ msgid "You have been logged out due to password change"
 #~ msgstr "S'ha desconnectat la sessió per un canvi de la contrasenya"
 
@@ -1124,9 +1136,6 @@ msgstr "Torna a la pàgina d'enviaments"
 
 #~ msgid "Why is this dangerous?"
 #~ msgstr "Per què això és perillós?"
-
-#~ msgid "Welcome"
-#~ msgstr "Us donem la benvinguda"
 
 #~ msgid "Please either write this codename down and keep it in a safe place, or memorize it."
 #~ msgstr "Escriviu aquest nom en clau i conserveu-lo en un lloc segur, o memoritzeu-lo."
@@ -1250,14 +1259,6 @@ msgstr "Torna a la pàgina d'enviaments"
 
 #~ msgid "Please rest assured that we were able to download your submission, and check back again later for a reply."
 #~ msgstr "Assegureu-vos que hem pogut baixar el vostre enviament i comproveu més endavant si hi ha cap resposta."
-
-#, fuzzy
-#~| msgid "Must be at least {num} character long."
-#~| msgid_plural "Must be at least {num} characters long."
-#~ msgid "Must be at least one character long."
-#~ msgid_plural "Must be at least {num} characters long."
-#~ msgstr[0] "Cal que tingui com a mínim {num} caràcter."
-#~ msgstr[1] "Cal que tingui com a mínim {num} caràcters."
 
 #~ msgid "<strong>Critical Security:</strong>&nbsp;&nbsp;The operating system used by your SecureDrop servers has reached its end-of-life. A manual upgrade is required to re-enable the Source Interface and remain safe. Please contact your administrator. <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Learn More</a>"
 #~ msgstr "<strong>Seguretat crítica</strong>&nbsp;&nbsp;El sistema operatiu usat pels servidors del vostre SecureDrop ha assolit el final de cicle. Cal una actualització manual per restablir la interfície de fonts i mantenir-se segur. Contacteu amb l'administrador. <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Més informació</a>"

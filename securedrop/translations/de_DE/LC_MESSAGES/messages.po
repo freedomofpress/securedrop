@@ -28,9 +28,6 @@ msgstr "Dieser Benutzername ist ungültig, da er für interne Nutzung durch die 
 msgid "Invalid username"
 msgstr "Ungültiger Benutzername"
 
-msgid "Invalid OTP secret"
-msgstr "Ungültiges OTP-Geheimnis"
-
 msgid "{time} ago"
 msgstr "vor {time}"
 
@@ -468,10 +465,8 @@ msgstr "Ungelesen"
 msgid "Read"
 msgstr "Gelesen"
 
-#, fuzzy
-#| msgid "Uploaded Document"
 msgid "Uploaded File"
-msgstr "Hochgeladenes Dokument"
+msgstr ""
 
 msgid "Reply"
 msgstr "Antworten"
@@ -558,10 +553,8 @@ msgstr "LOGO AKTUALISIEREN"
 msgid "Submission Preferences"
 msgstr "Einreichungseinstellungen"
 
-#, fuzzy
-#| msgid "Prevent sources from uploading documents. Sources will still be able to send messages."
 msgid "Prevent sources from uploading files. Sources will still be able to send messages."
-msgstr "Quellen am Hochladen von Dokumenten hindern. Quellen werden weiterhin Nachrichten senden können."
+msgstr ""
 
 msgid "Prevent sources from sending initial messages shorter than the minimum required length:"
 msgstr "Quellen am Senden von Erstmeldungen hindern, wenn diese kürzer als die Mindestlänge sind:"
@@ -593,6 +586,9 @@ msgstr "TESTWEISEN OSSEC-ALARM SENDEN"
 msgid "Edit user \"{user}\""
 msgstr "Benutzer \"{user}\" bearbeiten"
 
+msgid "Edit your account"
+msgstr "Ihr Konto bearbeiten"
+
 msgid "Change Name and Admin Status"
 msgstr "Name und Admin-Status ändern"
 
@@ -601,9 +597,6 @@ msgstr "Konto aktualisieren"
 
 msgid "UPDATE"
 msgstr "AKTUALISIEREN"
-
-msgid "Edit your account"
-msgstr "Ihr Konto bearbeiten"
 
 msgid "Change Name"
 msgstr "Name ändern"
@@ -683,10 +676,8 @@ msgstr "Markieren rückgängig machen"
 msgid "Designation"
 msgstr "Bestimmung"
 
-#, fuzzy
-#| msgid "Filename"
 msgid "Files"
-msgstr "Dateiname"
+msgstr ""
 
 msgid "Messages"
 msgstr "Nachrichten"
@@ -787,15 +778,11 @@ msgstr "Danke, dass Sie uns diese Information gesendet haben. Bitte kommen Sie s
 msgid "Thanks! We received your message."
 msgstr "Danke! Wir haben Ihre Nachricht erhalten."
 
-#, fuzzy
-#| msgid "Thanks! We received your message."
 msgid "Thanks! We received your file."
-msgstr "Danke! Wir haben Ihre Nachricht erhalten."
+msgstr ""
 
-#, fuzzy
-#| msgid "Thanks! We received your message."
 msgid "Thanks! We received your file and message."
-msgstr "Danke! Wir haben Ihre Nachricht erhalten."
+msgstr ""
 
 msgid "Reply deleted"
 msgstr "Antwort gelöscht"
@@ -839,10 +826,8 @@ msgstr "Decknamen nachschlagen..."
 msgid "Powered by"
 msgstr "Ermöglicht durch"
 
-#, fuzzy
-#| msgid "Please note: Sharing sensitive documents may put you at risk, even when using Tor and SecureDrop."
 msgid "Please note: Sharing sensitive information may put you at risk, even when using Tor and SecureDrop."
-msgstr "Achtung: Das Teilen von vertraulichen Dokumenten kann Sie in Gefahr bringen, auch wenn Sie Tor und SecureDrop verwenden."
+msgstr ""
 
 msgid "SecureDrop is a project of Freedom of the Press Foundation."
 msgstr "SecureDrop ist ein Projekt der Freedom of the Press Foundation."
@@ -864,6 +849,9 @@ msgstr "<strong>Bewahren Sie es sicher auf.</strong> Es gibt keine Option zur Wi
 
 msgid "Continue"
 msgstr "Fortsetzen"
+
+msgid "Welcome"
+msgstr "Willkommen"
 
 msgid "Your Tor Browser's <a id=\"disable-js\" href=\"\"><b>Security Level</b></a> is too low. Use the <img src=\"{icon}\" alt=\"&quot;Security Level&quot;\"> button in your browser’s toolbar to change it."
 msgstr "Die <a id=\"disable-js\" href=\"\"><b>Sicherheitsstufe</b></a> Ihres Tor-Browsers ist zu niedrig. Nutzen Sie die Schaltfläche <img src=\"{icon}\" alt=\"&quot;Sicherheitsstufe&quot;\"> in der Werkzeugleiste Ihres Browsers, um sie zu ändern."
@@ -910,6 +898,9 @@ msgstr "Wiederholungsbesuch"
 msgid "Already have a codename? Check for replies or submit something new."
 msgstr "Haben Sie bereits einen Decknamen? Schauen Sie nach Antworten oder reichen Sie etwas Neues ein."
 
+msgid "Login"
+msgstr ""
+
 msgid "Enter Codename"
 msgstr "Deckname eingeben"
 
@@ -918,6 +909,9 @@ msgstr "Geben Sie Ihren Decknamen ein"
 
 msgid "CANCEL"
 msgstr "ABBRECHEN"
+
+msgid "Additional Action Required"
+msgstr ""
 
 msgid "One more thing..."
 msgstr "Eine Sache noch..."
@@ -928,11 +922,11 @@ msgstr "Klicken Sie auf die Schaltfläche <img src={icon} alt=\"\" width=\"16\" 
 msgid "Submit Files or Messages"
 msgstr "Dateien oder Nachrichten versenden"
 
-msgid "You can submit any kind of file, a message, or both."
-msgstr "Sie können jede Art von Datei, eine Nachricht oder beides versenden."
-
 msgid "Submit Messages"
 msgstr "Nachrichten versenden"
+
+msgid "You can submit any kind of file, a message, or both."
+msgstr "Sie können jede Art von Datei, eine Nachricht oder beides versenden."
 
 msgid "If you are already familiar with GPG, you can optionally encrypt your files and messages with our <a href=\"{url}\" class=\"text-link\">public key</a> before submission. Files are encrypted as they are received by SecureDrop."
 msgstr "Wenn Sie bereits mit GPG vertraut sind, können Sie Ihre Dateien und Nachrichten vor dem Versenden zusätzlich mit unserem <a href=\"{url}\" class=\"text-link\">öffentlichen Schlüssel</a> verschlüsseln. Die Dateien werden verschlüsselt, wenn Sie von SecureDrop empfangen werden."
@@ -987,6 +981,9 @@ msgstr "Seite nicht gefunden"
 
 msgid "Sorry, we couldn't locate what you requested."
 msgstr "Leider konnten wir nicht finden, was Sie angefordert haben."
+
+msgid "WARNING: Proxy Service Detected"
+msgstr ""
 
 msgid "Proxy Service Detected"
 msgstr "Proxy-Dienst erkannt"
@@ -1070,6 +1067,9 @@ msgstr "<strong>Wichtig:</strong> Verwenden Sie <strong>nicht</strong> GPG, um d
 msgid "Back to submission page"
 msgstr "Zurück zur Einreichungsseite"
 
+#~ msgid "Invalid OTP secret"
+#~ msgstr "Ungültiges OTP-Geheimnis"
+
 #~ msgid "You have been logged out due to password change"
 #~ msgstr "Sie wurden wegen einer Passwortänderung abgemeldet"
 
@@ -1122,9 +1122,6 @@ msgstr "Zurück zur Einreichungsseite"
 
 #~ msgid "Why is this dangerous?"
 #~ msgstr "Warum ist das gefährlich?"
-
-#~ msgid "Welcome"
-#~ msgstr "Willkommen"
 
 #~ msgid "Please either write this codename down and keep it in a safe place, or memorize it."
 #~ msgstr "Bitte notieren Sie sich diesen Decknamen und bewahren Sie ihn an einem sicheren Ort auf, oder merken Sie ihn sich."
@@ -1248,14 +1245,6 @@ msgstr "Zurück zur Einreichungsseite"
 
 #~ msgid "Please rest assured that we were able to download your submission, and check back again later for a reply."
 #~ msgstr "Bitte seien Sie versichert, dass wir Ihre übermittelten Daten erhalten haben. Schauen Sie zu einem späteren Zeitpunkt noch einmal nach einer Antwort."
-
-#, fuzzy
-#~| msgid "Must be at least {num} character long."
-#~| msgid_plural "Must be at least {num} characters long."
-#~ msgid "Must be at least one character long."
-#~ msgid_plural "Must be at least {num} characters long."
-#~ msgstr[0] "Muss mindestens {num} Zeichen lang sein."
-#~ msgstr[1] "Muss mindestens {num} Zeichen lang sein."
 
 #~ msgid "<strong>Critical Security:</strong>&nbsp;&nbsp;The operating system used by your SecureDrop servers has reached its end-of-life. A manual upgrade is required to re-enable the Source Interface and remain safe. Please contact your administrator. <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Learn More</a>"
 #~ msgstr "<strong>Kritische Sicherheitswarnung:</strong>&nbsp;&nbsp;Das von Ihren SecureDrop Servern benutzte Betriebssystem hat sein Lebensende erreicht. Ein manuelles Upgrade ist nötig um die Eingabemaske für Quellen wieder zu aktivieren und um Sicherheit weiterhin zu gewährleisten. <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Mehr Erfahren</a>"

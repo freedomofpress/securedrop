@@ -33,9 +33,6 @@ msgstr "Toto uživatelské jméno je neplatné, protože je rezervováno pro int
 msgid "Invalid username"
 msgstr "Neplatné uživatelské jméno"
 
-msgid "Invalid OTP secret"
-msgstr "Neplatný kód pro generování OTP"
-
 msgid "{time} ago"
 msgstr "před {time}"
 
@@ -482,10 +479,8 @@ msgstr "Nepřečteno"
 msgid "Read"
 msgstr "Přečteno"
 
-#, fuzzy
-#| msgid "Uploaded Document"
 msgid "Uploaded File"
-msgstr "Nahraný dokument"
+msgstr ""
 
 msgid "Reply"
 msgstr "Odpověď"
@@ -572,10 +567,8 @@ msgstr "AKTUALIZOVAT LOGO"
 msgid "Submission Preferences"
 msgstr "Preference podání"
 
-#, fuzzy
-#| msgid "Prevent sources from uploading documents. Sources will still be able to send messages."
 msgid "Prevent sources from uploading files. Sources will still be able to send messages."
-msgstr "Zabraňte zdrojům nahrávat dokumenty. Zdroje budou stále moci posílat zprávy."
+msgstr ""
 
 msgid "Prevent sources from sending initial messages shorter than the minimum required length:"
 msgstr "Zabránit zdrojům odeslat úvodní zprávu kratší než je minimální požadovaná délka:"
@@ -607,6 +600,9 @@ msgstr "POSLAT TESTOVACÍ UPOZORNĚNÍ OSSEC"
 msgid "Edit user \"{user}\""
 msgstr "Upravit uživatele „{user}“"
 
+msgid "Edit your account"
+msgstr "Upravit svůj účet"
+
 msgid "Change Name and Admin Status"
 msgstr "Změnit jméno a status administrátora"
 
@@ -615,9 +611,6 @@ msgstr "Aktualizovat účet"
 
 msgid "UPDATE"
 msgstr "AKTUALIZOVAT"
-
-msgid "Edit your account"
-msgstr "Upravit svůj účet"
 
 msgid "Change Name"
 msgstr "Změnit jméno"
@@ -697,10 +690,8 @@ msgstr "Odznačit"
 msgid "Designation"
 msgstr "Označení"
 
-#, fuzzy
-#| msgid "Filename"
 msgid "Files"
-msgstr "Jméno souboru"
+msgstr ""
 
 msgid "Messages"
 msgstr "Zprávy"
@@ -801,15 +792,11 @@ msgstr "Děkujeme za zaslání těchto informací. Přihlaste se prosím za něj
 msgid "Thanks! We received your message."
 msgstr "Děkujeme! Obdrželi jsme vaši zprávu."
 
-#, fuzzy
-#| msgid "Thanks! We received your message."
 msgid "Thanks! We received your file."
-msgstr "Děkujeme! Obdrželi jsme vaši zprávu."
+msgstr ""
 
-#, fuzzy
-#| msgid "Thanks! We received your message."
 msgid "Thanks! We received your file and message."
-msgstr "Děkujeme! Obdrželi jsme vaši zprávu."
+msgstr ""
 
 msgid "Reply deleted"
 msgstr "Odpověď smazána"
@@ -853,10 +840,8 @@ msgstr "Vyhledat krycí jméno..."
 msgid "Powered by"
 msgstr "Používá systém"
 
-#, fuzzy
-#| msgid "Please note: Sharing sensitive documents may put you at risk, even when using Tor and SecureDrop."
 msgid "Please note: Sharing sensitive information may put you at risk, even when using Tor and SecureDrop."
-msgstr "Uvědomte si prosím, že sdílení citlivých dokumentů Vás může ohrozit i při používání Tor a SecureDrop."
+msgstr ""
 
 msgid "SecureDrop is a project of Freedom of the Press Foundation."
 msgstr "SecureDrop je projekt Freedom of the Press Foundation."
@@ -878,6 +863,9 @@ msgstr "<strong>Udržujte v bezpečí.</strong> Obnovení účtu není možné."
 
 msgid "Continue"
 msgstr "Pokračovat"
+
+msgid "Welcome"
+msgstr "Vítejte"
 
 msgid "Your Tor Browser's <a id=\"disable-js\" href=\"\"><b>Security Level</b></a> is too low. Use the <img src=\"{icon}\" alt=\"&quot;Security Level&quot;\"> button in your browser’s toolbar to change it."
 msgstr "<a id=\"disable-js\" href=\"\"><b>Úroveň zabezpečení</b></a> vašeho prohlížeče Tor je příliš nízká. Pro jeho změnu použijte tlačítko&nbsp;<img src=\"{icon}\" alt=\"&quot;Úroveň zabezpečení&quot;\"> na liště prohlížeče."
@@ -924,6 +912,9 @@ msgstr "Vracím se"
 msgid "Already have a codename? Check for replies or submit something new."
 msgstr "Už máte krycí jméno? Zkontrolujte odpovědi anebo pošlete něco nového."
 
+msgid "Login"
+msgstr ""
+
 msgid "Enter Codename"
 msgstr "Zadat krycí jméno"
 
@@ -932,6 +923,9 @@ msgstr "Zadejte své krycí jméno"
 
 msgid "CANCEL"
 msgstr "ZRUŠIT"
+
+msgid "Additional Action Required"
+msgstr ""
 
 msgid "One more thing..."
 msgstr "Ještě jedna věc..."
@@ -942,11 +936,11 @@ msgstr "Klepněte na <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<
 msgid "Submit Files or Messages"
 msgstr "Nahrání souborů nebo zpráv"
 
-msgid "You can submit any kind of file, a message, or both."
-msgstr "Můžete odeslat jakýkoliv soubor, zprávu nebo oboje."
-
 msgid "Submit Messages"
 msgstr "Nahrání zpráv"
+
+msgid "You can submit any kind of file, a message, or both."
+msgstr "Můžete odeslat jakýkoliv soubor, zprávu nebo oboje."
 
 msgid "If you are already familiar with GPG, you can optionally encrypt your files and messages with our <a href=\"{url}\" class=\"text-link\">public key</a> before submission. Files are encrypted as they are received by SecureDrop."
 msgstr "Pokud již ovládáte GPG, můžete zašifrovat své soubory a zprávy naším <a href=\"{url}\" class=\"text-link\">veřejným klíčem</a> před jejich odesláním. Soubory jsou pak zašifrované už při přijetí do SecureDropu."
@@ -1001,6 +995,9 @@ msgstr "Stránka nenalezena"
 
 msgid "Sorry, we couldn't locate what you requested."
 msgstr "Promiňte, váš požadavek jsme nenašli."
+
+msgid "WARNING: Proxy Service Detected"
+msgstr ""
 
 msgid "Proxy Service Detected"
 msgstr "Proxy služba byla rozpoznána"
@@ -1084,6 +1081,9 @@ msgstr "<strong>Důležité:</strong> Chcete-li zůstat v anonymitě, <strong>ne
 msgid "Back to submission page"
 msgstr "Zpátky na stránku podání"
 
+#~ msgid "Invalid OTP secret"
+#~ msgstr "Neplatný kód pro generování OTP"
+
 #~ msgid "You have been logged out due to password change"
 #~ msgstr "Z důvodu změny hesla jste byl/a odhlášen/a"
 
@@ -1137,9 +1137,6 @@ msgstr "Zpátky na stránku podání"
 
 #~ msgid "Why is this dangerous?"
 #~ msgstr "Proč je tohle nebezpečné?"
-
-#~ msgid "Welcome"
-#~ msgstr "Vítejte"
 
 #~ msgid "Please either write this codename down and keep it in a safe place, or memorize it."
 #~ msgstr "Zapište si prosím toto krycí jméno a uchovávejte ho na bezpečném místě, nebo si jej zapamatujte."
@@ -1263,15 +1260,6 @@ msgstr "Zpátky na stránku podání"
 
 #~ msgid "Please rest assured that we were able to download your submission, and check back again later for a reply."
 #~ msgstr "Podařilo se nám stáhnout váš příspěvek, přihlaste se prosím později abyste si mohli přečíst naši odpověď."
-
-#, fuzzy
-#~| msgid "Must be at least {num} character long."
-#~| msgid_plural "Must be at least {num} characters long."
-#~ msgid "Must be at least one character long."
-#~ msgid_plural "Must be at least {num} characters long."
-#~ msgstr[0] "Uživatelské jméno musí mít alespoň {num} znak."
-#~ msgstr[1] "Uživatelské jméno musí mít alespoň {num} znaky."
-#~ msgstr[2] "Uživatelské jméno musí mít alespoň {num} znaků."
 
 #~ msgid "<strong>Critical Security:</strong>&nbsp;&nbsp;The operating system used by your SecureDrop servers has reached its end-of-life. A manual upgrade is required to re-enable the Source Interface and remain safe. Please contact your administrator. <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Learn More</a>"
 #~ msgstr "<strong>Nezbytné zabezpečení:</strong> Operační systém vašich SecureDrop serverů dosáhl konce životnosti. Pro bezpečné zprovoznění rozhraní pro zdroje je nutný manuální upgrade. Kontaktujte svého administrátora.<a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Dozvědět se více</a>"

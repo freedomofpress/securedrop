@@ -32,9 +32,6 @@ msgstr "Este nome de utilizador é inválido porque está reservado para uso int
 msgid "Invalid username"
 msgstr "Nome de utilizador inválido"
 
-msgid "Invalid OTP secret"
-msgstr "Código secreto OTP inválido"
-
 msgid "{time} ago"
 msgstr "há {time}"
 
@@ -603,6 +600,9 @@ msgstr "ENVIAR TESTE DE ALERTA OSSEC"
 msgid "Edit user \"{user}\""
 msgstr "Editar utilizador \"{user}\""
 
+msgid "Edit your account"
+msgstr "Alterar definições de conta"
+
 msgid "Change Name and Admin Status"
 msgstr "Alterar Nome e Estado de Administrador"
 
@@ -611,9 +611,6 @@ msgstr "Alterar definições da conta"
 
 msgid "UPDATE"
 msgstr "ALTERAR"
-
-msgid "Edit your account"
-msgstr "Alterar definições de conta"
 
 msgid "Change Name"
 msgstr "Mudar Nome"
@@ -867,6 +864,9 @@ msgstr "<strong>Não a pode perder.</strong> Não poderá recuperar a sua conta.
 msgid "Continue"
 msgstr "Continuar"
 
+msgid "Welcome"
+msgstr "Bem-vindo(a)"
+
 msgid "Your Tor Browser's <a id=\"disable-js\" href=\"\"><b>Security Level</b></a> is too low. Use the <img src=\"{icon}\" alt=\"&quot;Security Level&quot;\"> button in your browser’s toolbar to change it."
 msgstr "O <a id=\"disable-js\" href=\"\"><b>Nível de Segurança (PT) / Security Level (EN)</b></a> do seu navegador Tor está demasiado fraco. Use o botão <img src=\"{icon}\" alt=\"&quot;Ícone do Escudo&quot;\"> na barra de ferramentas do seu navegador o modificar."
 
@@ -912,6 +912,9 @@ msgstr "Já tem conta?"
 msgid "Already have a codename? Check for replies or submit something new."
 msgstr "Já tem um nome-código? Veja se já lhe responderam ou envie mais documentos."
 
+msgid "Login"
+msgstr ""
+
 msgid "Enter Codename"
 msgstr "Escreva o Nome-código"
 
@@ -920,6 +923,9 @@ msgstr "Escreva o seu nome-código"
 
 msgid "CANCEL"
 msgstr "CANCELAR"
+
+msgid "Additional Action Required"
+msgstr ""
 
 msgid "One more thing..."
 msgstr "Uma última coisa..."
@@ -930,11 +936,11 @@ msgstr "Clique no botão <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nb
 msgid "Submit Files or Messages"
 msgstr "Enviar Documentos ou Mensagens"
 
-msgid "You can submit any kind of file, a message, or both."
-msgstr "Pode enviar qualquer tipo de ficheiro, uma mensagem ou ambos."
-
 msgid "Submit Messages"
 msgstr "Enviar Mensagens"
+
+msgid "You can submit any kind of file, a message, or both."
+msgstr "Pode enviar qualquer tipo de ficheiro, uma mensagem ou ambos."
 
 msgid "If you are already familiar with GPG, you can optionally encrypt your files and messages with our <a href=\"{url}\" class=\"text-link\">public key</a> before submission. Files are encrypted as they are received by SecureDrop."
 msgstr "Se está familiarizado com GPG, poderá optar por encriptar os seus próprios ficheiros e mensagens com a nossa <a href=\"{url}\" class=\"text-link\">chave pública</a> antes dos enviar. Os ficheiros também serão encriptados ao serem recebidos no SecureDrop."
@@ -989,6 +995,9 @@ msgstr "Página não encontrada"
 
 msgid "Sorry, we couldn't locate what you requested."
 msgstr "Desculpe, não conseguimos localizar o que pediu."
+
+msgid "WARNING: Proxy Service Detected"
+msgstr ""
 
 msgid "Proxy Service Detected"
 msgstr "Serviço de Proxy detetado"
@@ -1071,6 +1080,9 @@ msgstr "<strong>Importante:</strong> para manter o seu anonimato, <strong>não</
 
 msgid "Back to submission page"
 msgstr "Voltar à página de envio"
+
+#~ msgid "Invalid OTP secret"
+#~ msgstr "Código secreto OTP inválido"
 
 #~ msgid "You have been logged out due to password change"
 #~ msgstr "A sua sessão foi terminada devido à alteração da sua palavra-passe"
@@ -1185,9 +1197,6 @@ msgstr "Voltar à página de envio"
 #~ msgid "SecureDrop Home"
 #~ msgstr "Página inicial do SecureDrop"
 
-#~ msgid "Welcome"
-#~ msgstr "Bem-vindo(a)"
-
 #~ msgid "Please either write this codename down and keep it in a safe place, or memorize it."
 #~ msgstr "Por favor, anote o seu nome-código e guarde-o em um lugar seguro, ou memorize-o."
 
@@ -1230,11 +1239,6 @@ msgstr "Voltar à página de envio"
 #~ msgid "We <strong>strongly advise</strong> you to use the <a href=\"www.torproject.org/projects/torbrowser.html\">Tor Browser</a> instead."
 #~ msgstr "<strong>Recomendamos fortemente</strong> que use o <a href=\"www.torproject.org/projects/torbrowser.html\">Navegador Tor</a> em vez de Tor2Web."
 
-#, fuzzy
-#~| msgid "{source_name}'s collection deleted"
-#~ msgid "{source_name}'s collection deleted."
-#~ msgstr "Coleção de {source_name} apagada"
-
 #~ msgid "Submission deleted."
 #~ msgid_plural "{num} submissions deleted."
 #~ msgstr[0] "Submissão apagada."
@@ -1256,11 +1260,6 @@ msgstr "Voltar à página de envio"
 
 #~ msgid "Are you sure you want to delete the selected collections?"
 #~ msgstr "Tem certeza de que deseja apagar as coleções selecionadas?"
-
-#, fuzzy
-#~| msgid "Click below to delete this source's collection. <em>Warning: If you do this, the files seen here will be unrecoverable and the source will no longer be able to login using their previous codename.</em>"
-#~ msgid "Warning: If you do this, all files for the selected sources will be unrecoverable, and the sources will no longer be able to log in using their previous codename."
-#~ msgstr "Clique abaixo para excluir a coleção desta fonte. <em> Atenção: Se você fizer isso, os ficheiros serão irrecuperáveis e a fonte não poderá mais usar o seu nome-código atual para se inciar sessão.</em>"
 
 #~ msgid "Powered by <br> <img src=\"/static/i/securedrop_small.png\" alt=\"SecureDrop\">"
 #~ msgstr "Este site utiliza a tecnologia de <br> <img src=\"/static/i/securedrop_small.png\" alt=\"SecureDrop\">"
