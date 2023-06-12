@@ -36,7 +36,6 @@
 * Reorganize Debian packaging, having debhelper do most of the work and other cleanup (#6544)
 * Reorganize OSSEC packaging to use debhelper and other cleanup (#6754)
 * Use plain container for package building, not molecule (#6706, #6754)
-* 
 
 ### Development
 * Remove "sh" dependency (#6547, #6562, #6580)
