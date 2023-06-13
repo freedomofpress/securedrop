@@ -98,6 +98,9 @@ jobs:
     # Keep version in sync with rust-toolchain.toml
     docker:
       - image: rust:1.69.0
+    environment:
+      # TODO: Remove after we're on Rust 1.70
+      CARGO_REGISTRIES_CRATES_IO_PROTOCOL: "sparse"
     steps:
       - checkout
       - run:
