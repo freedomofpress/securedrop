@@ -2,7 +2,7 @@ from pathlib import Path
 
 import werkzeug
 from db import db
-from encryption import EncryptionManager, GpgKeyNotFoundError
+from encryption import GpgKeyNotFoundError
 from flask import (
     Blueprint,
     Markup,
@@ -56,12 +56,6 @@ def make_blueprint() -> Blueprint:
     def col(filesystem_id: str) -> str:
         form = ReplyForm()
         source = get_source(filesystem_id)
-        try:
-            EncryptionManager.get_default().get_source_public_key(filesystem_id)
-            source.has_key = True
-        except GpgKeyNotFoundError:
-            source.has_key = False
-
         return render_template("col.html", filesystem_id=filesystem_id, source=source, form=form)
 
     @view.route("/delete/<filesystem_id>", methods=("POST",))

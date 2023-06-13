@@ -119,7 +119,7 @@
 
   <section aria-labelledby="replies-heading" class="cut-out">
     <h2 id="replies-heading">{{ gettext('Reply') }}</h2>
-    {% if source.has_key %}
+    {% if source.public_key %}
     <p>{{ gettext('You can write a secure reply to the person who submitted these messages and/or files:') }}</p>
     <form action="{{ url_for('main.reply') }}" method="post" autocomplete="off">
       <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
