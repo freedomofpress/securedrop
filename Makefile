@@ -188,7 +188,7 @@ safety:  ## Run `safety check` to check python dependencies for vulnerabilities.
 bandit: test-config ## Run bandit with medium level excluding test-related folders.
 	@command -v bandit || (echo "Please run 'pip install -U bandit'."; exit 1)
 	@echo "███ Running bandit..."
-	@bandit -ll --exclude ./admin/.tox,./admin/.venv,./admin/.eggs,./molecule,./testinfra,./securedrop/tests,./.tox,./.venv*,securedrop/config.py --recursive .
+	@bandit -ll --exclude ./admin/.tox,./admin/.venv,./admin/.eggs,./molecule,./testinfra,./securedrop/tests,./.tox,./.venv*,securedrop/config.py,./target --recursive .
 	@echo "███ Running bandit on securedrop/config.py..."
 	@bandit -ll --skip B108 securedrop/config.py
 	@echo
