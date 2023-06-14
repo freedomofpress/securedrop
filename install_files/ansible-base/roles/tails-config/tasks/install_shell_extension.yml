@@ -1,4 +1,7 @@
 ---
+- name: Import variables
+  include_vars: "group_vars/all/site-specific"
+
 - name: Check for v3 Source Interface file
   stat:
     path: app-sourcev3-ths
@@ -25,18 +28,6 @@
   changed_when: false
   register: journalistv3_interface_lookup_result
   when: v3_source_file.stat.exists == true
-
-- name: Look up app server hostname
-  command: "awk -v FS='app_hostname: ' 'NF>1{print $2}' group_vars/all/site-specific"
-  changed_when: false
-  register: app_server_lookup_result
-  when: site_specific_file.stat.exists == true
-
-- name: Look up mon server hostname
-  command: "awk -v FS='monitor_hostname: ' 'NF>1{print $2}' /home/amnesia/Persistent/securedrop/install_files/ansible-base/group_vars/all/site-specific"
-  changed_when: false
-  register: mon_server_lookup_result
-  when: site_specific_file.stat.exists == true
 
 - name: Create the SecureDrop GNOME Shell Extension directories
   file:
@@ -87,14 +78,6 @@
   set_fact:
     journalist_iface: "{{ journalistv3_interface_lookup_result }}"
 
-- name: Set the right variable for app server hostname
-  set_fact:
-    app_hostname: "{{ app_server_lookup_result }}"
-
-- name: Set the right variable for app server hostname
-  set_fact:
-    mon_hostname: "{{ mon_server_lookup_result }}"
-
 - name: Assemble interface information for extension
   set_fact:
     _securedrop_extension_info:
@@ -102,8 +85,6 @@
         filename: extension.js
         source_interface_address: "{{ source_iface.stdout }}"
         journalist_interface_address: "{{ journalist_iface.stdout }}"
-        app_hostname: "{{ app_hostname.stdout }}"
-        mon_hostname: "{{ mon_hostname.stdout }}"
 
 - name: Create SecureDrop extension
   become: yes
