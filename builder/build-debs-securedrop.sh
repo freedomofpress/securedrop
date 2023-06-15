@@ -3,6 +3,7 @@
 # Build SecureDrop packages. This runs *inside* the container.
 
 export PIP_DISABLE_PIP_VERSION_CHECK=1
+export PIP_PROGRESS_BAR=off
 
 set -euxo pipefail
 
