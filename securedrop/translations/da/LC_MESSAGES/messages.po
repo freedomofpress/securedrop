@@ -717,7 +717,7 @@ msgstr ""
 msgid "Choose language"
 msgstr ""
 
-msgid "Login to access the journalist interface"
+msgid "Log in to access the journalist interface"
 msgstr ""
 
 msgid "Password"
@@ -903,7 +903,7 @@ msgstr ""
 msgid "Already have a codename? Check for replies or submit something new."
 msgstr ""
 
-msgid "Login"
+msgid "Log in"
 msgstr ""
 
 msgid "Enter Codename"

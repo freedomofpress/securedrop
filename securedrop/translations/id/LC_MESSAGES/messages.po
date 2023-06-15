@@ -706,8 +706,8 @@ msgstr ""
 msgid "Choose language"
 msgstr ""
 
-msgid "Login to access the journalist interface"
-msgstr "Masuk untuk mengakses antarmuka jurnalis"
+msgid "Log in to access the journalist interface"
+msgstr ""
 
 msgid "Password"
 msgstr "Kata Sandi"
@@ -892,7 +892,7 @@ msgstr ""
 msgid "Already have a codename? Check for replies or submit something new."
 msgstr ""
 
-msgid "Login"
+msgid "Log in"
 msgstr ""
 
 msgid "Enter Codename"
@@ -1058,6 +1058,9 @@ msgstr ""
 
 msgid "Back to submission page"
 msgstr "Kembali ke halaman pengiriman"
+
+#~ msgid "Login to access the journalist interface"
+#~ msgstr "Masuk untuk mengakses antarmuka jurnalis"
 
 #~ msgid "You have been logged out due to password change"
 #~ msgstr "Anda telah keluar karena perubahan kata sandi"

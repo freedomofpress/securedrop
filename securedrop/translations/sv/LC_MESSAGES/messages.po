@@ -726,8 +726,8 @@ msgstr "Markerat språk"
 msgid "Choose language"
 msgstr "Välj språk"
 
-msgid "Login to access the journalist interface"
-msgstr "Logga in för att få tillgång till journalistgränssnittet"
+msgid "Log in to access the journalist interface"
+msgstr ""
 
 msgid "Password"
 msgstr "Lösenord"
@@ -912,7 +912,7 @@ msgstr "Återkommande besök"
 msgid "Already have a codename? Check for replies or submit something new."
 msgstr "Har du redan ett kodnamn? Kontrollera om du fått svar eller lämna in något nytt."
 
-msgid "Login"
+msgid "Log in"
 msgstr ""
 
 msgid "Enter Codename"
@@ -1080,6 +1080,9 @@ msgstr "<strong> Viktigt:</strong> Ifall du önskar att förbli anonym, <strong>
 
 msgid "Back to submission page"
 msgstr "Tillbaka till inlämningssidan"
+
+#~ msgid "Login to access the journalist interface"
+#~ msgstr "Logga in för att få tillgång till journalistgränssnittet"
 
 #~ msgid "Invalid OTP secret"
 #~ msgstr "Inkorrekt OTP-hemlighet"

@@ -726,8 +726,8 @@ msgstr "Επιλεγμένη γλώσσα"
 msgid "Choose language"
 msgstr "Επιλογή γλώσσας"
 
-msgid "Login to access the journalist interface"
-msgstr "Συνδεθείτε για πρόσβαση στη διεπαφή δημοσιογράφου"
+msgid "Log in to access the journalist interface"
+msgstr ""
 
 msgid "Password"
 msgstr "Κωδικός πρόσβασης"
@@ -912,7 +912,7 @@ msgstr "Επιστροφή"
 msgid "Already have a codename? Check for replies or submit something new."
 msgstr "Έχετε ήδη κωδικό όνομα; Ελέγξτε για απαντήσεις ή υποβάλετε κάτι καινούριο."
 
-msgid "Login"
+msgid "Log in"
 msgstr ""
 
 msgid "Enter Codename"
@@ -1080,6 +1080,9 @@ msgstr "<strong>Σημαντικό:</strong> Αν επιθυμείτε να δι
 
 msgid "Back to submission page"
 msgstr "Πίσω στη σελίδα υποβολών"
+
+#~ msgid "Login to access the journalist interface"
+#~ msgstr "Συνδεθείτε για πρόσβαση στη διεπαφή δημοσιογράφου"
 
 #~ msgid "Invalid OTP secret"
 #~ msgstr "Άκυρο μυστικό OTP"

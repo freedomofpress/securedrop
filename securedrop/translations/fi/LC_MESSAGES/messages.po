@@ -716,8 +716,8 @@ msgstr ""
 msgid "Choose language"
 msgstr ""
 
-msgid "Login to access the journalist interface"
-msgstr "Kirjaudu journalistin käyttöliittymään"
+msgid "Log in to access the journalist interface"
+msgstr ""
 
 msgid "Password"
 msgstr "Salasana"
@@ -902,7 +902,7 @@ msgstr "Paluuvierailu"
 msgid "Already have a codename? Check for replies or submit something new."
 msgstr "Onko sinulla jo koodinimi? Tarkista vastaukset, tai lähetä jotain uutta."
 
-msgid "Login"
+msgid "Log in"
 msgstr ""
 
 msgid "Enter Codename"
@@ -1070,6 +1070,9 @@ msgstr "<strong>Tärkeää:</strong> Jos haluat pysyä nimettömänä, <strong>�
 
 msgid "Back to submission page"
 msgstr "Takaisin lähetyssivulle"
+
+#~ msgid "Login to access the journalist interface"
+#~ msgstr "Kirjaudu journalistin käyttöliittymään"
 
 #~ msgid "You have been logged out due to password change"
 #~ msgstr "Sinut on kirjattu ulos salasanan vaihtumisen vuoksi"

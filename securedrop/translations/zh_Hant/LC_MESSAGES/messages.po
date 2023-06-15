@@ -717,8 +717,8 @@ msgstr "選取語系"
 msgid "Choose language"
 msgstr "選擇語系"
 
-msgid "Login to access the journalist interface"
-msgstr "登入記者使用介面"
+msgid "Log in to access the journalist interface"
+msgstr ""
 
 msgid "Password"
 msgstr "密碼"
@@ -903,7 +903,7 @@ msgstr "返回文件提交訪問頁"
 msgid "Already have a codename? Check for replies or submit something new."
 msgstr "已有代號名稱？檢查回應或是提交新資料。"
 
-msgid "Login"
+msgid "Log in"
 msgstr ""
 
 msgid "Enter Codename"
@@ -1071,6 +1071,9 @@ msgstr "<strong>重要：</strong>如果您希望保持匿名，<strong>請勿</
 
 msgid "Back to submission page"
 msgstr "返回提交文件頁面"
+
+#~ msgid "Login to access the journalist interface"
+#~ msgstr "登入記者使用介面"
 
 #~ msgid "Invalid OTP secret"
 #~ msgstr "OTP 密碼無效"

@@ -727,8 +727,8 @@ msgstr "Geselecteerde taal"
 msgid "Choose language"
 msgstr "Taal kiezen"
 
-msgid "Login to access the journalist interface"
-msgstr "Inloggen om de interface voor journalisten te openen"
+msgid "Log in to access the journalist interface"
+msgstr ""
 
 msgid "Password"
 msgstr "Wachtwoord"
@@ -913,7 +913,7 @@ msgstr "Vervolgbezoek"
 msgid "Already have a codename? Check for replies or submit something new."
 msgstr "Hebt u al een codenaam? Controleer of er antwoorden zijn of stuur iets nieuws in."
 
-msgid "Login"
+msgid "Log in"
 msgstr ""
 
 msgid "Enter Codename"
@@ -1081,6 +1081,9 @@ msgstr "<strong>Belangrijk:</strong> Als u anoniem wilt blijven, gebruik dan <st
 
 msgid "Back to submission page"
 msgstr "Terug naar inzendingenpagina"
+
+#~ msgid "Login to access the journalist interface"
+#~ msgstr "Inloggen om de interface voor journalisten te openen"
 
 #~ msgid "Invalid OTP secret"
 #~ msgstr "Ongeldig OTP geheim"

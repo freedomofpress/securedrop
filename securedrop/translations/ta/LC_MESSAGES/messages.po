@@ -716,8 +716,8 @@ msgstr ""
 msgid "Choose language"
 msgstr ""
 
-msgid "Login to access the journalist interface"
-msgstr "இதழியலாளர் இடைமுகத்தை அணுக புகுபதிக"
+msgid "Log in to access the journalist interface"
+msgstr ""
 
 msgid "Password"
 msgstr "கடவுச்சொல்"
@@ -902,7 +902,7 @@ msgstr "மறு வருகை"
 msgid "Already have a codename? Check for replies or submit something new."
 msgstr "ஏற்கனவே ஒரு குறிப்பெயர் உள்ளதா? மறுமொழிகளைப் பார்த்திடுக அல்லது ஏதேனும் புதியதாகச் அனுப்பிடுக."
 
-msgid "Login"
+msgid "Log in"
 msgstr ""
 
 msgid "Enter Codename"
@@ -1070,6 +1070,9 @@ msgstr ""
 
 msgid "Back to submission page"
 msgstr "அனுப்புகைப் பக்கத்திற்குத் திரும்புக"
+
+#~ msgid "Login to access the journalist interface"
+#~ msgstr "இதழியலாளர் இடைமுகத்தை அணுக புகுபதிக"
 
 #~ msgid "You have been logged out due to password change"
 #~ msgstr "கடவுச்சொல் மாற்றத்தால் நீங்கள் விடுபதிகை செய்யப்பட்டுள்ளீர்கள்"

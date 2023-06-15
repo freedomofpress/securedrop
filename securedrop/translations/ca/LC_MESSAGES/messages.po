@@ -726,8 +726,8 @@ msgstr "Llengua seleccionada"
 msgid "Choose language"
 msgstr "Trieu una llengua"
 
-msgid "Login to access the journalist interface"
-msgstr "Inicieu la sessió per accedir a la interfície de periodista"
+msgid "Log in to access the journalist interface"
+msgstr ""
 
 msgid "Password"
 msgstr "Contrasenya"
@@ -912,7 +912,7 @@ msgstr "Cap novetat?"
 msgid "Already have a codename? Check for replies or submit something new."
 msgstr "Si ja teniu un nom en clau, entreu i comproveu les respostes o envieu quelcom nou."
 
-msgid "Login"
+msgid "Log in"
 msgstr ""
 
 msgid "Enter Codename"
@@ -1080,6 +1080,9 @@ msgstr "<strong>Important:</strong> si voleu romandre en l'anonimat, <strong>no<
 
 msgid "Back to submission page"
 msgstr "Torna a la pàgina d'enviaments"
+
+#~ msgid "Login to access the journalist interface"
+#~ msgstr "Inicieu la sessió per accedir a la interfície de periodista"
 
 #~ msgid "Invalid OTP secret"
 #~ msgstr "El secret OTP no és vàlid"

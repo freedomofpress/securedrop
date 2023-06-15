@@ -726,8 +726,8 @@ msgstr ""
 msgid "Choose language"
 msgstr ""
 
-msgid "Login to access the journalist interface"
-msgstr "Prijavite se za pristup na novinarsko sučelje"
+msgid "Log in to access the journalist interface"
+msgstr ""
 
 msgid "Password"
 msgstr "Lozinka"
@@ -912,7 +912,7 @@ msgstr "Povratni posjet"
 msgid "Already have a codename? Check for replies or submit something new."
 msgstr "Već imate kodno ime? Provjerite odgovore ili predajte nešto novo."
 
-msgid "Login"
+msgid "Log in"
 msgstr ""
 
 msgid "Enter Codename"
@@ -1080,6 +1080,9 @@ msgstr "<strong>Važno:</strong> Ako želite ostati anonimni, <strong>nemojte</s
 
 msgid "Back to submission page"
 msgstr "Natrag na stranicu predaje"
+
+#~ msgid "Login to access the journalist interface"
+#~ msgstr "Prijavite se za pristup na novinarsko sučelje"
 
 #~ msgid "You have been logged out due to password change"
 #~ msgstr "Odjavljeni ste zbog promjene lozinke"

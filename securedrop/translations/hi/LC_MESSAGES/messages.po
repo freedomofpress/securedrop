@@ -716,8 +716,8 @@ msgstr ""
 msgid "Choose language"
 msgstr ""
 
-msgid "Login to access the journalist interface"
-msgstr "पत्रकार इंटरफेस प्रवेशने के लिए लॉगिन करें"
+msgid "Log in to access the journalist interface"
+msgstr ""
 
 msgid "Password"
 msgstr "पासवर्ड"
@@ -902,7 +902,7 @@ msgstr "वापसी का दौरा"
 msgid "Already have a codename? Check for replies or submit something new."
 msgstr "पहले से ही एक संकेत नाम है? उत्तर के लिए जांचें या कुछ नया सबमिट करें।"
 
-msgid "Login"
+msgid "Log in"
 msgstr ""
 
 msgid "Enter Codename"
@@ -1070,6 +1070,9 @@ msgstr "<strong>महत्वपूर्ण:</strong> यदि आप गु
 
 msgid "Back to submission page"
 msgstr "सबमिशन पृष्ठ पर वापस जाएं"
+
+#~ msgid "Login to access the journalist interface"
+#~ msgstr "पत्रकार इंटरफेस प्रवेशने के लिए लॉगिन करें"
 
 #~ msgid "You have been logged out due to password change"
 #~ msgstr "पासवर्ड बदलने के कारण आप लॉग आउट हो गये है"

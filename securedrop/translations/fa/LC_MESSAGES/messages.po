@@ -716,8 +716,8 @@ msgstr ""
 msgid "Choose language"
 msgstr ""
 
-msgid "Login to access the journalist interface"
-msgstr "برای دسترسی به رابط روزنامه‌نگار وارد شوید"
+msgid "Log in to access the journalist interface"
+msgstr ""
 
 msgid "Password"
 msgstr "رمز عبور"
@@ -902,7 +902,7 @@ msgstr ""
 msgid "Already have a codename? Check for replies or submit something new."
 msgstr ""
 
-msgid "Login"
+msgid "Log in"
 msgstr ""
 
 msgid "Enter Codename"
@@ -1068,6 +1068,9 @@ msgstr ""
 
 msgid "Back to submission page"
 msgstr ""
+
+#~ msgid "Login to access the journalist interface"
+#~ msgstr "برای دسترسی به رابط روزنامه‌نگار وارد شوید"
 
 #~ msgid "Username \"{user}\" already taken."
 #~ msgstr "نام کاربری \"{user}\" قبلا گرفته شده‌ است."

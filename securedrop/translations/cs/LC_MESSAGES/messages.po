@@ -726,8 +726,8 @@ msgstr "Vybraný jazyk"
 msgid "Choose language"
 msgstr "Vyberte jazyk"
 
-msgid "Login to access the journalist interface"
-msgstr "Přihlaste se do rozhraní pro novináře"
+msgid "Log in to access the journalist interface"
+msgstr ""
 
 msgid "Password"
 msgstr "Heslo"
@@ -912,7 +912,7 @@ msgstr "Vracím se"
 msgid "Already have a codename? Check for replies or submit something new."
 msgstr "Už máte krycí jméno? Zkontrolujte odpovědi anebo pošlete něco nového."
 
-msgid "Login"
+msgid "Log in"
 msgstr ""
 
 msgid "Enter Codename"
@@ -1080,6 +1080,9 @@ msgstr "<strong>Důležité:</strong> Chcete-li zůstat v anonymitě, <strong>ne
 
 msgid "Back to submission page"
 msgstr "Zpátky na stránku podání"
+
+#~ msgid "Login to access the journalist interface"
+#~ msgstr "Přihlaste se do rozhraní pro novináře"
 
 #~ msgid "Invalid OTP secret"
 #~ msgstr "Neplatný kód pro generování OTP"

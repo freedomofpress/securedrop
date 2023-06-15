@@ -727,8 +727,8 @@ msgstr "Valgt språk"
 msgid "Choose language"
 msgstr "Velg språk"
 
-msgid "Login to access the journalist interface"
-msgstr "Logg inn for å få tilgang til journalist-portalen"
+msgid "Log in to access the journalist interface"
+msgstr ""
 
 msgid "Password"
 msgstr "Passord"
@@ -913,7 +913,7 @@ msgstr "Sendt inn før"
 msgid "Already have a codename? Check for replies or submit something new."
 msgstr "Har du allerede et kodenavn? Sjekk om du har fått svar, eller send inn ny informasjon."
 
-msgid "Login"
+msgid "Log in"
 msgstr ""
 
 msgid "Enter Codename"
@@ -1081,6 +1081,9 @@ msgstr "<strong>Viktig:</strong> Om du ønsker å være helt anonym, <strong>ikk
 
 msgid "Back to submission page"
 msgstr "Tilbake til innsendelsesside"
+
+#~ msgid "Login to access the journalist interface"
+#~ msgstr "Logg inn for å få tilgang til journalist-portalen"
 
 #~ msgid "Invalid OTP secret"
 #~ msgstr "Ugyldig OTP nøkkel"
