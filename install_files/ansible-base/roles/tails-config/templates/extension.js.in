@@ -19,8 +19,8 @@ const Domain = Gettext.domain(GETTEXT_DOMAIN)
 
 const source_interface_address = "{{ item.0.source_interface_address }}";
 const journalist_interface_address = "{{ item.0.journalist_interface_address }}";
-const app_server_hostname = "{{ item.0.app_hostname }}";
-const mon_server_hostname = "{{ item.0.mon_hostname }}";
+const app_server_hostname = "{{ app_hostname }}";
+const mon_server_hostname = "{{ monitor_hostname }}";
 
 const _ = Domain.gettext;
 
