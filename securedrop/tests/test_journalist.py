@@ -346,7 +346,7 @@ def test_validate_redirect(config, journalist_app, locale):
     with journalist_app.test_client() as app:
         resp = app.post(url_for("main.index", l=locale), follow_redirects=True)
         assert page_language(resp.data) == language_tag(locale)
-        msgids = ["Login to access the journalist interface"]
+        msgids = ["Log in to access the journalist interface"]
         with xfail_untranslated_messages(config, locale, msgids):
             assert gettext(msgids[0]) in resp.data.decode("utf-8")
 
@@ -3551,7 +3551,7 @@ def test_journalist_session_expiration(journalist_app, test_journo, locale):
         # because the session is being cleared when it expires, the
         # response should always be in English.
         assert page_language(resp.data) == "en-US"
-        assert "Login to access the journalist interface" in resp.data.decode("utf-8")
+        assert "Log in to access the journalist interface" in resp.data.decode("utf-8")
 
         # check that the session was cleared (apart from 'expires'
         # which is always present and 'csrf_token' which leaks no info)
