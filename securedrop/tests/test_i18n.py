@@ -456,3 +456,20 @@ def test_same_lang_diff_locale():
     html = resp.data.decode("utf-8")
     assert "português (Brasil)" in html
     assert "português (Portugal)" in html
+
+
+def test_duplicate_locales():
+    """
+    Verify that we don't display the full locale name for duplicate locales,
+    whether from user input or securedrop.sdconfig's enforcement of the
+    fallback locale.
+    """
+
+    # ["en_US", "en_US"] alone will not display the locale switcher, which
+    # *does* pass through set deduplication.
+    test_config = create_config_for_i18n_test(supported_locales=["en_US", "en_US", "ar"])
+
+    app = journalist_app_module.create_app(test_config).test_client()
+    resp = app.get("/", follow_redirects=True)
+    html = resp.data.decode("utf-8")
+    assert "English (United States)" not in html

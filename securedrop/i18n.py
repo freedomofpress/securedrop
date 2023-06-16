@@ -172,13 +172,16 @@ def map_locale_display_names(
     like Chinese, we do need the additional detail.
     """
 
+    # Deduplicate before sorting.
+    supported_locales = sorted(list(set(config.SUPPORTED_LOCALES)))
+
     language_locale_counts = collections.defaultdict(int)  # type: Dict[str, int]
-    for l in sorted(config.SUPPORTED_LOCALES):
+    for l in supported_locales:
         locale = RequestLocaleInfo(l)
         language_locale_counts[locale.language] += 1
 
     locale_map = collections.OrderedDict()
-    for l in sorted(config.SUPPORTED_LOCALES):
+    for l in supported_locales:
         if Locale.parse(l) not in usable_locales:
             continue
 
