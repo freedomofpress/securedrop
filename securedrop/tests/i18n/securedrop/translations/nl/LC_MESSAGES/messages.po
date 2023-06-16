@@ -770,7 +770,7 @@ msgstr ""
 "Weet u zeker dat u de tweestapsauthenticatie voor {username} wilt herstellen?"
 
 #: journalist_templates/login.html:4
-msgid "Login to access the journalist interface"
+msgid "Log in to access the journalist interface"
 msgstr "Inloggen om de interface voor journalisten te openen"
 
 #: journalist_templates/login.html:9
