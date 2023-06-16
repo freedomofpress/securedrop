@@ -334,7 +334,7 @@ class JournalistAppNavigator:
 
         # Logging out should redirect back to the login page
         def login_page():
-            assert "Login to access the journalist interface" in self.driver.page_source
+            assert "Log in to access the journalist interface" in self.driver.page_source
 
         self.nav_helper.wait_for(login_page)
 
