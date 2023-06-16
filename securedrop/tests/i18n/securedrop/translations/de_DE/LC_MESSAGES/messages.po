@@ -780,7 +780,7 @@ msgstr ""
 "zurücksetzen möchten?"
 
 #: journalist_templates/login.html:4
-msgid "Login to access the journalist interface"
+msgid "Log in to access the journalist interface"
 msgstr ""
 "Melden Sie sich an, um auf die Journalistenoberfläche zugreifen zu können"
 
