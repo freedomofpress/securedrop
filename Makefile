@@ -384,7 +384,7 @@ build-debs: ## Build and test SecureDrop Debian packages
 	@echo "Building SecureDrop Debian packages..."
 	@export TERM=dumb
 	@script \
-		--command $(SDROOT)/builder/build-debs.sh \
+		--command $(SDROOT)/builder/build-debs.sh --return \
 		$(OUT)
 	@echo
 	@echo "$(SCRIPT_MESSAGE)"
@@ -396,7 +396,7 @@ build-debs-notest: ## Build SecureDrop Debian packages without running tests.
 	@echo "Building SecureDrop Debian packages, skipping tests..."
 	@export TERM=dumb
 	@NOTEST=1 script \
-		--command $(SDROOT)/builder/build-debs.sh \
+		--command $(SDROOT)/builder/build-debs.sh --return \
 		$(OUT)
 	@echo
 	@echo "$(SCRIPT_MESSAGE)"
@@ -408,7 +408,7 @@ build-debs-ossec: ## Build OSSEC Debian packages
 	@echo "Building OSSEC Debian packages"
 	@export TERM=dumb
 	@WHAT=ossec script \
-		--command $(SDROOT)/builder/build-debs.sh \
+		--command $(SDROOT)/builder/build-debs.sh --return \
 		$(OUT)
 	@echo
 	@echo "$(SCRIPT_MESSAGE)"
@@ -420,7 +420,7 @@ build-debs-ossec-notest: ## Build OSSEC Debian packages without running tests
 	@echo "Building OSSEC Debian packages, skipping tests..."
 	@export TERM=dumb
 	@NOTEST=1 WHAT=ossec script \
-	       --command $(SDROOT)/builder/build-debs.sh \
+	       --command $(SDROOT)/builder/build-debs.sh --return \
 	       $(OUT)
 	@echo
 	@echo "$(SCRIPT_MESSAGE)"
