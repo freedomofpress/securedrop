@@ -736,8 +736,8 @@ msgstr "Выбранный язык"
 msgid "Choose language"
 msgstr "Выбрать язык"
 
-msgid "Login to access the journalist interface"
-msgstr "Войдите, чтобы получить доступ к панели журналиста"
+msgid "Log in to access the journalist interface"
+msgstr ""
 
 msgid "Password"
 msgstr "Пароль"
@@ -922,7 +922,7 @@ msgstr "Повторный визит"
 msgid "Already have a codename? Check for replies or submit something new."
 msgstr "Уже получали код? Введите для проверки ответов."
 
-msgid "Login"
+msgid "Log in"
 msgstr ""
 
 msgid "Enter Codename"
@@ -1090,6 +1090,9 @@ msgstr "<strong>Внимание:</strong> Если вы хотите сохра
 
 msgid "Back to submission page"
 msgstr "Вернуться на страницу отправки"
+
+#~ msgid "Login to access the journalist interface"
+#~ msgstr "Войдите, чтобы получить доступ к панели журналиста"
 
 #~ msgid "Invalid OTP secret"
 #~ msgstr "Данные OTP некорректны"

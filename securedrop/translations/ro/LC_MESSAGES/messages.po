@@ -726,8 +726,8 @@ msgstr ""
 msgid "Choose language"
 msgstr ""
 
-msgid "Login to access the journalist interface"
-msgstr "Autentifică-te pentru acces la interfața jurnalistului"
+msgid "Log in to access the journalist interface"
+msgstr ""
 
 msgid "Password"
 msgstr "Parolă"
@@ -912,7 +912,7 @@ msgstr "Am revenit"
 msgid "Already have a codename? Check for replies or submit something new."
 msgstr "Ai deja un nume de cod? Vezi dacă ai primit răspunsuri sau trimite ceva nou."
 
-msgid "Login"
+msgid "Log in"
 msgstr ""
 
 msgid "Enter Codename"
@@ -1080,6 +1080,9 @@ msgstr "<strong>Important:</strong> Dacă vrei să rămâi anonim(ă), <strong>n
 
 msgid "Back to submission page"
 msgstr "Înapoi la pagina de trimitere"
+
+#~ msgid "Login to access the journalist interface"
+#~ msgstr "Autentifică-te pentru acces la interfața jurnalistului"
 
 #~ msgid "You have been logged out due to password change"
 #~ msgstr "Ai fost deconectat(ă) în urma schimbării parolei"

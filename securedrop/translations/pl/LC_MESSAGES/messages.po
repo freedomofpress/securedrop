@@ -726,8 +726,8 @@ msgstr ""
 msgid "Choose language"
 msgstr ""
 
-msgid "Login to access the journalist interface"
-msgstr "Zaloguj się, aby uzyskać dostęp do interfejsu dziennikarza"
+msgid "Log in to access the journalist interface"
+msgstr ""
 
 msgid "Password"
 msgstr "Hasło"
@@ -912,7 +912,7 @@ msgstr "Wizyta powrotna"
 msgid "Already have a codename? Check for replies or submit something new."
 msgstr "Masz już kryptonim? Sprawdź odpowiedzi lub prześlij coś nowego."
 
-msgid "Login"
+msgid "Log in"
 msgstr ""
 
 msgid "Enter Codename"
@@ -1080,6 +1080,9 @@ msgstr "<strong> Ważne: </strong> jeśli chcesz pozostać anonimowy, <strong> n
 
 msgid "Back to submission page"
 msgstr "Powrót do strony zgłoszenia"
+
+#~ msgid "Login to access the journalist interface"
+#~ msgstr "Zaloguj się, aby uzyskać dostęp do interfejsu dziennikarza"
 
 #~ msgid "You have been logged out due to password change"
 #~ msgstr "Zostałeś wylogowany z powodu zmiany hasła"

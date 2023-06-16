@@ -706,8 +706,8 @@ msgstr ""
 msgid "Choose language"
 msgstr ""
 
-msgid "Login to access the journalist interface"
-msgstr "Fàṣẹwọlé láti rí ìwò-ojú akọ̀ròyìn lò"
+msgid "Log in to access the journalist interface"
+msgstr ""
 
 msgid "Password"
 msgstr "Ọ̀rọ̀-ìfiwọlé"
@@ -892,7 +892,7 @@ msgstr "Àbẹ̀wò padà"
 msgid "Already have a codename? Check for replies or submit something new."
 msgstr "O ti ní orúkọ-odù tẹ́lẹ̀? Wo èsì tàbí fi nǹkan tuntun sílẹ̀."
 
-msgid "Login"
+msgid "Log in"
 msgstr ""
 
 msgid "Enter Codename"
@@ -1058,6 +1058,9 @@ msgstr ""
 
 msgid "Back to submission page"
 msgstr "Padà sí ojú-ìwé asàfisílẹ̀"
+
+#~ msgid "Login to access the journalist interface"
+#~ msgstr "Fàṣẹwọlé láti rí ìwò-ojú akọ̀ròyìn lò"
 
 #~ msgid "You have been logged out due to password change"
 #~ msgstr "O ti fàṣẹ jáde nítorí pé o pààrọ ọ̀rọ̀-ìfiwọlé"

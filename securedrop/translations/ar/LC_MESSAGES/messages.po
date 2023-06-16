@@ -757,8 +757,8 @@ msgstr "اللغة المختارة"
 msgid "Choose language"
 msgstr "اختيار اللغة"
 
-msgid "Login to access the journalist interface"
-msgstr "لِج إلى حسابك للنفاذ إلى واجهة الصحافيين"
+msgid "Log in to access the journalist interface"
+msgstr ""
 
 msgid "Password"
 msgstr "كلمة السر"
@@ -943,7 +943,7 @@ msgstr "زائر متكرر"
 msgid "Already have a codename? Check for replies or submit something new."
 msgstr "هل لديك اسم رمزي؟ تحقق إن أتتك ردود أو قم بإيداع جديد."
 
-msgid "Login"
+msgid "Log in"
 msgstr ""
 
 msgid "Enter Codename"
@@ -1111,6 +1111,9 @@ msgstr "<strong>هام:</strong> إذا كنت ترغب في البقاء مجه
 
 msgid "Back to submission page"
 msgstr "الرجوع إلى صفحة الإيداع"
+
+#~ msgid "Login to access the journalist interface"
+#~ msgstr "لِج إلى حسابك للنفاذ إلى واجهة الصحافيين"
 
 #~ msgid "Invalid OTP secret"
 #~ msgstr "OTP غير صالحة"

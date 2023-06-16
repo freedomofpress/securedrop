@@ -726,8 +726,8 @@ msgstr "Seçilmiş dil"
 msgid "Choose language"
 msgstr "Dili seçin"
 
-msgid "Login to access the journalist interface"
-msgstr "Gazeteci arayüzüne erişmek için oturum açın"
+msgid "Log in to access the journalist interface"
+msgstr ""
 
 msgid "Password"
 msgstr "Parola"
@@ -912,7 +912,7 @@ msgstr "Daha önce gelmiştim"
 msgid "Already have a codename? Check for replies or submit something new."
 msgstr "Daha önce bir kod adı aldıysanız yanıtlara bakabilir veya yeni bir şeyler gönderebilirsiniz."
 
-msgid "Login"
+msgid "Log in"
 msgstr ""
 
 msgid "Enter Codename"
@@ -1080,6 +1080,9 @@ msgstr "<strong>Önemli:</strong> Anonim kalmak istiyorsanız, dosyanın GPG tar
 
 msgid "Back to submission page"
 msgstr "Gönderi sayfasına geri dön"
+
+#~ msgid "Login to access the journalist interface"
+#~ msgstr "Gazeteci arayüzüne erişmek için oturum açın"
 
 #~ msgid "Invalid OTP secret"
 #~ msgstr "OTP parolası geçersiz"

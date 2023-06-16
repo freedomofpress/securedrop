@@ -726,8 +726,8 @@ msgstr "Valið tungumál"
 msgid "Choose language"
 msgstr "Veldu tungumál"
 
-msgid "Login to access the journalist interface"
-msgstr "Innskráning fyrir aðgang að fréttamannaviðmótinu"
+msgid "Log in to access the journalist interface"
+msgstr ""
 
 msgid "Password"
 msgstr "Lykilorð"
@@ -912,7 +912,7 @@ msgstr "Endurkomu heimsókn"
 msgid "Already have a codename? Check for replies or submit something new."
 msgstr "Ertu þegar með kóðanafn? Skoðaðu  svör eða sendu inn eitthvað nýtt."
 
-msgid "Login"
+msgid "Log in"
 msgstr ""
 
 msgid "Enter Codename"
@@ -1080,6 +1080,9 @@ msgstr "<strong>Mikilvægt:</strong> Ef þú óskar áframhaldandi nafnleyndar, 
 
 msgid "Back to submission page"
 msgstr "Til baka á innsendingasíðuna"
+
+#~ msgid "Login to access the journalist interface"
+#~ msgstr "Innskráning fyrir aðgang að fréttamannaviðmótinu"
 
 #~ msgid "Invalid OTP secret"
 #~ msgstr "Ógildur OTP-leynilykill"

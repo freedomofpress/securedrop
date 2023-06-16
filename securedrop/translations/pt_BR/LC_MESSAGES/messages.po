@@ -716,8 +716,8 @@ msgstr "Língua selecionada"
 msgid "Choose language"
 msgstr "Escolha a língua"
 
-msgid "Login to access the journalist interface"
-msgstr "Faça login para acessar a interface para jornalistas"
+msgid "Log in to access the journalist interface"
+msgstr ""
 
 msgid "Password"
 msgstr "Senha"
@@ -902,7 +902,7 @@ msgstr "Nova visita"
 msgid "Already have a codename? Check for replies or submit something new."
 msgstr "Você já criou um codinome? Verifique respostas ou envie novos documentos."
 
-msgid "Login"
+msgid "Log in"
 msgstr ""
 
 msgid "Enter Codename"
@@ -1070,6 +1070,9 @@ msgstr "<strong>Importante:</strong> Para manter o seu anonimato, <strong>não</
 
 msgid "Back to submission page"
 msgstr "Voltar à página de envio"
+
+#~ msgid "Login to access the journalist interface"
+#~ msgstr "Faça login para acessar a interface para jornalistas"
 
 #~ msgid "Invalid OTP secret"
 #~ msgstr "Segredo OTP inválido"

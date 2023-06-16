@@ -712,8 +712,8 @@ msgstr "Ausgewählte Sprache"
 msgid "Choose language"
 msgstr "Sprache auswählen"
 
-msgid "Login to access the journalist interface"
-msgstr "Melden Sie sich an, um auf die Journalistenoberfläche zugreifen zu können"
+msgid "Log in to access the journalist interface"
+msgstr ""
 
 msgid "Password"
 msgstr "Passwort"
@@ -898,7 +898,7 @@ msgstr "Wiederholungsbesuch"
 msgid "Already have a codename? Check for replies or submit something new."
 msgstr "Haben Sie bereits einen Decknamen? Schauen Sie nach Antworten oder reichen Sie etwas Neues ein."
 
-msgid "Login"
+msgid "Log in"
 msgstr ""
 
 msgid "Enter Codename"
@@ -1066,6 +1066,9 @@ msgstr "<strong>Wichtig:</strong> Verwenden Sie <strong>nicht</strong> GPG, um d
 
 msgid "Back to submission page"
 msgstr "Zurück zur Einreichungsseite"
+
+#~ msgid "Login to access the journalist interface"
+#~ msgstr "Melden Sie sich an, um auf die Journalistenoberfläche zugreifen zu können"
 
 #~ msgid "Invalid OTP secret"
 #~ msgstr "Ungültiges OTP-Geheimnis"
