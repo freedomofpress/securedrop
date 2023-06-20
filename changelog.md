@@ -1,5 +1,12 @@
 # Changelog
 
+## 2.6.0~rc2
+
+### Web applications
+* Fixed display bug when duplicate locales are specified (#6853)
+* Dependency changes:
+  * Update cryptography from 39.0.1 to 41.0.1 (#6855)
+
 ## 2.6.0~rc1
 
 ### Web applications
@@ -23,7 +30,7 @@
   * Remove pyotp (#5613, #6679)
 
 ### Journalist Workstation
-* Add a GNOME shell extension (#6531, #6712)
+* Add a GNOME shell extension (#6531, #6712, 6847)
 
 ### Operations
 * Update SecureDrop release key expiry date to 2024-07-08 (#6803, #6804, #6819)
