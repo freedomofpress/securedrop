@@ -375,7 +375,7 @@ endif
 ###########
 
 SCRIPT_MESSAGE="You can now examine or commit the log at:"
-SCRIPT_OUTPUT_PREFIX=$(SDROOT)/build/$(shell date +%Y%M%d)
+SCRIPT_OUTPUT_PREFIX=$(SDROOT)/build/$(shell date +%Y%m%d)
 SCRIPT_OUTPUT_EXT=log
 
 .PHONY: build-debs
