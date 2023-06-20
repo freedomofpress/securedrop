@@ -20,6 +20,7 @@ RUN apt-get -y update && apt-get upgrade -y && apt-get install -y \
         libpcre2-dev \
         libssl-dev \
         make \
+        pkg-config \
         python3-all \
         python3-pip \
         python3-setuptools \
