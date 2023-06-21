@@ -139,6 +139,13 @@ log_events_without_ossec_alerts:
     level: "0"
     rule_id: "100114"
 
+  # #6866
+  - name: NameError_hasattr_does_not_produce_alert
+    alert: >
+      NameError: name 'hasattr' is not defined
+    level: "0"
+    rule_id: "199996"
+
 # Log events we expect an OSSEC alert to occur for
 log_events_with_ossec_alerts:
   # Check that a denied RWX mmaping would produce an OSSEC alert
