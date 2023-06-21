@@ -2,7 +2,6 @@ import os
 import re
 import typing
 from datetime import date
-from distutils.version import StrictVersion
 from io import BytesIO, StringIO
 from pathlib import Path
 from typing import Dict, List, Optional
@@ -14,41 +13,8 @@ from sdconfig import SecureDropConfig
 if typing.TYPE_CHECKING:
     from source_user import SourceUser
 
-
-def _monkey_patch_username_in_env() -> None:
-    # To fix https://github.com/freedomofpress/securedrop/issues/78
-    os.environ["USERNAME"] = "www-data"
-
-
-def _monkey_patch_unknown_status_message() -> None:
-    # To fix https://github.com/isislovecruft/python-gnupg/issues/250 with Focal gnupg
-    gnupg._parsers.Verify.TRUST_LEVELS["DECRYPTION_COMPLIANCE_MODE"] = 23
-
-
-def _monkey_patch_delete_handle_status() -> None:
-    # To fix https://github.com/freedomofpress/securedrop/issues/4294
-    def _updated_handle_status(self: gnupg._parsers.DeleteResult, key: str, value: str) -> None:
-        """
-        Parse a status code from the attached GnuPG process.
-        :raises: :exc:`~exceptions.ValueError` if the status message is unknown.
-        """
-        if key in ("DELETE_PROBLEM", "KEY_CONSIDERED"):
-            self.status = self.problem_reason.get(value, "Unknown error: %r" % value)
-        elif key in ("PINENTRY_LAUNCHED"):
-            self.status = key.replace("_", " ").lower()
-        else:
-            raise ValueError("Unknown status message: %r" % key)
-
-    gnupg._parsers.DeleteResult._handle_status = _updated_handle_status
-
-
-def _setup_monkey_patches_for_gnupg() -> None:
-    _monkey_patch_username_in_env()
-    _monkey_patch_unknown_status_message()
-    _monkey_patch_delete_handle_status()
-
-
-_setup_monkey_patches_for_gnupg()
+# To fix https://github.com/freedomofpress/securedrop/issues/78
+os.environ["USERNAME"] = "www-data"
 
 
 class GpgKeyNotFoundError(Exception):
@@ -92,18 +58,11 @@ class EncryptionManager:
         self._redis = Redis(decode_responses=True)
 
         # Instantiate the "main" GPG binary
-        gpg = gnupg.GPG(
-            binary="gpg2", homedir=str(self._gpg_key_dir), options=["--trust-model direct"]
+        self._gpg = gnupg.GPG(
+            binary="gpg2",
+            homedir=str(gpg_key_dir),
+            options=["--pinentry-mode loopback", "--trust-model direct"],
         )
-        if StrictVersion(gpg.binary_version) >= StrictVersion("2.1"):
-            # --pinentry-mode, required for SecureDrop on GPG 2.1.x+, was added in GPG 2.1.
-            self._gpg = gnupg.GPG(
-                binary="gpg2",
-                homedir=str(gpg_key_dir),
-                options=["--pinentry-mode loopback", "--trust-model direct"],
-            )
-        else:
-            self._gpg = gpg
 
         # Instantiate the GPG binary to be used for key deletion: always delete keys without
         # invoking pinentry-mode=loopback
