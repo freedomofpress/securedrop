@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2019-09-01 17:39+0000\n"
-"Last-Translator: 1000101 <jan.hrnko@satoshilabs.com>\n"
+"PO-Revision-Date: 2023-06-21 06:56+0000\n"
+"Last-Translator: Jan Papež <honyczek@centrum.cz>\n"
 "Language-Team: Czech <https://weblate.securedrop.org/projects/securedrop/"
 "desktop/cs/>\n"
 "Language: cs\n"
@@ -16,28 +16,28 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 3.7.1\n"
+"X-Generator: Weblate 4.14.1\n"
 
 msgid "Launch Source Interface"
-msgstr ""
+msgstr "Spustit rozhraní zdroje"
 
 msgid "Launch Journalist Interface"
-msgstr ""
+msgstr "Spustit novinářské rozhraní"
 
 msgid "Check for SecureDrop Updates"
-msgstr ""
+msgstr "Zkontrolovat aktualizace pro SecureDrop"
 
 msgid "SSH into the App Server"
-msgstr ""
+msgstr "Připojit se na SSH aplikačního serveru"
 
 msgid "SSH into the Monitor Server"
-msgstr ""
+msgstr "Připojit se na SSH monitorovacího serveru"
 
 msgid "Open KeePassXC Password Vault"
-msgstr ""
+msgstr "Otevřít trezor hesel KeePassXC"
 
 msgid "Open File Browser"
-msgstr ""
+msgstr "Otevřít průzkumník souborů"
 
 #: desktop-journalist-icon.j2.in:10
 msgid "SecureDrop Journalist Interface"
