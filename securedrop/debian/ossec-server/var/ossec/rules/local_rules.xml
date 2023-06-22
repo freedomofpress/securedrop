@@ -117,12 +117,18 @@
   </rule>
 </group>
 
+<group name="do not alert">
+  <rule id="199996" level="0">
+    <match>NameError: name 'hasattr' is not defined</match>
+    <description>ignore NameError on builtin hasattr() at mod_wsgi teardown (https://github.com/freedomofpress/securedrop/issues/6866)</description>
+    <options>no_email_alert</options>
+   </rule>
+
 <!--
   The python gnupg library that securedrop uses includes an obsolete option
   WARNING:gnupg no-use-agent is an obsolete option - it has no effect
   Do not send an alert for this event.
 -->
-<group name="do not alert">
   <rule id="199997" level="0">
     <decoded_as>gpg warning</decoded_as>
     <match>--no-use-agent" is an obsolete option - it has no effect</match>
