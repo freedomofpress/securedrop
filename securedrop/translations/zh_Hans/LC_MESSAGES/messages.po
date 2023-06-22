@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SecureDrop 0.6~rc2\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2022-09-28 05:27+0000\n"
-"Last-Translator: ff98sha <ff98sha@163.com>\n"
+"PO-Revision-Date: 2023-06-15 04:56+0000\n"
+"Last-Translator: Kishin Sagume <kishinsagi@riseup.net>\n"
 "Language-Team: Chinese (Simplified) <https://weblate.securedrop.org/projects/securedrop/securedrop/zh_Hans/>\n"
 "Language: zh_Hans\n"
 "MIME-Version: 1.0\n"
@@ -30,9 +30,6 @@ msgstr "此用户名无效，因为其被保留为软件内部使用。"
 
 msgid "Invalid username"
 msgstr "无效的用户名"
-
-msgid "Invalid OTP secret"
-msgstr "OTP 密码无效"
 
 msgid "{time} ago"
 msgstr "{time} 之前"
@@ -593,6 +590,9 @@ msgstr "发送测试OSSEC警报"
 msgid "Edit user \"{user}\""
 msgstr "编辑账户 \"{user}\""
 
+msgid "Edit your account"
+msgstr "编辑你的账户"
+
 msgid "Change Name and Admin Status"
 msgstr "更改名称和管理员状态"
 
@@ -601,9 +601,6 @@ msgstr "更新账户"
 
 msgid "UPDATE"
 msgstr "更新"
-
-msgid "Edit your account"
-msgstr "编辑你的账户"
 
 msgid "Change Name"
 msgstr "更改名字"
@@ -857,6 +854,9 @@ msgstr "<strong>请妥善保管</strong>，无法找回代号。"
 msgid "Continue"
 msgstr "继续"
 
+msgid "Welcome"
+msgstr "欢迎"
+
 msgid "Your Tor Browser's <a id=\"disable-js\" href=\"\"><b>Security Level</b></a> is too low. Use the <img src=\"{icon}\" alt=\"&quot;Security Level&quot;\"> button in your browser’s toolbar to change it."
 msgstr "您洋葱浏览器的<a id=\"disable-js\" href=\"\"><b>安全等级</b></a>过低。请点选您浏览器工具栏的 <img src=\"{icon}\" alt=\"&quot;安全等级&quot;\">以更改。"
 
@@ -902,6 +902,9 @@ msgstr "回到访问"
 msgid "Already have a codename? Check for replies or submit something new."
 msgstr "已有代码？查看回复或提交新内容。"
 
+msgid "Log in"
+msgstr "登录"
+
 msgid "Enter Codename"
 msgstr "输入代码"
 
@@ -910,6 +913,9 @@ msgstr "输入您的代号"
 
 msgid "CANCEL"
 msgstr "取消"
+
+msgid "Additional Action Required"
+msgstr "需要其他操作"
 
 msgid "One more thing..."
 msgstr "还有一件事..."
@@ -920,11 +926,11 @@ msgstr "点击 Tor 浏览器工具栏的<img src={icon} alt=\"\" width=\"16\" he
 msgid "Submit Files or Messages"
 msgstr "提交文件或信息"
 
-msgid "You can submit any kind of file, a message, or both."
-msgstr "您可上传任意种类的文件、信息，或两者均可。"
-
 msgid "Submit Messages"
 msgstr "提交信息"
+
+msgid "You can submit any kind of file, a message, or both."
+msgstr "您可上传任意种类的文件、信息，或两者均可。"
 
 msgid "If you are already familiar with GPG, you can optionally encrypt your files and messages with our <a href=\"{url}\" class=\"text-link\">public key</a> before submission. Files are encrypted as they are received by SecureDrop."
 msgstr "若您已熟知 GPG，您可在提交前使用我们的<a href=\"{url}\" class=\"text-link\">公钥</a>加密您的文件及信息。SecureDrop 中的文件将保持加密。"
@@ -979,6 +985,9 @@ msgstr "未找到页面"
 
 msgid "Sorry, we couldn't locate what you requested."
 msgstr "很抱歉，我们无法找到您所请求的内容。"
+
+msgid "WARNING: Proxy Service Detected"
+msgstr "警告：检测到代理服务"
 
 msgid "Proxy Service Detected"
 msgstr "检测到代理服务"
@@ -1062,6 +1071,9 @@ msgstr "<strong>重要提示：</strong>若您想保持匿名身份，<strong>�
 msgid "Back to submission page"
 msgstr "返回提交页面"
 
+#~ msgid "Invalid OTP secret"
+#~ msgstr "OTP 密码无效"
+
 #~ msgid "You have been logged out due to password change"
 #~ msgstr "您因密码更改而被登出"
 
@@ -1113,9 +1125,6 @@ msgstr "返回提交页面"
 
 #~ msgid "Why is this dangerous?"
 #~ msgstr "为什么这样做很危险？"
-
-#~ msgid "Welcome"
-#~ msgstr "欢迎"
 
 #~ msgid "Please either write this codename down and keep it in a safe place, or memorize it."
 #~ msgstr "请写下并妥善保管或牢记此代号。"
@@ -1239,13 +1248,6 @@ msgstr "返回提交页面"
 
 #~ msgid "Please rest assured that we were able to download your submission, and check back again later for a reply."
 #~ msgstr "请放心我们可以下载您所提交的文件，稍等我们的回复。"
-
-#, fuzzy
-#~| msgid "Must be at least {num} character long."
-#~| msgid_plural "Must be at least {num} characters long."
-#~ msgid "Must be at least one character long."
-#~ msgid_plural "Must be at least {num} characters long."
-#~ msgstr[0] "该字段需要至少 {num} 个字符。"
 
 #~ msgid "<strong>Critical Security:</strong>&nbsp;&nbsp;The operating system used by your SecureDrop servers has reached its end-of-life. A manual upgrade is required to re-enable the Source Interface and remain safe. Please contact your administrator. <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Learn More</a>"
 #~ msgstr "<strong>安全隐患：</strong>您使用的操作系统已经达到了使用年限，请您手动更新来重新启用线人界面。请联系你的管理员。<a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">进一步了解</a>"

@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2019-02-26 17:19+0000\n"
-"Last-Translator: Oktavia <ojonsdottir@irex.org>\n"
+"PO-Revision-Date: 2023-06-13 09:56+0000\n"
+"Last-Translator: Sveinn í Felli <sv1@fellsnet.is>\n"
 "Language-Team: Icelandic <https://weblate.securedrop.org/projects/securedrop/"
 "desktop/is/>\n"
 "Language: is\n"
@@ -16,28 +16,28 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n % 10 != 1 || n % 100 == 11;\n"
-"X-Generator: Weblate 3.4\n"
+"X-Generator: Weblate 4.14.1\n"
 
 msgid "Launch Source Interface"
-msgstr ""
+msgstr "Ræsa viðmót heimildarmanns"
 
 msgid "Launch Journalist Interface"
-msgstr ""
+msgstr "Ræsa viðmót blaðamanns"
 
 msgid "Check for SecureDrop Updates"
-msgstr ""
+msgstr "Athuga með uppfærslur SecureDrop"
 
 msgid "SSH into the App Server"
-msgstr ""
+msgstr "SSH inn í forritaþjón"
 
 msgid "SSH into the Monitor Server"
-msgstr ""
+msgstr "SSH inn í vöktunarþjón"
 
 msgid "Open KeePassXC Password Vault"
-msgstr ""
+msgstr "Opna KeePassXC-lykilorðageymslu"
 
 msgid "Open File Browser"
-msgstr ""
+msgstr "Opna skráastjóra"
 
 #: desktop-journalist-icon.j2.in:10
 msgid "SecureDrop Journalist Interface"

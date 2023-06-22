@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2022-09-28 15:27+0000\n"
+"PO-Revision-Date: 2023-06-20 19:56+0000\n"
 "Last-Translator: Øyvind Bye Skille <oyvind@byeskille.net>\n"
 "Language-Team: Norwegian Bokmål <https://weblate.securedrop.org/projects/securedrop/securedrop/nb_NO/>\n"
 "Language: nb_NO\n"
@@ -32,9 +32,6 @@ msgstr "Dette brukernavnet er ugyldig fordi programvaren har reservert det for i
 
 msgid "Invalid username"
 msgstr "Ugyldig brukernavn"
-
-msgid "Invalid OTP secret"
-msgstr "Ugyldig OTP nøkkel"
 
 msgid "{time} ago"
 msgstr "{time} siden"
@@ -604,6 +601,9 @@ msgstr "SEND TEST OSSEC-VARSEL"
 msgid "Edit user \"{user}\""
 msgstr "Rediger brukeren \"{user}\""
 
+msgid "Edit your account"
+msgstr "Rediger kontoen din"
+
 msgid "Change Name and Admin Status"
 msgstr "Endre navn og administratorstatus"
 
@@ -612,9 +612,6 @@ msgstr "Oppdater konto"
 
 msgid "UPDATE"
 msgstr "OPPDATER"
-
-msgid "Edit your account"
-msgstr "Rediger kontoen din"
 
 msgid "Change Name"
 msgstr "Endre navn"
@@ -730,8 +727,8 @@ msgstr "Valgt språk"
 msgid "Choose language"
 msgstr "Velg språk"
 
-msgid "Login to access the journalist interface"
-msgstr "Logg inn for å få tilgang til journalist-portalen"
+msgid "Log in to access the journalist interface"
+msgstr "Logg inn for å komme til journalist-grensesnittet"
 
 msgid "Password"
 msgstr "Passord"
@@ -868,6 +865,9 @@ msgstr "<strong>Ta godt vare på det.</strong> Det er ingen mulighet for å gjen
 msgid "Continue"
 msgstr "Fortsett"
 
+msgid "Welcome"
+msgstr "Velkommen"
+
 msgid "Your Tor Browser's <a id=\"disable-js\" href=\"\"><b>Security Level</b></a> is too low. Use the <img src=\"{icon}\" alt=\"&quot;Security Level&quot;\"> button in your browser’s toolbar to change it."
 msgstr "<a id=\"disable-js\" href=\"\"><b>Sikkerhetsinnstillingene</b></a> i din Tor-nettleser er satt for lavt. Bruk <img src=\"{icon}\" alt=\"&quot;Sikkerhetsnivå&quot;\"\">knappen i nettleserens verktøylinje for å endre nivået."
 
@@ -913,6 +913,9 @@ msgstr "Sendt inn før"
 msgid "Already have a codename? Check for replies or submit something new."
 msgstr "Har du allerede et kodenavn? Sjekk om du har fått svar, eller send inn ny informasjon."
 
+msgid "Log in"
+msgstr "Logg inn"
+
 msgid "Enter Codename"
 msgstr "Skriv inn kodenavn"
 
@@ -921,6 +924,9 @@ msgstr "Skriv inn ditt kodenavn"
 
 msgid "CANCEL"
 msgstr "AVBRYT"
+
+msgid "Additional Action Required"
+msgstr "Ytterligere handlinger er påkrevd"
 
 msgid "One more thing..."
 msgstr "Én ting til…"
@@ -931,11 +937,11 @@ msgstr "Klikk på <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>N
 msgid "Submit Files or Messages"
 msgstr "Send inn filer eller meldinger"
 
-msgid "You can submit any kind of file, a message, or both."
-msgstr "Du kan sende alle typer filer, en melding, eller begge deler."
-
 msgid "Submit Messages"
 msgstr "Send inn meldinger"
+
+msgid "You can submit any kind of file, a message, or both."
+msgstr "Du kan sende alle typer filer, en melding, eller begge deler."
 
 msgid "If you are already familiar with GPG, you can optionally encrypt your files and messages with our <a href=\"{url}\" class=\"text-link\">public key</a> before submission. Files are encrypted as they are received by SecureDrop."
 msgstr "Om du allerede er komfortabel med GPG, kan du velge å kryptere filene og meldingene dine med vår <a href=\"{url}\" class=\"text-link\">offentlige nøkkel</a> før du sender dem inn. Alle filer krypteres automatisk av seg selv i det de mottas av SecureDrop."
@@ -990,6 +996,9 @@ msgstr "Fant ikke siden"
 
 msgid "Sorry, we couldn't locate what you requested."
 msgstr "Beklager, men vi kunne ikke finne det du ba om."
+
+msgid "WARNING: Proxy Service Detected"
+msgstr "ADVARSEL: Proxy-tjeneste oppdaget"
 
 msgid "Proxy Service Detected"
 msgstr "Proxy-bruk oppdaget"
@@ -1073,6 +1082,9 @@ msgstr "<strong>Viktig:</strong> Om du ønsker å være helt anonym, <strong>ikk
 msgid "Back to submission page"
 msgstr "Tilbake til innsendelsesside"
 
+#~ msgid "Invalid OTP secret"
+#~ msgstr "Ugyldig OTP nøkkel"
+
 #~ msgid "You have been logged out due to password change"
 #~ msgstr "Du har blitt utlogget som følge av passordsendring"
 
@@ -1125,9 +1137,6 @@ msgstr "Tilbake til innsendelsesside"
 
 #~ msgid "Why is this dangerous?"
 #~ msgstr "Hvorfor utgjør dette en fare?"
-
-#~ msgid "Welcome"
-#~ msgstr "Velkommen"
 
 #~ msgid "Please either write this codename down and keep it in a safe place, or memorize it."
 #~ msgstr "Husk, eller skriv ned kodenavnet på et sikkert sted."
@@ -1251,14 +1260,6 @@ msgstr "Tilbake til innsendelsesside"
 
 #~ msgid "Please rest assured that we were able to download your submission, and check back again later for a reply."
 #~ msgstr "Du skal likevel vite at vi har kunnet laste ned det du sendte. Kom innom senere for å se etter nye svar."
-
-#, fuzzy
-#~| msgid "Must be at least {num} character long."
-#~| msgid_plural "Must be at least {num} characters long."
-#~ msgid "Must be at least one character long."
-#~ msgid_plural "Must be at least {num} characters long."
-#~ msgstr[0] "Må være minst {num} tegn langt."
-#~ msgstr[1] "Må være minst {num} tegn langt."
 
 #~ msgid "<strong>Critical Security:</strong>&nbsp;&nbsp;The operating system used by your SecureDrop servers has reached its end-of-life. A manual upgrade is required to re-enable the Source Interface and remain safe. Please contact your administrator. <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Learn More</a>"
 #~ msgstr "<strong>Sikkerhetskritisk:</strong>&nbsp;&nbsp;Operativsystemet på tjenerne som drifter denne installasjonen av SecureDrop har nådd slutten av sin levetid. En manuell oppgradering kreves for å reaktivere kilde-nettsiden og opprettholde sikkerheten. Kontakt din administrator. <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Les mer</a>"

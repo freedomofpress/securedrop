@@ -12,7 +12,7 @@ msgstr ""
 "Language-Team: Khmer (Central) <https://weblate.securedrop.org/projects/securedrop/securedrop/km/>\n"
 "Language: km\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Weblate 4.13\n"
@@ -31,16 +31,10 @@ msgstr ""
 msgid "Invalid username"
 msgstr ""
 
-msgid "Invalid OTP secret"
-msgstr ""
-
 msgid "{time} ago"
 msgstr ""
 
 msgid "You have been logged out due to inactivity."
-msgstr ""
-
-msgid "You have been logged out due to password change"
 msgstr ""
 
 msgid "SecureDrop"
@@ -474,7 +468,7 @@ msgstr ""
 msgid "Read"
 msgstr ""
 
-msgid "Uploaded Document"
+msgid "Uploaded File"
 msgstr ""
 
 msgid "Reply"
@@ -508,6 +502,19 @@ msgid "Delete Source Account"
 msgstr ""
 
 msgid "Are you sure?"
+msgstr ""
+
+msgid ""
+"<p>\n"
+"Deleting the account for <b>{source}</b> will:\n"
+"</p>\n"
+"<ul>\n"
+"<li>prevent them from logging in with their codename again\n"
+"<li>prevent your organization from sending replies\n"
+"</ul>\n"
+"<p>\n"
+"All files, messages, and replies will also be deleted when their account is deleted.\n"
+"</p>"
 msgstr ""
 
 msgid "Yes, Delete Source Account"
@@ -549,7 +556,7 @@ msgstr ""
 msgid "Submission Preferences"
 msgstr ""
 
-msgid "Prevent sources from uploading documents. Sources will still be able to send messages."
+msgid "Prevent sources from uploading files. Sources will still be able to send messages."
 msgstr ""
 
 msgid "Prevent sources from sending initial messages shorter than the minimum required length:"
@@ -582,6 +589,9 @@ msgstr ""
 msgid "Edit user \"{user}\""
 msgstr ""
 
+msgid "Edit your account"
+msgstr ""
+
 msgid "Change Name and Admin Status"
 msgstr ""
 
@@ -589,9 +599,6 @@ msgid "Update account"
 msgstr ""
 
 msgid "UPDATE"
-msgstr ""
-
-msgid "Edit your account"
 msgstr ""
 
 msgid "Change Name"
@@ -672,7 +679,7 @@ msgstr ""
 msgid "Designation"
 msgstr ""
 
-msgid "Documents"
+msgid "Files"
 msgstr ""
 
 msgid "Messages"
@@ -681,7 +688,7 @@ msgstr ""
 msgid "Date"
 msgstr ""
 
-msgid "No documents have been submitted!"
+msgid "There are no submissions!"
 msgstr ""
 
 msgid "Filter by codename"
@@ -774,10 +781,10 @@ msgstr ""
 msgid "Thanks! We received your message."
 msgstr ""
 
-msgid "Thanks! We received your document."
+msgid "Thanks! We received your file."
 msgstr ""
 
-msgid "Thanks! We received your message and document."
+msgid "Thanks! We received your file and message."
 msgstr ""
 
 msgid "Reply deleted"
@@ -822,7 +829,7 @@ msgstr ""
 msgid "Powered by"
 msgstr ""
 
-msgid "Please note: Sharing sensitive documents may put you at risk, even when using Tor and SecureDrop."
+msgid "Please note: Sharing sensitive information may put you at risk, even when using Tor and SecureDrop."
 msgstr ""
 
 msgid "SecureDrop is a project of Freedom of the Press Foundation."
@@ -844,6 +851,9 @@ msgid "<strong>Keep it safe.</strong> There is no account recovery option."
 msgstr ""
 
 msgid "Continue"
+msgstr ""
+
+msgid "Welcome"
 msgstr ""
 
 msgid "Your Tor Browser's <a id=\"disable-js\" href=\"\"><b>Security Level</b></a> is too low. Use the <img src=\"{icon}\" alt=\"&quot;Security Level&quot;\"> button in your browser’s toolbar to change it."
@@ -891,6 +901,9 @@ msgstr ""
 msgid "Already have a codename? Check for replies or submit something new."
 msgstr ""
 
+msgid "Login"
+msgstr ""
+
 msgid "Enter Codename"
 msgstr ""
 
@@ -898,6 +911,9 @@ msgid "Enter your codename"
 msgstr ""
 
 msgid "CANCEL"
+msgstr ""
+
+msgid "Additional Action Required"
 msgstr ""
 
 msgid "One more thing..."
@@ -909,10 +925,10 @@ msgstr ""
 msgid "Submit Files or Messages"
 msgstr ""
 
-msgid "You can submit any kind of file, a message, or both."
+msgid "Submit Messages"
 msgstr ""
 
-msgid "Submit Messages"
+msgid "You can submit any kind of file, a message, or both."
 msgstr ""
 
 msgid "If you are already familiar with GPG, you can optionally encrypt your files and messages with our <a href=\"{url}\" class=\"text-link\">public key</a> before submission. Files are encrypted as they are received by SecureDrop."
@@ -967,6 +983,9 @@ msgid "Page not found"
 msgstr ""
 
 msgid "Sorry, we couldn't locate what you requested."
+msgstr ""
+
+msgid "WARNING: Proxy Service Detected"
 msgstr ""
 
 msgid "Proxy Service Detected"

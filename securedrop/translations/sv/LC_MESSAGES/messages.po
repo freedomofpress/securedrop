@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SecureDrop 0.5-rc4\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2022-09-28 07:35+0000\n"
+"PO-Revision-Date: 2023-06-16 10:56+0000\n"
 "Last-Translator: Jonas Waga <jonas.waga@schibsted.com>\n"
 "Language-Team: Swedish <https://weblate.securedrop.org/projects/securedrop/securedrop/sv/>\n"
 "Language: sv\n"
@@ -31,9 +31,6 @@ msgstr "Detta användarnamn är ogiltigt, pga. att det är reserverat av program
 
 msgid "Invalid username"
 msgstr "Inkorrekt användarnamn"
-
-msgid "Invalid OTP secret"
-msgstr "Inkorrekt OTP-hemlighet"
 
 msgid "{time} ago"
 msgstr "{time} sedan"
@@ -603,6 +600,9 @@ msgstr "SKICKA TEST OSSEC-LARM"
 msgid "Edit user \"{user}\""
 msgstr "Redigera användaren \"{user}\""
 
+msgid "Edit your account"
+msgstr "Redigera ditt konto"
+
 msgid "Change Name and Admin Status"
 msgstr "Ändra namn och administratörsstatus"
 
@@ -611,9 +611,6 @@ msgstr "Uppdatera ditt konto"
 
 msgid "UPDATE"
 msgstr "UPPDATERA"
-
-msgid "Edit your account"
-msgstr "Redigera ditt konto"
 
 msgid "Change Name"
 msgstr "Ändra namn"
@@ -729,8 +726,8 @@ msgstr "Markerat språk"
 msgid "Choose language"
 msgstr "Välj språk"
 
-msgid "Login to access the journalist interface"
-msgstr "Logga in för att få tillgång till journalistgränssnittet"
+msgid "Log in to access the journalist interface"
+msgstr "Logga in för att få access till journalistgränssnittet"
 
 msgid "Password"
 msgstr "Lösenord"
@@ -867,6 +864,9 @@ msgstr "<strong>Håll det säkert.</strong> Det finns inget sätt att återstäl
 msgid "Continue"
 msgstr "Fortsätt"
 
+msgid "Welcome"
+msgstr "Välkommen"
+
 msgid "Your Tor Browser's <a id=\"disable-js\" href=\"\"><b>Security Level</b></a> is too low. Use the <img src=\"{icon}\" alt=\"&quot;Security Level&quot;\"> button in your browser’s toolbar to change it."
 msgstr "Din Tor Browsers <a id=\"disable-js\" href=\"\"><b>Säkerhetsnivå</b></a> är ställd för låg. Använd <img src=\"{icon}\" alt=\"&quot;Security Level&quot;\">-knappen i din Tor Browsers menyrad för att ändra det."
 
@@ -912,6 +912,9 @@ msgstr "Återkommande besök"
 msgid "Already have a codename? Check for replies or submit something new."
 msgstr "Har du redan ett kodnamn? Kontrollera om du fått svar eller lämna in något nytt."
 
+msgid "Log in"
+msgstr "Logga in"
+
 msgid "Enter Codename"
 msgstr "Ange kodnamn"
 
@@ -920,6 +923,9 @@ msgstr "Ange ditt kodnamn"
 
 msgid "CANCEL"
 msgstr "AVBRYT"
+
+msgid "Additional Action Required"
+msgstr "Mer information krävs"
 
 msgid "One more thing..."
 msgstr "En sak till…"
@@ -930,11 +936,11 @@ msgstr "Klicka på knappen <img src={icon} alt=\"\" width=\"16\" height=\"16\">&
 msgid "Submit Files or Messages"
 msgstr "Skicka filer eller meddelanden"
 
-msgid "You can submit any kind of file, a message, or both."
-msgstr "Du kan skicka alla typer av filer, ett meddelande, eller både och."
-
 msgid "Submit Messages"
 msgstr "Skicka meddelande"
+
+msgid "You can submit any kind of file, a message, or both."
+msgstr "Du kan skicka alla typer av filer, ett meddelande, eller både och."
 
 msgid "If you are already familiar with GPG, you can optionally encrypt your files and messages with our <a href=\"{url}\" class=\"text-link\">public key</a> before submission. Files are encrypted as they are received by SecureDrop."
 msgstr "Om du redan känner till GPG, så kan du själv välja att kryptera dina filer och meddelanden med vår <a href=\"{url}\" class=\"text-link\"> publika nyckel </a> före inlämningen. Filer krypteras när de tas emot av SecureDrop."
@@ -989,6 +995,9 @@ msgstr "Sidan kunde inte hittas"
 
 msgid "Sorry, we couldn't locate what you requested."
 msgstr "Förlåt, vi kunde inte hitta det du begärde."
+
+msgid "WARNING: Proxy Service Detected"
+msgstr "VARNING: Proxy-tjänst har upptäckts"
 
 msgid "Proxy Service Detected"
 msgstr "Procytjänst upptäckt"
@@ -1072,6 +1081,9 @@ msgstr "<strong> Viktigt:</strong> Ifall du önskar att förbli anonym, <strong>
 msgid "Back to submission page"
 msgstr "Tillbaka till inlämningssidan"
 
+#~ msgid "Invalid OTP secret"
+#~ msgstr "Inkorrekt OTP-hemlighet"
+
 #~ msgid "You have been logged out due to password change"
 #~ msgstr "Du har blivit utloggad på grund av lösenordsbyte"
 
@@ -1124,9 +1136,6 @@ msgstr "Tillbaka till inlämningssidan"
 
 #~ msgid "Why is this dangerous?"
 #~ msgstr "Varför är detta osäkert?"
-
-#~ msgid "Welcome"
-#~ msgstr "Välkommen"
 
 #~ msgid "Please either write this codename down and keep it in a safe place, or memorize it."
 #~ msgstr "Vänligen skriv ner detta kodnamn och spara det på en säker plats eller memorera det."
@@ -1250,14 +1259,6 @@ msgstr "Tillbaka till inlämningssidan"
 
 #~ msgid "Please rest assured that we were able to download your submission, and check back again later for a reply."
 #~ msgstr "Du kan vara säker på att vi kan läsa ditt meddelande, logga in igen lite senare för att se vårt svar."
-
-#, fuzzy
-#~| msgid "Must be at least {num} character long."
-#~| msgid_plural "Must be at least {num} characters long."
-#~ msgid "Must be at least one character long."
-#~ msgid_plural "Must be at least {num} characters long."
-#~ msgstr[0] "Måste vara minst {num} tecken långt."
-#~ msgstr[1] "Måste vara minst {num} tecken långt."
 
 #~ msgid "<strong>Critical Security:</strong>&nbsp;&nbsp;The operating system used by your SecureDrop servers has reached its end-of-life. A manual upgrade is required to re-enable the Source Interface and remain safe. Please contact your administrator. <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Learn More</a>"
 #~ msgstr "<strong>Kritisk sårbarhet:</strong>&nbsp;&nbsp;Operativsystemet som används av dina SecureDrop-servrar har passerat sin livslängd. En manuell uppdatering krävs snarast för att återaktivera källgränssnittet och för att fortsätta vara säker. Vänligen kontakta din administratör. <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Läs mer</a>"

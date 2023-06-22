@@ -33,9 +33,6 @@ msgstr "Deze gebruikersnaam is ongeldig, omdat het voor intern gebruik door de s
 msgid "Invalid username"
 msgstr "Gebruikersnaam wijzigen"
 
-msgid "Invalid OTP secret"
-msgstr "Ongeldig OTP geheim"
-
 msgid "{time} ago"
 msgstr "{time} geleden"
 
@@ -604,6 +601,9 @@ msgstr "VERSTUUR OSSEC WAARSCHUWINGSTESTMAIL"
 msgid "Edit user \"{user}\""
 msgstr "Gebruiker \"{user}\" bewerken"
 
+msgid "Edit your account"
+msgstr "Bewerk uw account"
+
 msgid "Change Name and Admin Status"
 msgstr "Wijzig naam en beheerdersstatus"
 
@@ -612,9 +612,6 @@ msgstr "Account bewerken"
 
 msgid "UPDATE"
 msgstr "BIJWERKEN"
-
-msgid "Edit your account"
-msgstr "Bewerk uw account"
 
 msgid "Change Name"
 msgstr "Wijzig naam"
@@ -868,6 +865,9 @@ msgstr "<strong>Hou het veilig.</strong> Er is geen optie om het account te hers
 msgid "Continue"
 msgstr "Ga verder"
 
+msgid "Welcome"
+msgstr "Welkom"
+
 msgid "Your Tor Browser's <a id=\"disable-js\" href=\"\"><b>Security Level</b></a> is too low. Use the <img src=\"{icon}\" alt=\"&quot;Security Level&quot;\"> button in your browser’s toolbar to change it."
 msgstr "De <a id=\"disable-js\" href=\"\"><b>veiligheidsinstellingen</b></a> van uw Tor-browser zijn niet strikt genoeg. Gebruik de <img src=\"{icon}\" alt=\"&quot;beveiligingsniveau&quot;\">-knop in de werkbalk van uw browser om dit te wijzigen."
 
@@ -913,6 +913,9 @@ msgstr "Vervolgbezoek"
 msgid "Already have a codename? Check for replies or submit something new."
 msgstr "Hebt u al een codenaam? Controleer of er antwoorden zijn of stuur iets nieuws in."
 
+msgid "Login"
+msgstr ""
+
 msgid "Enter Codename"
 msgstr "Codenaam invoeren"
 
@@ -921,6 +924,9 @@ msgstr "Voer uw codenaam in"
 
 msgid "CANCEL"
 msgstr "ANNULEREN"
+
+msgid "Additional Action Required"
+msgstr ""
 
 msgid "One more thing..."
 msgstr "Nog één ding…"
@@ -931,11 +937,11 @@ msgstr "Klik op de <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>
 msgid "Submit Files or Messages"
 msgstr "Verstuur bestanden of berichten"
 
-msgid "You can submit any kind of file, a message, or both."
-msgstr "U kunt elk soort bestand, een bericht of beide versturen."
-
 msgid "Submit Messages"
 msgstr "Verstuur berichten"
+
+msgid "You can submit any kind of file, a message, or both."
+msgstr "U kunt elk soort bestand, een bericht of beide versturen."
 
 msgid "If you are already familiar with GPG, you can optionally encrypt your files and messages with our <a href=\"{url}\" class=\"text-link\">public key</a> before submission. Files are encrypted as they are received by SecureDrop."
 msgstr "Indien u reeds bekend bent met GPG kunt u eventueel uw bestanden en berichten versleutelen met onze <a href=\"{url}\" class=\"text-link\">publieke sleutel</a> alvorens deze te versturen. Bestanden worden versleuteld ontvangen door SecureDrop."
@@ -990,6 +996,9 @@ msgstr "Pagina niet gevonden"
 
 msgid "Sorry, we couldn't locate what you requested."
 msgstr "Sorry, we kunnen niet vinden wat u zoekt."
+
+msgid "WARNING: Proxy Service Detected"
+msgstr ""
 
 msgid "Proxy Service Detected"
 msgstr "Proxyservice gedetecteerd"
@@ -1073,6 +1082,9 @@ msgstr "<strong>Belangrijk:</strong> Als u anoniem wilt blijven, gebruik dan <st
 msgid "Back to submission page"
 msgstr "Terug naar inzendingenpagina"
 
+#~ msgid "Invalid OTP secret"
+#~ msgstr "Ongeldig OTP geheim"
+
 #~ msgid "You have been logged out due to password change"
 #~ msgstr "U bent uitgelogd omdat uw wachtwoord is gewijzigd"
 
@@ -1126,9 +1138,6 @@ msgstr "Terug naar inzendingenpagina"
 #~ msgid "Why is this dangerous?"
 #~ msgstr "Waarom is dit gevaarlijk?"
 
-#~ msgid "Welcome"
-#~ msgstr "Welkom"
-
 #~ msgid "Please either write this codename down and keep it in a safe place, or memorize it."
 #~ msgstr "Noteer deze codenaam en bewaar op een veilige plaats of leer hem uit het hoofd."
 
@@ -1167,11 +1176,6 @@ msgstr "Terug naar inzendingenpagina"
 
 #~ msgid "Success"
 #~ msgstr "Gelukt"
-
-#, fuzzy
-#~| msgid "Enter Codename"
-#~ msgid "Refresh codename"
-#~ msgstr "Codenaam invoeren"
 
 #~ msgid "Your reply has been stored."
 #~ msgstr "Uw reactie is opgeslagen."
@@ -1244,14 +1248,6 @@ msgstr "Terug naar inzendingenpagina"
 
 #~ msgid "Please rest assured that we were able to download your submission, and check back again later for a reply."
 #~ msgstr "Vrees niet, we hebben uw inzending gedownload. Kom terug op een later moment om te kijken of we een antwoord gestuurd hebben."
-
-#, fuzzy
-#~| msgid "Must be at least {num} character long."
-#~| msgid_plural "Must be at least {num} characters long."
-#~ msgid "Must be at least one character long."
-#~ msgid_plural "Must be at least {num} characters long."
-#~ msgstr[0] "Moet ten minste {num} teken lang zijn."
-#~ msgstr[1] "Moet ten minste {num} tekens lang zijn."
 
 #~ msgid "<strong>Critical Security:</strong>&nbsp;&nbsp;The operating system used by your SecureDrop servers has reached its end-of-life. A manual upgrade is required to re-enable the Source Interface and remain safe. Please contact your administrator. <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Learn More</a>"
 #~ msgstr "<strong>Kritiek veiligheidsprobleem:</strong>&nbsp;&nbsp;Het besturingssysteem op uw SecureDrop servers is aan het einde van zijn levensduur. Een handmatige upgrade is vereist om de broninterface opnieuw in te schakelen en veilig te blijven. Neem contact op met uw beheerder.<a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Meer informatie.</a>"

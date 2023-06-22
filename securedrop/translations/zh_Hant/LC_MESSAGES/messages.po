@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: SecureDrop 0.3.12\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2022-10-07 01:27+0000\n"
-"Last-Translator: Chi-Hsun Tsai <chihsun.tsai@gmail.com>\n"
+"PO-Revision-Date: 2023-06-19 16:56+0000\n"
+"Last-Translator: Meng Pang Wang <mengpangwang@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://weblate.securedrop.org/projects/securedrop/securedrop/zh_Hant/>\n"
 "Language: zh_Hant\n"
 "MIME-Version: 1.0\n"
@@ -31,9 +31,6 @@ msgstr "因軟體本身保留自用故無法選用此帳戶名稱。"
 
 msgid "Invalid username"
 msgstr "使用者名稱無效"
-
-msgid "Invalid OTP secret"
-msgstr "OTP 密碼無效"
 
 msgid "{time} ago"
 msgstr "{time} 之前"
@@ -594,6 +591,9 @@ msgstr "傳送測試 OSSEC 警報"
 msgid "Edit user \"{user}\""
 msgstr "編輯帳户 \"{user}\""
 
+msgid "Edit your account"
+msgstr "編輯你的帳戶"
+
 msgid "Change Name and Admin Status"
 msgstr "更動名稱與管理者狀態"
 
@@ -602,9 +602,6 @@ msgstr "更新帳戶資訊"
 
 msgid "UPDATE"
 msgstr "更新"
-
-msgid "Edit your account"
-msgstr "編輯你的帳戶"
 
 msgid "Change Name"
 msgstr "更動名稱"
@@ -720,8 +717,8 @@ msgstr "選取語系"
 msgid "Choose language"
 msgstr "選擇語系"
 
-msgid "Login to access the journalist interface"
-msgstr "登入記者使用介面"
+msgid "Log in to access the journalist interface"
+msgstr "登入以存取記者介面"
 
 msgid "Password"
 msgstr "密碼"
@@ -858,6 +855,9 @@ msgstr "<strong>妥善保存</strong> 它沒辦法重新取得。"
 msgid "Continue"
 msgstr "繼續"
 
+msgid "Welcome"
+msgstr "歡迎"
+
 msgid "Your Tor Browser's <a id=\"disable-js\" href=\"\"><b>Security Level</b></a> is too low. Use the <img src=\"{icon}\" alt=\"&quot;Security Level&quot;\"> button in your browser’s toolbar to change it."
 msgstr "Tor 瀏覽器的 <a id=\"disable-js\" href=\"\"><b>安全性</b></a>等級過低。請使用瀏覽器工具列中的 <img src=\"{icon}\" alt=\"&quot;Security Level&quot;\">按鈕來變更它。"
 
@@ -903,6 +903,9 @@ msgstr "返回文件提交訪問頁"
 msgid "Already have a codename? Check for replies or submit something new."
 msgstr "已有代號名稱？檢查回應或是提交新資料。"
 
+msgid "Log in"
+msgstr "登入"
+
 msgid "Enter Codename"
 msgstr "輸入代號"
 
@@ -911,6 +914,9 @@ msgstr "請輸入您的代號"
 
 msgid "CANCEL"
 msgstr "取消"
+
+msgid "Additional Action Required"
+msgstr "需要額外動作"
 
 msgid "One more thing..."
 msgstr "還有一件事...."
@@ -921,11 +927,11 @@ msgstr "點擊 Tor 瀏覽器工具列 <img src={icon} alt=\"\" width=\"16\" heig
 msgid "Submit Files or Messages"
 msgstr "提交檔案和訊息"
 
-msgid "You can submit any kind of file, a message, or both."
-msgstr "您可以提交任何類型的檔案，撰寫訊息或兩者都作。"
-
 msgid "Submit Messages"
 msgstr "提交訊息"
+
+msgid "You can submit any kind of file, a message, or both."
+msgstr "您可以提交任何類型的檔案，撰寫訊息或兩者都作。"
 
 msgid "If you are already familiar with GPG, you can optionally encrypt your files and messages with our <a href=\"{url}\" class=\"text-link\">public key</a> before submission. Files are encrypted as they are received by SecureDrop."
 msgstr "如果你熟悉 GPG，可以在提交之前選擇使用我們的<a href=\"{url}\" class=\"text-link\">公鑰</a> 來加密。透過 SecureDrop 收到的文檔都會經過加密。"
@@ -980,6 +986,9 @@ msgstr "找不到網頁"
 
 msgid "Sorry, we couldn't locate what you requested."
 msgstr "對不起，未能處置您的請求。"
+
+msgid "WARNING: Proxy Service Detected"
+msgstr "警告：偵測到代理服務"
 
 msgid "Proxy Service Detected"
 msgstr "偵測到代理服務器"
@@ -1063,6 +1072,9 @@ msgstr "<strong>重要：</strong>如果您希望保持匿名，<strong>請勿</
 msgid "Back to submission page"
 msgstr "返回提交文件頁面"
 
+#~ msgid "Invalid OTP secret"
+#~ msgstr "OTP 密碼無效"
+
 #~ msgid "You have been logged out due to password change"
 #~ msgstr "因密碼變更已被登出"
 
@@ -1114,9 +1126,6 @@ msgstr "返回提交文件頁面"
 
 #~ msgid "Why is this dangerous?"
 #~ msgstr "這樣為什麼很危險？"
-
-#~ msgid "Welcome"
-#~ msgstr "歡迎"
 
 #~ msgid "Please either write this codename down and keep it in a safe place, or memorize it."
 #~ msgstr "請抄下代號並妥善保管，或牢牢記住它。"
@@ -1240,13 +1249,6 @@ msgstr "返回提交文件頁面"
 
 #~ msgid "Please rest assured that we were able to download your submission, and check back again later for a reply."
 #~ msgstr "請放心，我們能夠下載您的提交內容。請稍後回來檢查回覆。"
-
-#, fuzzy
-#~| msgid "Must be at least {num} character long."
-#~| msgid_plural "Must be at least {num} characters long."
-#~ msgid "Must be at least one character long."
-#~ msgid_plural "Must be at least {num} characters long."
-#~ msgstr[0] "须至少有 {num} 個字符長度。"
 
 #~ msgid "<strong>Critical Security:</strong>&nbsp;&nbsp;The operating system used by your SecureDrop servers has reached its end-of-life. A manual upgrade is required to re-enable the Source Interface and remain safe. Please contact your administrator. <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Learn More</a>"
 #~ msgstr "<strong>重要安全課題：</strong> &nbsp;&nbsp;SecureDrop 伺服器作業系統已逾使用年限，亟需手動更新才能啟用線人界面與維持安全。請聯絡網管人員 - <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">了解進一步資訊</a>"

@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SecureDrop 0.5-rc4\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2022-09-28 07:20+0000\n"
-"Last-Translator: Kaya Zeren <kayazeren@gmail.com>\n"
+"PO-Revision-Date: 2023-06-14 05:56+0000\n"
+"Last-Translator: tekrei <tekrei@tutanota.com>\n"
 "Language-Team: Turkish <https://weblate.securedrop.org/projects/securedrop/securedrop/tr/>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
@@ -31,9 +31,6 @@ msgstr "Bu kullanıcı adı geçersiz, çünkü yazılım tarafından içsel ola
 
 msgid "Invalid username"
 msgstr "Geçersiz kullanıcı adı"
-
-msgid "Invalid OTP secret"
-msgstr "OTP parolası geçersiz"
 
 msgid "{time} ago"
 msgstr "{time} önce"
@@ -603,6 +600,9 @@ msgstr "OSSEC UYARI GÖNDERME DENEMESİ"
 msgid "Edit user \"{user}\""
 msgstr "\"{user}\" kullanıcısını düzenle"
 
+msgid "Edit your account"
+msgstr "Hesabınızı düzenleyin"
+
 msgid "Change Name and Admin Status"
 msgstr "Adı ve Yönetici Durumunu Değiştir"
 
@@ -611,9 +611,6 @@ msgstr "Hesabı güncelle"
 
 msgid "UPDATE"
 msgstr "GÜNCELLE"
-
-msgid "Edit your account"
-msgstr "Hesabınızı düzenleyin"
 
 msgid "Change Name"
 msgstr "Ad Değiştir"
@@ -867,6 +864,9 @@ msgstr "<strong>Güvenli bir yerde koruyun.</strong> Herhangi bir hesap kurtarma
 msgid "Continue"
 msgstr "Devam"
 
+msgid "Welcome"
+msgstr "Hoş Geldiniz"
+
 msgid "Your Tor Browser's <a id=\"disable-js\" href=\"\"><b>Security Level</b></a> is too low. Use the <img src=\"{icon}\" alt=\"&quot;Security Level&quot;\"> button in your browser’s toolbar to change it."
 msgstr "Tor Browser <a id=\"disable-js\" href=\"\"><b>Güvenlik Düzeyi</b></a> çok düşük. Tor Browser araç çubuğundaki <img src=\"{icon}\" alt=\"&quot;Güvenlik Düzeyi&quot;\"> &nbsp;düğmesini kullanarak değiştirebilirsiniz."
 
@@ -912,6 +912,9 @@ msgstr "Daha önce gelmiştim"
 msgid "Already have a codename? Check for replies or submit something new."
 msgstr "Daha önce bir kod adı aldıysanız yanıtlara bakabilir veya yeni bir şeyler gönderebilirsiniz."
 
+msgid "Log in"
+msgstr "Oturum Aç"
+
 msgid "Enter Codename"
 msgstr "Kod Adını Yazın"
 
@@ -920,6 +923,9 @@ msgstr "Kod adınızı yazın"
 
 msgid "CANCEL"
 msgstr "İPTAL"
+
+msgid "Additional Action Required"
+msgstr "Ek İşlem Gerekli"
 
 msgid "One more thing..."
 msgstr "Bir şey daha var..."
@@ -930,11 +936,11 @@ msgstr "Tor Browser araç çubuğundan <img src={icon} alt=\"\" width=\"16\" hei
 msgid "Submit Files or Messages"
 msgstr "Dosya veya İleti Gönderin"
 
-msgid "You can submit any kind of file, a message, or both."
-msgstr "Herhangi bir dosya, bir ileti türü ya da her ikisini birden gönderebilirsiniz."
-
 msgid "Submit Messages"
 msgstr "İleti Gönderin"
+
+msgid "You can submit any kind of file, a message, or both."
+msgstr "Herhangi bir dosya, bir ileti türü ya da her ikisini birden gönderebilirsiniz."
 
 msgid "If you are already familiar with GPG, you can optionally encrypt your files and messages with our <a href=\"{url}\" class=\"text-link\">public key</a> before submission. Files are encrypted as they are received by SecureDrop."
 msgstr "GPG hakkında bilginiz varsa, dosya ve iletilerinizi göndermeden önce <a href=\"{url}\" class=\"text-link\">açık anahtarımızı</a> kullanarak şifreleyebilirsiniz. Dosyalar SecureDrop tarafından alındığı anda şifrelenir."
@@ -989,6 +995,9 @@ msgstr "Sayfa bulunamadı"
 
 msgid "Sorry, we couldn't locate what you requested."
 msgstr "Maalesef, isteğinizi yerine getiremiyoruz."
+
+msgid "WARNING: Proxy Service Detected"
+msgstr "UYARI: Vekil Hizmeti Tespit Edidi"
 
 msgid "Proxy Service Detected"
 msgstr "Vekil sunucu hizmeti algılandı"
@@ -1072,6 +1081,9 @@ msgstr "<strong>Önemli:</strong> Anonim kalmak istiyorsanız, dosyanın GPG tar
 msgid "Back to submission page"
 msgstr "Gönderi sayfasına geri dön"
 
+#~ msgid "Invalid OTP secret"
+#~ msgstr "OTP parolası geçersiz"
+
 #~ msgid "You have been logged out due to password change"
 #~ msgstr "Parolanız değiştirildiği için oturumunuz kapatıldı"
 
@@ -1124,9 +1136,6 @@ msgstr "Gönderi sayfasına geri dön"
 
 #~ msgid "Why is this dangerous?"
 #~ msgstr "Bu neden tehlikeli?"
-
-#~ msgid "Welcome"
-#~ msgstr "Hoş Geldiniz"
 
 #~ msgid "Please either write this codename down and keep it in a safe place, or memorize it."
 #~ msgstr "Lütfen bu kod adını bir yere yazın ve güvenli bir şekilde saklayın ya da ezberleyin."
@@ -1250,14 +1259,6 @@ msgstr "Gönderi sayfasına geri dön"
 
 #~ msgid "Please rest assured that we were able to download your submission, and check back again later for a reply."
 #~ msgstr "Gönderinizi indirebildiğimizden emin olabilirsiniz. Bir yanıt olup olmadığını denetlemek için daha sonra tekrar kontrol edin."
-
-#, fuzzy
-#~| msgid "Must be at least {num} character long."
-#~| msgid_plural "Must be at least {num} characters long."
-#~ msgid "Must be at least one character long."
-#~ msgid_plural "Must be at least {num} characters long."
-#~ msgstr[0] "{num} karakterden az olamaz."
-#~ msgstr[1] "{num} karakterden az olamaz."
 
 #~ msgid "<strong>Critical Security:</strong>&nbsp;&nbsp;The operating system used by your SecureDrop servers has reached its end-of-life. A manual upgrade is required to re-enable the Source Interface and remain safe. Please contact your administrator. <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Learn More</a>"
 #~ msgstr "<strong>Kritik Güvenlik:</strong>&nbsp;&nbsp;SecureDrop sunucularınız tarafından kullanılan işletim sisteminizin ömrü sona erdi. Kaynak arayüzünü yeniden etkinleştirmek ve güvende kalmak için elle bir güncelleme yapmanız gerekiyor. Lütfen BT yöneticiniz ile görüşün. <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Ayrıntılı Bilgi Alın</a>"

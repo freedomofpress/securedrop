@@ -33,9 +33,6 @@ msgstr "Este nombre de usuario es inválido porque está reservado para uso inte
 msgid "Invalid username"
 msgstr "Nombre de usuario inválido"
 
-msgid "Invalid OTP secret"
-msgstr "Secreto OTP inválido"
-
 msgid "{time} ago"
 msgstr "hace {time}"
 
@@ -604,6 +601,9 @@ msgstr "ENVIAR ALERTA DE PRUEBA OSSEC"
 msgid "Edit user \"{user}\""
 msgstr "Editar usuario \"{user}\""
 
+msgid "Edit your account"
+msgstr "Edita tu cuenta"
+
 msgid "Change Name and Admin Status"
 msgstr "Cambiar Nombre y Estado de Administrador"
 
@@ -612,9 +612,6 @@ msgstr "Actualizar cuenta"
 
 msgid "UPDATE"
 msgstr "ACTUALIZAR"
-
-msgid "Edit your account"
-msgstr "Edita tu cuenta"
 
 msgid "Change Name"
 msgstr "Cambiar Nombre"
@@ -868,6 +865,9 @@ msgstr "<strong>Manténlo seguro.</strong> No hay una opción para la recuperaci
 msgid "Continue"
 msgstr "Continuar"
 
+msgid "Welcome"
+msgstr "Bienvenido"
+
 msgid "Your Tor Browser's <a id=\"disable-js\" href=\"\"><b>Security Level</b></a> is too low. Use the <img src=\"{icon}\" alt=\"&quot;Security Level&quot;\"> button in your browser’s toolbar to change it."
 msgstr "El <a id=\"disable-js\" href=\"\"><b>Nivel de Seguridad</b></a> de tu Navegador Tor está demasiado bajo. Usa el botón <img src=\"{icon}\" alt=\"&quot;Security Level&quot;\"> en la barra de herramientas de tu navegador para cambiarlo."
 
@@ -913,6 +913,9 @@ msgstr "Nueva visita"
 msgid "Already have a codename? Check for replies or submit something new."
 msgstr "¿Ya tienes un nombre clave? Revisa si hay respuestas o envía algo nuevo."
 
+msgid "Login"
+msgstr ""
+
 msgid "Enter Codename"
 msgstr "Introduce Nombre Clave"
 
@@ -921,6 +924,9 @@ msgstr "Ingresa tu Nombre Clave"
 
 msgid "CANCEL"
 msgstr "CANCELAR"
+
+msgid "Additional Action Required"
+msgstr ""
 
 msgid "One more thing..."
 msgstr "Una cosa más..."
@@ -931,11 +937,11 @@ msgstr "Haz clic en el botón <img src={icon} alt=\"\" width=\"16\" height=\"16\
 msgid "Submit Files or Messages"
 msgstr "Enviar Archivos o Mensajes"
 
-msgid "You can submit any kind of file, a message, or both."
-msgstr "Puedes enviar cualquier tipo de archivo, un mensaje, o ambos."
-
 msgid "Submit Messages"
 msgstr "Enviar Mensajes"
+
+msgid "You can submit any kind of file, a message, or both."
+msgstr "Puedes enviar cualquier tipo de archivo, un mensaje, o ambos."
 
 msgid "If you are already familiar with GPG, you can optionally encrypt your files and messages with our <a href=\"{url}\" class=\"text-link\">public key</a> before submission. Files are encrypted as they are received by SecureDrop."
 msgstr "Si estás familiarizado con GPG, puedes cifrar tus archivos y mensajes de forma opcional con nuestra <a href=\"{url}\" class=\"text-link\">llave pública</a> antes de enviarlos. Sin importar si has cifrado tus mensajes con GPG o no, todos los archivos son cifrados tan pronto son recibidos por SecureDrop."
@@ -990,6 +996,9 @@ msgstr "Página no encontrada"
 
 msgid "Sorry, we couldn't locate what you requested."
 msgstr "Lo sentimos, no pudimos localizar lo que pediste."
+
+msgid "WARNING: Proxy Service Detected"
+msgstr ""
 
 msgid "Proxy Service Detected"
 msgstr "Servicio de proxy detectado"
@@ -1073,6 +1082,9 @@ msgstr "<strong>Importante:</strong> Si deseas permanecer anónimo, <strong>no</
 msgid "Back to submission page"
 msgstr "Regresar a la página de envío"
 
+#~ msgid "Invalid OTP secret"
+#~ msgstr "Secreto OTP inválido"
+
 #~ msgid "You have been logged out due to password change"
 #~ msgstr "Tu sesión ha sido terminada debido a un cambio de contraseña"
 
@@ -1125,9 +1137,6 @@ msgstr "Regresar a la página de envío"
 
 #~ msgid "Why is this dangerous?"
 #~ msgstr "¿Por qué es peligroso esto?"
-
-#~ msgid "Welcome"
-#~ msgstr "Bienvenido"
 
 #~ msgid "Please either write this codename down and keep it in a safe place, or memorize it."
 #~ msgstr "Por favor, escribe este nombre clave y guárdalo en un lugar seguro, o memorízalo."
@@ -1251,14 +1260,6 @@ msgstr "Regresar a la página de envío"
 
 #~ msgid "Please rest assured that we were able to download your submission, and check back again later for a reply."
 #~ msgstr "Por favor quédate tranquilo que hemos podido descargar tu envío, y vuelve a comprobar más tarde por una respuesta."
-
-#, fuzzy
-#~| msgid "Must be at least {num} character long."
-#~| msgid_plural "Must be at least {num} characters long."
-#~ msgid "Must be at least one character long."
-#~ msgid_plural "Must be at least {num} characters long."
-#~ msgstr[0] "Debe tener por lo menos {num} carácter de longitud."
-#~ msgstr[1] "Debe tener por lo menos {num} caracteres de longitud."
 
 #~ msgid "<strong>Critical Security:</strong>&nbsp;&nbsp;The operating system used by your SecureDrop servers has reached its end-of-life. A manual upgrade is required to re-enable the Source Interface and remain safe. Please contact your administrator. <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Learn More</a>"
 #~ msgstr "<strong>Situación crítica de Seguridad:</strong>&nbsp;&nbsp;El sistema operativo usado en tus servidores SecureDrop ha alcanzado el final de su ciclo de vida. Se necesita una actualización manual para rehabilitar la Interfaz de Fuente y permanecer seguro. Por favor contacta a tu administrador. <a href=\"//securedrop.org/xenial-eol\" rel=\"noreferrer\">Aprender Más</a>"
