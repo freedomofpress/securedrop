@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2019-05-28 18:25+0000\n"
-"Last-Translator: Joan Montané <joan@montane.cat>\n"
+"PO-Revision-Date: 2023-06-14 13:56+0000\n"
+"Last-Translator: John Smith <ecron_89@hotmail.com>\n"
 "Language-Team: Catalan <https://weblate.securedrop.org/projects/securedrop/"
 "desktop/ca/>\n"
 "Language: ca\n"
@@ -16,28 +16,28 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.4\n"
+"X-Generator: Weblate 4.14.1\n"
 
 msgid "Launch Source Interface"
-msgstr ""
+msgstr "Executa la interfície de la font"
 
 msgid "Launch Journalist Interface"
-msgstr ""
+msgstr "Executa la interfície del periodista"
 
 msgid "Check for SecureDrop Updates"
-msgstr ""
+msgstr "Comprova les actualitzacions del SecureDrop"
 
 msgid "SSH into the App Server"
-msgstr ""
+msgstr "SSH al servidor de l'aplicació"
 
 msgid "SSH into the Monitor Server"
-msgstr ""
+msgstr "SSH al servidor del monitor"
 
 msgid "Open KeePassXC Password Vault"
-msgstr ""
+msgstr "Obre la base de dades de contrasenyes del KeePassXC"
 
 msgid "Open File Browser"
-msgstr ""
+msgstr "Obre el navegador de fitxers"
 
 #: desktop-journalist-icon.j2.in:10
 msgid "SecureDrop Journalist Interface"

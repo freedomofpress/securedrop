@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2022-02-12 15:04+0000\n"
-"Last-Translator: Andrey <andrey@mailbox.org>\n"
+"PO-Revision-Date: 2023-06-20 19:56+0000\n"
+"Last-Translator: Adham Kurbanov <uz@zu.uz>\n"
 "Language-Team: Russian <https://weblate.securedrop.org/projects/securedrop/"
 "desktop/ru/>\n"
 "Language: ru\n"
@@ -17,28 +17,28 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.6\n"
+"X-Generator: Weblate 4.14.1\n"
 
 msgid "Launch Source Interface"
-msgstr ""
+msgstr "Запустить интерфейс источников"
 
 msgid "Launch Journalist Interface"
-msgstr ""
+msgstr "Запустить интерфейс журналиста"
 
 msgid "Check for SecureDrop Updates"
-msgstr ""
+msgstr "Проверить наличие обновлений SecureDrop"
 
 msgid "SSH into the App Server"
-msgstr ""
+msgstr "SSH подключение на сервер приложений"
 
 msgid "SSH into the Monitor Server"
-msgstr ""
+msgstr "SSH подключение на сервер мониторинга"
 
 msgid "Open KeePassXC Password Vault"
-msgstr ""
+msgstr "Открыть хранилище паролей KeePassXC"
 
 msgid "Open File Browser"
-msgstr ""
+msgstr "Открыть браузер файлов"
 
 #: desktop-journalist-icon.j2.in:10
 msgid "SecureDrop Journalist Interface"

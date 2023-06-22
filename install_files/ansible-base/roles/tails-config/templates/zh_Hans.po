@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2020-05-05 09:06+0000\n"
-"Last-Translator: ff98sha <ff98sha@163.com>\n"
+"PO-Revision-Date: 2023-06-15 04:56+0000\n"
+"Last-Translator: Kishin Sagume <kishinsagi@riseup.net>\n"
 "Language-Team: Chinese (Simplified) <https://weblate.securedrop.org/projects/"
 "securedrop/desktop/zh_Hans/>\n"
 "Language: zh_Hans\n"
@@ -16,28 +16,28 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 3.10.3\n"
+"X-Generator: Weblate 4.14.1\n"
 
 msgid "Launch Source Interface"
-msgstr ""
+msgstr "启动线人界面"
 
 msgid "Launch Journalist Interface"
-msgstr ""
+msgstr "启动记者界面"
 
 msgid "Check for SecureDrop Updates"
-msgstr ""
+msgstr "检查 SecureDrop 更新"
 
 msgid "SSH into the App Server"
-msgstr ""
+msgstr "应用服务器安装 SSH"
 
 msgid "SSH into the Monitor Server"
-msgstr ""
+msgstr "监视服务器安装 SSH"
 
 msgid "Open KeePassXC Password Vault"
-msgstr ""
+msgstr "打开 KeePassXC 密码库"
 
 msgid "Open File Browser"
-msgstr ""
+msgstr "打开文件浏览器"
 
 #: desktop-journalist-icon.j2.in:10
 msgid "SecureDrop Journalist Interface"
