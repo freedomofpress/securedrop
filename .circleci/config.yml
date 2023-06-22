@@ -94,27 +94,6 @@ jobs:
             DOCKER_BUILD_ARGUMENTS="--cache-from securedrop-test-focal-py3:${fromtag:-latest}" securedrop/bin/dev-shell \
                   bash -c "/opt/venvs/securedrop-app-code/bin/pip3 install --require-hashes -r requirements/python3/develop-requirements.txt && make -C .. lint"
 
-  rust:
-    # Keep version in sync with rust-toolchain.toml
-    docker:
-      - image: rust:1.69.0
-    environment:
-      # TODO: Remove after we're on Rust 1.70
-      CARGO_REGISTRIES_CRATES_IO_PROTOCOL: "sparse"
-    steps:
-      - checkout
-      - run:
-          name: Install dependencies
-          command: |
-            apt-get update && apt-get install make --yes
-            rustup component add rustfmt
-            rustup component add clippy
-      - run:
-          name: Lint and test Rust code
-          command: |
-            make rust-lint
-            make rust-test
-
   app-tests:
     machine:
       image: ubuntu-2004:202010-01
@@ -356,10 +335,6 @@ workflows:
   securedrop_ci:
     jobs:
       - lint:
-          context:
-            - circleci-slack
-          <<: *slack-fail-post-step
-      - rust:
           context:
             - circleci-slack
           <<: *slack-fail-post-step

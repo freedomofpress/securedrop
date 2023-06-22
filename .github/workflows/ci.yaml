@@ -5,6 +5,25 @@ defaults:
     shell: bash
 
 jobs:
+  rust:
+    runs-on: ubuntu-latest
+    # Keep version in sync with rust-toolchain.toml
+    container: rust:1.69.0
+    env:
+      # TODO: Remove after we're on Rust 1.70
+      CARGO_REGISTRIES_CRATES_IO_PROTOCOL: "sparse"
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install dependencies
+        run: |
+          apt-get update && apt-get install make --yes
+          rustup component add rustfmt
+          rustup component add clippy
+      - name: Lint and test Rust code
+        run: |
+          make rust-lint
+          make rust-test
+
   updater-gui-tests:
     runs-on: ubuntu-latest
     container: debian:bullseye
