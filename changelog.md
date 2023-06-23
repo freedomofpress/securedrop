@@ -1,6 +1,9 @@
 # Changelog
 
-## 2.6.0~rc1
+## 2.7.0~rc1
+
+
+## 2.6.0
 
 ### Web applications
 * Don't treat Tor Browser for Android as desktop Tor Browser (#6573)
@@ -12,18 +15,20 @@
 * Add `<title>` blocks for better accessibility (#6313, #6738)
 * Set `Cross-Origin-Resource-Policy: same-origin` (#6768)
 * Automatically and regularly remove pending sources (#6488, #6785)
+* Fixed display bug when duplicate locales are specified (#6853)
 * Dependency changes:
+  * Update cryptography from 39.0.1 to 41.0.1 (#6855)
   * Update mod-wsgi from 4.6.7 to 4.9.4 (#6775)
   * Update pytz from 2017.3 to 2022.2.1 (#6569, #6571)
   * Update pycparser from 2.20 to 2.21 (#6618, #6686)
-  * Update redis from 3.5.3 to 4.5.4 (#6783)
+  * Update redis from 3.5.3 to 4.5.4 (#6783, #6867)
   * Update requests from 2.26.0 to 2.31.0 (#6821)
   * Update wheel from 0.33.6 to 0.38.4 (#6680)
   * Remove passlib (#6631)
   * Remove pyotp (#5613, #6679)
 
 ### Journalist Workstation
-* Add a GNOME shell extension (#6531, #6712)
+* Add a GNOME shell extension (#6531, #6712, 6847)
 
 ### Operations
 * Update SecureDrop release key expiry date to 2024-07-08 (#6803, #6804, #6819)
@@ -36,7 +41,6 @@
 * Reorganize Debian packaging, having debhelper do most of the work and other cleanup (#6544)
 * Reorganize OSSEC packaging to use debhelper and other cleanup (#6754)
 * Use plain container for package building, not molecule (#6706, #6754)
-* 
 
 ### Development
 * Remove "sh" dependency (#6547, #6562, #6580)
