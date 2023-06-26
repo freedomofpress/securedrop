@@ -72,15 +72,15 @@ def test_securedrop_application_test_journalist_key(host):
     Ensure the SecureDrop Application GPG public key file is present.
     This is a test-only pubkey provided in the repository strictly for testing.
     """
-    pubkey_file = host.file(f"{securedrop_test_vars.securedrop_data}/test_journalist_key.pub")
+    pubkey_file = host.file(f"{securedrop_test_vars.securedrop_data}/journalist.pub")
     # sudo is only necessary when testing against app hosts, since the
     # permissions are tighter. Let's elevate privileges so we're sure
     # we can read the correct file attributes and test them.
     with host.sudo():
         assert pubkey_file.is_file
         assert pubkey_file.user == "root"
-        assert pubkey_file.group == "root"
-        assert pubkey_file.mode == 0o644
+        assert pubkey_file.group == "www-data"
+        assert pubkey_file.mode == 0o640
 
     # Let's make sure the corresponding fingerprint is specified
     # in the SecureDrop app configuration.
