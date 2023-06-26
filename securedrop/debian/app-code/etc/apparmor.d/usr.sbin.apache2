@@ -120,6 +120,7 @@
   /var/lib/securedrop/db.sqlite rwk,
   /var/lib/securedrop/db.sqlite-journal rw,
   /var/lib/securedrop/db.sqlite-journal w,
+  /var/lib/securedrop/journalist.pub r,
   /var/lib/securedrop/keys/* rwl,
   /var/lib/securedrop/keys/*.app-staging.* w,
   /var/lib/securedrop/keys/gpg-agent.conf r,
