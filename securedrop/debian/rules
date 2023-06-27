@@ -21,6 +21,8 @@ override_dh_installdeb:
 	echo "" > ${CURDIR}/debian/securedrop-keyring/DEBIAN/conffiles
 
 override_dh_auto_install:
+	# Build redwood wheel
+	python3 /srv/redwood/build-wheel.py --release --redwood /srv/redwood --target /srv/redwood/target
 	# Set up virtualenv and install dependencies
 	/usr/bin/python3 -m venv ./debian/securedrop-app-code/opt/venvs/securedrop-app-code
 	./debian/securedrop-app-code/opt/venvs/securedrop-app-code/bin/pip install $(PIP_ARGS) \
@@ -29,6 +31,8 @@ override_dh_auto_install:
 		pip==21.3
 	./debian/securedrop-app-code/opt/venvs/securedrop-app-code/bin/pip install $(PIP_ARGS) \
 		-r requirements/python3/requirements.txt
+	./debian/securedrop-app-code/opt/venvs/securedrop-app-code/bin/pip install $(PIP_ARGS) \
+		/srv/redwood/redwood-*.whl
 	# Update paths to point to install destination
 	find ./debian/securedrop-app-code/ -type f -exec sed -i "s#$(shell pwd)/debian/securedrop-app-code##" {} \;
 	dh_auto_install $@

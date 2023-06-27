@@ -9,6 +9,7 @@ SECUREDROP_ROOT = Path(
     subprocess.check_output(["git", "rev-parse", "--show-toplevel"]).decode().strip()
 )
 DEB_PATHS = list((SECUREDROP_ROOT / "build/focal").glob("*.deb"))
+SITE_PACKAGES = "/opt/venvs/securedrop-app-code/lib/python3.8/site-packages"
 
 
 @pytest.fixture(scope="module")
@@ -69,6 +70,7 @@ def test_deb_package_contains_expected_conffiles(deb: Path):
         "/var/www/securedrop/.well-known/pki-validation/",
         "/var/www/securedrop/translations/messages.pot",
         "/var/www/securedrop/translations/de_DE/LC_MESSAGES/messages.mo",
+        f"{SITE_PACKAGES}/redwood/redwood.cpython-38-x86_64-linux-gnu.so",
     ],
 )
 def test_app_code_paths(securedrop_app_code_contents: str, path: str):

@@ -4,11 +4,15 @@
 
 export PIP_DISABLE_PIP_VERSION_CHECK=1
 export PIP_PROGRESS_BAR=off
+export CARGO_TERM_COLOR=never
+export CARGO_TERM_PROGRESS_WHEN=never
 
 set -euxo pipefail
 
 # Make a copy of the source tree since we do destructive operations on it
 cp -R /src/securedrop /srv/securedrop
+cp -R /src/redwood /srv/redwood
+cp /src/Cargo.lock /srv/redwood/
 cd /srv/securedrop/
 
 # Control the version of setuptools used in the default construction of virtual environments
