@@ -34,14 +34,6 @@ RUN apt-get -y update && apt-get upgrade -y && apt-get install -y \
         unzip \
         zlib1g-dev
 
-
-# Install dh-virtualenv from Jammy Ubuntu release because there's no focal package
-# https://github.com/spotify/dh-virtualenv/issues/298
-RUN echo "deb http://archive.ubuntu.com/ubuntu/ jammy universe main" > /etc/apt/sources.list.d/ubuntu-jammy.list
-COPY dh-virtualenv.pref /etc/apt/preferences.d/
-
-RUN apt-get update && apt-get install -y dh-virtualenv
-
 ENV RUST_VERSION 1.69.0
 ENV RUSTUP_VERSION 1.24.3
 ENV RUSTUP_INIT_SHA256 3dc5ef50861ee18657f9db2eeb7392f9c2a6c95c90ab41e45ab4ca71476b4338

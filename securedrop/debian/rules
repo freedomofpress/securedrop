@@ -2,9 +2,10 @@
 include /usr/share/dpkg/pkg-info.mk
 
 DEB_DH_INSTALL_ARGS=-X .git
+PIP_ARGS=--verbose --no-deps --no-binary=:all: --no-cache-dir
 
 %:
-	dh $@ --with python-virtualenv --with systemd
+	dh $@ --with systemd --buildsystem=pybuild
 
 override_dh_gencontrol:
 	dh_gencontrol -- $(SUBSTVARS)
@@ -18,6 +19,22 @@ override_dh_installdeb:
 	echo "" > ${CURDIR}/debian/securedrop-app-code/DEBIAN/conffiles
 	echo "" > ${CURDIR}/debian/securedrop-config/DEBIAN/conffiles
 	echo "" > ${CURDIR}/debian/securedrop-keyring/DEBIAN/conffiles
+
+override_dh_auto_install:
+	# Set up virtualenv and install dependencies
+	/usr/bin/python3 -m venv ./debian/securedrop-app-code/opt/venvs/securedrop-app-code
+	./debian/securedrop-app-code/opt/venvs/securedrop-app-code/bin/pip install $(PIP_ARGS) \
+		setuptools-scm==6.0.1
+	./debian/securedrop-app-code/opt/venvs/securedrop-app-code/bin/pip install $(PIP_ARGS) \
+		pip==21.3
+	./debian/securedrop-app-code/opt/venvs/securedrop-app-code/bin/pip install $(PIP_ARGS) \
+		-r requirements/python3/requirements.txt
+	# Update paths to point to install destination
+	find ./debian/securedrop-app-code/ -type f -exec sed -i "s#$(shell pwd)/debian/securedrop-app-code##" {} \;
+	dh_auto_install $@
+
+override_dh_auto_test:
+	# Skip, we don't run tests at package build time
 
 override_dh_install:
 	# Build translations
@@ -36,21 +53,6 @@ override_dh_strip_nondeterminism:
 	find ./debian/ -type f -name 'pip-selfcheck.json' -delete
 	find ./debian/ -type f -name 'RECORD' -delete
 	dh_strip_nondeterminism $@
-
-override_dh_virtualenv:
-	cp requirements/python3/requirements.txt requirements.txt
-	dh_virtualenv \
-		--package=securedrop-app-code \
-		--python=/usr/bin/python3 \
-		--builtin-venv \
-		--preinstall setuptools-scm==6.0.1 \
-		--preinstall pip==21.3 \
-		--extra-pip-arg "--verbose" \
-		--extra-pip-arg "--no-deps" \
-		--extra-pip-arg "--no-binary=:all:" \
-		--extra-pip-arg "--no-cache-dir"
-	# Strip non-reproducible debugging information
-	dh_strip $@ --no-automatic-dbgsym
 
 override_dh_gencontrol:
 	dh_gencontrol -psecuredrop-ossec-agent -- "-v3.6.0+${DEB_VERSION}"
