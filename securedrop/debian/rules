@@ -26,6 +26,8 @@ override_dh_install:
 	find . -type f -name '*requirements.in' -delete
 	find . -type f -name '*.mako' -delete
 	rm upload-screenshots.py
+	# If a custom logo exists in the tree, delete it
+	rm -f static/i/custom_logo.png
 	dh_install
 
 override_dh_strip_nondeterminism:

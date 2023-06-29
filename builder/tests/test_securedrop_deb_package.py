@@ -89,7 +89,7 @@ def test_app_code_paths(securedrop_app_code_contents: str, path: str):
         "/var/www/securedrop/static/.webassets-cache/",
         "/var/www/securedrop/static/gen/",
         "/var/www/securedrop/config.py",
-        "/var/www/static/i/custom_logo.png",
+        "/var/www/securedrop/static/i/custom_logo.png",
         ".j2",
     ],
 )
