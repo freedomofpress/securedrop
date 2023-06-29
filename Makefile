@@ -31,10 +31,6 @@ update-python3-requirements:  ## Update Python 3 requirements with pip-compile.
 	@echo "███ Updating Python 3 requirements files..."
 	@SLIM_BUILD=1 $(DEVSHELL) pip-compile --generate-hashes \
 		--allow-unsafe \
-		--output-file requirements/python3/build-requirements.txt \
-		requirements/python3/build-requirements.in
-	@SLIM_BUILD=1 $(DEVSHELL) pip-compile --generate-hashes \
-		--allow-unsafe \
 		--output-file requirements/python3/develop-requirements.txt \
 		../admin/requirements-ansible.in \
 		../admin/requirements.in \

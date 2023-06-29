@@ -1,0 +1,3 @@
+include redwood/*.pyi
+include redwood/py.typed
+include redwood/*.so

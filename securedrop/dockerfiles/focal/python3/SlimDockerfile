@@ -31,8 +31,6 @@ RUN TMPDIR=`mktemp -d` && cd ${TMPDIR} \
 ENV CARGO_REGISTRIES_CRATES_IO_PROTOCOL sparse
 
 COPY requirements requirements
-RUN python3 -m venv /opt/venvs/securedrop-build && \
-    /opt/venvs/securedrop-build/bin/pip3 install --no-deps --require-hashes -r requirements/python3/build-requirements.txt
 RUN python3 -m venv /opt/venvs/securedrop-app-code && \
     /opt/venvs/securedrop-app-code/bin/pip3 install --no-deps --require-hashes -r requirements/python3/bootstrap-requirements.txt && \
     /opt/venvs/securedrop-app-code/bin/pip3 install --no-deps --require-hashes -r requirements/python3/test-requirements.txt && \
