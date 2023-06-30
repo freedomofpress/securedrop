@@ -1,12 +1,12 @@
 [tool.black]
 line-length = 100
 target-version = ["py38"]
-exclude = "securedrop/config.py"
-extend-exclude = ".venv"
+# Don't use `extend`, we want the default behavior that honors .gitignore rules
 
 [tool.isort]
 line_length = 100
 profile = "black"
+skip_gitignore = true
 
 [tool.mypy]
 ignore_missing_imports = true
