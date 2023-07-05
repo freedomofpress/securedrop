@@ -102,9 +102,11 @@ def do_test(create_app):
         ]
     )
 
-    for l in ("en_US", "fr_FR"):
+    for lang in ("en_US", "fr_FR"):
         pot = Path(test_config.TEMP_DIR) / "messages.pot"
-        subprocess.check_call(["pybabel", "init", "-i", pot, "-d", test_config.TEMP_DIR, "-l", l])
+        subprocess.check_call(
+            ["pybabel", "init", "-i", pot, "-d", test_config.TEMP_DIR, "-l", lang]
+        )
 
     app = create_app(test_config)
     with app.app_context():

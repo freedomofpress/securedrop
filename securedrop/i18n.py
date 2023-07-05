@@ -176,16 +176,16 @@ def map_locale_display_names(
     supported_locales = sorted(list(set(config.SUPPORTED_LOCALES)))
 
     language_locale_counts: DefaultDict[str, int] = collections.defaultdict(int)
-    for l in supported_locales:
-        locale = RequestLocaleInfo(l)
+    for code in supported_locales:
+        locale = RequestLocaleInfo(code)
         language_locale_counts[locale.language] += 1
 
     locale_map = collections.OrderedDict()
-    for l in supported_locales:
-        if Locale.parse(l) not in usable_locales:
+    for code in supported_locales:
+        if Locale.parse(code) not in usable_locales:
             continue
 
-        locale = RequestLocaleInfo(l)
+        locale = RequestLocaleInfo(code)
         if language_locale_counts[locale.language] > 1:
             # Disambiguate translations for this language.
             locale.use_display_name = True
@@ -235,9 +235,9 @@ def get_accepted_languages() -> List[str]:
     Convert a request's list of accepted languages into locale identifiers.
     """
     accept_languages = []
-    for l in request.accept_languages.values():
+    for code in request.accept_languages.values():
         try:
-            parsed = Locale.parse(l, "-")
+            parsed = Locale.parse(code, "-")
             accept_languages.append(str(parsed))
 
             # We only have two Chinese translations, simplified

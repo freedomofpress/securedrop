@@ -92,7 +92,7 @@ def sniff_accessibility_issues(driver: WebDriver, locale: str, test_name: str) -
     """
 
     # 1. Retrieve/compute required data
-    with open(f"/usr/local/lib/node_modules/html_codesniffer/build/HTMLCS.js") as htmlcs:
+    with open("/usr/local/lib/node_modules/html_codesniffer/build/HTMLCS.js") as htmlcs:
         html_codesniffer = htmlcs.read()
 
     errors_dir = _ACCESSIBILITY_DIR / locale / "errors"

@@ -42,7 +42,7 @@ def create_config_for_i18n_test(
     default_locale: str = "en_US",
     translation_dirs: Path = DEFAULT_SECUREDROP_ROOT / "translations",
 ) -> SecureDropConfig:
-    tmp_root_for_test = Path(f"/tmp/sd-tests/test_i18n")
+    tmp_root_for_test = Path("/tmp/sd-tests/test_i18n")
     tmp_root_for_test.mkdir(exist_ok=True, parents=True)
 
     i18n_config = SecureDropConfigFactory.create(
@@ -236,7 +236,7 @@ def verify_i18n(app):
 
 
 def test_i18n():
-    translation_dirs = Path(f"/tmp/sd-tests/test_i18n/translations")
+    translation_dirs = Path("/tmp/sd-tests/test_i18n/translations")
     translation_dirs.mkdir(exist_ok=True, parents=True)
     test_config = create_config_for_i18n_test(
         supported_locales=["ar", "en_US", "fr_FR", "nb_NO", "zh_Hans"],

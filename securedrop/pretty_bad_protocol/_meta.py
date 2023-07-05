@@ -715,7 +715,7 @@ class GPGBase:
             # for gpg. Default to "basic", and warn about the ambiguity.
             verbose = "basic"
 
-        if isinstance(verbose, str) and not (verbose in string_levels):
+        if isinstance(verbose, str) and verbose not in string_levels:
             verbose = "basic"
 
         self.verbose = verbose
