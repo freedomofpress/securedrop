@@ -340,7 +340,7 @@ def make_blueprint(config: SecureDropConfig) -> Blueprint:
             Reply.query.filter(Reply.source_id == logged_in_source.db_record_id)
             .filter(Reply.deleted_by_source == False)
             .all()
-        )  # noqa
+        )
         if len(replies) == 0:
             current_app.logger.error("Found no replies when at least one was " "expected")
             return redirect(url_for(".lookup"))

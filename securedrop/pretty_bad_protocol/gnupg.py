@@ -52,7 +52,7 @@ class GPG(GPGBase):
     #: '--list-sigs' to:
     _batch_limit = 25
 
-    def __init__(  # type: ignore[no-untyped-def] # noqa
+    def __init__(  # type: ignore[no-untyped-def]
         self,
         binary=None,
         homedir=None,
@@ -176,34 +176,34 @@ class GPG(GPGBase):
         self.use_agent = None
 
     @functools.wraps(_trust._create_trustdb)
-    def create_trustdb(self):  # type: ignore[no-untyped-def] # noqa
+    def create_trustdb(self):  # type: ignore[no-untyped-def]
         _trust._create_trustdb(self)
 
     # For backward compatibility with python-gnupg<=1.3.1:
     _create_trustdb = create_trustdb
 
     @functools.wraps(_trust.fix_trustdb)
-    def fix_trustdb(self, trustdb=None):  # type: ignore[no-untyped-def] # noqa
+    def fix_trustdb(self, trustdb=None):  # type: ignore[no-untyped-def]
         _trust.fix_trustdb(self)
 
     # For backward compatibility with python-gnupg<=1.3.1:
     _fix_trustdb = fix_trustdb
 
     @functools.wraps(_trust.import_ownertrust)
-    def import_ownertrust(self, trustdb=None):  # type: ignore[no-untyped-def] # noqa
+    def import_ownertrust(self, trustdb=None):  # type: ignore[no-untyped-def]
         _trust.import_ownertrust(self)
 
     # For backward compatibility with python-gnupg<=1.3.1:
     _import_ownertrust = import_ownertrust
 
     @functools.wraps(_trust.export_ownertrust)
-    def export_ownertrust(self, trustdb=None):  # type: ignore[no-untyped-def] # noqa
+    def export_ownertrust(self, trustdb=None):  # type: ignore[no-untyped-def]
         _trust.export_ownertrust(self)
 
     # For backward compatibility with python-gnupg<=1.3.1:
     _export_ownertrust = export_ownertrust
 
-    def sign(self, data, **kwargs):  # type: ignore[no-untyped-def] # noqa
+    def sign(self, data, **kwargs):  # type: ignore[no-untyped-def]
         """Create a signature for a message string or file.
 
         Note that this method is not for signing other keys. (In GnuPG's
@@ -251,7 +251,7 @@ class GPG(GPGBase):
             result = None
         return result
 
-    def verify(self, data):  # type: ignore[no-untyped-def] # noqa
+    def verify(self, data):  # type: ignore[no-untyped-def]
         """Verify the signature on the contents of the string ``data``.
 
         >>> gpg = GPG(homedir="doctests")
@@ -271,7 +271,7 @@ class GPG(GPGBase):
         f.close()
         return result
 
-    def verify_file(self, file, sig_file=None):  # type: ignore[no-untyped-def] # noqa
+    def verify_file(self, file, sig_file=None):  # type: ignore[no-untyped-def]
         """Verify the signature on the contents of a file or file-like
         object. Can handle embedded signatures as well as detached
         signatures. If using detached signatures, the file containing the
@@ -309,7 +309,7 @@ class GPG(GPGBase):
                     sig_fh.close()
         return result
 
-    def import_keys(self, key_data):  # type: ignore[no-untyped-def] # noqa
+    def import_keys(self, key_data):  # type: ignore[no-untyped-def]
         """
         Import the key_data into our keyring.
 
@@ -355,7 +355,7 @@ class GPG(GPGBase):
         data.close()
         return result
 
-    def recv_keys(self, *keyids, **kwargs):  # type: ignore[no-untyped-def] # noqa
+    def recv_keys(self, *keyids, **kwargs):  # type: ignore[no-untyped-def]
         """Import keys from a keyserver.
 
         >>> gpg = gnupg.GPG(homedir="doctests")
@@ -438,7 +438,7 @@ class GPG(GPGBase):
         log.debug("Exported:{}{!r}".format(os.linesep, result.fingerprints))
         return result.data.decode(self._encoding, self._decode_errors)
 
-    def list_keys(self, secret=False):  # type: ignore[no-untyped-def] # noqa
+    def list_keys(self, secret=False):  # type: ignore[no-untyped-def]
         """List the keys currently in the keyring.
 
         The GnuPG option '--show-photos', according to the GnuPG manual, "does
@@ -480,7 +480,7 @@ class GPG(GPGBase):
         self._parse_keys(result)
         return result
 
-    def list_packets(self, raw_data):  # type: ignore[no-untyped-def] # noqa
+    def list_packets(self, raw_data):  # type: ignore[no-untyped-def]
         """List the packet contents of a file."""
         args = ["--list-packets"]
         result = self._result_map["packets"](self)
@@ -523,7 +523,7 @@ class GPG(GPGBase):
         self._collect_output(p, result, stdin=p.stdin)
         return result
 
-    def list_sigs(self, *keyids):  # type: ignore[no-untyped-def] # noqa
+    def list_sigs(self, *keyids):  # type: ignore[no-untyped-def]
         """Get the signatures for each of the ``keyids``.
 
         >>> import gnupg
@@ -538,7 +538,7 @@ class GPG(GPGBase):
         """
         return self._process_keys(keyids)
 
-    def check_sigs(self, *keyids):  # type: ignore[no-untyped-def] # noqa
+    def check_sigs(self, *keyids):  # type: ignore[no-untyped-def]
         """Validate the signatures for each of the ``keyids``.
 
         :rtype: dict
@@ -547,7 +547,7 @@ class GPG(GPGBase):
         """
         return self._process_keys(keyids, check_sig=True)
 
-    def _process_keys(self, keyids, check_sig=False):  # type: ignore[no-untyped-def] # noqa
+    def _process_keys(self, keyids, check_sig=False):  # type: ignore[no-untyped-def]
 
         if len(keyids) > self._batch_limit:
             raise ValueError(
@@ -568,7 +568,7 @@ class GPG(GPGBase):
         self._parse_keys(result)
         return result
 
-    def _parse_keys(self, result):  # type: ignore[no-untyped-def] # noqa
+    def _parse_keys(self, result):  # type: ignore[no-untyped-def]
         lines = result.data.decode(self._encoding, self._decode_errors).splitlines()
         valid_keywords = "pub uid sec fpr sub sig rev".split()
         for line in lines:
@@ -626,7 +626,7 @@ class GPG(GPGBase):
         self._collect_output(p, result, stdin=p.stdin)
         return result
 
-    def gen_key(self, input):  # type: ignore[no-untyped-def] # noqa
+    def gen_key(self, input):  # type: ignore[no-untyped-def]
         """Generate a GnuPG key through batch file key generation. See
         :meth:`GPG.gen_key_input()` for creating the control input.
 
@@ -973,7 +973,7 @@ generate keys. Please see
 
         return out
 
-    def encrypt(self, data, *recipients, **kwargs):  # type: ignore[no-untyped-def] # noqa
+    def encrypt(self, data, *recipients, **kwargs):  # type: ignore[no-untyped-def]
         """Encrypt the message contained in ``data`` to ``recipients``.
 
         :param str data: The file or bytestream to encrypt.
@@ -1066,7 +1066,7 @@ generate keys. Please see
         stream.close()
         return result
 
-    def decrypt(self, message, **kwargs):  # type: ignore[no-untyped-def] # noqa
+    def decrypt(self, message, **kwargs):  # type: ignore[no-untyped-def]
         """Decrypt the contents of a string or file-like object ``message``.
 
         :type message: file or str or :class:`io.BytesIO`
@@ -1104,11 +1104,11 @@ generate keys. Please see
 class GPGUtilities:
     """Extra tools for working with GnuPG."""
 
-    def __init__(self, gpg):  # type: ignore[no-untyped-def] # noqa
+    def __init__(self, gpg):  # type: ignore[no-untyped-def]
         """Initialise extra utility functions."""
         self._gpg = gpg
 
-    def find_key_by_email(self, email, secret=False):  # type: ignore[no-untyped-def] # noqa
+    def find_key_by_email(self, email, secret=False):  # type: ignore[no-untyped-def]
         """Find user's key based on their email address.
 
         :param str email: The email address to search for.
@@ -1120,7 +1120,7 @@ class GPGUtilities:
                     return key
         raise LookupError("GnuPG public key for email %s not found!" % email)
 
-    def find_key_by_subkey(self, subkey):  # type: ignore[no-untyped-def] # noqa
+    def find_key_by_subkey(self, subkey):  # type: ignore[no-untyped-def]
         """Find a key by a fingerprint of one of its subkeys.
 
         :param str subkey: The fingerprint of the subkey to search for.
@@ -1131,7 +1131,7 @@ class GPGUtilities:
                     return key
         raise LookupError("GnuPG public key for subkey %s not found!" % subkey)
 
-    def send_keys(self, keyserver, *keyids):  # type: ignore[no-untyped-def] # noqa
+    def send_keys(self, keyserver, *keyids):  # type: ignore[no-untyped-def]
         """Send keys to a keyserver."""
         result = self._result_map["list"](self)
         log.debug("send_keys: %r", keyids)
@@ -1143,7 +1143,7 @@ class GPGUtilities:
         data.close()
         return result
 
-    def encrypted_to(self, raw_data):  # type: ignore[no-untyped-def] # noqa
+    def encrypted_to(self, raw_data):  # type: ignore[no-untyped-def]
         """Return the key to which raw_data is encrypted to."""
         # TODO: make this support multiple keys.
         result = self._gpg.list_packets(raw_data)
@@ -1154,15 +1154,15 @@ class GPGUtilities:
         except:  # noqa: E722
             return self.find_key_by_subkey(result.key)
 
-    def is_encrypted_sym(self, raw_data):  # type: ignore[no-untyped-def] # noqa
+    def is_encrypted_sym(self, raw_data):  # type: ignore[no-untyped-def]
         result = self._gpg.list_packets(raw_data)
         return bool(result.need_passphrase_sym)
 
-    def is_encrypted_asym(self, raw_data):  # type: ignore[no-untyped-def] # noqa
+    def is_encrypted_asym(self, raw_data):  # type: ignore[no-untyped-def]
         result = self._gpg.list_packets(raw_data)
         return bool(result.key)
 
-    def is_encrypted(self, raw_data):  # type: ignore[no-untyped-def] # noqa
+    def is_encrypted(self, raw_data):  # type: ignore[no-untyped-def]
         return self.is_encrypted_asym(raw_data) or self.is_encrypted_sym(raw_data)
 
 

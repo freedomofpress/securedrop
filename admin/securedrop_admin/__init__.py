@@ -542,9 +542,7 @@ class SiteConfig:
             if not condition(self._config_in_progress):
                 self._config_in_progress[var] = ""
                 continue
-            self._config_in_progress[var] = self.user_prompt_config_one(
-                desc, self.config.get(var)
-            )  # noqa: E501
+            self._config_in_progress[var] = self.user_prompt_config_one(desc, self.config.get(var))
         return self._config_in_progress
 
     def user_prompt_config_one(self, desc: _DescEntryType, from_config: Optional[Any]) -> Any:
@@ -932,7 +930,7 @@ def check_for_updates(args: argparse.Namespace) -> Tuple[bool, str]:
     # relied on to determine if we're on the latest tag or not.
     current_tag = (
         subprocess.check_output(["git", "describe"], cwd=args.root).decode("utf-8").rstrip("\n")
-    )  # noqa: E501
+    )
 
     # Fetch all branches
     git_fetch_cmd = ["git", "fetch", "--all"]
@@ -945,7 +943,7 @@ def check_for_updates(args: argparse.Namespace) -> Tuple[bool, str]:
         .decode("utf-8")
         .rstrip("\n")
         .split("\n")
-    )  # noqa: E501
+    )
 
     # Do not check out any release candidate tags
     all_prod_tags = [x for x in all_tags if "rc" not in x]

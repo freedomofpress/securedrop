@@ -21,6 +21,8 @@ select = [
     "F",
     # pycodestyle warnings
     "W",
+    # Unused noqa directive
+    "RUF100",
 ]
 ignore = [
     # incompatible with sqlalchemy https://github.com/astral-sh/ruff/issues/4560

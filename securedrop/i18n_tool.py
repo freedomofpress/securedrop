@@ -439,7 +439,7 @@ class I18NTool:
                 desktop_code = info["desktop"]
                 path = join(
                     LOCALE_DIR["desktop"],
-                    f"{desktop_code}.po",  # noqa: E741
+                    f"{desktop_code}.po",
                 )
                 add(path)
             except KeyError:

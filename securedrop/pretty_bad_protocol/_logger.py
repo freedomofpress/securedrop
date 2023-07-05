@@ -26,14 +26,14 @@ from logging import NullHandler
 GNUPG_STATUS_LEVEL = 9
 
 
-def status(self, message, *args, **kwargs):  # type: ignore[no-untyped-def] # noqa
+def status(self, message, *args, **kwargs):  # type: ignore[no-untyped-def]
     """LogRecord for GnuPG internal status messages."""
     if self.isEnabledFor(GNUPG_STATUS_LEVEL):
         self._log(GNUPG_STATUS_LEVEL, message, args, **kwargs)
 
 
 @wraps(logging.Logger)
-def create_logger(level=logging.NOTSET):  # type: ignore[no-untyped-def] # noqa
+def create_logger(level=logging.NOTSET):  # type: ignore[no-untyped-def]
     """Create a logger for python-gnupg at a specific message level.
 
     :type level: :obj:`int` or :obj:`str`

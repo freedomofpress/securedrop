@@ -169,7 +169,7 @@ class SessionInterface(FlaskSessionInterface):
         msg = gettext("You have been logged out due to inactivity.")
         return self._new_session(is_api, initial={"_flashes": [("error", msg)]})
 
-    def save_session(  # type: ignore[override] # noqa
+    def save_session(  # type: ignore[override]
         self, app: Flask, session: ServerSideSession, response: Response
     ) -> None:
         """This is called at the end of each request, just

@@ -1,4 +1,4 @@
-from io import BytesIO  # noqa
+from io import BytesIO
 
 import flask
 import werkzeug

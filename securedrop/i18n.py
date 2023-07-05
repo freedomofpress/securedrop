@@ -16,7 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 import collections
-from typing import List, OrderedDict, Set, DefaultDict
+from typing import DefaultDict, List, OrderedDict, Set
 
 from babel.core import (
     Locale,

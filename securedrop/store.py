@@ -7,6 +7,8 @@ import typing
 import zipfile
 from hashlib import sha256
 from pathlib import Path
+from tempfile import _TemporaryFileWrapper
+from typing import IO, List, Optional, Type, Union
 
 import rm
 from encryption import EncryptionManager
@@ -15,22 +17,15 @@ from rq.job import Job
 from sdconfig import SecureDropConfig
 from secure_tempfile import SecureTemporaryFile
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import Session, sessionmaker
 from werkzeug.utils import secure_filename
 from worker import create_queue
 
 if typing.TYPE_CHECKING:
-    # flake8 can not understand type annotation yet.
-    # That is why all type annotation relative import
-    # statements has to be marked as noqa.
-    # http://flake8.pycqa.org/en/latest/user/error-codes.html?highlight=f401
-    from tempfile import _TemporaryFileWrapper  # type: ignore # noqa: F401
-    from typing import IO, List, Optional, Type, Union  # noqa: F401
+    # Break circular import
+    from models import Reply, Submission
 
-    from models import Reply, Submission  # noqa: F401
-    from sqlalchemy.orm import Session  # noqa: F401
-
-_default_storage: typing.Optional["Storage"] = None
+_default_storage: Optional["Storage"] = None
 
 
 VALIDATE_FILENAME = re.compile(
@@ -313,7 +308,7 @@ class Storage:
         filesystem_id: str,
         count: int,
         journalist_filename: str,
-        filename: typing.Optional[str],
+        filename: Optional[str],
         stream: "IO[bytes]",
     ) -> str:
 
