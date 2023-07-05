@@ -33,7 +33,7 @@ update-python3-requirements:  ## Update Python 3 requirements with pip-compile.
 		--allow-unsafe \
 		--output-file requirements/python3/build-requirements.txt \
 		requirements/python3/build-requirements.in
-	@$(DEVSHELL) pip-compile --generate-hashes \
+	@SLIM_BUILD=1 $(DEVSHELL) pip-compile --generate-hashes \
 		--allow-unsafe \
 		--output-file requirements/python3/develop-requirements.txt \
 		../admin/requirements-ansible.in \
