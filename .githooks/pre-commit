@@ -14,8 +14,8 @@ if [[ -n "$PY_FILES" ]]; then
     echo "$PY_FILES"
     # Run black against changed python files for this commit
     black --check --diff ${PY_FILES//$'\n'/ }
-    # Run flake8 against changed python files for this commit
-    flake8 ${PY_FILES//$'\n'/ } && echo "flake8 passed!"
+    # Run ruff (against all files, it's fast enough)
+    ruff check . --diff && echo "ruff passed!"
 else
     exit 0
 fi

@@ -304,10 +304,6 @@ dparse==0.6.2 \
     --hash=sha256:8097076f1dd26c377f30d4745e6ec18fef42f3bf493933b842ac5bafad8c345f \
     --hash=sha256:d45255bda21f998bc7ddf2afd5e62505ba6134756ba2d42a84c56b0826614dfe
     # via safety
-entrypoints==0.3 \
-    --hash=sha256:589f874b313739ad35be6e0cd7efde2a4e9b6fea91edcc34e58ecbb8dbe56d19 \
-    --hash=sha256:c70dd71abe5a8c85e55e12c19bd91ccfeec11a6e99044204511f9ed547d48451
-    # via flake8
 exceptiongroup==1.0.4 \
     --hash=sha256:542adf9dea4055530d6e1279602fa5cb11dab2395fa650b8674eaec35fc4a828 \
     --hash=sha256:bd14967b79cd9bdb54d97323216f8fdf533e278df937aa2a90089e7d6e06e5ec
@@ -324,10 +320,6 @@ fasteners==0.14.1 \
     --hash=sha256:427c76773fe036ddfa41e57d89086ea03111bbac57c55fc55f3006d027107e18 \
     --hash=sha256:564a115ff9698767df401efca29620cbb1a1c2146b7095ebd304b79cc5807a7c
     # via python-gilt
-flake8==3.7.7 \
-    --hash=sha256:859996073f341f2670741b51ec1e67a01da142831aa1fdc6242dbf88dffbe661 \
-    --hash=sha256:a796a115208f5c03b18f332f7c11729812c8c3ded6c46319c59b53efd3819da8
-    # via -r requirements/python3/develop-requirements.in
 future==0.16.0 \
     --hash=sha256:e39ced1ab767b5936646cedba8bcce582398233d6a627067d4c6a454c90cfedb
     # via cookiecutter
@@ -501,9 +493,7 @@ markupsafe==2.0.1 \
 mccabe==0.6.1 \
     --hash=sha256:ab8a6258860da4b6677da4bd2fe5dc2c659cff31b3ee4f7f5d64e79735b80d42 \
     --hash=sha256:dd8d182285a0fe56bace7f45b5e7d1a6ebcbf524e8f3bd87eb0f125271b8831f
-    # via
-    #   flake8
-    #   pylint
+    # via pylint
 molecule-vagrant==0.3 \
     --hash=sha256:5fcacbb9544e2736ce206a01c72f25cf74cbfe147df1722930d0373d87499907 \
     --hash=sha256:94b9aec5b1c7b499f549539bdd8d73c74afcce0a20776efd82f3f4ebae40ca98
@@ -615,10 +605,6 @@ ptyprocess==0.5.2 \
     --hash=sha256:e64193f0047ad603b71f202332ab5527c5e52aa7c8b609704fc28c0dc20c4365 \
     --hash=sha256:e8c43b5eee76b2083a9badde89fd1bbce6c8942d1045146e100b7b5e014f4f1a
     # via pexpect
-pycodestyle==2.5.0 \
-    --hash=sha256:95a2219d12372f05704562a14ec30bc76b05a5b297b21a5dfe3f6fac3491ae56 \
-    --hash=sha256:e40a936c9a450ad81df37f549d676d127b1b66000a6c500caa2b085bc0ca976c
-    # via flake8
 pycparser==2.21 \
     --hash=sha256:8ee45429555515e1f6b185e78100aea234072576aa43ab53aefcae078162fca9 \
     --hash=sha256:e644fdec12f7872f86c58ff790da456218b10f863970249516d60a5eaca77206
@@ -629,10 +615,6 @@ pyenchant==3.2.1 \
     --hash=sha256:5e206a1d6596904a922496f6c9f7d0b964b243905f401f5f2f40ea4d1f74e2cf \
     --hash=sha256:e8546c28b630f6d9f76642166656e337df2a1849cbef2b8ee198e7f64266f4ee
     # via -r requirements/python3/develop-requirements.in
-pyflakes==2.1.1 \
-    --hash=sha256:17dbeb2e3f4d772725c777fabc446d5634d1038f234e77343108ce445ea69ce0 \
-    --hash=sha256:d976835886f8c5b31d47970ed689944a0262b5f3afa00a5a7b4dc81e5449f8a2
-    # via flake8
 pylint==2.7.4 \
     --hash=sha256:209d712ec870a0182df034ae19f347e725c1e615b2269519ab58a35b3fcbbe7a \
     --hash=sha256:bd38914c7731cdc518634a8d3c5585951302b6e2b6de60fbb3f7a0220e21eeee
@@ -817,6 +799,25 @@ ruamel.yaml==0.17.32 \
     #   ansible-lint
     #   safety
     #   semgrep
+ruff==0.0.277 \
+    --hash=sha256:14a7b2f00f149c5a295f188a643ac25226ff8a4d08f7a62b1d4b0a1dc9f9b85c \
+    --hash=sha256:2d4444c60f2e705c14cd802b55cd2b561d25bf4311702c463a002392d3116b22 \
+    --hash=sha256:2dab13cdedbf3af6d4427c07f47143746b6b95d9e4a254ac369a0edb9280a0d2 \
+    --hash=sha256:323b674c98078be9aaded5b8b51c0d9c424486566fb6ec18439b496ce79e5998 \
+    --hash=sha256:3250b24333ef419b7a232080d9724ccc4d2da1dbbe4ce85c4caa2290d83200f8 \
+    --hash=sha256:3a43fbe026ca1a2a8c45aa0d600a0116bec4dfa6f8bf0c3b871ecda51ef2b5dd \
+    --hash=sha256:3e60605e07482183ba1c1b7237eca827bd6cbd3535fe8a4ede28cbe2a323cb97 \
+    --hash=sha256:468bfb0a7567443cec3d03cf408d6f562b52f30c3c29df19927f1e0e13a40cd7 \
+    --hash=sha256:479864a3ccd8a6a20a37a6e7577bdc2406868ee80b1e65605478ad3b8eb2ba0b \
+    --hash=sha256:6fe81732f788894a00f6ade1fe69e996cc9e485b7c35b0f53fb00284397284b2 \
+    --hash=sha256:734165ea8feb81b0d53e3bf523adc2413fdb76f1264cde99555161dd5a725522 \
+    --hash=sha256:74e4b206cb24f2e98a615f87dbe0bde18105217cbcc8eb785bb05a644855ba50 \
+    --hash=sha256:7baa97c3d7186e5ed4d5d4f6834d759a27e56cf7d5874b98c507335f0ad5aadb \
+    --hash=sha256:88d0f2afb2e0c26ac1120e7061ddda2a566196ec4007bd66d558f13b374b9efc \
+    --hash=sha256:a9879f59f763cc5628aa01c31ad256a0f4dc61a29355c7315b83c2a5aac932b5 \
+    --hash=sha256:f32ec416c24542ca2f9cc8c8b65b84560530d338aaf247a4a78e74b99cd476b4 \
+    --hash=sha256:f612e0a14b3d145d90eb6ead990064e22f6f27281d847237560b4e10bf2251f3
+    # via -r requirements/python3/develop-requirements.in
 safety==2.3.1 \
     --hash=sha256:6e6fcb7d4e8321098cf289f59b65051cafd3467f089c6e57c9f894ae32c23b71 \
     --hash=sha256:8f098d12b607db2756886280e85c28ece8db1bba4f45fc5f981f4663217bd619

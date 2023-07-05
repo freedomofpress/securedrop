@@ -108,11 +108,15 @@ app-lint-full: ## Test pylint compliance, with no checks disabled.
 	@cd securedrop && find . -name '*.py' -or -path './scripts/*' | xargs pylint
 	@echo
 
-.PHONY: flake8
-flake8:  ## Validate PEP8 compliance for Python source files.
-	@echo "███ Running flake8..."
-	@flake8
+.PHONY: check-ruff
+check-ruff:  ## Lint Python source files.
+	@echo "███ Running ruff..."
+	@ruff check . --show-source
 	@echo
+
+.PHONY: ruff
+ruff: ## Update Python source file formatting.
+	@ruff check . --fix
 
 # The --disable=names is required to use the BEM syntax
 # # https://csswizardry.com/2013/01/mindbemding-getting-your-head-round-bem-syntax/
@@ -148,7 +152,7 @@ yamllint:  ## Lint YAML files (does not validate syntax!).
 	@echo
 
 .PHONY: lint
-lint: ansible-config-lint app-lint check-black check-isort flake8 html-lint shellcheck typelint yamllint ## Runs all lint checks
+lint: ansible-config-lint check-ruff app-lint check-black check-isort html-lint shellcheck typelint yamllint ## Runs all lint checks
 
 .PHONY: safety
 safety:  ## Run `safety check` to check python dependencies for vulnerabilities.

@@ -10,7 +10,6 @@ diffoscope
 docker
 # Needed for dig ansible lookup
 dnspython
-flake8
 html-linter
 importlib-resources
 isort
@@ -34,6 +33,7 @@ python-vagrant
 pyyaml>=5.4.1
 requests>=2.31.0
 ruamel.yaml>=0.16.10
+ruff
 safety>2.2.0
 semgrep>=0.98.0
 setuptools>=56.0.0

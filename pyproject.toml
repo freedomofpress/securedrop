@@ -1,3 +1,7 @@
+[project]
+name = "securedrop"
+requires-python = ">=3.8"
+
 [tool.black]
 line-length = 100
 target-version = ["py38"]
@@ -7,6 +11,21 @@ target-version = ["py38"]
 line_length = 100
 profile = "black"
 skip_gitignore = true
+
+[tool.ruff]
+line-length = 100
+select = [
+    # pycodestyle errors
+    "E",
+    # pyflakes
+    "F",
+    # pycodestyle warnings
+    "W",
+]
+ignore = [
+    # incompatible with sqlalchemy https://github.com/astral-sh/ruff/issues/4560
+    "E712",
+]
 
 [tool.mypy]
 ignore_missing_imports = true
