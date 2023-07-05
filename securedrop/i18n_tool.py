@@ -506,7 +506,7 @@ class I18NTool:
     ) -> None:
         """Check if any of the given paths have had changed staged.  If so, commit them."""
         self.require_git_email_name(args.root)
-        authors = set()  # type: Set[str]
+        authors: Set[str] = set()
         cmd = ["git", "--no-pager", "diff", "--name-only", "--cached", *paths]
         diffs = subprocess.check_output(cmd, cwd=args.root, encoding="utf-8")
 

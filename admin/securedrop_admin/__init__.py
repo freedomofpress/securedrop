@@ -266,10 +266,10 @@ class SiteConfig:
 
     def __init__(self, args: argparse.Namespace) -> None:
         self.args = args
-        self.config = {}  # type: Dict
+        self.config: dict = {}
         # Hold runtime configuration before save, to support
         # referencing other responses during validation
-        self._config_in_progress = {}  # type: Dict
+        self._config_in_progress: dict = {}
 
         supported_locales = I18N_DEFAULT_LOCALES.copy()
         i18n_conf_path = os.path.join(args.root, I18N_CONF)
@@ -279,7 +279,7 @@ class SiteConfig:
             supported_locales.update(set(i18n_conf["supported_locales"].keys()))
         locale_validator = SiteConfig.ValidateLocales(self.args.app_path, supported_locales)
 
-        self.desc = [
+        self.desc: List[_DescEntryType] = [
             (
                 "ssh_users",
                 "sd",
@@ -516,7 +516,7 @@ class SiteConfig:
                 str.split,
                 lambda config: True,
             ),
-        ]  # type: List[_DescEntryType]
+        ]
 
     def load_and_update_config(self, validate: bool = True, prompt: bool = True) -> bool:
         if self.exists():

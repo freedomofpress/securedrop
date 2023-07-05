@@ -513,7 +513,7 @@ def col_download_unread(cols_selected: List[str]) -> werkzeug.Response:
 
 def col_download_all(cols_selected: List[str]) -> werkzeug.Response:
     """Download all submissions from all selected sources."""
-    submissions = []  # type: List[Union[Source, Submission]]
+    submissions: List[Union[Source, Submission]] = []
     for filesystem_id in cols_selected:
         id = (
             Source.query.filter(Source.filesystem_id == filesystem_id)

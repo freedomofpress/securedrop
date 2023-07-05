@@ -35,8 +35,8 @@ class UpgradeTester:
     """
 
     source_count = 10
-    original_sources = {}  # type: Dict[str, Any]
-    source_submissions = {}  # type: Dict[str, Any]
+    original_sources: Dict[str, Any] = {}
+    source_submissions: Dict[str, Any] = {}
 
     def __init__(self, config):
         self.config = config
@@ -112,8 +112,8 @@ class DowngradeTester:
     """
 
     source_count = 10
-    original_sources = {}  # type: Dict[str, Any]
-    source_submissions = {}  # type: Dict[str, Any]
+    original_sources: Dict[str, Any] = {}
+    source_submissions: Dict[str, Any] = {}
 
     def __init__(self, config):
         self.config = config

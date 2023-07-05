@@ -74,7 +74,7 @@ def securedrop_import_testinfra_vars(hostname, with_header=False):
 
 
 class TestVars(dict):
-    managed_attrs = {}  # type: Dict[str, Any]
+    managed_attrs: Dict[str, Any] = {}
 
     def __init__(self, initial: Dict[str, Any]) -> None:
         self.securedrop_target_distribution = os.environ.get("SECUREDROP_TARGET_DISTRIBUTION")

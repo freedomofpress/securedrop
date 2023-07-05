@@ -99,7 +99,7 @@ class Source(db.Model):
     def collection(self) -> "List[Union[Submission, Reply]]":
         """Return the list of submissions and replies for this source, sorted
         in ascending order by the filename/interaction count."""
-        collection = []  # type: List[Union[Submission, Reply]]
+        collection: List[Union[Submission, Reply]] = []
         collection.extend(self.submissions)
         collection.extend(self.replies)
         collection.sort(key=lambda x: int(x.filename.split("-")[0]))
@@ -701,12 +701,12 @@ class Journalist(db.Model):
         """Returns a JSON representation of the journalist user. If all_info is
         False, potentially sensitive or extraneous fields are excluded. Note
         that both representations do NOT include credentials."""
-        json_user = {
+        json_user: Dict[str, Any] = {
             "username": self.username,
             "uuid": self.uuid,
             "first_name": self.first_name,
             "last_name": self.last_name,
-        }  # type: Dict[str, Any]
+        }
 
         if all_info is True:
             json_user["is_admin"] = self.is_admin

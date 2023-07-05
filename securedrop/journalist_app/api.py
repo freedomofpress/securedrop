@@ -324,7 +324,7 @@ def make_blueprint() -> Blueprint:
 
             # gather everything to be marked seen. if any don't exist,
             # reject the request.
-            targets = set()  # type: Set[Union[Submission, Reply]]
+            targets: Set[Union[Submission, Reply]] = set()
             for file_uuid in request.json.get("files", []):
                 f = Submission.query.filter(Submission.uuid == file_uuid).one_or_none()
                 if f is None or not f.is_file:

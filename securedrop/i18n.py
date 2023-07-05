@@ -16,7 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 import collections
-from typing import Dict, List, OrderedDict, Set
+from typing import List, OrderedDict, Set, DefaultDict
 
 from babel.core import (
     Locale,
@@ -175,7 +175,7 @@ def map_locale_display_names(
     # Deduplicate before sorting.
     supported_locales = sorted(list(set(config.SUPPORTED_LOCALES)))
 
-    language_locale_counts = collections.defaultdict(int)  # type: Dict[str, int]
+    language_locale_counts: DefaultDict[str, int] = collections.defaultdict(int)
     for l in supported_locales:
         locale = RequestLocaleInfo(l)
         language_locale_counts[locale.language] += 1
