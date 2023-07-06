@@ -19,6 +19,8 @@ select = [
     "E",
     # pyflakes
     "F",
+    # flake8-gettext
+    "INT",
     # pycodestyle warnings
     "W",
     # Unused noqa directive

@@ -1722,7 +1722,7 @@ def test_admin_add_user_yubikey_blank_secret(config, journalist_app, test_admin,
         )
 
         assert page_language(resp.data) == language_tag(locale)
-        msgids = ['The "otp_secret" field is required when "is_hotp" is set.']
+        msgids = ["The &#34;otp_secret&#34; field is required when &#34;is_hotp&#34; is set."]
         with xfail_untranslated_messages(config, locale, msgids):
             # Should redirect to the token verification page
             assert gettext(msgids[0]) in resp.data.decode("utf-8")

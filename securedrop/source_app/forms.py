@@ -1,6 +1,7 @@
 import wtforms
 from flask import abort
 from flask_babel import lazy_gettext as gettext
+from flask_babel import ngettext
 from flask_wtf import FlaskForm
 from models import InstanceConfig, Submission
 from passphrases import PassphraseGenerator
@@ -17,12 +18,11 @@ class LoginForm(FlaskForm):
             Length(
                 1,
                 PassphraseGenerator.MAX_PASSPHRASE_LENGTH,
-                message=gettext(
-                    "Field must be between 1 and "
-                    "{max_codename_len} characters long.".format(
-                        max_codename_len=PassphraseGenerator.MAX_PASSPHRASE_LENGTH
-                    )
-                ),
+                message=ngettext(
+                    "Field must be between 1 and {max_codename_len} character long.",
+                    "Field must be between 1 and {max_codename_len} characters long.",
+                    PassphraseGenerator.MAX_PASSPHRASE_LENGTH,
+                ).format(max_codename_len=PassphraseGenerator.MAX_PASSPHRASE_LENGTH),
             ),
             # Make sure to allow dashes since some words in the wordlist have them
             Regexp(r"[\sA-Za-z0-9-]+$", message=gettext("Invalid input.")),
