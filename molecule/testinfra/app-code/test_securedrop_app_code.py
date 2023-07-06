@@ -52,7 +52,7 @@ def test_unwanted_packages_absent(host, package):
     assert not host.package(package).is_installed
 
 
-@pytest.mark.skip_in_prod
+@pytest.mark.skip_in_prod()
 def test_securedrop_application_test_locale(host):
     """
     Ensure both SecureDrop DEFAULT_LOCALE and SUPPORTED_LOCALES are present.
@@ -66,7 +66,7 @@ def test_securedrop_application_test_locale(host):
         assert "\nSUPPORTED_LOCALES = ['el', 'ar', 'en_US']\n" in securedrop_config.content_string
 
 
-@pytest.mark.skip_in_prod
+@pytest.mark.skip_in_prod()
 def test_securedrop_application_test_journalist_key(host):
     """
     Ensure the SecureDrop Application GPG public key file is present.

@@ -196,7 +196,7 @@ class TestSecureDropAdmin:
                 assert tag == "0.6.1"
 
     @pytest.mark.parametrize(
-        "git_output, expected_rv",
+        ("git_output", "expected_rv"),
         [
             (b"* develop\n", "develop"),
             (b" develop\n" b"* release/1.7.0\n", "release/1.7.0"),
@@ -476,19 +476,20 @@ class TestSecureDropAdmin:
         with mock.patch("securedrop_admin.install_securedrop", return_value=True):
             with pytest.raises(SystemExit) as e:
                 securedrop_admin.main(["--root", str(tmpdir), "install"])
-                assert e.value.code == securedrop_admin.EXIT_SUCCESS
+            assert e.value.code == securedrop_admin.EXIT_SUCCESS
 
         with mock.patch(
             "securedrop_admin.install_securedrop",
             side_effect=subprocess.CalledProcessError(1, "TestError"),
-        ), pytest.raises(SystemExit) as e:
-            securedrop_admin.main(["--root", str(tmpdir), "install"])
+        ):
+            with pytest.raises(SystemExit) as e:
+                securedrop_admin.main(["--root", str(tmpdir), "install"])
             assert e.value.code == securedrop_admin.EXIT_SUBPROCESS_ERROR
 
         with mock.patch("securedrop_admin.install_securedrop", side_effect=KeyboardInterrupt):
             with pytest.raises(SystemExit) as e:
                 securedrop_admin.main(["--root", str(tmpdir), "install"])
-                assert e.value.code == securedrop_admin.EXIT_INTERRUPT
+            assert e.value.code == securedrop_admin.EXIT_INTERRUPT
 
 
 class TestSiteConfig:

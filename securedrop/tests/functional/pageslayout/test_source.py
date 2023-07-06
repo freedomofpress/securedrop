@@ -21,7 +21,7 @@ from tests.functional.pageslayout.utils import list_locales, save_static_data
 
 
 @pytest.mark.parametrize("locale", list_locales())
-@pytest.mark.pagelayout
+@pytest.mark.pagelayout()
 class TestSourceLayout:
     def test(self, locale, sd_servers_with_clean_state, tor_browser_web_driver):
         # Given a source user accessing the app from their browser

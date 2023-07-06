@@ -65,13 +65,13 @@ def test_fit_codenames_into_cookie(config):
 
 
 @pytest.mark.parametrize(
-    "message,expected",
-    (
+    ("message", "expected"),
+    [
         ("Foo", False),
         ("codename", True),
         (" codename ", True),
         ("foocodenamebar", False),
-    ),
+    ],
 )
 def test_codename_detected(message, expected):
     assert codename_detected(message, "codename") is expected

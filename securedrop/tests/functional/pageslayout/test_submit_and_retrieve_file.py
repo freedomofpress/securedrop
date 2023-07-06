@@ -7,7 +7,7 @@ from tests.functional.pageslayout.utils import list_locales, save_static_data
 
 
 @pytest.mark.parametrize("locale", list_locales())
-@pytest.mark.pagelayout
+@pytest.mark.pagelayout()
 class TestSubmitAndRetrieveFile:
     def test_submit_and_retrieve_happy_path(
         self, locale, sd_servers_with_clean_state, tor_browser_web_driver, firefox_web_driver

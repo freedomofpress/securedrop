@@ -72,7 +72,6 @@ class DowngradeTester:
         After downgrade, using `deleted_at` in a query should raise an exception
         """
         with self.app.app_context(), pytest.raises(sqlalchemy.exc.OperationalError):
-            sources = db.engine.execute(
+            db.engine.execute(
                 sqlalchemy.text("SELECT * FROM sources WHERE deleted_at IS NOT NULL")
             ).fetchall()
-            assert len(sources) == 0

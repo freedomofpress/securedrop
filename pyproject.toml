@@ -25,6 +25,8 @@ select = [
     "PIE",
     # pylint
     "PL",
+    # flake8-pytest-style
+    "PT",
     # flake8-pyi
     "PYI",
     # flake8-return
@@ -51,6 +53,10 @@ ignore = [
     "PLW0603",
     # loop assignment target being overwritten, not a big deal
     "PLW2901",
+    # too broad exception type
+    "PT011",
+    # usefixtures() isn't as user-friendly
+    "PT019",
     # doesn't understand flask.abort()
     "RET503",
     # superflous-else- rules, find they hurt readability

@@ -374,8 +374,8 @@ class TestJournalist:
         journ_app_nav.nav_helper.wait_for(one_source_no_files)
 
 
-@pytest.fixture(scope="function")
-def _sd_servers_with_missing_file(
+@pytest.fixture()
+def sd_servers_with_missing_file(
     setup_journalist_key_and_gpg_folder: Tuple[str, Path],
     setup_rqworker: Tuple[str, Path],
 ) -> Generator[SdServersFixtureResult, None, None]:
@@ -406,17 +406,17 @@ class TestJournalistMissingFile:
     """Test error handling when a message file has been deleted from disk but remains in the
     database. Ref #4787."""
 
-    def test_download_source_unread(self, _sd_servers_with_missing_file, firefox_web_driver):
+    def test_download_source_unread(self, sd_servers_with_missing_file, firefox_web_driver):
         # Given an SD server with a submission whose file was deleted from disk
         # And a journalist logged into the journalist interface
         journ_app_nav = JournalistAppNavigator(
-            journalist_app_base_url=_sd_servers_with_missing_file.journalist_app_base_url,
+            journalist_app_base_url=sd_servers_with_missing_file.journalist_app_base_url,
             web_driver=firefox_web_driver,
         )
         journ_app_nav.journalist_logs_in(
-            username=_sd_servers_with_missing_file.journalist_username,
-            password=_sd_servers_with_missing_file.journalist_password,
-            otp_secret=_sd_servers_with_missing_file.journalist_otp_secret,
+            username=sd_servers_with_missing_file.journalist_username,
+            password=sd_servers_with_missing_file.journalist_password,
+            otp_secret=sd_servers_with_missing_file.journalist_otp_secret,
         )
 
         # When the journalist clicks on the source's "n unread" button
@@ -441,19 +441,17 @@ class TestJournalistMissingFile:
 
         assert notification.text in error_msg
 
-    def test_select_source_and_download_all(
-        self, _sd_servers_with_missing_file, firefox_web_driver
-    ):
+    def test_select_source_and_download_all(self, sd_servers_with_missing_file, firefox_web_driver):
         # Given an SD server with a submission whose file was deleted from disk
         # And a journalist logged into the journalist interface
         journ_app_nav = JournalistAppNavigator(
-            journalist_app_base_url=_sd_servers_with_missing_file.journalist_app_base_url,
+            journalist_app_base_url=sd_servers_with_missing_file.journalist_app_base_url,
             web_driver=firefox_web_driver,
         )
         journ_app_nav.journalist_logs_in(
-            username=_sd_servers_with_missing_file.journalist_username,
-            password=_sd_servers_with_missing_file.journalist_password,
-            otp_secret=_sd_servers_with_missing_file.journalist_otp_secret,
+            username=sd_servers_with_missing_file.journalist_username,
+            password=sd_servers_with_missing_file.journalist_password,
+            otp_secret=sd_servers_with_missing_file.journalist_otp_secret,
         )
 
         # When the journalist selects the source and then clicks the "Download" button
@@ -467,18 +465,18 @@ class TestJournalistMissingFile:
         journ_app_nav.is_on_journalist_homepage()
 
     def test_select_source_and_download_unread(
-        self, _sd_servers_with_missing_file, firefox_web_driver
+        self, sd_servers_with_missing_file, firefox_web_driver
     ):
         # Given an SD server with a submission whose file was deleted from disk
         # And a journalist logged into the journalist interface
         journ_app_nav = JournalistAppNavigator(
-            journalist_app_base_url=_sd_servers_with_missing_file.journalist_app_base_url,
+            journalist_app_base_url=sd_servers_with_missing_file.journalist_app_base_url,
             web_driver=firefox_web_driver,
         )
         journ_app_nav.journalist_logs_in(
-            username=_sd_servers_with_missing_file.journalist_username,
-            password=_sd_servers_with_missing_file.journalist_password,
-            otp_secret=_sd_servers_with_missing_file.journalist_otp_secret,
+            username=sd_servers_with_missing_file.journalist_username,
+            password=sd_servers_with_missing_file.journalist_password,
+            otp_secret=sd_servers_with_missing_file.journalist_otp_secret,
         )
 
         # When the journalist selects the source then clicks the "Download Unread" button
@@ -491,17 +489,17 @@ class TestJournalistMissingFile:
         self._journalist_sees_missing_file_error_message(journ_app_nav)
         journ_app_nav.is_on_journalist_homepage()
 
-    def test_download_message(self, _sd_servers_with_missing_file, firefox_web_driver):
+    def test_download_message(self, sd_servers_with_missing_file, firefox_web_driver):
         # Given an SD server with a submission whose file was deleted from disk
         # And a journalist logged into the journalist interface
         journ_app_nav = JournalistAppNavigator(
-            journalist_app_base_url=_sd_servers_with_missing_file.journalist_app_base_url,
+            journalist_app_base_url=sd_servers_with_missing_file.journalist_app_base_url,
             web_driver=firefox_web_driver,
         )
         journ_app_nav.journalist_logs_in(
-            username=_sd_servers_with_missing_file.journalist_username,
-            password=_sd_servers_with_missing_file.journalist_password,
-            otp_secret=_sd_servers_with_missing_file.journalist_otp_secret,
+            username=sd_servers_with_missing_file.journalist_username,
+            password=sd_servers_with_missing_file.journalist_password,
+            otp_secret=sd_servers_with_missing_file.journalist_otp_secret,
         )
 
         # When the journalist clicks on the individual message from the source page
@@ -528,18 +526,18 @@ class TestJournalistMissingFile:
         )
 
     def test_select_message_and_download_selected(
-        self, _sd_servers_with_missing_file, firefox_web_driver
+        self, sd_servers_with_missing_file, firefox_web_driver
     ):
         # Given an SD server with a submission whose file was deleted from disk
         # And a journalist logged into the journalist interface
         journ_app_nav = JournalistAppNavigator(
-            journalist_app_base_url=_sd_servers_with_missing_file.journalist_app_base_url,
+            journalist_app_base_url=sd_servers_with_missing_file.journalist_app_base_url,
             web_driver=firefox_web_driver,
         )
         journ_app_nav.journalist_logs_in(
-            username=_sd_servers_with_missing_file.journalist_username,
-            password=_sd_servers_with_missing_file.journalist_password,
-            otp_secret=_sd_servers_with_missing_file.journalist_otp_secret,
+            username=sd_servers_with_missing_file.journalist_username,
+            password=sd_servers_with_missing_file.journalist_password,
+            otp_secret=sd_servers_with_missing_file.journalist_otp_secret,
         )
         # When the journalist selects the individual message from the source page
         # and clicks "Download Selected"

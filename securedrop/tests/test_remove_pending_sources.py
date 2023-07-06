@@ -7,7 +7,7 @@ from passphrases import PassphraseGenerator
 from source_user import create_source_user
 
 
-@pytest.mark.parametrize("n,m", [(10, 5), (7, 0)])
+@pytest.mark.parametrize(("n", "m"), [(10, 5), (7, 0)])
 def test_remove_pending_sources_none_pending(n, m, source_app, config, app_storage):
     """remove_pending_sources() is a no-op on active sources."""
 
@@ -45,7 +45,7 @@ def test_remove_pending_sources_none_pending(n, m, source_app, config, app_stora
         assert db.session.query(Source).count() == n
 
 
-@pytest.mark.parametrize("n,m", [(10, 5), (7, 0)])
+@pytest.mark.parametrize(("n", "m"), [(10, 5), (7, 0)])
 def test_remove_pending_sources_all_pending(n, m, source_app, config, app_storage):
     """remove_pending_sources() removes all but the most-recent m of n pending sources."""
     # Override the configuration to point at the per-test database.

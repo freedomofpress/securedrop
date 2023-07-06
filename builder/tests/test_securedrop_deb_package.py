@@ -65,11 +65,11 @@ def test_deb_package_contains_expected_conffiles(deb: Path):
 
 @pytest.mark.parametrize(
     "path",
-    (
+    [
         "/var/www/securedrop/.well-known/pki-validation/",
         "/var/www/securedrop/translations/messages.pot",
         "/var/www/securedrop/translations/de_DE/LC_MESSAGES/messages.mo",
-    ),
+    ],
 )
 def test_app_code_paths(securedrop_app_code_contents: str, path: str):
     """
@@ -80,18 +80,18 @@ def test_app_code_paths(securedrop_app_code_contents: str, path: str):
             assert True
             return
 
-    assert False, "not found"
+    pytest.fail("not found")
 
 
 @pytest.mark.parametrize(
     "path",
-    (
+    [
         "/var/www/securedrop/static/.webassets-cache/",
         "/var/www/securedrop/static/gen/",
         "/var/www/securedrop/config.py",
         "/var/www/static/i/custom_logo.png",
         ".j2",
-    ),
+    ],
 )
 def test_app_code_paths_missing(securedrop_app_code_contents: str, path: str):
     """
@@ -99,4 +99,4 @@ def test_app_code_paths_missing(securedrop_app_code_contents: str, path: str):
     """
     for line in securedrop_app_code_contents.splitlines():
         if line.endswith(path):
-            assert False, line
+            pytest.fail(f"found {line}")

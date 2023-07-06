@@ -20,7 +20,7 @@ from store import Storage, async_add_checksum_for_file, queued_add_checksum_for_
 from tests import utils
 
 
-@pytest.fixture(scope="function")
+@pytest.fixture()
 def test_storage() -> Generator[Storage, None, None]:
     # Setup the filesystem for the storage object
     with TemporaryDirectory() as data_dir_name:
@@ -115,28 +115,28 @@ def test_verify_path_not_absolute(test_storage):
 
 
 def test_verify_in_store_dir(test_storage):
+    path = test_storage.storage_path + "_backup"
     with pytest.raises(store.PathException) as e:
-        path = test_storage.storage_path + "_backup"
         test_storage.verify(path)
-        assert e.message == f"Path not valid in store: {path}"
+    assert e.message == f"Path not valid in store: {path}"
 
 
 def test_verify_store_path_not_absolute(test_storage):
     with pytest.raises(store.PathException) as e:
         test_storage.verify("..")
-        assert e.message == "Path not valid in store: .."
+    assert e.message == "Path not valid in store: .."
 
 
 def test_verify_rejects_symlinks(test_storage):
     """
     Test that verify rejects paths involving links outside the store.
     """
+    link = os.path.join(test_storage.storage_path, "foo")
     try:
-        link = os.path.join(test_storage.storage_path, "foo")
         os.symlink("/foo", link)
         with pytest.raises(store.PathException) as e:
             test_storage.verify(link)
-            assert e.message == f"Path not valid in store: {link}"
+        assert e.message == f"Path not valid in store: {link}"
     finally:
         os.unlink(link)
 
@@ -191,7 +191,7 @@ def test_verify_invalid_filename_in_sourcedir_raises_exception(test_storage):
 
     with pytest.raises(store.PathException) as e:
         test_storage.verify(file_path)
-        assert e.message == f"Path not valid in store: {file_path}"
+    assert e.message == f"Path not valid in store: {file_path}"
 
 
 def test_get_zip(journalist_app, test_source, app_storage, config):
@@ -278,9 +278,9 @@ def _wait_for_redis_worker(job: Job, timeout: int = 60) -> None:
         if job.result == redis_success_return_value:
             return
         elif job.result not in (None, redis_success_return_value):
-            assert False, "Redis worker failed!"
+            pytest.fail("Redis worker failed!")
         time.sleep(0.1)
-    assert False, "Redis worker timed out!"
+    pytest.fail("Redis worker timed out!")
 
 
 @pytest.mark.parametrize("db_model", [Submission, Reply])

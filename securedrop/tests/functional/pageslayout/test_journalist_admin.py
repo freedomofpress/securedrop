@@ -28,7 +28,7 @@ from tests.functional.pageslayout.utils import list_locales, save_static_data
 
 
 @pytest.mark.parametrize("locale", list_locales())
-@pytest.mark.pagelayout
+@pytest.mark.pagelayout()
 class TestAdminLayoutAddAndEditUser:
     def test_admin_adds_user_hotp_and_edits_hotp(
         self, locale, sd_servers_with_clean_state, firefox_web_driver
@@ -219,7 +219,7 @@ class TestAdminLayoutAddAndEditUser:
 
 
 @pytest.mark.parametrize("locale", list_locales())
-@pytest.mark.pagelayout
+@pytest.mark.pagelayout()
 class TestAdminLayoutEditConfig:
     def test_admin_changes_logo(self, locale, sd_servers_with_clean_state, firefox_web_driver):
         # Given an SD server

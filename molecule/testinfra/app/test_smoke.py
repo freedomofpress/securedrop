@@ -9,12 +9,12 @@ testinfra_hosts = [sdvars.app_hostname]
 
 
 @pytest.mark.parametrize(
-    "name,url,curl_flags",
-    (
+    ("name", "url", "curl_flags"),
+    [
         # We pass -L to follow the redirect from / to /login
         ("journalist", "http://localhost:8080/", "L"),
         ("source", "http://localhost:80/", ""),
-    ),
+    ],
 )
 def test_interface_up(host, name, url, curl_flags):
     """

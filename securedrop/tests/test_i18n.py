@@ -305,7 +305,7 @@ def test_parse_locale_set():
     assert parse_locale_set([FALLBACK_LOCALE]) == {Locale.parse(FALLBACK_LOCALE)}
 
 
-@pytest.mark.xfail  # #6873
+@pytest.mark.xfail()  # #6873
 def test_no_usable_fallback_locale():
     """
     The apps fail if neither the default nor the fallback locale is usable.
@@ -321,7 +321,7 @@ def test_no_usable_fallback_locale():
         source_app.create_app(test_config)
 
 
-@pytest.mark.xfail  # #6873
+@pytest.mark.xfail()  # #6873
 def test_unusable_default_but_usable_fallback_locale(caplog):
     """
     The apps start even if the default locale is unusable, as along as the fallback locale is

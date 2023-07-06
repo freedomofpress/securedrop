@@ -59,7 +59,6 @@ class DowngradeTester:
         After downgrade, using `organization_name` in a query should raise an exception
         """
         with self.app.app_context(), pytest.raises(sqlalchemy.exc.OperationalError):
-            configs = db.engine.execute(
+            db.engine.execute(
                 sqlalchemy.text("SELECT * FROM instance_config WHERE organization_name IS NOT NULL")
             ).fetchall()
-            assert len(configs) == 0

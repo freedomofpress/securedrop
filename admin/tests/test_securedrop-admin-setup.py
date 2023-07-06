@@ -45,7 +45,7 @@ class TestSecureDropAdmin:
             assert output_line.strip() == b"something"
 
         lines = []
-        with pytest.raises(subprocess.CalledProcessError):
+        with pytest.raises(subprocess.CalledProcessError):  # noqa: PT012
             for output_line in bootstrap.run_command(
                 ["sh", "-c", "echo in stdout ; echo in stderr >&2 ; false"]
             ):
@@ -122,8 +122,8 @@ class TestSecureDropAdmin:
             "subprocess.check_output", side_effect=self.side_effect_venv_bootstrap(venv)
         ):
             bootstrap.envsetup(args, venv)
-            assert not os.path.exists(venv)
-            assert "Cleaning up virtualenv" in caplog.text
+        assert not os.path.exists(venv)
+        assert "Cleaning up virtualenv" in caplog.text
 
     def side_effect_venv_bootstrap(self, venv_path):
         # emulate the venv being created, and raise exception to simulate

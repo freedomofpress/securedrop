@@ -51,7 +51,7 @@ class TestHOTP:
         hotp.verify(self._VALID_TOKEN, counter)
 
     @pytest.mark.parametrize(
-        "token, counter",
+        ("token", "counter"),
         [
             pytest.param(_VALID_TOKEN, _VALID_TOKEN_COUNTER + 10),
             pytest.param(_VALID_TOKEN, 12345),
@@ -102,7 +102,7 @@ class TestTOTP:
         assert token == self._VALID_TOKEN
 
     @pytest.mark.parametrize(
-        "token, verification_timestamp",
+        ("token", "verification_timestamp"),
         [
             # Ensure the token is valid at the exact time
             pytest.param(_VALID_TOKEN, _VALID_TOKEN_GENERATED_AT),
@@ -122,7 +122,7 @@ class TestTOTP:
         totp.verify(token, verification_time)
 
     @pytest.mark.parametrize(
-        "token, verification_timestamp",
+        ("token", "verification_timestamp"),
         [
             # Ensure the token is invalid at a totally wrong time
             pytest.param(_VALID_TOKEN, 123456),
