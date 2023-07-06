@@ -64,7 +64,7 @@ def _check_keyserver(location):  # type: ignore[no-untyped-def]
             url = location.replace(proto, "")
             host, slash, extra = url.partition("/")
             if extra:
-                log.warn("URI text for {}: '{}'".format(host, extra))
+                log.warn(f"URI text for {host}: '{extra}'")
             log.debug("Got host string for keyserver setting: '%s'" % host)
 
             host = _fix_unsafe(host)
@@ -311,7 +311,7 @@ def _sanitise(*args):  # type: ignore[no-untyped-def]
                         if _is_hex(v):
                             checked += v + " "
                         else:
-                            log.debug("'{} {}' not hex.".format(flag, v))
+                            log.debug(f"'{flag} {v}' not hex.")
                             if (flag in hex_or_none_options) and (v is None):
                                 log.debug("Allowing '%s' for all keys" % flag)
                         continue
@@ -334,7 +334,7 @@ def _sanitise(*args):  # type: ignore[no-untyped-def]
                         assert v is not None
                         assert not v.isspace()
                     except:  # noqa: E722
-                        log.debug("Dropping {} {}".format(flag, v))
+                        log.debug(f"Dropping {flag} {v}")
                         continue
 
                     if flag in [
@@ -348,7 +348,7 @@ def _sanitise(*args):  # type: ignore[no-untyped-def]
                         if (_util._is_file(val)) or ((flag == "--verify") and (val == "-")):
                             checked += val + " "
                         else:
-                            log.debug("{} not file: {}".format(flag, val))
+                            log.debug(f"{flag} not file: {val}")
 
                     elif flag in [
                         "--cipher-algo",
@@ -437,7 +437,7 @@ def _sanitise(*args):  # type: ignore[no-untyped-def]
                 log.debug("Appending option: %s" % safe)
                 checked_groups.append(safe)
             else:
-                log.warn("Dropped option: '{} {}'".format(a, v))
+                log.warn(f"Dropped option: '{a} {v}'")
         return checked_groups
 
     if args is not None:
@@ -457,7 +457,7 @@ def _sanitise(*args):  # type: ignore[no-untyped-def]
                 arg.reverse()
                 option_groups.update(_make_groups(arg))
             else:
-                log.warn("Got non-str/list arg: '%s', type '%s'" % (arg, type(arg)))
+                log.warn(f"Got non-str/list arg: '{arg}', type '{type(arg)}'")
         checked = _check_groups(option_groups)
         return " ".join(x for x in checked)
     else:
@@ -892,7 +892,7 @@ class KeyExpirationInterface:
 
     def _input_passphrase(self, _input):  # type: ignore[no-untyped-def]
         if self._passphrase:
-            return "{}{}\n".format(_input, self._passphrase)
+            return f"{_input}{self._passphrase}\n"
         return _input
 
     def _main_key_command(self):  # type: ignore[no-untyped-def]
@@ -972,7 +972,7 @@ class KeySigningResult:
             self.status = "{}: {}".format(key.replace("_", " ").lower(), value)
         else:
             self.status = "failed"
-            raise ValueError("Key signing, unknown status message: {!r} ::{}".format(key, value))
+            raise ValueError(f"Key signing, unknown status message: {key!r} ::{value}")
 
 
 class GenKey:
@@ -1650,7 +1650,7 @@ class Verify:
             # case of WARNING or ERROR) additional text.
             # Have fun figuring out what it means.
             self.status = value
-            log.warn("{} status emitted from gpg process: {}".format(key, value))
+            log.warn(f"{key} status emitted from gpg process: {value}")
         elif key == "NO_PUBKEY":
             self.valid = False
             self.key_id = value
@@ -1666,7 +1666,7 @@ class Verify:
         elif key in ("EXPKEYSIG", "REVKEYSIG"):
             self.valid = False
             self.key_id = value.split()[0]
-            self.status = (("%s %s") % (key[:3], key[3:])).lower()
+            self.status = (f"{key[:3]} {key[3:]}").lower()
         # This is super annoying, and bad design on the part of GnuPG, in my
         # opinion.
         #
@@ -1755,7 +1755,7 @@ class Verify:
                 else:
                     pass
         else:
-            raise ValueError("Unknown status message: {!r} {!r}".format(key, value))
+            raise ValueError(f"Unknown status message: {key!r} {value!r}")
 
 
 class Crypt(Verify):

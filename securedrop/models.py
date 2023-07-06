@@ -40,8 +40,7 @@ def get_one_or_else(
         return query.one()
     except MultipleResultsFound as e:
         logger.error(
-            "Found multiple while executing %s when one was expected: %s"
-            % (
+            "Found multiple while executing {} when one was expected: {}".format(
                 query,
                 e,
             )
@@ -867,10 +866,9 @@ class InstanceConfig(db.Model):
 
     def __repr__(self) -> str:
         return (
-            "<InstanceConfig(version=%s, valid_until=%s, "
-            "allow_document_uploads=%s, organization_name=%s, "
-            "initial_message_min_len=%s, reject_message_with_codename=%s)>"
-            % (
+            "<InstanceConfig(version={}, valid_until={}, "
+            "allow_document_uploads={}, organization_name={}, "
+            "initial_message_min_len={}, reject_message_with_codename={})>".format(
                 self.version,
                 self.valid_until,
                 self.allow_document_uploads,

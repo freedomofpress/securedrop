@@ -31,6 +31,8 @@ select = [
     "RET",
     # flake8-simplify
     "SIM",
+    # pyupgrade
+    "UP",
     # pycodestyle warnings
     "W",
     # Unused noqa directive

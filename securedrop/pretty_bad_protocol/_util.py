@@ -93,7 +93,7 @@ def _copy_data(instream, outstream):  # type: ignore[no-untyped-def]
         else:
             encoded = data
         log.debug("Sending %d bytes of data..." % sent)
-        log.debug("Encoded data (type {}):\n{}".format(type(encoded), encoded))
+        log.debug(f"Encoded data (type {type(encoded)}):\n{encoded}")
 
         try:
             outstream.write(bytes(encoded))
@@ -137,7 +137,7 @@ def _copy_data(instream, outstream):  # type: ignore[no-untyped-def]
     try:
         outstream.close()
     except OSError as ioe:
-        log.error("Unable to close outstream {}:\r\t{}".format(outstream, ioe))
+        log.error(f"Unable to close outstream {outstream}:\r\t{ioe}")
     else:
         log.debug("Closed outstream: %d bytes sent." % sent)
 
@@ -195,9 +195,9 @@ def create_uid_email(username=None, hostname=None):  # type: ignore[no-untyped-d
     else:
         username = username.replace(" ", "_")
         if (not hostname) and (username.find("@") == 0):
-            uid = "{}@{}".format(username, gethostname())
+            uid = f"{username}@{gethostname()}"
         elif hostname:
-            uid = "{}@{}".format(username, hostname)
+            uid = f"{username}@{hostname}"
         else:
             uid = username
 
@@ -221,7 +221,7 @@ def _deprefix(line, prefix, callback=None):  # type: ignore[no-untyped-def]
     try:
         assert line.upper().startswith("".join(prefix).upper())
     except AssertionError:
-        log.debug("Line doesn't start with prefix '{}':\n{}".format(prefix, line))
+        log.debug(f"Line doesn't start with prefix '{prefix}':\n{line}")
         return line
     else:
         newline = line[len(prefix) :]
@@ -299,7 +299,7 @@ def _is_file(filename):  # type: ignore[no-untyped-def]
     try:
         statinfo = os.lstat(filename)
         log.debug(
-            "lstat(%r) with type=%s gave us %r" % (repr(filename), type(filename), repr(statinfo))
+            f"lstat({repr(filename)!r}) with type={type(filename)} gave us {repr(statinfo)!r}"
         )
         if not (statinfo.st_size > 0):
             raise ValueError("'%s' appears to be an empty file!" % filename)

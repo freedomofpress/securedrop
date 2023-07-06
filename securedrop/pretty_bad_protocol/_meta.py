@@ -286,7 +286,7 @@ class GPGBase:
                         path.remove(directory)
                         self._removed_path_entries.append(directory)
                 log.debug("Deleted all found instance of %s." % directory)
-                log.debug("PATH is now:{}{}".format(os.linesep, path))
+                log.debug(f"PATH is now:{os.linesep}{path}")
                 return ":".join([p for p in path])
 
             @staticmethod
@@ -586,7 +586,7 @@ class GPGBase:
         # see http://docs.python.org/2/library/subprocess.html#converting-an\
         #    -argument-sequence-to-a-string-on-windows
         cmd = shlex.split(" ".join(self._make_args(args, passphrase)))
-        log.debug("Sending command to GnuPG process:{}{}".format(os.linesep, cmd))
+        log.debug(f"Sending command to GnuPG process:{os.linesep}{cmd}")
 
         environment = {
             "LANGUAGE": os.environ.get("LANGUAGE") or "en",
@@ -774,7 +774,7 @@ class GPGBase:
             keyserver = self.keyserver
 
         args = [f"--keyserver {keyserver}", f"--recv-keys {keyids}"]
-        log.info("Requesting keys from {}: {}".format(keyserver, keyids))
+        log.info(f"Requesting keys from {keyserver}: {keyids}")
 
         result = self._result_map["import"](self)
         proc = self._open_subprocess(args)
@@ -1010,8 +1010,7 @@ class GPGBase:
 
         if len(recipients) >= 1:
             log.debug(
-                "GPG.encrypt() called for recipients '%s' with type '%s'"
-                % (recipients, type(recipients))
+                f"GPG.encrypt() called for recipients '{recipients}' with type '{type(recipients)}'"
             )
 
             if isinstance(recipients, (list, tuple)):
@@ -1027,7 +1026,7 @@ class GPGBase:
                 log.debug("Don't know what to do with recipients: %r" % recipients)
 
         result = self._result_map["crypt"](self)
-        log.debug("Got data '{}' with type '{}'.".format(data, type(data)))
+        log.debug(f"Got data '{data}' with type '{type(data)}'.")
         self._handle_io(args, data, result, passphrase=passphrase, binary=True)
         # Avoid writing raw encrypted bytes to terminal loggers and breaking
         # them in that adorable way where they spew hieroglyphics until reset:

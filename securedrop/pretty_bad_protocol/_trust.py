@@ -34,8 +34,9 @@ def _create_trustdb(cls):  # type: ignore[no-untyped-def]
     trustdb = os.path.join(cls.homedir, "trustdb.gpg")
     if not os.path.isfile(trustdb):
         log.info(
-            "GnuPG complained that your trustdb file was missing. %s"
-            % "This is likely due to changing to a new homedir."
+            "GnuPG complained that your trustdb file was missing. {}".format(
+                "This is likely due to changing to a new homedir."
+            )
         )
         log.info("Creating trustdb.gpg file in your GnuPG homedir.")
         cls.fix_trustdb(trustdb)
