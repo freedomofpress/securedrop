@@ -7,11 +7,6 @@ line-length = 100
 target-version = ["py38"]
 # Don't use `extend`, we want the default behavior that honors .gitignore rules
 
-[tool.isort]
-line_length = 100
-profile = "black"
-skip_gitignore = true
-
 [tool.ruff]
 line-length = 100
 select = [
@@ -19,6 +14,8 @@ select = [
     "E",
     # pyflakes
     "F",
+    # isort
+    "I",
     # flake8-gettext
     "INT",
     # flake8-pie
@@ -70,6 +67,11 @@ ignore = [
     # nested if and with statements, too many violations for now
     "SIM102", "SIM117",
 ]
+
+[tool.ruff.isort]
+# ruff's isort is smart enough to know these are first party, but let's treat
+# them as third-party to match O.G. isort until we fix our package layout
+known-third-party = ["journalist_app", "management", "source_app", "tests"]
 
 [tool.mypy]
 ignore_missing_imports = true

@@ -76,16 +76,6 @@ check-black: ## Check Python source code formatting with black
 black: ## Update Python source code formatting with black
 	@black securedrop .
 
-.PHONY: check-isort
-check-isort: ## Check Python import organization with isort
-	@echo "███ Running isort check..."
-	@isort --check-only --diff .
-	@echo
-
-.PHONY: isort
-isort: ## Update Python import organization with isort
-	@isort .
-
 .PHONY: ansible-config-lint
 ansible-config-lint: ## Run custom Ansible linting tasks.
 	@echo "███ Linting Ansible configuration..."
@@ -152,7 +142,7 @@ yamllint:  ## Lint YAML files (does not validate syntax!).
 	@echo
 
 .PHONY: lint
-lint: ansible-config-lint check-ruff app-lint check-black check-isort html-lint shellcheck typelint yamllint ## Runs all lint checks
+lint: ansible-config-lint check-ruff app-lint check-black html-lint shellcheck typelint yamllint ## Runs all lint checks
 
 .PHONY: safety
 safety:  ## Run `safety check` to check python dependencies for vulnerabilities.
