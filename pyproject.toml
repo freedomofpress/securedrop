@@ -21,8 +21,16 @@ select = [
     "F",
     # flake8-gettext
     "INT",
+    # flake8-pie
+    "PIE",
     # pylint
     "PL",
+    # flake8-pyi
+    "PYI",
+    # flake8-return
+    "RET",
+    # flake8-simplify
+    "SIM",
     # pycodestyle warnings
     "W",
     # Unused noqa directive
@@ -41,6 +49,18 @@ ignore = [
     "PLW0603",
     # loop assignment target being overwritten, not a big deal
     "PLW2901",
+    # doesn't understand flask.abort()
+    "RET503",
+    # superflous-else- rules, find they hurt readability
+    "RET505", "RET506", "RET507", "RET508",
+    # Find contextlib.suppress() is harder to read
+    "SIM105",
+    # Find ternary statements harder to read
+    "SIM108",
+    # use context handler for opening files, too many violations for now
+    "SIM115",
+    # nested if and with statements, too many violations for now
+    "SIM102", "SIM117",
 ]
 
 [tool.mypy]

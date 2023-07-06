@@ -109,7 +109,7 @@ class TestSubmitAndRetrieveFile:
 
         def message_starred():
             starred = journ_app_nav.driver.find_elements_by_id("starred-source-link-1")
-            assert 1 == len(starred)
+            assert len(starred) == 1
 
         journ_app_nav.nav_helper.wait_for(message_starred)
 

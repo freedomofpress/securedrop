@@ -12,8 +12,9 @@ def flaky_filter_xfail(err, *args):
 
     If the test is expected to fail, let's not run it again.
     """
-    return "_pytest.outcomes.XFailed" == "{}.{}".format(
-        err[0].__class__.__module__, err[0].__class__.__qualname__
+    return (
+        "{}.{}".format(err[0].__class__.__module__, err[0].__class__.__qualname__)
+        == "_pytest.outcomes.XFailed"
     )
 
 

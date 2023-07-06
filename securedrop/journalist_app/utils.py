@@ -58,9 +58,7 @@ def get_source(filesystem_id: str, include_deleted: bool = False) -> Source:
     query = Source.query.filter(Source.filesystem_id == filesystem_id)
     if not include_deleted:
         query = query.filter_by(deleted_at=None)
-    source = get_one_or_else(query, current_app.logger, abort)
-
-    return source
+    return get_one_or_else(query, current_app.logger, abort)
 
 
 def validate_user(

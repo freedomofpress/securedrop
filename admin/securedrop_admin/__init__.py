@@ -228,14 +228,14 @@ class SiteConfig:
     class ValidateOSSECUsername(Validator):
         def validate(self, document: Document) -> bool:
             text = document.text
-            if text and "@" not in text and "test" != text:
+            if text and "@" not in text and text != "test":
                 return True
             raise ValidationError(message="The SASL username should not include the domain name")
 
     class ValidateOSSECPassword(Validator):
         def validate(self, document: Document) -> bool:
             text = document.text
-            if len(text) >= 8 and "password123" != text:
+            if len(text) >= 8 and text != "password123":
                 return True
             raise ValidationError(message="Password for OSSEC email account must be strong")
 
@@ -252,7 +252,7 @@ class SiteConfig:
         def validate(self, document: Document) -> bool:
             super().validate(document)
             text = document.text
-            if "ossec@ossec.test" != text:
+            if text != "ossec@ossec.test":
                 return True
             raise ValidationError(
                 message=("Must be set to something other than " "ossec@ossec.test")
@@ -1107,8 +1107,6 @@ def parse_argv(argv: List[str]) -> argparse.Namespace:
         argparse.ArgumentDefaultsHelpFormatter, argparse.RawTextHelpFormatter
     ):
         """Needed to combine formatting classes for help output"""
-
-        pass
 
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=ArgParseFormatterCombo)
     parser.add_argument(

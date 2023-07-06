@@ -512,7 +512,7 @@ class TestJournalistMissingFile:
             lambda: journ_app_nav.driver.find_element_by_css_selector("table#submissions")
         )
         submissions = journ_app_nav.driver.find_elements_by_css_selector("#submissions a")
-        assert 1 == len(submissions)
+        assert len(submissions) == 1
 
         file_link = submissions[0]
         file_link.click()

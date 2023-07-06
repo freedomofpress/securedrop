@@ -118,7 +118,7 @@ class JournalistAppNavigator:
             lambda: self.driver.find_element_by_css_selector("table#submissions")
         )
         submissions = self.driver.find_elements_by_css_selector("#submissions a")
-        assert 1 == len(submissions)
+        assert len(submissions) == 1
         file_url = submissions[0].get_attribute("href")
 
         # Downloading files with Selenium is tricky because it cannot automate
@@ -208,16 +208,14 @@ class JournalistAppNavigator:
         ActionChains(self.driver).move_to_element(confirm_btn).click().perform()
 
     def get_submission_checkboxes_on_current_page(self):
-        checkboxes = self.driver.find_elements_by_name("doc_names_selected")
-        return checkboxes
+        return self.driver.find_elements_by_name("doc_names_selected")
 
     def count_submissions_on_current_page(self) -> int:
         return len(self.get_submission_checkboxes_on_current_page())
 
     def get_sources_on_index_page(self):
         assert self.is_on_journalist_homepage()
-        sources = self.driver.find_elements_by_class_name("code-name")
-        return sources
+        return self.driver.find_elements_by_class_name("code-name")
 
     def count_sources_on_index_page(self) -> int:
         return len(self.get_sources_on_index_page())

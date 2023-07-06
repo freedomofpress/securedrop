@@ -71,9 +71,8 @@ class TestSecureDropAdmin:
             subprocess,
             "check_output",
             side_effect=subprocess.CalledProcessError(returncode=2, cmd="", output=b"failed"),
-        ):
-            with pytest.raises(subprocess.CalledProcessError):
-                bootstrap.install_pip_dependencies(args)
+        ), pytest.raises(subprocess.CalledProcessError):
+            bootstrap.install_pip_dependencies(args)
         assert "Failed to install" in caplog.text
 
     def test_python3_buster_venv_deleted_in_bullseye(self, tmpdir, caplog):
@@ -110,23 +109,21 @@ class TestSecureDropAdmin:
         venv_path = str(tmpdir)
         python_lib_path = os.path.join(venv_path, "lib/python3.7")
         os.makedirs(python_lib_path)
-        with mock.patch("bootstrap.is_tails", return_value=True):
-            with mock.patch(
-                "subprocess.check_output", side_effect=subprocess.CalledProcessError(1, ":o")
-            ):
-                bootstrap.clean_up_old_tails_venv(venv_path)
-                assert os.path.exists(venv_path)
+        with mock.patch("bootstrap.is_tails", return_value=True), mock.patch(
+            "subprocess.check_output", side_effect=subprocess.CalledProcessError(1, ":o")
+        ):
+            bootstrap.clean_up_old_tails_venv(venv_path)
+            assert os.path.exists(venv_path)
 
     def test_envsetup_cleanup(self, tmpdir, caplog):
         venv = os.path.join(str(tmpdir), "empty_dir")
         args = ""
-        with pytest.raises(subprocess.CalledProcessError):
-            with mock.patch(
-                "subprocess.check_output", side_effect=self.side_effect_venv_bootstrap(venv)
-            ):
-                bootstrap.envsetup(args, venv)
-                assert not os.path.exists(venv)
-                assert "Cleaning up virtualenv" in caplog.text
+        with pytest.raises(subprocess.CalledProcessError), mock.patch(
+            "subprocess.check_output", side_effect=self.side_effect_venv_bootstrap(venv)
+        ):
+            bootstrap.envsetup(args, venv)
+            assert not os.path.exists(venv)
+            assert "Cleaning up virtualenv" in caplog.text
 
     def side_effect_venv_bootstrap(self, venv_path):
         # emulate the venv being created, and raise exception to simulate

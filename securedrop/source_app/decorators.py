@@ -36,7 +36,7 @@ def ignore_static(f: Callable) -> Callable:
     @wraps(f)
     def decorated_function(*args: Any, **kwargs: Any) -> Any:
         if request.path.startswith("/static"):
-            return  # don't execute the decorated function
+            return None  # don't execute the decorated function
         return f(*args, **kwargs)
 
     return decorated_function

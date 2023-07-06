@@ -132,7 +132,7 @@ class Source(db.Model):
         else:
             starred = False
 
-        json_source = {
+        return {
             "uuid": self.uuid,
             "url": url_for("api.single_source", source_uuid=self.uuid),
             "journalist_designation": self.journalist_designation,
@@ -152,7 +152,6 @@ class Source(db.Model):
             "remove_star_url": url_for("api.remove_star", source_uuid=self.uuid),
             "replies_url": url_for("api.all_source_replies", source_uuid=self.uuid),
         }
-        return json_source
 
 
 class Submission(db.Model):
@@ -204,7 +203,7 @@ class Submission(db.Model):
                 if m.journalist
             }
         )
-        json_submission = {
+        return {
             "source_url": url_for("api.single_source", source_uuid=self.source.uuid)
             if self.source
             else None,
@@ -230,7 +229,6 @@ class Submission(db.Model):
             else None,
             "seen_by": list(seen_by),
         }
-        return json_submission
 
     @property
     def seen(self) -> bool:
@@ -280,7 +278,7 @@ class Reply(db.Model):
 
     def to_json(self) -> "Dict[str, Any]":
         seen_by = [r.journalist.uuid for r in SeenReply.query.filter(SeenReply.reply_id == self.id)]
-        json_reply = {
+        return {
             "source_url": url_for("api.single_source", source_uuid=self.source.uuid)
             if self.source
             else None,
@@ -299,7 +297,6 @@ class Reply(db.Model):
             "is_deleted_by_source": self.deleted_by_source,
             "seen_by": seen_by,
         }
-        return json_reply
 
 
 class SourceStar(db.Model):

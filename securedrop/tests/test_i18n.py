@@ -210,7 +210,7 @@ def verify_i18n(app):
         assert not_translated == gettext(not_translated)
 
     with app.test_request_context():
-        assert "" == render_template("locales.html")
+        assert render_template("locales.html") == ""
 
     with app.test_client() as c:
         c.get("/")

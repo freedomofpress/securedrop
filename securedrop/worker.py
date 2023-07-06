@@ -15,8 +15,7 @@ def create_queue(name: str, timeout: int = 3600) -> Queue:
 
     If ``name`` is omitted, ``config.RQ_WORKER_NAME`` is used.
     """
-    q = Queue(name=name, connection=Redis(), default_timeout=timeout)
-    return q
+    return Queue(name=name, connection=Redis(), default_timeout=timeout)
 
 
 def rq_workers(queue: Queue = None) -> List[Worker]:

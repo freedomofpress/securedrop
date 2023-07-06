@@ -38,8 +38,6 @@ class PathException(Exception):
     can be bad when it is not absolute or not normalized.
     """
 
-    pass
-
 
 class TooManyFilesException(Exception):
     """An exception raised by path_without_filesystem_id when too many
@@ -48,8 +46,6 @@ class TooManyFilesException(Exception):
     journalist_designations.
     """
 
-    pass
-
 
 class NoFileFoundException(Exception):
     """An exception raised by path_without_filesystem_id when a file could
@@ -57,15 +53,11 @@ class NoFileFoundException(Exception):
     This is likely due to an admin manually deleting files from the server.
     """
 
-    pass
-
 
 class NotEncrypted(Exception):
     """An exception raised if a file expected to be encrypted client-side
     is actually plaintext.
     """
-
-    pass
 
 
 def safe_renames(old: str, new: str) -> None:

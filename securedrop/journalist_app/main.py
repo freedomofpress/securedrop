@@ -115,8 +115,7 @@ def make_blueprint() -> Blueprint:
             source.num_unread = num_unread or 0
         unstarred = [source for source, num_unread in unstarred]
 
-        response = render_template("index.html", unstarred=unstarred, starred=starred)
-        return response
+        return render_template("index.html", unstarred=unstarred, starred=starred)
 
     @view.route("/reply", methods=("POST",))
     def reply() -> werkzeug.Response:

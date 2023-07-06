@@ -57,7 +57,7 @@ class UpgradeTester:
 
                 self.source_submissions[s.id] = db.engine.execute(
                     text("SELECT * FROM submissions WHERE source_id = :source_id"),
-                    **{"source_id": s.id},
+                    source_id=s.id,
                 ).fetchall()
 
     def add_source(self):
@@ -101,7 +101,7 @@ class UpgradeTester:
 
                 source_submissions = db.engine.execute(
                     text("SELECT * FROM submissions WHERE source_id = :source_id"),
-                    **{"source_id": source.id},
+                    source_id=source.id,
                 ).fetchall()
                 assert source_submissions == self.source_submissions[source.id]
 
@@ -156,7 +156,7 @@ class DowngradeTester:
 
                 self.source_submissions[s.id] = db.engine.execute(
                     text("SELECT * FROM submissions WHERE source_id = :source_id"),
-                    **{"source_id": s.id},
+                    source_id=s.id,
                 ).fetchall()
 
     def check_downgrade(self):
@@ -177,6 +177,6 @@ class DowngradeTester:
 
                 source_submissions = db.engine.execute(
                     text("SELECT * FROM submissions WHERE source_id = :source_id"),
-                    **{"source_id": source.id},
+                    source_id=source.id,
                 ).fetchall()
                 assert source_submissions == self.source_submissions[source.id]

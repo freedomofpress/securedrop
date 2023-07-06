@@ -64,10 +64,7 @@ class ServerSideSession(CallbackDict, SessionMixin):
         self.uid = uid
 
     def logged_in(self) -> bool:
-        if self.uid is not None:
-            return True
-        else:
-            return False
+        return self.uid is not None
 
     def destroy(
         self, flash: Optional[Tuple[str, str]] = None, locale: Optional[str] = None
@@ -254,7 +251,7 @@ class Session:
         config.setdefault("SESSION_KEY_PREFIX", "session:")
         config.setdefault("SESSION_HEADER_NAME", "authorization")
 
-        session_interface = SessionInterface(
+        return SessionInterface(
             config["SESSION_LIFETIME"],
             config["SESSION_RENEW_COUNT"],
             config["SESSION_REDIS"],
@@ -262,8 +259,6 @@ class Session:
             config["SESSION_SIGNER_SALT"],
             config["SESSION_HEADER_NAME"],
         )
-
-        return session_interface
 
 
 # Re-export flask.session, but with the correct type information for mypy.

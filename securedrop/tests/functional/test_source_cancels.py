@@ -31,4 +31,4 @@ class TestSourceUserCancels:
 
         # And the right message is displayed
         heading = source_app_nav.driver.find_element_by_id("submit-heading")
-        assert "Submit Files or Messages" == heading.text
+        assert heading.text == "Submit Files or Messages"

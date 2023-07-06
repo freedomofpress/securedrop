@@ -16,22 +16,22 @@ def verify_rel_datetime_format(app):
         c.get("/")
         assert session.get("locale") == "en_US"
         result = template_filters.rel_datetime_format(datetime(2016, 1, 1, 1, 1, 1))
-        assert "January 1, 2016 at 1:01:01 AM UTC" == result
+        assert result == "January 1, 2016 at 1:01:01 AM UTC"
 
         result = template_filters.rel_datetime_format(datetime(2016, 1, 1, 1, 1, 1), fmt="yyyy")
-        assert "2016" == result
+        assert result == "2016"
 
         test_time = datetime.utcnow() - timedelta(hours=2)
         result = template_filters.rel_datetime_format(test_time, relative=True)
-        assert "2 hours ago" == result
+        assert result == "2 hours ago"
 
         c.get("/?l=fr_FR")
         assert session.get("locale") == "fr_FR"
         result = template_filters.rel_datetime_format(datetime(2016, 1, 1, 1, 1, 1))
-        assert "1 janvier 2016 à 01:01:01 TU" == result
+        assert result == "1 janvier 2016 à 01:01:01 TU"
 
         result = template_filters.rel_datetime_format(datetime(2016, 1, 1, 1, 1, 1), fmt="yyyy")
-        assert "2016" == result
+        assert result == "2016"
 
         test_time = datetime.utcnow() - timedelta(hours=2)
         result = template_filters.rel_datetime_format(test_time, relative=True)
@@ -42,31 +42,31 @@ def verify_filesizeformat(app):
     with app.test_client() as c:
         c.get("/")
         assert session.get("locale") == "en_US"
-        assert "1 byte" == template_filters.filesizeformat(1)
-        assert "2 bytes" == template_filters.filesizeformat(2)
+        assert template_filters.filesizeformat(1) == "1 byte"
+        assert template_filters.filesizeformat(2) == "2 bytes"
         value = 1024 * 3
-        assert "3 kB" == template_filters.filesizeformat(value)
+        assert template_filters.filesizeformat(value) == "3 kB"
         value *= 1024
-        assert "3 MB" == template_filters.filesizeformat(value)
+        assert template_filters.filesizeformat(value) == "3 MB"
         value *= 1024
-        assert "3 GB" == template_filters.filesizeformat(value)
+        assert template_filters.filesizeformat(value) == "3 GB"
         value *= 1024
-        assert "3 TB" == template_filters.filesizeformat(value)
+        assert template_filters.filesizeformat(value) == "3 TB"
         value *= 1024
-        assert "3,072 TB" == template_filters.filesizeformat(value)
+        assert template_filters.filesizeformat(value) == "3,072 TB"
 
         c.get("/?l=fr_FR")
         assert session.get("locale") == "fr_FR"
-        assert "1\xa0octet" == template_filters.filesizeformat(1)
-        assert "2\xa0octets" == template_filters.filesizeformat(2)
+        assert template_filters.filesizeformat(1) == "1\xa0octet"
+        assert template_filters.filesizeformat(2) == "2\xa0octets"
         value = 1024 * 3
-        assert "3\u202fko" == template_filters.filesizeformat(value)
+        assert template_filters.filesizeformat(value) == "3\u202fko"
         value *= 1024
-        assert "3\u202fMo" == template_filters.filesizeformat(value)
+        assert template_filters.filesizeformat(value) == "3\u202fMo"
         value *= 1024
-        assert "3\u202fGo" == template_filters.filesizeformat(value)
+        assert template_filters.filesizeformat(value) == "3\u202fGo"
         value *= 1024
-        assert "3\u202fTo" == template_filters.filesizeformat(value)
+        assert template_filters.filesizeformat(value) == "3\u202fTo"
         value *= 1024
         assert "072\u202fTo" in template_filters.filesizeformat(value)
 

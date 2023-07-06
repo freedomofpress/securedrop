@@ -70,8 +70,7 @@ def _check_keyserver(location):  # type: ignore[no-untyped-def]
             host = _fix_unsafe(host)
             if host:
                 log.debug("Cleaned host string: '%s'" % host)
-                keyserver = proto + host
-                return keyserver
+                return proto + host
             return None
 
 
@@ -85,7 +84,7 @@ def _check_preferences(prefs, pref_type=None):  # type: ignore[no-untyped-def]
     .. _grudgingly: https://www.schneier.com/blog/archives/2012/10/when_will_we_se.html
     """
     if prefs is None:
-        return
+        return None
 
     cipher = frozenset(
         ["AES256", "AES192", "AES128", "CAMELLIA256", "CAMELLIA192", "TWOFISH", "3DES"]
@@ -137,8 +136,7 @@ def _fix_unsafe(shell_input):  # type: ignore[no-untyped-def]
         if len(_unsafe.findall(shell_input)) == 0:
             return shell_input.strip()
         else:
-            clean = "'" + shell_input.replace("'", "'\"'\"'") + "'"
-            return clean
+            return "'" + shell_input.replace("'", "'\"'\"'") + "'"
     except TypeError:
         return None
 
@@ -435,7 +433,7 @@ def _sanitise(*args):  # type: ignore[no-untyped-def]
         for a, v in groups.items():
             v = None if len(v) == 0 else v
             safe = _check_option(a, v)
-            if safe is not None and not safe.strip() == "":
+            if safe is not None and safe.strip() != "":
                 log.debug("Appending option: %s" % safe)
                 checked_groups.append(safe)
             else:
@@ -461,8 +459,7 @@ def _sanitise(*args):  # type: ignore[no-untyped-def]
             else:
                 log.warn("Got non-str/list arg: '%s', type '%s'" % (arg, type(arg)))
         checked = _check_groups(option_groups)
-        sanitised = " ".join(x for x in checked)
-        return sanitised
+        return " ".join(x for x in checked)
     else:
         log.debug("Got None for args")
 
@@ -646,7 +643,7 @@ def _get_options_group(group=None):  # type: ignore[no-untyped-def]
         none_options,
     )
 
-    if group and group in locals().keys():
+    if group and group in locals():
         return locals()[group]
 
 
@@ -846,8 +843,7 @@ def _get_all_gnupg_options():  # type: ignore[no-untyped-def]
     three_hundred_eighteen.append("--pinentry-mode")
     three_hundred_eighteen.append("--allow-loopback-pinentry")
 
-    gnupg_options = frozenset(three_hundred_eighteen)
-    return gnupg_options
+    return frozenset(three_hundred_eighteen)
 
 
 def nodata(status_code):  # type: ignore[no-untyped-def]
@@ -1053,7 +1049,7 @@ class GenKey:
                 "\nhttps://github.com/isislovecruft/python-gnupg/issues/137"
             )
             self.status = "key not created"
-        elif key.startswith("TRUST_") or key.startswith("PKA_TRUST_") or key == "NEWSIG":
+        elif key.startswith(("TRUST_", "PKA_TRUST_")) or key == "NEWSIG":
             pass
         else:
             raise ValueError("Unknown status message: %r" % key)
@@ -1374,7 +1370,7 @@ class ImportResult:
             )
         elif key == "IMPORT_RES":
             import_res = value.split()
-            for x in self.counts.keys():
+            for x in self.counts:
                 self.counts[x] = int(import_res.pop(0))
         elif key == "KEYEXPIRED":
             res = {"fingerprint": None, "status": "Key expired"}
@@ -1442,7 +1438,7 @@ class ExportResult:
             self.fingerprints.append(value)
         elif key == "EXPORT_RES":
             export_res = value.split()
-            for x in self.counts.keys():
+            for x in self.counts:
                 self.counts[x] += int(export_res.pop(0))
         elif key not in informational_keys:
             raise ValueError("Unknown status message: %r" % key)

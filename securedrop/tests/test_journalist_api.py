@@ -601,8 +601,8 @@ def test_authorized_user_can_delete_source_conversation(
         source_id = test_files["source"].id
 
         # Submissions and Replies both exist
-        assert not Submission.query.filter(source_id == source_id).all() == []
-        assert not Reply.query.filter(source_id == source_id).all() == []
+        assert Submission.query.filter(source_id == source_id).all() != []
+        assert Reply.query.filter(source_id == source_id).all() != []
 
         response = app.delete(
             url_for("api.source_conversation", source_uuid=uuid),
@@ -616,7 +616,7 @@ def test_authorized_user_can_delete_source_conversation(
         assert Reply.query.filter(source_id == source_id).all() == []
 
         # Source still exists
-        assert not Source.query.filter(uuid == uuid).all() == []
+        assert Source.query.filter(uuid == uuid).all() != []
 
 
 def test_source_conversation_does_not_support_get(

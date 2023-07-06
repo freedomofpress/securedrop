@@ -58,8 +58,7 @@ class HOTP:
         )
 
     def generate(self, counter: int) -> str:
-        token = self._hotp.generate(counter).decode("ascii")
-        return token
+        return self._hotp.generate(counter).decode("ascii")
 
     def verify(self, token: str, counter: int) -> int:
         """Validate an HOTP-generated token and return the counter value that succeeded."""
@@ -115,12 +114,10 @@ class TOTP:
         )
 
     def generate(self, time: datetime) -> str:
-        token = self._totp.generate(time.timestamp()).decode("ascii")
-        return token
+        return self._totp.generate(time.timestamp()).decode("ascii")
 
     def now(self) -> str:
-        token = self._totp.generate(datetime.utcnow().timestamp()).decode("ascii")
-        return token
+        return self._totp.generate(datetime.utcnow().timestamp()).decode("ascii")
 
     def verify(self, token: str, time: datetime) -> None:
         # Also check the given token against the previous and next valid tokens, to compensate

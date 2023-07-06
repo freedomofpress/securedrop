@@ -731,8 +731,7 @@ def _remove_from_content_line_with_text(text: str, content: str) -> str:
     # Remove the while line containing the text
     content_before_line = split_content[0]
     content_after_line = split_content[1].split("\n", maxsplit=1)[1]
-    updated_content = content_before_line + content_after_line
-    return updated_content
+    return content_before_line + content_after_line
 
 
 if __name__ == "__main__":  # pragma: no cover

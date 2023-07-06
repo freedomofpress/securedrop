@@ -158,7 +158,6 @@ class UpgradeTester(Helper):
         log file in `/tmp/`.
         The other part of the migration, creating a table, cannot be tested regardless.
         """
-        pass
 
 
 class DowngradeTester(Helper):

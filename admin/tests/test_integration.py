@@ -417,7 +417,7 @@ def test_sdconfig_enable_journalist_alerts():
         os.path.join(SD_DIR, "install_files/ansible-base/group_vars/all/site-specific")
     ) as fobj:
         data = fobj.read()
-    assert JOURNALIST_ALERT_OUTPUT == data
+    assert data == JOURNALIST_ALERT_OUTPUT
 
     verify_install_has_valid_config()
 
@@ -490,7 +490,7 @@ def test_sdconfig_enable_https_on_source_interface():
         os.path.join(SD_DIR, "install_files/ansible-base/group_vars/all/site-specific")
     ) as fobj:
         data = fobj.read()
-    assert HTTPS_OUTPUT == data
+    assert data == HTTPS_OUTPUT
 
     verify_install_has_valid_config()
 

@@ -481,10 +481,9 @@ class TestSecureDropAdmin:
         with mock.patch(
             "securedrop_admin.install_securedrop",
             side_effect=subprocess.CalledProcessError(1, "TestError"),
-        ):
-            with pytest.raises(SystemExit) as e:
-                securedrop_admin.main(["--root", str(tmpdir), "install"])
-                assert e.value.code == securedrop_admin.EXIT_SUBPROCESS_ERROR
+        ), pytest.raises(SystemExit) as e:
+            securedrop_admin.main(["--root", str(tmpdir), "install"])
+            assert e.value.code == securedrop_admin.EXIT_SUBPROCESS_ERROR
 
         with mock.patch("securedrop_admin.install_securedrop", side_effect=KeyboardInterrupt):
             with pytest.raises(SystemExit) as e:
@@ -647,7 +646,7 @@ class TestSiteConfig:
             root=tmpdir,
         )
         site_config = securedrop_admin.SiteConfig(args)
-        assert "ABC" == site_config.sanitize_fingerprint("    A bc")
+        assert site_config.sanitize_fingerprint("    A bc") == "ABC"
 
     def test_validate_int(self):
         validator = securedrop_admin.SiteConfig.ValidateInt()
@@ -981,11 +980,11 @@ class TestSiteConfig:
             value = "VALUE"
             assert value == site_config.validated_input("", value, lambda: True, None)
             assert value.lower() == site_config.validated_input("", value, lambda: True, str.lower)
-            assert "yes" == site_config.validated_input("", True, lambda: True, None)
-            assert "no" == site_config.validated_input("", False, lambda: True, None)
-            assert "1234" == site_config.validated_input("", 1234, lambda: True, None)
-            assert "a b" == site_config.validated_input("", ["a", "b"], lambda: True, None)
-            assert "{}" == site_config.validated_input("", {}, lambda: True, None)
+            assert site_config.validated_input("", True, lambda: True, None) == "yes"
+            assert site_config.validated_input("", False, lambda: True, None) == "no"
+            assert site_config.validated_input("", 1234, lambda: True, None) == "1234"
+            assert site_config.validated_input("", ["a", "b"], lambda: True, None) == "a b"
+            assert site_config.validated_input("", {}, lambda: True, None) == "{}"
 
     def test_load(self, tmpdir, caplog):
         args = argparse.Namespace(
@@ -1053,7 +1052,7 @@ def test_find_or_generate_new_torv3_keys_first_run(tmpdir, capsys):
         "mon_ssh_private_key",
     ]
     for key in expected_keys:
-        assert key in v3_onion_service_keys.keys()
+        assert key in v3_onion_service_keys
 
 
 def test_find_or_generate_new_torv3_keys_subsequent_run(tmpdir, capsys):

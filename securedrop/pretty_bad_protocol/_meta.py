@@ -287,8 +287,7 @@ class GPGBase:
                         self._removed_path_entries.append(directory)
                 log.debug("Deleted all found instance of %s." % directory)
                 log.debug("PATH is now:{}{}".format(os.linesep, path))
-                new_path = ":".join([p for p in path])
-                return new_path
+                return ":".join([p for p in path])
 
             @staticmethod
             def update_path(environment, path):  # type: ignore[no-untyped-def]

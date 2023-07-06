@@ -24,9 +24,7 @@ def find_disconnected_db_submissions(path: str) -> List[Submission]:
         for f in files:
             files_in_fs[f] = os.path.abspath(os.path.join(directory, f))
 
-    disconnected_submissions = [s for s in submissions if s.filename not in files_in_fs]
-
-    return disconnected_submissions
+    return [s for s in submissions if s.filename not in files_in_fs]
 
 
 def check_for_disconnected_db_submissions(args: argparse.Namespace) -> None:
@@ -101,11 +99,7 @@ def find_disconnected_fs_submissions(path: str) -> List[str]:
             filesize = os.stat(p).st_size
             disconnected_files_and_sizes.append((p, filesize))
 
-    disconnected_files = [
-        file for (file, size) in sorted(disconnected_files_and_sizes, key=lambda t: t[1])
-    ]
-
-    return disconnected_files
+    return [file for (file, size) in sorted(disconnected_files_and_sizes, key=lambda t: t[1])]
 
 
 def check_for_disconnected_fs_submissions(args: argparse.Namespace) -> None:

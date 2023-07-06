@@ -653,21 +653,19 @@ class GPG(GPGBase):
                 if not os.path.exists(d):
                     os.makedirs(d)
 
-            if self.temp_keyring:
-                if os.path.isfile(self.temp_keyring):
-                    prefix = os.path.join(self.temp_keyring, fpr)
-                    try:
-                        os.rename(self.temp_keyring, prefix + ".pubring")
-                    except OSError as ose:
-                        log.error(str(ose))
+            if self.temp_keyring and os.path.isfile(self.temp_keyring):
+                prefix = os.path.join(self.temp_keyring, fpr)
+                try:
+                    os.rename(self.temp_keyring, prefix + ".pubring")
+                except OSError as ose:
+                    log.error(str(ose))
 
-            if self.temp_secring:
-                if os.path.isfile(self.temp_secring):
-                    prefix = os.path.join(self.temp_secring, fpr)
-                    try:
-                        os.rename(self.temp_secring, prefix + ".secring")
-                    except OSError as ose:
-                        log.error(str(ose))
+            if self.temp_secring and os.path.isfile(self.temp_secring):
+                prefix = os.path.join(self.temp_secring, fpr)
+                try:
+                    os.rename(self.temp_secring, prefix + ".secring")
+                except OSError as ose:
+                    log.error(str(ose))
 
         log.info("Key created. Fingerprint: %s" % fpr)
         key.keyring = self.temp_keyring
@@ -884,9 +882,8 @@ class GPG(GPGBase):
         for key, val in list(kwargs.items()):
             key = key.replace("_", "-").title()
             # to set 'cert', 'Key-Usage' must be blank string
-            if key not in ("Key-Usage", "Subkey-Usage"):
-                if str(val).strip():
-                    parms[key] = val
+            if key not in ("Key-Usage", "Subkey-Usage") and str(val).strip():
+                parms[key] = val
 
         # if Key-Type is 'default', make Subkey-Type also be 'default'
         if parms["Key-Type"] == "default":
@@ -903,11 +900,11 @@ class GPG(GPGBase):
         # Key-Type must come first, followed by length
         out = "Key-Type: %s\n" % parms.pop("Key-Type")
         out += "Key-Length: %d\n" % parms.pop("Key-Length")
-        if "Subkey-Type" in parms.keys():
+        if "Subkey-Type" in parms:
             out += "Subkey-Type: %s\n" % parms.pop("Subkey-Type")
         elif default_type:
             out += "Subkey-Type: default\n"
-        if "Subkey-Length" in parms.keys():
+        if "Subkey-Length" in parms:
             out += "Subkey-Length: %s\n" % parms.pop("Subkey-Length")
 
         for key, val in list(parms.items()):
