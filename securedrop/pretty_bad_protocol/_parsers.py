@@ -421,10 +421,9 @@ def _sanitise(*args):  # type: ignore[no-untyped-def]
                 while len(filo) > 1 and not is_flag(filo[len(filo) - 1]):
                     log.debug("Got value: %s" % filo[len(filo) - 1])
                     groups[last] += filo.pop() + " "
-                else:
-                    if len(filo) == 1 and not is_flag(filo[0]):
-                        log.debug("Got value: %s" % filo[0])
-                        groups[last] += filo.pop()
+                if len(filo) == 1 and not is_flag(filo[0]):
+                    log.debug("Got value: %s" % filo[0])
+                    groups[last] += filo.pop()
             else:
                 log.warn("_make_groups(): Got solitary value: %s" % last)
                 groups["xxx"] = last
@@ -1019,11 +1018,11 @@ class GenKey:
     def __str__(self):  # type: ignore[no-untyped-def]
         if self.fingerprint:
             return self.fingerprint
+        elif self.status is not None:
+            return self.status
         else:
-            if self.status is not None:
-                return self.status
-            else:
-                return False
+            # FIXME: we should only be returning a str
+            return False  # noqa: PLE0307
 
     def _handle_status(self, key, value):  # type: ignore[no-untyped-def]
         """Parse a status code from the attached GnuPG process.

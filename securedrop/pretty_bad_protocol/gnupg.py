@@ -32,7 +32,7 @@ import os
 import re
 import textwrap
 import time
-from codecs import open as open
+from codecs import open
 
 #: see :pep:`328` http://docs.python.org/2.5/whatsnew/pep-328.html
 from . import _trust, _util
@@ -905,9 +905,8 @@ class GPG(GPGBase):
         out += "Key-Length: %d\n" % parms.pop("Key-Length")
         if "Subkey-Type" in parms.keys():
             out += "Subkey-Type: %s\n" % parms.pop("Subkey-Type")
-        else:
-            if default_type:
-                out += "Subkey-Type: default\n"
+        elif default_type:
+            out += "Subkey-Type: default\n"
         if "Subkey-Length" in parms.keys():
             out += "Subkey-Length: %s\n" % parms.pop("Subkey-Length")
 

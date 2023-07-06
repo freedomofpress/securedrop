@@ -658,11 +658,10 @@ class GPGBase:
                         # for some stupid reason, considered fatal:
                         if value.find("trustdb.gpg") and value.find("No such file"):
                             result._handle_status("NEED_TRUSTDB", "")
+            elif self.verbose:
+                log.info("%s" % line)
             else:
-                if self.verbose:
-                    log.info("%s" % line)
-                else:
-                    log.debug("%s" % line)
+                log.debug("%s" % line)
         result.stderr = "".join(lines)
 
     def _read_data(self, stream, result):  # type: ignore[no-untyped-def]

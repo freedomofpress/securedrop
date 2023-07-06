@@ -190,11 +190,10 @@ class SessionInterface(FlaskSessionInterface):
         if session.new:
             session["renew_count"] = self.renew_count
             expires = self.lifetime
-        else:
-            if expires < (30 * 60) and session["renew_count"] > 0:
-                session["renew_count"] -= 1
-                expires += self.lifetime
-                session.modified = True
+        elif expires < (30 * 60) and session["renew_count"] > 0:
+            session["renew_count"] -= 1
+            expires += self.lifetime
+            session.modified = True
         conditional_cookie_kwargs = {}
         httponly = self.get_cookie_httponly(app)
         secure = self.get_cookie_secure(app)

@@ -3,7 +3,7 @@ from contextlib import contextmanager
 from datetime import datetime
 from pathlib import Path
 
-import pytest as pytest
+import pytest
 from db import db
 from encryption import EncryptionManager, GpgDecryptError, GpgEncryptError, GpgKeyNotFoundError
 from passphrases import PassphraseGenerator
