@@ -22,7 +22,7 @@ from flask import url_for
 from flask_babel import gettext, ngettext
 from markupsafe import Markup
 from passphrases import PassphraseGenerator
-from sqlalchemy import Boolean, Column, DateTime, ForeignKey, Integer, LargeBinary, String
+from sqlalchemy import Boolean, Column, DateTime, ForeignKey, Integer, LargeBinary, String, Text
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Query, backref, relationship
 from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
@@ -70,9 +70,24 @@ class Source(db.Model):
     # when deletion of the source was requested
     deleted_at = Column(DateTime)
 
-    def __init__(self, filesystem_id: str, journalist_designation: str) -> None:
+    # PGP key material
+    pgp_public_key = Column(Text, nullable=True)
+    pgp_secret_key = Column(Text, nullable=True)
+    pgp_fingerprint = Column(String(40), nullable=True)
+
+    def __init__(
+        self,
+        filesystem_id: str,
+        journalist_designation: str,
+        public_key: str,
+        secret_key: str,
+        fingerprint: str,
+    ) -> None:
         self.filesystem_id = filesystem_id
         self.journalist_designation = journalist_designation
+        self.pgp_public_key = public_key
+        self.pgp_secret_key = secret_key
+        self.pgp_fingerprint = fingerprint
         self.uuid = str(uuid.uuid4())
 
     def __repr__(self) -> str:
@@ -105,14 +120,18 @@ class Source(db.Model):
         return collection
 
     @property
-    def fingerprint(self) -> "Optional[str]":
+    def fingerprint(self) -> Optional[str]:
+        if self.pgp_fingerprint is not None:
+            return self.pgp_fingerprint
         try:
             return EncryptionManager.get_default().get_source_key_fingerprint(self.filesystem_id)
         except GpgKeyNotFoundError:
             return None
 
     @property
-    def public_key(self) -> "Optional[str]":
+    def public_key(self) -> Optional[str]:
+        if self.pgp_public_key:
+            return self.pgp_public_key
         try:
             return EncryptionManager.get_default().get_source_public_key(self.filesystem_id)
         except GpgKeyNotFoundError:
