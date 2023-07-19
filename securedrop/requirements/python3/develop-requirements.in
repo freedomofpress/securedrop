@@ -6,7 +6,7 @@ bandit
 black
 # yes, we need both boto and boto3
 boto
-boto3
+boto3>=1.6.12,<1.7.0
 cffi>=1.14.2
 cryptography>=41.0.0
 diffoscope
