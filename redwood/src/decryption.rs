@@ -6,6 +6,7 @@ use sequoia_openpgp::crypto::{Password, SessionKey};
 use sequoia_openpgp::parse::stream::*;
 use sequoia_openpgp::policy::Policy;
 use sequoia_openpgp::types::SymmetricAlgorithm;
+use sequoia_openpgp::KeyID;
 
 pub(crate) struct Helper<'a> {
     pub(crate) policy: &'a dyn Policy,
@@ -58,20 +59,27 @@ impl<'a> DecryptionHelper for Helper<'a> {
             .key()
             .clone();
 
-        // Decrypt the secret key with the specified passphrase.
-        let mut pair = key.decrypt_secret(self.passphrase)?.into_keypair()?;
+        for pkesk in pkesks {
+            // Note: this check won't work for messages encrypted with --throw-keyids,
+            // but we don't generate any messages that use it.
+            if pkesk.recipient() == &KeyID::from(key.fingerprint()) {
+                // Decrypt the secret key with the specified passphrase.
+                let mut pair =
+                    key.decrypt_secret(self.passphrase)?.into_keypair()?;
+                pkesk
+                    .decrypt(&mut pair, sym_algo)
+                    .map(|(algo, session_key)| decrypt(algo, &session_key));
+                // XXX: The documentation says:
+                // > If the message is decrypted using a PKESK packet, then the
+                // > fingerprint of the certificate containing the encryption subkey
+                // > should be returned. This is used in conjunction with the intended
+                // > recipient subpacket (see Section 5.2.3.29 of RFC 4880bis) to
+                // > prevent Surreptitious Forwarding.
+                // Unclear if that's something we need to do.
+                return Ok(None);
+            }
+        }
 
-        pkesks[0]
-            .decrypt(&mut pair, sym_algo)
-            .map(|(algo, session_key)| decrypt(algo, &session_key));
-
-        // XXX: The documentation says:
-        // > If the message is decrypted using a PKESK packet, then the
-        // > fingerprint of the certificate containing the encryption subkey
-        // > should be returned. This is used in conjunction with the intended
-        // > recipient subpacket (see Section 5.2.3.29 of RFC 4880bis) to
-        // > prevent Surreptitious Forwarding.
-        // Unclear if that's something we need to do.
-        Ok(None)
+        Err(anyhow!("no matching pkesk, wrong secret key provided?"))
     }
 }
