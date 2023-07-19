@@ -4,9 +4,6 @@ ansible>=2.9.23,<2.10.0
 argon2_cffi>=20.1.0
 bandit
 black
-# yes, we need both boto and boto3
-boto
-boto3
 cffi>=1.14.2
 cryptography>=41.0.0
 diffoscope
