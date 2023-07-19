@@ -132,6 +132,7 @@ fn encrypt(
     // For each of the recipient certificates, pull the encryption keys that
     // are compatible with by the standard policy (e.g. not SHA-1) supported by
     // Sequoia (duh), and not revoked.
+    // These filter options should be kept in sync with `Helper::decrypt()`.
     for cert in certs.iter() {
         for key in cert
             .keys()
@@ -139,6 +140,7 @@ fn encrypt(
             .supported()
             .alive()
             .revoked(false)
+            .for_storage_encryption()
         {
             recipient_keys.push(key);
         }

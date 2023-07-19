@@ -45,12 +45,17 @@ impl<'a> DecryptionHelper for Helper<'a> {
     where
         D: FnMut(SymmetricAlgorithm, &SessionKey) -> bool,
     {
-        // The encryption key is the first and only subkey.
+        // Get the encryption key, which is the first and only subkey, from the cert.
+        // The filter options should be kept in sync with `encrypt()`.
         let key = self
             .secret
             .keys()
             .secret()
             .with_policy(self.policy, None)
+            .supported()
+            .alive()
+            .revoked(false)
+            .for_storage_encryption()
             .next()
             // In practice this error shouldn't be reachable from SecureDrop-generated keys
             .ok_or_else(|| {
