@@ -30,7 +30,7 @@ def test_gpg_export_keys(tmp_path):
     message = "GPG to Sequoia-PGP, yippe!"
     ciphertext = tmp_path / "encrypted.asc"
     redwood.encrypt_message([public_key], message, ciphertext)
-    decrypted = redwood.decrypt(ciphertext.read_bytes(), secret_key, passphrase)
+    decrypted = redwood.decrypt(ciphertext.read_bytes(), secret_key, passphrase).decode()
     assert decrypted == message
 
     # Test some failure cases for exporting the secret key:

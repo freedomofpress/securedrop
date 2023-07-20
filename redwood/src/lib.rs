@@ -12,15 +12,13 @@ use sequoia_openpgp::serialize::{
     SerializeInto,
 };
 use sequoia_openpgp::Cert;
+use std::borrow::Cow;
 use std::fs::File;
 use std::io::{self, Read};
 use std::path::{Path, PathBuf};
 use std::str::FromStr;
 use std::string::FromUtf8Error;
 use std::time::{Duration, SystemTime};
-
-/// Alias to make it easier for Python readers
-type Bytes = Vec<u8>;
 
 mod decryption;
 
@@ -164,14 +162,14 @@ fn encrypt(
 }
 
 /// Given a ciphertext, private key, and passphrase, unlock the private key with
-/// the passphrase, and use it to decrypt the ciphertext.  It is assumed that the
-/// plaintext is UTF-8.
+/// the passphrase, and use it to decrypt the ciphertext. Arbitrary bytes are
+/// returned, which may or may not be valid UTF-8.
 #[pyfunction]
 pub fn decrypt(
-    ciphertext: Bytes,
+    ciphertext: Vec<u8>,
     secret_key: String,
     passphrase: String,
-) -> Result<String> {
+) -> Result<Cow<'static, [u8]>> {
     let recipient = Cert::from_str(&secret_key)?;
     let policy = &StandardPolicy::new();
     let passphrase: Password = passphrase.into();
@@ -186,10 +184,10 @@ pub fn decrypt(
         .with_policy(policy, None, helper)?;
 
     // Decrypt the data.
-    let mut buffer: Bytes = vec![];
+    let mut buffer: Vec<u8> = vec![];
     io::copy(&mut decryptor, &mut buffer)?;
-    let plaintext = String::from_utf8(buffer)?;
-    Ok(plaintext)
+    // pyo3 maps Cow<[u8]> to Python's bytes
+    Ok(Cow::from(buffer))
 }
 
 #[cfg(test)]
@@ -246,7 +244,10 @@ mod tests {
         )
         .unwrap();
         // Verify message is what we put in originally
-        assert_eq!(SECRET_MESSAGE, &plaintext);
+        assert_eq!(
+            SECRET_MESSAGE,
+            String::from_utf8(plaintext.to_vec()).unwrap()
+        );
         // Decrypt as key 2
         let plaintext = decrypt(
             ciphertext.clone().into_bytes(),
@@ -255,7 +256,10 @@ mod tests {
         )
         .unwrap();
         // Verify message is what we put in originally
-        assert_eq!(SECRET_MESSAGE, &plaintext);
+        assert_eq!(
+            SECRET_MESSAGE,
+            String::from_utf8(plaintext.to_vec()).unwrap()
+        );
         // Try to decrypt as key 3, expect an error
         let err = decrypt(
             ciphertext.into_bytes(),
