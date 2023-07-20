@@ -69,19 +69,17 @@ impl<'a> DecryptionHelper for Helper<'a> {
             // but we don't generate any messages that use it.
             if pkesk.recipient() == &KeyID::from(key.fingerprint()) {
                 // Decrypt the secret key with the specified passphrase.
-                let mut pair =
-                    key.decrypt_secret(self.passphrase)?.into_keypair()?;
+                let mut pair = key
+                    .clone()
+                    .decrypt_secret(self.passphrase)?
+                    .into_keypair()?;
                 pkesk
                     .decrypt(&mut pair, sym_algo)
                     .map(|(algo, session_key)| decrypt(algo, &session_key));
-                // XXX: The documentation says:
-                // > If the message is decrypted using a PKESK packet, then the
-                // > fingerprint of the certificate containing the encryption subkey
-                // > should be returned. This is used in conjunction with the intended
-                // > recipient subpacket (see Section 5.2.3.29 of RFC 4880bis) to
-                // > prevent Surreptitious Forwarding.
-                // Unclear if that's something we need to do.
-                return Ok(None);
+                // Return the fingerprint of the key we decrypted with, this is used in
+                // conjunction with the intended recipient subpacket (see "Intended Recipient Fingerprint"
+                // in RFC 4880bis) to prevent Surreptitious Forwarding.
+                return Ok(Some(key.fingerprint()));
             }
         }
 
