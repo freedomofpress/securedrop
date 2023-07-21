@@ -8,7 +8,7 @@ import zipfile
 from hashlib import sha256
 from pathlib import Path
 from tempfile import _TemporaryFileWrapper
-from typing import IO, List, Optional, Type, Union
+from typing import BinaryIO, List, Optional, Type, Union
 
 import rm
 from encryption import EncryptionManager
@@ -301,7 +301,7 @@ class Storage:
         count: int,
         journalist_filename: str,
         filename: Optional[str],
-        stream: "IO[bytes]",
+        stream: BinaryIO,
     ) -> str:
 
         if filename is not None:

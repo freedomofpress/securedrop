@@ -1,15 +1,15 @@
 import json
 import random
 from datetime import datetime
+from pathlib import Path
 from uuid import UUID, uuid4
 
 from db import db
 from encryption import EncryptionManager
 from flask import url_for
 from models import Journalist, Reply, Source, SourceStar, Submission
+from tests.utils.api_helper import get_api_headers
 from two_factor import TOTP
-
-from .utils.api_helper import get_api_headers
 
 random.seed("◔ ⌣ ◔")
 
@@ -767,7 +767,7 @@ def test_unencrypted_replies_get_rejected(
 
 
 def test_authorized_user_can_add_reply(
-    journalist_app, journalist_api_token, test_source, test_journo, app_storage
+    journalist_app, journalist_api_token, test_source, test_journo, app_storage, tmp_path
 ):
     with journalist_app.test_client() as app:
         source_id = test_source["source"].id
@@ -776,12 +776,15 @@ def test_authorized_user_can_add_reply(
         # First we must encrypt the reply, or it will get rejected
         # by the server.
         encryption_mgr = EncryptionManager.get_default()
-        source_key = encryption_mgr.get_source_key_fingerprint(test_source["source"].filesystem_id)
-        reply_content = encryption_mgr._gpg.encrypt("This is a plaintext reply", source_key).data
+        reply_path = tmp_path / "message.gpg"
+        encryption_mgr.encrypt_journalist_reply(
+            test_source["source"], "This is a plaintext reply", reply_path
+        )
+        reply_content = reply_path.read_text()
 
         response = app.post(
             url_for("api.all_source_replies", source_uuid=uuid),
-            data=json.dumps({"reply": reply_content.decode("utf-8")}),
+            data=json.dumps({"reply": reply_content}),
             headers=get_api_headers(journalist_api_token),
         )
         assert response.status_code == 201
@@ -809,10 +812,9 @@ def test_authorized_user_can_add_reply(
             source.interaction_count, source.journalist_filename
         )
 
-        expected_filepath = app_storage.path(source.filesystem_id, expected_filename)
+        expected_filepath = Path(app_storage.path(source.filesystem_id, expected_filename))
 
-        with open(expected_filepath, "rb") as fh:
-            saved_content = fh.read()
+        saved_content = expected_filepath.read_text()
 
         assert reply_content == saved_content
 

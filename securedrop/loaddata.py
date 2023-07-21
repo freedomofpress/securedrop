@@ -221,7 +221,7 @@ def add_reply(
     record_source_interaction(source)
     fname = f"{source.interaction_count}-{source.journalist_filename}-reply.gpg"
     EncryptionManager.get_default().encrypt_journalist_reply(
-        for_source_with_filesystem_id=source.filesystem_id,
+        for_source=source,
         reply_in=next(replies),
         encrypted_reply_path_out=Path(Storage.get_default().path(source.filesystem_id, fname)),
     )
@@ -251,9 +251,6 @@ def add_source() -> Tuple[Source, str]:
     )
     source = source_user.get_db_record()
     db.session.commit()
-
-    # Generate source key
-    EncryptionManager.get_default().generate_source_key_pair(source_user)
 
     return source, codename
 

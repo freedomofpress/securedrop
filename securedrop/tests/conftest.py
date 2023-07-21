@@ -9,7 +9,6 @@ from os import path
 from pathlib import Path
 from typing import Any, Dict, Generator, Tuple
 from unittest import mock
-from unittest.mock import PropertyMock
 from uuid import uuid4
 
 import pretty_bad_protocol as gnupg
@@ -17,7 +16,6 @@ import psutil
 import pytest
 import sdconfig
 from db import db
-from encryption import EncryptionManager
 from flask import Flask, url_for
 from journalist_app import create_app as create_journalist_app
 from passphrases import PassphraseGenerator
@@ -91,14 +89,11 @@ def setup_journalist_key_and_gpg_folder() -> Generator[Tuple[str, Path], None, N
         gpg = gnupg.GPG("gpg2", homedir=str(tmp_gpg_dir))
         journalist_public_key_path = Path(__file__).parent / "files" / "test_journalist_key.pub"
         journalist_public_key = journalist_public_key_path.read_text()
-        journalist_key_fingerprint = gpg.import_keys(journalist_public_key).fingerprints[0]
+        # TODO: we don't need the journalist pub key in the keyring anymore, but include
+        # it anyways to match a legacy prod keyring.
+        gpg.import_keys(journalist_public_key)
 
-        # Reduce source GPG key length to speed up tests at the expense of security
-        with mock.patch.object(
-            EncryptionManager, "GPG_KEY_LENGTH", PropertyMock(return_value=1024)
-        ):
-
-            yield journalist_key_fingerprint, tmp_gpg_dir
+        yield "65A1B5FF195B56353CC63DFFCC40EF1228271441", tmp_gpg_dir
 
     finally:
         shutil.rmtree(tmp_gpg_dir, ignore_errors=True)
@@ -230,7 +225,6 @@ def test_source(journalist_app: Flask, app_storage: Storage) -> Dict[str, Any]:
             source_passphrase=passphrase,
             source_app_storage=app_storage,
         )
-        EncryptionManager.get_default().generate_source_key_pair(source_user)
         source = source_user.get_db_record()
         return {
             "source_user": source_user,
