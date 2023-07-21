@@ -1,7 +1,6 @@
 import os
 
 import pytest
-from pretty_bad_protocol._util import _is_stream
 from secure_tempfile import SecureTemporaryFile
 
 MESSAGE = "410,757,864,530"
@@ -76,10 +75,6 @@ def test_file_is_removed_from_disk():
     assert os.path.exists(f.filepath)
     f.close()
     assert not os.path.exists(f.filepath)
-
-
-def test_SecureTemporaryFile_is_a_STREAMLIKE_TYPE():
-    assert _is_stream(SecureTemporaryFile("/tmp"))
 
 
 def test_buffered_read():
