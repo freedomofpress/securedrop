@@ -225,7 +225,7 @@ def test_submit_file(journalist_app, source_app, test_journo, app_storage):
         utils.asynchronous.wait_for_assertion(assertion)
 
 
-def _helper_test_reply(journalist_app, source_app, test_journo, test_reply, expected_success=True):
+def _helper_test_reply(journalist_app, source_app, test_journo, test_reply):
     test_msg = "This is a test message."
 
     with source_app.test_client() as app:
@@ -275,11 +275,8 @@ def _helper_test_reply(journalist_app, source_app, test_journo, test_reply, expe
             )
             assert resp.status_code == 200
 
-        if not expected_success:
-            pass
-        else:
-            text = resp.data.decode("utf-8")
-            assert "The source will receive your reply" in text
+        text = resp.data.decode("utf-8")
+        assert "The source will receive your reply" in text
 
         resp = app.get(col_url)
         text = resp.data.decode("utf-8")
@@ -318,22 +315,18 @@ def _helper_test_reply(journalist_app, source_app, test_journo, test_reply, expe
         assert resp.status_code == 200
         text = resp.data.decode("utf-8")
 
-        if not expected_success:
-            # there should be no reply
-            assert "You have received a reply." not in text
-        else:
-            assert "You have received a reply. To protect your identity" in text
-            assert test_reply in text, text
-            soup = BeautifulSoup(text, "html.parser")
-            msgid = soup.select('form > input[name="reply_filename"]')[0]["value"]
-            resp = app.post(
-                "/delete",
-                data=dict(filesystem_id=filesystem_id, reply_filename=msgid),
-                follow_redirects=True,
-            )
-            assert resp.status_code == 200
-            text = resp.data.decode("utf-8")
-            assert "Reply deleted" in text
+        assert "You have received a reply. To protect your identity" in text
+        assert test_reply in text, text
+        soup = BeautifulSoup(text, "html.parser")
+        msgid = soup.select('form > input[name="reply_filename"]')[0]["value"]
+        resp = app.post(
+            "/delete",
+            data=dict(filesystem_id=filesystem_id, reply_filename=msgid),
+            follow_redirects=True,
+        )
+        assert resp.status_code == 200
+        text = resp.data.decode("utf-8")
+        assert "Reply deleted" in text
 
         app.get("/logout")
 
@@ -398,7 +391,6 @@ def test_reply_normal(journalist_app, source_app, test_journo):
             source_app,
             test_journo,
             "This is a test reply.",
-            True,
         )
 
 
@@ -418,7 +410,6 @@ def test_unicode_reply_with_ansi_env(journalist_app, source_app, test_journo):
             source_app,
             test_journo,
             "ᚠᛇᚻ᛫ᛒᛦᚦ᛫ᚠᚱᚩᚠᚢᚱ᛫ᚠᛁᚱᚪ᛫ᚷᛖᚻᚹᛦᛚᚳᚢᛗ",
-            True,
         )
 
 
