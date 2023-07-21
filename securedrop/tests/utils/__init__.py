@@ -1,9 +1,19 @@
+import datetime
+from pathlib import Path
+
 import flask
 import models
 from db import db
+from encryption import EncryptionManager
 from flask.testing import FlaskClient
+from source_user import SourceUser
 from tests.utils import asynchronous, db_helper  # noqa: F401
 from two_factor import TOTP
+
+import redwood
+
+JOURNALIST_SECRET_KEY_PATH = Path(__file__).parent.parent / "files" / "test_journalist_key.sec"
+JOURNALIST_SECRET_KEY = JOURNALIST_SECRET_KEY_PATH.read_text()
 
 
 def flaky_filter_xfail(err, *args):
@@ -56,3 +66,40 @@ def login_journalist(
     assert session.get_user() is not None
 
     _reset_journalist_last_token(username)
+
+
+def decrypt_as_journalist(ciphertext: bytes) -> bytes:
+    return redwood.decrypt(
+        ciphertext=ciphertext,
+        secret_key=JOURNALIST_SECRET_KEY,
+        passphrase="correcthorsebatterystaple",
+    )
+
+
+def create_legacy_gpg_key(
+    manager: EncryptionManager, source_user: SourceUser, source: models.Source
+) -> None:
+    """Create a GPG key for the source, so we can test pre-Sequoia behavior"""
+    # All reply keypairs will be "created" on the same day SecureDrop (then
+    # Strongbox) was publicly released for the first time.
+    # https://www.newyorker.com/news/news-desk/strongbox-and-aaron-swartz
+    default_key_creation_date = datetime.date(2013, 5, 14)
+    gen_key_input = manager._gpg.gen_key_input(
+        passphrase=source_user.gpg_secret,
+        name_email=source_user.filesystem_id,
+        key_type="RSA",
+        key_length=4096,
+        name_real="Source Key",
+        creation_date=default_key_creation_date.isoformat(),
+        # '0' is the magic value that tells GPG's batch key generation not
+        # to set an expiration date.
+        expire_date="0",
+    )
+    manager._gpg.gen_key(gen_key_input)
+
+    # Delete the Sequoia-generated keys
+    source.pgp_public_key = None
+    source.pgp_fingerprint = None
+    source.pgp_secret_key = None
+    db.session.add(source)
+    db.session.commit()

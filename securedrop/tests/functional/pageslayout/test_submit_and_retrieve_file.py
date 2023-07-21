@@ -1,5 +1,4 @@
 import pytest
-from encryption import EncryptionManager
 from selenium.common.exceptions import NoSuchElementException
 from tests.functional.app_navigators.journalist_app_nav import JournalistAppNavigator
 from tests.functional.app_navigators.source_app_nav import SourceAppNavigator
@@ -48,13 +47,7 @@ class TestSubmitAndRetrieveFile:
 
         # And when they try to download the file
         # Then it succeeds and the journalist sees the correct content
-        apps_sd_config = sd_servers_with_clean_state.config_in_use
-        retrieved_message = journ_app_nav.journalist_downloads_first_message(
-            encryption_mgr_to_use_for_decryption=EncryptionManager(
-                gpg_key_dir=apps_sd_config.GPG_KEY_DIR,
-                journalist_key_fingerprint=apps_sd_config.JOURNALIST_KEY,
-            )
-        )
+        retrieved_message = journ_app_nav.journalist_downloads_first_message()
         assert retrieved_message == submitted_content
 
         # And when they reply to the source, it succeeds

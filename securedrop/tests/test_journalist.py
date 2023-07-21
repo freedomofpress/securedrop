@@ -41,7 +41,6 @@ from store import Storage
 from tests import utils
 from tests.factories import SecureDropConfigFactory
 from tests.functional.db_session import get_database_session
-from tests.utils import login_journalist
 from tests.utils.i18n import (
     get_plural_tests,
     get_test_locales,
@@ -51,6 +50,8 @@ from tests.utils.i18n import (
 )
 from tests.utils.instrument import InstrumentedApp
 from two_factor import TOTP
+
+from .utils import create_legacy_gpg_key, login_journalist
 
 # Smugly seed the RNG for deterministic testing
 random.seed(r"¯\_(ツ)_/¯")
@@ -2867,9 +2868,14 @@ def test_delete_collection_updates_db(journalist_app, test_journo, test_source, 
             assert not seen_reply
 
 
-def test_delete_source_deletes_source_key(journalist_app, test_source, test_journo, app_storage):
-    """Verify that when a source is deleted, the PGP key that corresponds
+def test_delete_source_deletes_gpg_source_key(
+    journalist_app, test_source, test_journo, app_storage
+):
+    """Verify that when a legacy source is deleted, the GPG key that corresponds
     to them is also deleted."""
+
+    encryption_mgr = EncryptionManager.get_default()
+    create_legacy_gpg_key(encryption_mgr, test_source["source_user"], test_source["source"])
 
     with journalist_app.app_context():
         source = Source.query.get(test_source["id"])
@@ -2879,7 +2885,6 @@ def test_delete_source_deletes_source_key(journalist_app, test_source, test_jour
         utils.db_helper.reply(app_storage, journo, source, 2)
 
         # Source key exists
-        encryption_mgr = EncryptionManager.get_default()
         assert encryption_mgr.get_source_key_fingerprint(test_source["filesystem_id"])
 
         journalist_app_module.utils.delete_collection(test_source["filesystem_id"])

@@ -7,7 +7,7 @@ from typing import Union
 import store
 import werkzeug
 from db import db
-from encryption import EncryptionManager, GpgKeyNotFoundError
+from encryption import EncryptionManager
 from flask import (
     Blueprint,
     abort,
@@ -42,6 +42,8 @@ from source_user import (
     create_source_user,
 )
 from store import Storage
+
+import redwood
 
 
 def make_blueprint(config: SecureDropConfig) -> Blueprint:
@@ -161,7 +163,8 @@ def make_blueprint(config: SecureDropConfig) -> Blueprint:
                 with open(reply_path, "rb") as f:
                     contents = f.read()
                 decrypted_reply = EncryptionManager.get_default().decrypt_journalist_reply(
-                    for_source_user=logged_in_source, ciphertext_in=contents
+                    for_source_user=logged_in_source,
+                    ciphertext_in=contents,
                 )
                 reply.decrypted = decrypted_reply
             except UnicodeDecodeError:
@@ -174,13 +177,6 @@ def make_blueprint(config: SecureDropConfig) -> Blueprint:
 
         # Sort the replies by date
         replies.sort(key=operator.attrgetter("date"), reverse=True)
-
-        # If not done yet, generate a keypair to encrypt replies from the journalist
-        encryption_mgr = EncryptionManager.get_default()
-        try:
-            encryption_mgr.get_source_public_key(logged_in_source.filesystem_id)
-        except GpgKeyNotFoundError:
-            encryption_mgr.generate_source_key_pair(logged_in_source)
 
         return render_template(
             "lookup.html",
@@ -356,20 +352,33 @@ def make_blueprint(config: SecureDropConfig) -> Blueprint:
     @view.route("/login", methods=("GET", "POST"))
     def login() -> Union[str, werkzeug.Response]:
         form = LoginForm()
-        if form.validate_on_submit():
-            try:
-                SessionManager.log_user_in(
-                    db_session=db.session,
-                    supplied_passphrase=DicewarePassphrase(request.form["codename"].strip()),
-                )
-            except InvalidPassphraseError:
-                current_app.logger.info("Login failed for invalid codename")
-                flash_msg("error", None, gettext("Sorry, that is not a recognized codename."))
-            else:
-                # Success: a valid passphrase was supplied
-                return redirect(url_for(".lookup", from_login="1"))
+        if not form.validate_on_submit():
+            return render_template("login.html", form=form)
+        try:
+            source_user = SessionManager.log_user_in(
+                db_session=db.session,
+                supplied_passphrase=DicewarePassphrase(request.form["codename"].strip()),
+            )
+        except InvalidPassphraseError:
+            current_app.logger.info("Login failed for invalid codename")
+            flash_msg("error", None, gettext("Sorry, that is not a recognized codename."))
+            return render_template("login.html", form=form)
+        # Success: a valid passphrase was supplied and the source was logged-in
+        source = source_user.get_db_record()
+        if source.fingerprint is None:
+            # This legacy source didn't have a PGP keypair generated yet,
+            # do it now.
+            public_key, secret_key, fingerprint = redwood.generate_source_key_pair(
+                source_user.gpg_secret, source_user.filesystem_id
+            )
+            source.pgp_public_key = public_key
+            source.pgp_secret_key = secret_key
+            source.pgp_fingerprint = fingerprint
+            db.session.add(source)
+            db.session.commit()
+        # TODO: Migrate GPG secret key here too
 
-        return render_template("login.html", form=form)
+        return redirect(url_for(".lookup", from_login="1"))
 
     @view.route("/logout")
     def logout() -> Union[str, werkzeug.Response]:

@@ -1,22 +1,20 @@
 import base64
 import gzip
-import tempfile
 from binascii import unhexlify
 from random import randint
 from typing import Callable, Dict, Iterable, Optional, Tuple
 
 import requests
 import two_factor
-from encryption import EncryptionManager
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.firefox.webdriver import WebDriver
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support import expected_conditions
+from tests import utils
 from tests.functional.app_navigators._nav_helper import NavigationHelper
 from tests.functional.tor_utils import proxies_for_url
-from tests.test_encryption import import_journalist_private_key
 
 
 class JournalistAppNavigator:
@@ -98,20 +96,7 @@ class JournalistAppNavigator:
             data += chunk
         return data
 
-    @staticmethod
-    def _unzip_content(raw_content: bytes) -> str:
-        with tempfile.TemporaryFile() as fp:
-            fp.write(raw_content)
-            fp.seek(0)
-
-            gzf = gzip.GzipFile(mode="rb", fileobj=fp)
-            content = gzf.read()
-
-        return content.decode("utf-8")
-
-    def journalist_downloads_first_message(
-        self, encryption_mgr_to_use_for_decryption: EncryptionManager
-    ) -> str:
+    def journalist_downloads_first_message(self) -> str:
         # Select the first submission from the first source in the page
         self.journalist_selects_the_first_source()
         self.nav_helper.wait_for(
@@ -136,15 +121,13 @@ class JournalistAppNavigator:
         cks = cookie_string_from_selenium_cookies(self.driver.get_cookies())
         raw_content = self._download_content_at_url(file_url, cks)
 
-        with import_journalist_private_key(encryption_mgr_to_use_for_decryption):
-            decryption_result = encryption_mgr_to_use_for_decryption._gpg.decrypt(raw_content)
-
+        decryption_result = utils.decrypt_as_journalist(raw_content)
         if file_url.endswith(".gz.gpg"):
-            decrypted_message = self._unzip_content(decryption_result.data)
+            decrypted_message = gzip.decompress(decryption_result)
         else:
-            decrypted_message = decryption_result.data.decode("utf-8")
+            decrypted_message = decryption_result
 
-        return decrypted_message
+        return decrypted_message.decode()
 
     def journalist_selects_the_first_source(self) -> None:
         self.driver.find_element_by_css_selector("#un-starred-source-link-1").click()

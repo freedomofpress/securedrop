@@ -143,7 +143,7 @@ def make_blueprint() -> Blueprint:
             g.source.interaction_count, g.source.journalist_filename
         )
         EncryptionManager.get_default().encrypt_journalist_reply(
-            for_source_with_filesystem_id=g.filesystem_id,
+            for_source=g.source,
             reply_in=form.message.data,
             encrypted_reply_path_out=Path(Storage.get_default().path(g.filesystem_id, filename)),
         )
