@@ -21,6 +21,7 @@ use std::string::FromUtf8Error;
 use std::time::{Duration, SystemTime};
 
 mod decryption;
+mod stream;
 
 #[derive(thiserror::Error, Debug)]
 pub enum Error {
@@ -51,7 +52,7 @@ type Result<T> = std::result::Result<T, Error>;
 fn redwood(py: Python, m: &PyModule) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(generate_source_key_pair, m)?)?;
     m.add_function(wrap_pyfunction!(encrypt_message, m)?)?;
-    m.add_function(wrap_pyfunction!(encrypt_file, m)?)?;
+    m.add_function(wrap_pyfunction!(encrypt_stream, m)?)?;
     m.add_function(wrap_pyfunction!(decrypt, m)?)?;
     m.add("RedwoodError", py.get_type::<RedwoodError>())?;
     Ok(())
@@ -99,17 +100,17 @@ pub fn encrypt_message(
     encrypt(&recipients, plaintext, &destination)
 }
 
-/// Encrypt a file that's already on disk for the specified recipients.
+/// Encrypt a Python stream (`typing.BinaryIO`) for the specified recipients.
 /// The list of recipients is a set of PGP public keys. The encrypted file
 /// will be written to `destination`.
 #[pyfunction]
-pub fn encrypt_file(
+pub fn encrypt_stream(
     recipients: Vec<String>,
-    plaintext: PathBuf,
+    plaintext: &PyAny,
     destination: PathBuf,
 ) -> Result<()> {
-    let plaintext = File::open(plaintext)?;
-    encrypt(&recipients, plaintext, &destination)
+    let stream = stream::Stream { reader: plaintext };
+    encrypt(&recipients, stream, &destination)
 }
 
 /// Helper function to encrypt readable things.
