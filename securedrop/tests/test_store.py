@@ -116,15 +116,13 @@ def test_verify_path_not_absolute(test_storage):
 
 def test_verify_in_store_dir(test_storage):
     path = test_storage.storage_path + "_backup"
-    with pytest.raises(store.PathException) as e:
+    with pytest.raises(store.PathException, match="Path not valid in store: "):
         test_storage.verify(path)
-    assert e.message == f"Path not valid in store: {path}"
 
 
 def test_verify_store_path_not_absolute(test_storage):
-    with pytest.raises(store.PathException) as e:
+    with pytest.raises(store.PathException, match="Path not valid in store: "):
         test_storage.verify("..")
-    assert e.message == "Path not valid in store: .."
 
 
 def test_verify_rejects_symlinks(test_storage):
@@ -134,9 +132,8 @@ def test_verify_rejects_symlinks(test_storage):
     link = os.path.join(test_storage.storage_path, "foo")
     try:
         os.symlink("/foo", link)
-        with pytest.raises(store.PathException) as e:
+        with pytest.raises(store.PathException, match="Path not valid in store: "):
             test_storage.verify(link)
-        assert e.message == f"Path not valid in store: {link}"
     finally:
         os.unlink(link)
 
@@ -189,9 +186,8 @@ def test_verify_invalid_filename_in_sourcedir_raises_exception(test_storage):
         test_storage.storage_path, "example-filesystem-id", "NOTVALID.gpg"
     )
 
-    with pytest.raises(store.PathException) as e:
+    with pytest.raises(store.PathException, match="Path not valid in store: "):
         test_storage.verify(file_path)
-    assert e.message == f"Path not valid in store: {file_path}"
 
 
 def test_get_zip(journalist_app, test_source, app_storage, config):
