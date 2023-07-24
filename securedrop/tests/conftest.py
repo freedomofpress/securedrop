@@ -19,7 +19,6 @@ import sdconfig
 from db import db
 from encryption import EncryptionManager
 from flask import Flask, url_for
-from hypothesis import settings
 from journalist_app import create_app as create_journalist_app
 from passphrases import PassphraseGenerator
 from sdconfig import DEFAULT_SECUREDROP_ROOT, SecureDropConfig
@@ -34,11 +33,6 @@ from two_factor import TOTP
 # Quiet down gnupg output. (See Issue #2595)
 GNUPG_LOG_LEVEL = os.environ.get("GNUPG_LOG_LEVEL", "ERROR")
 gnupg._util.log.setLevel(getattr(logging, GNUPG_LOG_LEVEL, logging.ERROR))
-
-# `hypothesis` sets a default deadline of 200 milliseconds before failing tests,
-# which doesn't work for integration tests. Turn off deadlines.
-settings.register_profile("securedrop", deadline=None)
-settings.load_profile("securedrop")
 
 
 def pytest_addoption(parser):
