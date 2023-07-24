@@ -11,9 +11,7 @@ apipkg==1.5 \
 attrs==22.1.0 \
     --hash=sha256:29adc2665447e5191d0e7c568fde78b21f9672d344281d0c6e1ab085429b22b6 \
     --hash=sha256:86efa402f67bf2df34f51a335487cf46b1ec130d02b8d39fd248abfd30da551c
-    # via
-    #   hypothesis
-    #   pytest
+    # via pytest
 beautifulsoup4==4.6.0 \
     --hash=sha256:11a9a27b7d3bddc6d86f59fb76afb70e921a25ac2d6cc55b40d072bd68435a76 \
     --hash=sha256:7015e76bf32f1f574636c4288399a6de66ce08fb7b2457f628a8d70c0fbabb11 \
@@ -89,11 +87,6 @@ flaky==3.6.0 \
     # via -r requirements/python3/test-requirements.in
 html5validator==0.4.0 \
     --hash=sha256:3ce6e3e736c9c7b37e5e26eb173ba0777ae00776549bd608933fa14955260d49
-    # via -r requirements/python3/test-requirements.in
-hypothesis==4.22.2 \
-    --hash=sha256:7d504c4de30ec2bf9e9421e6dacb76666266bc584440b3fda4ba3ae7ecb8d2fc \
-    --hash=sha256:ce7c4a46823f73e9ef548f10963095bf82c787646a09d1886979f007c74b07cc \
-    --hash=sha256:e97ef0a17a6dfb3873aa7e4ef3e6398d5b5ee7fbc5923f2cebfa4a1d5f9eb44b
     # via -r requirements/python3/test-requirements.in
 idna==2.8 \
     --hash=sha256:c357b3f628cf53ae2c4c05627ecc484553142ca23264e593d327bcde5e9c3407 \

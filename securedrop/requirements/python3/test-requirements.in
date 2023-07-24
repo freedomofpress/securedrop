@@ -12,7 +12,6 @@ pytest-xdist>=3.0.2
 pluggy>=0.13.1
 pytest-cov
 pytest-mock
-hypothesis
 requests[socks]>=2.31.0
 setuptools>=56.0.0
 selenium>=3.141.0
