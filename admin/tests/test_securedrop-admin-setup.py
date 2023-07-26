@@ -128,5 +128,8 @@ class TestSecureDropAdmin:
     def side_effect_venv_bootstrap(self, venv_path):
         # emulate the venv being created, and raise exception to simulate
         # failure in virtualenv creation
-        os.makedirs(venv_path)
-        raise subprocess.CalledProcessError(1, ":o")
+        def func(*args, **kwargs):
+            os.makedirs(venv_path)
+            raise subprocess.CalledProcessError(1, ":o")
+
+        return func

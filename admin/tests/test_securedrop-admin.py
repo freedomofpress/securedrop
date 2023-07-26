@@ -473,7 +473,7 @@ class TestSecureDropAdmin:
     def test_exit_codes(self, tmpdir):
         """Ensure that securedrop-admin returns the correct
         exit codes for success or failure."""
-        with mock.patch("securedrop_admin.install_securedrop", return_value=True):
+        with mock.patch("securedrop_admin.install_securedrop", return_value=0):
             with pytest.raises(SystemExit) as e:
                 securedrop_admin.main(["--root", str(tmpdir), "install"])
             assert e.value.code == securedrop_admin.EXIT_SUCCESS
