@@ -1,6 +1,5 @@
 coverage>=5.0  # #6091
 d2to1
-flake8>=5.0.4
 flaky
 mock
 pbr
