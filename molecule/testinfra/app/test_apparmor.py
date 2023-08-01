@@ -114,4 +114,10 @@ def test_aa_no_denies_in_syslog(host):
     """Ensure that there are no apparmor denials in syslog"""
     with host.sudo():
         f = host.file("/var/log/syslog")
-        assert 'apparmor="DENIED"' not in f.content_string
+        lines = f.content_string.splitlines()
+    # syslog is very big, just print the denial lines
+    found = []
+    for line in lines:
+        if 'apparmor="DENIED"' in line:
+            found.append(line)
+    assert found == []
