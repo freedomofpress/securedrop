@@ -120,7 +120,7 @@ class WeblateUploader:
 
         # API results are paginated, so we must loop through a set of results and
         # concatenate them.
-        screenshots = []  # type: List[Dict[str, str]]
+        screenshots: List[Dict[str, str]] = []
         request_count = 0
         while next_screenshots_url is not None:
             response = self.session.get(next_screenshots_url)

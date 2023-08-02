@@ -109,11 +109,9 @@ class DowngradeTester:
         """This function loads data into the database and filesystem. It is
         executed before the downgrade.
         """
-        pass
 
     def check_downgrade(self):
         """This function is run after the downgrade and verifies the state
         of the database or filesystem. It MUST raise an exception if the
         check fails.
         """
-        pass

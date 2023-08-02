@@ -40,8 +40,7 @@ def get_one_or_else(
         return query.one()
     except MultipleResultsFound as e:
         logger.error(
-            "Found multiple while executing %s when one was expected: %s"
-            % (
+            "Found multiple while executing {} when one was expected: {}".format(
                 query,
                 e,
             )
@@ -99,7 +98,7 @@ class Source(db.Model):
     def collection(self) -> "List[Union[Submission, Reply]]":
         """Return the list of submissions and replies for this source, sorted
         in ascending order by the filename/interaction count."""
-        collection = []  # type: List[Union[Submission, Reply]]
+        collection: List[Union[Submission, Reply]] = []
         collection.extend(self.submissions)
         collection.extend(self.replies)
         collection.sort(key=lambda x: int(x.filename.split("-")[0]))
@@ -132,7 +131,7 @@ class Source(db.Model):
         else:
             starred = False
 
-        json_source = {
+        return {
             "uuid": self.uuid,
             "url": url_for("api.single_source", source_uuid=self.uuid),
             "journalist_designation": self.journalist_designation,
@@ -152,7 +151,6 @@ class Source(db.Model):
             "remove_star_url": url_for("api.remove_star", source_uuid=self.uuid),
             "replies_url": url_for("api.all_source_replies", source_uuid=self.uuid),
         }
-        return json_source
 
 
 class Submission(db.Model):
@@ -204,7 +202,7 @@ class Submission(db.Model):
                 if m.journalist
             }
         )
-        json_submission = {
+        return {
             "source_url": url_for("api.single_source", source_uuid=self.source.uuid)
             if self.source
             else None,
@@ -230,7 +228,6 @@ class Submission(db.Model):
             else None,
             "seen_by": list(seen_by),
         }
-        return json_submission
 
     @property
     def seen(self) -> bool:
@@ -280,7 +277,7 @@ class Reply(db.Model):
 
     def to_json(self) -> "Dict[str, Any]":
         seen_by = [r.journalist.uuid for r in SeenReply.query.filter(SeenReply.reply_id == self.id)]
-        json_reply = {
+        return {
             "source_url": url_for("api.single_source", source_uuid=self.source.uuid)
             if self.source
             else None,
@@ -299,7 +296,6 @@ class Reply(db.Model):
             "is_deleted_by_source": self.deleted_by_source,
             "seen_by": seen_by,
         }
-        return json_reply
 
 
 class SourceStar(db.Model):
@@ -701,12 +697,12 @@ class Journalist(db.Model):
         """Returns a JSON representation of the journalist user. If all_info is
         False, potentially sensitive or extraneous fields are excluded. Note
         that both representations do NOT include credentials."""
-        json_user = {
+        json_user: Dict[str, Any] = {
             "username": self.username,
             "uuid": self.uuid,
             "first_name": self.first_name,
             "last_name": self.last_name,
-        }  # type: Dict[str, Any]
+        }
 
         if all_info is True:
             json_user["is_admin"] = self.is_admin
@@ -870,10 +866,9 @@ class InstanceConfig(db.Model):
 
     def __repr__(self) -> str:
         return (
-            "<InstanceConfig(version=%s, valid_until=%s, "
-            "allow_document_uploads=%s, organization_name=%s, "
-            "initial_message_min_len=%s, reject_message_with_codename=%s)>"
-            % (
+            "<InstanceConfig(version={}, valid_until={}, "
+            "allow_document_uploads={}, organization_name={}, "
+            "initial_message_min_len={}, reject_message_with_codename={})>".format(
                 self.version,
                 self.valid_until,
                 self.allow_document_uploads,

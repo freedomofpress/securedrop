@@ -30,7 +30,7 @@ def securedrop_import_testinfra_vars(hostname, with_header=False):
 
     hostvars["securedrop_venv_site_packages"] = hostvars["securedrop_venv_site_packages"].format(
         "3.8"
-    )  # noqa: E501
+    )
     hostvars["python_version"] = "3.8"
     hostvars["apparmor_enforce_actual"] = hostvars["apparmor_enforce"]["focal"]
 
@@ -60,7 +60,7 @@ def securedrop_import_testinfra_vars(hostname, with_header=False):
         repo_filepath = os.path.join(
             os.path.dirname(__file__),
             "../../install_files/ansible-base/roles/install-fpf-repo/defaults/main.yml",
-        )  # noqa: E501
+        )
         if os.path.isfile(repo_filepath):
             with open(repo_filepath) as f:
                 repovars = yaml.safe_load(f)
@@ -74,7 +74,7 @@ def securedrop_import_testinfra_vars(hostname, with_header=False):
 
 
 class TestVars(dict):
-    managed_attrs = {}  # type: Dict[str, Any]
+    managed_attrs: Dict[str, Any] = {}
 
     def __init__(self, initial: Dict[str, Any]) -> None:
         self.securedrop_target_distribution = os.environ.get("SECUREDROP_TARGET_DISTRIBUTION")

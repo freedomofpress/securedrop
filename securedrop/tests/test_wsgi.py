@@ -6,7 +6,7 @@ from pathlib import Path
 import pytest
 
 
-@pytest.mark.parametrize("filename", ("journalist.wsgi", "source.wsgi"))
+@pytest.mark.parametrize("filename", ["journalist.wsgi", "source.wsgi"])
 def test_wsgi(filename):
     """
     Verify that all setup code and imports in the wsgi files work

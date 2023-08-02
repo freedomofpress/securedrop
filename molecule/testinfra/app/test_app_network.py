@@ -9,7 +9,7 @@ securedrop_test_vars = testutils.securedrop_test_vars
 testinfra_hosts = [securedrop_test_vars.app_hostname]
 
 
-@pytest.mark.skip_in_prod
+@pytest.mark.skip_in_prod()
 def test_app_iptables_rules(host):
 
     local = host.get_host("local://")

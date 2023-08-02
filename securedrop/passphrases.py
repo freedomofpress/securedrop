@@ -10,7 +10,7 @@ from sdconfig import SecureDropConfig
 DicewarePassphrase = NewType("DicewarePassphrase", str)
 
 
-_default_generator = None  # type: Optional["PassphraseGenerator"]
+_default_generator: Optional["PassphraseGenerator"] = None
 
 
 class InvalidWordListError(Exception):
@@ -117,9 +117,9 @@ class PassphraseGenerator:
             # default language
             words_list = self._language_to_words[self._fallback_language]
 
-        words = [
+        words: List[str] = [
             self._random_generator.choice(words_list) for _ in range(self.PASSPHRASE_WORDS_COUNT)
-        ]  # type: List[str]
+        ]
         return DicewarePassphrase(" ".join(words))
 
 

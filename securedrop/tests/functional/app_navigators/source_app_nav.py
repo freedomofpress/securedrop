@@ -128,8 +128,7 @@ class SourceAppNavigator:
                 return notification.text
 
         # Return the confirmation notification
-        notification_text = self.nav_helper.wait_for(message_submitted)
-        return notification_text
+        return self.nav_helper.wait_for(message_submitted)
 
     def source_submits_a_file(self, file_content: str = "S3cr3t f1l3") -> None:
         # Write the content to a file

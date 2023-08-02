@@ -29,7 +29,7 @@ def test_ossec_binaries_are_present_agent():
     contents = subprocess.check_output(["dpkg-deb", "-c", str(path)]).decode()
     for wanted_file in wanted_files:
         assert re.search(
-            r"^.* .{}$".format(wanted_file),
+            rf"^.* .{wanted_file}$",
             contents,
             re.M,
         )
@@ -71,7 +71,7 @@ def test_ossec_binaries_are_present_server():
     contents = subprocess.check_output(["dpkg-deb", "-c", str(path)]).decode()
     for wanted_file in wanted_files:
         assert re.search(
-            r"^.* .{}$".format(wanted_file),
+            rf"^.* .{wanted_file}$",
             contents,
             re.M,
         )

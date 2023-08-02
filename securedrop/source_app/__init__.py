@@ -102,9 +102,8 @@ def create_app(config: SecureDropConfig) -> Flask:
     @ignore_static
     def check_tor2web() -> Optional[werkzeug.Response]:
         # TODO: expand header checking logic to catch modern tor2web proxies
-        if "X-tor2web" in request.headers:
-            if request.path != url_for("info.tor2web_warning"):
-                return redirect(url_for("info.tor2web_warning"))
+        if "X-tor2web" in request.headers and request.path != url_for("info.tor2web_warning"):
+            return redirect(url_for("info.tor2web_warning"))
         return None
 
     @app.errorhandler(404)

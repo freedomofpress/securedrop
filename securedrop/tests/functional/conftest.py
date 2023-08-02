@@ -21,14 +21,14 @@ from tests.functional.web_drivers import WebDriverTypeEnum, get_web_driver
 
 
 # Function-scoped so that tests can be run in parallel if needed
-@pytest.fixture(scope="function")
+@pytest.fixture()
 def firefox_web_driver() -> WebDriver:
     with get_web_driver(web_driver_type=WebDriverTypeEnum.FIREFOX) as web_driver:
         yield web_driver
 
 
 # Function-scoped so that tests can be run in parallel if needed
-@pytest.fixture(scope="function")
+@pytest.fixture()
 def tor_browser_web_driver() -> WebDriver:
     with get_web_driver(web_driver_type=WebDriverTypeEnum.TOR_BROWSER) as web_driver:
         yield web_driver
@@ -216,7 +216,7 @@ def sd_servers(
         yield sd_servers_result
 
 
-@pytest.fixture(scope="function")
+@pytest.fixture()
 def sd_servers_with_clean_state(
     setup_journalist_key_and_gpg_folder: Tuple[str, Path],
     setup_rqworker: Tuple[str, Path],
@@ -239,7 +239,7 @@ def sd_servers_with_clean_state(
         yield sd_servers_result
 
 
-@pytest.fixture(scope="function")
+@pytest.fixture()
 def sd_servers_with_submitted_file(
     setup_journalist_key_and_gpg_folder: Tuple[str, Path],
     setup_rqworker: Tuple[str, Path],

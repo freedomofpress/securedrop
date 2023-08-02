@@ -64,10 +64,7 @@ class ServerSideSession(CallbackDict, SessionMixin):
         self.uid = uid
 
     def logged_in(self) -> bool:
-        if self.uid is not None:
-            return True
-        else:
-            return False
+        return self.uid is not None
 
     def destroy(
         self, flash: Optional[Tuple[str, str]] = None, locale: Optional[str] = None
@@ -169,7 +166,7 @@ class SessionInterface(FlaskSessionInterface):
         msg = gettext("You have been logged out due to inactivity.")
         return self._new_session(is_api, initial={"_flashes": [("error", msg)]})
 
-    def save_session(  # type: ignore[override] # noqa
+    def save_session(  # type: ignore[override]
         self, app: Flask, session: ServerSideSession, response: Response
     ) -> None:
         """This is called at the end of each request, just
@@ -190,11 +187,10 @@ class SessionInterface(FlaskSessionInterface):
         if session.new:
             session["renew_count"] = self.renew_count
             expires = self.lifetime
-        else:
-            if expires < (30 * 60) and session["renew_count"] > 0:
-                session["renew_count"] -= 1
-                expires += self.lifetime
-                session.modified = True
+        elif expires < (30 * 60) and session["renew_count"] > 0:
+            session["renew_count"] -= 1
+            expires += self.lifetime
+            session.modified = True
         conditional_cookie_kwargs = {}
         httponly = self.get_cookie_httponly(app)
         secure = self.get_cookie_secure(app)
@@ -255,7 +251,7 @@ class Session:
         config.setdefault("SESSION_KEY_PREFIX", "session:")
         config.setdefault("SESSION_HEADER_NAME", "authorization")
 
-        session_interface = SessionInterface(
+        return SessionInterface(
             config["SESSION_LIFETIME"],
             config["SESSION_RENEW_COUNT"],
             config["SESSION_REDIS"],
@@ -263,8 +259,6 @@ class Session:
             config["SESSION_SIGNER_SALT"],
             config["SESSION_HEADER_NAME"],
         )
-
-        return session_interface
 
 
 # Re-export flask.session, but with the correct type information for mypy.

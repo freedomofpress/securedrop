@@ -53,7 +53,7 @@ class GPGMeta(type):
                        set to a ``psutil.Process`` for that process.
     """
 
-    def __new__(cls, name, bases, attrs):  # type: ignore[no-untyped-def] # noqa
+    def __new__(cls, name, bases, attrs):  # type: ignore[no-untyped-def]
         """Construct the initialiser for GPG"""
         log.debug("Metaclass __new__ constructor called for %r" % cls)
         if cls._find_agent():
@@ -63,7 +63,7 @@ class GPGMeta(type):
         return super().__new__(cls, name, bases, attrs)
 
     @classmethod
-    def _find_agent(cls):  # type: ignore[no-untyped-def] # noqa
+    def _find_agent(cls):  # type: ignore[no-untyped-def]
         """Discover if a gpg-agent process for the current euid is running.
 
         If there is a matching gpg-agent process, set a :class:`psutil.Process`
@@ -132,7 +132,7 @@ class GPGBase:
         "packets": _parsers.ListPackets,
     }
 
-    def __init__(  # type: ignore[no-untyped-def] # noqa
+    def __init__(  # type: ignore[no-untyped-def]
         self,
         binary=None,
         home=None,
@@ -224,7 +224,7 @@ class GPGBase:
         # Assign our self.binary_version attribute:
         self._check_sane_and_get_gpg_version()
 
-    def __remove_path__(self, prog=None, at_exit=True):  # type: ignore[no-untyped-def] # noqa
+    def __remove_path__(self, prog=None, at_exit=True):  # type: ignore[no-untyped-def]
         """Remove the directories containing a program from the system's
         ``$PATH``. If ``GPGBase.binary`` is in a directory being removed, it
         is linked to :file:'./gpg' in the current directory.
@@ -268,7 +268,7 @@ class GPGBase:
             assert "PATH" not in os.environ, "OS env kept $PATH anyway!"
 
             @staticmethod
-            def remove_program_from_path(path, prog_base):  # type: ignore[no-untyped-def] # noqa
+            def remove_program_from_path(path, prog_base):  # type: ignore[no-untyped-def]
                 """Remove all directories which contain a program from PATH.
 
                 :param str path: The contents of the system environment's
@@ -286,12 +286,11 @@ class GPGBase:
                         path.remove(directory)
                         self._removed_path_entries.append(directory)
                 log.debug("Deleted all found instance of %s." % directory)
-                log.debug("PATH is now:{}{}".format(os.linesep, path))
-                new_path = ":".join([p for p in path])
-                return new_path
+                log.debug(f"PATH is now:{os.linesep}{path}")
+                return ":".join([p for p in path])
 
             @staticmethod
-            def update_path(environment, path):  # type: ignore[no-untyped-def] # noqa
+            def update_path(environment, path):  # type: ignore[no-untyped-def]
                 """Add paths to the string at ``os.environ['PATH']``.
 
                 :param str environment: The environment mapping to update.
@@ -311,7 +310,7 @@ class GPGBase:
             # register an _exithandler with the python interpreter:
             atexit.register(update_path, env_copy, path_copy)
 
-            def remove_symlinked_binary(symlink):  # type: ignore[no-untyped-def] # noqa
+            def remove_symlinked_binary(symlink):  # type: ignore[no-untyped-def]
                 if os.path.islink(symlink):
                     os.unlink(symlink)
                     log.debug("Removed binary symlink '%s'" % symlink)
@@ -319,12 +318,12 @@ class GPGBase:
             atexit.register(remove_symlinked_binary, new_gpg_location)
 
     @property
-    def default_preference_list(self):  # type: ignore[no-untyped-def] # noqa
+    def default_preference_list(self):  # type: ignore[no-untyped-def]
         """Get the default preference list."""
         return self._prefs
 
     @default_preference_list.setter
-    def default_preference_list(self, prefs):  # type: ignore[no-untyped-def] # noqa
+    def default_preference_list(self, prefs):  # type: ignore[no-untyped-def]
         """Set the default preference list.
 
         :param str prefs: A string containing the default preferences for
@@ -335,7 +334,7 @@ class GPGBase:
             self._prefs = prefs
 
     @default_preference_list.deleter
-    def default_preference_list(self):  # type: ignore[no-untyped-def] # noqa
+    def default_preference_list(self):  # type: ignore[no-untyped-def]
         """Reset the default preference list to its original state.
 
         Note that "original state" does not mean the default preference
@@ -348,12 +347,12 @@ class GPGBase:
         self._prefs = "SHA512 SHA384 SHA256 AES256 CAMELLIA256 TWOFISH ZLIB ZIP"
 
     @property
-    def keyserver(self):  # type: ignore[no-untyped-def] # noqa
+    def keyserver(self):  # type: ignore[no-untyped-def]
         """Get the current keyserver setting."""
         return self._keyserver
 
     @keyserver.setter
-    def keyserver(self, location):  # type: ignore[no-untyped-def] # noqa
+    def keyserver(self, location):  # type: ignore[no-untyped-def]
         """Set the default keyserver to use for sending and receiving keys.
 
         The ``location`` is sent to :func:`_parsers._check_keyserver` when
@@ -368,11 +367,11 @@ class GPGBase:
         self._keyserver = location
 
     @keyserver.deleter
-    def keyserver(self):  # type: ignore[no-untyped-def] # noqa
+    def keyserver(self):  # type: ignore[no-untyped-def]
         """Reset the keyserver to the default setting."""
         self._keyserver = "hkp://wwwkeys.pgp.net"
 
-    def _homedir_getter(self):  # type: ignore[no-untyped-def] # noqa
+    def _homedir_getter(self):  # type: ignore[no-untyped-def]
         """Get the directory currently being used as GnuPG's homedir.
 
         If unspecified, use :file:`~/.config/python-gnupg/`
@@ -382,7 +381,7 @@ class GPGBase:
         """
         return self._homedir
 
-    def _homedir_setter(self, directory):  # type: ignore[no-untyped-def] # noqa
+    def _homedir_setter(self, directory):  # type: ignore[no-untyped-def]
         """Set the directory to use as GnuPG's homedir.
 
         If unspecified, use $HOME/.config/python-gnupg. If specified, ensure
@@ -425,7 +424,7 @@ class GPGBase:
 
     homedir = _util.InheritableProperty(_homedir_getter, _homedir_setter)
 
-    def _generated_keys_getter(self):  # type: ignore[no-untyped-def] # noqa
+    def _generated_keys_getter(self):  # type: ignore[no-untyped-def]
         """Get the ``homedir`` subdirectory for storing generated keys.
 
         :rtype: str
@@ -433,7 +432,7 @@ class GPGBase:
         """
         return self.__generated_keys
 
-    def _generated_keys_setter(self, directory):  # type: ignore[no-untyped-def] # noqa
+    def _generated_keys_setter(self, directory):  # type: ignore[no-untyped-def]
         """Set the directory for storing generated keys.
 
         If unspecified, use
@@ -474,7 +473,7 @@ class GPGBase:
 
     _generated_keys = _util.InheritableProperty(_generated_keys_getter, _generated_keys_setter)
 
-    def _check_sane_and_get_gpg_version(self):  # type: ignore[no-untyped-def] # noqa
+    def _check_sane_and_get_gpg_version(self):  # type: ignore[no-untyped-def]
         """Check that everything runs alright, and grab the gpg binary's
         version number while we're at it, storing it as :data:`binary_version`.
 
@@ -503,7 +502,7 @@ class GPGBase:
             raise RuntimeError("Got invalid version line from gpg: %s\n" % self.binary_version)
         log.debug("Using GnuPG version %s" % self.binary_version)
 
-    def _make_args(self, args, passphrase=False):  # type: ignore[no-untyped-def] # noqa
+    def _make_args(self, args, passphrase=False):  # type: ignore[no-untyped-def]
         """Make a list of command line elements for GPG.
 
         The value of ``args`` will be appended only if it passes the checks in
@@ -566,7 +565,7 @@ class GPGBase:
 
         return cmd
 
-    def _open_subprocess(self, args=None, passphrase=False):  # type: ignore[no-untyped-def] # noqa
+    def _open_subprocess(self, args=None, passphrase=False):  # type: ignore[no-untyped-def]
         """Open a pipe to a GPG subprocess and return the file objects for
         communicating with it.
 
@@ -587,7 +586,7 @@ class GPGBase:
         # see http://docs.python.org/2/library/subprocess.html#converting-an\
         #    -argument-sequence-to-a-string-on-windows
         cmd = shlex.split(" ".join(self._make_args(args, passphrase)))
-        log.debug("Sending command to GnuPG process:{}{}".format(os.linesep, cmd))
+        log.debug(f"Sending command to GnuPG process:{os.linesep}{cmd}")
 
         environment = {
             "LANGUAGE": os.environ.get("LANGUAGE") or "en",
@@ -606,7 +605,7 @@ class GPGBase:
             env=environment,
         )
 
-    def _read_response(self, stream, result):  # type: ignore[no-untyped-def] # noqa
+    def _read_response(self, stream, result):  # type: ignore[no-untyped-def]
         """Reads all the stderr output from GPG, taking notice only of lines
         that begin with the magic [GNUPG:] prefix.
 
@@ -658,14 +657,13 @@ class GPGBase:
                         # for some stupid reason, considered fatal:
                         if value.find("trustdb.gpg") and value.find("No such file"):
                             result._handle_status("NEED_TRUSTDB", "")
+            elif self.verbose:
+                log.info("%s" % line)
             else:
-                if self.verbose:
-                    log.info("%s" % line)
-                else:
-                    log.debug("%s" % line)
+                log.debug("%s" % line)
         result.stderr = "".join(lines)
 
-    def _read_data(self, stream, result):  # type: ignore[no-untyped-def] # noqa
+    def _read_data(self, stream, result):  # type: ignore[no-untyped-def]
         """Incrementally read from ``stream`` and store read data.
 
         All data gathered from calling ``stream.read()`` will be concatenated
@@ -690,7 +688,7 @@ class GPGBase:
         log.debug("Finishing reading from stream %r..." % stream.__repr__())
         log.debug("Read %4d bytes total" % len(result.data))
 
-    def _set_verbose(self, verbose):  # type: ignore[no-untyped-def] # noqa
+    def _set_verbose(self, verbose):  # type: ignore[no-untyped-def]
         """Check and set our :data:`verbose` attribute.
         The debug-level must be a string or an integer. If it is one of
         the allowed strings, GnuPG will translate it internally to it's
@@ -715,7 +713,7 @@ class GPGBase:
             # for gpg. Default to "basic", and warn about the ambiguity.
             verbose = "basic"
 
-        if isinstance(verbose, str) and not (verbose in string_levels):
+        if isinstance(verbose, str) and verbose not in string_levels:
             verbose = "basic"
 
         self.verbose = verbose
@@ -764,7 +762,7 @@ class GPGBase:
         self._collect_output(p, result, writer, stdin)
         return result
 
-    def _recv_keys(self, keyids, keyserver=None):  # type: ignore[no-untyped-def] # noqa
+    def _recv_keys(self, keyids, keyserver=None):  # type: ignore[no-untyped-def]
         """Import keys from a keyserver.
 
         :param str keyids: A space-delimited string containing the keyids to
@@ -776,7 +774,7 @@ class GPGBase:
             keyserver = self.keyserver
 
         args = [f"--keyserver {keyserver}", f"--recv-keys {keyids}"]
-        log.info("Requesting keys from {}: {}".format(keyserver, keyids))
+        log.info(f"Requesting keys from {keyserver}: {keyids}")
 
         result = self._result_map["import"](self)
         proc = self._open_subprocess(args)
@@ -784,7 +782,7 @@ class GPGBase:
         log.debug("recv_keys result: %r", result.__dict__)
         return result
 
-    def _sign_file(  # type: ignore[no-untyped-def] # noqa
+    def _sign_file(  # type: ignore[no-untyped-def]
         self,
         file,
         default_key=None,
@@ -856,7 +854,7 @@ class GPGBase:
         self._collect_output(proc, result, writer, proc.stdin)
         return result
 
-    def _encrypt(  # type: ignore[no-untyped-def] # noqa
+    def _encrypt(  # type: ignore[no-untyped-def]
         self,
         data,
         recipients,
@@ -1012,8 +1010,7 @@ class GPGBase:
 
         if len(recipients) >= 1:
             log.debug(
-                "GPG.encrypt() called for recipients '%s' with type '%s'"
-                % (recipients, type(recipients))
+                f"GPG.encrypt() called for recipients '{recipients}' with type '{type(recipients)}'"
             )
 
             if isinstance(recipients, (list, tuple)):
@@ -1029,7 +1026,7 @@ class GPGBase:
                 log.debug("Don't know what to do with recipients: %r" % recipients)
 
         result = self._result_map["crypt"](self)
-        log.debug("Got data '{}' with type '{}'.".format(data, type(data)))
+        log.debug(f"Got data '{data}' with type '{type(data)}'.")
         self._handle_io(args, data, result, passphrase=passphrase, binary=True)
         # Avoid writing raw encrypted bytes to terminal loggers and breaking
         # them in that adorable way where they spew hieroglyphics until reset:

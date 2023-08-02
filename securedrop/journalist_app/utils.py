@@ -58,9 +58,7 @@ def get_source(filesystem_id: str, include_deleted: bool = False) -> Source:
     query = Source.query.filter(Source.filesystem_id == filesystem_id)
     if not include_deleted:
         query = query.filter_by(deleted_at=None)
-    source = get_one_or_else(query, current_app.logger, abort)
-
-    return source
+    return get_one_or_else(query, current_app.logger, abort)
 
 
 def validate_user(
@@ -513,7 +511,7 @@ def col_download_unread(cols_selected: List[str]) -> werkzeug.Response:
 
 def col_download_all(cols_selected: List[str]) -> werkzeug.Response:
     """Download all submissions from all selected sources."""
-    submissions = []  # type: List[Union[Source, Submission]]
+    submissions: List[Union[Source, Submission]] = []
     for filesystem_id in cols_selected:
         id = (
             Source.query.filter(Source.filesystem_id == filesystem_id)

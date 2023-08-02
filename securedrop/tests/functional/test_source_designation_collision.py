@@ -7,7 +7,7 @@ from tests.functional.conftest import spawn_sd_servers
 
 
 @pytest.fixture(scope="session")
-def _sd_servers_with_designation_collisions(setup_journalist_key_and_gpg_folder, setup_rqworker):
+def sd_servers_with_designation_collisions(setup_journalist_key_and_gpg_folder, setup_rqworker):
     """Spawn source and journalist apps that can only generate a single journalist designation."""
     # Generate a config that can only generate a single journalist designation
     folder_for_fixture_path = Path("/tmp/sd-tests/functional-designation-collisions")
@@ -36,9 +36,9 @@ def _sd_servers_with_designation_collisions(setup_journalist_key_and_gpg_folder,
 
 
 class TestSourceAppDesignationCollision:
-    def test(self, _sd_servers_with_designation_collisions, tor_browser_web_driver):
+    def test(self, sd_servers_with_designation_collisions, tor_browser_web_driver):
         navigator = SourceAppNavigator(
-            source_app_base_url=_sd_servers_with_designation_collisions.source_app_base_url,
+            source_app_base_url=sd_servers_with_designation_collisions.source_app_base_url,
             web_driver=tor_browser_web_driver,
         )
 

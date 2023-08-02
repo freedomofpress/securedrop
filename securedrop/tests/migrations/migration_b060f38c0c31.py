@@ -35,8 +35,8 @@ class UpgradeTester:
     """
 
     source_count = 10
-    original_sources = {}  # type: Dict[str, Any]
-    source_submissions = {}  # type: Dict[str, Any]
+    original_sources: Dict[str, Any] = {}
+    source_submissions: Dict[str, Any] = {}
 
     def __init__(self, config):
         self.config = config
@@ -57,7 +57,7 @@ class UpgradeTester:
 
                 self.source_submissions[s.id] = db.engine.execute(
                     text("SELECT * FROM submissions WHERE source_id = :source_id"),
-                    **{"source_id": s.id},
+                    source_id=s.id,
                 ).fetchall()
 
     def add_source(self):
@@ -101,7 +101,7 @@ class UpgradeTester:
 
                 source_submissions = db.engine.execute(
                     text("SELECT * FROM submissions WHERE source_id = :source_id"),
-                    **{"source_id": source.id},
+                    source_id=source.id,
                 ).fetchall()
                 assert source_submissions == self.source_submissions[source.id]
 
@@ -112,8 +112,8 @@ class DowngradeTester:
     """
 
     source_count = 10
-    original_sources = {}  # type: Dict[str, Any]
-    source_submissions = {}  # type: Dict[str, Any]
+    original_sources: Dict[str, Any] = {}
+    source_submissions: Dict[str, Any] = {}
 
     def __init__(self, config):
         self.config = config
@@ -156,7 +156,7 @@ class DowngradeTester:
 
                 self.source_submissions[s.id] = db.engine.execute(
                     text("SELECT * FROM submissions WHERE source_id = :source_id"),
-                    **{"source_id": s.id},
+                    source_id=s.id,
                 ).fetchall()
 
     def check_downgrade(self):
@@ -177,6 +177,6 @@ class DowngradeTester:
 
                 source_submissions = db.engine.execute(
                     text("SELECT * FROM submissions WHERE source_id = :source_id"),
-                    **{"source_id": source.id},
+                    source_id=source.id,
                 ).fetchall()
                 assert source_submissions == self.source_submissions[source.id]

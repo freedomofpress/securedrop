@@ -81,7 +81,7 @@ apt_config_options = {
 }
 
 
-@pytest.mark.parametrize("k, v", apt_config_options.items())
+@pytest.mark.parametrize(("k", "v"), apt_config_options.items())
 def test_unattended_upgrades_config(host, k, v):
     """
     Ensures the apt and unattended-upgrades config is correct only under Ubuntu Focal

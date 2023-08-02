@@ -21,7 +21,7 @@ from tests.functional.pageslayout.utils import list_locales, save_static_data
 
 
 @pytest.mark.parametrize("locale", list_locales())
-@pytest.mark.pagelayout
+@pytest.mark.pagelayout()
 class TestJournalistLayout:
     def test_login_index_and_edit(self, locale, sd_servers, firefox_web_driver):
         # Given an SD server

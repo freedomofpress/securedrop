@@ -11,7 +11,7 @@ SKIP_REASON = "unimplemented, see GH#3689"
 
 class TestBase:
     @pytest.fixture(autouse=True)
-    def only_mon_staging_sudo(self, host):
+    def only_mon_staging_sudo(self, host):  # noqa: PT004
         if host.backend.host != "mon-staging":
             pytest.skip()
 

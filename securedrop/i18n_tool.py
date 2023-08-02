@@ -211,7 +211,7 @@ class I18NTool:
 
         if args.compile:
             pos = [f for f in os.listdir(args.translations_dir) if f.endswith(".po")]
-            linguas = [l[:-3] for l in pos]
+            linguas = [lingua[:-3] for lingua in pos]
             content = "\n".join(linguas) + "\n"
             linguas_file = join(args.translations_dir, "LINGUAS")
             try:
@@ -269,8 +269,8 @@ class I18NTool:
         Sorts the lines containing the icon names.
         """
         lines = open(template).readlines()
-        names = sorted(l for l in lines if l.startswith("Name"))
-        others = (l for l in lines if not l.startswith("Name"))
+        names = sorted(line for line in lines if line.startswith("Name"))
+        others = (line for line in lines if not line.startswith("Name"))
         with open(template, "w") as new_template:
             for line in others:
                 new_template.write(line)
@@ -439,7 +439,7 @@ class I18NTool:
                 desktop_code = info["desktop"]
                 path = join(
                     LOCALE_DIR["desktop"],
-                    f"{desktop_code}.po",  # noqa: E741
+                    f"{desktop_code}.po",
                 )
                 add(path)
             except KeyError:
@@ -506,7 +506,7 @@ class I18NTool:
     ) -> None:
         """Check if any of the given paths have had changed staged.  If so, commit them."""
         self.require_git_email_name(args.root)
-        authors = set()  # type: Set[str]
+        authors: Set[str] = set()
         cmd = ["git", "--no-pager", "diff", "--name-only", "--cached", *paths]
         diffs = subprocess.check_output(cmd, cwd=args.root, encoding="utf-8")
 
@@ -592,8 +592,8 @@ class I18NTool:
 
     def list_locales(self, args: argparse.Namespace) -> None:
         if args.lines:
-            for l in sorted(list(self.supported_languages.keys()) + ["en_US"]):
-                print(l)
+            for lang in sorted(list(self.supported_languages.keys()) + ["en_US"]):
+                print(lang)
         elif args.python:
             print(sorted(list(self.supported_languages.keys()) + ["en_US"]))
         else:
@@ -731,8 +731,7 @@ def _remove_from_content_line_with_text(text: str, content: str) -> str:
     # Remove the while line containing the text
     content_before_line = split_content[0]
     content_after_line = split_content[1].split("\n", maxsplit=1)[1]
-    updated_content = content_before_line + content_after_line
-    return updated_content
+    return content_before_line + content_after_line
 
 
 if __name__ == "__main__":  # pragma: no cover

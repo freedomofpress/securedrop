@@ -7,7 +7,7 @@ from tests.functional.pageslayout.utils import list_locales, save_static_data
 
 
 @pytest.mark.parametrize("locale", list_locales())
-@pytest.mark.pagelayout
+@pytest.mark.pagelayout()
 class TestSubmitAndRetrieveFile:
     def test_submit_and_retrieve_happy_path(
         self, locale, sd_servers_with_clean_state, tor_browser_web_driver, firefox_web_driver
@@ -109,7 +109,7 @@ class TestSubmitAndRetrieveFile:
 
         def message_starred():
             starred = journ_app_nav.driver.find_elements_by_id("starred-source-link-1")
-            assert 1 == len(starred)
+            assert len(starred) == 1
 
         journ_app_nav.nav_helper.wait_for(message_starred)
 

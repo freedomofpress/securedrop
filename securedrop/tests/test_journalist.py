@@ -1,7 +1,5 @@
-# flake8: noqa: E741
 import base64
 import binascii
-import io
 import os
 import random
 import time
@@ -792,7 +790,8 @@ def test_user_edits_password_expires_session(journalist_app, test_journo):
             ins.assert_redirects(resp, url_for("main.login"))
 
         # verify the session was expired after the password was changed
-        assert session.uid is None and session.user is None
+        assert session.uid is None
+        assert session.user is None
 
 
 @flaky(rerun_filter=utils.flaky_filter_xfail)
@@ -1652,7 +1651,7 @@ def test_admin_add_user_too_short_username(config, journalist_app, test_admin, l
 
 @flaky(rerun_filter=utils.flaky_filter_xfail)
 @pytest.mark.parametrize(
-    "locale, secret",
+    ("locale", "secret"),
     (
         (locale, "a" * i)
         for locale in get_test_locales()
@@ -1695,7 +1694,7 @@ def test_admin_add_user_yubikey_odd_length(config, journalist_app, test_admin, l
 
 @flaky(rerun_filter=utils.flaky_filter_xfail)
 @pytest.mark.parametrize(
-    "locale, secret",
+    ("locale", "secret"),
     ((locale, " " * i) for locale in get_test_locales() for i in range(3)),
 )
 def test_admin_add_user_yubikey_blank_secret(config, journalist_app, test_admin, locale, secret):
@@ -1722,7 +1721,7 @@ def test_admin_add_user_yubikey_blank_secret(config, journalist_app, test_admin,
         )
 
         assert page_language(resp.data) == language_tag(locale)
-        msgids = ['The "otp_secret" field is required when "is_hotp" is set.']
+        msgids = ["The &#34;otp_secret&#34; field is required when &#34;is_hotp&#34; is set."]
         with xfail_untranslated_messages(config, locale, msgids):
             # Should redirect to the token verification page
             assert gettext(msgids[0]) in resp.data.decode("utf-8")
@@ -3018,7 +3017,7 @@ def test_render_locales(
     journalist_key_fingerprint, gpg_key_dir = setup_journalist_key_and_gpg_folder
     worker_name, _ = setup_rqworker
     config_with_fr_locale = SecureDropConfigFactory.create(
-        SECUREDROP_DATA_ROOT=Path(f"/tmp/sd-tests/render_locales"),
+        SECUREDROP_DATA_ROOT=Path("/tmp/sd-tests/render_locales"),
         GPG_KEY_DIR=gpg_key_dir,
         JOURNALIST_KEY=journalist_key_fingerprint,
         SUPPORTED_LOCALES=["en_US", "fr_FR"],
@@ -3099,7 +3098,7 @@ def test_download_selected_submissions_and_replies(
         ).one_or_none()
 
         if not seen_file and not seen_message and not seen_reply:
-            assert False
+            pytest.fail("no seen_file and no seen_message and no seen_reply")
 
     # The items not selected are absent from the zipfile
     not_selected_submissions = set(submissions).difference(selected_submissions)
@@ -3173,7 +3172,7 @@ def test_download_selected_submissions_and_replies_previously_seen(
         ).one_or_none()
 
         if not seen_file and not seen_message and not seen_reply:
-            assert False
+            pytest.fail("no seen_file and no seen_message and no seen_reply")
 
     # The items not selected are absent from the zipfile
     not_selected_submissions = set(submissions).difference(selected_submissions)
@@ -3251,7 +3250,7 @@ def test_download_selected_submissions_previously_downloaded(
             )
 
 
-@pytest.fixture(scope="function")
+@pytest.fixture()
 def selected_missing_files(journalist_app, test_source, app_storage):
     """Fixture for the download tests with missing files in storage."""
     source = Source.query.get(test_source["id"])
@@ -3264,7 +3263,7 @@ def selected_missing_files(journalist_app, test_source, app_storage):
     for file in msg_files:
         file.unlink()
 
-    yield selected
+    return selected
 
 
 def test_download_selected_submissions_missing_files(
@@ -3400,20 +3399,19 @@ def test_download_unread_all_sources(journalist_app, test_journo, app_storage):
             ).one_or_none()
 
             if not seen_file and not seen_message:
-                assert False
+                pytest.fail("no seen_file and no seen_message")
 
         # Check that the zip file does not contain any seen data or replies
+        zipf = zipfile.ZipFile(BytesIO(resp.data))
         for item in seen_files + seen_messages + seen_replies + unseen_replies:
+            path = os.path.join(
+                "unread",
+                source.journalist_designation,
+                "{}_{}".format(item.filename.split("-")[0], source.last_updated.date()),
+                item.filename,
+            )
             with pytest.raises(KeyError):
-                zipinfo = zipfile.ZipFile(BytesIO(resp.data)).getinfo(
-                    os.path.join(
-                        "unread",
-                        source.journalist_designation,
-                        "{}_{}".format(item.filename.split("-")[0], source.last_updated.date()),
-                        item.filename,
-                    )
-                )
-                assert zipinfo
+                zipf.getinfo(path)
 
 
 def test_download_all_selected_sources(journalist_app, test_journo, app_storage):
@@ -3475,20 +3473,19 @@ def test_download_all_selected_sources(journalist_app, test_journo, app_storage)
             ).one_or_none()
 
             if not seen_file and not seen_message:
-                assert False
+                pytest.fail("no seen_file and no seen_message")
 
         # Check that the zip file does not contain any replies
+        zipf = zipfile.ZipFile(BytesIO(resp.data))
         for item in seen_replies + unseen_replies:
+            path = os.path.join(
+                "unread",
+                source.journalist_designation,
+                "{}_{}".format(item.filename.split("-")[0], source.last_updated.date()),
+                item.filename,
+            )
             with pytest.raises(KeyError):
-                zipinfo = zipfile.ZipFile(BytesIO(resp.data)).getinfo(
-                    os.path.join(
-                        "unread",
-                        source.journalist_designation,
-                        "{}_{}".format(item.filename.split("-")[0], source.last_updated.date()),
-                        item.filename,
-                    )
-                )
-                assert zipinfo
+                zipf.getinfo(path)
 
 
 def test_single_source_is_successfully_starred(journalist_app, test_journo, test_source):

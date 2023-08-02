@@ -228,14 +228,14 @@ class SiteConfig:
     class ValidateOSSECUsername(Validator):
         def validate(self, document: Document) -> bool:
             text = document.text
-            if text and "@" not in text and "test" != text:
+            if text and "@" not in text and text != "test":
                 return True
             raise ValidationError(message="The SASL username should not include the domain name")
 
     class ValidateOSSECPassword(Validator):
         def validate(self, document: Document) -> bool:
             text = document.text
-            if len(text) >= 8 and "password123" != text:
+            if len(text) >= 8 and text != "password123":
                 return True
             raise ValidationError(message="Password for OSSEC email account must be strong")
 
@@ -252,7 +252,7 @@ class SiteConfig:
         def validate(self, document: Document) -> bool:
             super().validate(document)
             text = document.text
-            if "ossec@ossec.test" != text:
+            if text != "ossec@ossec.test":
                 return True
             raise ValidationError(
                 message=("Must be set to something other than " "ossec@ossec.test")
@@ -266,10 +266,10 @@ class SiteConfig:
 
     def __init__(self, args: argparse.Namespace) -> None:
         self.args = args
-        self.config = {}  # type: Dict
+        self.config: dict = {}
         # Hold runtime configuration before save, to support
         # referencing other responses during validation
-        self._config_in_progress = {}  # type: Dict
+        self._config_in_progress: dict = {}
 
         supported_locales = I18N_DEFAULT_LOCALES.copy()
         i18n_conf_path = os.path.join(args.root, I18N_CONF)
@@ -279,7 +279,7 @@ class SiteConfig:
             supported_locales.update(set(i18n_conf["supported_locales"].keys()))
         locale_validator = SiteConfig.ValidateLocales(self.args.app_path, supported_locales)
 
-        self.desc = [
+        self.desc: List[_DescEntryType] = [
             (
                 "ssh_users",
                 "sd",
@@ -516,7 +516,7 @@ class SiteConfig:
                 str.split,
                 lambda config: True,
             ),
-        ]  # type: List[_DescEntryType]
+        ]
 
     def load_and_update_config(self, validate: bool = True, prompt: bool = True) -> bool:
         if self.exists():
@@ -542,9 +542,7 @@ class SiteConfig:
             if not condition(self._config_in_progress):
                 self._config_in_progress[var] = ""
                 continue
-            self._config_in_progress[var] = self.user_prompt_config_one(
-                desc, self.config.get(var)
-            )  # noqa: E501
+            self._config_in_progress[var] = self.user_prompt_config_one(desc, self.config.get(var))
         return self._config_in_progress
 
     def user_prompt_config_one(self, desc: _DescEntryType, from_config: Optional[Any]) -> Any:
@@ -932,7 +930,7 @@ def check_for_updates(args: argparse.Namespace) -> Tuple[bool, str]:
     # relied on to determine if we're on the latest tag or not.
     current_tag = (
         subprocess.check_output(["git", "describe"], cwd=args.root).decode("utf-8").rstrip("\n")
-    )  # noqa: E501
+    )
 
     # Fetch all branches
     git_fetch_cmd = ["git", "fetch", "--all"]
@@ -945,7 +943,7 @@ def check_for_updates(args: argparse.Namespace) -> Tuple[bool, str]:
         .decode("utf-8")
         .rstrip("\n")
         .split("\n")
-    )  # noqa: E501
+    )
 
     # Do not check out any release candidate tags
     all_prod_tags = [x for x in all_tags if "rc" not in x]
@@ -1109,8 +1107,6 @@ def parse_argv(argv: List[str]) -> argparse.Namespace:
         argparse.ArgumentDefaultsHelpFormatter, argparse.RawTextHelpFormatter
     ):
         """Needed to combine formatting classes for help output"""
-
-        pass
 
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=ArgParseFormatterCombo)
     parser.add_argument(

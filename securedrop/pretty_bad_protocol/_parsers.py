@@ -39,7 +39,7 @@ class UsageError(Exception):
     """Raised when incorrect usage of the API occurs.."""
 
 
-def _check_keyserver(location):  # type: ignore[no-untyped-def] # noqa
+def _check_keyserver(location):  # type: ignore[no-untyped-def]
     """Check that a given keyserver is a known protocol and does not contain
     shell escape characters.
 
@@ -64,18 +64,17 @@ def _check_keyserver(location):  # type: ignore[no-untyped-def] # noqa
             url = location.replace(proto, "")
             host, slash, extra = url.partition("/")
             if extra:
-                log.warn("URI text for {}: '{}'".format(host, extra))
+                log.warn(f"URI text for {host}: '{extra}'")
             log.debug("Got host string for keyserver setting: '%s'" % host)
 
             host = _fix_unsafe(host)
             if host:
                 log.debug("Cleaned host string: '%s'" % host)
-                keyserver = proto + host
-                return keyserver
+                return proto + host
             return None
 
 
-def _check_preferences(prefs, pref_type=None):  # type: ignore[no-untyped-def] # noqa
+def _check_preferences(prefs, pref_type=None):  # type: ignore[no-untyped-def]
     """Check cipher, digest, and compression preference settings.
 
     MD5 is not allowed. This is `not 1994`__. SHA1 is allowed_ grudgingly_.
@@ -85,7 +84,7 @@ def _check_preferences(prefs, pref_type=None):  # type: ignore[no-untyped-def] #
     .. _grudgingly: https://www.schneier.com/blog/archives/2012/10/when_will_we_se.html
     """
     if prefs is None:
-        return
+        return None
 
     cipher = frozenset(
         ["AES256", "AES192", "AES128", "CAMELLIA256", "CAMELLIA192", "TWOFISH", "3DES"]
@@ -126,7 +125,7 @@ def _check_preferences(prefs, pref_type=None):  # type: ignore[no-untyped-def] #
     return allowed
 
 
-def _fix_unsafe(shell_input):  # type: ignore[no-untyped-def] # noqa
+def _fix_unsafe(shell_input):  # type: ignore[no-untyped-def]
     """Find characters used to escape from a string into a shell, and wrap them in
     quotes if they exist. Regex pilfered from Python3 :mod:`shlex` module.
 
@@ -137,13 +136,12 @@ def _fix_unsafe(shell_input):  # type: ignore[no-untyped-def] # noqa
         if len(_unsafe.findall(shell_input)) == 0:
             return shell_input.strip()
         else:
-            clean = "'" + shell_input.replace("'", "'\"'\"'") + "'"
-            return clean
+            return "'" + shell_input.replace("'", "'\"'\"'") + "'"
     except TypeError:
         return None
 
 
-def _hyphenate(input, add_prefix=False):  # type: ignore[no-untyped-def] # noqa
+def _hyphenate(input, add_prefix=False):  # type: ignore[no-untyped-def]
     """Change underscores to hyphens so that object attributes can be easily
     tranlated to GPG option names.
 
@@ -157,7 +155,7 @@ def _hyphenate(input, add_prefix=False):  # type: ignore[no-untyped-def] # noqa
     return ret
 
 
-def _is_allowed(input):  # type: ignore[no-untyped-def] # noqa
+def _is_allowed(input):  # type: ignore[no-untyped-def]
     """Check that an option or argument given to GPG is in the set of allowed
     options, the latter being a strict subset of the set of all options known
     to GPG.
@@ -227,7 +225,7 @@ def _is_allowed(input):  # type: ignore[no-untyped-def] # noqa
     return None
 
 
-def _is_hex(string):  # type: ignore[no-untyped-def] # noqa
+def _is_hex(string):  # type: ignore[no-untyped-def]
     """Check that a string is hexadecimal, with alphabetic characters
     in either upper or lower case and without whitespace.
 
@@ -238,7 +236,7 @@ def _is_hex(string):  # type: ignore[no-untyped-def] # noqa
     return False
 
 
-def _sanitise(*args):  # type: ignore[no-untyped-def] # noqa
+def _sanitise(*args):  # type: ignore[no-untyped-def]
     """Take an arg or the key portion of a kwarg and check that it is in the
     set of allowed GPG options and flags, and that it has the correct
     type. Then, attempt to escape any unsafe characters. If an option is not
@@ -269,7 +267,7 @@ def _sanitise(*args):  # type: ignore[no-untyped-def] # noqa
 
     # see TODO file, tag :cleanup:sanitise:
 
-    def _check_option(arg, value):  # type: ignore[no-untyped-def] # noqa
+    def _check_option(arg, value):  # type: ignore[no-untyped-def]
         """Check that a single ``arg`` is an allowed option.
 
         If it is allowed, quote out any escape characters in ``value``, and
@@ -313,7 +311,7 @@ def _sanitise(*args):  # type: ignore[no-untyped-def] # noqa
                         if _is_hex(v):
                             checked += v + " "
                         else:
-                            log.debug("'{} {}' not hex.".format(flag, v))
+                            log.debug(f"'{flag} {v}' not hex.")
                             if (flag in hex_or_none_options) and (v is None):
                                 log.debug("Allowing '%s' for all keys" % flag)
                         continue
@@ -336,7 +334,7 @@ def _sanitise(*args):  # type: ignore[no-untyped-def] # noqa
                         assert v is not None
                         assert not v.isspace()
                     except:  # noqa: E722
-                        log.debug("Dropping {} {}".format(flag, v))
+                        log.debug(f"Dropping {flag} {v}")
                         continue
 
                     if flag in [
@@ -350,7 +348,7 @@ def _sanitise(*args):  # type: ignore[no-untyped-def] # noqa
                         if (_util._is_file(val)) or ((flag == "--verify") and (val == "-")):
                             checked += val + " "
                         else:
-                            log.debug("{} not file: {}".format(flag, val))
+                            log.debug(f"{flag} not file: {val}")
 
                     elif flag in [
                         "--cipher-algo",
@@ -395,16 +393,16 @@ def _sanitise(*args):  # type: ignore[no-untyped-def] # noqa
 
         return checked.rstrip(" ")
 
-    def is_flag(x):  # type: ignore[no-untyped-def] # noqa
+    def is_flag(x):  # type: ignore[no-untyped-def]
         return x.startswith("--")
 
-    def _make_filo(args_string):  # type: ignore[no-untyped-def] # noqa
+    def _make_filo(args_string):  # type: ignore[no-untyped-def]
         filo = arg.split(" ")
         filo.reverse()
         log.debug("_make_filo(): Converted to reverse list: %s" % filo)
         return filo
 
-    def _make_groups(filo):  # type: ignore[no-untyped-def] # noqa
+    def _make_groups(filo):  # type: ignore[no-untyped-def]
         groups = {}
         while len(filo) >= 1:
             last = filo.pop()
@@ -421,26 +419,25 @@ def _sanitise(*args):  # type: ignore[no-untyped-def] # noqa
                 while len(filo) > 1 and not is_flag(filo[len(filo) - 1]):
                     log.debug("Got value: %s" % filo[len(filo) - 1])
                     groups[last] += filo.pop() + " "
-                else:
-                    if len(filo) == 1 and not is_flag(filo[0]):
-                        log.debug("Got value: %s" % filo[0])
-                        groups[last] += filo.pop()
+                if len(filo) == 1 and not is_flag(filo[0]):
+                    log.debug("Got value: %s" % filo[0])
+                    groups[last] += filo.pop()
             else:
                 log.warn("_make_groups(): Got solitary value: %s" % last)
                 groups["xxx"] = last
         return groups
 
-    def _check_groups(groups):  # type: ignore[no-untyped-def] # noqa
+    def _check_groups(groups):  # type: ignore[no-untyped-def]
         log.debug("Got groups: %s" % groups)
         checked_groups = []
         for a, v in groups.items():
             v = None if len(v) == 0 else v
             safe = _check_option(a, v)
-            if safe is not None and not safe.strip() == "":
+            if safe is not None and safe.strip() != "":
                 log.debug("Appending option: %s" % safe)
                 checked_groups.append(safe)
             else:
-                log.warn("Dropped option: '{} {}'".format(a, v))
+                log.warn(f"Dropped option: '{a} {v}'")
         return checked_groups
 
     if args is not None:
@@ -460,15 +457,14 @@ def _sanitise(*args):  # type: ignore[no-untyped-def] # noqa
                 arg.reverse()
                 option_groups.update(_make_groups(arg))
             else:
-                log.warn("Got non-str/list arg: '%s', type '%s'" % (arg, type(arg)))
+                log.warn(f"Got non-str/list arg: '{arg}', type '{type(arg)}'")
         checked = _check_groups(option_groups)
-        sanitised = " ".join(x for x in checked)
-        return sanitised
+        return " ".join(x for x in checked)
     else:
         log.debug("Got None for args")
 
 
-def _sanitise_list(arg_list):  # type: ignore[no-untyped-def] # noqa
+def _sanitise_list(arg_list):  # type: ignore[no-untyped-def]
     """A generator for iterating through a list of gpg options and sanitising
     them.
 
@@ -485,7 +481,7 @@ def _sanitise_list(arg_list):  # type: ignore[no-untyped-def] # noqa
                 yield safe_arg
 
 
-def _get_options_group(group=None):  # type: ignore[no-untyped-def] # noqa
+def _get_options_group(group=None):  # type: ignore[no-untyped-def]
     """Get a specific group of options which are allowed."""
 
     #: These expect a hexidecimal keyid as their argument, and can be parsed
@@ -647,11 +643,11 @@ def _get_options_group(group=None):  # type: ignore[no-untyped-def] # noqa
         none_options,
     )
 
-    if group and group in locals().keys():
+    if group and group in locals():
         return locals()[group]
 
 
-def _get_all_gnupg_options():  # type: ignore[no-untyped-def] # noqa
+def _get_all_gnupg_options():  # type: ignore[no-untyped-def]
     """Get all GnuPG options and flags.
 
     This is hardcoded within a local scope to reduce the chance of a tampered
@@ -847,11 +843,10 @@ def _get_all_gnupg_options():  # type: ignore[no-untyped-def] # noqa
     three_hundred_eighteen.append("--pinentry-mode")
     three_hundred_eighteen.append("--allow-loopback-pinentry")
 
-    gnupg_options = frozenset(three_hundred_eighteen)
-    return gnupg_options
+    return frozenset(three_hundred_eighteen)
 
 
-def nodata(status_code):  # type: ignore[no-untyped-def] # noqa
+def nodata(status_code):  # type: ignore[no-untyped-def]
     """Translate NODATA status codes from GnuPG to messages."""
     lookup = {
         "1": "No armored data.",
@@ -864,7 +859,7 @@ def nodata(status_code):  # type: ignore[no-untyped-def] # noqa
             return value
 
 
-def progress(status_code):  # type: ignore[no-untyped-def] # noqa
+def progress(status_code):  # type: ignore[no-untyped-def]
     """Translate PROGRESS status codes from GnuPG to messages."""
     lookup = {
         "pk_dsa": "DSA key generation",
@@ -884,31 +879,31 @@ def progress(status_code):  # type: ignore[no-untyped-def] # noqa
 class KeyExpirationInterface:
     """Interface that guards against misuse of --edit-key combined with --command-fd"""
 
-    def __init__(self, expiration_time, passphrase=None):  # type: ignore[no-untyped-def] # noqa
+    def __init__(self, expiration_time, passphrase=None):  # type: ignore[no-untyped-def]
         self._passphrase = passphrase
         self._expiration_time = expiration_time
         self._clean_key_expiration_option()
 
-    def _clean_key_expiration_option(self):  # type: ignore[no-untyped-def] # noqa
+    def _clean_key_expiration_option(self):  # type: ignore[no-untyped-def]
         """validates the expiration option supplied"""
         allowed_entry = re.findall(r"^(\d+)(|w|m|y)$", self._expiration_time)
         if not allowed_entry:
             raise UsageError("Key expiration option: %s is not valid" % self._expiration_time)
 
-    def _input_passphrase(self, _input):  # type: ignore[no-untyped-def] # noqa
+    def _input_passphrase(self, _input):  # type: ignore[no-untyped-def]
         if self._passphrase:
-            return "{}{}\n".format(_input, self._passphrase)
+            return f"{_input}{self._passphrase}\n"
         return _input
 
-    def _main_key_command(self):  # type: ignore[no-untyped-def] # noqa
+    def _main_key_command(self):  # type: ignore[no-untyped-def]
         main_key_input = "expire\n%s\n" % self._expiration_time
         return self._input_passphrase(main_key_input)
 
-    def _sub_key_command(self, sub_key_number):  # type: ignore[no-untyped-def] # noqa
+    def _sub_key_command(self, sub_key_number):  # type: ignore[no-untyped-def]
         sub_key_input = "key %d\nexpire\n%s\n" % (sub_key_number, self._expiration_time)
         return self._input_passphrase(sub_key_input)
 
-    def gpg_interactive_input(self, sub_keys_number):  # type: ignore[no-untyped-def] # noqa
+    def gpg_interactive_input(self, sub_keys_number):  # type: ignore[no-untyped-def]
         """processes series of inputs normally supplied on --edit-key but passed through stdin
         this ensures that no other --edit-key command is actually passing through.
         """
@@ -925,11 +920,11 @@ class KeyExpirationResult:
     It does not really have a job, but just to conform to the API
     """
 
-    def __init__(self, gpg):  # type: ignore[no-untyped-def] # noqa
+    def __init__(self, gpg):  # type: ignore[no-untyped-def]
         self._gpg = gpg
         self.status = "ok"
 
-    def _handle_status(self, key, value):  # type: ignore[no-untyped-def] # noqa
+    def _handle_status(self, key, value):  # type: ignore[no-untyped-def]
         """Parse a status code from the attached GnuPG process.
 
         :raises: :exc:`~exceptions.ValueError` if the status message is unknown.
@@ -955,11 +950,11 @@ class KeyExpirationResult:
 class KeySigningResult:
     """Handle status messages for key singing"""
 
-    def __init__(self, gpg):  # type: ignore[no-untyped-def] # noqa
+    def __init__(self, gpg):  # type: ignore[no-untyped-def]
         self._gpg = gpg
         self.status = "ok"
 
-    def _handle_status(self, key, value):  # type: ignore[no-untyped-def] # noqa
+    def _handle_status(self, key, value):  # type: ignore[no-untyped-def]
         """Parse a status code from the attached GnuPG process.
 
         :raises: :exc:`~exceptions.ValueError` if the status message is unknown.
@@ -977,7 +972,7 @@ class KeySigningResult:
             self.status = "{}: {}".format(key.replace("_", " ").lower(), value)
         else:
             self.status = "failed"
-            raise ValueError("Key signing, unknown status message: {!r} ::{}".format(key, value))
+            raise ValueError(f"Key signing, unknown status message: {key!r} ::{value}")
 
 
 class GenKey:
@@ -987,7 +982,7 @@ class GenKey:
     key's fingerprint, or a status string explaining the results.
     """
 
-    def __init__(self, gpg):  # type: ignore[no-untyped-def] # noqa
+    def __init__(self, gpg):  # type: ignore[no-untyped-def]
         self._gpg = gpg
         # this should get changed to something more useful, like 'key_type'
         #: 'P':= primary, 'S':= subkey, 'B':= both
@@ -1009,23 +1004,23 @@ class GenKey:
         #: ``separate_keyring=True``.
         self.secring = None
 
-    def __nonzero__(self):  # type: ignore[no-untyped-def] # noqa
+    def __nonzero__(self):  # type: ignore[no-untyped-def]
         if self.fingerprint:
             return True
         return False
 
     __bool__ = __nonzero__
 
-    def __str__(self):  # type: ignore[no-untyped-def] # noqa
+    def __str__(self):  # type: ignore[no-untyped-def]
         if self.fingerprint:
             return self.fingerprint
+        elif self.status is not None:
+            return self.status
         else:
-            if self.status is not None:
-                return self.status
-            else:
-                return False
+            # FIXME: we should only be returning a str
+            return False  # noqa: PLE0307
 
-    def _handle_status(self, key, value):  # type: ignore[no-untyped-def] # noqa
+    def _handle_status(self, key, value):  # type: ignore[no-untyped-def]
         """Parse a status code from the attached GnuPG process.
 
         :raises: :exc:`~exceptions.ValueError` if the status message is unknown.
@@ -1054,7 +1049,7 @@ class GenKey:
                 "\nhttps://github.com/isislovecruft/python-gnupg/issues/137"
             )
             self.status = "key not created"
-        elif key.startswith("TRUST_") or key.startswith("PKA_TRUST_") or key == "NEWSIG":
+        elif key.startswith(("TRUST_", "PKA_TRUST_")) or key == "NEWSIG":
             pass
         else:
             raise ValueError("Unknown status message: %r" % key)
@@ -1068,11 +1063,11 @@ class GenKey:
 class DeleteResult:
     """Handle status messages for --delete-keys and --delete-secret-keys"""
 
-    def __init__(self, gpg):  # type: ignore[no-untyped-def] # noqa
+    def __init__(self, gpg):  # type: ignore[no-untyped-def]
         self._gpg = gpg
         self.status = "ok"
 
-    def __str__(self):  # type: ignore[no-untyped-def] # noqa
+    def __str__(self):  # type: ignore[no-untyped-def]
         return self.status
 
     problem_reason = {
@@ -1081,7 +1076,7 @@ class DeleteResult:
         "3": "Ambigious specification",
     }
 
-    def _handle_status(self, key, value):  # type: ignore[no-untyped-def] # noqa
+    def _handle_status(self, key, value):  # type: ignore[no-untyped-def]
         """
         Parse a status code from the attached GnuPG process.
         :raises: :exc:`~exceptions.ValueError` if the status message is unknown.
@@ -1114,10 +1109,10 @@ class Sign:
     what = None
     status = None
 
-    def __init__(self, gpg):  # type: ignore[no-untyped-def] # noqa
+    def __init__(self, gpg):  # type: ignore[no-untyped-def]
         self._gpg = gpg
 
-    def __nonzero__(self):  # type: ignore[no-untyped-def] # noqa
+    def __nonzero__(self):  # type: ignore[no-untyped-def]
         """Override the determination for truthfulness evaluation.
 
         :rtype: bool
@@ -1127,10 +1122,10 @@ class Sign:
 
     __bool__ = __nonzero__
 
-    def __str__(self):  # type: ignore[no-untyped-def] # noqa
+    def __str__(self):  # type: ignore[no-untyped-def]
         return self.data.decode(self._gpg._encoding, self._gpg._decode_errors)
 
-    def _handle_status(self, key, value):  # type: ignore[no-untyped-def] # noqa
+    def _handle_status(self, key, value):  # type: ignore[no-untyped-def]
         """Parse a status code from the attached GnuPG process.
 
         :raises: :exc:`~exceptions.ValueError` if the status message is unknown.
@@ -1189,7 +1184,7 @@ class ListKeys(list):
     |  rvk = revocation key
     """
 
-    def __init__(self, gpg):  # type: ignore[no-untyped-def] # noqa
+    def __init__(self, gpg):  # type: ignore[no-untyped-def]
         super().__init__()
         self._gpg = gpg
         self.curkey = None
@@ -1200,7 +1195,7 @@ class ListKeys(list):
         self.certs = {}
         self.revs = {}
 
-    def key(self, args):  # type: ignore[no-untyped-def] # noqa
+    def key(self, args):  # type: ignore[no-untyped-def]
         vars = (
             """
             type trust length algo keyid date expires dummy ownertrust uid
@@ -1225,11 +1220,11 @@ class ListKeys(list):
 
     pub = sec = key
 
-    def fpr(self, args):  # type: ignore[no-untyped-def] # noqa
+    def fpr(self, args):  # type: ignore[no-untyped-def]
         self.curkey["fingerprint"] = args[9]
         self.fingerprints.append(args[9])
 
-    def uid(self, args):  # type: ignore[no-untyped-def] # noqa
+    def uid(self, args):  # type: ignore[no-untyped-def]
         uid = args[9]
         uid = ESCAPE_PATTERN.sub(lambda m: chr(int(m.group(1), 16)), uid)
         self.curkey["uids"].append(uid)
@@ -1239,7 +1234,7 @@ class ListKeys(list):
         self.certs[uid] = set()
         self.uids.append(uid)
 
-    def sig(self, args):  # type: ignore[no-untyped-def] # noqa
+    def sig(self, args):  # type: ignore[no-untyped-def]
         vars = (
             """
             type trust length algo keyid date expires dummy ownertrust uid
@@ -1253,21 +1248,21 @@ class ListKeys(list):
         if sig["trust"] == "!":
             self.certs[self.curuid].add(sig["keyid"])
 
-    def sub(self, args):  # type: ignore[no-untyped-def] # noqa
+    def sub(self, args):  # type: ignore[no-untyped-def]
         subkey = [args[4], args[11]]
         self.curkey["subkeys"].append(subkey)
 
-    def rev(self, args):  # type: ignore[no-untyped-def] # noqa
+    def rev(self, args):  # type: ignore[no-untyped-def]
         self.curkey["rev"] = {"keyid": args[4], "revtime": args[5], "uid": self.curuid}
 
-    def _handle_status(self, key, value):  # type: ignore[no-untyped-def] # noqa
+    def _handle_status(self, key, value):  # type: ignore[no-untyped-def]
         pass
 
 
 class ImportResult:
     """Parse GnuPG status messages for key import operations."""
 
-    def __init__(self, gpg):  # type: ignore[no-untyped-def] # noqa
+    def __init__(self, gpg):  # type: ignore[no-untyped-def]
         """Start parsing the results of a key import operation.
 
         :type gpg: :class:`gnupg.GPG`
@@ -1315,7 +1310,7 @@ class ImportResult:
         #: imported.
         self.results = list()
 
-    def __nonzero__(self):  # type: ignore[no-untyped-def] # noqa
+    def __nonzero__(self):  # type: ignore[no-untyped-def]
         """Override the determination for truthfulness evaluation.
 
         :rtype: bool
@@ -1329,7 +1324,7 @@ class ImportResult:
 
     __bool__ = __nonzero__
 
-    def _handle_status(self, key, value):  # type: ignore[no-untyped-def] # noqa
+    def _handle_status(self, key, value):  # type: ignore[no-untyped-def]
         """Parse a status code from the attached GnuPG process.
 
         :raises ValueError: if the status message is unknown.
@@ -1375,7 +1370,7 @@ class ImportResult:
             )
         elif key == "IMPORT_RES":
             import_res = value.split()
-            for x in self.counts.keys():
+            for x in self.counts:
                 self.counts[x] = int(import_res.pop(0))
         elif key == "KEYEXPIRED":
             res = {"fingerprint": None, "status": "Key expired"}
@@ -1388,7 +1383,7 @@ class ImportResult:
         else:
             raise ValueError("Unknown status message: %r" % key)
 
-    def summary(self):  # type: ignore[no-untyped-def] # noqa
+    def summary(self):  # type: ignore[no-untyped-def]
         l = []  # noqa: E741
         l.append("%d imported" % self.counts["imported"])
         if self.counts["not_imported"]:
@@ -1399,7 +1394,7 @@ class ImportResult:
 class ExportResult:
     """Parse GnuPG status messages for key export operations."""
 
-    def __init__(self, gpg):  # type: ignore[no-untyped-def] # noqa
+    def __init__(self, gpg):  # type: ignore[no-untyped-def]
         """Start parsing the results of a key export operation.
 
         :type gpg: :class:`gnupg.GPG`
@@ -1419,7 +1414,7 @@ class ExportResult:
         #: exported.
         self.fingerprints = list()
 
-    def __nonzero__(self):  # type: ignore[no-untyped-def] # noqa
+    def __nonzero__(self):  # type: ignore[no-untyped-def]
         """Override the determination for truthfulness evaluation.
 
         :rtype: bool
@@ -1433,7 +1428,7 @@ class ExportResult:
 
     __bool__ = __nonzero__
 
-    def _handle_status(self, key, value):  # type: ignore[no-untyped-def] # noqa
+    def _handle_status(self, key, value):  # type: ignore[no-untyped-def]
         """Parse a status code from the attached GnuPG process.
 
         :raises ValueError: if the status message is unknown.
@@ -1443,12 +1438,12 @@ class ExportResult:
             self.fingerprints.append(value)
         elif key == "EXPORT_RES":
             export_res = value.split()
-            for x in self.counts.keys():
+            for x in self.counts:
                 self.counts[x] += int(export_res.pop(0))
         elif key not in informational_keys:
             raise ValueError("Unknown status message: %r" % key)
 
-    def summary(self):  # type: ignore[no-untyped-def] # noqa
+    def summary(self):  # type: ignore[no-untyped-def]
         return "%d exported" % self.counts["exported"]
 
 
@@ -1501,7 +1496,7 @@ class Verify:
         "DECRYPTION_COMPLIANCE_MODE": DECRYPTION_COMPLIANCE_MODE,
     }
 
-    def __init__(self, gpg):  # type: ignore[no-untyped-def] # noqa
+    def __init__(self, gpg):  # type: ignore[no-untyped-def]
         """Create a parser for verification and certification commands.
 
         :param gpg: An instance of :class:`gnupg.GPG`.
@@ -1573,7 +1568,7 @@ class Verify:
         #: ``NOTATION_DATA``.
         self._last_notation_name = None
 
-    def __nonzero__(self):  # type: ignore[no-untyped-def] # noqa
+    def __nonzero__(self):  # type: ignore[no-untyped-def]
         """Override the determination for truthfulness evaluation.
 
         :rtype: bool
@@ -1583,7 +1578,7 @@ class Verify:
 
     __bool__ = __nonzero__
 
-    def _handle_status(self, key, value):  # type: ignore[no-untyped-def] # noqa
+    def _handle_status(self, key, value):  # type: ignore[no-untyped-def]
         """Parse a status code from the attached GnuPG process.
 
         :raises: :exc:`~exceptions.ValueError` if the status message is unknown.
@@ -1655,7 +1650,7 @@ class Verify:
             # case of WARNING or ERROR) additional text.
             # Have fun figuring out what it means.
             self.status = value
-            log.warn("{} status emitted from gpg process: {}".format(key, value))
+            log.warn(f"{key} status emitted from gpg process: {value}")
         elif key == "NO_PUBKEY":
             self.valid = False
             self.key_id = value
@@ -1671,7 +1666,7 @@ class Verify:
         elif key in ("EXPKEYSIG", "REVKEYSIG"):
             self.valid = False
             self.key_id = value.split()[0]
-            self.status = (("%s %s") % (key[:3], key[3:])).lower()
+            self.status = (f"{key[:3]} {key[3:]}").lower()
         # This is super annoying, and bad design on the part of GnuPG, in my
         # opinion.
         #
@@ -1760,7 +1755,7 @@ class Verify:
                 else:
                     pass
         else:
-            raise ValueError("Unknown status message: {!r} {!r}".format(key, value))
+            raise ValueError(f"Unknown status message: {key!r} {value!r}")
 
 
 class Crypt(Verify):
@@ -1768,7 +1763,7 @@ class Crypt(Verify):
     ``--decrypt``, and ``--decrypt-files``.
     """
 
-    def __init__(self, gpg):  # type: ignore[no-untyped-def] # noqa
+    def __init__(self, gpg):  # type: ignore[no-untyped-def]
         Verify.__init__(self, gpg)
         self._gpg = gpg
         #: A string containing the encrypted or decrypted data.
@@ -1782,14 +1777,14 @@ class Crypt(Verify):
         self.data_timestamp = None
         self.data_filename = None
 
-    def __nonzero__(self):  # type: ignore[no-untyped-def] # noqa
+    def __nonzero__(self):  # type: ignore[no-untyped-def]
         if self.ok:
             return True
         return False
 
     __bool__ = __nonzero__
 
-    def __str__(self):  # type: ignore[no-untyped-def] # noqa
+    def __str__(self):  # type: ignore[no-untyped-def]
         """The str() method for a :class:`Crypt` object will automatically return the
         decoded data string, which stores the encryped or decrypted data.
 
@@ -1800,7 +1795,7 @@ class Crypt(Verify):
         """
         return self.data.decode(self._gpg._encoding, self._gpg._decode_errors)
 
-    def _handle_status(self, key, value):  # type: ignore[no-untyped-def] # noqa
+    def _handle_status(self, key, value):  # type: ignore[no-untyped-def]
         """Parse a status code from the attached GnuPG process.
 
         :raises: :exc:`~exceptions.ValueError` if the status message is unknown.
@@ -1870,7 +1865,7 @@ class Crypt(Verify):
 class ListPackets:
     """Handle status messages for --list-packets."""
 
-    def __init__(self, gpg):  # type: ignore[no-untyped-def] # noqa
+    def __init__(self, gpg):  # type: ignore[no-untyped-def]
         self._gpg = gpg
         #: A string describing the current processing status, or error, if one
         #: has occurred.
@@ -1888,7 +1883,7 @@ class ListPackets:
         #: A list of keyid's that the message has been encrypted to.
         self.encrypted_to = []
 
-    def _handle_status(self, key, value):  # type: ignore[no-untyped-def] # noqa
+    def _handle_status(self, key, value):  # type: ignore[no-untyped-def]
         """Parse a status code from the attached GnuPG process.
 
         :raises: :exc:`~exceptions.ValueError` if the status message is unknown.

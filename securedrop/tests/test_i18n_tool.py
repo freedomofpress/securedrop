@@ -309,7 +309,7 @@ class TestI18NTool:
         subprocess.check_call(["git", "checkout", "-b", "i18n", "master"], **k)
 
         def r():
-            return "".join([str(l) for l in caplog.records])
+            return "".join([str(record) for record in caplog.records])
 
         #
         # de_DE is not amount the supported languages, it is not taken

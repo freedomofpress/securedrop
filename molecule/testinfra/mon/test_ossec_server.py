@@ -32,7 +32,7 @@ def test_ossec_service_start_style(host):
 
 
 # Permissions don't match between Ansible and OSSEC deb packages postinst.
-@pytest.mark.xfail
+@pytest.mark.xfail()
 @pytest.mark.parametrize(
     "keyfile",
     [
@@ -59,7 +59,7 @@ def test_ossec_keyfiles(host, keyfile):
 
 
 # Permissions don't match between Ansible and OSSEC deb packages postinst.
-@pytest.mark.xfail
+@pytest.mark.xfail()
 def test_procmail_log(host):
     """
     Ensure procmail log file exist with proper ownership.

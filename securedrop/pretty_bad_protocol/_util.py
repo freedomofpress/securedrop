@@ -69,7 +69,7 @@ class GnuPGVersionError(ValueError):
     """Raised when we couldn't parse GnuPG's version info."""
 
 
-def _copy_data(instream, outstream):  # type: ignore[no-untyped-def] # noqa
+def _copy_data(instream, outstream):  # type: ignore[no-untyped-def]
     """Copy data from one stream to another.
 
     :type instream: :class:`io.BytesIO` or :class:`io.StringIO` or file
@@ -93,7 +93,7 @@ def _copy_data(instream, outstream):  # type: ignore[no-untyped-def] # noqa
         else:
             encoded = data
         log.debug("Sending %d bytes of data..." % sent)
-        log.debug("Encoded data (type {}):\n{}".format(type(encoded), encoded))
+        log.debug(f"Encoded data (type {type(encoded)}):\n{encoded}")
 
         try:
             outstream.write(bytes(encoded))
@@ -137,12 +137,12 @@ def _copy_data(instream, outstream):  # type: ignore[no-untyped-def] # noqa
     try:
         outstream.close()
     except OSError as ioe:
-        log.error("Unable to close outstream {}:\r\t{}".format(outstream, ioe))
+        log.error(f"Unable to close outstream {outstream}:\r\t{ioe}")
     else:
         log.debug("Closed outstream: %d bytes sent." % sent)
 
 
-def _create_if_necessary(directory):  # type: ignore[no-untyped-def] # noqa
+def _create_if_necessary(directory):  # type: ignore[no-untyped-def]
     """Create the specified directory, if necessary.
 
     :param str directory: The directory to use.
@@ -167,7 +167,7 @@ def _create_if_necessary(directory):  # type: ignore[no-untyped-def] # noqa
     return True
 
 
-def create_uid_email(username=None, hostname=None):  # type: ignore[no-untyped-def] # noqa
+def create_uid_email(username=None, hostname=None):  # type: ignore[no-untyped-def]
     """Create an email address suitable for a UID on a GnuPG key.
 
     :param str username: The username portion of an email address.  If None,
@@ -195,16 +195,16 @@ def create_uid_email(username=None, hostname=None):  # type: ignore[no-untyped-d
     else:
         username = username.replace(" ", "_")
         if (not hostname) and (username.find("@") == 0):
-            uid = "{}@{}".format(username, gethostname())
+            uid = f"{username}@{gethostname()}"
         elif hostname:
-            uid = "{}@{}".format(username, hostname)
+            uid = f"{username}@{hostname}"
         else:
             uid = username
 
     return uid
 
 
-def _deprefix(line, prefix, callback=None):  # type: ignore[no-untyped-def] # noqa
+def _deprefix(line, prefix, callback=None):  # type: ignore[no-untyped-def]
     """Remove the prefix string from the beginning of line, if it exists.
 
     :param string line: A line, such as one output by GnuPG's status-fd.
@@ -221,7 +221,7 @@ def _deprefix(line, prefix, callback=None):  # type: ignore[no-untyped-def] # no
     try:
         assert line.upper().startswith("".join(prefix).upper())
     except AssertionError:
-        log.debug("Line doesn't start with prefix '{}':\n{}".format(prefix, line))
+        log.debug(f"Line doesn't start with prefix '{prefix}':\n{line}")
         return line
     else:
         newline = line[len(prefix) :]
@@ -233,7 +233,7 @@ def _deprefix(line, prefix, callback=None):  # type: ignore[no-untyped-def] # no
         return newline
 
 
-def _find_binary(binary=None):  # type: ignore[no-untyped-def] # noqa
+def _find_binary(binary=None):  # type: ignore[no-untyped-def]
     """Find the absolute path to the GnuPG binary.
 
     Also run checks that the binary is not a symlink, and check that
@@ -274,7 +274,7 @@ def _find_binary(binary=None):  # type: ignore[no-untyped-def] # noqa
     return found
 
 
-def _has_readwrite(path):  # type: ignore[no-untyped-def] # noqa
+def _has_readwrite(path):  # type: ignore[no-untyped-def]
     """
     Determine if the real uid/gid of the executing user has read and write
     permissions for a directory or a file.
@@ -287,7 +287,7 @@ def _has_readwrite(path):  # type: ignore[no-untyped-def] # noqa
     return os.access(path, os.R_OK | os.W_OK)
 
 
-def _is_file(filename):  # type: ignore[no-untyped-def] # noqa
+def _is_file(filename):  # type: ignore[no-untyped-def]
     """Check that the size of the thing which is supposed to be a filename has
     size greater than zero, without following symbolic links or using
     :func:os.path.isfile.
@@ -299,7 +299,7 @@ def _is_file(filename):  # type: ignore[no-untyped-def] # noqa
     try:
         statinfo = os.lstat(filename)
         log.debug(
-            "lstat(%r) with type=%s gave us %r" % (repr(filename), type(filename), repr(statinfo))
+            f"lstat({repr(filename)!r}) with type={type(filename)} gave us {repr(statinfo)!r}"
         )
         if not (statinfo.st_size > 0):
             raise ValueError("'%s' appears to be an empty file!" % filename)
@@ -315,7 +315,7 @@ def _is_file(filename):  # type: ignore[no-untyped-def] # noqa
     return False
 
 
-def _is_stream(input):  # type: ignore[no-untyped-def] # noqa
+def _is_stream(input):  # type: ignore[no-untyped-def]
     """Check that the input is a byte stream.
 
     :param input: An object provided for reading from or writing to.
@@ -325,7 +325,7 @@ def _is_stream(input):  # type: ignore[no-untyped-def] # noqa
     return isinstance(input, tuple(_STREAMLIKE_TYPES))
 
 
-def _is_list_or_tuple(instance):  # type: ignore[no-untyped-def] # noqa
+def _is_list_or_tuple(instance):  # type: ignore[no-untyped-def]
     """Check that ``instance`` is a list or tuple.
 
     :param instance: The object to type check.
@@ -341,7 +341,7 @@ def _is_list_or_tuple(instance):  # type: ignore[no-untyped-def] # noqa
     )
 
 
-def _make_binary_stream(thing, encoding=None, armor=True):  # type: ignore[no-untyped-def] # noqa
+def _make_binary_stream(thing, encoding=None, armor=True):  # type: ignore[no-untyped-def]
     """Encode **thing**, then make it stream/file-like.
 
     :param thing: The thing to turn into a encoded stream.
@@ -355,7 +355,7 @@ def _make_binary_stream(thing, encoding=None, armor=True):  # type: ignore[no-un
     return BytesIO(thing)
 
 
-def _next_year():  # type: ignore[no-untyped-def] # noqa
+def _next_year():  # type: ignore[no-untyped-def]
     """Get the date of today plus one year.
 
     :rtype: str
@@ -368,12 +368,12 @@ def _next_year():  # type: ignore[no-untyped-def] # noqa
     return "-".join((next_year, month, day))
 
 
-def _now():  # type: ignore[no-untyped-def] # noqa
+def _now():  # type: ignore[no-untyped-def]
     """Get a timestamp for right now, formatted according to ISO 8601."""
     return datetime.isoformat(datetime.now())
 
 
-def _separate_keyword(line):  # type: ignore[no-untyped-def] # noqa
+def _separate_keyword(line):  # type: ignore[no-untyped-def]
     """Split the line, and return (first_word, the_rest)."""
     try:
         first, rest = line.split(None, 1)
@@ -383,7 +383,7 @@ def _separate_keyword(line):  # type: ignore[no-untyped-def] # noqa
     return first, rest
 
 
-def _threaded_copy_data(instream, outstream):  # type: ignore[no-untyped-def] # noqa
+def _threaded_copy_data(instream, outstream):  # type: ignore[no-untyped-def]
     """Copy data from one stream to another in a separate thread.
 
     Wraps ``_copy_data()`` in a :class:`threading.Thread`.
@@ -423,7 +423,7 @@ def _which(executable, flags=os.X_OK, abspath_only=False, disallow_symlinks=Fals
               they were found.
     """
 
-    def _can_allow(p):  # type: ignore[no-untyped-def] # noqa
+    def _can_allow(p):  # type: ignore[no-untyped-def]
         if not os.access(p, flags):
             return False
         if abspath_only and not os.path.abspath(p):
@@ -450,7 +450,7 @@ def _which(executable, flags=os.X_OK, abspath_only=False, disallow_symlinks=Fals
     return result
 
 
-def _write_passphrase(stream, passphrase, encoding):  # type: ignore[no-untyped-def] # noqa
+def _write_passphrase(stream, passphrase, encoding):  # type: ignore[no-untyped-def]
     """Write the passphrase from memory to the GnuPG process' stdin.
 
     :type stream: file, :class:`~io.BytesIO`, or :class:`~io.StringIO`
@@ -474,7 +474,7 @@ class InheritableProperty:
         self.fdel = fdel
         self.__doc__ = doc
 
-    def __get__(self, obj, objtype=None):  # type: ignore[no-untyped-def] # noqa
+    def __get__(self, obj, objtype=None):  # type: ignore[no-untyped-def]
         if obj is None:
             return self
         if self.fget is None:
@@ -484,7 +484,7 @@ class InheritableProperty:
         else:
             return getattr(obj, self.fget.__name__)()
 
-    def __set__(self, obj, value):  # type: ignore[no-untyped-def] # noqa
+    def __set__(self, obj, value):  # type: ignore[no-untyped-def]
         if self.fset is None:
             raise AttributeError("can't set attribute")
         if self.fset.__name__ == "<lambda>" or not self.fset.__name__:
@@ -492,7 +492,7 @@ class InheritableProperty:
         else:
             getattr(obj, self.fset.__name__)(value)
 
-    def __delete__(self, obj):  # type: ignore[no-untyped-def] # noqa
+    def __delete__(self, obj):  # type: ignore[no-untyped-def]
         if self.fdel is None:
             raise AttributeError("can't delete attribute")
         if self.fdel.__name__ == "<lambda>" or not self.fdel.__name__:

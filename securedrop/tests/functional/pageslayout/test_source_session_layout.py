@@ -13,7 +13,7 @@ SESSION_EXPIRATION_SECONDS = 3
 
 
 @pytest.fixture(scope="session")
-def _sd_servers_with_short_timeout(
+def sd_servers_with_short_timeout(
     setup_journalist_key_and_gpg_folder: Tuple[str, Path],
     setup_rqworker: Tuple[str, str],
 ) -> Generator[SdServersFixtureResult, None, None]:
@@ -35,14 +35,14 @@ def _sd_servers_with_short_timeout(
 
 
 @pytest.mark.parametrize("locale", list_locales())
-@pytest.mark.pagelayout
+@pytest.mark.pagelayout()
 class TestSourceAppSessionTimeout:
-    def test_source_session_timeout(self, locale, _sd_servers_with_short_timeout):
+    def test_source_session_timeout(self, locale, sd_servers_with_short_timeout):
         # Given an SD server with a very short session timeout
         # And a source user accessing the source app from their browser
         locale_with_commas = locale.replace("_", "-")
         with SourceAppNavigator.using_tor_browser_web_driver(
-            source_app_base_url=_sd_servers_with_short_timeout.source_app_base_url,
+            source_app_base_url=sd_servers_with_short_timeout.source_app_base_url,
             accept_languages=locale_with_commas,
         ) as navigator:
 

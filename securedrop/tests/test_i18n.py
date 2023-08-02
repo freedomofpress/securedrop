@@ -42,7 +42,7 @@ def create_config_for_i18n_test(
     default_locale: str = "en_US",
     translation_dirs: Path = DEFAULT_SECUREDROP_ROOT / "translations",
 ) -> SecureDropConfig:
-    tmp_root_for_test = Path(f"/tmp/sd-tests/test_i18n")
+    tmp_root_for_test = Path("/tmp/sd-tests/test_i18n")
     tmp_root_for_test.mkdir(exist_ok=True, parents=True)
 
     i18n_config = SecureDropConfigFactory.create(
@@ -210,7 +210,7 @@ def verify_i18n(app):
         assert not_translated == gettext(not_translated)
 
     with app.test_request_context():
-        assert "" == render_template("locales.html")
+        assert render_template("locales.html") == ""
 
     with app.test_client() as c:
         c.get("/")
@@ -236,7 +236,7 @@ def verify_i18n(app):
 
 
 def test_i18n():
-    translation_dirs = Path(f"/tmp/sd-tests/test_i18n/translations")
+    translation_dirs = Path("/tmp/sd-tests/test_i18n/translations")
     translation_dirs.mkdir(exist_ok=True, parents=True)
     test_config = create_config_for_i18n_test(
         supported_locales=["ar", "en_US", "fr_FR", "nb_NO", "zh_Hans"],
@@ -305,7 +305,7 @@ def test_parse_locale_set():
     assert parse_locale_set([FALLBACK_LOCALE]) == {Locale.parse(FALLBACK_LOCALE)}
 
 
-@pytest.mark.xfail  # #6873
+@pytest.mark.xfail()  # #6873
 def test_no_usable_fallback_locale():
     """
     The apps fail if neither the default nor the fallback locale is usable.
@@ -321,7 +321,7 @@ def test_no_usable_fallback_locale():
         source_app.create_app(test_config)
 
 
-@pytest.mark.xfail  # #6873
+@pytest.mark.xfail()  # #6873
 def test_unusable_default_but_usable_fallback_locale(caplog):
     """
     The apps start even if the default locale is unusable, as along as the fallback locale is

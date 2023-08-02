@@ -77,8 +77,7 @@ class Helper:
                      GROUP BY j.id
                      ORDER BY j.id
                   """
-            res = list(db.session.execute(text(sql)))
-        return res
+            return list(db.session.execute(text(sql)))
 
 
 class UpgradeTester(Helper):

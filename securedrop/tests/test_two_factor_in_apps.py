@@ -94,25 +94,24 @@ class TestTwoFactorInJournalistApp:
             db.session.commit()
 
         # When they try to login
-        with journalist_app.test_client() as app:
-            with InstrumentedApp(app) as ins:
-                resp = app.post(
-                    url_for("main.login"),
-                    data={
-                        "username": new_username,
-                        "password": password,
-                        "token": "705334",
-                    },
-                    follow_redirects=True,
-                )
+        with journalist_app.test_client() as app, InstrumentedApp(app) as ins:
+            resp = app.post(
+                url_for("main.login"),
+                data={
+                    "username": new_username,
+                    "password": password,
+                    "token": "705334",
+                },
+                follow_redirects=True,
+            )
 
-                # It fails and they didn't get a session
-                assert resp.status_code == 200
-                assert session.get_user() is None
+            # It fails and they didn't get a session
+            assert resp.status_code == 200
+            assert session.get_user() is None
 
-                # And the corresponding error messages was displayed
-                assert len(ins.flashed_messages) == 1
-                assert "2FA details are invalid" in ins.flashed_messages[0][0]
+            # And the corresponding error messages was displayed
+            assert len(ins.flashed_messages) == 1
+            assert "2FA details are invalid" in ins.flashed_messages[0][0]
 
     def test_can_login_after_regenerating_hotp(self, journalist_app, test_journo):
         # Given a journalist logged into the journalist app
@@ -144,19 +143,18 @@ class TestTwoFactorInJournalistApp:
             app.get("/logout")
 
         # When they later try to login using a 2fa token based on their new HOTP secret
-        with journalist_app.test_client() as app:
-            with InstrumentedApp(journalist_app) as ins:
-                resp = app.post(
-                    "/login",
-                    data=dict(
-                        username=test_journo["username"],
-                        password=test_journo["password"],
-                        token=HOTP(b32_otp_secret).generate(1),
-                    ),
-                )
+        with journalist_app.test_client() as app, InstrumentedApp(journalist_app) as ins:
+            resp = app.post(
+                "/login",
+                data=dict(
+                    username=test_journo["username"],
+                    password=test_journo["password"],
+                    token=HOTP(b32_otp_secret).generate(1),
+                ),
+            )
 
-                # Then it succeeds
-                ins.assert_redirects(resp, "/")
+            # Then it succeeds
+            ins.assert_redirects(resp, "/")
 
 
 class TestTwoFactorInAdminApp:

@@ -1,4 +1,3 @@
-# flake8: noqa: E741
 import gzip
 import os
 import re
@@ -14,19 +13,16 @@ from unittest.mock import ANY, patch
 import pytest
 import version
 from db import db
-from flaky import flaky
 from flask import escape, g, request, session, url_for
-from flask_babel import gettext
 from journalist_app.utils import delete_collection
 from models import InstanceConfig, Reply, Source
 from passphrases import PassphraseGenerator
 from source_app import api as source_app_api
-from source_app import get_logo_url, session_manager
+from source_app import get_logo_url
 from source_app.session_manager import SessionManager
 
 from . import utils
 from .utils.db_helper import new_codename, submit
-from .utils.i18n import get_test_locales, language_tag, page_language, xfail_untranslated_messages
 from .utils.instrument import InstrumentedApp
 
 GENERATE_DATA = {"tor2web_check": 'href="fake.onion"'}
@@ -769,12 +765,12 @@ def test_normalize_timestamps(source_app, app_storage):
         assert "Thanks! We received your message" in text
 
         # only two of the source's three submissions should have files in the store
-        assert 3 == len(source.submissions)
+        assert len(source.submissions) == 3
         submission_paths = [
             Path(app_storage.path(source.filesystem_id, s.filename)) for s in source.submissions
         ]
         extant_paths = [p for p in submission_paths if p.exists()]
-        assert 2 == len(extant_paths)
+        assert len(extant_paths) == 2
 
         # verify that the deleted file has not been recreated
         assert not first_submission_path.exists()

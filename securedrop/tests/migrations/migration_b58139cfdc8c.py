@@ -127,7 +127,6 @@ class UpgradeTester(Helper):
         self.storage = Storage(str(config.STORE_DIR), str(config.TEMP_DIR))
 
     def load_data(self):
-        global DATA
         with mock.patch("store.Storage.get_default") as mock_storage_global:
             mock_storage_global.return_value = self.storage
             with self.app.app_context():
@@ -159,7 +158,6 @@ class UpgradeTester(Helper):
         log file in `/tmp/`.
         The other part of the migration, creating a table, cannot be tested regardless.
         """
-        pass
 
 
 class DowngradeTester(Helper):

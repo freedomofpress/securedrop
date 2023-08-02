@@ -7,7 +7,7 @@ securedrop_test_vars = testutils.securedrop_test_vars
 testinfra_hosts = [securedrop_test_vars.app_hostname]
 
 
-@pytest.mark.parametrize("header, value", securedrop_test_vars.wanted_apache_headers.items())
+@pytest.mark.parametrize(("header", "value"), securedrop_test_vars.wanted_apache_headers.items())
 def test_apache_headers_journalist_interface(host, header, value):
     """
     Test for expected headers in Document Interface vhost config.

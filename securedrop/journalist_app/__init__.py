@@ -124,9 +124,8 @@ def create_app(config: SecureDropConfig) -> Flask:
         if request.path.split("/")[1] == "api":
             if request.endpoint not in _insecure_api_views and not session.logged_in():
                 abort(403)
-        else:
-            if request.endpoint not in _insecure_views and not session.logged_in():
-                return redirect(url_for("main.login"))
+        elif request.endpoint not in _insecure_views and not session.logged_in():
+            return redirect(url_for("main.login"))
 
         if request.method == "POST":
             filesystem_id = request.form.get("filesystem_id")

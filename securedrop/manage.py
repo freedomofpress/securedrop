@@ -17,13 +17,13 @@ from typing import List, Optional
 from flask.ctx import AppContext
 from passphrases import PassphraseGenerator
 
-sys.path.insert(0, "/var/www/securedrop")  # noqa: E402
+sys.path.insert(0, "/var/www/securedrop")
 
 import qrcode  # noqa: E402
 from sqlalchemy.orm.exc import NoResultFound  # noqa: E402
 
 if not os.environ.get("SECUREDROP_ENV"):
-    os.environ["SECUREDROP_ENV"] = "dev"  # noqa
+    os.environ["SECUREDROP_ENV"] = "dev"
 
 
 from db import db  # noqa: E402

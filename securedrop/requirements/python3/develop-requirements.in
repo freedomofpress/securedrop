@@ -10,10 +10,8 @@ diffoscope
 docker
 # Needed for dig ansible lookup
 dnspython
-flake8
 html-linter
 importlib-resources
-isort
 markupsafe>=2.0
 molecule>=3.0.1
 molecule-vagrant>=0.3
@@ -34,6 +32,7 @@ python-vagrant
 pyyaml>=5.4.1
 requests>=2.31.0
 ruamel.yaml>=0.16.10
+ruff
 safety>2.2.0
 semgrep>=0.98.0
 setuptools>=56.0.0

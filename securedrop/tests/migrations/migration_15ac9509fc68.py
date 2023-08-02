@@ -180,4 +180,3 @@ class DowngradeTester:
         """We don't need to check anything on this downgrade because the
         migration drops all the tables. Thus, there is nothing to do.
         """
-        pass

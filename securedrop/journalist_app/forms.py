@@ -42,10 +42,8 @@ class RequiredIf(DataRequired):
                     self.message = self.custom_message
                 else:
                     self.message = gettext(
-                        'The "{name}" field is required when "{other_name}" is set.'.format(
-                            other_name=self.other_field_name, name=field.name
-                        )
-                    )
+                        'The "{name}" field is required when "{other_name}" is set.'
+                    ).format(other_name=self.other_field_name, name=field.name)
                 super().__call__(form, field)
             else:
                 field.errors[:] = []
@@ -53,10 +51,8 @@ class RequiredIf(DataRequired):
         else:
             raise ValidationError(
                 gettext(
-                    'The "{other_name}" field was not found - it is required by "{name}".'.format(
-                        other_name=self.other_field_name, name=field.name
-                    )
-                )
+                    'The "{other_name}" field was not found - it is required by "{name}".'
+                ).format(other_name=self.other_field_name, name=field.name)
             )
 
 

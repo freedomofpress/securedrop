@@ -1,12 +1,77 @@
+[project]
+name = "securedrop"
+requires-python = ">=3.8"
+
 [tool.black]
 line-length = 100
 target-version = ["py38"]
 # Don't use `extend`, we want the default behavior that honors .gitignore rules
 
-[tool.isort]
-line_length = 100
-profile = "black"
-skip_gitignore = true
+[tool.ruff]
+line-length = 100
+select = [
+    # pycodestyle errors
+    "E",
+    # pyflakes
+    "F",
+    # isort
+    "I",
+    # flake8-gettext
+    "INT",
+    # flake8-pie
+    "PIE",
+    # pylint
+    "PL",
+    # flake8-pytest-style
+    "PT",
+    # flake8-pyi
+    "PYI",
+    # flake8-return
+    "RET",
+    # flake8-simplify
+    "SIM",
+    # pyupgrade
+    "UP",
+    # pycodestyle warnings
+    "W",
+    # Unused noqa directive
+    "RUF100",
+]
+ignore = [
+    # incompatible with sqlalchemy https://github.com/astral-sh/ruff/issues/4560
+    "E712",
+    # code complexity checks that we fail
+    "PLR0912", "PLR0913", "PLR0915",
+    # sqlalchemy false positives in tests
+    "PLR0124",
+    # magic-value-comparison, too many violations for now
+    "PLR2004",
+    # we use global variables for singletons, sorry
+    "PLW0603",
+    # loop assignment target being overwritten, not a big deal
+    "PLW2901",
+    # too broad exception type
+    "PT011",
+    # usefixtures() isn't as user-friendly
+    "PT019",
+    # doesn't understand flask.abort()
+    "RET503",
+    # superflous-else- rules, find they hurt readability
+    "RET505", "RET506", "RET507", "RET508",
+    # Find contextlib.suppress() is harder to read
+    "SIM105",
+    # Find ternary statements harder to read
+    "SIM108",
+    # use context handler for opening files, too many violations for now
+    "SIM115",
+    # nested if and with statements, too many violations for now
+    "SIM102", "SIM117",
+]
+
+[tool.ruff.isort]
+# ruff's isort is smart enough to know these are first party, but let's treat
+# them as third-party to match O.G. isort until we fix our package layout
+known-third-party = ["journalist_app", "management", "source_app", "tests"]
 
 [tool.mypy]
 ignore_missing_imports = true

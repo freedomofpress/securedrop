@@ -152,7 +152,7 @@ def make_blueprint() -> Blueprint:
             if fn.endswith("reply.gpg"):
                 reply = Reply.query.filter(Reply.filename == fn).one()
                 mark_seen([reply], journalist)
-            elif fn.endswith("-doc.gz.gpg") or fn.endswith("doc.zip.gpg"):
+            elif fn.endswith(("-doc.gz.gpg", "doc.zip.gpg")):
                 submitted_file = Submission.query.filter(Submission.filename == fn).one()
                 mark_seen([submitted_file], journalist)
             else:
