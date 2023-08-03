@@ -30,6 +30,7 @@ import encodings
 import functools
 import os
 import re
+import tempfile
 import textwrap
 import time
 from codecs import open
@@ -409,32 +410,36 @@ class GPG(GPGBase):
         self._collect_output(p, result, stdin=p.stdin)
         return result
 
-    def export_keys(self, keyids, secret=False, subkeys=False):  # type: ignore[no-untyped-def] # noqa
+    def export_keys(self, keyids, secret=False, subkeys=False, passphrase=None):  # type: ignore[no-untyped-def] # noqa
         """Export the indicated ``keyids``.
 
         :param str keyids: A keyid or fingerprint in any format that GnuPG will
             accept.
         :param bool secret: If True, export only the secret key.
         :param bool subkeys: If True, export the secret subkeys.
+        :param Optional[str] passphrase: if exporting secret keys, use this
+            passphrase to authenticate
         """
         which = ""
         if subkeys:
             which = "-secret-subkeys"
         elif secret:
             which = "-secret-keys"
+        else:
+            # No secret key material, ignore passphrase arg
+            passphrase = None
 
         if _is_list_or_tuple(keyids):
             keyids = " ".join(["%s" % k for k in keyids])
 
-        args = ["--armor"]
-        args.append(f"--export{which} {keyids}")
-
-        p = self._open_subprocess(args)
-        # gpg --export produces no status-fd output; stdout will be empty in
-        # case of failure
-        # stdout, stderr = p.communicate()
+        args = ["--armor", f"--export{which} {keyids}"]
         result = self._result_map["export"](self)
-        self._collect_output(p, result, stdin=p.stdin)
+
+        # Yes we need to pass in an empty temporary file here,
+        # please don't ask me why. I can't get it to work otherwise.
+        with tempfile.NamedTemporaryFile() as tmp:
+            self._handle_io(args, tmp.name, result, passphrase, binary=True)
+
         log.debug(f"Exported:{os.linesep}{result.fingerprints!r}")
         return result.data.decode(self._encoding, self._decode_errors)
 

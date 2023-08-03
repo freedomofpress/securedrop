@@ -1433,13 +1433,20 @@ class ExportResult:
 
         :raises ValueError: if the status message is unknown.
         """
-        informational_keys = ["KEY_CONSIDERED"]
-        if key in ("EXPORTED"):
+        informational_keys = ["KEY_CONSIDERED", "USERID_HINT", "INQUIRE_MAXLEN"]
+        if key in ("EXPORTED",):
             self.fingerprints.append(value)
         elif key == "EXPORT_RES":
             export_res = value.split()
             for x in self.counts:
                 self.counts[x] += int(export_res.pop(0))
+        elif key in (
+            "NEED_PASSPHRASE",
+            "BAD_PASSPHRASE",
+            "GOOD_PASSPHRASE",
+            "MISSING_PASSPHRASE",
+        ):
+            self.status = key.replace("_", " ").lower()
         elif key not in informational_keys:
             raise ValueError("Unknown status message: %r" % key)
 
