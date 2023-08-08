@@ -1,6 +1,12 @@
 ---
+- name: Check for site specific file
+  stat:
+    path: group_vars/all/site-specific
+  register: site_specific_file
+
 - name: Import variables
   include_vars: "group_vars/all/site-specific"
+  when: site_specific_file.stat.exists
 
 - name: Check for v3 Source Interface file
   stat:
@@ -11,11 +17,6 @@
   stat:
     path: app-journalist.auth_private
   register: v3_journalist_file
-
-- name: Check for site specific file
-  stat:
-    path: group_vars/all/site-specific
-  register: site_specific_file
 
 - name: Look up v3 Source Interface URL.
   command: grep -Po '.{56}\.onion' app-sourcev3-ths
