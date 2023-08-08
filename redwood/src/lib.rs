@@ -132,6 +132,7 @@ fn encrypt(
     // For each of the recipient certificates, pull the encryption keys that
     // are compatible with by the standard policy (e.g. not SHA-1) supported by
     // Sequoia (duh), and not revoked.
+    // These filter options should be kept in sync with `Helper::decrypt()`.
     for cert in certs.iter() {
         for key in cert
             .keys()
@@ -139,6 +140,7 @@ fn encrypt(
             .supported()
             .alive()
             .revoked(false)
+            .for_storage_encryption()
         {
             recipient_keys.push(key);
         }
@@ -195,13 +197,13 @@ mod tests {
     use super::*;
     use tempfile::NamedTempFile;
 
+    const PASSPHRASE: &str = "correcthorsebatterystaple";
+    const SECRET_MESSAGE: &str = "Rust is great 🦀";
+
     #[test]
     fn test_generate_source_key_pair() {
-        let (public_key, secret_key, fingerprint) = generate_source_key_pair(
-            "correcthorsebatterystaple",
-            "foo@example.org",
-        )
-        .unwrap();
+        let (public_key, secret_key, fingerprint) =
+            generate_source_key_pair(PASSPHRASE, "foo@example.org").unwrap();
         assert_eq!(fingerprint.len(), 40);
         println!("{}", public_key);
         assert!(public_key.starts_with("-----BEGIN PGP PUBLIC KEY BLOCK-----"));
@@ -216,32 +218,54 @@ mod tests {
     }
 
     #[test]
-    fn test_encryption_decryption() {
-        // Generate a new key
-        let (public_key, secret_key, _fingerprint) = generate_source_key_pair(
-            "correcthorsebatterystaple",
-            "foo@example.org",
-        )
-        .unwrap();
+    fn test_multiple_recipients() {
+        // Generate 3 keys
+        let (public_key1, secret_key1, _) =
+            generate_source_key_pair(PASSPHRASE, "foo1@example.org").unwrap();
+        let (public_key2, secret_key2, _) =
+            generate_source_key_pair(PASSPHRASE, "foo2@example.org").unwrap();
+        let (_public_key3, secret_key3, _) =
+            generate_source_key_pair(PASSPHRASE, "foo3@example.org").unwrap();
+
         let tmp = NamedTempFile::new().unwrap();
-        // Encrypt a message
+        // Encrypt a message to keys 1 and 2 but not 3
         encrypt_message(
-            vec![public_key],
-            "Rust is great 🦀".to_string(),
+            vec![public_key1, public_key2],
+            SECRET_MESSAGE.to_string(),
             tmp.path().to_path_buf(),
         )
         .unwrap();
         let ciphertext = std::fs::read_to_string(tmp.path()).unwrap();
         // Verify ciphertext looks like an encrypted message
         assert!(ciphertext.starts_with("-----BEGIN PGP MESSAGE-----\n"));
-        // Try to decrypt the message
+        // Decrypt as key 1
         let plaintext = decrypt(
-            ciphertext.into_bytes(),
-            secret_key,
-            "correcthorsebatterystaple".to_string(),
+            ciphertext.clone().into_bytes(),
+            secret_key1,
+            PASSPHRASE.to_string(),
         )
         .unwrap();
         // Verify message is what we put in originally
-        assert_eq!("Rust is great 🦀", &plaintext);
+        assert_eq!(SECRET_MESSAGE, &plaintext);
+        // Decrypt as key 2
+        let plaintext = decrypt(
+            ciphertext.clone().into_bytes(),
+            secret_key2,
+            PASSPHRASE.to_string(),
+        )
+        .unwrap();
+        // Verify message is what we put in originally
+        assert_eq!(SECRET_MESSAGE, &plaintext);
+        // Try to decrypt as key 3, expect an error
+        let err = decrypt(
+            ciphertext.into_bytes(),
+            secret_key3,
+            PASSPHRASE.to_string(),
+        )
+        .unwrap_err();
+        assert_eq!(
+            err.to_string(),
+            "OpenPGP error: no matching pkesk, wrong secret key provided?"
+        );
     }
 }
