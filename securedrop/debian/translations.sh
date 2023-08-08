@@ -1,8 +1,6 @@
 #!/bin/bash
 set -ex
 
-export PATH="${PATH}:/root/.cargo/bin"
-
 # We create the virtualenv separately from the "pip install" commands below,
 # to make error-reporting a bit more obvious. We also update beforehand,
 # beyond what the system version provides, see #6317.

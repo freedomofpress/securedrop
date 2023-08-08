@@ -1,6 +1,8 @@
 """
 Basic smoke tests that verify the apps are functioning as expected
 """
+import json
+
 import pytest
 import testutils
 
@@ -31,3 +33,19 @@ def test_interface_up(host, name, url, curl_flags):
                 assert "nopenopenope" in f.content_string
     assert "200 OK" in response
     assert "Powered by" in response
+
+
+def test_redwood(host):
+    """
+    Verify the redwood wheel was built and installed properly and basic
+    functionality works
+    """
+    response = host.run(
+        "/opt/venvs/securedrop-app-code/bin/python3 -c "
+        "'import redwood; import json; print("
+        'json.dumps(redwood.generate_source_key_pair("abcde", "test@invalid")))\''
+    )
+    parsed = json.loads(response.stdout)
+    assert "-----BEGIN PGP PUBLIC KEY BLOCK-----" in parsed[0]
+    assert "-----BEGIN PGP PRIVATE KEY BLOCK-----" in parsed[1]
+    assert len(parsed[2]) == 40

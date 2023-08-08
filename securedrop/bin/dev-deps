@@ -164,7 +164,7 @@ function build_redwood() {
     # it persists instead of being recreated from scratch each time the container starts.
     # n.b. we can't re-use the host's caches because of permission differences
     PATH="$PATH:/opt/cargo/bin/" \
-    CARGO_TARGET_DIR="${REPOROOT}/target/dev" CARGO_HOME="${REPOROOT}/target/cargo-dev" \
-        /opt/venvs/securedrop-build/bin/maturin build -m "${REPOROOT}/redwood/Cargo.toml"
-    /opt/venvs/securedrop-app-code/bin/pip install "${REPOROOT}"/target/dev/wheels/redwood-*.whl
+    CARGO_HOME="${REPOROOT}/target/cargo-dev" \
+        python3 "${REPOROOT}/redwood/build-wheel.py" --redwood "${REPOROOT}/redwood" --target "${REPOROOT}/target/dev"
+    /opt/venvs/securedrop-app-code/bin/pip install "${REPOROOT}"/redwood/redwood-*.whl
 }
