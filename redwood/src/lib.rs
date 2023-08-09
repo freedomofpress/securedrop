@@ -268,4 +268,34 @@ mod tests {
             "OpenPGP error: no matching pkesk, wrong secret key provided?"
         );
     }
+
+    #[test]
+    fn test_encryption_missing_malformed_recipient_key() {
+        // Bad fingerprints can be: empty, empty string, or malformed
+        let bad_keys: Vec<(Vec<String>, &str)> = vec![
+            (
+                vec![],
+                "OpenPGP error: Invalid operation: \
+                Neither recipients, passwords, nor session key given",
+            ),
+            (
+                vec!["".to_string()],
+                "OpenPGP error: Malformed Cert: No data",
+            ),
+            (
+                vec!["DEADBEEF0123456".to_string()],
+                "OpenPGP error: unexpected EOF",
+            ),
+        ];
+        let tmp: NamedTempFile = NamedTempFile::new().unwrap();
+        for (key, error) in bad_keys {
+            let err = encrypt_message(
+                key, // missing or malformed recipient key
+                "Look ma, no key".to_string(),
+                tmp.path().to_path_buf(),
+            )
+            .unwrap_err();
+            assert_eq!(err.to_string(), error);
+        }
+    }
 }
