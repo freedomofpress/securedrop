@@ -383,7 +383,6 @@ workflows:
           filters:
             branches:
               ignore:
-                - /i18n-.*/
                 - /update-builder-.*/
           requires:
             - lint
@@ -394,7 +393,6 @@ workflows:
           filters:
             branches:
               ignore:
-                - /i18n-.*/
                 - /update-builder-.*/
           requires:
             - lint
@@ -405,7 +403,6 @@ workflows:
           filters:
             branches:
               ignore:
-                - /i18n-.*/
                 - /update-builder-.*/
           context:
             - circleci-slack
@@ -414,7 +411,6 @@ workflows:
           filters:
             branches:
               ignore:
-                - /i18n-.*/
                 - /update-builder-.*/
           context:
             - circleci-slack
@@ -428,8 +424,6 @@ workflows:
       - staging-test-with-rebase:
           filters:
             branches:
-              # Ignore needs to be here explicitly as only clause introduced in PR #6086 might be removed afterwards.
-              ignore: /i18n-.*/
               only: /(stg-|release\/).*/
           requires:
             - lint
