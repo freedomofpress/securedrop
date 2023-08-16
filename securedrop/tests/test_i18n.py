@@ -34,7 +34,9 @@ from sdconfig import DEFAULT_SECUREDROP_ROOT, FALLBACK_LOCALE, SecureDropConfig
 from tests.factories import SecureDropConfigFactory
 from werkzeug.datastructures import Headers
 
-NEVER_LOCALE = "eo"  # Esperanto
+# Interlingua, per
+# <https://developers.securedrop.org/en/latest/supported_languages.html>.
+NEVER_LOCALE = "ia"
 
 
 def create_config_for_i18n_test(
