@@ -1,3 +1,8 @@
+---
+name: Pull request
+about: For everything else
+---
+
 ## Status
 
 Ready for review / Work in progress
@@ -47,20 +52,3 @@ Choose one of the following:
 - [ ] I have opened a PR in the [docs repo](https://github.com/freedomofpress/securedrop-docs) for these changes, or will do so later
 - [ ] I would appreciate help with the documentation
 - [ ] These changes do not require documentation
-
-### If you added or updated a production code dependency:
-
-Production code dependencies are defined in:
-
-- `admin/requirements.in`
-- `admin/requirements-ansible.in`
-- `securedrop/requirements/python3/requirements.in`
-
-If you changed another `requirements.in` file that applies only to development
-or testing environments, then no diff review is required, and you can skip
-(remove) this section.
-
-Choose one of the following:
-
-- [ ] I have performed a diff review and pasted the contents to [the packaging wiki](https://github.com/freedomofpress/securedrop-debian-packaging/wiki)
-- [ ] I would like someone else to do the diff review
