@@ -50,6 +50,11 @@ impl From<Error> for PyErr {
 
 type Result<T> = std::result::Result<T, Error>;
 
+// All reply keypairs will be "created" on the same day SecureDrop (then
+// Strongbox) was publicly released for the first time, 2013-05-14
+// https://www.newyorker.com/news/news-desk/strongbox-and-aaron-swartz
+const KEY_CREATION_SECONDS_FROM_EPOCH: u64 = 1368507600;
+
 /// A Python module implemented in Rust.
 #[pymodule]
 fn redwood(py: Python, m: &PyModule) -> PyResult<()> {
@@ -73,12 +78,11 @@ pub fn generate_source_key_pair(
         .set_cipher_suite(CipherSuite::RSA4k)
         .add_userid(format!("Source Key <{}>", email))
         .set_creation_time(
-            // All reply keypairs will be "created" on the same day SecureDrop (then
-            // Strongbox) was publicly released for the first time.
-            // https://www.newyorker.com/news/news-desk/strongbox-and-aaron-swartz
+            // All reply keypairs will be "created" on the same day, 2013-05-14
             SystemTime::UNIX_EPOCH
-                // Equivalent to 2013-05-14
-                .checked_add(Duration::from_secs(1368507600))
+                .checked_add(Duration::from_secs(
+                    KEY_CREATION_SECONDS_FROM_EPOCH,
+                ))
                 // unwrap: Safe because the value is fixed and we know it won't overflow
                 .unwrap(),
         )
@@ -256,6 +260,30 @@ mod tests {
         )
         .unwrap_err();
         assert_eq!(err.to_string(), expected_err_msg);
+    }
+
+    #[test]
+    fn test_source_key_creation_expiry() {
+        let (public_key, _secret_key, _fingerprint) =
+            generate_source_key_pair(PASSPHRASE, "foo@example.org").unwrap();
+        let cert = Cert::from_str(&public_key).unwrap();
+        let standard_creation_time = SystemTime::UNIX_EPOCH
+            // Equivalent to 2013-05-14
+            .checked_add(Duration::from_secs(KEY_CREATION_SECONDS_FROM_EPOCH))
+            // unwrap: Safe because the value is fixed and we know it won't overflow
+            .unwrap();
+        let signature = cert.primary_key().self_signatures().nth(0).unwrap();
+
+        assert_eq!(
+            signature.signature_creation_time(),
+            Some(standard_creation_time)
+        );
+
+        // From the documentation:
+        // This function is called signature_validity_period and not signature_expiration_time
+        // [because] the time is actually relative to the signature's creation time, which
+        // is stored in the signature's Signature Creation Time subpacket.
+        assert_eq!(signature.signature_validity_period(), None);
     }
 
     #[test]
