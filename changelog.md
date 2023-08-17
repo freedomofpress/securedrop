@@ -1,6 +1,6 @@
 # Changelog
 
-## 2.6.1~rc1
+## 2.6.1
 
 ### Operations
 
