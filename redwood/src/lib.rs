@@ -3,8 +3,10 @@
 use pyo3::create_exception;
 use pyo3::exceptions::PyException;
 use pyo3::prelude::*;
+use sequoia_openpgp::cert::prelude::ValidErasedKeyAmalgamation;
 use sequoia_openpgp::cert::{CertBuilder, CipherSuite};
 use sequoia_openpgp::crypto::Password;
+use sequoia_openpgp::packet::key::PublicParts;
 use sequoia_openpgp::parse::{stream::DecryptorBuilder, Parse};
 use sequoia_openpgp::policy::StandardPolicy;
 use sequoia_openpgp::serialize::{
@@ -32,6 +34,9 @@ pub enum Error {
     Io(#[from] io::Error),
     #[error("Unexpected non-UTF-8 text: {0}")]
     NotUnicode(#[from] FromUtf8Error),
+    // Distinct from OpenPgp error because it's about our own logic
+    #[error("Encryption Error: {0}")]
+    Encryption(String),
 }
 
 create_exception!(redwood, RedwoodError, PyException);
@@ -131,18 +136,27 @@ fn encrypt(
 
     // For each of the recipient certificates, pull the encryption keys that
     // are compatible with by the standard policy (e.g. not SHA-1) supported by
-    // Sequoia (duh), and not revoked.
+    // Sequoia, and not revoked.
     // These filter options should be kept in sync with `Helper::decrypt()`.
     for cert in certs.iter() {
-        for key in cert
+        let keys: Vec<ValidErasedKeyAmalgamation<PublicParts>> = cert
             .keys()
             .with_policy(p, None)
             .supported()
             .alive()
             .revoked(false)
             .for_storage_encryption()
-        {
-            recipient_keys.push(key);
+            .collect();
+
+        // Each certificate must have at least one supported encryption key
+        match keys.len() {
+            0 => {
+                return Err(Error::Encryption(
+                    "At least one supported key is needed per certificate"
+                        .to_string(),
+                ))
+            }
+            _ => recipient_keys.extend(keys),
         }
     }
 
@@ -195,10 +209,34 @@ pub fn decrypt(
 #[cfg(test)]
 mod tests {
     use super::*;
+    use sequoia_openpgp::Cert;
     use tempfile::NamedTempFile;
 
     const PASSPHRASE: &str = "correcthorsebatterystaple";
     const SECRET_MESSAGE: &str = "Rust is great 🦀";
+
+    // Purposefully weak key that should be rejected; this is 1024-bit RSA
+    const BAD_KEY: &str = "-----BEGIN PGP PUBLIC KEY BLOCK-----
+        mI0EZN1mPgEEANxv1ymcSsTjSvx/itkHBUCuf/LCSiU+T/VhUPT+pSxO4nyE4aLF
+        SAawGnxwGLPg2nO4txX93eZRX+PHDa5/Uk105RfAqFafC1UDFBNu+dA5CPxJx7BT
+        2yTSdpJh1a/9ur0HWrad9PV6eYWirPo2vhqaXiqhYkLcSHVwmFfPNMLJABEBAAG0
+        LmRlbGxzYmVyZyAoRVhBTVBMRV9LRVlfT05MWSkgPGZvb0BleGFtcGxlLm9yZz6I
+        zgQTAQoAOBYhBFbO0Jy+SeQ+Qtc9NeUVm4kgzl8xBQJk3WY+AhsDBQsJCAcCBhUK
+        CQgLAgQWAgMBAh4BAheAAAoJEOUVm4kgzl8x2OoD/ROBhvNs1J48Ogbr8bgx/zCk
+        yIXteBEvzJe7dNkHY0fG/bGuHIrAiGH0LZt2Y+xkWaYF6laxjLmZbkw+MA9HAxnH
+        EKgXGFj59+trxL/bRhKIzHj96yxCRGCls+YzmVU3okK/UhYJ61ze38OX6QL4jrP9
+        ltAlaGlVjh9RPpGM4HF6uI0EZN1mPgEEAOhN5IcYtSQgeEvmAjeErrJf10P/9jdh
+        Xn3OpG0qLxiDba60BSw9OIGSfDP/zT+Q2XBw3Sla2p2Moe567ospeFpuJsM2pubO
+        O2IEt3+7CnzIM860P4MSGK24etJvcRxvR4m1m2Cr86xC4vfVltyEp6ON42Yb1i+C
+        R2q2qxmwQ8e7ABEBAAGItgQYAQoAIBYhBFbO0Jy+SeQ+Qtc9NeUVm4kgzl8xBQJk
+        3WY+AhsMAAoJEOUVm4kgzl8xdQYD/3ShTd2KM0XS25gMzfTQ8NtBS+jBvR0/+Eej
+        0BPhAf57pvNs8Y/uxUPO6l1+KrQek8XEnvGAkNBMD0wd2xPoQzcQqnf0iMcPhAY2
+        wCYRRONffypz3PkTM/JsFH08i2/UsntkgCLbgCEX/0Od1OFJT8VOSIOZe8EVjlGz
+        UUAkCN7u
+        =9bsJ
+        -----END PGP PUBLIC KEY BLOCK-----";
+    const BAD_KEY_FINGERPRINT: &str =
+        "56CED09CBE49E43E42D73D35E5159B8920CE5F31";
 
     #[test]
     fn test_generate_source_key_pair() {
@@ -215,6 +253,51 @@ mod tests {
         assert!(secret_key.contains("Comment: Source Key <foo@example.org>"));
         let cert = Cert::from_str(&secret_key).unwrap();
         assert_eq!(format!("{}", cert.fingerprint()), fingerprint);
+    }
+
+    #[test]
+    fn test_source_cert_has_accepted_key() {
+        // Certificate with valid key
+        let (public_key, _secret_key, _fingerprint) =
+            generate_source_key_pair(PASSPHRASE, "foo@example.org").unwrap();
+        let good_cert = Cert::from_str(&public_key).unwrap();
+
+        // Certificate with unsupported key
+        let bad_cert = Cert::from_bytes(BAD_KEY.as_bytes()).unwrap();
+        assert_eq!(BAD_KEY_FINGERPRINT, bad_cert.fingerprint().to_string());
+
+        // Expected num supported keys for each type of certificate
+        let certs_and_results = vec![(good_cert, 1), (bad_cert, 0)];
+
+        for (cert_collection, expected_supported_keys) in certs_and_results {
+            let mut actual_supported_keys = 0;
+            for _key in cert_collection
+                .keys()
+                .with_policy(&StandardPolicy::new(), None)
+                .supported()
+                .alive()
+                .revoked(false)
+                .for_storage_encryption()
+            {
+                actual_supported_keys += 1;
+            }
+            assert_eq!(expected_supported_keys, actual_supported_keys);
+        }
+
+        // Attempting to encrypt to multiple recipients should fail if any one of them
+        // has no supported keys
+        let tmp = NamedTempFile::new().unwrap();
+
+        let err = encrypt_message(
+            vec![public_key, BAD_KEY.to_string()],
+            SECRET_MESSAGE.to_string(),
+            tmp.path().to_path_buf(),
+        )
+        .unwrap_err();
+        assert_eq!(
+            err.to_string(),
+            "Encryption Error: At least one supported key is needed per certificate"
+        );
     }
 
     #[test]
