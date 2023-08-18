@@ -370,6 +370,7 @@ $(POT): securedrop
 		--strip-comments \
 		--add-location=never \
 		--no-wrap \
+		--ignore-dirs tests \
 		$^
 	@sed -i -e '/^"POT-Creation-Date/d' ${POT}
 
