@@ -4,6 +4,7 @@ GCLOUD_VERSION := 222.0.0-1
 SDROOT := $(shell git rev-parse --show-toplevel)
 TAG ?= $(shell git rev-parse HEAD)
 STABLE_VER := $(shell cat molecule/shared/stable.ver)
+VERSION=$(shell python -c "import securedrop.version; print(securedrop.version.__version__)")
 
 SDBIN := $(SDROOT)/securedrop/bin
 DEVSHELL := $(SDBIN)/dev-shell
@@ -34,6 +35,7 @@ update-python3-requirements:  ## Update Python 3 requirements with pip-compile.
 		--output-file requirements/python3/develop-requirements.txt \
 		../admin/requirements-ansible.in \
 		../admin/requirements.in \
+		requirements/python3/translation-requirements.in \
 		requirements/python3/develop-requirements.in
 	@SLIM_BUILD=1 $(DEVSHELL) pip-compile --generate-hashes \
 		--allow-unsafe \
@@ -340,12 +342,36 @@ upgrade-destroy:  ## Destroy an upgrade test environment.
 DESKTOP_LOCALE_BASE=install_files/ansible-base/roles/tails-config/templates
 DESKTOP_LOCALE_DIR=$(DESKTOP_LOCALE_BASE)/locale
 
-.PHONY: translate
-translate:  ## Update POT files from translated strings in source code.
-	@echo "Updating translations..."
-	@$(DEVSHELL) $(SDROOT)/securedrop/i18n_tool.py translate-messages --extract-update
-	@$(DEVSHELL) $(SDROOT)/securedrop/i18n_tool.py translate-desktop --extract-update
-	@echo
+LOCALE_DIR=securedrop/translations
+POT=${LOCALE_DIR}/messages.pot
+
+.PHONY: check-strings
+check-strings: ## Check that the translation catalog is up to date with source code.
+	@make extract-strings
+	@git diff --quiet ${LOCALE_DIR} || { echo "Translation catalog is out of date. Please run \"make extract-strings\" and commit the changes."; exit 1; }
+
+.PHONY: extract-strings
+extract-strings: ## Extract translatable strings from source code.
+	@make --always-make ${POT}
+
+# Derive POT from sources.
+$(POT): securedrop
+	@echo "updating catalog template: $@"
+	@mkdir -p ${LOCALE_DIR}
+	@pybabel extract \
+		-F securedrop/babel.cfg \
+		--charset=utf-8 \
+		--output=${POT} \
+		--project="SecureDrop" \
+		--version=${VERSION} \
+		--msgid-bugs-address=securedrop@freedom.press \
+		--copyright-holder="Freedom of the Press Foundation" \
+		--add-comments="Translators:" \
+		--strip-comments \
+		--add-location=never \
+		--no-wrap \
+		$^
+	@sed -i -e '/^"POT-Creation-Date/d' ${POT}
 
 .PHONY: translation-test
 translation-test:  ## Run page layout tests in all supported languages.
