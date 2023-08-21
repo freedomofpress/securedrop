@@ -716,6 +716,21 @@ class TestSiteConfig:
                 site_config.validate_gpg_keys()
             assert "FAIL does not match" in str(e)
 
+        # Test a key with matching fingerprint but that fails sq-keyring-linter
+        invalid_config = {
+            # Correct key fingerprint but weak 1024-bit RSA key with SHA-1 self signature
+            "securedrop_app_gpg_public_key": "weak_test_key_should_fail_sqlinter.asc",
+            "securedrop_app_gpg_fingerprint": "40F1C17B7E7826DAB40B14AE7786B000E6D0A76E",
+            "ossec_alert_gpg_public_key": "test_journalist_key.pub",
+            "ossec_gpg_fpr": "65A1B5FF195B56353CC63DFFCC40EF1228271441",
+            "journalist_alert_gpg_public_key": "test_journalist_key.pub",
+            "journalist_gpg_fpr": "65A1B5FF195B56353CC63DFFCC40EF1228271441",
+        }
+        site_config.config = invalid_config
+        with pytest.raises(securedrop_admin.FingerprintException) as e:
+            site_config.validate_gpg_keys()
+        assert "failed sq-keyring-linter check" in str(e)
+
     def test_journalist_alert_email(self, tmpdir):
         args = argparse.Namespace(
             site_config="INVALID",
