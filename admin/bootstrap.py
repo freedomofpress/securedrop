@@ -125,7 +125,8 @@ def install_apt_dependencies(args: argparse.Namespace) -> None:
                    virtualenv \
                    libffi-dev \
                    libssl-dev \
-                   libpython3-dev",
+                   libpython3-dev \
+                   sq-keyring-linter",
     ]
 
     try:
