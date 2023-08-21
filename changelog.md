@@ -3,6 +3,13 @@
 ## 2.7.0~rc1
 
 
+
+## 2.6.1
+
+### Operations
+
+* Fixed bug preventing Journalist Workstation provisioning. (#6905)
+
 ## 2.6.0
 
 ### Web applications
