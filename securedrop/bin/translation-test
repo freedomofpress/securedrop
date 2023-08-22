@@ -17,7 +17,7 @@ pybabel compile --directory translations/
 
 mkdir -p "/tmp/test-results/logs"
 
-SUPPORTED_LOCALES=$(./i18n_tool.py list-locales)
+SUPPORTED_LOCALES=$(make --directory .. --quiet supported-locales | jq --raw-output 'join (" ")')
 LOCALES="${*:-${SUPPORTED_LOCALES}}"
 
 function locale_is_supported {

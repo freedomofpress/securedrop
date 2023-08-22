@@ -8,7 +8,7 @@ ENV USER_ID ${USER_ID:-0}
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get install -y \
                        apache2-dev coreutils vim \
                        python3-pip python3-all python3-venv virtualenv python3-dev libssl-dev \
-                       gnupg2 redis-server git curl wget \
+                       gnupg2 redis-server git curl wget jq \
                        enchant libffi-dev sqlite3 gettext sudo tor basez pkg-config
 
 # Install Rust using the same steps as <https://github.com/rust-lang/docker-rust>

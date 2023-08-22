@@ -225,7 +225,8 @@ securedrop/config.py: ## Generate the test SecureDrop application config.
 		 ctx.update(dict((k, {"stdout":v}) for k,v in os.environ.items())); \
 		 ctx = open("config.py", "w").write(env.get_template("config.py.example").render(ctx))'
 	@echo >> securedrop/config.py
-	@echo "SUPPORTED_LOCALES = $$(if test -f /opt/venvs/securedrop-app-code/bin/python3; then ./securedrop/i18n_tool.py list-locales --python; else DOCKER_BUILD_VERBOSE=false $(DEVSHELL) ./i18n_tool.py list-locales --python; fi)" | sed 's/\r//' >> securedrop/config.py
+	@echo "SUPPORTED_LOCALES = $$(make --quiet supported-locales)" >> securedrop/config.py
+	@echo "SUPPORTED_LOCALES.append('en_US')" >> securedrop/config.py
 	@echo
 
 HOOKS_DIR=.githooks
@@ -339,9 +340,10 @@ upgrade-destroy:  ## Destroy an upgrade test environment.
 #
 ##############
 
+I18N_CONF=securedrop/i18n.json
+
 DESKTOP_LOCALE_BASE=install_files/ansible-base/roles/tails-config/templates
 DESKTOP_LOCALE_DIR=$(DESKTOP_LOCALE_BASE)/locale
-
 LOCALE_DIR=securedrop/translations
 POT=${LOCALE_DIR}/messages.pot
 
@@ -373,6 +375,10 @@ $(POT): securedrop
 		--ignore-dirs tests \
 		$^
 	@sed -i -e '/^"POT-Creation-Date/d' ${POT}
+
+.PHONY: supported-locales
+supported-locales:  ## List supported locales (languages).
+	@jq --compact-output '.supported_locales | keys' ${I18N_CONF}
 
 .PHONY: translation-test
 translation-test:  ## Run page layout tests in all supported languages.
