@@ -48,7 +48,7 @@ Choose one of the following:
 - [ ] I would appreciate help with the documentation
 - [ ] These changes do not require documentation
 
-### If you added or updated a production code dependency:
+### If you added or updated a reference to a production code dependency:
 
 Production code dependencies are defined in:
 
@@ -64,3 +64,4 @@ Choose one of the following:
 
 - [ ] I have performed a diff review and pasted the contents to [the packaging wiki](https://github.com/freedomofpress/securedrop-debian-packaging/wiki)
 - [ ] I would like someone else to do the diff review
+- [ ] I am silencing an alert related to a production dependency, because (please explain below):
