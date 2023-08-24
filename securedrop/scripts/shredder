@@ -9,11 +9,11 @@ import logging
 import sys
 import time
 
-sys.path.insert(0, "/var/www/securedrop")  # noqa: E402
+sys.path.insert(0, "/var/www/securedrop")
 
-import journalist_app
-from sdconfig import SecureDropConfig
-from store import Storage
+import journalist_app  # noqa: E402
+from sdconfig import SecureDropConfig  # noqa: E402
+from store import Storage  # noqa: E402
 
 
 def parse_args():
@@ -32,7 +32,7 @@ def clear_shredder():
     try:
         Storage.get_default().clear_shredder()
     except Exception as e:
-        logging.info("Error clearing shredder: {}".format(e))
+        logging.info(f"Error clearing shredder: {e}")
 
 
 def main():
@@ -41,7 +41,7 @@ def main():
         format="%(asctime)s %(levelname)s %(message)s", level=logging.INFO
     )
     if args.interval:
-        logging.info("Clearing shredder every {} seconds.".format(args.interval))
+        logging.info(f"Clearing shredder every {args.interval} seconds.")
         while 1:
             clear_shredder()
             time.sleep(args.interval)
