@@ -386,14 +386,6 @@ translation-test:  ## Run page layout tests in all supported languages.
 	@$(DEVSHELL) $(SDBIN)/translation-test $${LOCALES}
 	@echo
 
-.PHONY: list-translators
-list-translators:  ## Collect the names of translators since the last merge from Weblate.
-	@$(DEVSHELL) $(SDROOT)/securedrop/i18n_tool.py list-translators
-
-.PHONY: list-all-translators
-list-all-translators:  ## Collect the names of all translators in the project's history.
-	@$(DEVSHELL) $(SDROOT)/securedrop/i18n_tool.py list-translators --all
-
 .PHONY: update-user-guides
 update-user-guides:  ## Regenerate docs screenshots. Set DOCS_REPO_DIR to repo checkout root.
 ifndef DOCS_REPO_DIR
