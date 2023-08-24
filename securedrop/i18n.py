@@ -211,11 +211,11 @@ def get_locale(config: SecureDropConfig) -> str:
     - config.DEFAULT_LOCALE
     - config.FALLBACK_LOCALE
     """
-    preferences = []
+    preferences: List[str] = []
     if session and session.get("locale"):
-        preferences.append(session.get("locale"))
+        preferences.append(session["locale"])
     if request.args.get("l"):
-        preferences.insert(0, request.args.get("l"))
+        preferences.insert(0, request.args["l"])
     if not preferences:
         preferences.extend(get_accepted_languages())
     preferences.append(config.DEFAULT_LOCALE)
