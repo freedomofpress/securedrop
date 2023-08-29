@@ -60,7 +60,7 @@ SecureDrop is open source and released under the [GNU Affero General Public Lice
 The wordlist we use to generate source passphrases come from various sources:
 
 * [en.txt](/securedrop/wordlists/en.txt) is based off a new [Diceware wordlist](https://www.eff.org/deeplinks/2016/07/new-wordlists-random-passphrases) from the EFF.
-* [fr.txt](/securedrop/wordlists/fr.txt) is based off Matthieu Weber's [translated diceware list](http://weber.fi.eu.org/index.shtml.en).
+* [fr.txt](/securedrop/wordlists/fr.txt) is based off Matthieu Weber's [translated diceware list](http://weber.fi.eu.org/index.shtml.en) and the French word list found in [trezor/python-mnemonic](https://github.com/trezor/python-mnemonic/blob/161bec3351dce9c439cd00dc0beaaf09e7906ff8/src/mnemonic/wordlist/french.txt) (MIT licensed).
 
 
 ## Acknowledgments
