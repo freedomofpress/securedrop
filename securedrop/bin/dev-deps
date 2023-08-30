@@ -158,13 +158,17 @@ function reset_demo() {
 }
 
 function build_redwood() {
-    # Create a debug build of redwood and install it in the app-code virtualenv
-    # TODO: add live reload support
-    # We tell cargo to put its registry/crate cache and build cache in the target/ folder so
-    # it persists instead of being recreated from scratch each time the container starts.
-    # n.b. we can't re-use the host's caches because of permission differences
-    PATH="$PATH:/opt/cargo/bin/" \
-    CARGO_HOME="${REPOROOT}/target/cargo-dev" \
-        python3 "${REPOROOT}/redwood/build-wheel.py" --redwood "${REPOROOT}/redwood" --target "${REPOROOT}/target/dev"
-    /opt/venvs/securedrop-app-code/bin/pip install "${REPOROOT}"/redwood/redwood-*.whl
+    # For the demo, we build the wheel at container build time instead of
+    # during launch, so skip this part
+    if [[ -z "${SKIP_REDWOOD_BUILD:-}" ]]; then
+        # Create a debug build of redwood and install it in the app-code virtualenv
+        # TODO: add live reload support
+        # We tell cargo to put its registry/crate cache and build cache in the target/ folder so
+        # it persists instead of being recreated from scratch each time the container starts.
+        # n.b. we can't re-use the host's caches because of permission differences
+        PATH="$PATH:/opt/cargo/bin/" \
+        CARGO_HOME="${REPOROOT}/target/cargo-dev" \
+            python3 "${REPOROOT}/redwood/build-wheel.py" --redwood "${REPOROOT}/redwood" --target "${REPOROOT}/target/dev"
+        /opt/venvs/securedrop-app-code/bin/pip install "${REPOROOT}"/redwood/redwood-*.whl
+    fi
 }
