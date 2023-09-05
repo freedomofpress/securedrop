@@ -5,7 +5,7 @@ argon2_cffi>=20.1.0
 bandit
 black
 cffi>=1.14.2
-cryptography>=41.0.0
+cryptography>=41.0.3
 diffoscope
 docker
 # Needed for dig ansible lookup
