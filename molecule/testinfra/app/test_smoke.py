@@ -11,14 +11,15 @@ testinfra_hosts = [sdvars.app_hostname]
 
 
 @pytest.mark.parametrize(
-    ("name", "url", "curl_flags"),
+    ("name", "url", "curl_flags", "expected"),
     [
         # We pass -L to follow the redirect from / to /login
-        ("journalist", "http://localhost:8080/", "L"),
-        ("source", "http://localhost:80/", ""),
+        ("journalist", "http://localhost:8080/", "L", "Powered by"),
+        ("source", "http://localhost:80/", "", "Powered by"),
+        ("source", "http://localhost:80/public-key", "", "-----BEGIN PGP PUBLIC KEY BLOCK-----"),
     ],
 )
-def test_interface_up(host, name, url, curl_flags):
+def test_interface_up(host, name, url, curl_flags, expected):
     """
     Ensure the respective interface is up with HTTP 200 if not, we try our
     best to grab the error log and print it via an intentionally failed
@@ -32,7 +33,7 @@ def test_interface_up(host, name, url, curl_flags):
             if f.exists:
                 assert "nopenopenope" in f.content_string
     assert "200 OK" in response
-    assert "Powered by" in response
+    assert expected in response
 
 
 def test_redwood(host):
