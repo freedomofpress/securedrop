@@ -32,6 +32,8 @@ pub enum Error {
     Io(#[from] io::Error),
     #[error("Unexpected non-UTF-8 text: {0}")]
     NotUnicode(#[from] FromUtf8Error),
+    #[error("No supported keys for certificate {0}")]
+    NoSupportedKeys(String),
 }
 
 create_exception!(redwood, RedwoodError, PyException);
@@ -131,18 +133,23 @@ fn encrypt(
 
     // For each of the recipient certificates, pull the encryption keys that
     // are compatible with by the standard policy (e.g. not SHA-1) supported by
-    // Sequoia (duh), and not revoked.
+    // Sequoia, and not revoked.
     // These filter options should be kept in sync with `Helper::decrypt()`.
     for cert in certs.iter() {
-        for key in cert
+        let keys: Vec<_> = cert
             .keys()
             .with_policy(p, None)
             .supported()
             .alive()
             .revoked(false)
             .for_storage_encryption()
-        {
-            recipient_keys.push(key);
+            .collect();
+
+        // Each certificate must have at least one supported encryption key
+        if keys.is_empty() {
+            return Err(Error::NoSupportedKeys(cert.fingerprint().to_string()));
+        } else {
+            recipient_keys.extend(keys)
         }
     }
 
@@ -195,6 +202,7 @@ pub fn decrypt(
 #[cfg(test)]
 mod tests {
     use super::*;
+    use sequoia_openpgp::Cert;
     use tempfile::NamedTempFile;
 
     const PASSPHRASE: &str = "correcthorsebatterystaple";
@@ -215,6 +223,39 @@ mod tests {
         assert!(secret_key.contains("Comment: Source Key <foo@example.org>"));
         let cert = Cert::from_str(&secret_key).unwrap();
         assert_eq!(format!("{}", cert.fingerprint()), fingerprint);
+    }
+
+    #[test]
+    fn test_source_cert_has_accepted_key() {
+        // Certificate with valid key
+        let (good_key, _secret_key, _fingerprint) =
+            generate_source_key_pair(PASSPHRASE, "foo@example.org").unwrap();
+
+        // Purposefully weak key that should be rejected; this is 1024-bit RSA
+        // and uses a SHA-1 self signature scheme
+        let bad_key: &str = include_str!("../res/weak_sample_key.asc");
+        let bad_key_fingerprint: &str =
+            include_str!("../res/weak_sample_key_fingerprint.txt");
+
+        // Certificate with the weak key
+        let bad_cert = Cert::from_bytes(bad_key.as_bytes()).unwrap();
+        assert_eq!(bad_key_fingerprint, bad_cert.fingerprint().to_string());
+
+        // Attempting to encrypt to multiple recipients should fail if any one of them
+        // has no supported keys
+        let tmp = NamedTempFile::new().unwrap();
+        let expected_err_msg = format!(
+            "No supported keys for certificate {}",
+            bad_key_fingerprint
+        );
+
+        let err = encrypt_message(
+            vec![good_key, bad_key.to_string()],
+            SECRET_MESSAGE.to_string(),
+            tmp.path().to_path_buf(),
+        )
+        .unwrap_err();
+        assert_eq!(err.to_string(), expected_err_msg);
     }
 
     #[test]
