@@ -240,7 +240,7 @@ jobs:
           name: Run tests
           command: |
             sudo apt update && sudo apt install python3-sh python3-babel
-            export LOCALES="$(/usr/bin/python3 securedrop/i18n_tool.py list-locales --lines | circleci tests split | tr '\n' ' ')"
+            export LOCALES="$(make supported-locales | jq --raw-output 'join("\n")' | circleci tests split)"
             fromtag=$(docker images | grep securedrop-test-focal-py3 | head -n1 | awk '{print $2}')
             DOCKER_BUILD_ARGUMENTS="--cache-from securedrop-test-focal-py3:${fromtag:-latest}" make translation-test
 
