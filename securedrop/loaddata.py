@@ -239,7 +239,7 @@ def add_reply(
     db.session.commit()
 
 
-def add_source() -> Tuple[Source, str]:
+def add_source(use_gpg: bool = False) -> Tuple[Source, str]:
     """
     Adds a single source.
     """
@@ -250,6 +250,26 @@ def add_source() -> Tuple[Source, str]:
         source_app_storage=Storage.get_default(),
     )
     source = source_user.get_db_record()
+    if use_gpg:
+        manager = EncryptionManager.get_default()
+        gen_key_input = manager._gpg.gen_key_input(
+            passphrase=source_user.gpg_secret,
+            name_email=source_user.filesystem_id,
+            key_type="RSA",
+            key_length=4096,
+            name_real="Source Key",
+            creation_date="2013-05-14",
+            # '0' is the magic value that tells GPG's batch key generation not
+            # to set an expiration date.
+            expire_date="0",
+        )
+        manager._gpg.gen_key(gen_key_input)
+
+        # Delete the Sequoia-generated keys
+        source.pgp_public_key = None
+        source.pgp_fingerprint = None
+        source.pgp_secret_key = None
+        db.session.add(source)
     db.session.commit()
 
     return source, codename
@@ -323,7 +343,7 @@ def add_sources(args: argparse.Namespace, journalists: Tuple[Journalist, ...]) -
     )
 
     for i in range(1, args.source_count + 1):
-        source, codename = add_source()
+        source, codename = add_source(use_gpg=args.gpg)
 
         for _ in range(args.messages_per_source):
             submit_message(source, secrets.choice(journalists) if seen_message_count > 0 else None)
@@ -449,6 +469,12 @@ def parse_arguments() -> argparse.Namespace:
     parser.add_argument(
         "--seed",
         help=("Random number seed (for reproducible datasets)"),
+    )
+    parser.add_argument(
+        "--gpg",
+        help="Create sources with a key pair stored in GPG",
+        action="store_true",
+        default=False,
     )
     return parser.parse_args()
 
