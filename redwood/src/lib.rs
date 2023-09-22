@@ -21,6 +21,7 @@ use std::string::FromUtf8Error;
 use std::time::{Duration, SystemTime};
 
 mod decryption;
+mod keys;
 mod stream;
 
 #[derive(thiserror::Error, Debug)]
@@ -33,6 +34,8 @@ pub enum Error {
     NotUnicode(#[from] FromUtf8Error),
     #[error("No supported keys for certificate {0}")]
     NoSupportedKeys(String),
+    #[error("Contains secret key material")]
+    HasSecretKeyMaterial,
 }
 
 create_exception!(redwood, RedwoodError, PyException);
@@ -58,6 +61,7 @@ const KEY_CREATION_SECONDS_FROM_EPOCH: u64 = 1368507600;
 #[pymodule]
 fn redwood(py: Python, m: &PyModule) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(generate_source_key_pair, m)?)?;
+    m.add_function(wrap_pyfunction!(is_valid_public_key, m)?)?;
     m.add_function(wrap_pyfunction!(encrypt_message, m)?)?;
     m.add_function(wrap_pyfunction!(encrypt_stream, m)?)?;
     m.add_function(wrap_pyfunction!(decrypt, m)?)?;
@@ -91,6 +95,19 @@ pub fn generate_source_key_pair(
     let public_key = String::from_utf8(cert.armored().to_vec()?)?;
     let secret_key = String::from_utf8(cert.as_tsk().armored().to_vec()?)?;
     Ok((public_key, secret_key, format!("{}", cert.fingerprint())))
+}
+
+#[pyfunction]
+pub fn is_valid_public_key(input: &str) -> Result<String> {
+    let policy = &StandardPolicy::new();
+    let cert = Cert::from_str(input)?;
+    // We don't need the keys, just need to check there's at least one and no error
+    keys::keys_from_cert(policy, &cert)?;
+    // And there is no secret key material
+    if cert.keys().secret().next().is_some() {
+        return Err(Error::HasSecretKeyMaterial);
+    }
+    Ok(cert.fingerprint().to_string())
 }
 
 /// Encrypt a message (text) for the specified recipients. The list of
@@ -127,33 +144,15 @@ fn encrypt(
     mut plaintext: impl Read,
     destination: &Path,
 ) -> Result<()> {
-    let p = &StandardPolicy::new();
+    let policy = &StandardPolicy::new();
     let mut certs = vec![];
     let mut recipient_keys = vec![];
     for recipient in recipients {
         certs.push(Cert::from_str(recipient)?);
     }
 
-    // For each of the recipient certificates, pull the encryption keys that
-    // are compatible with by the standard policy (e.g. not SHA-1) supported by
-    // Sequoia, and not revoked.
-    // These filter options should be kept in sync with `Helper::decrypt()`.
     for cert in certs.iter() {
-        let keys: Vec<_> = cert
-            .keys()
-            .with_policy(p, None)
-            .supported()
-            .alive()
-            .revoked(false)
-            .for_storage_encryption()
-            .collect();
-
-        // Each certificate must have at least one supported encryption key
-        if keys.is_empty() {
-            return Err(Error::NoSupportedKeys(cert.fingerprint().to_string()));
-        } else {
-            recipient_keys.extend(keys)
-        }
+        recipient_keys.extend(keys::keys_from_cert(policy, cert)?);
     }
 
     // In reverse order, we set up a writer that will write an encrypted and
@@ -210,6 +209,11 @@ mod tests {
 
     const PASSPHRASE: &str = "correcthorsebatterystaple";
     const SECRET_MESSAGE: &str = "Rust is great 🦀";
+    // Purposefully weak key that should be rejected; this is 1024-bit RSA
+    // and uses a SHA-1 self signature scheme
+    const BAD_KEY: &str = include_str!("../res/weak_sample_key.asc");
+    const BAD_KEY_FINGERPRINT: &str =
+        include_str!("../res/weak_sample_key_fingerprint.txt");
 
     #[test]
     fn test_generate_source_key_pair() {
@@ -229,31 +233,43 @@ mod tests {
     }
 
     #[test]
+    fn test_is_valid_public_key() {
+        let (good_key, secret_key, fingerprint) =
+            generate_source_key_pair(PASSPHRASE, "foo@example.org").unwrap();
+        assert_eq!(is_valid_public_key(&good_key).unwrap(), fingerprint);
+        assert_eq!(
+            is_valid_public_key(BAD_KEY).unwrap_err().to_string(),
+            format!(
+                "No supported keys for certificate {}",
+                BAD_KEY_FINGERPRINT
+            )
+        );
+        assert_eq!(
+            is_valid_public_key(&secret_key).unwrap_err().to_string(),
+            "Contains secret key material"
+        );
+    }
+
+    #[test]
     fn test_source_cert_has_accepted_key() {
         // Certificate with valid key
         let (good_key, _secret_key, _fingerprint) =
             generate_source_key_pair(PASSPHRASE, "foo@example.org").unwrap();
 
-        // Purposefully weak key that should be rejected; this is 1024-bit RSA
-        // and uses a SHA-1 self signature scheme
-        let bad_key: &str = include_str!("../res/weak_sample_key.asc");
-        let bad_key_fingerprint: &str =
-            include_str!("../res/weak_sample_key_fingerprint.txt");
-
         // Certificate with the weak key
-        let bad_cert = Cert::from_bytes(bad_key.as_bytes()).unwrap();
-        assert_eq!(bad_key_fingerprint, bad_cert.fingerprint().to_string());
+        let bad_cert = Cert::from_bytes(BAD_KEY.as_bytes()).unwrap();
+        assert_eq!(BAD_KEY_FINGERPRINT, bad_cert.fingerprint().to_string());
 
         // Attempting to encrypt to multiple recipients should fail if any one of them
         // has no supported keys
         let tmp = NamedTempFile::new().unwrap();
         let expected_err_msg = format!(
             "No supported keys for certificate {}",
-            bad_key_fingerprint
+            BAD_KEY_FINGERPRINT
         );
 
         let err = encrypt_message(
-            vec![good_key, bad_key.to_string()],
+            vec![good_key, BAD_KEY.to_string()],
             SECRET_MESSAGE.to_string(),
             tmp.path().to_path_buf(),
         )
