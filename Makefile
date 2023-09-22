@@ -195,6 +195,16 @@ semgrep:
 	@semgrep --exclude "securedrop/tests/" --error --strict --metrics off --max-chars-per-line 200 --verbose --config "p/r2c-security-audit" securedrop
 	@echo
 
+
+# check dependencies in Cargo.lock
+.PHONY: rust-audit
+rust-audit:
+	@echo "███ Running Rust dependency checks..."
+	@cargo install cargo-audit
+	@cargo audit
+	@echo
+
+
 #############
 #
 # Development
