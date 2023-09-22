@@ -3,6 +3,8 @@ import werkzeug
 from tests.functional import tor_utils
 from tests.functional.app_navigators.source_app_nav import SourceAppNavigator
 
+import redwood
+
 from ..test_journalist import VALID_PASSWORD
 
 
@@ -105,7 +107,7 @@ class TestSourceAppDownloadJournalistKey:
         response = requests.get(url=url, proxies=tor_utils.proxies_for_url(url))
 
         # Then it succeeds and the right data is returned
-        assert "BEGIN PGP PUBLIC KEY BLOCK" in response.content.decode("utf-8")
+        assert redwood.is_valid_public_key(response.content.decode("utf-8"))
 
 
 class TestSourceAppCodenamesInMultipleTabs:

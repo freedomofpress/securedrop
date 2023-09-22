@@ -7,6 +7,7 @@ from passphrases import PassphraseGenerator
 from source_user import create_source_user
 from tests import utils
 
+import redwood
 from redwood import RedwoodError
 
 
@@ -17,8 +18,7 @@ class TestEncryptionManager:
         assert encryption_mgr
         # When using the encryption manager to fetch the journalist public key
         # It succeeds
-        journalist_pub_key = encryption_mgr.get_journalist_public_key()
-        assert journalist_pub_key.startswith("-----BEGIN PGP PUBLIC KEY BLOCK----")
+        assert redwood.is_valid_public_key(encryption_mgr.get_journalist_public_key())
 
     def test_get_gpg_source_public_key(self, test_source):
         # Given a source user with a key pair in the gpg keyring
@@ -29,8 +29,7 @@ class TestEncryptionManager:
         # When using the encryption manager to fetch the source user's public key
         # It succeeds
         source_pub_key = encryption_mgr.get_source_public_key(source_user.filesystem_id)
-        assert source_pub_key
-        assert source_pub_key.startswith("-----BEGIN PGP PUBLIC KEY BLOCK----")
+        assert redwood.is_valid_public_key(source_pub_key)
 
         # And the key's fingerprint was saved to Redis
         source_key_fingerprint = encryption_mgr._redis.hget(

@@ -21,6 +21,8 @@ from source_app import api as source_app_api
 from source_app import get_logo_url
 from source_app.session_manager import SessionManager
 
+import redwood
+
 from . import utils
 from .utils.db_helper import new_codename, submit
 from .utils.instrument import InstrumentedApp
@@ -225,7 +227,7 @@ def test_lookup(source_app):
         # download the public key
         resp = app.get(url_for("info.download_public_key"))
         text = resp.data.decode("utf-8")
-        assert "BEGIN PGP PUBLIC KEY BLOCK" in text
+        assert redwood.is_valid_public_key(text)
 
 
 def test_journalist_key_redirects_to_public_key(source_app):
@@ -235,7 +237,7 @@ def test_journalist_key_redirects_to_public_key(source_app):
         assert resp.status_code == 301
         resp = app.get(url_for("info.download_journalist_key"), follow_redirects=True)
         assert request.path == url_for("info.download_public_key")
-        assert "BEGIN PGP PUBLIC KEY BLOCK" in resp.data.decode("utf-8")
+        assert redwood.is_valid_public_key(resp.data.decode("utf-8"))
 
 
 def test_login_and_logout(source_app):
