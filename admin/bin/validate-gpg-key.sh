@@ -26,8 +26,8 @@ declare -r fingerprint="$2"
 printf "Creating temporary GPG config dir for testing key import...\n"
 temporary_gpg_homedir="$(mktemp -d)"
 export GNUPGHOME="${temporary_gpg_homedir}"
-export KEY_MISMATCH=1
-export SQLINT_FAIL=2
+export KEY_MISMATCH=11
+export SQLINT_FAIL=12
 
 
 function cleanup_temporary_gpg_homedir() {
@@ -42,7 +42,7 @@ function report_error() {
     elif [[ $1 -eq $SQLINT_FAIL ]]; then
         printf "Failed! Fingerprint matches but key failed sq-keyring-linter.\n"
         exit 2
-    else # Unreachable
+    else
         printf "Failed! Specified fingerprint has failed validation.\n"
         exit 3
     fi
@@ -71,14 +71,18 @@ printf "\t Fingerprint: %s\n" "${fingerprint}"
 
 gpg2 --fingerprint "$fingerprint" || report_error $KEY_MISMATCH
 
-# Validate against Seqouia's key linter, which checks whether OpenPGP certificates
-# use a SHA-1 based binding signature
+# Opportunistically validate against Seqouia's key linter, which checks whether
+# OpenPGP certificates use a SHA-1 based binding signature
 # (see https://sequoia-pgp.org/blog/2023/02/01/202302-happy-sha1-day/).
 # Note: it is possible that the key has been updated on another admin workstation,
-# but the updated pubkey has not been transferred to this workstation.  
-printf "Validating that key is supported...\n"
-gpg2 --export "$fingerprint" | sq-keyring-linter || report_error $SQLINT_FAIL
-
+# but the updated pubkey has not been transferred to this workstation.
+if [[ $(dpkg-query -W -f='${Status}' sq-keyring-linter) == "install ok installed" ]]; then
+    printf "Validating that key is supported...\n"
+    gpg2 --export "$fingerprint" | sq-keyring-linter || report_error $SQLINT_FAIL
+else
+    printf "Warning: sq-keyring-linter package is missing. "
+    printf "Key validation checks will be limited without it.\n"
+fi
 
 printf "Success! Specified fingerprint matches pubkey file.\n"
 exit 0
