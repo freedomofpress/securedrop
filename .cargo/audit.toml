@@ -1,0 +1,12 @@
+[advisories]
+ignore = [] # advisory IDs to ignore e.g. ["RUSTSEC-2019-0001", ...]
+
+# Output Configuration
+[output]
+deny = ["yanked", "unmaintained"]
+quiet = false
+
+# Target Configuration
+[target]
+arch = "x86_64" # Ignore advisories for CPU architectures other than this one
+os = "linux" # Ignore advisories for operating systems other than this one

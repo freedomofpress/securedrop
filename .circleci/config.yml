@@ -112,6 +112,17 @@ jobs:
             make rust-lint
             make rust-test
 
+  rust-security:
+    # Keep version in sync with rust-toolchain.toml
+    docker:
+      - image: rust:1.71.1
+    steps:
+      - checkout
+      - run:
+          name: Check Rust dependencies
+          command: |
+            make rust-audit
+
   app-tests:
     machine:
       image: ubuntu-2004:202010-01
@@ -421,6 +432,12 @@ workflows:
           context:
             - circleci-slack
           <<: *slack-fail-post-step
+      - rust-security:
+          requires:
+            - lint
+          context:
+            - circleci-slack
+          <<: *slack-fail-post-step
       - staging-test-with-rebase:
           filters:
             branches:
@@ -455,6 +472,7 @@ workflows:
     jobs:
       - staging-test-with-rebase
       - static-analysis-and-no-known-cves
+      - rust-security
 
   weekly:
     triggers:
