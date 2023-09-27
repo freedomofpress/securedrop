@@ -34,7 +34,8 @@ parser = argparse.ArgumentParser(
 parser.add_argument(
     "locale",
     nargs="+",
-    help="""one or more locale directories, each of which must contain an "LC_MESSAGES" directory""",
+    help="""one or more locale directories, each of which must contain an
+    "LC_MESSAGES" directory""",
 )
 parser.add_argument(
     "--domain", default="messages", help="""the gettext domain to load (defaults to "messages")"""
@@ -99,7 +100,7 @@ class CatalogVerifier:
         for stray in self.strays:
             yield f"--diff-mask {shlex.quote(stray)}"  # tell diffoscope to mask strays
         yield "| grep -Fv '[masked]'"  # ignore things we've masked
-        yield "| grep -E '│ (-|\+)msg(id|str)'"  # ignore context; we only care about real diffs
+        yield "| grep -E '│ (-|\\+)msg(id|str)'"  # ignore context; we only care about real diffs
 
     def diffoscope_call(
         self, a: Path, b: Path, filtered: bool = True
@@ -113,7 +114,8 @@ class CatalogVerifier:
         # We silence Bandit and Semgrep warnings on `shell=True`
         # because we want to inherit the Python virtual environment
         # in which we're invoked.
-        return subprocess.run(  # nosec B602 nosemgrep: python.lang.security.audit.subprocess-shell-true.subprocess-shell-true
+        # nosemgrep: python.lang.security.audit.subprocess-shell-true.subprocess-shell-true
+        return subprocess.run(  # nosec B602
             cmd,
             capture_output=True,
             env=os.environ,
