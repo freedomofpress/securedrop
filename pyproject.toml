@@ -67,6 +67,7 @@ ignore = [
     # nested if and with statements, too many violations for now
     "SIM102", "SIM117",
 ]
+extend-include = ["securedrop/scripts/*"]
 
 [tool.ruff.isort]
 # ruff's isort is smart enough to know these are first party, but let's treat

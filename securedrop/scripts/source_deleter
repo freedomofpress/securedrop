@@ -9,10 +9,10 @@ import logging
 import sys
 import time
 
-sys.path.insert(0, "/var/www/securedrop")  # noqa: E402
+sys.path.insert(0, "/var/www/securedrop")
 
-import journalist_app
-from sdconfig import SecureDropConfig
+import journalist_app  # noqa: E402
+from sdconfig import SecureDropConfig  # noqa: E402
 
 
 def parse_args():
@@ -31,7 +31,7 @@ def purge_deleted_sources():
     try:
         journalist_app.utils.purge_deleted_sources()
     except Exception as e:
-        logging.info("Error purging deleted sources: {}".format(e))
+        logging.info(f"Error purging deleted sources: {e}")
 
 
 def main():
@@ -40,7 +40,7 @@ def main():
         format="%(asctime)s %(levelname)s %(message)s", level=logging.INFO
     )
     if args.interval:
-        logging.info("Purging deleted sources every {} seconds.".format(args.interval))
+        logging.info(f"Purging deleted sources every {args.interval} seconds.")
         while 1:
             purge_deleted_sources()
             time.sleep(args.interval)

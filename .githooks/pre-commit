@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # shellcheck disable=SC2086
 
-PY_FILES=$(git diff --name-only --cached --diff-filter=ACMR | grep ".py$")
+PY_FILES=$(git diff --name-only --cached --diff-filter=ACMR | grep "\.py$")
 
 set -eo pipefail
 
