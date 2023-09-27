@@ -21,6 +21,7 @@ netaddr
 # Now also pin pip due to https://github.com/jazzband/pip-tools/issues/853
 pip>=21.3
 pip-tools>=6.1.0
+polib
 psutil>=5.6.6
 pylint>=2.7.0
 # pyenchant is via pylint[spelling]
@@ -38,5 +39,6 @@ semgrep>=0.98.0
 setuptools>=56.0.0
 shellcheck-py
 testinfra>=5.3.1
+translate-toolkit
 urllib3>=1.26.5
 yamllint
