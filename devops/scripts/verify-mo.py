@@ -20,10 +20,8 @@ import argparse
 import os
 import shlex
 import subprocess
-from collections.abc import Iterator
 from pathlib import Path
-from types import TracebackType
-from typing import Optional, Set
+from typing import Any, Iterator, Optional, Set
 
 import polib
 from translate.tools.pocompile import convertmo
@@ -61,9 +59,9 @@ class CatalogVerifier:
 
     def __exit__(
         self,
-        exc_type: Optional[type[BaseException]],
-        exc_value: Optional[BaseException],
-        traceback: Optional[TracebackType],
+        exc_type: Optional[Any],
+        exc_value: Optional[Any],
+        traceback: Optional[Any],
     ) -> None:
         """Clean up."""
 
