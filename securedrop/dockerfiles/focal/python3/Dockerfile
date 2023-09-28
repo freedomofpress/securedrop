@@ -6,6 +6,8 @@ RUN apt-get update  && apt-get install -y \
     # with its being installed along with everything else since it will be
     # cached along with everything else too.
     default-jdk \
+    # For diffoscope:
+    libarchive13 libmagic1 \
     libasound2 libdbus-glib-1-2 libgtk2.0-0 libfontconfig1 libxrender1 \
     libcairo-gobject2 libgtk-3-0 libstartup-notification0 npm && \
     npm install --global html_codesniffer@2.5.1

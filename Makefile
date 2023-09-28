@@ -337,6 +337,9 @@ upgrade-destroy:  ## Destroy an upgrade test environment.
 #
 ##############
 
+DESKTOP_LOCALE_BASE=install_files/ansible-base/roles/tails-config/templates
+DESKTOP_LOCALE_DIR=$(DESKTOP_LOCALE_BASE)/locale
+
 .PHONY: translate
 translate:  ## Update POT files from translated strings in source code.
 	@echo "Updating translations..."
@@ -368,6 +371,22 @@ endif
 	@echo "Copying screenshots..."
 	cp securedrop/tests/functional/pageslayout/screenshots/en_US/*.png $${DOCS_REPO_DIR}/docs/images/manual/screenshots
 	@echo
+
+.PHONY: verify-mo
+verify-mo: ## Verify that all gettext machine objects (.mo) are reproducible from their catalogs (.po).
+	@# TODO(#6917): Once Weblate (rather than i18n_tool.py) is correctly filing
+	@# both .po and .mo under $DESKTOP_LOCALE_DIR, remove this step.  (See
+	@# also: 76f3adeed90f4aaadbf0685e09dec6314367d5c0.)
+	@find ${DESKTOP_LOCALE_BASE} \
+		-maxdepth 1 \
+		-name "*.po" \
+		-exec bash -c 'PO="$$(basename {} | sed \'s/.po//')"; cp ${DESKTOP_LOCALE_BASE}/$${PO}.po $(DESKTOP_LOCALE_DIR)/$${PO}/LC_MESSAGES/messages.po' \;
+	@TERM=dumb devops/scripts/verify-mo.py ${DESKTOP_LOCALE_DIR}/*
+	@# All good; now clean up.
+	@# TODO(#6917): git restore "${LOCALE_DIR}/**/*.po"
+	@find ${DESKTOP_LOCALE_DIR} \
+		-name "*.po" \
+		-delete
 
 
 ###########
