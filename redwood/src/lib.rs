@@ -24,6 +24,8 @@ mod decryption;
 mod keys;
 mod stream;
 
+const POLICY: &StandardPolicy = &StandardPolicy::new();
+
 #[derive(thiserror::Error, Debug)]
 pub enum Error {
     #[error("OpenPGP error: {0}")]
@@ -99,10 +101,9 @@ pub fn generate_source_key_pair(
 
 #[pyfunction]
 pub fn is_valid_public_key(input: &str) -> Result<String> {
-    let policy = &StandardPolicy::new();
     let cert = Cert::from_str(input)?;
     // We don't need the keys, just need to check there's at least one and no error
-    keys::keys_from_cert(policy, &cert)?;
+    keys::keys_from_cert(POLICY, &cert)?;
     // And there is no secret key material
     if cert.keys().secret().next().is_some() {
         return Err(Error::HasSecretKeyMaterial);
@@ -144,7 +145,6 @@ fn encrypt(
     mut plaintext: impl Read,
     destination: &Path,
 ) -> Result<()> {
-    let policy = &StandardPolicy::new();
     let mut certs = vec![];
     let mut recipient_keys = vec![];
     for recipient in recipients {
@@ -152,7 +152,7 @@ fn encrypt(
     }
 
     for cert in certs.iter() {
-        recipient_keys.extend(keys::keys_from_cert(policy, cert)?);
+        recipient_keys.extend(keys::keys_from_cert(POLICY, cert)?);
     }
 
     // In reverse order, we set up a writer that will write an encrypted and
@@ -182,17 +182,16 @@ pub fn decrypt(
     passphrase: String,
 ) -> Result<Cow<'static, [u8]>> {
     let recipient = Cert::from_str(&secret_key)?;
-    let policy = &StandardPolicy::new();
     let passphrase: Password = passphrase.into();
     let helper = decryption::Helper {
-        policy,
+        policy: POLICY,
         secret: &recipient,
         passphrase: &passphrase,
     };
 
     // Now, create a decryptor with a helper using the given Certs.
     let mut decryptor = DecryptorBuilder::from_bytes(&ciphertext)?
-        .with_policy(policy, None, helper)?;
+        .with_policy(POLICY, None, helper)?;
 
     // Decrypt the data.
     let mut buffer: Vec<u8> = vec![];
