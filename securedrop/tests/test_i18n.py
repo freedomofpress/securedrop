@@ -21,7 +21,6 @@ from pathlib import Path
 from typing import List
 
 import i18n
-import i18n_tool
 import journalist_app as journalist_app_module
 import pytest
 import source_app
@@ -247,22 +246,31 @@ def test_i18n():
 
     i18n_dir = Path(__file__).absolute().parent / "i18n"
     sources = [str(i18n_dir / "code.py"), str(i18n_dir / "template.html")]
-    i18n_tool.I18NTool().main(
+    pot = i18n_dir / "messages.pot"
+    subprocess.check_call(
         [
-            "--verbose",
-            "translate-messages",
+            "pybabel",
+            "extract",
             "--mapping",
             str(i18n_dir / "babel.cfg"),
-            "--translations-dir",
-            str(translation_dirs),
-            "--sources",
-            ",".join(sources),
-            "--extract-update",
+            "--output",
+            pot,
+            *sources,
         ]
     )
 
-    pot = translation_dirs / "messages.pot"
-    subprocess.check_call(["pybabel", "init", "-i", pot, "-d", translation_dirs, "-l", "en_US"])
+    subprocess.check_call(
+        [
+            "pybabel",
+            "init",
+            "--input-file",
+            pot,
+            "--output-dir",
+            translation_dirs,
+            "--locale",
+            "en_US",
+        ]
+    )
 
     for (locale, translated_msg) in (
         ("fr_FR", "code bonjour"),
@@ -271,7 +279,18 @@ def test_i18n():
         ("nb_NO", "code norwegian"),
         ("es_ES", "code spanish"),
     ):
-        subprocess.check_call(["pybabel", "init", "-i", pot, "-d", translation_dirs, "-l", locale])
+        subprocess.check_call(
+            [
+                "pybabel",
+                "init",
+                "--input-file",
+                pot,
+                "--output-dir",
+                translation_dirs,
+                "--locale",
+                locale,
+            ]
+        )
 
         # Populate the po file with a translation
         po_file = translation_dirs / locale / "LC_MESSAGES" / "messages.po"
@@ -281,15 +300,18 @@ def test_i18n():
             msgstr=translated_msg,
         )
 
-    i18n_tool.I18NTool().main(
-        [
-            "--verbose",
-            "translate-messages",
-            "--translations-dir",
-            str(translation_dirs),
-            "--compile",
-        ]
-    )
+        subprocess.check_call(
+            [
+                "pybabel",
+                "compile",
+                "--directory",
+                translation_dirs,
+                "--locale",
+                locale,
+                "--input-file",
+                po_file,
+            ]
+        )
 
     # Use our config (and not an app fixture) because the i18n module
     # grabs values at init time and we can't inject them later.
