@@ -1,14 +1,14 @@
 ---
 - include_vars: "{{ ansible_distribution }}_{{ ansible_distribution_release }}.yml"
 
-- include: fetch_tor_config.yml
+- include_tasks: fetch_tor_config.yml
   when: fetch_tor_client_auth_configs
 
-- include: dh_moduli.yml
+- include_tasks: dh_moduli.yml
 
-- include: ssh.yml
+- include_tasks: ssh.yml
 
-- include: iptables.yml
+- include_tasks: iptables.yml
   tags:
     - iptables
     - permissions

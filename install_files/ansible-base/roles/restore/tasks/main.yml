@@ -1,11 +1,11 @@
 ---
 - name: Apply backup to Application Server
-  include: perform_restore.yml
+  include_tasks: perform_restore.yml
 
 - name: Remove deprecated v2 onion service configuration
-  include: cleanup_v2.yml
+  include_tasks: cleanup_v2.yml
   when: not restore_skip_tor
 
 - name: Restart Tor
-  include: update_tor.yml
+  include_tasks: update_tor.yml
   when: not restore_skip_tor

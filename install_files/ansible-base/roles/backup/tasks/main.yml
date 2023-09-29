@@ -1,2 +1,2 @@
 ---
-- include: backup.yml
+- include_tasks: backup.yml

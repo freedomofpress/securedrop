@@ -44,7 +44,7 @@
         - not enable_ssh_over_tor
         - sd_dir_check.stat.exists
 
-    - include: tasks/transition_ssh_local.yml
+    - include_tasks: tasks/transition_ssh_local.yml
       when:
         - not enable_ssh_over_tor
         - sd_dir_check.stat.exists
