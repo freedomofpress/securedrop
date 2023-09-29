@@ -18,9 +18,7 @@
 
 """Extra utilities for python-gnupg."""
 
-import io
 import os
-import re
 import threading
 from datetime import datetime
 from io import BytesIO
@@ -28,16 +26,7 @@ from socket import gethostname
 
 from . import _logger
 
-# These are all the classes which are stream-like; they are used in
-# :func:`_is_stream`.
-_STREAMLIKE_TYPES = [io.IOBase]
-
-
 # Directory shortcuts:
-# we don't want to use this one because it writes to the install dir:
-# _here = getabsfile(currentframe()).rsplit(os.path.sep, 1)[0]
-_here = os.path.join(os.getcwd(), "pretty_bad_protocol")  # current dir
-_test = os.path.join(os.path.join(_here, "test"), "tmp")  # ./tests/tmp
 _user = os.environ.get("HOME")  # $HOME
 
 # Fix for Issue #74: we shouldn't expect that a $HOME directory is set in all
@@ -54,19 +43,11 @@ if not _user:
     # that. Otherwise, we'll use the current directory + /gnupghome.
     _user = os.path.sep.join([_user, "gnupghome"])
 
-_ugpg = os.path.join(_user, ".gnupg")  # $HOME/.gnupg
 _conf = os.path.join(os.path.join(_user, ".config"), "python-gnupg")
 # $HOME/.config/python-gnupg
 
 # Logger is disabled by default
 log = _logger.create_logger(0)
-
-#: Compiled regex for determining a GnuPG binary's version:
-_VERSION_STRING_REGEX = re.compile(r"(\d)(\.)(\d)(\.)(\d+)")
-
-
-class GnuPGVersionError(ValueError):
-    """Raised when we couldn't parse GnuPG's version info."""
 
 
 def _copy_data(instream, outstream):  # type: ignore[no-untyped-def]
@@ -313,16 +294,6 @@ def _is_file(filename):  # type: ignore[no-untyped-def]
     else:
         return True
     return False
-
-
-def _is_stream(input):  # type: ignore[no-untyped-def]
-    """Check that the input is a byte stream.
-
-    :param input: An object provided for reading from or writing to.
-    :rtype: bool
-    :returns: True if :param:input is a stream, False if otherwise.
-    """
-    return isinstance(input, tuple(_STREAMLIKE_TYPES))
 
 
 def _is_list_or_tuple(instance):  # type: ignore[no-untyped-def]

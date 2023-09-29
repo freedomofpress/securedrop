@@ -244,11 +244,11 @@ class TestEncryptionManager:
                 )
 
         # Amd the reply can't be decrypted without providing the source1's gpg secret
-        result = encryption_mgr.gpg().decrypt(
-            # For GPG 2.1+, a non-null passphrase _must_ be passed to decrypt()
-            encrypted_reply,
-            passphrase="test 123",
-        )
+        with encrypted_reply_path.open("rb") as fobj:
+            result = encryption_mgr.gpg().decrypt_file(
+                fobj,
+                passphrase="test 123",
+            )
         assert not result.ok
 
         # And the journalist is able to decrypt their reply

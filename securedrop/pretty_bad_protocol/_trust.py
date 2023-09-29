@@ -42,51 +42,6 @@ def _create_trustdb(cls):  # type: ignore[no-untyped-def]
         cls.fix_trustdb(trustdb)
 
 
-def export_ownertrust(cls, trustdb=None):  # type: ignore[no-untyped-def]
-    """Export ownertrust to a trustdb file.
-
-    If there is already a file named :file:`trustdb.gpg` in the current GnuPG
-    homedir, it will be renamed to :file:`trustdb.gpg.bak`.
-
-    :param string trustdb: The path to the trustdb.gpg file. If not given,
-                           defaults to ``'trustdb.gpg'`` in the current GnuPG
-                           homedir.
-    """
-    if trustdb is None:
-        trustdb = os.path.join(cls.homedir, "trustdb.gpg")
-
-    try:
-        os.rename(trustdb, trustdb + ".bak")
-    except OSError as err:
-        log.debug(str(err))
-
-    export_proc = cls._open_subprocess(["--export-ownertrust"])
-    tdb = open(trustdb, "wb")
-    _util._threaded_copy_data(export_proc.stdout, tdb)
-    export_proc.wait()
-
-
-def import_ownertrust(cls, trustdb=None):  # type: ignore[no-untyped-def]
-    """Import ownertrust from a trustdb file.
-
-    :param str trustdb: The path to the trustdb.gpg file. If not given,
-                        defaults to :file:`trustdb.gpg` in the current GnuPG
-                        homedir.
-    """
-    if trustdb is None:
-        trustdb = os.path.join(cls.homedir, "trustdb.gpg")
-
-    import_proc = cls._open_subprocess(["--import-ownertrust"])
-
-    try:
-        tdb = open(trustdb, "rb")
-    except OSError:
-        log.error("trustdb file %s does not exist!" % trustdb)
-
-    _util._threaded_copy_data(tdb, import_proc.stdin)
-    import_proc.wait()
-
-
 def fix_trustdb(cls, trustdb=None):  # type: ignore[no-untyped-def]
     """Attempt to repair a broken trustdb.gpg file.
 
