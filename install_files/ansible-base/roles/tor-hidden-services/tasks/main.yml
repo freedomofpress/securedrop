@@ -1,4 +1,4 @@
 ---
-- include: install_tor.yml
+- include_tasks: install_tor.yml
 
-- include: configure_tor_hidden_services.yml
+- include_tasks: configure_tor_hidden_services.yml

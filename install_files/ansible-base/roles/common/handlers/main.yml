@@ -5,7 +5,7 @@
 # in order to reuse a single implementation of reboot logic
 # as necessary.
 - name: reboot
-  include: "{{ role_path }}/../../tasks/reboot.yml"
+  include_tasks: "{{ role_path }}/../../tasks/reboot.yml"
 
 - name: update apt cache
   apt:

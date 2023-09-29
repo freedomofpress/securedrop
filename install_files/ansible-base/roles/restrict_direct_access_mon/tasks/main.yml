@@ -1,7 +1,7 @@
 ---
-- include: mon_display_onions.yml
+- include_tasks: mon_display_onions.yml
   tags: backup
 
-- include: ssh.yml
+- include_tasks: ssh.yml
 
-- include: mon_iptables.yml
+- include_tasks: mon_iptables.yml
