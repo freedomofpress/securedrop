@@ -44,7 +44,7 @@ _user = os.environ.get("HOME")  # $HOME
 # environs. https://github.com/isislovecruft/python-gnupg/issues/74
 if not _user:
     # FIXME: Shouldn't we use a randomized tmp directory? (Do we even hit this code path?)
-    _user = "/tmp/python-gnupg"  # nosec B108
+    _user = "/tmp/python-gnupg"  # noqa: S108
     try:
         os.makedirs(_user)
     except OSError:

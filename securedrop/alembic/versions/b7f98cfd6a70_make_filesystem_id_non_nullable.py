@@ -42,9 +42,9 @@ def upgrade() -> None:
     # Now things that directly refer to sources
     for table in ("source_stars", "submissions", "replies"):
         op.execute(
-            f"DELETE FROM {table} WHERE source_id IN "  # nosec
+            f"DELETE FROM {table} WHERE source_id IN "  # noqa: S608
             f"(SELECT id FROM sources WHERE filesystem_id IS NULL)"
-        )  # nosec
+        )
     # And now the sources
     op.execute("DELETE FROM sources WHERE filesystem_id IS NULL")
     with op.batch_alter_table("sources", schema=None) as batch_op:

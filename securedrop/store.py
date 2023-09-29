@@ -324,7 +324,7 @@ class Storage:
 
         encrypted_file_name = f"{count}-{journalist_filename}-doc.gz.gpg"
         encrypted_file_path = self.path(filesystem_id, encrypted_file_name)
-        with SecureTemporaryFile("/tmp") as stf:  # nosec
+        with SecureTemporaryFile("/tmp") as stf:  # noqa: S108
             with gzip.GzipFile(filename=sanitized_filename, mode="wb", fileobj=stf, mtime=0) as gzf:
                 # Buffer the stream into the gzip file to avoid excessive
                 # memory consumption
