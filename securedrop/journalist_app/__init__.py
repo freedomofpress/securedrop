@@ -6,7 +6,8 @@ import i18n
 import template_filters
 import version
 from db import db
-from flask import Flask, abort, g, json, redirect, render_template, request, url_for
+from flask import Flask, abort, g, redirect, render_template, request, url_for
+from flask.json.provider import DefaultJSONProvider
 from flask_babel import gettext
 from flask_wtf.csrf import CSRFError, CSRFProtect
 from journalist_app import account, admin, api, col, main
@@ -56,15 +57,19 @@ def create_app(config: SecureDropConfig) -> Flask:
     app.config["SQLALCHEMY_DATABASE_URI"] = config.DATABASE_URI
     db.init_app(app)
 
-    class JSONEncoder(json.JSONEncoder):
+    class JSONProvider(DefaultJSONProvider):
         """Custom JSON encoder to use our preferred timestamp format"""
 
-        def default(self, obj: "Any") -> "Any":
-            if isinstance(obj, datetime):
-                return obj.strftime(API_DATETIME_FORMAT)
-            super().default(obj)
+        def dumps(self, obj: Any, **kwargs: Any) -> str:
+            def default(obj: Any) -> Any:
+                if isinstance(obj, datetime):
+                    return obj.strftime(API_DATETIME_FORMAT)
+                return super().default(obj)
 
-    app.json_encoder = JSONEncoder
+            kwargs["default"] = default
+            return super().dumps(obj, **kwargs)
+
+    app.json = JSONProvider(app)
 
     @app.errorhandler(CSRFError)
     def handle_csrf_error(e: CSRFError) -> "Response":
