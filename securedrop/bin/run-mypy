@@ -7,8 +7,9 @@ REPOROOT=$(git rev-parse --show-toplevel)
 cd "${REPOROOT}"
 
 if [ "$(command -v mypy)" ]; then
-    source "securedrop/bin/dev-deps"
-    build_redwood
+    # Point mypy at the redwood package with type stub, see second option on
+    # <https://mypy.readthedocs.io/en/stable/stubs.html#creating-a-stub>.
+    export MYPYPATH="./redwood"
     mypy ./securedrop ./admin --namespace-packages --explicit-package-bases "$@"
 elif [ -d "/opt/venvs/securedrop-app-code/" ]; then
     # Inside the dev container, but no mypy
