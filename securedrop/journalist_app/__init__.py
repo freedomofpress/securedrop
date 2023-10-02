@@ -6,7 +6,8 @@ import i18n
 import template_filters
 import version
 from db import db
-from flask import Flask, abort, g, json, redirect, render_template, request, url_for
+from flask import Flask, abort, g, redirect, render_template, request, url_for
+from flask.json.provider import DefaultJSONProvider
 from flask_babel import gettext
 from flask_wtf.csrf import CSRFError, CSRFProtect
 from journalist_app import account, admin, api, col, main
@@ -56,15 +57,15 @@ def create_app(config: SecureDropConfig) -> Flask:
     app.config["SQLALCHEMY_DATABASE_URI"] = config.DATABASE_URI
     db.init_app(app)
 
-    class JSONEncoder(json.JSONEncoder):
+    class JSONProvider(DefaultJSONProvider):
         """Custom JSON encoder to use our preferred timestamp format"""
 
-        def default(self, obj: "Any") -> "Any":
+        def dumps(self, obj: Any, **kwargs: Any) -> str:
             if isinstance(obj, datetime):
-                return obj.strftime(API_DATETIME_FORMAT)
-            super().default(obj)
+                obj = obj.strftime(API_DATETIME_FORMAT)
+            return super().dumps(obj, **kwargs)
 
-    app.json_encoder = JSONEncoder
+    app.json_provider_class = JSONProvider
 
     @app.errorhandler(CSRFError)
     def handle_csrf_error(e: CSRFError) -> "Response":
@@ -88,7 +89,9 @@ def create_app(config: SecureDropConfig) -> Flask:
         return render_template("error.html", error=error), error.code
 
     for code in default_exceptions:
-        app.errorhandler(code)(_handle_http_exception)
+        # n.b. this is not possible to type properly, see comments on flask's
+        # typing.ErrorHandlerCallable
+        app.register_error_handler(code, _handle_http_exception)  # type: ignore
 
     i18n.configure(config, app)
 

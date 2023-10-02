@@ -144,7 +144,7 @@ class SessionInterface(FlaskSessionInterface):
             else:
                 return self._new_session(is_api)
         else:
-            sid = request.cookies.get(app.session_cookie_name)
+            sid = request.cookies.get(app.config["SESSION_COOKIE_NAME"])
         if sid:
             try:
                 sid = self._get_signer(app).loads(sid)
@@ -208,7 +208,7 @@ class SessionInterface(FlaskSessionInterface):
         if not session.is_api and (session.new or session.to_regenerate):
             response.headers.add("Vary", "Cookie")
             response.set_cookie(
-                app.session_cookie_name,
+                app.config["SESSION_COOKIE_NAME"],
                 session.token,
                 httponly=httponly,
                 domain=domain,

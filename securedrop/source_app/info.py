@@ -30,7 +30,7 @@ def make_blueprint(config: SecureDropConfig) -> Blueprint:
         return send_file(
             data,
             mimetype="application/pgp-keys",
-            attachment_filename=config.JOURNALIST_KEY + ".asc",
+            download_name=config.JOURNALIST_KEY + ".asc",
             as_attachment=True,
         )
 

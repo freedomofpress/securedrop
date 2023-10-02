@@ -34,10 +34,8 @@ class RequestThatSecuresFileUploads(wrappers.Request):
 
     def make_form_data_parser(self) -> FormDataParser:
         return self.form_data_parser_class(
-            self._secure_file_stream,
-            self.charset,
-            self.encoding_errors,
-            self.max_form_memory_size,
-            self.max_content_length,
-            self.parameter_storage_class,
+            stream_factory=self._secure_file_stream,
+            max_form_memory_size=self.max_form_memory_size,
+            max_content_length=self.max_content_length,
+            cls=self.parameter_storage_class,
         )
