@@ -1,5 +1,4 @@
 beautifulsoup4>=4.8.2,<4.9
-blinker
 coverage>=5.0  # #6091
 flaky
 html5validator
