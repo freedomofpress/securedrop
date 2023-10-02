@@ -8,7 +8,6 @@ from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives.ciphers import Cipher
 from cryptography.hazmat.primitives.ciphers.algorithms import AES
 from cryptography.hazmat.primitives.ciphers.modes import CTR
-from pretty_bad_protocol._util import _STREAMLIKE_TYPES
 
 
 class SecureTemporaryFile(_TemporaryFileWrapper):
@@ -134,9 +133,3 @@ class SecureTemporaryFile(_TemporaryFileWrapper):
         # Since tempfile._TemporaryFileWrapper.close() does other cleanup,
         # (i.e. deleting the temp file on disk), we need to call it also.
         super().close()
-
-
-# python-gnupg will not recognize our SecureTemporaryFile as a stream-like type
-# and will attempt to call encode on it, thinking it's a string-like type. To
-# avoid this we append it the list of stream-like types.
-_STREAMLIKE_TYPES.append(_TemporaryFileWrapper)

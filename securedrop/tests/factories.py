@@ -106,5 +106,10 @@ class SecureDropConfigFactory:
         config.TEMP_DIR.mkdir(parents=True)
         config.STORE_DIR.mkdir(parents=True)
 
+        # Copy the journalist public key into DATA_ROOT
+        shutil.copy2(
+            Path(__file__).parent / "files/test_journalist_key.pub",
+            config.SECUREDROP_DATA_ROOT / "journalist.pub",
+        )
         # All done
         return config

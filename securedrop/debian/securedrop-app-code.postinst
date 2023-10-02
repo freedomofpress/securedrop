@@ -168,6 +168,31 @@ update_apache2_headers(){
     sed -i 's/^Header always set Cross-Origin-Resource-Policy "same-site"/Header always set Cross-Origin-Resource-Policy "same-origin"/g' "$1"
 }
 
+# Export the journalist public key out of the GPG keyring to journalist.pub
+# as part of the GPG -> Sequoia migration.
+export_journalist_public_key() {
+    # config.py is root-writable, so it's safe to run it as root to extract the fingerprint
+    journalist_pub="/var/lib/securedrop/journalist.pub"
+    # If the journalist.pub file doesn't exist
+    if ! test -f $journalist_pub; then
+        # And we have a config.py (during initial install it won't exist yet)
+        if test -f /var/www/securedrop/config.py; then
+            # n.b. based on sdconfig.py, this should work with very old config.py files.
+            fingerprint=$(cd /var/www/securedrop; python3 -c "import config; print(config.JOURNALIST_KEY)")
+            # Set up journalist.pub as root/www-data 640 before writing to it.
+            touch $journalist_pub
+            chown root:www-data $journalist_pub
+            chmod 640 $journalist_pub
+            # Export the GPG public key
+            # shellcheck disable=SC2024
+            sudo -u www-data gpg2 --homedir=/var/lib/securedrop/keys --export --armor "$fingerprint" > $journalist_pub
+            # Verify integrity of what we just exported
+            sudo -u www-data /var/www/securedrop/scripts/validate-pgp-key "$journalist_pub" "$fingerprint"
+        fi
+    fi
+
+}
+
 
 case "$1" in
     configure)
@@ -232,10 +257,11 @@ case "$1" in
     # mode.
     a2dissite 000-default
     a2dissite default-ssl
-    # Stop Apache service before making changes to its AppArmor profile.
-    # If the Apache service is running unconfined, and the profile is
+    # Stop Apache service while we make changes. This is primarily for
+    # AppArmor (if the Apache service is running unconfined, and the profile is
     # set to "enforce", then apache2 will fail to restart, since it lacks
-    # the ability to send signals to unconfined peers.
+    # the ability to send signals to unconfined peers), but also prevents any
+    # web traffic while database updates are applied.
     service apache2 stop
 
     # and make sure it's enabled
@@ -259,16 +285,19 @@ case "$1" in
     update_apache2_headers /etc/apache2/sites-available/source.conf
     update_apache2_headers /etc/apache2/sites-available/journalist.conf
 
-    # Restart apache so it loads with the apparmor profiles in enforce mode.
-    service apache2 restart
-
     # remove previously dynamically-generated assets
     rm -fr /var/www/securedrop/static/gen/
     rm -fr /var/www/securedrop/static/.webassets-cache/
 
-    # Version migrations
+    # GPG -> Sequoia migration
+    export_journalist_public_key
 
+    # Version migrations
     database_migration
+
+    # Restart apache now that we've updated everything, setup AppArmor
+    # and applied all migrations
+    service apache2 restart
 
     ;;
 

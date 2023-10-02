@@ -15,7 +15,6 @@ from journalist_app.sessions import session
 from source_app.session_manager import SessionManager
 from store import Storage
 from tests import utils
-from tests.test_encryption import import_journalist_private_key
 from tests.utils import login_journalist
 from two_factor import TOTP
 
@@ -78,11 +77,8 @@ def test_submit_message(journalist_app, source_app, test_journo, app_storage):
         resp = app.get(submission_url)
         assert resp.status_code == 200
 
-        encryption_mgr = EncryptionManager.get_default()
-        with import_journalist_private_key(encryption_mgr):
-            decryption_result = encryption_mgr._gpg.decrypt(resp.data)
-        assert decryption_result.ok
-        assert decryption_result.data.decode("utf-8") == test_msg
+        decryption_result = utils.decrypt_as_journalist(resp.data).decode()
+        assert decryption_result == test_msg
 
         # delete submission
         resp = app.get(col_url)
@@ -175,12 +171,8 @@ def test_submit_file(journalist_app, source_app, test_journo, app_storage):
         resp = app.get(submission_url)
         assert resp.status_code == 200
 
-        encryption_mgr = EncryptionManager.get_default()
-        with import_journalist_private_key(encryption_mgr):
-            decrypted_data = encryption_mgr._gpg.decrypt(resp.data)
-        assert decrypted_data.ok
-
-        sio = BytesIO(decrypted_data.data)
+        decrypted_data = utils.decrypt_as_journalist(resp.data)
+        sio = BytesIO(decrypted_data)
         with gzip.GzipFile(mode="rb", fileobj=sio) as gzip_file:
             unzipped_decrypted_data = gzip_file.read()
             mtime = gzip_file.mtime
@@ -225,7 +217,7 @@ def test_submit_file(journalist_app, source_app, test_journo, app_storage):
         utils.asynchronous.wait_for_assertion(assertion)
 
 
-def _helper_test_reply(journalist_app, source_app, test_journo, test_reply, expected_success=True):
+def _helper_test_reply(journalist_app, source_app, test_journo, test_reply):
     test_msg = "This is a test message."
 
     with source_app.test_client() as app:
@@ -260,8 +252,6 @@ def _helper_test_reply(journalist_app, source_app, test_journo, test_reply, expe
         resp = app.get(col_url)
         assert resp.status_code == 200
 
-    assert EncryptionManager.get_default().get_source_key_fingerprint(filesystem_id)
-
     # Create 2 replies to test deleting on journalist and source interface
     with journalist_app.test_client() as app:
         login_journalist(
@@ -275,11 +265,8 @@ def _helper_test_reply(journalist_app, source_app, test_journo, test_reply, expe
             )
             assert resp.status_code == 200
 
-        if not expected_success:
-            pass
-        else:
-            text = resp.data.decode("utf-8")
-            assert "The source will receive your reply" in text
+        text = resp.data.decode("utf-8")
+        assert "The source will receive your reply" in text
 
         resp = app.get(col_url)
         text = resp.data.decode("utf-8")
@@ -304,8 +291,10 @@ def _helper_test_reply(journalist_app, source_app, test_journo, test_reply, expe
 
     zf = zipfile.ZipFile(BytesIO(resp.data), "r")
     data = zf.read(zf.namelist()[0])
-    _can_decrypt_with_journalist_secret_key(data)
-    _can_decrypt_with_source_secret_key(data, source_user.gpg_secret)
+    journalist_decrypted = utils.decrypt_as_journalist(data).decode()
+    assert journalist_decrypted == test_reply
+    source_decrypted = EncryptionManager.get_default().decrypt_journalist_reply(source_user, data)
+    assert source_decrypted == test_reply
 
     # Test deleting reply on the journalist interface
     last_reply_number = len(soup.select('input[name="doc_names_selected"]')) - 1
@@ -318,22 +307,18 @@ def _helper_test_reply(journalist_app, source_app, test_journo, test_reply, expe
         assert resp.status_code == 200
         text = resp.data.decode("utf-8")
 
-        if not expected_success:
-            # there should be no reply
-            assert "You have received a reply." not in text
-        else:
-            assert "You have received a reply. To protect your identity" in text
-            assert test_reply in text, text
-            soup = BeautifulSoup(text, "html.parser")
-            msgid = soup.select('form > input[name="reply_filename"]')[0]["value"]
-            resp = app.post(
-                "/delete",
-                data=dict(filesystem_id=filesystem_id, reply_filename=msgid),
-                follow_redirects=True,
-            )
-            assert resp.status_code == 200
-            text = resp.data.decode("utf-8")
-            assert "Reply deleted" in text
+        assert "You have received a reply. To protect your identity" in text
+        assert test_reply in text, text
+        soup = BeautifulSoup(text, "html.parser")
+        msgid = soup.select('form > input[name="reply_filename"]')[0]["value"]
+        resp = app.post(
+            "/delete",
+            data=dict(filesystem_id=filesystem_id, reply_filename=msgid),
+            follow_redirects=True,
+        )
+        assert resp.status_code == 200
+        text = resp.data.decode("utf-8")
+        assert "Reply deleted" in text
 
         app.get("/logout")
 
@@ -367,26 +352,6 @@ def _helper_filenames_delete(journalist_app, soup, i):
     utils.asynchronous.wait_for_assertion(assertion)
 
 
-def _can_decrypt_with_journalist_secret_key(msg: bytes) -> None:
-    encryption_mgr = EncryptionManager.get_default()
-    with import_journalist_private_key(encryption_mgr):
-        # For GPG 2.1+, a non null passphrase _must_ be passed to decrypt()
-        decryption_result = encryption_mgr._gpg.decrypt(msg, passphrase="dummy passphrase")
-
-    assert decryption_result.ok, "Could not decrypt msg with key, gpg says: {}".format(
-        decryption_result.stderr
-    )
-
-
-def _can_decrypt_with_source_secret_key(msg: bytes, source_gpg_secret: str) -> None:
-    encryption_mgr = EncryptionManager.get_default()
-    decryption_result = encryption_mgr._gpg.decrypt(msg, passphrase=source_gpg_secret)
-
-    assert decryption_result.ok, "Could not decrypt msg with key, gpg says: {}".format(
-        decryption_result.stderr
-    )
-
-
 def test_reply_normal(journalist_app, source_app, test_journo):
     """Test for regression on #1360 (failure to encode bytes before calling
     gpg functions).
@@ -398,7 +363,6 @@ def test_reply_normal(journalist_app, source_app, test_journo):
             source_app,
             test_journo,
             "This is a test reply.",
-            True,
         )
 
 
@@ -418,7 +382,6 @@ def test_unicode_reply_with_ansi_env(journalist_app, source_app, test_journo):
             source_app,
             test_journo,
             "ᚠᛇᚻ᛫ᛒᛦᚦ᛫ᚠᚱᚩᚠᚢᚱ᛫ᚠᛁᚱᚪ᛫ᚷᛖᚻᚹᛦᛚᚳᚢᛗ",
-            True,
         )
 
 

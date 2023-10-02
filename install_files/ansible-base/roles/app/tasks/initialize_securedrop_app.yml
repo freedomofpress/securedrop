@@ -1,18 +1,24 @@
 ---
 - name: Copy the SecureDrop Application GPG public key to the Application Server.
+  # The key is installed as journalist.pub for Sequoia to read. Since this controls
+  # who can decrypt things, set it to root-writable, but www-data-readable.
   copy:
     src: "{{ securedrop_app_gpg_public_key }}"
-    dest: "{{ securedrop_data }}/"
+    dest: "{{ securedrop_data }}/journalist.pub"
+    owner: "root"
+    group: "www-data"
+    mode: "0640"
   tags:
     - securedrop_config
 
 - name: Import the SecureDrop Application GPG public key to the Application Server keyring.
-  # multiline format for command module, since this is a long command
+  # TODO: We don't need this but it sets up the GPG keyring so let's leave it in place now
+  # and get rid of it once we've finished the private key migration step to Sequoia.
   command: >
     su -s /bin/bash -c 'gpg
     --homedir {{ securedrop_data }}/keys
     --no-default-keyring --keyring {{ securedrop_data }}/keys/pubring.gpg
-    --import {{ securedrop_data }}/{{ securedrop_app_gpg_public_key }}' {{ securedrop_user }}
+    --import {{ securedrop_data }}/journalist.pub' {{ securedrop_user }}
   register: gpg_app_key_import
   changed_when: "'imported: 1' in gpg_app_key_import.stderr"
   tags:

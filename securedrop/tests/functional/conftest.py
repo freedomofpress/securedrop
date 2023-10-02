@@ -275,7 +275,6 @@ def create_source_and_submission(config_in_use: SecureDropConfig) -> Tuple[Sourc
     """
     # This function will be called in a separate Process that runs the app
     # Hence the late imports
-    from encryption import EncryptionManager
     from models import Submission
     from passphrases import PassphraseGenerator
     from source_user import create_source_user
@@ -291,7 +290,6 @@ def create_source_and_submission(config_in_use: SecureDropConfig) -> Tuple[Sourc
             source_app_storage=Storage.get_default(),
         )
         source_db_record = source_user.get_db_record()
-        EncryptionManager.get_default().generate_source_key_pair(source_user)
 
         # Create a file submission from this source
         source_db_record.interaction_count += 1

@@ -137,6 +137,8 @@ def test_alembic_migration_up_and_down(alembic_config, config, migration, _reset
 
 @pytest.mark.parametrize("migration", ALL_MIGRATIONS)
 def test_schema_unchanged_after_up_then_downgrade(alembic_config, config, migration, _reset_db):
+    if migration == "811334d7105f":
+        pytest.skip("811334d7105f_sequoia_pgp doesn't delete columns on downgrade")
     # Create the app here. Using a fixture will init the database.
     app = create_app(config)
 
