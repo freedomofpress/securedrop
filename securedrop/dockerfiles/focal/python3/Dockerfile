@@ -15,8 +15,8 @@ RUN apt-get update  && apt-get install -y \
 # Current versions of the test browser software. Tor Browser is based
 # on a specific version of Firefox, noted in Help > About Tor Browser.
 # Ideally we'll keep those in sync.
-ENV FF_VERSION 91.12.0esr
-ENV GECKODRIVER_VERSION v0.29.1
+ENV FF_VERSION 115.3.1esr
+ENV GECKODRIVER_VERSION v0.33.0
 
 # Import Tor release signing key
 ENV TOR_RELEASE_KEY_FINGERPRINT "EF6E286DDA85EA2A4BA7DE684E2C6E8793298290"
