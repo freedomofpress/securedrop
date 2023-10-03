@@ -140,7 +140,7 @@ yamllint:  ## Lint YAML files (does not validate syntax!).
 	@echo
 
 .PHONY: lint
-lint: ansible-config-lint app-lint check-black check-strings check-ruff html-lint shellcheck typelint yamllint ## Runs all lint checks
+lint: ansible-config-lint app-lint check-black check-strings check-ruff check-supported-locales html-lint shellcheck typelint yamllint ## Runs all lint checks
 
 .PHONY: safety
 safety:  ## Run `safety check` to check python dependencies for vulnerabilities.
