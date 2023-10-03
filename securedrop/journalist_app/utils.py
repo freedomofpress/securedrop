@@ -7,9 +7,10 @@ import flask
 import werkzeug
 from db import db
 from encryption import EncryptionManager
-from flask import Markup, abort, current_app, escape, flash, redirect, send_file, url_for
+from flask import abort, current_app, flash, redirect, send_file, url_for
 from flask_babel import gettext, ngettext
 from journalist_app.sessions import session
+from markupsafe import Markup, escape
 from models import (
     FirstOrLastNameError,
     InvalidPasswordLength,

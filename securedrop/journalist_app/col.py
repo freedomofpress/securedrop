@@ -5,10 +5,8 @@ from db import db
 from encryption import GpgKeyNotFoundError
 from flask import (
     Blueprint,
-    Markup,
     abort,
     current_app,
-    escape,
     flash,
     redirect,
     render_template,
@@ -32,6 +30,7 @@ from journalist_app.utils import (
     make_star_true,
     mark_seen,
 )
+from markupsafe import Markup, escape
 from models import Reply, Submission
 from sqlalchemy.orm.exc import NoResultFound
 from store import Storage
