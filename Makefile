@@ -382,6 +382,10 @@ check-supported-locales: ## Check that the documentation list of supported local
 	@$(MAKE) --no-print-directory update-supported-locales
 	@git diff --quiet ${I18N_LIST} || { echo "Documentation list of supported locales is out of date. Please run \"make update-supported-locales\" and commit the changes."; exit 1; }
 
+.PHONY: count-supported-locales
+count-supported-locales: ## Return the number of supported locales.
+	@jq --raw-output '.supported_locales | length' ${I18N_CONF}
+
 .PHONY: update-supported-locales
 update-supported-locales: ## Render the documentation list of supported locales.
 	@$(MAKE) --always-make --no-print-directory ${I18N_LIST}

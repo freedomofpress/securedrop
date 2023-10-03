@@ -240,6 +240,8 @@ jobs:
           name: Run tests
           command: |
             sudo apt update && sudo apt install python3-sh python3-babel
+            NUM_SUPPORTED_LOCALES="$(make count-supported-locales)"
+            [[ "$NUM_SUPPORTED_LOCALES" -eq "$CIRCLE_NODE_TOTAL" ]] || { echo "Parallelism (${CIRCLE_NODE_TOTAL} must equal the number of supported languages (${NUM_SUPPORTED_LOCALES})."; exit 1; }
             export LOCALES="$(make supported-locales | jq --raw-output 'join("\n")' | circleci tests split)"
             fromtag=$(docker images | grep securedrop-test-focal-py3 | head -n1 | awk '{print $2}')
             DOCKER_BUILD_ARGUMENTS="--cache-from securedrop-test-focal-py3:${fromtag:-latest}" make translation-test
