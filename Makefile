@@ -350,12 +350,12 @@ POT=${LOCALE_DIR}/messages.pot
 
 .PHONY: check-strings
 check-strings: ## Check that the translation catalog is up to date with source code.
-	@make extract-strings
+	@$(MAKE) --no-print-directory extract-strings
 	@git diff --quiet ${LOCALE_DIR} || { echo "Translation catalog is out of date. Please run \"make extract-strings\" and commit the changes."; exit 1; }
 
 .PHONY: extract-strings
 extract-strings: ## Extract translatable strings from source code.
-	@make --always-make ${POT}
+	@$(MAKE) --always-make --no-print-directory ${POT}
 
 # Derive POT from sources.
 $(POT): securedrop
@@ -379,12 +379,12 @@ $(POT): securedrop
 
 .PHONY: check-supported-locales
 check-supported-locales: ## Check that the documentation list of supported locales is up to date.
-	@make update-supported-locales
+	@$(MAKE) --no-print-directory update-supported-locales
 	@git diff --quiet ${I18N_LIST} || { echo "Documentation list of supported locales is out of date. Please run \"make update-supported-locales\" and commit the changes."; exit 1; }
 
 .PHONY: update-supported-locales
 update-supported-locales: ## Render the documentation list of supported locales.
-	@make --always-make ${I18N_LIST}
+	@$(MAKE) --always-make --no-print-directory ${I18N_LIST}
 
 # Render documentation list from "i18n.json".
 ${I18N_LIST}: ${I18N_CONF}
