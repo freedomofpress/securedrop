@@ -11,6 +11,8 @@ from models import Journalist, Reply, Source, SourceStar, Submission
 from tests.utils.api_helper import get_api_headers
 from two_factor import TOTP
 
+import redwood
+
 random.seed("◔ ⌣ ◔")
 
 
@@ -316,7 +318,7 @@ def test_authorized_user_gets_single_source(journalist_app, test_source, journal
 
         assert response.json["uuid"] == test_source["source"].uuid
         assert response.json["key"]["fingerprint"] == test_source["source"].fingerprint
-        assert "BEGIN PGP PUBLIC KEY" in response.json["key"]["public"]
+        assert redwood.is_valid_public_key(response.json["key"]["public"])
 
 
 def test_get_non_existant_source_404s(journalist_app, journalist_api_token):

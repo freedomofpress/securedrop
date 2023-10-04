@@ -22,7 +22,7 @@ def test_gpg_export_keys(tmp_path):
     fingerprint = gpg.gen_key(gen_key_input)
     print(fingerprint)
     public_key = gpg.export_keys(fingerprint)
-    assert public_key.startswith("-----BEGIN PGP PUBLIC KEY BLOCK-----")
+    assert redwood.is_valid_public_key(public_key)
     secret_key = gpg.export_keys(fingerprint, secret=True, passphrase=passphrase)
     assert secret_key.startswith("-----BEGIN PGP PRIVATE KEY BLOCK-----")
 
