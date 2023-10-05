@@ -599,11 +599,23 @@ class SiteConfig:
                 )
             except subprocess.CalledProcessError as e:
                 sdlog.debug(e.output)
-                raise FingerprintException(
-                    f"fingerprint {fingerprint} "
-                    + "does not match "
-                    + f"the public key {public_key}"
-                )
+                message = f"{fingerprint}: Fingerprint validation failed"
+
+                # The validation script returns different error codes depending on what
+                # the cause of the validation failure was. See `admin/bin/validate-gpg-key.sh`
+                if e.returncode == 1:
+                    message = (
+                        f"fingerprint {fingerprint} does not match "
+                        + f"the public key {public_key}"
+                    )
+                elif e.returncode == 2:
+                    message = (
+                        f"fingerprint {fingerprint} "
+                        + "failed sq-keyring-linter check. You may be using an older key that "
+                        + "needs to be updated. Please contact your SecureDrop administrator, or "
+                        + "https://support.freedom.press for assistance."
+                    )
+                raise FingerprintException(message)
         return True
 
     def validate_journalist_alert_email(self) -> bool:

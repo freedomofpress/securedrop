@@ -29,6 +29,16 @@ sdlog = logging.getLogger(__name__)
 DIR = os.path.dirname(os.path.realpath(__file__))
 VENV_DIR = os.path.join(DIR, ".venv3")
 
+# Space-separated list of apt dependencies
+APT_DEPENDENCIES_STR = "python3-virtualenv \
+                   python3-yaml \
+                   python3-pip \
+                   virtualenv \
+                   libffi-dev \
+                   libssl-dev \
+                   libpython3-dev \
+                   sq-keyring-linter"
+
 
 def setup_logger(verbose: bool = False) -> None:
     """Configure logging handler"""
@@ -95,6 +105,37 @@ def checkenv(args: argparse.Namespace) -> None:
         sys.exit(1)
 
 
+def is_missing_dependency() -> bool:
+    """
+    Check if there are any missing apt dependencies.
+    This applies to existing Tails systems where `securedrop-setup` may not have been
+    run recently.
+    """
+    # apt-cache -q0 policy $dependency1 $dependency2 $dependency3 | grep "Installed: (none)"
+    apt_query = f"apt-cache -q0 policy {APT_DEPENDENCIES_STR}".split(" ")
+    grep_command = ["grep", "Installed: (none)"]
+
+    try:
+        sdlog.info("Checking apt dependencies are installed")
+        apt_process = subprocess.Popen(apt_query, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+        grep_process = subprocess.Popen(
+            grep_command, stdin=apt_process.stdout, stdout=subprocess.PIPE, stderr=subprocess.PIPE
+        )
+
+        # Wait for the process to complete before checking the returncode
+        grep_process.communicate()
+        returncode = grep_process.returncode
+
+        # If the above command returns 0, then one or more packages are not installed.
+        return returncode == 0
+
+    except subprocess.CalledProcessError as e:
+        sdlog.error("Error checking apt dependencies")
+        sdlog.debug(e.output)
+        raise
+
+
 def maybe_torify() -> List[str]:
     if is_tails():
         return ["torify"]
@@ -117,15 +158,8 @@ def install_apt_dependencies(args: argparse.Namespace) -> None:
         "sudo",
         "su",
         "-c",
-        "apt-get update && \
-                   apt-get -q -o=Dpkg::Use-Pty=0 install -y \
-                   python3-virtualenv \
-                   python3-yaml \
-                   python3-pip \
-                   virtualenv \
-                   libffi-dev \
-                   libssl-dev \
-                   libpython3-dev",
+        f"apt-get update && \
+                   apt-get -q -o=Dpkg::Use-Pty=0 install -y {APT_DEPENDENCIES_STR}",
     ]
 
     try:
@@ -133,6 +167,7 @@ def install_apt_dependencies(args: argparse.Namespace) -> None:
         # of progress during long-running command.
         for output_line in run_command(apt_command):
             print(output_line.decode("utf-8").rstrip())
+
     except subprocess.CalledProcessError:
         # Tails supports apt persistence, which was used by SecureDrop
         # under Tails 2.x. If updates are being applied, don't try to pile
@@ -158,10 +193,12 @@ def envsetup(args: argparse.Namespace, virtualenv_dir: str = VENV_DIR) -> None:
     # clean up old Tails venv on major upgrades
     clean_up_old_tails_venv(virtualenv_dir)
 
+    # Check apt dependencies and ensure all are present.
+    if is_missing_dependency():
+        install_apt_dependencies(args)
+
     # virtualenv doesnt exist? Install dependencies and create
     if not os.path.exists(virtualenv_dir):
-
-        install_apt_dependencies(args)
 
         # Technically you can create a virtualenv from within python
         # but pip can only be run over Tor on Tails, and debugging that
