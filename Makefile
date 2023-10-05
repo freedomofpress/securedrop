@@ -140,7 +140,7 @@ yamllint:  ## Lint YAML files (does not validate syntax!).
 	@echo
 
 .PHONY: lint
-lint: ansible-config-lint app-lint check-black check-strings check-ruff check-supported-locales html-lint shellcheck typelint yamllint ## Runs all lint checks
+lint: ansible-config-lint app-lint check-black check-desktop-files check-strings check-ruff check-supported-locales html-lint shellcheck typelint yamllint ## Runs all lint checks
 
 .PHONY: safety
 safety:  ## Run `safety check` to check python dependencies for vulnerabilities.
@@ -378,6 +378,19 @@ $(POT): securedrop
 		--ignore-dirs tests \
 		$^
 	@sed -i -e '/^"POT-Creation-Date/d' ${POT}
+
+.PHONY: check-desktop-files
+check-desktop-files: ${DESKTOP_LOCALE_BASE}/*.j2
+	@$(MAKE) --always-make --no-print-directory update-desktop-files
+	@git diff --quiet $^ || { echo "Desktop files are out of date. Please run \"make update-desktop-files\" and commit the changes."; exit 1; }
+
+.PHONY: update-desktop-files
+update-desktop-files: ${DESKTOP_LOCALE_BASE}/*.j2
+	@$(MAKE) --always-make --no-print-directory $^
+
+# Render desktop files from templates.
+%.j2: %.j2.in
+	@msgfmt -d ${DESKTOP_LOCALE_BASE} --desktop --template $< --output-file $@
 
 # Render desktop list from "i18n.json".
 $(DESKTOP_I18N_CONF):
