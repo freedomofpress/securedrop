@@ -12,12 +12,9 @@ that only the specified fingerprint was imported
 
 import argparse
 import sys
-import tempfile
 from pathlib import Path
 
-sys.path.insert(0, "/var/www/securedrop")
-
-import pretty_bad_protocol as gnupg  # noqa: E402
+import redwood
 
 parser = argparse.ArgumentParser(description="Verify PGP key file")
 parser.add_argument("pubkey", type=Path, help="Public key file")
@@ -26,17 +23,10 @@ args = parser.parse_args()
 
 pubkey = args.pubkey.read_text()
 
-with tempfile.TemporaryDirectory() as tmpdir:
-    # FIXME: we should be using redwood/Sequoia for this!!
-    gpg = gnupg.GPG(
-        binary="gpg2",
-        homedir=tmpdir,
-        options=["--pinentry-mode loopback", "--trust-model direct"],
-    )
-    result = gpg.import_keys(pubkey)
-    if result.fingerprints == [args.fingerprint]:
-        print("Success! Specified fingerprint matches pubkey file.")
-        sys.exit(0)
-    else:
-        print(f"Failed! Key contains {result.fingerprints}, not {args.fingerprint}")
-        sys.exit(1)
+fingerprint = redwood.is_valid_public_key(pubkey)
+if fingerprint == args.fingerprint:
+    print("Success! Specified fingerprint matches pubkey file.")
+    sys.exit(0)
+else:
+    print(f"Failed! Key contains {fingerprint}, not {args.fingerprint}")
+    sys.exit(1)
