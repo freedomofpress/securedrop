@@ -7,22 +7,12 @@ Revises: 60f41bb14d98
 Create Date: 2018-11-25 19:40:25.873292
 
 """
-import os
 
 import sqlalchemy as sa
 from alembic import op
-
-# raise the errors if we're not in production
-raise_errors = os.environ.get("SECUREDROP_ENV", "prod") != "prod"
-
-try:
-    from journalist_app import create_app
-    from sdconfig import SecureDropConfig
-    from store import NoFileFoundException, Storage, TooManyFilesException
-except ImportError:
-    # This is a fresh install, and config.py has not been created yet.
-    if raise_errors:
-        raise
+from journalist_app import create_app
+from sdconfig import SecureDropConfig
+from store import NoFileFoundException, Storage, TooManyFilesException
 
 # revision identifiers, used by Alembic.
 revision = "3da3fcab826a"
@@ -43,69 +33,70 @@ def raw_sql_grab_orphaned_objects(table_name: str) -> str:
 
 
 def upgrade() -> None:
+    try:
+        config = SecureDropConfig.get_current()
+    except ModuleNotFoundError:
+        # Fresh install, nothing to migrate
+        return
+
     conn = op.get_bind()
     submissions = conn.execute(sa.text(raw_sql_grab_orphaned_objects("submissions"))).fetchall()
 
     replies = conn.execute(sa.text(raw_sql_grab_orphaned_objects("replies"))).fetchall()
 
-    try:
-        config = SecureDropConfig.get_current()
-        app = create_app(config)
-        with app.app_context():
-            for submission in submissions:
-                try:
-                    conn.execute(
-                        sa.text(
-                            """
-                        DELETE FROM submissions
+    app = create_app(config)
+    with app.app_context():
+        for submission in submissions:
+            try:
+                conn.execute(
+                    sa.text(
+                        """
+                    DELETE FROM submissions
+                    WHERE id=:id
+                """
+                    ).bindparams(id=submission.id)
+                )
+
+                path = Storage.get_default().path_without_filesystem_id(submission.filename)
+                Storage.get_default().move_to_shredder(path)
+            except NoFileFoundException:
+                # The file must have been deleted by the admin, remove the row
+                conn.execute(
+                    sa.text(
+                        """
+                    DELETE FROM submissions
+                    WHERE id=:id
+                """
+                    ).bindparams(id=submission.id)
+                )
+            except TooManyFilesException:
+                pass
+
+        for reply in replies:
+            try:
+                conn.execute(
+                    sa.text(
+                        """
+                        DELETE FROM replies
                         WHERE id=:id
                     """
-                        ).bindparams(id=submission.id)
-                    )
+                    ).bindparams(id=reply.id)
+                )
 
-                    path = Storage.get_default().path_without_filesystem_id(submission.filename)
-                    Storage.get_default().move_to_shredder(path)
-                except NoFileFoundException:
-                    # The file must have been deleted by the admin, remove the row
-                    conn.execute(
-                        sa.text(
-                            """
-                        DELETE FROM submissions
+                path = Storage.get_default().path_without_filesystem_id(reply.filename)
+                Storage.get_default().move_to_shredder(path)
+            except NoFileFoundException:
+                # The file must have been deleted by the admin, remove the row
+                conn.execute(
+                    sa.text(
+                        """
+                        DELETE FROM replies
                         WHERE id=:id
                     """
-                        ).bindparams(id=submission.id)
-                    )
-                except TooManyFilesException:
-                    pass
-
-            for reply in replies:
-                try:
-                    conn.execute(
-                        sa.text(
-                            """
-                            DELETE FROM replies
-                            WHERE id=:id
-                        """
-                        ).bindparams(id=reply.id)
-                    )
-
-                    path = Storage.get_default().path_without_filesystem_id(reply.filename)
-                    Storage.get_default().move_to_shredder(path)
-                except NoFileFoundException:
-                    # The file must have been deleted by the admin, remove the row
-                    conn.execute(
-                        sa.text(
-                            """
-                            DELETE FROM replies
-                            WHERE id=:id
-                        """
-                        ).bindparams(id=reply.id)
-                    )
-                except TooManyFilesException:
-                    pass
-    except:  # noqa
-        if raise_errors:
-            raise
+                    ).bindparams(id=reply.id)
+                )
+            except TooManyFilesException:
+                pass
 
 
 def downgrade() -> None:
