@@ -345,6 +345,8 @@ I18N_LIST=securedrop/i18n.rst
 
 DESKTOP_LOCALE_BASE=install_files/ansible-base/roles/tails-config/templates
 DESKTOP_LOCALE_DIR=$(DESKTOP_LOCALE_BASE)/locale
+DESKTOP_I18N_CONF=$(DESKTOP_LOCALE_BASE)/LINGUAS
+
 LOCALE_DIR=securedrop/translations
 POT=${LOCALE_DIR}/messages.pot
 
@@ -377,18 +379,22 @@ $(POT): securedrop
 		$^
 	@sed -i -e '/^"POT-Creation-Date/d' ${POT}
 
+# Render desktop list from "i18n.json".
+$(DESKTOP_I18N_CONF):
+	@jq --raw-output '.supported_locales[].desktop' ${I18N_CONF} > $@
+
 .PHONY: check-supported-locales
-check-supported-locales: ## Check that the documentation list of supported locales is up to date.
+check-supported-locales: $(I18N_LIST) $(DESKTOP_I18N_CONF) ## Check that the desktop and documentation lists of supported locales are up to date.
 	@$(MAKE) --no-print-directory update-supported-locales
-	@git diff --quiet ${I18N_LIST} || { echo "Documentation list of supported locales is out of date. Please run \"make update-supported-locales\" and commit the changes."; exit 1; }
+	@git diff --quiet $^ || { echo "Desktop and/or documentation lists of supported locales are out of date. Please run \"make update-supported-locales\" and commit the changes."; exit 1; }
 
 .PHONY: count-supported-locales
 count-supported-locales: ## Return the number of supported locales.
 	@jq --raw-output '.supported_locales | length' ${I18N_CONF}
 
 .PHONY: update-supported-locales
-update-supported-locales: ## Render the documentation list of supported locales.
-	@$(MAKE) --always-make --no-print-directory ${I18N_LIST}
+update-supported-locales: $(I18N_LIST) $(DESKTOP_I18N_CONF) ## Render the desktop and documentation list of supported locales.
+	@$(MAKE) --always-make --no-print-directory $^
 
 # Render documentation list from "i18n.json".
 ${I18N_LIST}: ${I18N_CONF}
