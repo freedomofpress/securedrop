@@ -113,6 +113,12 @@ class EncryptionManager:
         self._save_key_fingerprint_to_redis(source_filesystem_id, source_key_fingerprint)
         return source_key_fingerprint
 
+    def get_source_secret_key(self, fingerprint: str, passphrase: str) -> str:
+        secret_key = self._gpg.export_keys(fingerprint, secret=True, passphrase=passphrase)
+        if not secret_key:
+            raise GpgKeyNotFoundError()
+        return secret_key
+
     def encrypt_source_message(self, message_in: str, encrypted_message_path_out: Path) -> None:
         redwood.encrypt_message(
             # A submission is only encrypted for the journalist key

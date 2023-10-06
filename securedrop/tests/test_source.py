@@ -13,6 +13,7 @@ from unittest.mock import ANY, patch
 import pytest
 import version
 from db import db
+from encryption import EncryptionManager, GpgKeyNotFoundError
 from flask import escape, g, request, session, url_for
 from journalist_app.utils import delete_collection
 from models import InstanceConfig, Reply, Source
@@ -20,6 +21,7 @@ from passphrases import PassphraseGenerator
 from source_app import api as source_app_api
 from source_app import get_logo_url
 from source_app.session_manager import SessionManager
+from source_user import create_source_user
 
 import redwood
 
@@ -343,6 +345,62 @@ def test_login_with_missing_reply_files(source_app, app_storage):
         text = resp.data.decode("utf-8")
         assert "Submit Files" in text
         assert SessionManager.is_user_logged_in(db_session=db.session)
+
+
+def test_login_no_pgp_keypair(source_app, app_storage):
+    """
+    Test the on-demand creation of a keypair when none exists
+    """
+    source, codename = utils.db_helper.init_source(app_storage)
+    source.pgp_fingerprint = None
+    source.pgp_public_key = None
+    source.pgp_secret_key = None
+    db.session.add(source)
+    db.session.commit()
+    # And there's no legacy GPG key hiding in the background
+    assert source.fingerprint is None
+    with source_app.test_client() as app:
+        resp = app.post(url_for("main.login"), data=dict(codename=codename), follow_redirects=True)
+        assert resp.status_code == 200
+        assert SessionManager.is_user_logged_in(db_session=db.session)
+    # Now check to see PGP fields are populated
+    assert len(source.pgp_fingerprint) == 40
+    assert redwood.is_valid_public_key(source.pgp_public_key)
+    assert source.pgp_secret_key.startswith("-----BEGIN PGP PRIVATE KEY BLOCK-----")
+
+
+def test_login_gpg_secret_key_migration(source_app, app_storage):
+    """
+    Test the on-demand migration of GPG secret keys to database-backed storage
+    """
+    # First create a source that is backed by a GPG key
+    passphrase = PassphraseGenerator.get_default().generate_passphrase()
+    source_user = create_source_user(
+        db_session=db.session,
+        source_passphrase=passphrase,
+        source_app_storage=app_storage,
+    )
+    source = source_user.get_db_record()
+    encryption_mgr = EncryptionManager.get_default()
+    utils.create_legacy_gpg_key(encryption_mgr, source_user, source)
+    # Copy the fingerprint and public key to DB storage, like the alembic migration does
+    source.pgp_fingerprint = source.fingerprint
+    source.pgp_public_key = source.public_key
+    source.pgp_secret_key = None
+    db.session.add(source)
+    db.session.commit()
+    # Now log in
+    with source_app.test_client() as app:
+        resp = app.post(
+            url_for("main.login"), data=dict(codename=passphrase), follow_redirects=True
+        )
+        assert resp.status_code == 200
+        assert SessionManager.is_user_logged_in(db_session=db.session)
+    # Now check to see PGP secret key is populated
+    assert source.pgp_secret_key.startswith("-----BEGIN PGP PRIVATE KEY BLOCK-----")
+    # And the GPG key has been deleted
+    with pytest.raises(GpgKeyNotFoundError):
+        encryption_mgr.get_source_key_fingerprint(source.filesystem_id)
 
 
 def _dummy_submission(app):
