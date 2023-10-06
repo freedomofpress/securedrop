@@ -32,7 +32,12 @@ def upgrade() -> None:
     doesn't already have key material migrated, export the key and
     save it in the database.
     """
-    config = SecureDropConfig.get_current()
+    try:
+        config = SecureDropConfig.get_current()
+    except ModuleNotFoundError:
+        # Fresh install, nothing to migrate
+        return
+
     gpg = gnupg.GPG(
         binary="gpg2",
         homedir=str(config.GPG_KEY_DIR),

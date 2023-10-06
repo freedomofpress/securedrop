@@ -5,24 +5,15 @@ Revises: de00920916bf
 Create Date: 2022-01-12 19:31:06.186285
 
 """
-import os
 import uuid
 
 import argon2
 import sqlalchemy as sa
 import two_factor
 from alembic import op
-
-# raise the errors if we're not in production
-raise_errors = os.environ.get("SECUREDROP_ENV", "prod") != "prod"
-
-try:
-    from models import ARGON2_PARAMS
-    from passphrases import PassphraseGenerator
-except:  # noqa
-    if raise_errors:
-        raise
-
+from models import ARGON2_PARAMS
+from passphrases import PassphraseGenerator
+from sdconfig import SecureDropConfig
 
 # revision identifiers, used by Alembic.
 revision = "2e24fc7536e8"
@@ -98,6 +89,14 @@ def migrate_nulls() -> None:
 
 
 def upgrade() -> None:
+    try:
+        # While this migration doesn't use SecureDrop config directly,
+        # it's transitively used via PassphraseGenerator
+        SecureDropConfig.get_current()
+    except ModuleNotFoundError:
+        # Fresh install, nothing to migrate
+        return
+
     migrate_nulls()
 
     with op.batch_alter_table("journalist_login_attempt", schema=None) as batch_op:

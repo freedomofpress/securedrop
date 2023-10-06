@@ -1,8 +1,11 @@
 import os
 import re
+import shutil
 import subprocess
 from collections import OrderedDict
+from contextlib import contextmanager
 from os import path
+from typing import Generator
 
 import pytest
 from alembic.config import Config as AlembicConfig
@@ -129,10 +132,12 @@ def test_alembic_head_matches_db_models(journalist_app, alembic_config, config):
     assert_schemas_equal(alembic_schema, models_schema)
 
 
+@pytest.mark.parametrize("use_config_py", [True, False])
 @pytest.mark.parametrize("migration", ALL_MIGRATIONS)
-def test_alembic_migration_up_and_down(alembic_config, config, migration, _reset_db):
-    upgrade(alembic_config, migration)
-    downgrade(alembic_config, "base")
+def test_alembic_migration_up_and_down(alembic_config, config, use_config_py, migration, _reset_db):
+    with use_config(use_config_py):
+        upgrade(alembic_config, migration)
+        downgrade(alembic_config, "base")
 
 
 @pytest.mark.parametrize("migration", ALL_MIGRATIONS)
@@ -213,3 +218,14 @@ def test_downgrade_with_data(alembic_config, config, migration, _reset_db):
 
     # Make sure it applied "cleanly" for some definition of clean
     downgrade_tester.check_downgrade()
+
+
+@contextmanager
+def use_config(use: bool) -> Generator:
+    if not use:
+        shutil.move("config.py", "config.py.moved")
+    try:
+        yield
+    finally:
+        if not use:
+            shutil.move("config.py.moved", "config.py")
