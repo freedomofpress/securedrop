@@ -408,6 +408,7 @@ $(DESKTOP_POT): ${DESKTOP_BASE}/*.in
 		--msgid-bugs-address=securedrop@freedom.press \
 		--copyright-holder="Freedom of the Press Foundation" \
 		--add-location=never \
+		--sort-output \
 		$^
 	@sed -i -e '/^"POT-Creation-Date/d' $@
 
