@@ -348,7 +348,7 @@ POT=${LOCALE_DIR}/messages.pot
 
 DESKTOP_BASE=install_files/ansible-base/roles/tails-config/templates
 DESKTOP_LOCALE_DIR=$(DESKTOP_BASE)/locale
-DESKTOP_I18N_CONF=$(DESKTOP_BASE)/LINGUAS
+DESKTOP_I18N_CONF=$(DESKTOP_LOCALE_DIR)/LINGUAS
 DESKTOP_POT=$(DESKTOP_LOCALE_DIR)/messages.pot
 
 .PHONY: check-strings
@@ -402,9 +402,19 @@ $(DESKTOP_POT): ${DESKTOP_BASE}/*.in
 		$^
 	@sed -i -e '/^"POT-Creation-Date/d' $@
 
-# Render desktop files from templates.
+# Render desktop files from templates.  msgfmt needs each
+# "$LANG/LC_MESSAGES/messages.po" file in "$LANG.po".
 %.j2: %.j2.in
-	@msgfmt -d ${DESKTOP_BASE} --desktop --template $< --output-file $@
+	@find ${DESKTOP_LOCALE_DIR}/* \
+		-maxdepth 0 \
+		-type d \
+		-exec bash -c 'locale="$$(basename {})"; cp ${DESKTOP_LOCALE_DIR}/$${locale}/LC_MESSAGES/messages.po $(DESKTOP_LOCALE_DIR)/$${locale}.po' \;
+	@msgfmt \
+		-d ${DESKTOP_LOCALE_DIR} \
+		--desktop \
+		--template $< \
+		--output-file $@
+	@rm ${DESKTOP_LOCALE_DIR}/*.po
 
 # Render desktop list from "i18n.json".
 $(DESKTOP_I18N_CONF):
@@ -453,19 +463,9 @@ endif
 
 .PHONY: verify-mo
 verify-mo: ## Verify that all gettext machine objects (.mo) are reproducible from their catalogs (.po).
-	@# TODO(#6917): Once Weblate (rather than i18n_tool.py) is correctly filing
-	@# both .po and .mo under $DESKTOP_LOCALE_DIR, remove this step.  (See
-	@# also: 76f3adeed90f4aaadbf0685e09dec6314367d5c0.)
-	@find ${DESKTOP_BASE} \
-		-maxdepth 1 \
-		-name "*.po" \
-		-exec bash -c 'PO="$$(basename {} | sed \'s/.po//')"; cp ${DESKTOP_BASE}/$${PO}.po $(DESKTOP_LOCALE_DIR)/$${PO}/LC_MESSAGES/messages.po' \;
 	@TERM=dumb devops/scripts/verify-mo.py ${DESKTOP_LOCALE_DIR}/*
 	@# All good; now clean up.
-	@# TODO(#6917): git restore "${LOCALE_DIR}/**/*.po"
-	@find ${DESKTOP_LOCALE_DIR} \
-		-name "*.po" \
-		-delete
+	@git restore "${LOCALE_DIR}/**/*.po"
 
 
 ###########

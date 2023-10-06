@@ -1,20 +1,32 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR Freedom of the Press Foundation
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Translations template for SecureDrop.
+# Copyright (C) 2023 Freedom of the Press Foundation
+# This file is distributed under the same license as the SecureDrop project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2023.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: SecureDrop 2.7.0~rc1\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.12.1\n"
+
+#. Name
+msgid "SecureDrop Journalist Interface"
+msgstr ""
+
+#. Icon
+msgid "{{ tails_config_securedrop_dotfiles }}/securedrop_icon.png"
+msgstr ""
+
+#. Name
+msgid "SecureDrop Source Interface"
+msgstr ""
 
 msgid "Launch Source Interface"
 msgstr ""
@@ -37,10 +49,3 @@ msgstr ""
 msgid "Open File Browser"
 msgstr ""
 
-#: desktop-journalist-icon.j2.in:10
-msgid "SecureDrop Journalist Interface"
-msgstr ""
-
-#: desktop-source-icon.j2.in:10
-msgid "SecureDrop Source Interface"
-msgstr ""

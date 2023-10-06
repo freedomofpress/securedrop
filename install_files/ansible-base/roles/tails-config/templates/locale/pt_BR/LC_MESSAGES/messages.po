@@ -1,4 +1,4 @@
-# Spanish translations for PACKAGE package.
+# Portuguese translations for PACKAGE package.
 # Copyright (C) 2017 Freedom of the Press Foundation
 # This file is distributed under the same license as the PACKAGE package.
 # Automatically generated, 2017.
@@ -7,42 +7,41 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2018-12-05 08:18+0000\n"
-"Last-Translator: Adolfo Jayme-Barrientos <fitojb@ubuntu.com>\n"
-"Language-Team: Spanish <https://weblate.securedrop.org/projects/securedrop/"
-"desktop/es/>\n"
-"Language: es_ES\n"
+"PO-Revision-Date: 2023-06-22 07:39+0000\n"
+"Last-Translator: notmuchtohide <notmuchtohide@protonmail.com>\n"
+"Language-Team: Portuguese (Brazil) <https://weblate.securedrop.org/projects/securedrop/desktop/pt_BR/>\n"
+"Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2.20\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 4.14.1\n"
 
 msgid "Launch Source Interface"
-msgstr ""
+msgstr "Abrir a Interface de Fontes"
 
 msgid "Launch Journalist Interface"
-msgstr ""
+msgstr "Abrir Interface de Jornalista"
 
 msgid "Check for SecureDrop Updates"
-msgstr ""
+msgstr "Verificar atualizações do SecureDrop"
 
 msgid "SSH into the App Server"
-msgstr ""
+msgstr "SSH no Servidor de Aplicações"
 
 msgid "SSH into the Monitor Server"
-msgstr ""
+msgstr "SSH no Servidor de Monitoramento"
 
 msgid "Open KeePassXC Password Vault"
-msgstr ""
+msgstr "Abrir Cofre de Senhas do KeePassXC"
 
 msgid "Open File Browser"
-msgstr ""
+msgstr "Abrir Explorador de Arquivos"
 
 #: desktop-journalist-icon.j2.in:10
 msgid "SecureDrop Journalist Interface"
-msgstr "Interfaz de periodista de SecureDrop"
+msgstr "Interface de Jornalista do SecureDrop"
 
 #: desktop-source-icon.j2.in:10
 msgid "SecureDrop Source Interface"
-msgstr "Interfaz de fuente de SecureDrop"
+msgstr "Interface de Fontes do SecureDrop"
