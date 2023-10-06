@@ -343,21 +343,22 @@ upgrade-destroy:  ## Destroy an upgrade test environment.
 I18N_CONF=securedrop/i18n.json
 I18N_LIST=securedrop/i18n.rst
 
-DESKTOP_LOCALE_BASE=install_files/ansible-base/roles/tails-config/templates
-DESKTOP_LOCALE_DIR=$(DESKTOP_LOCALE_BASE)/locale
-DESKTOP_I18N_CONF=$(DESKTOP_LOCALE_BASE)/LINGUAS
-
 LOCALE_DIR=securedrop/translations
 POT=${LOCALE_DIR}/messages.pot
 
+DESKTOP_BASE=install_files/ansible-base/roles/tails-config/templates
+DESKTOP_LOCALE_DIR=$(DESKTOP_BASE)/locale
+DESKTOP_I18N_CONF=$(DESKTOP_BASE)/LINGUAS
+DESKTOP_POT=$(DESKTOP_LOCALE_DIR)/messages.pot
+
 .PHONY: check-strings
-check-strings: ## Check that the translation catalog is up to date with source code.
+check-strings: $(POT) $(DESKTOP_POT) ## Check that the translation catalogs are up to date with source code.
 	@$(MAKE) --no-print-directory extract-strings
-	@git diff --quiet ${LOCALE_DIR} || { echo "Translation catalog is out of date. Please run \"make extract-strings\" and commit the changes."; exit 1; }
+	@git diff --quiet $^ || { echo "Translation catalogs are out of date. Please run \"make extract-strings\" and commit the changes."; exit 1; }
 
 .PHONY: extract-strings
-extract-strings: ## Extract translatable strings from source code.
-	@$(MAKE) --always-make --no-print-directory ${POT}
+extract-strings: $(POT) $(DESKTOP_POT) ## Extract translatable strings from source code.
+	@$(MAKE) --always-make --no-print-directory $^
 
 # Derive POT from sources.
 $(POT): securedrop
@@ -377,20 +378,33 @@ $(POT): securedrop
 		--no-wrap \
 		--ignore-dirs tests \
 		$^
-	@sed -i -e '/^"POT-Creation-Date/d' ${POT}
+	@sed -i -e '/^"POT-Creation-Date/d' $@
 
 .PHONY: check-desktop-files
-check-desktop-files: ${DESKTOP_LOCALE_BASE}/*.j2
+check-desktop-files: ${DESKTOP_BASE}/*.j2
 	@$(MAKE) --always-make --no-print-directory update-desktop-files
 	@git diff --quiet $^ || { echo "Desktop files are out of date. Please run \"make update-desktop-files\" and commit the changes."; exit 1; }
 
 .PHONY: update-desktop-files
-update-desktop-files: ${DESKTOP_LOCALE_BASE}/*.j2
+update-desktop-files: ${DESKTOP_BASE}/*.j2
 	@$(MAKE) --always-make --no-print-directory $^
+
+# Derive POT from templates.
+$(DESKTOP_POT): ${DESKTOP_BASE}/*.in
+	pybabel extract \
+		-F securedrop/babel.cfg \
+		--output=${DESKTOP_POT} \
+		--project=SecureDrop \
+		--version=${VERSION} \
+		--msgid-bugs-address=securedrop@freedom.press \
+		--copyright-holder="Freedom of the Press Foundation" \
+		--add-location=never \
+		$^
+	@sed -i -e '/^"POT-Creation-Date/d' $@
 
 # Render desktop files from templates.
 %.j2: %.j2.in
-	@msgfmt -d ${DESKTOP_LOCALE_BASE} --desktop --template $< --output-file $@
+	@msgfmt -d ${DESKTOP_BASE} --desktop --template $< --output-file $@
 
 # Render desktop list from "i18n.json".
 $(DESKTOP_I18N_CONF):
@@ -442,10 +456,10 @@ verify-mo: ## Verify that all gettext machine objects (.mo) are reproducible fro
 	@# TODO(#6917): Once Weblate (rather than i18n_tool.py) is correctly filing
 	@# both .po and .mo under $DESKTOP_LOCALE_DIR, remove this step.  (See
 	@# also: 76f3adeed90f4aaadbf0685e09dec6314367d5c0.)
-	@find ${DESKTOP_LOCALE_BASE} \
+	@find ${DESKTOP_BASE} \
 		-maxdepth 1 \
 		-name "*.po" \
-		-exec bash -c 'PO="$$(basename {} | sed \'s/.po//')"; cp ${DESKTOP_LOCALE_BASE}/$${PO}.po $(DESKTOP_LOCALE_DIR)/$${PO}/LC_MESSAGES/messages.po' \;
+		-exec bash -c 'PO="$$(basename {} | sed \'s/.po//')"; cp ${DESKTOP_BASE}/$${PO}.po $(DESKTOP_LOCALE_DIR)/$${PO}/LC_MESSAGES/messages.po' \;
 	@TERM=dumb devops/scripts/verify-mo.py ${DESKTOP_LOCALE_DIR}/*
 	@# All good; now clean up.
 	@# TODO(#6917): git restore "${LOCALE_DIR}/**/*.po"
