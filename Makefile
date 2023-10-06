@@ -340,16 +340,21 @@ upgrade-destroy:  ## Destroy an upgrade test environment.
 #
 ##############
 
+# Global configuration:
 I18N_CONF=securedrop/i18n.json
 I18N_LIST=securedrop/i18n.rst
 
+# securedrop/securedrop configuration:
 LOCALE_DIR=securedrop/translations
-POT=${LOCALE_DIR}/messages.pot
+POT=$(LOCALE_DIR)/messages.pot
 
+# securedrop/desktop configuration:
 DESKTOP_BASE=install_files/ansible-base/roles/tails-config/templates
 DESKTOP_LOCALE_DIR=$(DESKTOP_BASE)/locale
 DESKTOP_I18N_CONF=$(DESKTOP_LOCALE_DIR)/LINGUAS
 DESKTOP_POT=$(DESKTOP_LOCALE_DIR)/messages.pot
+
+## Global
 
 .PHONY: check-strings
 check-strings: $(POT) $(DESKTOP_POT) ## Check that the translation catalogs are up to date with source code.
@@ -359,6 +364,8 @@ check-strings: $(POT) $(DESKTOP_POT) ## Check that the translation catalogs are 
 .PHONY: extract-strings
 extract-strings: $(POT) $(DESKTOP_POT) ## Extract translatable strings from source code.
 	@$(MAKE) --always-make --no-print-directory $^
+
+## securedrop/securedrop
 
 # Derive POT from sources.
 $(POT): securedrop
@@ -379,6 +386,8 @@ $(POT): securedrop
 		--ignore-dirs tests \
 		$^
 	@sed -i -e '/^"POT-Creation-Date/d' $@
+
+## securedrop/desktop
 
 .PHONY: check-desktop-files
 check-desktop-files: ${DESKTOP_BASE}/*.j2
@@ -420,6 +429,8 @@ $(DESKTOP_POT): ${DESKTOP_BASE}/*.in
 $(DESKTOP_I18N_CONF):
 	@jq --raw-output '.supported_locales[].desktop' ${I18N_CONF} > $@
 
+## Supported locales
+
 .PHONY: check-supported-locales
 check-supported-locales: $(I18N_LIST) $(DESKTOP_I18N_CONF) ## Check that the desktop and documentation lists of supported locales are up to date.
 	@$(MAKE) --no-print-directory update-supported-locales
@@ -443,6 +454,8 @@ ${I18N_LIST}: ${I18N_CONF}
 .PHONY: supported-locales
 supported-locales: ## List supported locales (languages).
 	@jq --compact-output '.supported_locales | keys' ${I18N_CONF}
+
+## Utilities
 
 .PHONY: translation-test
 translation-test: ## Run page layout tests in all supported languages.
