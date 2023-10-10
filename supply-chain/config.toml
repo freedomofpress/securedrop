@@ -1,0 +1,292 @@
+
+# cargo-vet config file
+
+[cargo-vet]
+version = "0.8"
+
+[imports.bytecode-alliance]
+url = "https://raw.githubusercontent.com/bytecodealliance/wasmtime/main/supply-chain/audits.toml"
+
+[imports.google]
+url = "https://raw.githubusercontent.com/google/supply-chain/main/audits.toml"
+
+[imports.isrg]
+url = "https://raw.githubusercontent.com/divviup/libprio-rs/main/supply-chain/audits.toml"
+
+[imports.mozilla]
+url = "https://raw.githubusercontent.com/mozilla/supply-chain/main/audits.toml"
+
+[imports.zcash]
+url = "https://raw.githubusercontent.com/zcash/rust-ecosystem/main/supply-chain/audits.toml"
+
+[policy.hermit-abi]
+criteria = []
+notes = "Hermit OS-only"
+
+[policy.js-sys]
+criteria = []
+notes = "WASM-only"
+
+[policy.redox_syscall]
+criteria = []
+notes = "Redox OS-only"
+
+[policy.redox_users]
+criteria = []
+notes = "Redox OS-only"
+
+[policy.wasi]
+criteria = []
+notes = "WASM-only"
+
+[policy.wasm-bindgen]
+criteria = []
+notes = "WASM-only"
+
+[policy.wasm-bindgen-backend]
+criteria = []
+notes = "WASM-only"
+
+[policy.wasm-bindgen-macro]
+criteria = []
+notes = "WASM-only"
+
+[policy.wasm-bindgen-macro-support]
+criteria = []
+notes = "WASM-only"
+
+[policy.wasm-bindgen-shared]
+criteria = []
+notes = "WASM-only"
+
+[policy.winapi]
+criteria = []
+notes = "Windows-only"
+
+[policy.winapi-i686-pc-windows-gnu]
+criteria = []
+notes = "Windows-only"
+
+[policy.winapi-x86_64-pc-windows-gnu]
+criteria = []
+notes = "Windows-only"
+
+[policy.windows-sys]
+criteria = []
+notes = "Windows-only"
+
+[policy.windows-targets]
+criteria = []
+notes = "Windows-only"
+
+[policy.windows_aarch64_gnullvm]
+criteria = []
+notes = "Windows-only"
+
+[policy.windows_aarch64_msvc]
+criteria = []
+notes = "Windows-only"
+
+[policy.windows_i686_gnu]
+criteria = []
+notes = "Windows-only"
+
+[policy.windows_i686_msvc]
+criteria = []
+notes = "Windows-only"
+
+[policy.windows_x86_64_gnu]
+criteria = []
+notes = "Windows-only"
+
+[policy.windows_x86_64_gnullvm]
+criteria = []
+notes = "Windows-only"
+
+[policy.windows_x86_64_msvc]
+criteria = []
+notes = "Windows-only"
+
+[[exemptions.ascii-canvas]]
+version = "3.0.0"
+criteria = "safe-to-deploy"
+
+[[exemptions.bitflags]]
+version = "2.4.0"
+criteria = "safe-to-deploy"
+
+[[exemptions.cc]]
+version = "1.0.83"
+criteria = "safe-to-deploy"
+
+[[exemptions.chrono]]
+version = "0.4.31"
+criteria = "safe-to-deploy"
+
+[[exemptions.crc32fast]]
+version = "1.3.2"
+criteria = "safe-to-deploy"
+
+[[exemptions.diff]]
+version = "0.1.13"
+criteria = "safe-to-deploy"
+
+[[exemptions.digest]]
+version = "0.9.0"
+criteria = "safe-to-deploy"
+
+[[exemptions.dirs-next]]
+version = "2.0.0"
+criteria = "safe-to-deploy"
+
+[[exemptions.dirs-sys-next]]
+version = "0.1.2"
+criteria = "safe-to-deploy"
+
+[[exemptions.ena]]
+version = "0.14.2"
+criteria = "safe-to-deploy"
+
+[[exemptions.fastrand]]
+version = "2.0.1"
+criteria = "safe-to-run"
+
+[[exemptions.fixedbitset]]
+version = "0.4.2"
+criteria = "safe-to-deploy"
+
+[[exemptions.flate2]]
+version = "1.0.27"
+criteria = "safe-to-deploy"
+
+[[exemptions.generic-array]]
+version = "0.14.7"
+criteria = "safe-to-deploy"
+
+[[exemptions.getrandom]]
+version = "0.1.16"
+criteria = "safe-to-deploy"
+
+[[exemptions.getrandom]]
+version = "0.2.10"
+criteria = "safe-to-deploy"
+
+[[exemptions.itertools]]
+version = "0.10.5"
+criteria = "safe-to-deploy"
+
+[[exemptions.lalrpop]]
+version = "0.19.12"
+criteria = "safe-to-deploy"
+
+[[exemptions.lalrpop-util]]
+version = "0.19.12"
+criteria = "safe-to-deploy"
+
+[[exemptions.libc]]
+version = "0.2.149"
+criteria = "safe-to-deploy"
+
+[[exemptions.memoffset]]
+version = "0.8.0"
+criteria = "safe-to-deploy"
+
+[[exemptions.memsec]]
+version = "0.6.3"
+criteria = "safe-to-deploy"
+
+[[exemptions.once_cell]]
+version = "1.18.0"
+criteria = "safe-to-deploy"
+
+[[exemptions.openssl]]
+version = "0.10.57"
+criteria = "safe-to-deploy"
+
+[[exemptions.openssl-sys]]
+version = "0.9.93"
+criteria = "safe-to-deploy"
+
+[[exemptions.petgraph]]
+version = "0.6.4"
+criteria = "safe-to-deploy"
+
+[[exemptions.phf_shared]]
+version = "0.10.0"
+criteria = "safe-to-deploy"
+
+[[exemptions.pkg-config]]
+version = "0.3.27"
+criteria = "safe-to-deploy"
+
+[[exemptions.ppv-lite86]]
+version = "0.2.17"
+criteria = "safe-to-deploy"
+
+[[exemptions.pyo3]]
+version = "0.18.3"
+criteria = "safe-to-deploy"
+
+[[exemptions.pyo3-build-config]]
+version = "0.18.3"
+criteria = "safe-to-deploy"
+
+[[exemptions.pyo3-ffi]]
+version = "0.18.3"
+criteria = "safe-to-deploy"
+
+[[exemptions.pyo3-macros]]
+version = "0.18.3"
+criteria = "safe-to-deploy"
+
+[[exemptions.pyo3-macros-backend]]
+version = "0.18.3"
+criteria = "safe-to-deploy"
+
+[[exemptions.rand]]
+version = "0.7.3"
+criteria = "safe-to-deploy"
+
+[[exemptions.rand_chacha]]
+version = "0.2.2"
+criteria = "safe-to-deploy"
+
+[[exemptions.rand_core]]
+version = "0.5.1"
+criteria = "safe-to-deploy"
+
+[[exemptions.rand_hc]]
+version = "0.2.0"
+criteria = "safe-to-deploy"
+
+[[exemptions.siphasher]]
+version = "0.3.11"
+criteria = "safe-to-deploy"
+
+[[exemptions.smallvec]]
+version = "1.11.1"
+criteria = "safe-to-deploy"
+
+[[exemptions.string_cache]]
+version = "0.8.7"
+criteria = "safe-to-deploy"
+
+[[exemptions.tempfile]]
+version = "3.8.0"
+criteria = "safe-to-run"
+
+[[exemptions.term]]
+version = "0.7.0"
+criteria = "safe-to-deploy"
+
+[[exemptions.tiny-keccak]]
+version = "2.0.2"
+criteria = "safe-to-deploy"
+
+[[exemptions.typenum]]
+version = "1.17.0"
+criteria = "safe-to-deploy"
+
+[[exemptions.xxhash-rust]]
+version = "0.8.7"
+criteria = "safe-to-deploy"
