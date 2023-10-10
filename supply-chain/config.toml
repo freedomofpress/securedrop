@@ -215,10 +215,6 @@ criteria = "safe-to-deploy"
 version = "0.10.0"
 criteria = "safe-to-deploy"
 
-[[exemptions.pkg-config]]
-version = "0.3.27"
-criteria = "safe-to-deploy"
-
 [[exemptions.ppv-lite86]]
 version = "0.2.17"
 criteria = "safe-to-deploy"

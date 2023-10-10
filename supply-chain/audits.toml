@@ -1,7 +1,10 @@
 
 # cargo-vet audits file
 
-[audits]
+[[audits.pkg-config]]
+who = "Kunal Mehta <legoktm@debian.org>"
+criteria = "safe-to-deploy"
+delta = "0.3.26 -> 0.3.27"
 
 [[trusted.aho-corasick]]
 criteria = "safe-to-deploy"
