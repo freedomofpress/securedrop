@@ -7,42 +7,41 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2023-06-13 09:56+0000\n"
-"Last-Translator: Sveinn í Felli <sv1@fellsnet.is>\n"
-"Language-Team: Icelandic <https://weblate.securedrop.org/projects/securedrop/"
-"desktop/is/>\n"
-"Language: is\n"
+"PO-Revision-Date: 2023-06-13 07:56+0000\n"
+"Last-Translator: Jonas Waga <jonas.waga@schibsted.com>\n"
+"Language-Team: Swedish <https://weblate.securedrop.org/projects/securedrop/desktop/sv/>\n"
+"Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n % 10 != 1 || n % 100 == 11;\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Weblate 4.14.1\n"
 
 msgid "Launch Source Interface"
-msgstr "Ræsa viðmót heimildarmanns"
+msgstr "Starta källgränssnitt"
 
 msgid "Launch Journalist Interface"
-msgstr "Ræsa viðmót blaðamanns"
+msgstr "Starta journalistgränssnitt"
 
 msgid "Check for SecureDrop Updates"
-msgstr "Athuga með uppfærslur SecureDrop"
+msgstr "Leta efter Securedrop-uppdateringar"
 
 msgid "SSH into the App Server"
-msgstr "SSH inn í forritaþjón"
+msgstr "Anslut med SSH till App-servern"
 
 msgid "SSH into the Monitor Server"
-msgstr "SSH inn í vöktunarþjón"
+msgstr "Anslut med SSH till Monitor-servern"
 
 msgid "Open KeePassXC Password Vault"
-msgstr "Opna KeePassXC-lykilorðageymslu"
+msgstr "Öppna KeePassXC lösenordsvalv"
 
 msgid "Open File Browser"
-msgstr "Opna skráastjóra"
+msgstr "Öppna filhanterare"
 
 #: desktop-journalist-icon.j2.in:10
 msgid "SecureDrop Journalist Interface"
-msgstr "Blaðamannaviðmót SecureDrop"
+msgstr "SecureDrop journalistgränssnitt"
 
 #: desktop-source-icon.j2.in:10
 msgid "SecureDrop Source Interface"
-msgstr "Heimildarmannaviðmót SecureDrop"
+msgstr "SecureDrop källgränssnitt"

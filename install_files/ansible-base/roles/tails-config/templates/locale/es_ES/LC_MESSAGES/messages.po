@@ -1,22 +1,21 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR Freedom of the Press Foundation
+# Spanish translations for PACKAGE package.
+# Copyright (C) 2017 Freedom of the Press Foundation
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Automatically generated, 2017.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2018-01-13 08:54+0000\n"
-"Last-Translator: Claudio Arseni <claudio.arseni@ubuntu.com>\n"
-"Language-Team: Italian <https://weblate.securedrop.org/projects/securedrop/"
-"desktop/it/>\n"
-"Language: it\n"
+"PO-Revision-Date: 2018-12-05 08:18+0000\n"
+"Last-Translator: Adolfo Jayme-Barrientos <fitojb@ubuntu.com>\n"
+"Language-Team: Spanish <https://weblate.securedrop.org/projects/securedrop/desktop/es/>\n"
+"Language: es_ES\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2.18\n"
+"X-Generator: Weblate 2.20\n"
 
 msgid "Launch Source Interface"
 msgstr ""
@@ -41,8 +40,8 @@ msgstr ""
 
 #: desktop-journalist-icon.j2.in:10
 msgid "SecureDrop Journalist Interface"
-msgstr "Interfaccia Giornalista di SecureDrop"
+msgstr "Interfaz de periodista de SecureDrop"
 
 #: desktop-source-icon.j2.in:10
 msgid "SecureDrop Source Interface"
-msgstr "Interfaccia Fonte di SecureDrop"
+msgstr "Interfaz de fuente de SecureDrop"

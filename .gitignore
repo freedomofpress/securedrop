@@ -95,7 +95,9 @@ coverage.xml
 .hypothesis/
 .mypy_cache/
 
-# Translations compiled during packaging:
+# Translation artifacts generated during testing and packaging:
+install_files/ansible-base/roles/tails-config/templates/locale/*.po
+securedrop/tests/i18n/messages.pot
 securedrop/translations/**/*.mo
 
 # Flask stuff:

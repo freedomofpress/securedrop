@@ -2,7 +2,6 @@ import subprocess
 from datetime import datetime, timedelta
 from pathlib import Path
 
-import i18n_tool
 import journalist_app
 import source_app
 import template_filters
@@ -87,23 +86,24 @@ def do_test(create_app):
     test_config = create_config_for_i18n_test(supported_locales=["en_US", "fr_FR"])
 
     i18n_dir = Path(__file__).absolute().parent / "i18n"
-    i18n_tool.I18NTool().main(
+    pot = Path(test_config.TEMP_DIR) / "messages.pot"
+    subprocess.check_call(
         [
-            "--verbose",
-            "translate-messages",
+            "pybabel",
+            "extract",
             "--mapping",
             str(i18n_dir / "babel.cfg"),
-            "--translations-dir",
-            str(test_config.TEMP_DIR),
-            "--sources",
+            "--output",
+            pot,
             str(i18n_dir / "code.py"),
-            "--extract-update",
-            "--compile",
         ]
     )
 
+    # To be able to test template filters for a given language, its message
+    # catalog must exist, but it doesn't have to contain any actual
+    # translations.  So we can just initialize it based on the template created
+    # by "pybabel extract".
     for lang in ("en_US", "fr_FR"):
-        pot = Path(test_config.TEMP_DIR) / "messages.pot"
         subprocess.check_call(
             ["pybabel", "init", "-i", pot, "-d", test_config.TEMP_DIR, "-l", lang]
         )

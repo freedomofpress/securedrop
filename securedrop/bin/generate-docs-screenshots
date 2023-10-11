@@ -13,5 +13,5 @@ urandom
 build_redwood
 maybe_create_config_py
 
-./i18n_tool.py translate-messages --compile
+pybabel compile --directory translations/
 pytest -v --page-layout "${@:-tests/functional/pageslayout}"

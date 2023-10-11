@@ -1,1 +1,2 @@
-babel>=2.9.1
+babel>=2.10
+BabelGladeExtractor
