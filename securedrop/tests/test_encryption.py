@@ -243,7 +243,7 @@ class TestEncryptionManager:
                 )
 
         # Amd the reply can't be decrypted without providing the source1's gpg secret
-        result = encryption_mgr._gpg.decrypt(
+        result = encryption_mgr.gpg().decrypt(
             # For GPG 2.1+, a non-null passphrase _must_ be passed to decrypt()
             encrypted_reply,
             passphrase="test 123",

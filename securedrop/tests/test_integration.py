@@ -357,6 +357,7 @@ def test_reply_normal(journalist_app, source_app, test_journo):
     gpg functions).
     """
     encryption_mgr = EncryptionManager.get_default()
+    encryption_mgr.gpg()  # lazily initialize GPG
     with mock.patch.object(encryption_mgr._gpg, "_encoding", "ansi_x3.4_1968"):
         _helper_test_reply(
             journalist_app,
@@ -376,6 +377,7 @@ def test_unicode_reply_with_ansi_env(journalist_app, source_app, test_journo):
     # environment. See
     # https://github.com/freedomofpress/securedrop/issues/1360 for context.
     encryption_mgr = EncryptionManager.get_default()
+    encryption_mgr.gpg()  # lazily initialize GPG
     with mock.patch.object(encryption_mgr._gpg, "_encoding", "ansi_x3.4_1968"):
         _helper_test_reply(
             journalist_app,

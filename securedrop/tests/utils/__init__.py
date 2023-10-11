@@ -84,7 +84,7 @@ def create_legacy_gpg_key(
     # Strongbox) was publicly released for the first time.
     # https://www.newyorker.com/news/news-desk/strongbox-and-aaron-swartz
     default_key_creation_date = datetime.date(2013, 5, 14)
-    gen_key_input = manager._gpg.gen_key_input(
+    gen_key_input = manager.gpg().gen_key_input(
         passphrase=source_user.gpg_secret,
         name_email=source_user.filesystem_id,
         key_type="RSA",
@@ -95,7 +95,7 @@ def create_legacy_gpg_key(
         # to set an expiration date.
         expire_date="0",
     )
-    manager._gpg.gen_key(gen_key_input)
+    manager.gpg().gen_key(gen_key_input)
 
     # Delete the Sequoia-generated keys
     source.pgp_public_key = None

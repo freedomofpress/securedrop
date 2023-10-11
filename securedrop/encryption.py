@@ -52,18 +52,33 @@ class EncryptionManager:
         self._redis = Redis(decode_responses=True)
 
         # Instantiate the "main" GPG binary
-        self._gpg = gnupg.GPG(
-            binary="gpg2",
-            homedir=str(gpg_key_dir),
-            options=["--pinentry-mode loopback", "--trust-model direct"],
-        )
+        self._gpg = None
 
         # Instantiate the GPG binary to be used for key deletion: always delete keys without
         # invoking pinentry-mode=loopback
         # see: https://lists.gnupg.org/pipermail/gnupg-users/2016-May/055965.html
-        self._gpg_for_key_deletion = gnupg.GPG(
-            binary="gpg2", homedir=str(self._gpg_key_dir), options=["--yes", "--trust-model direct"]
-        )
+        self._gpg_for_key_deletion = None
+
+    def gpg(self, for_deletion: Optional[bool] = False) -> gnupg.GPG:
+        if for_deletion:
+            if self._gpg_for_key_deletion is None:
+                # GPG binary to be used for key deletion: always delete keys without
+                # invoking pinentry-mode=loopback
+                # see: https://lists.gnupg.org/pipermail/gnupg-users/2016-May/055965.html
+                self._gpg_for_key_deletion = gnupg.GPG(
+                    binary="gpg2",
+                    homedir=str(self._gpg_key_dir),
+                    options=["--yes", "--trust-model direct"],
+                )
+            return self._gpg_for_key_deletion
+        else:
+            if self._gpg is None:
+                self._gpg = gnupg.GPG(
+                    binary="gpg2",
+                    homedir=str(self._gpg_key_dir),
+                    options=["--pinentry-mode loopback", "--trust-model direct"],
+                )
+            return self._gpg
 
     @classmethod
     def get_default(cls) -> "EncryptionManager":
@@ -90,7 +105,7 @@ class EncryptionManager:
             return
 
         # The subkeys keyword argument deletes both secret and public keys
-        self._gpg_for_key_deletion.delete_keys(source_key_fingerprint, secret=True, subkeys=True)
+        self.gpg(for_deletion=True).delete_keys(source_key_fingerprint, secret=True, subkeys=True)
 
         self._redis.hdel(self.REDIS_KEY_HASH, source_key_fingerprint)
         self._redis.hdel(self.REDIS_FINGERPRINT_HASH, source_filesystem_id)
@@ -114,7 +129,7 @@ class EncryptionManager:
         return source_key_fingerprint
 
     def get_source_secret_key(self, fingerprint: str, passphrase: str) -> str:
-        secret_key = self._gpg.export_keys(fingerprint, secret=True, passphrase=passphrase)
+        secret_key = self.gpg().export_keys(fingerprint, secret=True, passphrase=passphrase)
         if not secret_key:
             raise GpgKeyNotFoundError()
         return secret_key
@@ -155,16 +170,16 @@ class EncryptionManager:
                 secret_key=for_source.pgp_secret_key,
                 passphrase=for_source_user.gpg_secret,
             ).decode()
-        # TODO: Migrate gpg-stored secret keys to database storage for Sequoia
+        # In practice this should be uncreachable unless the Sequoia secret key migration failed
         ciphertext_as_stream = BytesIO(ciphertext_in)
-        out = self._gpg.decrypt_file(ciphertext_as_stream, passphrase=for_source_user.gpg_secret)
+        out = self.gpg().decrypt_file(ciphertext_as_stream, passphrase=for_source_user.gpg_secret)
         if not out.ok:
             raise GpgDecryptError(out.stderr)
 
         return out.data.decode("utf-8")
 
     def _get_source_key_details(self, source_filesystem_id: str) -> Dict[str, str]:
-        for key in self._gpg.list_keys():
+        for key in self.gpg().list_keys():
             for uid in key["uids"]:
                 if source_filesystem_id in uid and self.SOURCE_KEY_UID_RE.match(uid):
                     return key
@@ -182,7 +197,7 @@ class EncryptionManager:
             return public_key
 
         # Then directly from GPG
-        public_key = self._gpg.export_keys(key_fingerprint)
+        public_key = self.gpg().export_keys(key_fingerprint)
         if not public_key:
             raise GpgKeyNotFoundError()
 

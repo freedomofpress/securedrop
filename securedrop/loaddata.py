@@ -252,7 +252,7 @@ def add_source(use_gpg: bool = False) -> Tuple[Source, str]:
     source = source_user.get_db_record()
     if use_gpg:
         manager = EncryptionManager.get_default()
-        gen_key_input = manager._gpg.gen_key_input(
+        gen_key_input = manager.gpg().gen_key_input(
             passphrase=source_user.gpg_secret,
             name_email=source_user.filesystem_id,
             key_type="RSA",
@@ -263,7 +263,7 @@ def add_source(use_gpg: bool = False) -> Tuple[Source, str]:
             # to set an expiration date.
             expire_date="0",
         )
-        manager._gpg.gen_key(gen_key_input)
+        manager.gpg().gen_key(gen_key_input)
 
         # Delete the Sequoia-generated keys
         source.pgp_public_key = None
