@@ -113,11 +113,11 @@ class CatalogVerifier:
         # because we want to inherit the Python virtual environment
         # in which we're invoked.
         # nosemgrep: python.lang.security.audit.subprocess-shell-true.subprocess-shell-true
-        return subprocess.run(  # nosec B602
+        return subprocess.run(
             cmd,
             capture_output=True,
             env=os.environ,
-            shell=True,
+            shell=True,  # noqa: S602
         )
 
     def reproduce(self) -> None:

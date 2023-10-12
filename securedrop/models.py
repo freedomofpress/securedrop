@@ -559,7 +559,8 @@ class Journalist(db.Model):
                 )
 
             # For type checking
-            assert isinstance(self.pw_hash, bytes)
+            if not isinstance(self.pw_hash, bytes):
+                raise RuntimeError("self.pw_hash isn't bytes")
 
             is_valid = compare_digest(self._scrypt_hash(passphrase, self.pw_salt), self.pw_hash)
 

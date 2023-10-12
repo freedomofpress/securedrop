@@ -28,6 +28,8 @@ select = [
     "PYI",
     # flake8-return
     "RET",
+    # flake8-bandit
+    "S",
     # flake8-simplify
     "SIM",
     # pyupgrade
@@ -58,6 +60,16 @@ ignore = [
     "RET503",
     # superflous-else- rules, find they hurt readability
     "RET505", "RET506", "RET507", "RET508",
+    # yes, we bind to 0.0.0.0
+    "S104",
+    # hardcoded passwords, lots of false positives
+    "S105", "S106",
+    # we intentionally don't log stuff sometimes
+    "S110",
+    # flags every instance of subprocess
+    "S603",
+    # we trust $PATH isn't hijacked
+    "S607",
     # Find contextlib.suppress() is harder to read
     "SIM105",
     # Find ternary statements harder to read
@@ -73,6 +85,27 @@ extend-include = ["securedrop/scripts/*"]
 # ruff's isort is smart enough to know these are first party, but let's treat
 # them as third-party to match O.G. isort until we fix our package layout
 known-third-party = ["journalist_app", "management", "source_app", "tests"]
+
+[tool.ruff.per-file-ignores]
+"**/test**.py" = [
+    # use of `assert`
+    "S101",
+    # weak crypto
+    "S311",
+
+    # insecure temporary file/directory
+    "S108",
+    # HTTP request without timeout
+    "S113",
+]
+"securedrop/loaddata.py" = [
+    # ok to use weak crypto here
+    "S311",
+]
+"securedrop/pretty_bad_protocol/*.py" = [
+    # legacy code that still uses `assert`
+    "S101",
+]
 
 [tool.mypy]
 ignore_missing_imports = true

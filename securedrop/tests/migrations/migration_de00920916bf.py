@@ -14,7 +14,7 @@ class Helper:
     def __init__(self):
         self.journalist_id = None
 
-    def create_journalist(self, otp_secret="ABCDEFGHIJKLMNOPQRSTUVWXYZ234567"):
+    def create_journalist(self):
         if self.journalist_id is not None:
             raise RuntimeError("Journalist already created")
 
@@ -22,7 +22,7 @@ class Helper:
             "uuid": str(uuid.uuid4()),
             "username": random_chars(50),
             "session_nonce": 0,
-            "otp_secret": otp_secret,
+            "otp_secret": "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567",
         }
         sql = """INSERT INTO journalists (uuid, username, otp_secret, session_nonce)
                  VALUES (:uuid, :username, :otp_secret, :session_nonce)

@@ -66,10 +66,6 @@ babel==2.12.1 \
 babelgladeextractor==0.7.0 \
     --hash=sha256:bcf805e28b4bb18c8b6909a65a7cf5c7c2bcbf4ae50b164878c9682d22271798
     # via -r requirements/python3/translation-requirements.in
-bandit==1.7.0 \
-    --hash=sha256:216be4d044209fa06cf2a3e51b319769a51be8318140659719aa7a115c35ed07 \
-    --hash=sha256:8a4c7415254d75df8ff3c3b15cfe9042ecee628a1e40b44c15a98890fbfc2608
-    # via -r requirements/python3/develop-requirements.in
 bcrypt==3.1.3 \
     --hash=sha256:05b35b9842b009b44496fa5433ce462f69966291e50fbd471dbb427f399f748f \
     --hash=sha256:06280fe19ffbcf6cf904de25190dd6fcd313e30bc79da305f5642a8295d1616e \
@@ -341,14 +337,6 @@ git-url-parse==1.0.2 \
     --hash=sha256:75d1cf1e19534678711e1a9293e6fb978461a5f734adf941cd468a802d08bbb2 \
     --hash=sha256:bf0a20c48e8552fea1218b52714be84fa31b0d73c58897e70b765d5e7a26f4cb
     # via python-gilt
-gitdb2==2.0.3 \
-    --hash=sha256:b60e29d4533e5e25bb50b7678bbc187c8f6bcff1344b4f293b2ba55c85795f09 \
-    --hash=sha256:cf9a4b68e8c4da8d42e48728c944ff7af2d8c9db303ac1ab32eac37aa4194b0e
-    # via gitpython
-gitpython==2.1.8 \
-    --hash=sha256:ad61bc25deadb535b047684d06f3654c001d9415e1971e51c9c20f5b510076e9 \
-    --hash=sha256:b8367c432de995dc330b5b146c5bfdc0926b8496e100fda6692134e00c0dcdc5
-    # via bandit
 glom==22.1.0 \
     --hash=sha256:1510c6587a8f9c64a246641b70033cbc5ebde99f02ad245693678038e821aeb5 \
     --hash=sha256:5339da206bf3532e01a83a35aca202960ea885156986d190574b779598e9e772
@@ -654,7 +642,6 @@ pbr==5.1.1 \
     # via
     #   git-url-parse
     #   python-gilt
-    #   stevedore
 peewee==3.15.0 \
     --hash=sha256:48eac70be812ac84daa5400fb8e7b545e0c83adcfa05c8e2a8612f9ced4da495
     # via semgrep
@@ -850,7 +837,6 @@ pyyaml==5.4.1 \
     #   ansible
     #   ansible-lint
     #   aspy.yaml
-    #   bandit
     #   molecule
     #   molecule-vagrant
     #   pre-commit
@@ -968,7 +954,6 @@ six==1.15.0 \
     #   -r ../admin/requirements.in
     #   ansible-lint
     #   argon2-cffi
-    #   bandit
     #   bcrypt
     #   cfgv
     #   click-completion
@@ -981,16 +966,7 @@ six==1.15.0 \
     #   prompt-toolkit
     #   pynacl
     #   python-dateutil
-    #   stevedore
     #   websocket-client
-smmap2==2.0.3 \
-    --hash=sha256:b78ee0f1f5772d69ff50b1cbdb01b8c6647a8354f02f23b488cf4b2cfc923956 \
-    --hash=sha256:c7530db63f15f09f8251094b22091298e82bf6c699a6b8344aaaef3f2e1276c3
-    # via gitdb2
-stevedore==1.28.0 \
-    --hash=sha256:e3d96b2c4e882ec0c1ff95eaebf7b575a779fd0ccb4c741b9832bed410d58b3d \
-    --hash=sha256:f1c7518e7b160336040fee272174f1f7b29a46febb3632502a8f2055f973d60b
-    # via bandit
 tabulate==0.8.7 \
     --hash=sha256:ac64cb76d53b1231d364babcd72abbb16855adac7de6665122f97b593f1eb2ba \
     --hash=sha256:db2723a20d04bcda8522165c73eea7c300eda74e0ce852d9022e0159d7895007

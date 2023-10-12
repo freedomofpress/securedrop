@@ -30,7 +30,7 @@ class HOTP:
     _LENGTH = 6
 
     # nosemgrep: python.cryptography.security.insecure-hash-algorithms.insecure-hash-algorithm-sha1
-    _ALGORITHM = SHA1()  # nosec B303
+    _ALGORITHM = SHA1()  # noqa: S303
 
     _LOOK_AHEAD_WINDOW_SIZE = 20
 
@@ -84,7 +84,7 @@ class TOTP:
     _TIME_STEP = 30
 
     # nosemgrep: python.cryptography.security.insecure-hash-algorithms.insecure-hash-algorithm-sha1
-    _ALGORITHM = SHA1()  # nosec B303
+    _ALGORITHM = SHA1()  # noqa: S303
 
     # Minimum length for ascii-encoded OTP secrets - by default, secrets are now 160-bit (32 chars)
     # but existing Journalist users may still have 80-bit (16-char) secrets
