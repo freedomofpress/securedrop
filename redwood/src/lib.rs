@@ -105,7 +105,7 @@ pub fn is_valid_public_key(input: &str) -> Result<String> {
     // We don't need the keys, just need to check there's at least one and no error
     keys::keys_from_cert(POLICY, &cert)?;
     // And there is no secret key material
-    if cert.keys().secret().next().is_some() {
+    if cert.is_tsk() {
         return Err(Error::HasSecretKeyMaterial);
     }
     Ok(cert.fingerprint().to_string())
