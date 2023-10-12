@@ -454,7 +454,7 @@ workflows:
             - lint
           filters:
             branches:
-              only: /i18n-.*/
+              only: /weblate-.*/
           context:
             - circleci-slack
           <<: *slack-fail-post-step
