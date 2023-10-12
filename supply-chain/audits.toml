@@ -1,0 +1,286 @@
+
+# cargo-vet audits file
+
+[[audits.pkg-config]]
+who = "Kunal Mehta <legoktm@debian.org>"
+criteria = "safe-to-deploy"
+delta = "0.3.26 -> 0.3.27"
+
+[[trusted.aho-corasick]]
+criteria = "safe-to-deploy"
+user-id = 189 # Andrew Gallant (BurntSushi)
+start = "2019-03-28"
+end = "2024-04-10"
+notes = "Rust Project member"
+
+[[trusted.anyhow]]
+criteria = "safe-to-deploy"
+user-id = 3618 # David Tolnay (dtolnay)
+start = "2019-10-05"
+end = "2024-04-10"
+notes = "Rust Project member"
+
+[[trusted.buffered-reader]]
+criteria = "safe-to-deploy"
+user-id = 33886 # Neal H. Walfield (nwalfield)
+start = "2023-01-06"
+end = "2024-04-10"
+notes = "Sequoia developer"
+
+[[trusted.bzip2]]
+criteria = "safe-to-deploy"
+user-id = 1 # Alex Crichton (alexcrichton)
+start = "2020-07-06"
+end = "2024-04-10"
+notes = "Rust Project member"
+
+[[trusted.bzip2-sys]]
+criteria = "safe-to-deploy"
+user-id = 1 # Alex Crichton (alexcrichton)
+start = "2020-02-24"
+end = "2024-04-10"
+notes = "Rust Project member"
+
+[[trusted.cc]]
+criteria = "safe-to-deploy"
+user-id = 1 # Alex Crichton (alexcrichton)
+start = "2019-03-01"
+end = "2024-04-10"
+notes = "Rust Project member"
+
+[[trusted.dyn-clone]]
+criteria = "safe-to-deploy"
+user-id = 3618 # David Tolnay (dtolnay)
+start = "2019-12-23"
+end = "2024-04-10"
+notes = "Rust Project member"
+
+[[trusted.either]]
+criteria = "safe-to-deploy"
+user-id = 539 # Josh Stone (cuviper)
+start = "2019-04-02"
+end = "2024-04-10"
+
+[[trusted.equivalent]]
+criteria = "safe-to-deploy"
+user-id = 539 # Josh Stone (cuviper)
+start = "2023-02-05"
+end = "2024-04-10"
+notes = "Rust Project member"
+
+[[trusted.errno]]
+criteria = "safe-to-deploy"
+user-id = 6825 # Dan Gohman (sunfishcode)
+start = "2023-08-29"
+end = "2024-04-10"
+notes = "Rust Project member"
+
+[[trusted.flate2]]
+criteria = "safe-to-deploy"
+user-id = 1 # Alex Crichton (alexcrichton)
+start = "2019-03-14"
+end = "2024-04-10"
+notes = "Rust Project member"
+
+[[trusted.hashbrown]]
+criteria = "safe-to-deploy"
+user-id = 2915 # Amanieu d'Antras (Amanieu)
+start = "2019-04-02"
+end = "2024-04-10"
+notes = "Rust Project member"
+
+[[trusted.indexmap]]
+criteria = "safe-to-deploy"
+user-id = 539 # Josh Stone (cuviper)
+start = "2020-01-15"
+end = "2024-04-10"
+notes = "Rust Project member"
+
+[[trusted.indoc]]
+criteria = "safe-to-deploy"
+user-id = 3618 # David Tolnay (dtolnay)
+start = "2019-04-28"
+end = "2024-04-10"
+notes = "Rust Project member"
+
+[[trusted.is-terminal]]
+criteria = "safe-to-deploy"
+user-id = 6825 # Dan Gohman (sunfishcode)
+start = "2022-01-22"
+end = "2024-04-10"
+notes = "Rust Project member"
+
+[[trusted.libc]]
+criteria = "safe-to-deploy"
+user-id = 1 # Alex Crichton (alexcrichton)
+start = "2019-03-29"
+end = "2024-04-10"
+notes = "Rust Project member"
+
+[[trusted.libc]]
+criteria = "safe-to-deploy"
+user-id = 2915 # Amanieu d'Antras (Amanieu)
+start = "2021-01-27"
+end = "2024-04-10"
+notes = "Rust Project member"
+
+[[trusted.linux-raw-sys]]
+criteria = "safe-to-deploy"
+user-id = 6825 # Dan Gohman (sunfishcode)
+start = "2021-06-12"
+end = "2024-04-10"
+notes = "Rust Project member"
+
+[[trusted.lock_api]]
+criteria = "safe-to-deploy"
+user-id = 2915 # Amanieu d'Antras (Amanieu)
+start = "2019-05-04"
+end = "2024-04-10"
+notes = "Rust Project member"
+
+[[trusted.memchr]]
+criteria = "safe-to-deploy"
+user-id = 189 # Andrew Gallant (BurntSushi)
+start = "2019-07-07"
+end = "2024-04-10"
+notes = "Rust Project member"
+
+[[trusted.num-traits]]
+criteria = "safe-to-deploy"
+user-id = 539 # Josh Stone (cuviper)
+start = "2019-05-20"
+end = "2024-04-10"
+notes = "Rust Project member"
+
+[[trusted.parking_lot]]
+criteria = "safe-to-deploy"
+user-id = 2915 # Amanieu d'Antras (Amanieu)
+start = "2019-05-04"
+end = "2024-04-10"
+notes = "Rust Project member"
+
+[[trusted.parking_lot_core]]
+criteria = "safe-to-deploy"
+user-id = 2915 # Amanieu d'Antras (Amanieu)
+start = "2019-05-04"
+end = "2024-04-10"
+notes = "Rust Project member"
+
+[[trusted.proc-macro2]]
+criteria = "safe-to-deploy"
+user-id = 3618 # David Tolnay (dtolnay)
+start = "2019-04-23"
+end = "2024-04-10"
+notes = "Rust Project member"
+
+[[trusted.quote]]
+criteria = "safe-to-deploy"
+user-id = 3618 # David Tolnay (dtolnay)
+start = "2019-04-09"
+end = "2024-04-10"
+notes = "Rust Project member"
+
+[[trusted.regex]]
+criteria = "safe-to-deploy"
+user-id = 189 # Andrew Gallant (BurntSushi)
+start = "2019-02-27"
+end = "2024-04-10"
+notes = "Rust Project member"
+
+[[trusted.regex-automata]]
+criteria = "safe-to-deploy"
+user-id = 189 # Andrew Gallant (BurntSushi)
+start = "2019-02-25"
+end = "2024-04-10"
+notes = "Rust Project member"
+
+[[trusted.regex-syntax]]
+criteria = "safe-to-deploy"
+user-id = 189 # Andrew Gallant (BurntSushi)
+start = "2019-03-30"
+end = "2024-04-10"
+notes = "Rust Project member"
+
+[[trusted.rustix]]
+criteria = "safe-to-deploy"
+user-id = 6825 # Dan Gohman (sunfishcode)
+start = "2021-10-29"
+end = "2024-04-10"
+notes = "Rust Project member"
+
+[[trusted.rustversion]]
+criteria = "safe-to-deploy"
+user-id = 3618 # David Tolnay (dtolnay)
+start = "2019-07-08"
+end = "2024-04-10"
+notes = "Rust Project member"
+
+[[trusted.scopeguard]]
+criteria = "safe-to-deploy"
+user-id = 2915 # Amanieu d'Antras (Amanieu)
+start = "2020-02-16"
+end = "2024-04-10"
+notes = "Rust Project member"
+
+[[trusted.sequoia-openpgp]]
+criteria = "safe-to-deploy"
+user-id = 33886 # Neal H. Walfield (nwalfield)
+start = "2022-11-18"
+end = "2024-04-10"
+notes = "Sequoia developer"
+
+[[trusted.sha1collisiondetection]]
+criteria = "safe-to-deploy"
+user-id = 33886 # Neal H. Walfield (nwalfield)
+start = "2022-08-28"
+end = "2024-04-10"
+notes = "Sequoia developer"
+
+[[trusted.sha1collisiondetection]]
+criteria = "safe-to-deploy"
+user-id = 14969 # Wiktor Kwapisiewicz (wiktor-k)
+start = "2023-05-05"
+end = "2024-04-10"
+notes = "Sequoia developer"
+
+[[trusted.syn]]
+criteria = "safe-to-deploy"
+user-id = 3618 # David Tolnay (dtolnay)
+start = "2019-03-01"
+end = "2024-04-10"
+notes = "Rust Project member"
+
+[[trusted.target-lexicon]]
+criteria = "safe-to-deploy"
+user-id = 6825 # Dan Gohman (sunfishcode)
+start = "2019-03-06"
+end = "2024-04-10"
+notes = "Rust Project member"
+
+[[trusted.thiserror]]
+criteria = "safe-to-deploy"
+user-id = 3618 # David Tolnay (dtolnay)
+start = "2019-10-09"
+end = "2024-04-10"
+notes = "Rust Project member"
+
+[[trusted.thiserror-impl]]
+criteria = "safe-to-deploy"
+user-id = 3618 # David Tolnay (dtolnay)
+start = "2019-10-09"
+end = "2024-04-10"
+notes = "Rust Project member"
+
+[[trusted.unicode-ident]]
+criteria = "safe-to-deploy"
+user-id = 3618 # David Tolnay (dtolnay)
+start = "2021-10-02"
+end = "2024-04-10"
+notes = "Rust Project member"
+
+[[trusted.unindent]]
+criteria = "safe-to-deploy"
+user-id = 3618 # David Tolnay (dtolnay)
+start = "2019-08-17"
+end = "2024-04-10"
+notes = "Rust Project member"
