@@ -7,7 +7,6 @@ use sequoia_openpgp::crypto::{Password, SessionKey};
 use sequoia_openpgp::parse::stream::*;
 use sequoia_openpgp::policy::Policy;
 use sequoia_openpgp::types::SymmetricAlgorithm;
-use sequoia_openpgp::KeyID;
 
 pub(crate) struct Helper<'a> {
     pub(crate) policy: &'a dyn Policy,
@@ -51,7 +50,7 @@ impl<'a> DecryptionHelper for Helper<'a> {
         for pkesk in pkesks {
             // Note: this check won't work for messages encrypted with --throw-keyids,
             // but we don't generate any messages that use it.
-            if pkesk.recipient() == &KeyID::from(key.fingerprint()) {
+            if pkesk.recipient() == &key.keyid() {
                 // Decrypt the secret key with the specified passphrase.
                 let mut pair = key
                     .clone()
