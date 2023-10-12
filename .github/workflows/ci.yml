@@ -28,3 +28,37 @@ jobs:
           git config --global --add safe.directory $GITHUB_WORKSPACE
           source .venv/bin/activate
           make lint
+
+  rust:
+    runs-on: ubuntu-latest
+    # Keep version in sync with rust-toolchain.toml
+    container: rust:1.74.0
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install dependencies
+        run: |
+          rustup component add rustfmt
+          rustup component add clippy
+      - name: Lint and test Rust code
+        run: |
+          make rust-lint
+          make rust-test
+
+  updater-gui-tests:
+    runs-on: ubuntu-latest
+    container: debian:bullseye
+    steps:
+      - name: Install dependencies
+        run: |
+          apt-get update && apt-get install --yes git libqt5designer5 python3-venv
+      - uses: actions/checkout@v3
+      - name: Install Python dependencies
+        run: |
+          cd journalist_gui
+          python3 -m venv .venv/ && source .venv/bin/activate
+          pip install --require-hashes -r dev-requirements.txt
+      - name: Run tests
+        run: |
+          cd journalist_gui
+          source .venv/bin/activate
+          QT_QPA_PLATFORM=offscreen python3 test_gui.py -v
