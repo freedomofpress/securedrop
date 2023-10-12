@@ -139,8 +139,10 @@ yamllint:  ## Lint YAML files (does not validate syntax!).
 	@yamllint --strict .
 	@echo
 
+# While the order mostly doesn't matter here, keep "check-ruff" first, since it
+# gives the broadest coverage and runs (and therefore fails) fastest.
 .PHONY: lint
-lint: ansible-config-lint app-lint check-black check-desktop-files check-strings check-ruff check-supported-locales html-lint shellcheck typelint yamllint ## Runs all lint checks
+lint: check-ruff ansible-config-lint app-lint check-black check-desktop-files check-strings check-supported-locales html-lint shellcheck typelint yamllint ## Runs all lint checks
 
 .PHONY: safety
 safety:  ## Run `safety check` to check python dependencies for vulnerabilities.
