@@ -227,6 +227,13 @@ jobs:
       BASE_OS: focal
     parallelism: 21
     steps:
+      - run:
+          name: Only run on translation pull requests
+          command: |
+            if [ "$CIRCLE_PR_USERNAME" != "weblate-fpf" ]; then
+                circleci-agent step halt
+            fi
+
       - checkout
       - *rebaseontarget
       - *createcachedir
@@ -452,9 +459,6 @@ workflows:
       - translation-tests:
           requires:
             - lint
-          filters:
-            branches:
-              only: /weblate-.*/
           context:
             - circleci-slack
           <<: *slack-fail-post-step
