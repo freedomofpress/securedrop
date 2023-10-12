@@ -5,11 +5,9 @@ use crate::keys::secret_key_from_cert;
 use anyhow::anyhow;
 use sequoia_openpgp::crypto::{Password, SessionKey};
 use sequoia_openpgp::parse::stream::*;
-use sequoia_openpgp::policy::Policy;
 use sequoia_openpgp::types::SymmetricAlgorithm;
 
 pub(crate) struct Helper<'a> {
-    pub(crate) policy: &'a dyn Policy,
     pub(crate) secret: &'a sequoia_openpgp::Cert,
     pub(crate) passphrase: &'a Password,
 }
@@ -45,7 +43,7 @@ impl<'a> DecryptionHelper for Helper<'a> {
     where
         D: FnMut(SymmetricAlgorithm, &SessionKey) -> bool,
     {
-        let key = secret_key_from_cert(self.policy, self.secret)?;
+        let key = secret_key_from_cert(self.secret)?;
 
         for pkesk in pkesks {
             // Note: this check won't work for messages encrypted with --throw-keyids,

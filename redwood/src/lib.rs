@@ -24,7 +24,7 @@ mod decryption;
 mod keys;
 mod stream;
 
-const POLICY: &StandardPolicy = &StandardPolicy::new();
+const STANDARD_POLICY: &StandardPolicy = &StandardPolicy::new();
 
 #[derive(thiserror::Error, Debug)]
 pub enum Error {
@@ -104,7 +104,7 @@ pub fn generate_source_key_pair(
 pub fn is_valid_public_key(input: &str) -> Result<String> {
     let cert = Cert::from_str(input)?;
     // We don't need the keys, just need to check there's at least one and no error
-    keys::keys_from_cert(POLICY, &cert)?;
+    keys::keys_from_cert(STANDARD_POLICY, &cert)?;
     // And there is no secret key material
     if cert.is_tsk() {
         return Err(Error::HasSecretKeyMaterial);
@@ -116,7 +116,7 @@ pub fn is_valid_public_key(input: &str) -> Result<String> {
 pub fn is_valid_secret_key(input: &str, passphrase: String) -> Result<String> {
     let passphrase: Password = passphrase.into();
     let cert = Cert::from_str(input)?;
-    let secret_key = keys::secret_key_from_cert(POLICY, &cert)?;
+    let secret_key = keys::secret_key_from_cert(&cert)?;
     secret_key.decrypt_secret(&passphrase)?;
     Ok(cert.fingerprint().to_string())
 }
@@ -164,7 +164,7 @@ fn encrypt(
     }
 
     for cert in certs.iter() {
-        recipient_keys.extend(keys::keys_from_cert(POLICY, cert)?);
+        recipient_keys.extend(keys::keys_from_cert(STANDARD_POLICY, cert)?);
     }
 
     // In reverse order, we set up a writer that will write an encrypted and
@@ -207,14 +207,13 @@ pub fn decrypt(
     let recipient = Cert::from_str(&secret_key)?;
     let passphrase: Password = passphrase.into();
     let helper = decryption::Helper {
-        policy: POLICY,
         secret: &recipient,
         passphrase: &passphrase,
     };
 
     // Now, create a decryptor with a helper using the given Certs.
     let mut decryptor = DecryptorBuilder::from_bytes(&ciphertext)?
-        .with_policy(POLICY, None, helper)?;
+        .with_policy(STANDARD_POLICY, None, helper)?;
 
     // Decrypt the data.
     let mut buffer: Vec<u8> = vec![];
