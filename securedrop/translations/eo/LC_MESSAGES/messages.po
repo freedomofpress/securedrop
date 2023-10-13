@@ -4,19 +4,7 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
 #
 msgid ""
-msgstr ""
-"Project-Id-Version: SecureDrop 2.5.0~rc1\n"
-"Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2023-01-13 01:09+0000\n"
-"Last-Translator: anonymous <noreply@weblate.org>\n"
-"Language-Team: Esperanto <https://weblate.securedrop.org/projects/securedrop/securedrop/eo/>\n"
-"Language: eo\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.14.1\n"
-"Generated-By: Babel 2.9.1\n"
+msgstr "Project-Id-Version: SecureDrop 2.5.0~rc1\nReport-Msgid-Bugs-To: securedrop@freedom.press\nPO-Revision-Date: 2023-10-11 23:58+0000\nLast-Translator: anonymous <noreply@weblate.org>\nLanguage-Team: Esperanto <https://weblate.securedrop.org/projects/securedrop/securedrop/eo/>\nLanguage: eo\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=2; plural=n != 1;\nX-Generator: Weblate 4.18.2\nGenerated-By: Babel 2.9.1\n"
 
 msgid "Name too long"
 msgstr "[!Name too long!]"
@@ -31,9 +19,6 @@ msgstr "[!!!!!!!!This username is invalid because it is reserved for internal us
 
 msgid "Invalid username"
 msgstr "[!Invalid username!]"
-
-msgid "Invalid OTP secret"
-msgstr "[!Invalid OTP secret!]"
 
 msgid "{time} ago"
 msgstr "[!{time} ago!]"
@@ -603,6 +588,9 @@ msgstr "[!!SEND TEST OSSEC ALERT!!]"
 msgid "Edit user \"{user}\""
 msgstr "[!Edit user \"{user}\"!]"
 
+msgid "Edit your account"
+msgstr "[!Edit your account!]"
+
 msgid "Change Name and Admin Status"
 msgstr "[!!Change Name and Admin Status!!]"
 
@@ -611,9 +599,6 @@ msgstr "[!Update account!]"
 
 msgid "UPDATE"
 msgstr "[UPDATE]"
-
-msgid "Edit your account"
-msgstr "[!Edit your account!]"
 
 msgid "Change Name"
 msgstr "[!Change Name!]"
@@ -729,8 +714,8 @@ msgstr "[!Selected language!]"
 msgid "Choose language"
 msgstr "[!Choose language!]"
 
-msgid "Login to access the journalist interface"
-msgstr "[!!!!Login to access the journalist interface!!!!]"
+msgid "Log in to access the journalist interface"
+msgstr "[!!!!Log in to access the journalist interface!!!!]"
 
 msgid "Password"
 msgstr "[Password]"
@@ -744,8 +729,10 @@ msgstr "[Log In]"
 msgid "LOG IN"
 msgstr "[LOG IN]"
 
-msgid "Field must be between 1 and {max_codename_len} characters long."
-msgstr "[!!!!!!Field must be between 1 and {max_codename_len} characters long.!!!!!!]"
+msgid "Field must be between 1 and {max_codename_len} character long."
+msgid_plural "Field must be between 1 and {max_codename_len} characters long."
+msgstr[0] "[!!!!!!Field must be between 1 and {max_codename_len} character long.!!!!!!]"
+msgstr[1] "[!!!!!!Field must be between 1 and {max_codename_len} characters long.!!!!!!]"
 
 msgid "Invalid input."
 msgstr "[!Invalid input.!]"
@@ -867,6 +854,9 @@ msgstr "[!!!!!!<strong>Keep it safe.</strong> There is no account recovery optio
 msgid "Continue"
 msgstr "[Continue]"
 
+msgid "Welcome"
+msgstr "[Welcome]"
+
 msgid "Your Tor Browser's <a id=\"disable-js\" href=\"\"><b>Security Level</b></a> is too low. Use the <img src=\"{icon}\" alt=\"&quot;Security Level&quot;\"> button in your browser’s toolbar to change it."
 msgstr "[!!!!!!!!!!!!!!!!!!!Your Tor Browser's <a id=\"disable-js\" href=\"\"><b>Security Level</b></a> is too low. Use the <img src=\"{icon}\" alt=\"&quot;Security Level&quot;\"> button in your browser’s toolbar to change it.!!!!!!!!!!!!!!!!!!!]"
 
@@ -912,6 +902,9 @@ msgstr "[!Return visit!]"
 msgid "Already have a codename? Check for replies or submit something new."
 msgstr "[!!!!!!Already have a codename? Check for replies or submit something new.!!!!!!]"
 
+msgid "Log in"
+msgstr "[Log in]"
+
 msgid "Enter Codename"
 msgstr "[!Enter Codename!]"
 
@@ -920,6 +913,9 @@ msgstr "[!Enter your codename!]"
 
 msgid "CANCEL"
 msgstr "[CANCEL]"
+
+msgid "Additional Action Required"
+msgstr "[!!Additional Action Required!!]"
 
 msgid "One more thing..."
 msgstr "[!One more thing...!]"
@@ -930,11 +926,11 @@ msgstr "[!!!!!!!!!!!!!!!!!!Click the <img src={icon} alt=\"\" width=\"16\" heigh
 msgid "Submit Files or Messages"
 msgstr "[!!Submit Files or Messages!!]"
 
-msgid "You can submit any kind of file, a message, or both."
-msgstr "[!!!!!You can submit any kind of file, a message, or both.!!!!!]"
-
 msgid "Submit Messages"
 msgstr "[!Submit Messages!]"
+
+msgid "You can submit any kind of file, a message, or both."
+msgstr "[!!!!!You can submit any kind of file, a message, or both.!!!!!]"
 
 msgid "If you are already familiar with GPG, you can optionally encrypt your files and messages with our <a href=\"{url}\" class=\"text-link\">public key</a> before submission. Files are encrypted as they are received by SecureDrop."
 msgstr "[!!!!!!!!!!!!!!!!!!!!!!If you are already familiar with GPG, you can optionally encrypt your files and messages with our <a href=\"{url}\" class=\"text-link\">public key</a> before submission. Files are encrypted as they are received by SecureDrop.!!!!!!!!!!!!!!!!!!!!!!]"
@@ -989,6 +985,9 @@ msgstr "[!Page not found!]"
 
 msgid "Sorry, we couldn't locate what you requested."
 msgstr "[!!!!Sorry, we couldn't locate what you requested.!!!!]"
+
+msgid "WARNING: Proxy Service Detected"
+msgstr "[!!!WARNING: Proxy Service Detected!!!]"
 
 msgid "Proxy Service Detected"
 msgstr "[!!Proxy Service Detected!!]"
@@ -1071,3 +1070,12 @@ msgstr "[!!!!!!!!!!!!!!!!!!!!!<strong>Important:</strong> If you wish to remain 
 
 msgid "Back to submission page"
 msgstr "[!!Back to submission page!!]"
+
+#~ msgid "Invalid OTP secret"
+#~ msgstr "[!Invalid OTP secret!]"
+
+#~ msgid "Login to access the journalist interface"
+#~ msgstr "[!!!!Login to access the journalist interface!!!!]"
+
+#~ msgid "Field must be between 1 and {max_codename_len} characters long."
+#~ msgstr "[!!!!!!Field must be between 1 and {max_codename_len} characters long.!!!!!!]"

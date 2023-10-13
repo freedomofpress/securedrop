@@ -742,8 +742,10 @@ msgstr "Inloggen"
 msgid "LOG IN"
 msgstr "INLOGGEN"
 
-msgid "Field must be between 1 and {max_codename_len} characters long."
-msgstr "Veld moet tussen de 1 en {max_codename_len} tekens lang zijn."
+msgid "Field must be between 1 and {max_codename_len} character long."
+msgid_plural "Field must be between 1 and {max_codename_len} characters long."
+msgstr[0] ""
+msgstr[1] ""
 
 msgid "Invalid input."
 msgstr "Ongeldige invoer."
@@ -1081,6 +1083,9 @@ msgstr "<strong>Belangrijk:</strong> Als u anoniem wilt blijven, gebruik dan <st
 
 msgid "Back to submission page"
 msgstr "Terug naar inzendingenpagina"
+
+#~ msgid "Field must be between 1 and {max_codename_len} characters long."
+#~ msgstr "Veld moet tussen de 1 en {max_codename_len} tekens lang zijn."
 
 #~ msgid "Login to access the journalist interface"
 #~ msgstr "Inloggen om de interface voor journalisten te openen"

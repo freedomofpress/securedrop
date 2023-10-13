@@ -729,8 +729,10 @@ msgstr ""
 msgid "LOG IN"
 msgstr ""
 
-msgid "Field must be between 1 and {max_codename_len} characters long."
-msgstr ""
+msgid "Field must be between 1 and {max_codename_len} character long."
+msgid_plural "Field must be between 1 and {max_codename_len} characters long."
+msgstr[0] ""
+msgstr[1] ""
 
 msgid "Invalid input."
 msgstr ""

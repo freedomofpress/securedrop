@@ -751,8 +751,11 @@ msgstr "Авторизация"
 msgid "LOG IN"
 msgstr "Войти"
 
-msgid "Field must be between 1 and {max_codename_len} characters long."
-msgstr "Поле должно содержать от 1 до {max_codename_len} символов."
+msgid "Field must be between 1 and {max_codename_len} character long."
+msgid_plural "Field must be between 1 and {max_codename_len} characters long."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 msgid "Invalid input."
 msgstr "Неверный ввод."
@@ -1090,6 +1093,9 @@ msgstr "<strong>Внимание:</strong> Если вы хотите сохра
 
 msgid "Back to submission page"
 msgstr "Вернуться на страницу отправки"
+
+#~ msgid "Field must be between 1 and {max_codename_len} characters long."
+#~ msgstr "Поле должно содержать от 1 до {max_codename_len} символов."
 
 #~ msgid "Login to access the journalist interface"
 #~ msgstr "Войдите, чтобы получить доступ к панели журналиста"

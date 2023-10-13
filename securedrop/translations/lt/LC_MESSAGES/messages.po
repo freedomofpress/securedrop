@@ -741,8 +741,11 @@ msgstr ""
 msgid "LOG IN"
 msgstr "PRISIJUNGTI"
 
-msgid "Field must be between 1 and {max_codename_len} characters long."
-msgstr "Laukas turi būti nuo 1 iki {max_codename_len} simbolių ilgio."
+msgid "Field must be between 1 and {max_codename_len} character long."
+msgid_plural "Field must be between 1 and {max_codename_len} characters long."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 msgid "Invalid input."
 msgstr "Neteisinga įvestis."
@@ -1080,6 +1083,9 @@ msgstr "<strong>Patarimas:</strong> Jeigu norite likti neatpažintas, <strong>ne
 
 msgid "Back to submission page"
 msgstr "Grįžti į pateikimo puslapį"
+
+#~ msgid "Field must be between 1 and {max_codename_len} characters long."
+#~ msgstr "Laukas turi būti nuo 1 iki {max_codename_len} simbolių ilgio."
 
 #~ msgid "Login to access the journalist interface"
 #~ msgstr "Prisijunkite, kad galėtumėte pasiekti žurnalisto sąsają"

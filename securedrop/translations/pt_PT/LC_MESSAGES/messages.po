@@ -4,19 +4,7 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
 #
 msgid ""
-msgstr ""
-"Project-Id-Version: SecureDrop 0.4.3\n"
-"Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2023-06-22 07:39+0000\n"
-"Last-Translator: deeplow <deeplower@protonmail.com>\n"
-"Language-Team: Portuguese (Portugal) <https://weblate.securedrop.org/projects/securedrop/securedrop/pt_PT/>\n"
-"Language: pt_PT\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.14.1\n"
-"Generated-By: Babel 2.4.0\n"
+msgstr "Project-Id-Version: SecureDrop 0.4.3\nReport-Msgid-Bugs-To: securedrop@freedom.press\nPO-Revision-Date: 2023-10-13 13:30+0000\nLast-Translator: deeplow <deeplower@protonmail.com>\nLanguage-Team: Portuguese (Portugal) <https://weblate.securedrop.org/projects/securedrop/securedrop/pt_PT/>\nLanguage: pt_PT\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=2; plural=n != 1;\nX-Generator: Weblate 4.18.2\nGenerated-By: Babel 2.4.0\n"
 
 msgid "Name too long"
 msgstr "Nome demasiado longo"
@@ -741,8 +729,10 @@ msgstr "Iniciar Sessão"
 msgid "LOG IN"
 msgstr "INICIAR SESSÃO"
 
-msgid "Field must be between 1 and {max_codename_len} characters long."
-msgstr "Este campo deve conter entre 1 e {max_codename_len} caracteres."
+msgid "Field must be between 1 and {max_codename_len} character long."
+msgid_plural "Field must be between 1 and {max_codename_len} characters long."
+msgstr[0] "O campo deve entre 1 caractere e  {max_codename_len} caractere."
+msgstr[1] "O campo deve entre 1 caractere e  {max_codename_len} caracteres."
 
 msgid "Invalid input."
 msgstr "Inseriu caracteres inválidos."
@@ -1080,6 +1070,9 @@ msgstr "<strong>Importante:</strong> para manter o seu anonimato, <strong>não</
 
 msgid "Back to submission page"
 msgstr "Voltar à página de envio"
+
+#~ msgid "Field must be between 1 and {max_codename_len} characters long."
+#~ msgstr "Este campo deve conter entre 1 e {max_codename_len} caracteres."
 
 #~ msgid "Login to access the journalist interface"
 #~ msgstr "Inicie sessão para aceder à interface para jornalistas"

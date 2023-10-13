@@ -4,44 +4,37 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 msgid ""
-msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2018-01-11 15:26+0000\n"
-"Last-Translator: Volkan <volkangezer@gmail.com>\n"
-"Language-Team: Turkish <https://weblate.securedrop.org/projects/securedrop/desktop/tr/>\n"
-"Language: tr\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2.18\n"
-
-msgid "Launch Source Interface"
-msgstr ""
-
-msgid "Launch Journalist Interface"
-msgstr ""
+msgstr "Project-Id-Version: PACKAGE VERSION\nReport-Msgid-Bugs-To: securedrop@freedom.press\nPO-Revision-Date: 2023-10-13 13:30+0000\nLast-Translator: Alper Gunay <aalpergunay@gmail.com>\nLanguage-Team: Turkish <https://weblate.securedrop.org/projects/securedrop/desktop/tr/>\nLanguage: tr\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=2; plural=n != 1;\nX-Generator: Weblate 4.18.2\n"
 
 msgid "Check for SecureDrop Updates"
-msgstr ""
+msgstr "SecureDrop Güncellemelerini Kontrol Edin"
 
-msgid "SSH into the App Server"
-msgstr ""
+msgid "Launch Journalist Interface"
+msgstr "Gazeteci Arayüzüne Giriş Yap"
 
-msgid "SSH into the Monitor Server"
-msgstr ""
-
-msgid "Open KeePassXC Password Vault"
-msgstr ""
+msgid "Launch Source Interface"
+msgstr "Kaynak Arayüzüne Giriş Yap"
 
 msgid "Open File Browser"
-msgstr ""
+msgstr "Dosyalara Gözat"
 
-#: desktop-journalist-icon.j2.in:10
+msgid "Open KeePassXC Password Vault"
+msgstr "KeePassXC Şifrelerini Gör"
+
+msgid "SSH into the App Server"
+msgstr "Uygulama Sunucusunda SSH"
+
+msgid "SSH into the Monitor Server"
+msgstr "Görüntüleme Sunucusunda SSH"
+
+#. Name
 msgid "SecureDrop Journalist Interface"
 msgstr "SecureDrop Gazeteci Arayüzü"
 
-#: desktop-source-icon.j2.in:10
+#. Name
 msgid "SecureDrop Source Interface"
 msgstr "SecureDrop Kaynak Arayüzü"
+
+#. Icon
+msgid "{{ tails_config_securedrop_dotfiles }}/securedrop_icon.png"
+msgstr "{{ tails_config_securedrop_dotfiles }}/securedrop_icon.png"

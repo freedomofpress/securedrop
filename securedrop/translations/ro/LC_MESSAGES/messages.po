@@ -741,8 +741,11 @@ msgstr ""
 msgid "LOG IN"
 msgstr "CONECTARE"
 
-msgid "Field must be between 1 and {max_codename_len} characters long."
-msgstr "Câmpul trebuie să aibă între 1 și {max_codename_len} caractere."
+msgid "Field must be between 1 and {max_codename_len} character long."
+msgid_plural "Field must be between 1 and {max_codename_len} characters long."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 msgid "Invalid input."
 msgstr "Date introduse nevalide."
@@ -1080,6 +1083,9 @@ msgstr "<strong>Important:</strong> Dacă vrei să rămâi anonim(ă), <strong>n
 
 msgid "Back to submission page"
 msgstr "Înapoi la pagina de trimitere"
+
+#~ msgid "Field must be between 1 and {max_codename_len} characters long."
+#~ msgstr "Câmpul trebuie să aibă între 1 și {max_codename_len} caractere."
 
 #~ msgid "Login to access the journalist interface"
 #~ msgstr "Autentifică-te pentru acces la interfața jurnalistului"

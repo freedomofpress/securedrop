@@ -4,44 +4,37 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 msgid ""
-msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2019-08-29 21:39+0000\n"
-"Last-Translator: 1000101 <jan.hrnko@satoshilabs.com>\n"
-"Language-Team: Slovak <https://weblate.securedrop.org/projects/securedrop/desktop/sk/>\n"
-"Language: sk\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 3.7.1\n"
-
-msgid "Launch Source Interface"
-msgstr ""
-
-msgid "Launch Journalist Interface"
-msgstr ""
+msgstr "Project-Id-Version: PACKAGE VERSION\nReport-Msgid-Bugs-To: securedrop@freedom.press\nPO-Revision-Date: 2023-10-13 15:54+0000\nLast-Translator: 1000101 <b1000101@pm.me>\nLanguage-Team: Slovak <https://weblate.securedrop.org/projects/securedrop/desktop/sk/>\nLanguage: sk\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\nX-Generator: Weblate 4.18.2\n"
 
 msgid "Check for SecureDrop Updates"
-msgstr ""
+msgstr "Skontrolovať aktualizácie pre SecureDrop"
 
-msgid "SSH into the App Server"
-msgstr ""
+msgid "Launch Journalist Interface"
+msgstr "Spustiť rozhranie novinára"
 
-msgid "SSH into the Monitor Server"
-msgstr ""
-
-msgid "Open KeePassXC Password Vault"
-msgstr ""
+msgid "Launch Source Interface"
+msgstr "Spustiť rozhranie zdroja"
 
 msgid "Open File Browser"
-msgstr ""
+msgstr "Otvoriť prieskumník súborov"
 
-#: desktop-journalist-icon.j2.in:10
+msgid "Open KeePassXC Password Vault"
+msgstr "Otvoriť správcu hesiel KeePassXC"
+
+msgid "SSH into the App Server"
+msgstr "SSH pripojenie k aplikačnému serveru"
+
+msgid "SSH into the Monitor Server"
+msgstr "SSH pripojenie k monitorovaciemu serveru"
+
+#. Name
 msgid "SecureDrop Journalist Interface"
 msgstr "SecureDrop rozhranie novinára"
 
-#: desktop-source-icon.j2.in:10
+#. Name
 msgid "SecureDrop Source Interface"
 msgstr "SecureDrop rozhranie zdroja"
+
+#. Icon
+msgid "{{ tails_config_securedrop_dotfiles }}/securedrop_icon.png"
+msgstr "{{ tails_config_securedrop_dotfiles }}/securedrop_icon.png"

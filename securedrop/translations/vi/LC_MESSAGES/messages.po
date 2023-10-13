@@ -721,8 +721,9 @@ msgstr ""
 msgid "LOG IN"
 msgstr "TRUY CẬP"
 
-msgid "Field must be between 1 and {max_codename_len} characters long."
-msgstr "Trường nhập phải bao gồm giữa 1 và {max_codename_len} kí tự."
+msgid "Field must be between 1 and {max_codename_len} character long."
+msgid_plural "Field must be between 1 and {max_codename_len} characters long."
+msgstr[0] ""
 
 msgid "Invalid input."
 msgstr "Nhập không chính xác."
@@ -1058,6 +1059,9 @@ msgstr ""
 
 msgid "Back to submission page"
 msgstr ""
+
+#~ msgid "Field must be between 1 and {max_codename_len} characters long."
+#~ msgstr "Trường nhập phải bao gồm giữa 1 và {max_codename_len} kí tự."
 
 #~ msgid "Login to access the journalist interface"
 #~ msgstr "Truy cập để sử dụng giao diện nhà báo"

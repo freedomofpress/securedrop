@@ -742,8 +742,10 @@ msgstr "Logg inn"
 msgid "LOG IN"
 msgstr "LOGG INN"
 
-msgid "Field must be between 1 and {max_codename_len} characters long."
-msgstr "Feltet må være mellom ett og {max_codename_len} tegn langt."
+msgid "Field must be between 1 and {max_codename_len} character long."
+msgid_plural "Field must be between 1 and {max_codename_len} characters long."
+msgstr[0] ""
+msgstr[1] ""
 
 msgid "Invalid input."
 msgstr "Ugyldig inndata."
@@ -1081,6 +1083,9 @@ msgstr "<strong>Viktig:</strong> Om du ønsker å være helt anonym, <strong>ikk
 
 msgid "Back to submission page"
 msgstr "Tilbake til innsendelsesside"
+
+#~ msgid "Field must be between 1 and {max_codename_len} characters long."
+#~ msgstr "Feltet må være mellom ett og {max_codename_len} tegn langt."
 
 #~ msgid "Login to access the journalist interface"
 #~ msgstr "Logg inn for å få tilgang til journalist-portalen"

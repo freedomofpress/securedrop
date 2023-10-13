@@ -731,8 +731,10 @@ msgstr ""
 msgid "LOG IN"
 msgstr "புகுபதிகை"
 
-msgid "Field must be between 1 and {max_codename_len} characters long."
-msgstr "புலம் 1-க்கும் {max_codename_len}-க்கும் இடையிலான எண்ணிக்கையில் எழுத்துக்களைக் கொண்டிருக்கவேண்டும்."
+msgid "Field must be between 1 and {max_codename_len} character long."
+msgid_plural "Field must be between 1 and {max_codename_len} characters long."
+msgstr[0] ""
+msgstr[1] ""
 
 msgid "Invalid input."
 msgstr "ஏற்புடையதற்ற உள்ளீடு."
@@ -1070,6 +1072,9 @@ msgstr ""
 
 msgid "Back to submission page"
 msgstr "அனுப்புகைப் பக்கத்திற்குத் திரும்புக"
+
+#~ msgid "Field must be between 1 and {max_codename_len} characters long."
+#~ msgstr "புலம் 1-க்கும் {max_codename_len}-க்கும் இடையிலான எண்ணிக்கையில் எழுத்துக்களைக் கொண்டிருக்கவேண்டும்."
 
 #~ msgid "Login to access the journalist interface"
 #~ msgstr "இதழியலாளர் இடைமுகத்தை அணுக புகுபதிக"

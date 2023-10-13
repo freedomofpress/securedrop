@@ -731,8 +731,10 @@ msgstr ""
 msgid "LOG IN"
 msgstr "ورود"
 
-msgid "Field must be between 1 and {max_codename_len} characters long."
-msgstr "فیلد باید بین 1 تا {max_codename_len} کاراکتر طولانی باشد."
+msgid "Field must be between 1 and {max_codename_len} character long."
+msgid_plural "Field must be between 1 and {max_codename_len} characters long."
+msgstr[0] ""
+msgstr[1] ""
 
 msgid "Invalid input."
 msgstr "ورودی نامعتبر."
@@ -1068,6 +1070,9 @@ msgstr ""
 
 msgid "Back to submission page"
 msgstr ""
+
+#~ msgid "Field must be between 1 and {max_codename_len} characters long."
+#~ msgstr "فیلد باید بین 1 تا {max_codename_len} کاراکتر طولانی باشد."
 
 #~ msgid "Login to access the journalist interface"
 #~ msgstr "برای دسترسی به رابط روزنامه‌نگار وارد شوید"

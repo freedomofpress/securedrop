@@ -751,8 +751,11 @@ msgstr "Prijava"
 msgid "LOG IN"
 msgstr "Prijava"
 
-msgid "Field must be between 1 and {max_codename_len} characters long."
-msgstr "Polje mora biti između 1 i {max_codename_len} znakova dugo."
+msgid "Field must be between 1 and {max_codename_len} character long."
+msgid_plural "Field must be between 1 and {max_codename_len} characters long."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 msgid "Invalid input."
 msgstr "Neispravan unos."
@@ -1090,6 +1093,9 @@ msgstr "<strong>Važno:</strong> Ako želite ostati anonimni, <strong>nemojte</s
 
 msgid "Back to submission page"
 msgstr "Natrag na stranicu predaje"
+
+#~ msgid "Field must be between 1 and {max_codename_len} characters long."
+#~ msgstr "Polje mora biti između 1 i {max_codename_len} znakova dugo."
 
 #~ msgid "Login to access the journalist interface"
 #~ msgstr "Prijavite se za pristup na novinarsko sučelje"

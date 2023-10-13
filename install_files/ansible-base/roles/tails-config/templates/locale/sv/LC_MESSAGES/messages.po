@@ -4,27 +4,22 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 msgid ""
-msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2023-06-13 07:56+0000\n"
-"Last-Translator: Jonas Waga <jonas.waga@schibsted.com>\n"
-"Language-Team: Swedish <https://weblate.securedrop.org/projects/securedrop/desktop/sv/>\n"
-"Language: sv\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.14.1\n"
+msgstr "Project-Id-Version: PACKAGE VERSION\nReport-Msgid-Bugs-To: securedrop@freedom.press\nPO-Revision-Date: 2023-10-12 07:30+0000\nLast-Translator: Jonas Waga <jonas.waga@schibsted.com>\nLanguage-Team: Swedish <https://weblate.securedrop.org/projects/securedrop/desktop/sv/>\nLanguage: sv\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=2; plural=n != 1;\nX-Generator: Weblate 4.18.2\n"
 
-msgid "Launch Source Interface"
-msgstr "Starta källgränssnitt"
+msgid "Check for SecureDrop Updates"
+msgstr "Leta efter Securedrop-uppdateringar"
 
 msgid "Launch Journalist Interface"
 msgstr "Starta journalistgränssnitt"
 
-msgid "Check for SecureDrop Updates"
-msgstr "Leta efter Securedrop-uppdateringar"
+msgid "Launch Source Interface"
+msgstr "Starta källgränssnitt"
+
+msgid "Open File Browser"
+msgstr "Öppna filhanterare"
+
+msgid "Open KeePassXC Password Vault"
+msgstr "Öppna KeePassXC lösenordsvalv"
 
 msgid "SSH into the App Server"
 msgstr "Anslut med SSH till App-servern"
@@ -32,16 +27,14 @@ msgstr "Anslut med SSH till App-servern"
 msgid "SSH into the Monitor Server"
 msgstr "Anslut med SSH till Monitor-servern"
 
-msgid "Open KeePassXC Password Vault"
-msgstr "Öppna KeePassXC lösenordsvalv"
-
-msgid "Open File Browser"
-msgstr "Öppna filhanterare"
-
-#: desktop-journalist-icon.j2.in:10
+#. Name
 msgid "SecureDrop Journalist Interface"
 msgstr "SecureDrop journalistgränssnitt"
 
-#: desktop-source-icon.j2.in:10
+#. Name
 msgid "SecureDrop Source Interface"
 msgstr "SecureDrop källgränssnitt"
+
+#. Icon
+msgid "{{ tails_config_securedrop_dotfiles }}/securedrop_icon.png"
+msgstr "{{ tails_config_securedrop_dotfiles }}/securedrop_icon.png"

@@ -17,14 +17,20 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Weblate 4.14.1\n"
 
-msgid "Launch Source Interface"
-msgstr "Quellenschnittstelle starten"
+msgid "Check for SecureDrop Updates"
+msgstr "Auf SecureDrop-Aktualisierungen prüfen"
 
 msgid "Launch Journalist Interface"
 msgstr "Journalistenschnittstelle starten"
 
-msgid "Check for SecureDrop Updates"
-msgstr "Auf SecureDrop-Aktualisierungen prüfen"
+msgid "Launch Source Interface"
+msgstr "Quellenschnittstelle starten"
+
+msgid "Open File Browser"
+msgstr "Dateimanager öffnen"
+
+msgid "Open KeePassXC Password Vault"
+msgstr "KeePassXC-Passwort-Tresor öffnen"
 
 msgid "SSH into the App Server"
 msgstr "SSH auf den App-Server"
@@ -32,16 +38,14 @@ msgstr "SSH auf den App-Server"
 msgid "SSH into the Monitor Server"
 msgstr "SSH in den Monitor-Server"
 
-msgid "Open KeePassXC Password Vault"
-msgstr "KeePassXC-Passwort-Tresor öffnen"
-
-msgid "Open File Browser"
-msgstr "Dateimanager öffnen"
-
-#: desktop-journalist-icon.j2.in:10
+#. Name
 msgid "SecureDrop Journalist Interface"
 msgstr "Journalistenschnittstelle für SecureDrop"
 
-#: desktop-source-icon.j2.in:10
+#. Name
 msgid "SecureDrop Source Interface"
 msgstr "Quellenschnittstelle für SecureDrop"
+
+#. Icon
+msgid "{{ tails_config_securedrop_dotfiles }}/securedrop_icon.png"
+msgstr ""
