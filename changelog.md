@@ -2,6 +2,43 @@
 
 ## 2.7.0~rc1
 
+### Web applications
+* Use Sequoia and redwood instead of gnupg and pretty_bad_protocol for GPG operations (#6891, #6884, #6913, #6912, #6925, #6926, #6949, #6958, #6892, #6948, #6946, #6970, #6975, #6972, #6983, #6981, #6998)
+* Update translation workflow to support continuous updates (#6953, #6954, #6985, #6997, #6984)
+* Update French diceware wordlist (#6936)
+* Replace pretty-bad-protocol dependency with vendored version (#6836, #6907)
+* Import Markup and escape from markupsafe (#6964)
+* Dependency changes:
+  * Update cryptography from 41.0.1 to 41.0.3
+
+### Operations
+
+* Remove Ansible check for installed Tor version on servers (#6894)
+* Miscellaneous demo server fixes (#6935, #6994)
+* Update default Dockerfile application versions:
+  * geckodriver to 0.33.0 (#6957)
+  * Firefox to 115esr, Tor Browser to 13.0 (#7001)
+* Update securedrop-admin tooling to reject weak GPG keys with a SHA-1 signature (#6928)
+
+### CI
+
+* Replace bandit, flake8, pylint, and isort with ruff; added more checks (#6885, #6932, #6961, #6995)
+* Update CI to run all non-staging tests on i18n branches (#6923)
+* Reduce mypy execution time by skipping redwood compilation and parsing stub (#6971)
+* Miscellaneous CI updates (#6844, #6920)
+
+
+### Development
+
+* Dependencies changes:
+  * Remove boto and boto3 dependencies (#6890)
+  * Remove hypothesis dependency (#6893)
+  * Update certifi from 2022.12.7 to 2023.7.22 (#6900)
+  * Update pillow from 9.3.0 to 10.0.1 (#6959)
+* Improve printing of apparmor denials in testinfra suite (#6883)
+* Set "ia" as unavailable locale, "eo" as test locale  (#6919)
+* Add script to auto-backport PRs to release branches (#6875)
+* Miscellaneous development updates (#6842, #6865, #6871, #6882)
 
 
 ## 2.6.1
