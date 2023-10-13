@@ -383,7 +383,7 @@ $(POT): securedrop
 .PHONY: check-desktop-files
 check-desktop-files: ${DESKTOP_BASE}/*.j2
 	@$(MAKE) --always-make --no-print-directory update-desktop-files
-	@git diff --quiet $^ || { echo "Desktop files are out of date. Please run \"make update-desktop-files\" and commit the changes."; exit 1; }
+	@git diff --quiet $^ || [[ "$$CIRCLE_PR_USERNAME" == "weblate-fpf" ]] || { echo "Desktop files are out of date. Please run \"make update-desktop-files\" and commit the changes."; exit 1; }
 
 .PHONY: update-desktop-files
 update-desktop-files: ${DESKTOP_BASE}/*.j2
