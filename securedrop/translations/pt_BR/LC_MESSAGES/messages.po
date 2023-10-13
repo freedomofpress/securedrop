@@ -741,8 +741,10 @@ msgstr "Conectar"
 msgid "LOG IN"
 msgstr "ACESSAR"
 
-msgid "Field must be between 1 and {max_codename_len} characters long."
-msgstr "Este campo deve conter entre 1 e {max_codename_len} caracteres."
+msgid "Field must be between 1 and {max_codename_len} character long."
+msgid_plural "Field must be between 1 and {max_codename_len} characters long."
+msgstr[0] ""
+msgstr[1] ""
 
 msgid "Invalid input."
 msgstr "Entrada inválida."
@@ -1080,6 +1082,9 @@ msgstr "<strong>Importante:</strong> Para manter o seu anonimato, <strong>não</
 
 msgid "Back to submission page"
 msgstr "Voltar à página de envio"
+
+#~ msgid "Field must be between 1 and {max_codename_len} characters long."
+#~ msgstr "Este campo deve conter entre 1 e {max_codename_len} caracteres."
 
 #~ msgid "Login to access the journalist interface"
 #~ msgstr "Faça login para acessar a interface para jornalistas"

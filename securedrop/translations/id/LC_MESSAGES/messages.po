@@ -721,8 +721,9 @@ msgstr ""
 msgid "LOG IN"
 msgstr "MASUK"
 
-msgid "Field must be between 1 and {max_codename_len} characters long."
-msgstr "Masukkan antara 1 dan {max_codename_len} karakter."
+msgid "Field must be between 1 and {max_codename_len} character long."
+msgid_plural "Field must be between 1 and {max_codename_len} characters long."
+msgstr[0] ""
 
 msgid "Invalid input."
 msgstr "Masukan tidak valid."
@@ -1058,6 +1059,9 @@ msgstr ""
 
 msgid "Back to submission page"
 msgstr "Kembali ke halaman pengiriman"
+
+#~ msgid "Field must be between 1 and {max_codename_len} characters long."
+#~ msgstr "Masukkan antara 1 dan {max_codename_len} karakter."
 
 #~ msgid "Login to access the journalist interface"
 #~ msgstr "Masuk untuk mengakses antarmuka jurnalis"

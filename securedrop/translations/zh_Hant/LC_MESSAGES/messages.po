@@ -732,8 +732,9 @@ msgstr "登入"
 msgid "LOG IN"
 msgstr "登錄"
 
-msgid "Field must be between 1 and {max_codename_len} characters long."
-msgstr "此處字段長度必須在 1 和 {max_codename_len} 個字符之間。"
+msgid "Field must be between 1 and {max_codename_len} character long."
+msgid_plural "Field must be between 1 and {max_codename_len} characters long."
+msgstr[0] ""
 
 msgid "Invalid input."
 msgstr "無效輸入。"
@@ -1071,6 +1072,9 @@ msgstr "<strong>重要：</strong>如果您希望保持匿名，<strong>請勿</
 
 msgid "Back to submission page"
 msgstr "返回提交文件頁面"
+
+#~ msgid "Field must be between 1 and {max_codename_len} characters long."
+#~ msgstr "此處字段長度必須在 1 和 {max_codename_len} 個字符之間。"
 
 #~ msgid "Login to access the journalist interface"
 #~ msgstr "登入記者使用介面"

@@ -741,8 +741,10 @@ msgstr "Oturum aç"
 msgid "LOG IN"
 msgstr "OTURUM AÇ"
 
-msgid "Field must be between 1 and {max_codename_len} characters long."
-msgstr "Alanda 1 ile {max_codename_len} arasında karakter bulunmalıdır."
+msgid "Field must be between 1 and {max_codename_len} character long."
+msgid_plural "Field must be between 1 and {max_codename_len} characters long."
+msgstr[0] ""
+msgstr[1] ""
 
 msgid "Invalid input."
 msgstr "Geçersiz girdi."
@@ -1080,6 +1082,9 @@ msgstr "<strong>Önemli:</strong> Anonim kalmak istiyorsanız, dosyanın GPG tar
 
 msgid "Back to submission page"
 msgstr "Gönderi sayfasına geri dön"
+
+#~ msgid "Field must be between 1 and {max_codename_len} characters long."
+#~ msgstr "Alanda 1 ile {max_codename_len} arasında karakter bulunmalıdır."
 
 #~ msgid "Login to access the journalist interface"
 #~ msgstr "Gazeteci arayüzüne erişmek için oturum açın"

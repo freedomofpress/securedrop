@@ -731,8 +731,10 @@ msgstr ""
 msgid "LOG IN"
 msgstr "लॉग इन"
 
-msgid "Field must be between 1 and {max_codename_len} characters long."
-msgstr "फ़ील्ड 1 और {max_codename_len} वर्णों के बीच लंबा होना चाहिए।"
+msgid "Field must be between 1 and {max_codename_len} character long."
+msgid_plural "Field must be between 1 and {max_codename_len} characters long."
+msgstr[0] ""
+msgstr[1] ""
 
 msgid "Invalid input."
 msgstr "अमान्य निवेश।"
@@ -1070,6 +1072,9 @@ msgstr "<strong>महत्वपूर्ण:</strong> यदि आप गु
 
 msgid "Back to submission page"
 msgstr "सबमिशन पृष्ठ पर वापस जाएं"
+
+#~ msgid "Field must be between 1 and {max_codename_len} characters long."
+#~ msgstr "फ़ील्ड 1 और {max_codename_len} वर्णों के बीच लंबा होना चाहिए।"
 
 #~ msgid "Login to access the journalist interface"
 #~ msgstr "पत्रकार इंटरफेस प्रवेशने के लिए लॉगिन करें"

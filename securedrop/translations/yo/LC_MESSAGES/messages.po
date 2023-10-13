@@ -721,8 +721,9 @@ msgstr ""
 msgid "LOG IN"
 msgstr "FÀṢẸ WỌLÉ"
 
-msgid "Field must be between 1 and {max_codename_len} characters long."
-msgstr "Ọ̀rọ̀ tí o fi sílẹ̀ gbọdọ̀ gùn ju ọmọ-ọ̀rọ̀ kan sí {pọ̀jùu_orúkọodù_gígùn} lọ."
+msgid "Field must be between 1 and {max_codename_len} character long."
+msgid_plural "Field must be between 1 and {max_codename_len} characters long."
+msgstr[0] ""
 
 msgid "Invalid input."
 msgstr "Ohun-tí-o-fi-sílẹ̀ kòlágbára"
@@ -1058,6 +1059,9 @@ msgstr ""
 
 msgid "Back to submission page"
 msgstr "Padà sí ojú-ìwé asàfisílẹ̀"
+
+#~ msgid "Field must be between 1 and {max_codename_len} characters long."
+#~ msgstr "Ọ̀rọ̀ tí o fi sílẹ̀ gbọdọ̀ gùn ju ọmọ-ọ̀rọ̀ kan sí {pọ̀jùu_orúkọodù_gígùn} lọ."
 
 #~ msgid "Login to access the journalist interface"
 #~ msgstr "Fàṣẹwọlé láti rí ìwò-ojú akọ̀ròyìn lò"

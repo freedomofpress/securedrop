@@ -4,19 +4,7 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2018.
 #
 msgid ""
-msgstr ""
-"Project-Id-Version: SecureDrop 0.6~rc2\n"
-"Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2023-06-15 04:56+0000\n"
-"Last-Translator: Kishin Sagume <kishinsagi@riseup.net>\n"
-"Language-Team: Chinese (Simplified) <https://weblate.securedrop.org/projects/securedrop/securedrop/zh_Hans/>\n"
-"Language: zh_Hans\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.14.1\n"
-"Generated-By: Babel 2.5.1\n"
+msgstr "Project-Id-Version: SecureDrop 0.6~rc2\nReport-Msgid-Bugs-To: securedrop@freedom.press\nPO-Revision-Date: 2023-10-13 13:30+0000\nLast-Translator: Reader <isabellinacrew@tuta.io>\nLanguage-Team: Chinese (Simplified) <https://weblate.securedrop.org/projects/securedrop/securedrop/zh_Hans/>\nLanguage: zh_Hans\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=1; plural=0;\nX-Generator: Weblate 4.18.2\nGenerated-By: Babel 2.5.1\n"
 
 msgid "Name too long"
 msgstr "名字太长"
@@ -717,7 +705,7 @@ msgid "Choose language"
 msgstr "选择语言"
 
 msgid "Log in to access the journalist interface"
-msgstr ""
+msgstr "登录以访问记者界面"
 
 msgid "Password"
 msgstr "密码"
@@ -731,8 +719,9 @@ msgstr "登录"
 msgid "LOG IN"
 msgstr "登录"
 
-msgid "Field must be between 1 and {max_codename_len} characters long."
-msgstr "字段长度必须介于 1 至 {max_codename_len} 字节之间。"
+msgid "Field must be between 1 and {max_codename_len} character long."
+msgid_plural "Field must be between 1 and {max_codename_len} characters long."
+msgstr[0] "字段长度必须在 1 和{max_codename_len}字符之间。"
 
 msgid "Invalid input."
 msgstr "输入无效。"
@@ -1070,6 +1059,9 @@ msgstr "<strong>重要提示：</strong>若您想保持匿名身份，<strong>�
 
 msgid "Back to submission page"
 msgstr "返回提交页面"
+
+#~ msgid "Field must be between 1 and {max_codename_len} characters long."
+#~ msgstr "字段长度必须介于 1 至 {max_codename_len} 字节之间。"
 
 #~ msgid "Login to access the journalist interface"
 #~ msgstr "登录以访问记者界面"

@@ -4,19 +4,7 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2019.
 #
 msgid ""
-msgstr ""
-"Project-Id-Version: SecureDrop 0.12.0~rc1\n"
-"Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2023-06-16 10:56+0000\n"
-"Last-Translator: Sveinn í Felli <sv1@fellsnet.is>\n"
-"Language-Team: Icelandic <https://weblate.securedrop.org/projects/securedrop/securedrop/is/>\n"
-"Language: is\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n % 10 != 1 || n % 100 == 11;\n"
-"X-Generator: Weblate 4.14.1\n"
-"Generated-By: Babel 2.5.1\n"
+msgstr "Project-Id-Version: SecureDrop 0.12.0~rc1\nReport-Msgid-Bugs-To: securedrop@freedom.press\nPO-Revision-Date: 2023-10-12 13:30+0000\nLast-Translator: Sveinn í Felli <sv1@fellsnet.is>\nLanguage-Team: Icelandic <https://weblate.securedrop.org/projects/securedrop/securedrop/is/>\nLanguage: is\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=2; plural=n % 10 != 1 || n % 100 == 11;\nX-Generator: Weblate 4.18.2\nGenerated-By: Babel 2.5.1\n"
 
 msgid "Name too long"
 msgstr "Nafnið er of langt"
@@ -741,8 +729,10 @@ msgstr "Skrá inn"
 msgid "LOG IN"
 msgstr "SKRÁ INN"
 
-msgid "Field must be between 1 and {max_codename_len} characters long."
-msgstr "Gagnasvið verður að vera á milli 1 og {max_codename_len} stafa langt."
+msgid "Field must be between 1 and {max_codename_len} character long."
+msgid_plural "Field must be between 1 and {max_codename_len} characters long."
+msgstr[0] "Reiturinn verður að vera á milli 1 og {max_codename_len} stafs langur."
+msgstr[1] "Reiturinn verður að vera á milli 1 og {max_codename_len} stafa langur."
 
 msgid "Invalid input."
 msgstr "Ógilt ílag."
@@ -1080,6 +1070,9 @@ msgstr "<strong>Mikilvægt:</strong> Ef þú óskar áframhaldandi nafnleyndar, 
 
 msgid "Back to submission page"
 msgstr "Til baka á innsendingasíðuna"
+
+#~ msgid "Field must be between 1 and {max_codename_len} characters long."
+#~ msgstr "Gagnasvið verður að vera á milli 1 og {max_codename_len} stafa langt."
 
 #~ msgid "Login to access the journalist interface"
 #~ msgstr "Innskráning fyrir aðgang að fréttamannaviðmótinu"

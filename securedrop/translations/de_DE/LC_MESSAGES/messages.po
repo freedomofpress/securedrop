@@ -737,8 +737,10 @@ msgstr "Anmelden"
 msgid "LOG IN"
 msgstr "ANMELDEN"
 
-msgid "Field must be between 1 and {max_codename_len} characters long."
-msgstr "Feld muss zwischen 1 und {max_codename_len} Zeichen lang sein."
+msgid "Field must be between 1 and {max_codename_len} character long."
+msgid_plural "Field must be between 1 and {max_codename_len} characters long."
+msgstr[0] ""
+msgstr[1] ""
 
 msgid "Invalid input."
 msgstr "Ungültige Eingabe."
@@ -1076,6 +1078,9 @@ msgstr "<strong>Wichtig:</strong> Verwenden Sie <strong>nicht</strong> GPG, um d
 
 msgid "Back to submission page"
 msgstr "Zurück zur Einreichungsseite"
+
+#~ msgid "Field must be between 1 and {max_codename_len} characters long."
+#~ msgstr "Feld muss zwischen 1 und {max_codename_len} Zeichen lang sein."
 
 #~ msgid "Login to access the journalist interface"
 #~ msgstr "Melden Sie sich an, um auf die Journalistenoberfläche zugreifen zu können"

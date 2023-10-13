@@ -742,8 +742,10 @@ msgstr "Connexion"
 msgid "LOG IN"
 msgstr "CONNEXION"
 
-msgid "Field must be between 1 and {max_codename_len} characters long."
-msgstr "Le champ doit comporter entre 1 et {max_codename_len} caractères."
+msgid "Field must be between 1 and {max_codename_len} character long."
+msgid_plural "Field must be between 1 and {max_codename_len} characters long."
+msgstr[0] ""
+msgstr[1] ""
 
 msgid "Invalid input."
 msgstr "L’entrée est invalide."
@@ -1081,6 +1083,9 @@ msgstr "<strong>Important :</strong> Si vous souhaitez rester anonyme, <strong>
 
 msgid "Back to submission page"
 msgstr "Revenir à la page d'envoi"
+
+#~ msgid "Field must be between 1 and {max_codename_len} characters long."
+#~ msgstr "Le champ doit comporter entre 1 et {max_codename_len} caractères."
 
 #~ msgid "Login to access the journalist interface"
 #~ msgstr "Connectez-vous pour accéder à l'interface des journalistes"

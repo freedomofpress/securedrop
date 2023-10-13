@@ -4,19 +4,7 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
 #
 msgid ""
-msgstr ""
-"Project-Id-Version: SecureDrop 0.5-rc4\n"
-"Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2023-06-16 10:56+0000\n"
-"Last-Translator: Jonas Waga <jonas.waga@schibsted.com>\n"
-"Language-Team: Swedish <https://weblate.securedrop.org/projects/securedrop/securedrop/sv/>\n"
-"Language: sv\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.14.1\n"
-"Generated-By: Babel 2.4.0\n"
+msgstr "Project-Id-Version: SecureDrop 0.5-rc4\nReport-Msgid-Bugs-To: securedrop@freedom.press\nPO-Revision-Date: 2023-10-12 07:30+0000\nLast-Translator: Jonas Waga <jonas.waga@schibsted.com>\nLanguage-Team: Swedish <https://weblate.securedrop.org/projects/securedrop/securedrop/sv/>\nLanguage: sv\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=2; plural=n != 1;\nX-Generator: Weblate 4.18.2\nGenerated-By: Babel 2.4.0\n"
 
 msgid "Name too long"
 msgstr "Namnet är för långt"
@@ -607,7 +595,7 @@ msgid "Change Name and Admin Status"
 msgstr "Ändra namn och administratörsstatus"
 
 msgid "Update account"
-msgstr "Uppdatera ditt konto"
+msgstr "Uppdatera konto"
 
 msgid "UPDATE"
 msgstr "UPPDATERA"
@@ -741,8 +729,10 @@ msgstr "Logga in"
 msgid "LOG IN"
 msgstr "LOGGA IN"
 
-msgid "Field must be between 1 and {max_codename_len} characters long."
-msgstr "Fältet måste innehålla mellan 1 och {max_codename_len} tecken."
+msgid "Field must be between 1 and {max_codename_len} character long."
+msgid_plural "Field must be between 1 and {max_codename_len} characters long."
+msgstr[0] "Fältet måste vara mellan 1 och {max_codename_len} tecken långt."
+msgstr[1] "Fälten måste vara mellan 1 och {max_codename_len} tecken långa."
 
 msgid "Invalid input."
 msgstr "Ogiltigt innehåll."
@@ -1080,6 +1070,9 @@ msgstr "<strong> Viktigt:</strong> Ifall du önskar att förbli anonym, <strong>
 
 msgid "Back to submission page"
 msgstr "Tillbaka till inlämningssidan"
+
+#~ msgid "Field must be between 1 and {max_codename_len} characters long."
+#~ msgstr "Fältet måste innehålla mellan 1 och {max_codename_len} tecken."
 
 #~ msgid "Login to access the journalist interface"
 #~ msgstr "Logga in för att få tillgång till journalistgränssnittet"
