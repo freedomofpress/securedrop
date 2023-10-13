@@ -14,7 +14,7 @@ use sequoia_openpgp::serialize::{
 use sequoia_openpgp::Cert;
 use std::borrow::Cow;
 use std::fs::File;
-use std::io::{self, Read};
+use std::io::{self, BufWriter, Read, Write};
 use std::path::{Path, PathBuf};
 use std::str::FromStr;
 use std::string::FromUtf8Error;
@@ -105,7 +105,7 @@ pub fn is_valid_public_key(input: &str) -> Result<String> {
     // We don't need the keys, just need to check there's at least one and no error
     keys::keys_from_cert(POLICY, &cert)?;
     // And there is no secret key material
-    if cert.keys().secret().next().is_some() {
+    if cert.is_tsk() {
         return Err(Error::HasSecretKeyMaterial);
     }
     Ok(cert.fingerprint().to_string())
@@ -157,8 +157,14 @@ fn encrypt(
 
     // In reverse order, we set up a writer that will write an encrypted and
     // armored message to a newly-created file at `destination`.
-    let mut sink = File::create(destination)?;
-    let message = Message::new(&mut sink);
+    // TODO: Use `File::create_new()` once it's stabilized: https://github.com/rust-lang/rust/issues/105135
+    let sink = File::options()
+        .read(true)
+        .write(true)
+        .create_new(true)
+        .open(destination)?;
+    let mut writer = BufWriter::new(sink);
+    let message = Message::new(&mut writer);
     let message = Armorer::new(message).build()?;
     let message = Encryptor::for_recipients(message, recipient_keys).build()?;
     let mut message = LiteralWriter::new(message).build()?;
@@ -168,6 +174,7 @@ fn encrypt(
 
     // Flush any remaining buffers
     message.finalize()?;
+    writer.flush()?;
 
     Ok(())
 }
@@ -204,7 +211,7 @@ pub fn decrypt(
 mod tests {
     use super::*;
     use sequoia_openpgp::Cert;
-    use tempfile::NamedTempFile;
+    use tempfile::TempDir;
 
     const PASSPHRASE: &str = "correcthorsebatterystaple";
     const SECRET_MESSAGE: &str = "Rust is great 🦀";
@@ -261,7 +268,7 @@ mod tests {
 
         // Attempting to encrypt to multiple recipients should fail if any one of them
         // has no supported keys
-        let tmp = NamedTempFile::new().unwrap();
+        let tmp_dir = TempDir::new().unwrap();
         let expected_err_msg = format!(
             "No supported keys for certificate {}",
             BAD_KEY_FINGERPRINT
@@ -270,7 +277,7 @@ mod tests {
         let err = encrypt_message(
             vec![good_key, BAD_KEY.to_string()],
             SECRET_MESSAGE.to_string(),
-            tmp.path().to_path_buf(),
+            tmp_dir.path().join("message.asc"),
         )
         .unwrap_err();
         assert_eq!(err.to_string(), expected_err_msg);
@@ -310,15 +317,17 @@ mod tests {
         let (_public_key3, secret_key3, _) =
             generate_source_key_pair(PASSPHRASE, "foo3@example.org").unwrap();
 
-        let tmp = NamedTempFile::new().unwrap();
+        let tmp_dir = TempDir::new().unwrap();
+        let tmp = tmp_dir.path().join("message.asc");
+        println!("{}", tmp.to_string_lossy());
         // Encrypt a message to keys 1 and 2 but not 3
         encrypt_message(
             vec![public_key1, public_key2],
             SECRET_MESSAGE.to_string(),
-            tmp.path().to_path_buf(),
+            tmp.clone(),
         )
         .unwrap();
-        let ciphertext = std::fs::read_to_string(tmp.path()).unwrap();
+        let ciphertext = std::fs::read_to_string(tmp).unwrap();
         // Verify ciphertext looks like an encrypted message
         assert!(ciphertext.starts_with("-----BEGIN PGP MESSAGE-----\n"));
         // Decrypt as key 1
@@ -376,12 +385,12 @@ mod tests {
                 "OpenPGP error: unexpected EOF",
             ),
         ];
-        let tmp: NamedTempFile = NamedTempFile::new().unwrap();
+        let tmp_dir = TempDir::new().unwrap();
         for (key, error) in bad_keys {
             let err = encrypt_message(
                 key, // missing or malformed recipient key
                 "Look ma, no key".to_string(),
-                tmp.path().to_path_buf(),
+                tmp_dir.path().join("message.asc"),
             )
             .unwrap_err();
             assert_eq!(err.to_string(), error);
