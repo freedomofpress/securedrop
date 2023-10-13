@@ -1,0 +1,40 @@
+# Translations template for SecureDrop.
+# Copyright (C) 2023 Freedom of the Press Foundation
+# This file is distributed under the same license as the SecureDrop project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2023.
+#
+msgid ""
+msgstr "Project-Id-Version: SecureDrop 2.7.0~rc1\nReport-Msgid-Bugs-To: securedrop@freedom.press\nPO-Revision-Date: 2023-10-12 00:02+0000\nLast-Translator: anonymous <noreply@weblate.org>\nLanguage-Team: Esperanto <https://weblate.securedrop.org/projects/securedrop/desktop/eo/>\nLanguage: eo\nMIME-Version: 1.0\nContent-Type: text/plain; charset=utf-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=2; plural=n != 1;\nX-Generator: Weblate 4.18.2\nGenerated-By: Babel 2.12.1\n"
+
+msgid "Check for SecureDrop Updates"
+msgstr "[!!Check for SecureDrop Updates!!]"
+
+msgid "Launch Journalist Interface"
+msgstr "[!!Launch Journalist Interface!!]"
+
+msgid "Launch Source Interface"
+msgstr "[!!Launch Source Interface!!]"
+
+msgid "Open File Browser"
+msgstr "[!Open File Browser!]"
+
+msgid "Open KeePassXC Password Vault"
+msgstr "[!!Open KeePassXC Password Vault!!]"
+
+msgid "SSH into the App Server"
+msgstr "[!!SSH into the App Server!!]"
+
+msgid "SSH into the Monitor Server"
+msgstr "[!!SSH into the Monitor Server!!]"
+
+#. Name
+msgid "SecureDrop Journalist Interface"
+msgstr "[!!!SecureDrop Journalist Interface!!!]"
+
+#. Name
+msgid "SecureDrop Source Interface"
+msgstr "[!!SecureDrop Source Interface!!]"
+
+#. Icon
+msgid "{{ tails_config_securedrop_dotfiles }}/securedrop_icon.png"
+msgstr "[!!!!!{{ tails_config_securedrop_dotfiles }}/securedrop_icon.png!!!!!]"
