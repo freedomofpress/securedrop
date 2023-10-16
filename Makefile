@@ -415,6 +415,7 @@ $(DESKTOP_POT): ${DESKTOP_BASE}/*.in
 	@msgfmt \
 		-d ${DESKTOP_LOCALE_DIR} \
 		--desktop \
+		--keyword=Name \
 		--template $< \
 		--output-file $@
 	@rm ${DESKTOP_LOCALE_DIR}/*.po
