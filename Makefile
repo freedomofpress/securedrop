@@ -385,7 +385,7 @@ $(POT): securedrop
 check-desktop-files: ${DESKTOP_BASE}/*.j2
 	@echo "███ Checking desktop translation catalogs..."
 	@$(MAKE) --always-make --no-print-directory update-desktop-files
-	@git diff --quiet $^ || [[ "$$CIRCLE_PR_USERNAME" == "weblate-fpf" ]] || { echo "Desktop files are out of date. Please run \"make update-desktop-files\" and commit the changes."; exit 1; }
+	@git diff --quiet $^ || { echo "Desktop files are out of date. Please run \"make update-desktop-files\" and commit the changes. (If this is a translation pull request from Weblate, a maintainer can append the new commit to this branch so that CI passes before merge.)"; exit 1; }
 
 .PHONY: update-desktop-files
 update-desktop-files: ${DESKTOP_BASE}/*.j2
