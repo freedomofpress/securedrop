@@ -146,6 +146,21 @@ log_events_without_ossec_alerts:
     level: "0"
     rule_id: "199996"
 
+  # OSSEC should not alert when "manage.py check-disconnected-{db,fs}-
+  # submissions" has logged that there are no disconnected submissions.
+  - name: test_no_disconnected_db_submissions_produces_alert
+    alert: >
+      ossec: output: 'cat /var/lib/securedrop/disconnected_db_submissions.txt':
+      No problems were found. All submissions' files are present.
+    level: "1"
+    rule_id: "400800"
+  - name: test_disconnected_fs_submissions_produces_alert
+    alert: >
+      ossec: output: 'cat /var/lib/securedrop/disconnected_fs_submissions.txt':
+      No unexpected files were found in the store.
+    level: "1"
+    rule_id: "400801"
+
 # Log events we expect an OSSEC alert to occur for
 log_events_with_ossec_alerts:
   # Check that a denied RWX mmaping would produce an OSSEC alert
@@ -214,6 +229,24 @@ log_events_with_ossec_alerts:
       [pid 1479:tid 4201988093696] ERROR:flask.app:This is a test OSSEC alert
     level: "7"
     rule_id: "400700"
+
+  # OSSEC should alert when "manage.py check-disconnected-{db,fs}-submissions"
+  # has logged that there are disconnected submissions.
+  - name: test_disconnected_db_submissions_produces_alert
+    alert: >
+      ossec: output: 'cat /var/lib/securedrop/disconnected_db_submissions.txt':
+      There are submissions in the database with no corresponding files. Run
+      "manage.py list-disconnected-db-submissions" for details.
+    level: "1"
+    rule_id: "400800"
+  - name: test_disconnected_fs_submissions_produces_alert
+    alert: >
+      ossec: output: 'cat /var/lib/securedrop/disconnected_fs_submissions.txt':
+      There are files in the submission area with no corresponding records in
+      the database. Run "manage.py list-disconnected-fs-submissions" for
+      details.
+    level: "1"
+    rule_id: "400801"
 
 fpf_apt_repo_url: "https://apt-test.freedom.press"
 
