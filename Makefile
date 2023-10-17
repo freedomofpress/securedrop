@@ -142,7 +142,7 @@ yamllint:  ## Lint YAML files (does not validate syntax!).
 # While the order mostly doesn't matter here, keep "check-ruff" first, since it
 # gives the broadest coverage and runs (and therefore fails) fastest.
 .PHONY: lint
-lint: check-ruff ansible-config-lint app-lint check-black check-desktop-files check-strings check-supported-locales html-lint shellcheck typelint yamllint ## Runs all lint checks
+lint: check-ruff ansible-config-lint app-lint check-black html-lint shellcheck typelint yamllint check-strings check-supported-locales check-desktop-files ## Runs all lint checks
 
 .PHONY: safety
 safety:  ## Run `safety check` to check python dependencies for vulnerabilities.
@@ -349,6 +349,7 @@ DESKTOP_POT=$(DESKTOP_LOCALE_DIR)/messages.pot
 
 .PHONY: check-strings
 check-strings: $(POT) $(DESKTOP_POT) ## Check that the translation catalogs are up to date with source code.
+	@echo "███ Checking translation catalogs..."
 	@$(MAKE) --no-print-directory extract-strings
 	@git diff --quiet $^ || { echo "Translation catalogs are out of date. Please run \"make extract-strings\" and commit the changes."; exit 1; }
 
@@ -382,8 +383,9 @@ $(POT): securedrop
 
 .PHONY: check-desktop-files
 check-desktop-files: ${DESKTOP_BASE}/*.j2
+	@echo "███ Checking desktop translation catalogs..."
 	@$(MAKE) --always-make --no-print-directory update-desktop-files
-	@git diff --quiet $^ || [[ "$$CIRCLE_PR_USERNAME" == "weblate-fpf" ]] || { echo "Desktop files are out of date. Please run \"make update-desktop-files\" and commit the changes."; exit 1; }
+	@git diff --quiet $^ || { echo "Desktop files are out of date. Please run \"make update-desktop-files\" and commit the changes. (If this is a translation pull request from Weblate, a maintainer can append the new commit to this branch so that CI passes before merge.)"; exit 1; }
 
 .PHONY: update-desktop-files
 update-desktop-files: ${DESKTOP_BASE}/*.j2
@@ -413,6 +415,7 @@ $(DESKTOP_POT): ${DESKTOP_BASE}/*.in
 	@msgfmt \
 		-d ${DESKTOP_LOCALE_DIR} \
 		--desktop \
+		--keyword=Name \
 		--template $< \
 		--output-file $@
 	@rm ${DESKTOP_LOCALE_DIR}/*.po
@@ -425,6 +428,7 @@ $(DESKTOP_I18N_CONF):
 
 .PHONY: check-supported-locales
 check-supported-locales: $(I18N_LIST) $(DESKTOP_I18N_CONF) ## Check that the desktop and documentation lists of supported locales are up to date.
+	@echo "███ Checking supported locales..."
 	@$(MAKE) --no-print-directory update-supported-locales
 	@git diff --quiet $^ || { echo "Desktop and/or documentation lists of supported locales are out of date. Please run \"make update-supported-locales\" and commit the changes."; exit 1; }
 
