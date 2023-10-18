@@ -49,6 +49,8 @@ override_dh_install:
 	rm upload-screenshots.py
 	# If a custom logo exists in the tree, delete it
 	rm -f static/i/custom_logo.png
+	# Same with any config.py
+	rm -f config.py
 	dh_install
 
 override_dh_strip_nondeterminism:
