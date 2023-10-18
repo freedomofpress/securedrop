@@ -192,7 +192,7 @@ def submit_message(source: Source, journalist_who_saw: Optional[Journalist]) -> 
         db.session.add(seen_message)
 
 
-def submit_file(source: Source, journalist_who_saw: Optional[Journalist]) -> None:
+def submit_file(source: Source, size: int, journalist_who_saw: Optional[Journalist]) -> None:
     """
     Adds a single file submitted by a source.
     """
@@ -202,7 +202,7 @@ def submit_file(source: Source, journalist_who_saw: Optional[Journalist]) -> Non
         source.interaction_count,
         source.journalist_filename,
         "memo.txt",
-        io.BytesIO(b"This is an example of a plain text file upload."),
+        io.BytesIO(b"A" * size),
     )
     submission = Submission(source, fpath, Storage.get_default())
     db.session.add(submission)
@@ -350,7 +350,9 @@ def add_sources(args: argparse.Namespace, journalists: Tuple[Journalist, ...]) -
             seen_message_count -= 1
 
         for _ in range(args.files_per_source):
-            submit_file(source, secrets.choice(journalists) if seen_file_count > 0 else None)
+            submit_file(
+                source, args.file_size, secrets.choice(journalists) if seen_file_count > 0 else None
+            )
             seen_file_count -= 1
 
         if i <= starred_sources_count:
@@ -435,6 +437,12 @@ def parse_arguments() -> argparse.Namespace:
         type=non_negative_int,
         default=2,
         help=("Number of submitted files to create for each source"),
+    )
+    parser.add_argument(
+        "--file-size",
+        type=non_negative_int,
+        default=25,
+        help="Size of the generated file to be submitted, in bytes.",
     )
     parser.add_argument(
         "--replies-per-source",
