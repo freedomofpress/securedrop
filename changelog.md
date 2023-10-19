@@ -1,5 +1,22 @@
 # Changelog
 
+## 2.7.0~rc2
+
+### Web applications
+
+* Update translation workflow to support continuous updates (#7010)
+
+### Operations
+
+* Use systemd timers to check for disconnected submissions and source listings (#7009)
+* Dependency changes:
+  * Update Ansible from 2.9.26 to 6.7.0 (ansible-core version 2.13.7) (#6830)
+
+### Development:
+
+* Dependency changes:
+  * Update markupsafe from 2.0.1 to 2.1.2 (#7014)
+
 ## 2.7.0~rc1
 
 ### Web applications
