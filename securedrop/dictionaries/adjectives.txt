@@ -693,7 +693,6 @@ bashful
 basic
 basilar
 bass
-bastardized
 bated
 bathetic
 battered
