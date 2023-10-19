@@ -1,8 +1,8 @@
 ---
-- include: configure_client.yml
+- include_tasks: configure_client.yml
   when: ossec_is_client
 
-- include: configure_server.yml
+- include_tasks: configure_server.yml
   when: ossec_is_server
 
-- include: register.yml
+- include_tasks: register.yml

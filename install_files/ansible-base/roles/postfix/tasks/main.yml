@@ -1,9 +1,9 @@
 ---
-- include: install_postfix.yml
+- include_tasks: install_postfix.yml
 
-- include: install_procmail.yml
+- include_tasks: install_procmail.yml
 
   # Configure SSL certificates for SMTP relay if manual
   # overrides are declared. See default vars
   # `smtp_relay_cert_override_file` and `smtp_relay_cert_override_dir`.
-- include: configure_custom_cert.yml
+- include_tasks: configure_custom_cert.yml

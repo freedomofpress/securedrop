@@ -148,11 +148,10 @@ lint: check-ruff ansible-config-lint app-lint check-black html-lint shellcheck t
 safety:  ## Run `safety check` to check python dependencies for vulnerabilities.
 	@command -v safety || (echo "Please run 'pip install -U safety'."; exit 1)
 	@echo "███ Running safety..."
-	@for req_file in `find . -type f -name '*requirements.txt'`; do \
+	@for req_file in `find . -type f -name '*requirements.txt' | grep -v .venv`; do \
 		echo "Checking file $$req_file" \
 		&& safety check \
 		--ignore 42050 \
-		--ignore 42926 \
 		--ignore 42923 \
 		--ignore 45185 \
 		--ignore 49337 \
@@ -163,13 +162,10 @@ safety:  ## Run `safety check` to check python dependencies for vulnerabilities.
                 --ignore 52518 \
                 --ignore 54709 \
                 --ignore 54564 \
-                --ignore 54219 \
                 --ignore 54230 \
                 --ignore 54229 \
-                --ignore 54421 \
                 --ignore 55261 \
                 --ignore 58912 \
-                --ignore 59473 \
                 --ignore 60350 \
 		--ignore 60789 \
 		--ignore 60841 \

@@ -1,2 +1,2 @@
 ---
-- include: reset-ssh-key.yml
+- include_tasks: reset-ssh-key.yml
