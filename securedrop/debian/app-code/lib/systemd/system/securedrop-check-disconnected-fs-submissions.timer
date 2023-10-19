@@ -1,0 +1,9 @@
+[Unit]
+Description=check for disconnected submissions on the filesystem
+
+[Timer]
+# We want to run this 1 hour before reboot, or 23h after the last reboot
+OnBootSec=23h
+
+[Install]
+WantedBy=timers.target

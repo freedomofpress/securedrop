@@ -1,0 +1,12 @@
+[Unit]
+Description=job to check for disconnected submissions in the database
+
+[Service]
+ExecStart=/bin/bash -c "/var/www/securedrop/manage.py check-disconnected-db-submissions > /var/lib/securedrop/disconnected_db_submissions.txt"
+PrivateDevices=yes
+PrivateTmp=yes
+ProtectSystem=full
+ReadOnlyDirectories=/
+ReadWriteDirectories=/var/lib/securedrop
+User=www-data
+WorkingDirectory=/var/www/securedrop
