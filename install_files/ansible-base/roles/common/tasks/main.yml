@@ -1,29 +1,29 @@
 ---
 - include_vars: "{{ ansible_distribution }}_{{ ansible_distribution_release }}.yml"
 
-- include: apt_sources.yml
+- include_tasks: apt_sources.yml
 
-- include: apt_upgrade.yml
+- include_tasks: apt_upgrade.yml
 
-- include: install_packages.yml
+- include_tasks: install_packages.yml
 
-- include: post_ubuntu_install_checks.yml
+- include_tasks: post_ubuntu_install_checks.yml
 
-- include: create_users.yml
+- include_tasks: create_users.yml
 
-- include: setup_etc_hosts.yml
+- include_tasks: setup_etc_hosts.yml
 
-- include: harden_dns.yml
+- include_tasks: harden_dns.yml
 
-- include: unattended_upgrades.yml
+- include_tasks: unattended_upgrades.yml
   tags:
     - ua
     - reboot
 
-- include: remove_unused_packages.yml
+- include_tasks: remove_unused_packages.yml
 
-- include: sysctl.yml
+- include_tasks: sysctl.yml
 
-- include: disable_swap.yml
+- include_tasks: disable_swap.yml
 
-- include: remove_kernel_modules.yml
+- include_tasks: remove_kernel_modules.yml

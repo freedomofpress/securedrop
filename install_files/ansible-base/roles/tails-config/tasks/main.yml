@@ -1,21 +1,21 @@
 ---
 # Reuse validation logic.
-- include: "{{ role_path }}/../validate/tasks/validate_tails_environment.yml"
+- include_tasks: "{{ role_path }}/../validate/tasks/validate_tails_environment.yml"
 
-- include: copy_dotfiles.yml
+- include_tasks: copy_dotfiles.yml
 
-- include: configure_torrc_additions.yml
+- include_tasks: configure_torrc_additions.yml
 
-- include: create_desktop_shortcuts.yml
+- include_tasks: create_desktop_shortcuts.yml
 
-- include: install_shell_extension.yml
+- include_tasks: install_shell_extension.yml
 
-- include: configure_network_hook.yml
+- include_tasks: configure_network_hook.yml
 
 - name: Check that we are on an admin workstation
   stat:
     path: group_vars/all/site-specific
   register: site_specific_result
 
-- include: create_ssh_aliases.yml
+- include_tasks: create_ssh_aliases.yml
   when: site_specific_result.stat.exists

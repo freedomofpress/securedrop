@@ -1,10 +1,10 @@
 ---
-- include: staging_wsgi_files.yml
+- include_tasks: staging_wsgi_files.yml
   when: "'staging' in group_names"
   tags:
     - apache
 
-- include: modern_gettext.yml
+- include_tasks: modern_gettext.yml
   tags:
     - modern_gettext
 

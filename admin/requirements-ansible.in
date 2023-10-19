@@ -1,4 +1,6 @@
-Jinja2>=2.11.3
-ansible>=2.9.23,<2.10.0
+ansible==6.7.0
 cryptography>=41.0.3
+jinja2==3.0.2
 netaddr
+markupsafe==2.1.2
+packaging==20.4

@@ -4,12 +4,17 @@
 #
 #    pip-compile --allow-unsafe --generate-hashes --output-file=requirements/python3/develop-requirements.txt ../admin/requirements-ansible.in ../admin/requirements.in requirements/python3/develop-requirements.in requirements/python3/translation-requirements.in
 #
+ansible-core==2.13.7 \
+    --hash=sha256:6005c24e45ff59497a7fe24411825fcba862585bc6bde83d6d48242c97042aba \
+    --hash=sha256:a9d5f942ff0dcbeec3d7183a898ea4f656d233d6055d4bc8e22e37b013b1881a
+    # via ansible
 ansible-lint==4.2.0 \
     --hash=sha256:b9fc9a6564f5d60a4284497f966f38ef78f0e2505edbe2bd1225f1ade31c2d8a \
     --hash=sha256:eb925d8682d70563ccb80e2aca7b3edf84fb0b768cea3edc6846aac7abdc414a
     # via -r requirements/python3/develop-requirements.in
-ansible==2.9.26 \
-    --hash=sha256:3ae02aad2bbedcfb419ce75ebd2a648e9deb73e9e2d8de86c82d6047b1bdeb63
+ansible==6.7.0 \
+    --hash=sha256:3cda6e67b1d42516f64ce376bb94c5186ff33d215d155432be5b3c2ec60bf112 \
+    --hash=sha256:c188f3ac8a8583794aadcff0bea87895ead58c19d6f244cd0c342562706e176c
     # via
     #   -r ../admin/requirements-ansible.in
     #   -r requirements/python3/develop-requirements.in
@@ -282,8 +287,7 @@ cryptography==41.0.3 \
     --hash=sha256:d0d651aa754ef58d75cec6edfbd21259d93810b73f6ec246436a21b7841908de
     # via
     #   -r ../admin/requirements-ansible.in
-    #   -r requirements/python3/develop-requirements.in
-    #   ansible
+    #   ansible-core
     #   paramiko
 defusedxml==0.7.1 \
     --hash=sha256:1bb3032db185915b62d7c6209c5a8792be6a32ab2fedacc84e01b52c51aa3e69 \
@@ -378,7 +382,7 @@ jinja2==3.0.2 \
     # via
     #   -r ../admin/requirements-ansible.in
     #   -r requirements/python3/develop-requirements.in
-    #   ansible
+    #   ansible-core
     #   click-completion
     #   cookiecutter
     #   jinja2-time
@@ -603,6 +607,7 @@ packaging==21.3 \
     --hash=sha256:dd47c42927d89ab911e606518907cc2d3a1f38bbd026385970643f9c5b8ecfeb \
     --hash=sha256:ef103e05f519cdc783ae24ea4e2e0f508a9c99b2d4969652eed6a2e1ea5bd522
     # via
+    #   ansible-core
     #   dparse
     #   pytest
     #   safety
@@ -815,7 +820,7 @@ pyyaml==5.4.1 \
     # via
     #   -r ../admin/requirements.in
     #   -r requirements/python3/develop-requirements.in
-    #   ansible
+    #   ansible-core
     #   ansible-lint
     #   aspy.yaml
     #   molecule
@@ -832,6 +837,10 @@ requests==2.31.0 \
     #   docker
     #   safety
     #   semgrep
+resolvelib==0.8.1 \
+    --hash=sha256:c6ea56732e9fb6fca1b2acc2ccc68a0b6b8c566d8f3e78e0443310ede61dbd37 \
+    --hash=sha256:d9b7907f055c3b3a2cfc56c914ffd940122915826ff5fb5b1de0c99778f4de98
+    # via ansible-core
 ruamel.yaml.clib==0.2.7 \
     --hash=sha256:045e0626baf1c52e5527bd5db361bc83180faaba2ff586e763d3d5982a876a9e \
     --hash=sha256:15910ef4f3e537eea7fe45f8a5d19997479940d9196f357152a09031c5be59f3 \
