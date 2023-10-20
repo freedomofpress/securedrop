@@ -4,6 +4,8 @@
 
 set -euxo pipefail
 
+git log -1 --oneline --no-color --show-signature
+
 OCI_RUN_ARGUMENTS="--user=root -v $(pwd):/src:Z"
 
 # Default to podman if available
