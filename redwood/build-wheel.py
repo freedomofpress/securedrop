@@ -28,12 +28,8 @@ args = parser.parse_args()
 
 os.chdir(args.redwood)
 
-if args.release:
-    flavor = "release"
-    cargo_flags = ["--release"]
-else:
-    flavor = "debug"
-    cargo_flags = []
+flavor = "release"
+cargo_flags = ["--release"]
 
 env = {"CARGO_TARGET_DIR": str(args.target), **os.environ}
 
