@@ -3206,7 +3206,6 @@ grizzled
 groomed
 grooved
 groovy
-groping
 grotesque
 grotty
 ground-floor
@@ -3661,7 +3660,6 @@ incapable
 incarnate
 incautious
 incendiary
-incestuous
 incident
 incidental
 incipient

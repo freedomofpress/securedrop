@@ -2993,7 +2993,6 @@ clamp
 clampdown
 clamshell
 clang
-clansman
 clapboard
 clapper
 claque
@@ -7695,7 +7694,6 @@ hollow
 hollowness
 holly
 hollyhock
-holocaust
 hologram
 holography
 holster
@@ -9461,7 +9459,6 @@ lymphadenopathy
 lymphedema
 lymphocyte
 lymphoma
-lynching
 lynx
 lyre
 lyric
@@ -11096,7 +11093,6 @@ organza
 orientalism
 orientalist
 orientation
-orifice
 origami
 origin
 original
