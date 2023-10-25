@@ -7,7 +7,7 @@ from typing import Union
 import store
 import werkzeug
 from db import db
-from encryption import EncryptionManager, GpgKeyNotFoundError
+from encryption import EncryptionManager, GpgDecryptError, GpgKeyNotFoundError
 from flask import (
     Blueprint,
     abort,
@@ -44,6 +44,7 @@ from source_user import (
 from store import Storage
 
 import redwood
+from redwood import RedwoodError
 
 
 def make_blueprint(config: SecureDropConfig) -> Blueprint:
@@ -171,6 +172,8 @@ def make_blueprint(config: SecureDropConfig) -> Blueprint:
                 current_app.logger.error("Could not decode reply %s" % reply.filename)
             except FileNotFoundError:
                 current_app.logger.error("Reply file missing: %s" % reply.filename)
+            except (GpgDecryptError, RedwoodError) as e:
+                current_app.logger.error(f"Could not decrypt reply {reply.filename}: {str(e)}")
             else:
                 reply.date = datetime.utcfromtimestamp(os.stat(reply_path).st_mtime)
                 replies.append(reply)
