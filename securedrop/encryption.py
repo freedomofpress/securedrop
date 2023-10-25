@@ -128,9 +128,19 @@ class EncryptionManager:
         self._save_key_fingerprint_to_redis(source_filesystem_id, source_key_fingerprint)
         return source_key_fingerprint
 
-    def get_source_secret_key(self, fingerprint: str, passphrase: str) -> str:
+    def get_source_secret_key_from_gpg(self, fingerprint: str, passphrase: str) -> str:
         secret_key = self.gpg().export_keys(fingerprint, secret=True, passphrase=passphrase)
         if not secret_key:
+            raise GpgKeyNotFoundError()
+        # Verify the secret key we got can be read and decrypted by redwood
+        try:
+            actual_fingerprint = redwood.is_valid_secret_key(secret_key, passphrase)
+        except redwood.RedwoodError:
+            # Either Sequoia can't extract the secret key or the passphrase
+            # is incorrect.
+            raise GpgKeyNotFoundError()
+        if fingerprint != actual_fingerprint:
+            # Somehow we exported the wrong key?
             raise GpgKeyNotFoundError()
         return secret_key
 

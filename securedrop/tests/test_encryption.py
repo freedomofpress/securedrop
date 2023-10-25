@@ -1,4 +1,5 @@
 from pathlib import Path
+from unittest.mock import MagicMock
 
 import pytest
 from db import db
@@ -253,3 +254,26 @@ class TestEncryptionManager:
         # And the journalist is able to decrypt their reply
         decrypted_reply_for_journalist = utils.decrypt_as_journalist(encrypted_reply).decode()
         assert decrypted_reply_for_journalist == journalist_reply
+
+    def test_get_source_secret_key_from_gpg(self, test_source, tmp_path, config):
+        source_user = test_source["source_user"]
+        source = test_source["source"]
+
+        encryption_mgr = EncryptionManager(
+            gpg_key_dir=tmp_path,
+            journalist_pub_key=(config.SECUREDROP_DATA_ROOT / "journalist.pub"),
+        )
+        new_fingerprint = utils.create_legacy_gpg_key(encryption_mgr, source_user, source)
+        secret_key = encryption_mgr.get_source_secret_key_from_gpg(
+            new_fingerprint, source_user.gpg_secret
+        )
+        assert secret_key.splitlines()[0] == "-----BEGIN PGP PRIVATE KEY BLOCK-----"
+        # Now try an invalid passphrase
+        with pytest.raises(GpgKeyNotFoundError):
+            encryption_mgr.get_source_secret_key_from_gpg(new_fingerprint, "not correct passphrase")
+        # Now if we get a garbage response from GPG
+        mock_gpg = MagicMock()
+        mock_gpg.export_keys.return_value = "definitely not a gpg secret key"
+        encryption_mgr._gpg = mock_gpg
+        with pytest.raises(GpgKeyNotFoundError):
+            encryption_mgr.get_source_secret_key_from_gpg(new_fingerprint, source_user.gpg_secret)
