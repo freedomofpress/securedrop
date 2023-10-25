@@ -64,6 +64,7 @@ const KEY_CREATION_SECONDS_FROM_EPOCH: u64 = 1368507600;
 fn redwood(py: Python, m: &PyModule) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(generate_source_key_pair, m)?)?;
     m.add_function(wrap_pyfunction!(is_valid_public_key, m)?)?;
+    m.add_function(wrap_pyfunction!(is_valid_secret_key, m)?)?;
     m.add_function(wrap_pyfunction!(encrypt_message, m)?)?;
     m.add_function(wrap_pyfunction!(encrypt_stream, m)?)?;
     m.add_function(wrap_pyfunction!(decrypt, m)?)?;
@@ -108,6 +109,15 @@ pub fn is_valid_public_key(input: &str) -> Result<String> {
     if cert.is_tsk() {
         return Err(Error::HasSecretKeyMaterial);
     }
+    Ok(cert.fingerprint().to_string())
+}
+
+#[pyfunction]
+pub fn is_valid_secret_key(input: &str, passphrase: String) -> Result<String> {
+    let passphrase: Password = passphrase.into();
+    let cert = Cert::from_str(input)?;
+    let secret_key = keys::secret_key_from_cert(POLICY, &cert)?;
+    secret_key.decrypt_secret(&passphrase)?;
     Ok(cert.fingerprint().to_string())
 }
 
@@ -259,6 +269,31 @@ mod tests {
         assert_eq!(
             is_valid_public_key(&secret_key).unwrap_err().to_string(),
             "Contains secret key material"
+        );
+    }
+
+    #[test]
+    fn test_is_valid_secret_key() {
+        let (public_key, secret_key, fingerprint) =
+            generate_source_key_pair(PASSPHRASE, "foo@example.org").unwrap();
+        assert_eq!(
+            is_valid_secret_key(&secret_key, PASSPHRASE.to_string()).unwrap(),
+            fingerprint
+        );
+        assert_eq!(
+            is_valid_secret_key(
+                &secret_key,
+                "not the correct passphrase".to_string()
+            )
+            .unwrap_err()
+            .to_string(),
+            "OpenPGP error: unexpected EOF"
+        );
+        assert_eq!(
+            is_valid_secret_key(&public_key, PASSPHRASE.to_string())
+                .unwrap_err()
+                .to_string(),
+            format!("No supported keys for certificate {fingerprint}")
         );
     }
 

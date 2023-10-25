@@ -380,7 +380,7 @@ def make_blueprint(config: SecureDropConfig) -> Blueprint:
             # Need to migrate the secret key out of GPG
             encryption_mgr = EncryptionManager.get_default()
             try:
-                secret_key = encryption_mgr.get_source_secret_key(
+                secret_key = encryption_mgr.get_source_secret_key_from_gpg(
                     source.fingerprint, source_user.gpg_secret
                 )
             except GpgKeyNotFoundError:

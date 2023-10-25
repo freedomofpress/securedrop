@@ -78,7 +78,7 @@ def decrypt_as_journalist(ciphertext: bytes) -> bytes:
 
 def create_legacy_gpg_key(
     manager: EncryptionManager, source_user: SourceUser, source: models.Source
-) -> None:
+) -> str:
     """Create a GPG key for the source, so we can test pre-Sequoia behavior"""
     # All reply keypairs will be "created" on the same day SecureDrop (then
     # Strongbox) was publicly released for the first time.
@@ -95,7 +95,7 @@ def create_legacy_gpg_key(
         # to set an expiration date.
         expire_date="0",
     )
-    manager.gpg().gen_key(gen_key_input)
+    result = manager.gpg().gen_key(gen_key_input)
 
     # Delete the Sequoia-generated keys
     source.pgp_public_key = None
@@ -103,3 +103,4 @@ def create_legacy_gpg_key(
     source.pgp_secret_key = None
     db.session.add(source)
     db.session.commit()
+    return result.fingerprint
