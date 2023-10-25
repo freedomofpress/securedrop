@@ -13,7 +13,7 @@ from unittest.mock import ANY, patch
 import pytest
 import version
 from db import db
-from encryption import EncryptionManager, GpgKeyNotFoundError
+from encryption import EncryptionManager, GpgDecryptError, GpgKeyNotFoundError
 from flask import escape, g, request, session, url_for
 from journalist_app.utils import delete_collection
 from models import InstanceConfig, Reply, Source
@@ -345,6 +345,34 @@ def test_login_with_missing_reply_files(source_app, app_storage):
         text = resp.data.decode("utf-8")
         assert "Submit Files" in text
         assert SessionManager.is_user_logged_in(db_session=db.session)
+
+
+def test_login_with_undecryptable_reply_files(source_app, app_storage):
+    """
+    Test that source can log in when replies are present but cannot be decrypted
+    """
+    source, codename = utils.db_helper.init_source(app_storage)
+    journalist, _ = utils.db_helper.init_journalist()
+    replies = utils.db_helper.reply(app_storage, journalist, source, 1)
+    assert len(replies) > 0
+    reply_file_path = Path(app_storage.path(source.filesystem_id, replies[0].filename))
+    assert reply_file_path.exists()
+
+    with mock.patch("encryption.EncryptionManager.decrypt_journalist_reply") as repMock:
+        repMock.side_effect = GpgDecryptError()
+        with source_app.test_client() as app:
+            resp = app.get(url_for("main.login"))
+            assert resp.status_code == 200
+            text = resp.data.decode("utf-8")
+            assert "Enter Codename" in text
+
+            resp = app.post(
+                url_for("main.login"), data=dict(codename=codename), follow_redirects=True
+            )
+            assert resp.status_code == 200
+            text = resp.data.decode("utf-8")
+            assert "Submit Files" in text
+            assert SessionManager.is_user_logged_in(db_session=db.session)
 
 
 def test_login_no_pgp_keypair(source_app, app_storage):
