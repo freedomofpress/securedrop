@@ -4,18 +4,7 @@
 # Automatically generated, 2017.
 #
 msgid ""
-msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2023-06-18 10:56+0000\n"
-"Last-Translator: Curtis Baltimore <curtisbaltimore@protonmail.com>\n"
-"Language-Team: German <https://weblate.securedrop.org/projects/securedrop/desktop/de/>\n"
-"Language: de_DE\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.14.1\n"
+msgstr "Project-Id-Version: PACKAGE VERSION\nReport-Msgid-Bugs-To: securedrop@freedom.press\nPO-Revision-Date: 2023-10-14 13:40+0000\nLast-Translator: JoK <jonah@etrainer.eu>\nLanguage-Team: German <https://weblate.securedrop.org/projects/securedrop/desktop/de/>\nLanguage: de_DE\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=2; plural=n != 1;\nX-Generator: Weblate 4.18.2\n"
 
 msgid "Check for SecureDrop Updates"
 msgstr "Auf SecureDrop-Aktualisierungen prüfen"
@@ -48,4 +37,4 @@ msgstr "Quellenschnittstelle für SecureDrop"
 
 #. Icon
 msgid "{{ tails_config_securedrop_dotfiles }}/securedrop_icon.png"
-msgstr ""
+msgstr "{{ tails_config_securedrop_dotfiles }}/securedrop_icon.png"
