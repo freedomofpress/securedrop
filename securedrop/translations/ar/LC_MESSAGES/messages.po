@@ -4,20 +4,7 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
 # Ahmad Gharbeia أحمد غربية <ahmad@gharbeia.org>, 2017.
 msgid ""
-msgstr ""
-"Project-Id-Version: SecureDrop 0.3.12\n"
-"Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2022-05-19 13:11+0000\n"
-"Last-Translator: Ahmed Essam <ahmedessamdev@gmail.com>\n"
-"Language-Team: Arabic <https://weblate.securedrop.org/projects/securedrop/securedrop/ar/>\n"
-"Language: ar\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
-"X-Generator: Weblate 4.11.2\n"
-"Generated-By: Babel 2.4.0\n"
+msgstr "Project-Id-Version: SecureDrop 0.3.12\nReport-Msgid-Bugs-To: securedrop@freedom.press\nPOT-Creation-Date: 2017-09-02 07:28+0000\nPO-Revision-Date: 2023-10-18 01:30+0000\nLast-Translator: Soufiane Hti <ifreelance.0@gmail.com>\nLanguage-Team: Arabic <https://weblate.securedrop.org/projects/securedrop/securedrop/ar/>\nLanguage: ar\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\nX-Generator: Weblate 4.18.2\nGenerated-By: Babel 2.4.0\n"
 
 msgid "Name too long"
 msgstr "الاسم طويلٌ جداً"
@@ -511,7 +498,7 @@ msgid "Read"
 msgstr "قراءة"
 
 msgid "Uploaded File"
-msgstr ""
+msgstr "تم تحميل الملف"
 
 msgid "Reply"
 msgstr "رُدّ"
@@ -557,7 +544,7 @@ msgid ""
 "<p>\n"
 "All files, messages, and replies will also be deleted when their account is deleted.\n"
 "</p>"
-msgstr ""
+msgstr "<p>\nسيؤدي حذف حساب <b>{source}<b/> إلى ما يلي:\n<p/>\n<ul>\n<li>منعهم من تسجيل الدخول باستخدام الاسم الرمزي الخاص بهم مرة أخرى\n<li>منع مؤسستك من إرسال الردود\n</ul>\n<p>\nسيتم أيضًا حذف جميع الملفات والرسائل والردود عند حذف حسابهم.\n<p/>"
 
 msgid "Yes, Delete Source Account"
 msgstr "نعم، احذف حساب المصدر"
@@ -599,7 +586,7 @@ msgid "Submission Preferences"
 msgstr "تفضيلات الإرسال"
 
 msgid "Prevent sources from uploading files. Sources will still be able to send messages."
-msgstr ""
+msgstr "منع المصادر من تحميل الملفات. ستظل المصادر قادرة على إرسال الرسائل."
 
 msgid "Prevent sources from sending initial messages shorter than the minimum required length:"
 msgstr "منع المصادر من إرسال رسائل أولية أقصر من الحد الأدنى للطول المطلوب:"
@@ -722,7 +709,7 @@ msgid "Designation"
 msgstr "تعيين رمز"
 
 msgid "Files"
-msgstr ""
+msgstr "الملفات"
 
 msgid "Messages"
 msgstr "الرسائل"
@@ -731,7 +718,7 @@ msgid "Date"
 msgstr "التاريخ"
 
 msgid "There are no submissions!"
-msgstr ""
+msgstr "لا يوجد تقديمات!"
 
 msgid "Filter by codename"
 msgstr "الترشيح بالاسم الرمزي"
@@ -758,7 +745,7 @@ msgid "Choose language"
 msgstr "اختيار اللغة"
 
 msgid "Log in to access the journalist interface"
-msgstr ""
+msgstr "قم بتسجيل الدخول للوصول إلى واجهة الصحفي"
 
 msgid "Password"
 msgstr "كلمة السر"
@@ -774,12 +761,12 @@ msgstr "لِج"
 
 msgid "Field must be between 1 and {max_codename_len} character long."
 msgid_plural "Field must be between 1 and {max_codename_len} characters long."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
-msgstr[5] ""
+msgstr[0] "يجب أن يتراوح طول الحقل بين 0 حرف و{max_codename_len} حرف."
+msgstr[1] "يجب أن يتراوح طول الحقل بين حرف واحد و{max_codename_len} حرف."
+msgstr[2] "يجب أن يتراوح طول الحقل بين حرفين و{max_codename_len} أحرف."
+msgstr[3] "يجب أن يتراوح طول الحقل بين بضعة أحرف و{max_codename_len} أحرف."
+msgstr[4] "يجب أن يتراوح طول الحقل بين عدة أحرف و{max_codename_len} أحرف."
+msgstr[5] "يجب أن يتراوح طول الحقل بين عدد أحرف و{max_codename_len} أحرف."
 
 msgid "Invalid input."
 msgstr "دَخل غير صالح."
@@ -830,10 +817,10 @@ msgid "Thanks! We received your message."
 msgstr "شكرا! لقد تلقينا الرسالة."
 
 msgid "Thanks! We received your file."
-msgstr ""
+msgstr "شكرًا! لقد استلمنا ملفك."
 
 msgid "Thanks! We received your file and message."
-msgstr ""
+msgstr "شكرًا! لقد تلقينا ملفك ورسالتك."
 
 msgid "Reply deleted"
 msgstr "حُذِفَ الرد"
@@ -878,7 +865,7 @@ msgid "Powered by"
 msgstr "تشغّله"
 
 msgid "Please note: Sharing sensitive information may put you at risk, even when using Tor and SecureDrop."
-msgstr ""
+msgstr "رجاءا ملاحظة: مشاركة المعلومات الحساسة قد تعرضك للخطر، حتى عند استخدام Tor وSecureDrop."
 
 msgid "SecureDrop is a project of Freedom of the Press Foundation."
 msgstr "إن سيكيور دروب SecureDrop لمشروع من مؤسسة حرية الصحافة Freedom of the Press Foundation."
@@ -950,7 +937,7 @@ msgid "Already have a codename? Check for replies or submit something new."
 msgstr "هل لديك اسم رمزي؟ تحقق إن أتتك ردود أو قم بإيداع جديد."
 
 msgid "Log in"
-msgstr ""
+msgstr "تسجيل الدخول"
 
 msgid "Enter Codename"
 msgstr "أدخل الاسم الرمزي"
@@ -962,7 +949,7 @@ msgid "CANCEL"
 msgstr "ألغ"
 
 msgid "Additional Action Required"
-msgstr ""
+msgstr "مطلوب إجراء إضافي"
 
 msgid "One more thing..."
 msgstr "هناك أمرٌ آخر نود أن نلفت نظرك إليه..."
@@ -1034,7 +1021,7 @@ msgid "Sorry, we couldn't locate what you requested."
 msgstr "عذرًا لم نتمكن من إيجاد المطلوب."
 
 msgid "WARNING: Proxy Service Detected"
-msgstr ""
+msgstr "تحذير: تم اكتشاف خدمة البروكسي"
 
 msgid "Proxy Service Detected"
 msgstr "تم اكتشاف خدمة بروكسي"
