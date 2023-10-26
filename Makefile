@@ -4,7 +4,6 @@ GCLOUD_VERSION := 222.0.0-1
 SDROOT := $(shell git rev-parse --show-toplevel)
 TAG ?= $(shell git rev-parse HEAD)
 STABLE_VER := $(shell cat molecule/shared/stable.ver)
-VERSION=$(shell python -c "import securedrop.version; print(securedrop.version.__version__)")
 
 SDBIN := $(SDROOT)/securedrop/bin
 DEVSHELL := $(SDBIN)/dev-shell
@@ -364,7 +363,6 @@ $(POT): securedrop
 		--charset=utf-8 \
 		--output=${POT} \
 		--project="SecureDrop" \
-		--version=${VERSION} \
 		--msgid-bugs-address=securedrop@freedom.press \
 		--copyright-holder="Freedom of the Press Foundation" \
 		--add-comments="Translators:" \
@@ -393,7 +391,6 @@ $(DESKTOP_POT): ${DESKTOP_BASE}/*.in
 		-F securedrop/babel.cfg \
 		--output=${DESKTOP_POT} \
 		--project=SecureDrop \
-		--version=${VERSION} \
 		--msgid-bugs-address=securedrop@freedom.press \
 		--copyright-holder="Freedom of the Press Foundation" \
 		--add-location=never \
