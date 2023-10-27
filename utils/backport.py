@@ -12,8 +12,9 @@ import subprocess
 import sys
 
 parser = argparse.ArgumentParser(description="Backport a PR")
-parser.add_argument("pr", type=int)
-parser.add_argument("version")
+parser.add_argument("pr", type=int, help="the # of the PR to backport")
+parser.add_argument("version", help="the release version to target with the backport")
+parser.add_argument("remote", default="origin", help="the git remote to use (defaults to origin)")
 args = parser.parse_args()
 
 title = json.loads(
@@ -27,12 +28,13 @@ commits = json.loads(
 print(f'Backporting {len(commits)} commits from "{title}"')
 branch = f"backport-{args.pr}"
 base = f"release/{args.version}"
-subprocess.check_call(["git", "fetch", "origin"])
-subprocess.check_call(["git", "checkout", "-b", branch, f"origin/{base}"])
+remote = args.remote
+subprocess.check_call(["git", "fetch", remote])
+subprocess.check_call(["git", "checkout", "-b", branch, f"{remote}/{base}"])
 subprocess.check_call(["git", "cherry-pick", "-x"] + [commit["sha"] for commit in commits])
 if input("OK to push and create PR? [y/N]").lower() != "y":
     sys.exit()
-subprocess.check_call(["git", "push", "-u", "origin", branch])
+subprocess.check_call(["git", "push", "-u", remote, branch])
 body = f"""\
 ## Status
 
