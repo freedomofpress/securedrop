@@ -4,20 +4,7 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
 #
 msgid ""
-msgstr ""
-"Project-Id-Version: SecureDrop 0.3.12\n"
-"Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2023-06-19 16:56+0000\n"
-"Last-Translator: Meng Pang Wang <mengpangwang@gmail.com>\n"
-"Language-Team: Chinese (Traditional) <https://weblate.securedrop.org/projects/securedrop/securedrop/zh_Hant/>\n"
-"Language: zh_Hant\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.14.1\n"
-"Generated-By: Babel 2.4.0\n"
+msgstr "Project-Id-Version: SecureDrop 0.3.12\nReport-Msgid-Bugs-To: securedrop@freedom.press\nPOT-Creation-Date: 2017-09-02 07:28+0000\nPO-Revision-Date: 2023-10-26 02:30+0000\nLast-Translator: Chi-Hsun Tsai <chihsun.tsai@gmail.com>\nLanguage-Team: Chinese (Traditional) <https://weblate.securedrop.org/projects/securedrop/securedrop/zh_Hant/>\nLanguage: zh_Hant\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=1; plural=0;\nX-Generator: Weblate 4.18.2\nGenerated-By: Babel 2.4.0\n"
 
 msgid "Name too long"
 msgstr "名稱過長"
@@ -245,10 +232,10 @@ msgid "You will not be able to send them replies."
 msgstr "您將無法向其傳送回覆。"
 
 msgid "All files and messages from that source will also be destroyed."
-msgstr "此位線人的檔案與訊息已被銷毀。"
+msgstr "即將刪除此線人全部的檔案與訊息。"
 
 msgid "Are you sure this is what you want?"
-msgstr "確定要這麼做？"
+msgstr "確認真要這麼做？"
 
 msgid "Yes, Delete Selected Source Accounts"
 msgstr "是的，刪除選取的安全帳號"
@@ -323,7 +310,7 @@ msgid "ADD USER"
 msgstr "增加用户"
 
 msgid "Username"
-msgstr "使用者名稱"
+msgstr "用戶名"
 
 msgid "Edit"
 msgstr "編輯"
@@ -491,7 +478,7 @@ msgid "An encryption key will be generated for the source the next time they log
 msgstr "系統會在線人下次登入時產生新的加密密鑰，之後您可以在這裡回覆線人。"
 
 msgid "Delete Source Account"
-msgstr "刪除線人帳號"
+msgstr "刪除線人帳戶"
 
 msgid "Are you sure?"
 msgstr "確定嗎？"
@@ -734,7 +721,7 @@ msgstr "登錄"
 
 msgid "Field must be between 1 and {max_codename_len} character long."
 msgid_plural "Field must be between 1 and {max_codename_len} characters long."
-msgstr[0] ""
+msgstr[0] "欄位必須有 1 ~ {max_codename_len}個字符長度。"
 
 msgid "Invalid input."
 msgstr "無效輸入。"

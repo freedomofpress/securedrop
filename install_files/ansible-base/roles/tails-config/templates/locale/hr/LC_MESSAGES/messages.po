@@ -1,0 +1,40 @@
+# Translations template for SecureDrop.
+# Copyright (C) 2023 Freedom of the Press Foundation
+# This file is distributed under the same license as the SecureDrop project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2023.
+#
+msgid ""
+msgstr "Project-Id-Version: SecureDrop 2.7.0~rc1\nReport-Msgid-Bugs-To: securedrop@freedom.press\nPO-Revision-Date: 2023-10-20 12:30+0000\nLast-Translator: Milo Ivir <mail@milotype.de>\nLanguage-Team: Croatian <https://weblate.securedrop.org/projects/securedrop/desktop/hr/>\nLanguage: hr\nMIME-Version: 1.0\nContent-Type: text/plain; charset=utf-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\nX-Generator: Weblate 4.18.2\nGenerated-By: Babel 2.12.1\n"
+
+msgid "Check for SecureDrop Updates"
+msgstr "Provjeri ako ima SecureDrop ažuriranja"
+
+msgid "Launch Journalist Interface"
+msgstr "Pokreni sučelje za novinare"
+
+msgid "Launch Source Interface"
+msgstr "Pokreni sučelje za izvore"
+
+msgid "Open File Browser"
+msgstr "Otvori preglednik datoteka"
+
+msgid "Open KeePassXC Password Vault"
+msgstr "Otvori KeePassXC trezor lozinki"
+
+msgid "SSH into the App Server"
+msgstr "SSH veza s poslužiteljem za aplikacije"
+
+msgid "SSH into the Monitor Server"
+msgstr "SSH veza s poslužiteljem za nadzor"
+
+#. Name
+msgid "SecureDrop Journalist Interface"
+msgstr "SecureDrop sučelje za novinare"
+
+#. Name
+msgid "SecureDrop Source Interface"
+msgstr "SecureDrop sučelje za izvore"
+
+#. Icon
+msgid "{{ tails_config_securedrop_dotfiles }}/securedrop_icon.png"
+msgstr "{{ tails_config_securedrop_dotfiles }}/securedrop_icon.png"
