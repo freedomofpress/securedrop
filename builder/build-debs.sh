@@ -4,7 +4,7 @@
 
 set -euxo pipefail
 
-git log -1 --oneline --no-color --show-signature
+git --no-pager log -1 --oneline --show-signature --no-color
 
 OCI_RUN_ARGUMENTS="--user=root -v $(pwd):/src:Z"
 
