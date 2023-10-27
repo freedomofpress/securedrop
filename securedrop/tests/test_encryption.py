@@ -114,9 +114,9 @@ class TestEncryptionManager:
             message_in=message, encrypted_message_path_out=encrypted_message_path
         )
 
-        # And the output file contains the encrypted data
+        # And the output file doesn't contain the message plaintext
         encrypted_message = encrypted_message_path.read_bytes()
-        assert encrypted_message.startswith(b"-----BEGIN PGP MESSAGE-----")
+        assert message.encode() not in encrypted_message
 
         # And the journalist is able to decrypt the message
         decrypted_message = utils.decrypt_as_journalist(encrypted_message).decode()
@@ -138,9 +138,9 @@ class TestEncryptionManager:
                 encrypted_file_path_out=encrypted_file_path,
             )
 
-        # And the output file contains the encrypted data
+        # And the output file doesn't contain the file plaintext
         encrypted_file = encrypted_file_path.read_bytes()
-        assert encrypted_file.startswith(b"-----BEGIN PGP MESSAGE-----")
+        assert file_to_encrypt_path.read_bytes() not in encrypted_file
 
         # And the journalist is able to decrypt the file
         decrypted_file = utils.decrypt_as_journalist(encrypted_file)
@@ -173,9 +173,9 @@ class TestEncryptionManager:
             encrypted_reply_path_out=encrypted_reply_path,
         )
 
-        # And the output file contains the encrypted data
+        # And the output file doesn't contain the reply plaintext
         encrypted_reply = encrypted_reply_path.read_bytes()
-        assert encrypted_reply.startswith(b"-----BEGIN PGP MESSAGE-----")
+        assert journalist_reply.encode() not in encrypted_reply
 
         # And source1 is able to decrypt the reply
         decrypted_reply = encryption_mgr.decrypt_journalist_reply(
@@ -224,9 +224,9 @@ class TestEncryptionManager:
                 encrypted_reply_path_out=encrypted_reply_path,
             )
 
-            # And the output file contains the encrypted data
+            # And the output file doesn't contain the reply plaintext
             encrypted_reply = encrypted_reply_path.read_bytes()
-            assert encrypted_reply.startswith(b"-----BEGIN PGP MESSAGE-----")
+            assert journalist_reply.encode() not in encrypted_reply
 
             # And source1 is able to decrypt the reply
             decrypted_reply = encryption_mgr.decrypt_journalist_reply(

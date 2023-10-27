@@ -119,9 +119,10 @@ pub fn encrypt_message(
     recipients: Vec<String>,
     plaintext: String,
     destination: PathBuf,
+    armor: Option<bool>,
 ) -> Result<()> {
     let plaintext = plaintext.as_bytes();
-    encrypt(&recipients, plaintext, &destination)
+    encrypt(&recipients, plaintext, &destination, armor)
 }
 
 /// Encrypt a Python stream (`typing.BinaryIO`) for the specified recipients.
@@ -134,7 +135,7 @@ pub fn encrypt_stream(
     destination: PathBuf,
 ) -> Result<()> {
     let stream = stream::Stream { reader: plaintext };
-    encrypt(&recipients, stream, &destination)
+    encrypt(&recipients, stream, &destination, None)
 }
 
 /// Helper function to encrypt readable things.
@@ -144,6 +145,7 @@ fn encrypt(
     recipients: &[String],
     mut plaintext: impl Read,
     destination: &Path,
+    armor: Option<bool>,
 ) -> Result<()> {
     let mut certs = vec![];
     let mut recipient_keys = vec![];
@@ -165,7 +167,11 @@ fn encrypt(
         .open(destination)?;
     let mut writer = BufWriter::new(sink);
     let message = Message::new(&mut writer);
-    let message = Armorer::new(message).build()?;
+    let message = if armor.unwrap_or(false) {
+        Armorer::new(message).build()?
+    } else {
+        message
+    };
     let message = Encryptor::for_recipients(message, recipient_keys).build()?;
     let mut message = LiteralWriter::new(message).build()?;
 
@@ -278,6 +284,7 @@ mod tests {
             vec![good_key, BAD_KEY.to_string()],
             SECRET_MESSAGE.to_string(),
             tmp_dir.path().join("message.asc"),
+            None,
         )
         .unwrap_err();
         assert_eq!(err.to_string(), expected_err_msg);
@@ -325,42 +332,31 @@ mod tests {
             vec![public_key1, public_key2],
             SECRET_MESSAGE.to_string(),
             tmp.clone(),
+            None,
         )
         .unwrap();
-        let ciphertext = std::fs::read_to_string(tmp).unwrap();
-        // Verify ciphertext looks like an encrypted message
-        assert!(ciphertext.starts_with("-----BEGIN PGP MESSAGE-----\n"));
+        let ciphertext = std::fs::read(tmp).unwrap();
         // Decrypt as key 1
-        let plaintext = decrypt(
-            ciphertext.clone().into_bytes(),
-            secret_key1,
-            PASSPHRASE.to_string(),
-        )
-        .unwrap();
+        let plaintext =
+            decrypt(ciphertext.clone(), secret_key1, PASSPHRASE.to_string())
+                .unwrap();
         // Verify message is what we put in originally
         assert_eq!(
             SECRET_MESSAGE,
             String::from_utf8(plaintext.to_vec()).unwrap()
         );
         // Decrypt as key 2
-        let plaintext = decrypt(
-            ciphertext.clone().into_bytes(),
-            secret_key2,
-            PASSPHRASE.to_string(),
-        )
-        .unwrap();
+        let plaintext =
+            decrypt(ciphertext.clone(), secret_key2, PASSPHRASE.to_string())
+                .unwrap();
         // Verify message is what we put in originally
         assert_eq!(
             SECRET_MESSAGE,
             String::from_utf8(plaintext.to_vec()).unwrap()
         );
         // Try to decrypt as key 3, expect an error
-        let err = decrypt(
-            ciphertext.into_bytes(),
-            secret_key3,
-            PASSPHRASE.to_string(),
-        )
-        .unwrap_err();
+        let err = decrypt(ciphertext, secret_key3, PASSPHRASE.to_string())
+            .unwrap_err();
         assert_eq!(
             err.to_string(),
             "OpenPGP error: no matching pkesk, wrong secret key provided?"
@@ -391,6 +387,7 @@ mod tests {
                 key, // missing or malformed recipient key
                 "Look ma, no key".to_string(),
                 tmp_dir.path().join("message.asc"),
+                None,
             )
             .unwrap_err();
             assert_eq!(err.to_string(), error);
