@@ -2,22 +2,8 @@ use crate::{Error, Result};
 use sequoia_openpgp::cert::prelude::ValidErasedKeyAmalgamation;
 use sequoia_openpgp::packet::key::{PublicParts, SecretParts, UnspecifiedRole};
 use sequoia_openpgp::packet::Key;
-use sequoia_openpgp::policy::Policy;
+use sequoia_openpgp::policy::{NullPolicy, Policy};
 use sequoia_openpgp::Cert;
-
-/// We want to use the same iterators on public and secret keys but it's not
-/// really possible to do it in a function because of type differences so we
-/// use a macro instead.
-macro_rules! filter_keys {
-    ( $keys:expr, $policy: ident ) => {
-        $keys
-            .with_policy($policy, None)
-            .supported()
-            .alive()
-            .revoked(false)
-            .for_storage_encryption()
-    };
-}
 
 /// Get public encryption keys from the specified cert, returning an error if
 /// no valid keys are found.
@@ -27,7 +13,14 @@ pub(crate) fn keys_from_cert<'a>(
 ) -> Result<Vec<ValidErasedKeyAmalgamation<'a, PublicParts>>> {
     // Pull the encryption keys that are compatible with by the standard policy
     // (e.g. not SHA-1) supported by Sequoia, and not revoked.
-    let keys: Vec<_> = filter_keys!(cert.keys(), policy).collect();
+    let keys: Vec<_> = cert
+        .keys()
+        .with_policy(policy, None)
+        .supported()
+        .alive()
+        .revoked(false)
+        .for_storage_encryption()
+        .collect();
 
     // Each certificate must have at least one supported encryption key
     if keys.is_empty() {
@@ -37,18 +30,35 @@ pub(crate) fn keys_from_cert<'a>(
     }
 }
 
-/// Get the secret encryption key, which is the first and only subkey, from the cert.
-pub(crate) fn secret_key_from_cert<'a>(
-    policy: &'a dyn Policy,
-    cert: &'a Cert,
+/// Get the secret encryption key from the cert.
+pub(crate) fn secret_key_from_cert(
+    cert: &Cert,
 ) -> Result<Key<SecretParts, UnspecifiedRole>> {
-    // Pull the encryption keys that are compatible with by the standard policy
-    // (e.g. not SHA-1) supported by Sequoia, and not revoked.
-    // These filter options should be kept in sync with `Helper::decrypt()`.
-    let keys: Vec<_> = filter_keys!(cert.keys().secret(), policy).collect();
+    // Get the secret encryption key for decryption. We don't care about
+    // whether it is revoked or expired, or even if its not a weak key
+    // since we're just decrypting.
+    // We first try to find the key using the StandardPolicy and then
+    // fall back to a NullPolicy to prevent downgrade attacks.
+    let key = cert
+        .keys()
+        .secret()
+        .with_policy(crate::STANDARD_POLICY, None)
+        .for_storage_encryption()
+        .next();
+    if let Some(key) = key {
+        return Ok(key.key().clone());
+    }
 
-    // Just return the first encryption key
-    match keys.get(0) {
+    // No key found, try again with a null policy
+    let null = NullPolicy::new();
+    let key = cert
+        .keys()
+        .secret()
+        .with_policy(&null, None)
+        .for_storage_encryption()
+        .next();
+
+    match key {
         Some(key) => Ok(key.key().clone()),
         None => Err(Error::NoSupportedKeys(cert.fingerprint().to_string())),
     }
