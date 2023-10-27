@@ -2455,6 +2455,7 @@ enterprising
 entertaining
 enthusiastic
 entire
+entitled
 entomological
 entrenched
 entrepreneurial
@@ -2541,6 +2542,7 @@ ever-present
 evergreen
 every
 everyday
+evident
 evidential
 evidentiary
 evil
@@ -2689,6 +2691,7 @@ faltering
 familial
 familiar
 famished
+famous
 fan-shaped
 fanatic
 fanciful
@@ -3206,7 +3209,6 @@ grizzled
 groomed
 grooved
 groovy
-groping
 grotesque
 grotty
 ground-floor
@@ -3661,7 +3663,6 @@ incapable
 incarnate
 incautious
 incendiary
-incestuous
 incident
 incidental
 incipient
@@ -5011,6 +5012,7 @@ one-to-one
 one-way
 oneiric
 ongoing
+online
 onomatopoeic
 onshore
 onstage
@@ -5888,6 +5890,7 @@ reluctant
 remarkable
 remediable
 remedial
+remote
 removable
 removed
 rending
