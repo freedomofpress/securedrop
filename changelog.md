@@ -1,5 +1,17 @@
 # Changelog
 
+## 2.7.0~rc3
+
+### Web applications
+
+* Use Sequoia and redwood instead of gnupg and pretty_bad_protocol for GPG operations (#7023, #7035, #7029, #7026, #7000)
+* Update translation workflow to support continuous updates (#7034)
+* Update wordlist to remove potentially confusing or offensive terms (#7008, #7021)
+
+### Development
+
+* Update build script to record commit details (#7019, #7038)
+
 ## 2.7.0~rc2
 
 ### Web applications
