@@ -19,9 +19,17 @@ url = "https://raw.githubusercontent.com/mozilla/supply-chain/main/audits.toml"
 [imports.zcash]
 url = "https://raw.githubusercontent.com/zcash/rust-ecosystem/main/supply-chain/audits.toml"
 
+[policy.android-tzdata]
+criteria = []
+notes = "Android-only"
+
 [policy.hermit-abi]
 criteria = []
 notes = "Hermit OS-only"
+
+[policy.iana-time-zone-haiku]
+criteria = []
+notes = "Haiku OS-only"
 
 [policy.js-sys]
 criteria = []
@@ -68,6 +76,10 @@ criteria = []
 notes = "Windows-only"
 
 [policy.winapi-x86_64-pc-windows-gnu]
+criteria = []
+notes = "Windows-only"
+
+[policy.windows-core]
 criteria = []
 notes = "Windows-only"
 
@@ -127,20 +139,12 @@ criteria = "safe-to-deploy"
 version = "0.14.2"
 criteria = "safe-to-deploy"
 
-[[exemptions.fastrand]]
-version = "2.0.1"
-criteria = "safe-to-run"
-
 [[exemptions.flate2]]
 version = "1.0.27"
 criteria = "safe-to-deploy"
 
 [[exemptions.generic-array]]
 version = "0.14.7"
-criteria = "safe-to-deploy"
-
-[[exemptions.getrandom]]
-version = "0.1.16"
 criteria = "safe-to-deploy"
 
 [[exemptions.getrandom]]
@@ -153,10 +157,6 @@ criteria = "safe-to-deploy"
 
 [[exemptions.lalrpop]]
 version = "0.19.12"
-criteria = "safe-to-deploy"
-
-[[exemptions.libc]]
-version = "0.2.149"
 criteria = "safe-to-deploy"
 
 [[exemptions.memoffset]]
@@ -207,18 +207,6 @@ criteria = "safe-to-deploy"
 version = "0.7.3"
 criteria = "safe-to-deploy"
 
-[[exemptions.rand_chacha]]
-version = "0.2.2"
-criteria = "safe-to-deploy"
-
-[[exemptions.rand_core]]
-version = "0.5.1"
-criteria = "safe-to-deploy"
-
-[[exemptions.rand_hc]]
-version = "0.2.0"
-criteria = "safe-to-deploy"
-
 [[exemptions.smallvec]]
 version = "1.11.1"
 criteria = "safe-to-deploy"
@@ -226,10 +214,6 @@ criteria = "safe-to-deploy"
 [[exemptions.string_cache]]
 version = "0.8.7"
 criteria = "safe-to-deploy"
-
-[[exemptions.tempfile]]
-version = "3.8.0"
-criteria = "safe-to-run"
 
 [[exemptions.term]]
 version = "0.7.0"
