@@ -777,10 +777,16 @@ def test_authorized_user_can_add_reply(
 
         # First we must encrypt the reply, or it will get rejected
         # by the server.
-        encryption_mgr = EncryptionManager.get_default()
         reply_path = tmp_path / "message.gpg"
-        encryption_mgr.encrypt_journalist_reply(
-            test_source["source"], "This is a plaintext reply", reply_path
+        # Use redwood directly, so we can generate an armored message.
+        redwood.encrypt_message(
+            recipients=[
+                test_source["source"].public_key,
+                EncryptionManager.get_default().get_journalist_public_key(),
+            ],
+            plaintext="This is an encrypted reply",
+            destination=reply_path,
+            armor=True,
         )
         reply_content = reply_path.read_text()
 
