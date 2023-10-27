@@ -186,8 +186,7 @@ export_journalist_public_key() {
             # Export the GPG public key
             # shellcheck disable=SC2024
             sudo -u www-data gpg2 --homedir=/var/lib/securedrop/keys --export --armor "$fingerprint" > $journalist_pub
-            # Verify integrity of what we just exported
-            sudo -u www-data /var/www/securedrop/scripts/validate-pgp-key "$journalist_pub" "$fingerprint"
+            # We explicitly do not validate the exported key here, that is done during JI startup
         fi
     fi
 
