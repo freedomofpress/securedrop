@@ -4,20 +4,7 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
 #
 msgid ""
-msgstr ""
-"Project-Id-Version: SecureDrop 0.3.12\n"
-"Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2022-09-29 19:27+0000\n"
-"Last-Translator: kwadronaut <kwadronaut@autistici.org>\n"
-"Language-Team: Dutch <https://weblate.securedrop.org/projects/securedrop/securedrop/nl/>\n"
-"Language: nl\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.14.1\n"
-"Generated-By: Babel 2.4.0\n"
+msgstr "Project-Id-Version: SecureDrop 0.3.12\nReport-Msgid-Bugs-To: securedrop@freedom.press\nPOT-Creation-Date: 2017-09-02 07:28+0000\nPO-Revision-Date: 2023-10-26 11:30+0000\nLast-Translator: kwadronaut <kwadronaut@autistici.org>\nLanguage-Team: Dutch <https://weblate.securedrop.org/projects/securedrop/securedrop/nl/>\nLanguage: nl\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=2; plural=n != 1;\nX-Generator: Weblate 4.18.2\nGenerated-By: Babel 2.4.0\n"
 
 msgid "Name too long"
 msgstr "Naam is te lang"
@@ -728,7 +715,7 @@ msgid "Choose language"
 msgstr "Taal kiezen"
 
 msgid "Log in to access the journalist interface"
-msgstr ""
+msgstr "Inloggen op de interface voor journalisten"
 
 msgid "Password"
 msgstr "Wachtwoord"
@@ -744,8 +731,8 @@ msgstr "INLOGGEN"
 
 msgid "Field must be between 1 and {max_codename_len} character long."
 msgid_plural "Field must be between 1 and {max_codename_len} characters long."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Het veld moet tussen de 1 en {max_codename_len} tekens lang zijn."
+msgstr[1] "Het veld moet tussen de 1 en {max_codename_len} tekens zijn."
 
 msgid "Invalid input."
 msgstr "Ongeldige invoer."
@@ -916,7 +903,7 @@ msgid "Already have a codename? Check for replies or submit something new."
 msgstr "Hebt u al een codenaam? Controleer of er antwoorden zijn of stuur iets nieuws in."
 
 msgid "Log in"
-msgstr ""
+msgstr "Inloggen"
 
 msgid "Enter Codename"
 msgstr "Codenaam invoeren"
@@ -928,7 +915,7 @@ msgid "CANCEL"
 msgstr "ANNULEREN"
 
 msgid "Additional Action Required"
-msgstr ""
+msgstr "Extra handeling vereist"
 
 msgid "One more thing..."
 msgstr "Nog één ding…"
