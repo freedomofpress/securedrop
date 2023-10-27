@@ -8,7 +8,7 @@ use sequoia_openpgp::crypto::Password;
 use sequoia_openpgp::parse::{stream::DecryptorBuilder, Parse};
 use sequoia_openpgp::policy::StandardPolicy;
 use sequoia_openpgp::serialize::{
-    stream::{Armorer, Encryptor, LiteralWriter, Message},
+    stream::{Armorer, Encryptor2 as Encryptor, LiteralWriter, Message},
     SerializeInto,
 };
 use sequoia_openpgp::Cert;
