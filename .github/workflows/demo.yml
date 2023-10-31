@@ -1,0 +1,36 @@
+name: Demo
+
+on: [push, pull_request]
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  build:
+    name: Build demo
+    runs-on: ubuntu-22.04
+    env:
+      DOCKERIZE_VERSION: v0.6.1
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build container
+        run: |
+          podman build -t demo -f securedrop/dockerfiles/focal/python3/DemoDockerfile .
+      - name: Install dockerize
+        run: |
+          wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
+          tar -C /usr/local/bin -xzvf dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
+          rm dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
+      - name: Run container and verify it's up
+        run: |
+          function debug() {
+            # Dump container logs on failure
+            podman logs demo
+            exit 1
+          }
+          # Start the container in the background
+          podman run --name=demo -d -t -p 8080:8080 -p 8081:8081 demo
+          # And wait for both ports to be up!
+          dockerize -wait http://127.0.0.1:8080 -timeout 2m || debug
+          dockerize -wait http://127.0.0.1:8081 -timeout 2m || debug
