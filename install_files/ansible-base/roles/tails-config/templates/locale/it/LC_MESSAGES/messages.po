@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2018-01-13 08:54+0000\n"
+"PO-Revision-Date: 2023-10-31 17:30+0000\n"
 "Last-Translator: Claudio Arseni <claudio.arseni@ubuntu.com>\n"
 "Language-Team: Italian <https://weblate.securedrop.org/projects/securedrop/desktop/it/>\n"
 "Language: it\n"
@@ -15,37 +15,37 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2.18\n"
+"X-Generator: Weblate 4.18.2\n"
 
 msgid "Check for SecureDrop Updates"
-msgstr ""
+msgstr "Verifica gli aggiornamenti per SecureDrop"
 
 msgid "Launch Journalist Interface"
-msgstr ""
+msgstr "Avvia l'interfaccia giornalista"
 
 msgid "Launch Source Interface"
-msgstr ""
+msgstr "Avvia l'interfaccia fonte"
 
 msgid "Open File Browser"
-msgstr ""
+msgstr "Apri Esplora file"
 
 msgid "Open KeePassXC Password Vault"
-msgstr ""
+msgstr "Apri la cassaforte delle password KeePassXC"
 
 msgid "SSH into the App Server"
-msgstr ""
+msgstr "Accedi con SSH all'app server"
 
 msgid "SSH into the Monitor Server"
-msgstr ""
+msgstr "Accedi con SSH al monitoraggio server"
 
 #. Name
 msgid "SecureDrop Journalist Interface"
-msgstr "Interfaccia Giornalista di SecureDrop"
+msgstr "Interfaccia giornalista di SecureDrop"
 
 #. Name
 msgid "SecureDrop Source Interface"
-msgstr "Interfaccia Fonte di SecureDrop"
+msgstr "Interfaccia fonte di SecureDrop"
 
 #. Icon
 msgid "{{ tails_config_securedrop_dotfiles }}/securedrop_icon.png"
-msgstr ""
+msgstr "{{ tails_config_securedrop_dotfiles }}/securedrop_icon.png"
