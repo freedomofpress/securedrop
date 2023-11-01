@@ -213,3 +213,53 @@ class EncryptionManager:
 
         self._redis.hset(self.REDIS_KEY_HASH, key_fingerprint, public_key)
         return public_key
+
+    def migrate_public_key(self, source: "Source") -> bool:
+        """If GPG -> Sequoia public key migration failed, retry it"""
+        modified = False
+        if source.pgp_fingerprint is None:
+            try:
+                fingerprint = self.get_source_key_fingerprint(source.filesystem_id)
+            except GpgKeyNotFoundError:
+                return False
+
+            source.pgp_fingerprint = fingerprint
+            modified = True
+
+        if source.pgp_public_key is None:
+            try:
+                public_key = self.get_source_public_key(source.filesystem_id)
+            except GpgKeyNotFoundError:
+                return False
+
+            source.pgp_public_key = public_key
+            modified = True
+
+        return modified
+
+    def migrate_secret_key(self, source: "Source", gpg_secret: str) -> bool:
+        """Perform GPG -> Sequoia secret key migration, if needed"""
+        if source.pgp_secret_key is None:
+            try:
+                secret_key = self.get_source_secret_key_from_gpg(source.fingerprint, gpg_secret)
+            except GpgKeyNotFoundError:
+                # Don't fail here, but it's likely decryption of journalist
+                # messages will fail.
+                return False
+
+            source.pgp_secret_key = secret_key
+            return True
+
+        return False
+
+    def cleanup_gpg_key_post_migration(self, source: "Source") -> None:
+        """
+        If a source has been fully migrated to database storage, delete it from GPG
+
+        It is OK if it fails since we still try to delete from the keyring on source deletion too
+        """
+        if source.pgp_fingerprint and source.pgp_public_key and source.pgp_secret_key:
+            try:
+                self.delete_source_key_pair(source.filesystem_id)
+            except:  # noqa: E722
+                pass

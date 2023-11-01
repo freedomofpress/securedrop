@@ -7,7 +7,7 @@ from typing import Union
 import store
 import werkzeug
 from db import db
-from encryption import EncryptionManager, GpgDecryptError, GpgKeyNotFoundError
+from encryption import EncryptionManager, GpgDecryptError
 from flask import (
     Blueprint,
     abort,
@@ -379,30 +379,14 @@ def make_blueprint(config: SecureDropConfig) -> Blueprint:
             source.pgp_fingerprint = fingerprint
             db.session.add(source)
             db.session.commit()
-        elif source.pgp_secret_key is None:
-            # Need to migrate the secret key out of GPG
-            encryption_mgr = EncryptionManager.get_default()
-            try:
-                secret_key = encryption_mgr.get_source_secret_key_from_gpg(
-                    source.fingerprint, source_user.gpg_secret
-                )
-            except GpgKeyNotFoundError:
-                # Don't fail here, but it's likely decryption of journalist
-                # messages will fail.
-                secret_key = None
-            if secret_key:
-                source.pgp_secret_key = secret_key
-                db.session.add(source)
-                db.session.commit()
-                # Let's optimistically delete the GPG key from the keyring
-                # if *everything* has been migrated. If this fails it's OK,
-                # since we still try to delete from the keyring on source
-                # deletion too.
-                if source.pgp_fingerprint and source.pgp_public_key:
-                    try:
-                        encryption_mgr.delete_source_key_pair(source.filesystem_id)
-                    except:  # noqa: E722
-                        pass
+        encryption_mgr = EncryptionManager.get_default()
+        # If necessary, perform GPG -> Sequoia key storage migrations
+        migrated_public_key = encryption_mgr.migrate_public_key(source)
+        migrated_secret_key = encryption_mgr.migrate_secret_key(source, source_user.gpg_secret)
+        if migrated_public_key or migrated_secret_key:
+            db.session.add(source)
+            db.session.commit()
+            encryption_mgr.cleanup_gpg_key_post_migration(source)
 
         return redirect(url_for(".lookup", from_login="1"))
 
