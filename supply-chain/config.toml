@@ -1,5 +1,6 @@
 
 # cargo-vet config file
+default-criteria = "safe-to-run"
 
 [cargo-vet]
 version = "0.8"
@@ -42,6 +43,9 @@ notes = "Redox OS-only"
 [policy.redox_users]
 criteria = []
 notes = "Redox OS-only"
+
+[policy.redwood]
+criteria = "safe-to-run"
 
 [policy.wasi]
 criteria = []
@@ -121,112 +125,80 @@ notes = "Windows-only"
 
 [[exemptions.bitflags]]
 version = "2.4.0"
-criteria = "safe-to-deploy"
-
-[[exemptions.cc]]
-version = "1.0.83"
-criteria = "safe-to-deploy"
+criteria = "safe-to-run"
 
 [[exemptions.chrono]]
 version = "0.4.31"
-criteria = "safe-to-deploy"
+criteria = "safe-to-run"
 
 [[exemptions.diff]]
 version = "0.1.13"
-criteria = "safe-to-deploy"
+criteria = "safe-to-run"
 
 [[exemptions.ena]]
 version = "0.14.2"
-criteria = "safe-to-deploy"
-
-[[exemptions.flate2]]
-version = "1.0.27"
-criteria = "safe-to-deploy"
+criteria = "safe-to-run"
 
 [[exemptions.generic-array]]
 version = "0.14.7"
-criteria = "safe-to-deploy"
-
-[[exemptions.getrandom]]
-version = "0.2.10"
-criteria = "safe-to-deploy"
-
-[[exemptions.itertools]]
-version = "0.10.5"
-criteria = "safe-to-deploy"
+criteria = "safe-to-run"
 
 [[exemptions.lalrpop]]
 version = "0.19.12"
-criteria = "safe-to-deploy"
+criteria = "safe-to-run"
 
 [[exemptions.memoffset]]
 version = "0.8.0"
-criteria = "safe-to-deploy"
-
-[[exemptions.memsec]]
-version = "0.6.3"
-criteria = "safe-to-deploy"
-
-[[exemptions.once_cell]]
-version = "1.18.0"
-criteria = "safe-to-deploy"
-
-[[exemptions.openssl]]
-version = "0.10.57"
-criteria = "safe-to-deploy"
-
-[[exemptions.openssl-sys]]
-version = "0.9.93"
-criteria = "safe-to-deploy"
+criteria = "safe-to-run"
 
 [[exemptions.petgraph]]
 version = "0.6.4"
-criteria = "safe-to-deploy"
+criteria = "safe-to-run"
 
 [[exemptions.ppv-lite86]]
-version = "0.2.17"
-criteria = "safe-to-deploy"
+version = "0.2.16"
+criteria = "safe-to-run"
 
 [[exemptions.pyo3]]
 version = "0.18.3"
-criteria = "safe-to-deploy"
+criteria = "safe-to-run"
 
 [[exemptions.pyo3-build-config]]
 version = "0.18.3"
-criteria = "safe-to-deploy"
+criteria = "safe-to-run"
 
 [[exemptions.pyo3-ffi]]
 version = "0.18.3"
-criteria = "safe-to-deploy"
+criteria = "safe-to-run"
 
 [[exemptions.pyo3-macros-backend]]
 version = "0.18.3"
-criteria = "safe-to-deploy"
+criteria = "safe-to-run"
 
 [[exemptions.rand]]
 version = "0.7.3"
-criteria = "safe-to-deploy"
+criteria = "safe-to-run"
 
 [[exemptions.smallvec]]
 version = "1.11.1"
-criteria = "safe-to-deploy"
+criteria = "safe-to-run"
 
 [[exemptions.string_cache]]
 version = "0.8.7"
-criteria = "safe-to-deploy"
+criteria = "safe-to-run"
 
 [[exemptions.term]]
 version = "0.7.0"
-criteria = "safe-to-deploy"
+criteria = "safe-to-run"
 
 [[exemptions.tiny-keccak]]
 version = "2.0.2"
-criteria = "safe-to-deploy"
+criteria = "safe-to-run"
 
 [[exemptions.typenum]]
 version = "1.17.0"
-criteria = "safe-to-deploy"
+criteria = "safe-to-run"
 
 [[exemptions.xxhash-rust]]
 version = "0.8.7"
-criteria = "safe-to-deploy"
+criteria = "safe-to-run"
