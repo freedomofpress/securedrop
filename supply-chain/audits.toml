@@ -6,6 +6,11 @@ who = "Cory Francis Myers <cory@freedom.press>"
 criteria = "safe-to-deploy"
 version = "3.0.0"
 
+[[audits.chrono]]
+who = "Kunal Mehta <legoktm@debian.org>"
+criteria = "safe-to-run"
+delta = "0.4.26 -> 0.4.31"
+
 [[audits.crc32fast]]
 who = "Cory Francis Myers <cory@freedom.press>"
 criteria = "safe-to-deploy"

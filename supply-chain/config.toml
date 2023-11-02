@@ -127,10 +127,6 @@ notes = "Windows-only"
 version = "2.4.0"
 criteria = "safe-to-run"
 
-[[exemptions.chrono]]
-version = "0.4.31"
-criteria = "safe-to-run"
-
 [[exemptions.diff]]
 version = "0.1.13"
 criteria = "safe-to-run"
