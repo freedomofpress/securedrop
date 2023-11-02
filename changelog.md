@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.7.0~rc4
+
+### Web applications
+
+* Fix validation of the submission key; block both Journalist and Source Interfaces if invalid (#7059)
+
 ## 2.7.0~rc3
 
 ### Web applications
