@@ -240,6 +240,27 @@ start = "2019-05-20"
 end = "2024-04-10"
 notes = "Rust Project member"
 
+[[trusted.openssl]]
+criteria = "safe-to-deploy"
+user-id = 5 # Steven Fackler (sfackler)
+start = "2019-02-22"
+end = "2024-05-02"
+notes = "Rust Project member"
+
+[[trusted.openssl]]
+criteria = "safe-to-deploy"
+user-id = 163 # Alex Gaynor (alex)
+start = "2023-03-24"
+end = "2024-05-02"
+notes = "Rust Project member"
+
+[[trusted.openssl-sys]]
+criteria = "safe-to-deploy"
+user-id = 5 # Steven Fackler (sfackler)
+start = "2019-03-01"
+end = "2024-05-02"
+notes = "Rust Project member"
+
 [[trusted.parking_lot]]
 criteria = "safe-to-deploy"
 user-id = 2915 # Amanieu d'Antras (Amanieu)
