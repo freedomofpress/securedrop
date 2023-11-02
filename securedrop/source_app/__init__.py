@@ -8,7 +8,7 @@ import template_filters
 import version
 import werkzeug
 from db import db
-from flask import Flask, g, redirect, render_template, request, session, url_for
+from flask import Flask, g, make_response, redirect, render_template, request, session, url_for
 from flask_babel import gettext
 from flask_wtf.csrf import CSRFError, CSRFProtect
 from models import InstanceConfig
@@ -17,6 +17,7 @@ from sdconfig import SecureDropConfig
 from source_app import api, info, main
 from source_app.decorators import ignore_static
 from source_app.utils import clear_session_and_redirect_to_logged_out_page
+from startup import validate_journalist_key
 
 
 def get_logo_url(app: Flask) -> str:
@@ -61,6 +62,9 @@ def create_app(config: SecureDropConfig) -> Flask:
     app.config["SQLALCHEMY_DATABASE_URI"] = config.DATABASE_URI
     db.init_app(app)
 
+    # Check if the Submission Key is valid; if not, we'll disable the UI
+    app.config["SUBMISSION_KEY_VALID"] = validate_journalist_key()
+
     @app.errorhandler(CSRFError)
     def handle_csrf_error(e: CSRFError) -> werkzeug.Response:
         return clear_session_and_redirect_to_logged_out_page(flask_session=session)
@@ -104,6 +108,15 @@ def create_app(config: SecureDropConfig) -> Flask:
         # TODO: expand header checking logic to catch modern tor2web proxies
         if "X-tor2web" in request.headers and request.path != url_for("info.tor2web_warning"):
             return redirect(url_for("info.tor2web_warning"))
+        return None
+
+    @app.before_request
+    @ignore_static
+    def check_submission_key() -> Optional[werkzeug.Response]:
+        if not app.config["SUBMISSION_KEY_VALID"]:
+            session.clear()
+            g.show_offline_message = True
+            return make_response(render_template("offline.html"), 503)
         return None
 
     @app.errorhandler(404)
