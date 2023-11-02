@@ -167,10 +167,6 @@ criteria = "safe-to-run"
 version = "1.11.1"
 criteria = "safe-to-run"
 
-[[exemptions.string_cache]]
-version = "0.8.7"
-criteria = "safe-to-run"
-
 [[exemptions.term]]
 version = "0.7.0"
 criteria = "safe-to-run"

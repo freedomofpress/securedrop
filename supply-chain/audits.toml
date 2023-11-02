@@ -114,6 +114,11 @@ who = "Cory Francis Myers <cory@freedom.press>"
 criteria = "safe-to-deploy"
 version = "0.3.10"
 
+[[audits.string_cache]]
+who = "Kunal Mehta <legoktm@debian.org>"
+criteria = "safe-to-run"
+version = "0.8.7"
+
 [[audits.typenum]]
 who = "Kunal Mehta <legoktm@debian.org>"
 criteria = "safe-to-run"
