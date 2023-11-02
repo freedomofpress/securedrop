@@ -59,6 +59,11 @@ who = "Kunal Mehta <legoktm@debian.org>"
 criteria = "safe-to-deploy"
 delta = "0.19.12 -> 0.20.0"
 
+[[audits.memoffset]]
+who = "Kunal Mehta <legoktm@debian.org>"
+criteria = "safe-to-run"
+version = "0.6.5"
+
 [[audits.memsec]]
 who = "Kunal Mehta <legoktm@debian.org>"
 criteria = "safe-to-run"

@@ -147,10 +147,6 @@ criteria = "safe-to-run"
 version = "0.19.12"
 criteria = "safe-to-run"
 
-[[exemptions.memoffset]]
-version = "0.8.0"
-criteria = "safe-to-run"
-
 [[exemptions.petgraph]]
 version = "0.6.4"
 criteria = "safe-to-run"

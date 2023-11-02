@@ -99,13 +99,6 @@ user-id = 6825
 user-login = "sunfishcode"
 user-name = "Dan Gohman"
 
-[[publisher.libc]]
-version = "0.2.146"
-when = "2023-06-06"
-user-id = 2915
-user-login = "Amanieu"
-user-name = "Amanieu d'Antras"
-
 [[publisher.linux-raw-sys]]
 version = "0.4.10"
 when = "2023-10-09"
@@ -358,6 +351,18 @@ criteria = "safe-to-deploy"
 delta = "0.2.146 -> 0.2.147"
 notes = "Only new type definitions and updating others for some platforms, no major changes"
 
+[[audits.bytecode-alliance.audits.libc]]
+who = "Alex Crichton <alex@alexcrichton.com>"
+criteria = "safe-to-deploy"
+delta = "0.2.148 -> 0.2.149"
+notes = "Lots of new functions and constants for new platforms and nothing out of the ordinary for what one would expect of the `libc` crate."
+
+[[audits.bytecode-alliance.audits.memoffset]]
+who = "Alex Crichton <alex@alexcrichton.com>"
+criteria = "safe-to-deploy"
+delta = "0.7.1 -> 0.8.0"
+notes = "This was a small update to the crate which has to do with Rust language features and compiler versions, no substantial changes."
+
 [[audits.bytecode-alliance.audits.miniz_oxide]]
 who = "Alex Crichton <alex@alexcrichton.com>"
 criteria = "safe-to-deploy"
@@ -484,6 +489,16 @@ criteria = "safe-to-run"
 version = "1.4.0"
 aggregated-from = "https://chromium.googlesource.com/chromiumos/third_party/rust_crates/+/refs/heads/main/cargo-vet/audits.toml?format=TEXT"
 
+[[audits.google.audits.libc]]
+who = "George Burgess IV <gbiv@google.com>"
+criteria = "safe-to-run"
+version = "0.2.146"
+notes = """
+Much like the getrandom crate, this exports interfaces to APIs which perform
+crypto, but does not implement any crypto itself.
+"""
+aggregated-from = "https://chromium.googlesource.com/chromiumos/third_party/rust_crates/+/refs/heads/main/cargo-vet/audits.toml?format=TEXT"
+
 [[audits.google.audits.log]]
 who = "ChromeOS"
 criteria = "safe-to-run"
@@ -494,6 +509,12 @@ aggregated-from = "https://chromium.googlesource.com/chromiumos/third_party/rust
 who = "George Burgess IV <gbiv@google.com>"
 criteria = "safe-to-run"
 delta = "0.4.17 -> 0.4.20"
+aggregated-from = "https://chromium.googlesource.com/chromiumos/third_party/rust_crates/+/refs/heads/main/cargo-vet/audits.toml?format=TEXT"
+
+[[audits.google.audits.memoffset]]
+who = "Dennis Kempin <denniskempin@google.com>"
+criteria = "safe-to-run"
+delta = "0.6.5 -> 0.7.1"
 aggregated-from = "https://chromium.googlesource.com/chromiumos/third_party/rust_crates/+/refs/heads/main/cargo-vet/audits.toml?format=TEXT"
 
 [[audits.google.audits.once_cell]]
@@ -671,38 +692,11 @@ criteria = "safe-to-deploy"
 delta = "1.9.0 -> 2.0.0"
 aggregated-from = "https://hg.mozilla.org/mozilla-central/raw-file/tip/supply-chain/audits.toml"
 
-[[audits.mozilla.audits.lazy_static]]
-who = "Nika Layzell <nika@thelayzells.com>"
-criteria = "safe-to-deploy"
-version = "1.4.0"
-notes = "I have read over the macros, and audited the unsafe code."
-aggregated-from = "https://raw.githubusercontent.com/mozilla/cargo-vet/main/supply-chain/audits.toml"
-
 [[audits.mozilla.audits.libc]]
 who = "Mike Hommey <mh+mozilla@glandium.org>"
 criteria = "safe-to-deploy"
 delta = "0.2.147 -> 0.2.148"
 aggregated-from = "https://hg.mozilla.org/mozilla-central/raw-file/tip/supply-chain/audits.toml"
-
-[[audits.mozilla.audits.libc]]
-who = "Jan-Erik Rediger <jrediger@mozilla.com>"
-criteria = "safe-to-deploy"
-delta = "0.2.148 -> 0.2.149"
-notes = "New defintions for a new target we don't use"
-aggregated-from = "https://raw.githubusercontent.com/mozilla/glean/main/supply-chain/audits.toml"
-
-[[audits.mozilla.audits.log]]
-who = "Mike Hommey <mh+mozilla@glandium.org>"
-criteria = "safe-to-deploy"
-version = "0.4.17"
-aggregated-from = "https://hg.mozilla.org/mozilla-central/raw-file/tip/supply-chain/audits.toml"
-
-[[audits.mozilla.audits.log]]
-who = "Jan-Erik Rediger <jrediger@mozilla.com>"
-criteria = "safe-to-deploy"
-delta = "0.4.17 -> 0.4.18"
-notes = "One dependency removed, others updated (which we don't rely on), some APIs (which we don't use) changed."
-aggregated-from = "https://raw.githubusercontent.com/mozilla/glean/main/supply-chain/audits.toml"
 
 [[audits.mozilla.audits.new_debug_unreachable]]
 who = "Bobby Holley <bobbyholley@gmail.com>"
