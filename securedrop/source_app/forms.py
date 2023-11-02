@@ -19,7 +19,7 @@ class LoginForm(FlaskForm):
                 1,
                 PassphraseGenerator.MAX_PASSPHRASE_LENGTH,
                 message=ngettext(
-                    "Field must be between 1 and {max_codename_len} character long.",
+                    "Field must be 1 character long.",
                     "Field must be between 1 and {max_codename_len} characters long.",
                     PassphraseGenerator.MAX_PASSPHRASE_LENGTH,
                 ).format(max_codename_len=PassphraseGenerator.MAX_PASSPHRASE_LENGTH),
