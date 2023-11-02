@@ -17,7 +17,6 @@ from encryption import EncryptionManager, GpgKeyNotFoundError
 from flaky import flaky
 from flask import escape, g, url_for
 from flask_babel import gettext, ngettext
-from journalist import validate_journalist_key
 from journalist_app.sessions import session
 from journalist_app.utils import mark_seen
 from models import (
@@ -51,8 +50,6 @@ from tests.utils.i18n import (
 )
 from tests.utils.instrument import InstrumentedApp
 from two_factor import TOTP
-
-from redwood import RedwoodError
 
 from .utils import create_legacy_gpg_key, login_journalist
 
@@ -3775,20 +3772,3 @@ def test_journalist_deletion(journalist_app, app_storage):
     assert len(SeenReply.query.filter_by(journalist_id=deleted.id).all()) == 2
     # And there are no login attempts
     assert JournalistLoginAttempt.query.all() == []
-
-
-def test_validate_journalist_key(config, capsys):
-    # The test key passes validation
-    validate_journalist_key()
-    # Reading the key file fails
-    with patch(
-        "encryption.EncryptionManager.get_journalist_public_key", side_effect=RuntimeError("err")
-    ):
-        with pytest.raises(SystemExit):
-            validate_journalist_key()
-    assert capsys.readouterr().err == "ERROR: Unable to read journalist public key: err\n"
-    # Key fails validation
-    with patch("redwood.is_valid_public_key", side_effect=RedwoodError("err")):
-        with pytest.raises(SystemExit):
-            validate_journalist_key()
-    assert capsys.readouterr().err == "ERROR: Journalist public key is not valid: err\n"
