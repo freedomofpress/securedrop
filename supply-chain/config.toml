@@ -135,10 +135,6 @@ criteria = "safe-to-run"
 version = "0.1.13"
 criteria = "safe-to-run"
 
-[[exemptions.ena]]
-version = "0.14.2"
-criteria = "safe-to-run"
-
 [[exemptions.generic-array]]
 version = "0.14.7"
 criteria = "safe-to-run"
@@ -153,14 +149,6 @@ criteria = "safe-to-run"
 
 [[exemptions.memsec]]
 version = "0.6.3"
-criteria = "safe-to-run"
-
-[[exemptions.openssl]]
-version = "0.10.57"
-criteria = "safe-to-run"
-
-[[exemptions.openssl-sys]]
-version = "0.9.93"
 criteria = "safe-to-run"
 
 [[exemptions.petgraph]]

@@ -149,6 +149,13 @@ user-id = 539 # Josh Stone (cuviper)
 start = "2019-04-02"
 end = "2024-04-10"
 
+[[trusted.ena]]
+criteria = "safe-to-deploy"
+user-id = 1386 # Niko Matsakis (nikomatsakis)
+start = "2019-03-19"
+end = "2024-05-02"
+notes = "Rust Project member"
+
 [[trusted.equivalent]]
 criteria = "safe-to-deploy"
 user-id = 539 # Josh Stone (cuviper)
@@ -198,6 +205,13 @@ start = "2022-01-22"
 end = "2024-04-10"
 notes = "Rust Project member"
 
+[[trusted.lalrpop]]
+criteria = "safe-to-deploy"
+user-id = 1386 # Niko Matsakis (nikomatsakis)
+start = "2023-03-25"
+end = "2024-05-02"
+notes = "Rust Project member"
+
 [[trusted.libc]]
 criteria = "safe-to-deploy"
 user-id = 1 # Alex Crichton (alexcrichton)
@@ -238,6 +252,27 @@ criteria = "safe-to-deploy"
 user-id = 539 # Josh Stone (cuviper)
 start = "2019-05-20"
 end = "2024-04-10"
+notes = "Rust Project member"
+
+[[trusted.openssl]]
+criteria = "safe-to-deploy"
+user-id = 5 # Steven Fackler (sfackler)
+start = "2019-02-22"
+end = "2024-05-02"
+notes = "Rust Project member"
+
+[[trusted.openssl]]
+criteria = "safe-to-deploy"
+user-id = 163 # Alex Gaynor (alex)
+start = "2023-03-24"
+end = "2024-05-02"
+notes = "Rust Project member"
+
+[[trusted.openssl-sys]]
+criteria = "safe-to-deploy"
+user-id = 5 # Steven Fackler (sfackler)
+start = "2019-03-01"
+end = "2024-05-02"
 notes = "Rust Project member"
 
 [[trusted.parking_lot]]
