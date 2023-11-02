@@ -1,4 +1,4 @@
-# Based off of https://mozilla.github.io/cargo-vet/configuring-ci.html
+# Roughly based off of https://mozilla.github.io/cargo-vet/configuring-ci.html
 
 name: cargo vet
 
@@ -15,12 +15,12 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - uses: actions/cache@v2
+      id: cache-vet
       with:
-        path: ${{ runner.tool_cache }}/cargo-vet
-        key: cargo-vet-bin-${{ env.CARGO_VET_VERSION }}
-    - name: Add the tool cache directory to the search path
-      run: echo "${{ runner.tool_cache }}/cargo-vet/bin" >> $GITHUB_PATH
-    - name: Ensure that the tool cache is populated with the cargo-vet binary
-      run: cargo install --root ${{ runner.tool_cache }}/cargo-vet --version ${{ env.CARGO_VET_VERSION }} cargo-vet
+        path: /usr/local/cargo/bin/cargo-vet
+        key: cargo-vet-${{ env.CARGO_VET_VERSION }}
+    - name: Install the cargo-vet binary, if needed
+      if: ${{ steps.cache-vet.outputs.cache-hit != 'true' }}
+      run: cargo install --version ${{ env.CARGO_VET_VERSION }} cargo-vet
     - name: Invoke cargo-vet
       run: cargo vet --locked
