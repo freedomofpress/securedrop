@@ -986,7 +986,7 @@ msgstr ""
 msgid "Sorry, we couldn't locate what you requested."
 msgstr ""
 
-msgid "WARNING: Proxy Service Detected"
+msgid "Warning: Proxy Detected"
 msgstr ""
 
 msgid "Proxy Service Detected"
