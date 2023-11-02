@@ -4,7 +4,18 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 msgid ""
-msgstr "Project-Id-Version: PACKAGE VERSION\nReport-Msgid-Bugs-To: securedrop@freedom.press\nPO-Revision-Date: 2023-10-13 13:30+0000\nLast-Translator: Reader <isabellinacrew@tuta.io>\nLanguage-Team: Chinese (Simplified) <https://weblate.securedrop.org/projects/securedrop/desktop/zh_Hans/>\nLanguage: zh_Hans\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=1; plural=0;\nX-Generator: Weblate 4.18.2\n"
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: securedrop@freedom.press\n"
+"PO-Revision-Date: 2023-10-13 13:30+0000\n"
+"Last-Translator: Reader <isabellinacrew@tuta.io>\n"
+"Language-Team: Chinese (Simplified) <https://weblate.securedrop.org/projects/securedrop/desktop/zh_Hans/>\n"
+"Language: zh_Hans\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 4.18.2\n"
 
 msgid "Check for SecureDrop Updates"
 msgstr "检查 SecureDrop 更新"
