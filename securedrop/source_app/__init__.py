@@ -8,6 +8,7 @@ import template_filters
 import version
 import werkzeug
 from db import db
+from encryption import EncryptionManager
 from flask import Flask, g, redirect, render_template, request, session, url_for
 from flask_babel import gettext
 from flask_wtf.csrf import CSRFError, CSRFProtect
@@ -17,6 +18,24 @@ from sdconfig import SecureDropConfig
 from source_app import api, info, main
 from source_app.decorators import ignore_static
 from source_app.utils import clear_session_and_redirect_to_logged_out_page
+
+import redwood
+
+
+def have_valid_submission_key() -> bool:
+    """Verify the journalist PGP key is valid"""
+    encryption_mgr = EncryptionManager.get_default()
+    # First check that we can read it
+    try:
+        journalist_key = encryption_mgr.get_journalist_public_key()
+    except Exception:
+        return False
+    # And then what we read is valid
+    try:
+        redwood.is_valid_public_key(journalist_key)
+    except redwood.RedwoodError:
+        return False
+    return True
 
 
 def get_logo_url(app: Flask) -> str:
@@ -43,6 +62,13 @@ def create_app(config: SecureDropConfig) -> Flask:
     )
     app.request_class = RequestThatSecuresFileUploads
     app.config.from_object(config.SOURCE_APP_FLASK_CONFIG_CLS)
+
+    app.config["SI_DISABLED"] = False
+
+    # disable SI if a weak submission key is detected
+    if not have_valid_submission_key():
+        app.config["SI_DISABLED"] = True
+        app.logger.error("ERROR: Weak journalist key found.")
 
     i18n.configure(config, app)
 
@@ -95,7 +121,6 @@ def create_app(config: SecureDropConfig) -> Flask:
             g.logo = get_logo_url(app)  # pylint: disable=assigning-non-slot
         except FileNotFoundError:
             app.logger.error("Site logo not found.")
-
         return None
 
     @app.before_request
@@ -104,6 +129,15 @@ def create_app(config: SecureDropConfig) -> Flask:
         # TODO: expand header checking logic to catch modern tor2web proxies
         if "X-tor2web" in request.headers and request.path != url_for("info.tor2web_warning"):
             return redirect(url_for("info.tor2web_warning"))
+        return None
+
+    @app.before_request
+    @ignore_static
+    def disable_ui() -> Optional[str]:
+        if app.config["SI_DISABLED"]:
+            session.clear()
+            g.show_offline_message = True
+            return render_template("offline.html")
         return None
 
     @app.errorhandler(404)

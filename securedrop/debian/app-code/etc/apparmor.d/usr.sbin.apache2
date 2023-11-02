@@ -238,6 +238,7 @@
   /var/www/securedrop/source_templates/logout.html r,
   /var/www/securedrop/source_templates/lookup.html r,
   /var/www/securedrop/source_templates/notfound.html r,
+  /var/www/securedrop/source_templates/offline.html r,
   /var/www/securedrop/source_templates/tor2web-warning.html r,
   /var/www/securedrop/source_templates/use-tor-browser.html r,
   /var/www/securedrop/source_templates/utils.html r,
