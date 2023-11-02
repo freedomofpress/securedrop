@@ -127,10 +127,6 @@ notes = "Windows-only"
 version = "2.4.0"
 criteria = "safe-to-run"
 
-[[exemptions.diff]]
-version = "0.1.13"
-criteria = "safe-to-run"
-
 [[exemptions.ena]]
 version = "0.14.2"
 criteria = "safe-to-run"
@@ -185,12 +181,4 @@ criteria = "safe-to-run"
 
 [[exemptions.tiny-keccak]]
 version = "2.0.2"
-criteria = "safe-to-run"
-
-[[exemptions.typenum]]
-version = "1.17.0"
-criteria = "safe-to-run"
-
-[[exemptions.xxhash-rust]]
-version = "0.8.7"
 criteria = "safe-to-run"
