@@ -127,78 +127,10 @@ notes = "Windows-only"
 version = "2.4.0"
 criteria = "safe-to-run"
 
-[[exemptions.chrono]]
-version = "0.4.31"
-criteria = "safe-to-run"
-
-[[exemptions.diff]]
-version = "0.1.13"
-criteria = "safe-to-run"
-
 [[exemptions.generic-array]]
 version = "0.14.7"
 criteria = "safe-to-run"
 
-[[exemptions.lalrpop]]
-version = "0.19.12"
-criteria = "safe-to-run"
-
-[[exemptions.memoffset]]
-version = "0.8.0"
-criteria = "safe-to-run"
-
-[[exemptions.memsec]]
-version = "0.6.3"
-criteria = "safe-to-run"
-
-[[exemptions.petgraph]]
-version = "0.6.4"
-criteria = "safe-to-run"
-
-[[exemptions.ppv-lite86]]
-version = "0.2.16"
-criteria = "safe-to-run"
-
-[[exemptions.pyo3]]
-version = "0.18.3"
-criteria = "safe-to-run"
-
-[[exemptions.pyo3-build-config]]
-version = "0.18.3"
-criteria = "safe-to-run"
-
-[[exemptions.pyo3-ffi]]
-version = "0.18.3"
-criteria = "safe-to-run"
-
-[[exemptions.pyo3-macros-backend]]
-version = "0.18.3"
-criteria = "safe-to-run"
-
-[[exemptions.rand]]
-version = "0.7.3"
-criteria = "safe-to-run"
-
-[[exemptions.smallvec]]
-version = "1.11.1"
-criteria = "safe-to-run"
-
-[[exemptions.string_cache]]
-version = "0.8.7"
-criteria = "safe-to-run"
-
-[[exemptions.term]]
-version = "0.7.0"
-criteria = "safe-to-run"
-
 [[exemptions.tiny-keccak]]
 version = "2.0.2"
-criteria = "safe-to-run"
-
-[[exemptions.typenum]]
-version = "1.17.0"
-criteria = "safe-to-run"
-
-[[exemptions.xxhash-rust]]
-version = "0.8.7"
 criteria = "safe-to-run"
