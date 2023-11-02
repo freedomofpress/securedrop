@@ -57,6 +57,13 @@ user-id = 539
 user-login = "cuviper"
 user-name = "Josh Stone"
 
+[[publisher.ena]]
+version = "0.14.2"
+when = "2023-03-17"
+user-id = 1386
+user-login = "nikomatsakis"
+user-name = "Niko Matsakis"
+
 [[publisher.equivalent]]
 version = "1.0.1"
 when = "2023-07-10"

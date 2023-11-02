@@ -127,10 +127,6 @@ notes = "Windows-only"
 version = "2.4.0"
 criteria = "safe-to-run"
 
-[[exemptions.ena]]
-version = "0.14.2"
-criteria = "safe-to-run"
-
 [[exemptions.generic-array]]
 version = "0.14.7"
 criteria = "safe-to-run"
