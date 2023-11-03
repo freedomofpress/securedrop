@@ -6,6 +6,16 @@ who = "Cory Francis Myers <cory@freedom.press>"
 criteria = "safe-to-run"
 version = "3.0.0"
 
+[[audits.bitflags]]
+who = "Cory Francis Myers <cory@freedom.press>"
+criteria = "safe-to-run"
+version = "1.3.2"
+
+[[audits.cc]]
+who = "Cory Francis Myers <cory@freedom.press>"
+criteria = "safe-to-run"
+delta = "1.0.73 -> 1.0.83"
+
 [[audits.chrono]]
 who = "Kunal Mehta <legoktm@debian.org>"
 criteria = "safe-to-run"
@@ -36,10 +46,30 @@ who = "Cory Francis Myers <cory@freedom.press>"
 criteria = "safe-to-run"
 version = "0.1.2"
 
+[[audits.ena]]
+who = "Cory Francis Myers <cory@freedom.press>"
+criteria = "safe-to-run"
+version = "0.14.2"
+
 [[audits.fixedbitset]]
 who = "Cory Francis Myers <cory@freedom.press>"
 criteria = "safe-to-run"
 version = "0.4.2"
+
+[[audits.generic-array]]
+who = "Cory Francis Myers <cory@freedom.press>"
+criteria = "safe-to-run"
+version = "0.14.6"
+
+[[audits.getrandom]]
+who = "Cory Francis Myers <cory@freedom.press>"
+criteria = "safe-to-run"
+version = "0.1.16"
+
+[[audits.getrandom]]
+who = "Cory Francis Myers <cory@freedom.press>"
+criteria = "safe-to-run"
+delta = "0.1.16 -> 0.2.6"
 
 [[audits.iana-time-zone]]
 who = "Kunal Mehta <legoktm@debian.org>"
@@ -118,6 +148,11 @@ version = "0.3.10"
 who = "Kunal Mehta <legoktm@debian.org>"
 criteria = "safe-to-run"
 version = "0.8.7"
+
+[[audits.tiny-keccak]]
+who = "Cory Francis Myers <cory@freedom.press>"
+criteria = "safe-to-run"
+version = "2.0.2"
 
 [[audits.typenum]]
 who = "Kunal Mehta <legoktm@debian.org>"

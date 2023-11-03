@@ -123,14 +123,6 @@ notes = "Windows-only"
 criteria = []
 notes = "Windows-only"
 
-[[exemptions.bitflags]]
-version = "2.4.0"
-criteria = "safe-to-run"
-
-[[exemptions.generic-array]]
-version = "0.14.7"
-criteria = "safe-to-run"
-
 [[exemptions.lalrpop]]
 version = "0.19.12"
 criteria = "safe-to-run"
@@ -169,8 +161,4 @@ criteria = "safe-to-run"
 
 [[exemptions.term]]
 version = "0.7.0"
-criteria = "safe-to-run"
-
-[[exemptions.tiny-keccak]]
-version = "2.0.2"
 criteria = "safe-to-run"
