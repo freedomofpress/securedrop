@@ -123,26 +123,10 @@ notes = "Windows-only"
 criteria = []
 notes = "Windows-only"
 
-[[exemptions.lalrpop]]
-version = "0.19.12"
-criteria = "safe-to-run"
-
-[[exemptions.petgraph]]
-version = "0.6.4"
-criteria = "safe-to-run"
-
 [[exemptions.pyo3]]
 version = "0.18.3"
 criteria = "safe-to-run"
 
 [[exemptions.pyo3-ffi]]
 version = "0.18.3"
-criteria = "safe-to-run"
-
-[[exemptions.rand]]
-version = "0.7.3"
-criteria = "safe-to-run"
-
-[[exemptions.smallvec]]
-version = "1.11.1"
 criteria = "safe-to-run"

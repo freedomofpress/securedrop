@@ -99,6 +99,13 @@ user-id = 6825
 user-login = "sunfishcode"
 user-name = "Dan Gohman"
 
+[[publisher.lalrpop]]
+version = "0.19.10"
+when = "2023-04-24"
+user-id = 1386
+user-login = "nikomatsakis"
+user-name = "Niko Matsakis"
+
 [[publisher.linux-raw-sys]]
 version = "0.4.10"
 when = "2023-10-09"
@@ -565,6 +572,12 @@ criteria = "safe-to-deploy"
 delta = "0.1.0 -> 0.1.1"
 aggregated-from = "https://chromium.googlesource.com/chromiumos/third_party/rust_crates/+/refs/heads/main/cargo-vet/audits.toml?format=TEXT"
 
+[[audits.google.audits.petgraph]]
+who = "ChromeOS"
+criteria = "safe-to-run"
+version = "0.6.2"
+aggregated-from = "https://chromium.googlesource.com/chromiumos/third_party/rust_crates/+/refs/heads/main/cargo-vet/audits.toml?format=TEXT"
+
 [[audits.google.audits.pkg-config]]
 who = "Alexandre Courbot <acourbot@chromium.org>"
 criteria = "safe-to-run"
@@ -577,6 +590,12 @@ criteria = "safe-to-run"
 version = "0.2.10"
 aggregated-from = "https://chromium.googlesource.com/chromiumos/third_party/rust_crates/+/refs/heads/main/cargo-vet/audits.toml?format=TEXT"
 
+[[audits.google.audits.rand]]
+who = "Android Legacy"
+criteria = "safe-to-run"
+version = "0.8.3"
+aggregated-from = "https://chromium.googlesource.com/chromiumos/third_party/rust_crates/+/refs/heads/main/cargo-vet/audits.toml?format=TEXT"
+
 [[audits.google.audits.rand_chacha]]
 who = "Android Legacy"
 criteria = "safe-to-run"
@@ -587,6 +606,12 @@ aggregated-from = "https://chromium.googlesource.com/chromiumos/third_party/rust
 who = "Android Legacy"
 criteria = "safe-to-run"
 version = "0.6.4"
+aggregated-from = "https://chromium.googlesource.com/chromiumos/third_party/rust_crates/+/refs/heads/main/cargo-vet/audits.toml?format=TEXT"
+
+[[audits.google.audits.smallvec]]
+who = "Android Legacy"
+criteria = "safe-to-run"
+version = "1.6.1"
 aggregated-from = "https://chromium.googlesource.com/chromiumos/third_party/rust_crates/+/refs/heads/main/cargo-vet/audits.toml?format=TEXT"
 
 [[audits.google.audits.tempfile]]
