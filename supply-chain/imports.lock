@@ -57,13 +57,6 @@ user-id = 539
 user-login = "cuviper"
 user-name = "Josh Stone"
 
-[[publisher.ena]]
-version = "0.14.2"
-when = "2023-03-17"
-user-id = 1386
-user-login = "nikomatsakis"
-user-name = "Niko Matsakis"
-
 [[publisher.equivalent]]
 version = "1.0.1"
 when = "2023-07-10"
@@ -576,6 +569,12 @@ aggregated-from = "https://chromium.googlesource.com/chromiumos/third_party/rust
 who = "Alexandre Courbot <acourbot@chromium.org>"
 criteria = "safe-to-run"
 version = "0.3.26"
+aggregated-from = "https://chromium.googlesource.com/chromiumos/third_party/rust_crates/+/refs/heads/main/cargo-vet/audits.toml?format=TEXT"
+
+[[audits.google.audits.ppv-lite86]]
+who = "Android Legacy"
+criteria = "safe-to-run"
+version = "0.2.10"
 aggregated-from = "https://chromium.googlesource.com/chromiumos/third_party/rust_crates/+/refs/heads/main/cargo-vet/audits.toml?format=TEXT"
 
 [[audits.google.audits.rand_chacha]]

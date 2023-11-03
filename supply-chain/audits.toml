@@ -119,8 +119,24 @@ who = "Kunal Mehta <legoktm@debian.org>"
 criteria = "safe-to-deploy"
 delta = "0.3.26 -> 0.3.27"
 
+[[audits.ppv-lite86]]
+who = "Kunal Mehta <legoktm@debian.org>"
+criteria = "safe-to-run"
+delta = "0.2.10 -> 0.2.16"
+
+[[audits.pyo3-build-config]]
+who = "Kunal Mehta <legoktm@debian.org>"
+criteria = "safe-to-run"
+version = "0.18.3"
+notes = "Windows, cross-compiling and abi3 code not reviewed."
+
 [[audits.pyo3-macros]]
 who = "Cory Francis Myers <cory@freedom.press>"
+criteria = "safe-to-run"
+version = "0.18.3"
+
+[[audits.pyo3-macros-backend]]
+who = "Kunal Mehta <legoktm@debian.org>"
 criteria = "safe-to-run"
 version = "0.18.3"
 
@@ -148,6 +164,12 @@ version = "0.3.10"
 who = "Kunal Mehta <legoktm@debian.org>"
 criteria = "safe-to-run"
 version = "0.8.7"
+
+[[audits.term]]
+who = "Kunal Mehta <legoktm@debian.org>"
+criteria = "safe-to-run"
+version = "0.7.0"
+notes = "Windows code was not reviewed."
 
 [[audits.tiny-keccak]]
 who = "Cory Francis Myers <cory@freedom.press>"
@@ -222,7 +244,7 @@ end = "2024-04-10"
 
 [[trusted.ena]]
 criteria = "safe-to-deploy"
-user-id = 1386 # Niko Matsakis (nikomatsakis)
+user-id = 1386
 start = "2019-03-19"
 end = "2024-05-02"
 notes = "Rust Project member"
@@ -278,7 +300,7 @@ notes = "Rust Project member"
 
 [[trusted.lalrpop]]
 criteria = "safe-to-deploy"
-user-id = 1386 # Niko Matsakis (nikomatsakis)
+user-id = 1386
 start = "2023-03-25"
 end = "2024-05-02"
 notes = "Rust Project member"

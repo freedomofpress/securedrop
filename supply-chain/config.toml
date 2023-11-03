@@ -131,23 +131,11 @@ criteria = "safe-to-run"
 version = "0.6.4"
 criteria = "safe-to-run"
 
-[[exemptions.ppv-lite86]]
-version = "0.2.16"
-criteria = "safe-to-run"
-
 [[exemptions.pyo3]]
 version = "0.18.3"
 criteria = "safe-to-run"
 
-[[exemptions.pyo3-build-config]]
-version = "0.18.3"
-criteria = "safe-to-run"
-
 [[exemptions.pyo3-ffi]]
-version = "0.18.3"
-criteria = "safe-to-run"
-
-[[exemptions.pyo3-macros-backend]]
 version = "0.18.3"
 criteria = "safe-to-run"
 
@@ -157,8 +145,4 @@ criteria = "safe-to-run"
 
 [[exemptions.smallvec]]
 version = "1.11.1"
-criteria = "safe-to-run"
-
-[[exemptions.term]]
-version = "0.7.0"
 criteria = "safe-to-run"
