@@ -122,15 +122,3 @@ notes = "Windows-only"
 [policy.windows_x86_64_msvc]
 criteria = []
 notes = "Windows-only"
-
-[[exemptions.bitflags]]
-version = "2.4.0"
-criteria = "safe-to-run"
-
-[[exemptions.generic-array]]
-version = "0.14.7"
-criteria = "safe-to-run"
-
-[[exemptions.tiny-keccak]]
-version = "2.0.2"
-criteria = "safe-to-run"
