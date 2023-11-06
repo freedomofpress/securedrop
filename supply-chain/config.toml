@@ -122,7 +122,3 @@ notes = "Windows-only"
 [policy.windows_x86_64_msvc]
 criteria = []
 notes = "Windows-only"
-
-[[exemptions.pyo3]]
-version = "0.18.3"
-criteria = "safe-to-run"

@@ -134,6 +134,11 @@ who = "Kunal Mehta <legoktm@debian.org>"
 criteria = "safe-to-run"
 delta = "0.2.10 -> 0.2.16"
 
+[[audits.pyo3]]
+who = "Kunal Mehta <legoktm@debian.org>"
+criteria = "safe-to-run"
+version = "0.18.3"
+
 [[audits.pyo3-build-config]]
 who = "Kunal Mehta <legoktm@debian.org>"
 criteria = "safe-to-run"
