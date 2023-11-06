@@ -140,6 +140,12 @@ criteria = "safe-to-run"
 version = "0.18.3"
 notes = "Windows, cross-compiling and abi3 code not reviewed."
 
+[[audits.pyo3-ffi]]
+who = "Kunal Mehta <legoktm@debian.org>"
+criteria = "safe-to-run"
+version = "0.18.3"
+notes = "Unsurprisingly lots of unsafe, appears fine for an FFI library. PyPy and Windows code was skipped."
+
 [[audits.pyo3-macros]]
 who = "Cory Francis Myers <cory@freedom.press>"
 criteria = "safe-to-run"

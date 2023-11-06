@@ -126,7 +126,3 @@ notes = "Windows-only"
 [[exemptions.pyo3]]
 version = "0.18.3"
 criteria = "safe-to-run"
-
-[[exemptions.pyo3-ffi]]
-version = "0.18.3"
-criteria = "safe-to-run"
