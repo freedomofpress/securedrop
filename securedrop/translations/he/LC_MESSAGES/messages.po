@@ -4,19 +4,7 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
 #
 msgid ""
-msgstr ""
-"Project-Id-Version: SecureDrop 0.4.3\n"
-"Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2023-10-17 14:30+0000\n"
-"Last-Translator: hwr2023 <avaknin@gmail.com>\n"
-"Language-Team: Hebrew <https://weblate.securedrop.org/projects/securedrop/securedrop/he/>\n"
-"Language: he\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Weblate 4.18.2\n"
-"Generated-By: Babel 2.4.0\n"
+msgstr "Project-Id-Version: SecureDrop 0.4.3\nReport-Msgid-Bugs-To: securedrop@freedom.press\nPO-Revision-Date: 2023-11-12 13:30+0000\nLast-Translator: hwr2023 <avaknin@gmail.com>\nLanguage-Team: Hebrew <https://weblate.securedrop.org/projects/securedrop/securedrop/he/>\nLanguage: he\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=2; plural=(n != 1);\nX-Generator: Weblate 4.18.2\nGenerated-By: Babel 2.4.0\n"
 
 msgid "Name too long"
 msgstr "השם ארוך מדי"
@@ -115,7 +103,7 @@ msgstr "יש לבחור לפחות פריט אחד."
 msgid "Your download failed because the file could not be found. An admin can find more information in the system and monitoring logs."
 msgid_plural "Your download failed because a file could not be found. An admin can find more information in the system and monitoring logs."
 msgstr[0] "ההורדה נכשלה כי הקובץ לא נמצא. מידע נוסף נגיש בהנהלת המערכת ביומני הניטור."
-msgstr[1] "ההורדה נכשלה כי הקובץ לא נמצא. מידע נוסף נגיש בהנהלת המערכת ביומני הניטור."
+msgstr[1] "ההורדה נכשלה כי לא נמצאו קובצים. מידע נוסף נגיש בהנהלת המערכת ביומני הניטור."
 
 msgid "Only admins can access this page."
 msgstr "עמוד זה נגיש להנהלה בלבד."
@@ -146,22 +134,22 @@ msgid "You cannot send an empty reply."
 msgstr "אין אפשרות לשלוח תגובה ריקה."
 
 msgid "To configure a minimum message length, you must set the required number of characters."
-msgstr ""
+msgstr "כדי להגדיר אורך הודעה מינימלי, עליך להגדיר את מספר התווים הנדרש."
 
 msgid "File required."
 msgstr "קובץ נדרש."
 
 msgid "You can only upload PNG image files."
-msgstr ""
+msgstr "אתה יכול להעלות רק קובצי תמונה בפורמט PNG."
 
 msgid "The source will receive your reply next time they log in."
-msgstr ""
+msgstr "המקור יקבל את תשובתך בפעם הבאה שהוא יתחבר."
 
 msgid "You must select one or more items for download"
-msgstr ""
+msgstr "עליך לבחור פריט אחד או יותר להורדה"
 
 msgid "You must select one or more items for deletion"
-msgstr ""
+msgstr "עליך לבחור פריט אחד או יותר למחיקה"
 
 msgid "No unread submissions for this source."
 msgstr "אין טפסים שלא נקראו עבור המקור הזה."
@@ -170,52 +158,52 @@ msgid "Account updated."
 msgstr "החשבון עודכן."
 
 msgid "Login failed."
-msgstr ""
+msgstr "ההתחברות נכשלה."
 
 msgid "Please wait at least {num} second before logging in again."
 msgid_plural "Please wait at least {num} seconds before logging in again."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "המתן לפחות שניה אחת לפני שתתחבר שוב."
+msgstr[1] "המתן לפחות {num} שניות לפני שתתחבר שוב."
 
 msgid "Your 2FA details are invalid - please contact an administrator to reset them."
-msgstr ""
+msgstr "פרטי האימות הדו-שלבי שלך אינם תקינים - אנא צור קשר עם מנהל מערכת כדי לאפס אותם."
 
 msgid "Please wait for a new code from your two-factor mobile app or security key before trying again."
-msgstr ""
+msgstr "אנא המתן לקוד חדש מהאפליקציה או ממפתח האבטחה שלך לפני שתנסה שוב."
 
 msgid "The item has been deleted."
 msgid_plural "{num} items have been deleted."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "הפריט נמחק."
+msgstr[1] "{num} פריטים נמחקו."
 
 msgid "No collections selected for deletion."
-msgstr ""
+msgstr "לא נבחרו אוספים למחיקה."
 
 msgid "The account and all data for the source have been deleted."
 msgid_plural "The accounts and all data for {n} sources have been deleted."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "החשבון וכל הנתונים עבור המקור נמחקו."
+msgstr[1] "החשבונות וכל הנתונים עבור {n} מקורות נמחקו."
 
 msgid "You must select one or more items for deletion."
-msgstr ""
+msgstr "עליך לבחור פריט אחד או יותר למחיקה."
 
 msgid "The files and messages have been deleted."
-msgstr ""
+msgstr "הקבצים וההודעות נמחקו."
 
 msgid "Name updated."
-msgstr ""
+msgstr "השם עודכן."
 
 msgid "The password you submitted is invalid. Password not changed."
-msgstr ""
+msgstr "הסיסמה שהזנת אינה חוקית. הסיסמה לא שונתה."
 
 msgid "There was an error, and the new password might not have been saved correctly. To prevent you from getting locked out of your account, you should reset your password again."
-msgstr ""
+msgstr "אירעה שגיאה, וייתכן שהסיסמה החדשה לא נשמרה כהלכה. כדי למנוע ממך להינעל מחוץ לחשבון שלך, עליך לאפס שוב את הסיסמה שלך."
 
 msgid "Password updated. Don't forget to save it in your KeePassX database. New password:"
 msgstr "הסיסמא עודכנה. אל תשכח לשמור אותה בKeePassX. הסיסמא החדשה היא:"
 
 msgid "No unread submissions in selected collections."
-msgstr ""
+msgstr "אין הודעות שלא נקראו באוספים שנבחרו."
 
 msgid "Close"
 msgstr "סגור"
@@ -224,10 +212,10 @@ msgid "Cancel"
 msgstr "בטל"
 
 msgid "Un-star {designation}"
-msgstr ""
+msgstr "הסר כוכב {designation}"
 
 msgid "Star {designation}"
-msgstr ""
+msgstr "סמן כוכב {designation}"
 
 msgid "1 doc"
 msgid_plural "{num} docs"
@@ -308,7 +296,7 @@ msgid "Once you have paired FreeOTP with this account, enter the 6-digit verific
 msgstr "לאחר ששייכת FreeOTP לחשבון זה, הזן את קוד האימות בן 6 הספרות למטה:"
 
 msgid "Enable YubiKey (OATH-HOTP)"
-msgstr "הפעלת  (OATH-HOTP)"
+msgstr "הפעלת (OATH-HOTP)"
 
 msgid "Once you have configured your YubiKey, enter the 6-digit verification code below:"
 msgstr "לאחר הגדרת ה- YubiKey שלך, הזן את קוד האימות בן 6 הספרות למטה:"
@@ -356,7 +344,7 @@ msgid "Delete user {username}"
 msgstr "מחק את המשתמש {username}"
 
 msgid "never"
-msgstr "לעולם לא"
+msgstr "אף פעם"
 
 msgid "Delete Confirmation"
 msgstr "אימות מחיקה"
@@ -422,7 +410,7 @@ msgid "Navigation"
 msgstr "ניווט"
 
 msgid "Skip to main content"
-msgstr "קישור נגישות למשתמשים המסתמכים על מכשירים מסייעים כגון קוראי מסך, מוסתר אלא אם כן אתה מתמקד בו באופן פעיל."
+msgstr "דלג לתוכן הראשי"
 
 msgid "Logged on as"
 msgstr "מחובר כ"
@@ -443,7 +431,7 @@ msgid "All Sources"
 msgstr "כל המקורות"
 
 msgid "All messages, files, and replies from sources are stored as encrypted files for security. To read them, you will need to decrypt them on your Secure Viewing Station."
-msgstr ""
+msgstr "כל ההודעות, הקבצים והתשובות ממקורות מאוחסנים כקבצים מוצפנים לצורך אבטחה. כדי לקרוא אותם, תצטרך לפענח אותם בתחנת הצפייה המאובטחת שלך."
 
 msgid "Download Selected"
 msgstr "הורד נבחרים"
@@ -452,58 +440,58 @@ msgid "Delete Selected"
 msgstr "מחק נבחרים"
 
 msgid "Status"
-msgstr ""
+msgstr "מצב"
 
 msgid "Filename"
-msgstr ""
+msgstr "שם קובץ"
 
 msgid "Size"
-msgstr ""
+msgstr "גודל"
 
 msgid "Type"
-msgstr ""
+msgstr "סוג"
 
 msgid "Unread"
-msgstr ""
+msgstr "לא נקרא"
 
 msgid "Read"
-msgstr ""
+msgstr "נקרא"
 
 msgid "Uploaded File"
-msgstr ""
+msgstr "קובץ שהועלה"
 
 msgid "Reply"
-msgstr "השב"
+msgstr "תשובה"
 
 msgid "Message"
 msgstr "הודעה"
 
 msgid "Are you sure you want to delete the selected submissions?"
-msgstr ""
+msgstr "האם אתה בטוח שברצונך למחוק את ההודעות שנבחרו?"
 
 msgid "No submissions to display."
-msgstr ""
+msgstr "אין הודעות לתצוגה."
 
 msgid "You can write a secure reply to the person who submitted these messages and/or files:"
-msgstr ""
+msgstr "ניתן לכתוב תשובה מאובטחת לאדם ששלח את ההודעות ו/או הקבצים האלה:"
 
 msgid "Write a reply."
-msgstr ""
+msgstr "כתוב תשובה."
 
 msgid "Submit reply"
-msgstr ""
+msgstr "שלח תשובה"
 
 msgid "This source has no encryption key."
-msgstr ""
+msgstr "למקור זה אין מפתח הצפנה."
 
 msgid "An encryption key will be generated for the source the next time they log in, after which you will be able to reply to the source here."
-msgstr "מפתח צופן יווצר עבור המקור הזה כאשר יתחבר בפעם הבאה, אחר כך תוכל להגיב עבורו כאן."
+msgstr "מפתח צופן יווצר עבור המקור הזה כאשר יתחבר בפעם הבאה, לאחר כך תוכל להגיב עבורו כאן."
 
 msgid "Delete Source Account"
-msgstr ""
+msgstr "מחיקת חשבון מקור"
 
 msgid "Are you sure?"
-msgstr ""
+msgstr "האם את.ה בטוח.ה?"
 
 msgid ""
 "<p>\n"
@@ -516,73 +504,73 @@ msgid ""
 "<p>\n"
 "All files, messages, and replies will also be deleted when their account is deleted.\n"
 "</p>"
-msgstr ""
+msgstr "<p>\nמחיקת החשבון <b>{source}</b>\n</p>\n<ul>\n<li>תמנע כניסה חוזרת עם שם הקוד של החשבון\n<li>תמנע מהארגון לשלוח תשובות\n</ul>\n<p>\nכל הקבצים, ההודעות והתשובות יימחקו גם הם.\n</p>"
 
 msgid "Yes, Delete Source Account"
-msgstr ""
+msgstr "כן, מחק חשבון מקור"
 
 msgid "Instance Configuration"
-msgstr ""
+msgstr "תצורת מופע"
 
 msgid "Organization Name"
-msgstr ""
+msgstr "שם הארגון"
 
 msgid "Set the organization name used on the SecureDrop web interfaces:"
-msgstr ""
+msgstr "שם האירגון בממשק SecureDrop:"
 
 msgid "Set Organization Name"
-msgstr ""
+msgstr "הגדר שה ארגון"
 
 msgid "SET ORGANIZATION NAME"
-msgstr ""
+msgstr "הגדר שם ארגון"
 
 msgid "Logo Image"
-msgstr "סמליל"
+msgstr "לוגו"
 
 msgid "Here you can update the image displayed on the SecureDrop web interfaces:"
-msgstr "כאן תוכל לעדכן את התמונה שתוצג באתר של SecureDrop:"
+msgstr "כאן תוכל לעדכן את התמונה שתוצג בממשק SecureDrop:"
 
 msgid "Logo image:"
-msgstr ""
+msgstr "קובץ לוגו:"
 
 msgid "Recommended size: 500px * 450px"
 msgstr "גודל מומלץ: 500px * 450px"
 
 msgid "Update Logo"
-msgstr ""
+msgstr "עדכן לוגו"
 
 msgid "UPDATE LOGO"
-msgstr "עדכן סמליל"
+msgstr "עדכן לוגו"
 
 msgid "Submission Preferences"
-msgstr ""
+msgstr "העדפות הגשה"
 
 msgid "Prevent sources from uploading files. Sources will still be able to send messages."
-msgstr ""
+msgstr "מנע ממקורות להעלות קבצים. מקורות עדיין יוכלו לשלוח הודעות."
 
 msgid "Prevent sources from sending initial messages shorter than the minimum required length:"
-msgstr ""
+msgstr "מנע ממקורות לשלוח הודעות ראשוניות קצרות מהאורך המינימלי הנדרש:"
 
 msgid "Minimum number of characters."
-msgstr ""
+msgstr "מספר מינימלי של תווים."
 
 msgid "Prevent sources from submitting their codename as an initial message."
-msgstr ""
+msgstr "מנע ממקורות לשלוח את שם הקוד שלהם כהודעה ראשונית."
 
 msgid "Update Submission Preferences"
-msgstr ""
+msgstr "עדכן העדפות הגשה"
 
 msgid "UPDATE SUBMISSION PREFERENCES"
-msgstr ""
+msgstr "עדכן העדפות הגשה"
 
 msgid "Alerts"
 msgstr "התראות"
 
 msgid "Send an encrypted email to verify if OSSEC alerts work correctly:"
-msgstr "שלח מייל מוצפן אם התראות OSSEC עובדות:"
+msgstr "שלח מייל מוצפן בכדי לוודא שהתראות OSSEC פועלות באופ תקין:"
 
 msgid "Send Test OSSEC Alert"
-msgstr ""
+msgstr "בדיקת התראות OSSEC"
 
 msgid "SEND TEST OSSEC ALERT"
 msgstr "שלח התראת ניסיון של OSSEC"
@@ -594,482 +582,482 @@ msgid "Edit your account"
 msgstr "ערוך את החשבון"
 
 msgid "Change Name and Admin Status"
-msgstr ""
+msgstr "עדכן שם ומצב מנהל"
 
 msgid "Update account"
-msgstr ""
+msgstr "עדכן חשבון"
 
 msgid "UPDATE"
 msgstr "עדכן"
 
 msgid "Change Name"
-msgstr ""
+msgstr "שנה שם"
 
 msgid "Update your account"
-msgstr ""
+msgstr "עדכן חשבון"
 
 msgid "Reset Password"
 msgstr "שחזר סיסמא"
 
 msgid "SecureDrop uses automatically generated diceware passwords."
-msgstr ""
+msgstr "SecureDrop יוצר סיסמאות diceware באופן אוטומטי."
 
 msgid "Your password will be changed immediately, so you will need to save it before pressing the \"Reset Password\" button."
-msgstr ""
+msgstr "הסיסמה שלך תשתנה מיד, ששמור אותה לפני שתלחץ על \"איפוס סיסמה\"."
 
 msgid "Please enter your current password and two-factor code."
-msgstr ""
+msgstr "הזן סיסמה נוכחית וקוד אימות דו-שלבי."
 
 msgid "Current Password"
-msgstr ""
+msgstr "סיסמה נוכחית"
 
 msgid "Two-factor Code"
-msgstr ""
+msgstr "קוד אימות דו-שלבי"
 
 msgid "The user's password will be changed to:"
-msgstr ""
+msgstr "הסיסמה תתעדכן ל:"
 
 msgid "Your password will be changed to:"
-msgstr ""
+msgstr "הסיסמה תתעדכן ל:"
 
 msgid "RESET PASSWORD"
-msgstr ""
+msgstr "איפוס סיסמה"
 
 msgid "Reset Two-Factor Authentication"
-msgstr ""
+msgstr "איפוס אימות דו-שלבי"
 
 msgid "If a user's two-factor authentication credentials have been lost or compromised, you can reset them here. <em>If you do this, make sure the user is present and ready to set up their device with the new two-factor credentials. Otherwise, they will be locked out of their account.</em>"
-msgstr ""
+msgstr "אם קודי האימות הדו-שלבי של משתמש אבדו או נפגעו, תוכל לאפס אותם כאן. <em>אם תעשה זאת, ודא שהמשתמש נוכח ומוכן להגדיר את המכשיר שלו עם קודי האימות הדו-שלבי החדשים. אחרת, הוא יינעל מחוץ לחשבון.</em>"
 
 msgid "If your two-factor authentication credentials have been lost or compromised, or you got a new device, you can reset your credentials here. <em>If you do this, make sure you are ready to set up your new device, otherwise you will be locked out of your account.</em>"
-msgstr ""
+msgstr "אם קודי האימות הדו-שלבי שלך אבדו או נגנבו, או שיש לך מכשיר חדש, תוכל לאפס את הההגדות כאן. <em>אם תעשה זאת, ודא שאתה מוכן להגדיר את המכשיר החדש שלך, אחרת תינעל מחוץ לחשבונך.</em>"
 
 msgid "To reset two-factor authentication for mobile apps such as FreeOTP, choose the first option. For security keys like the YubiKey, choose the second one."
-msgstr ""
+msgstr "בכדי לאפס את האימות הדו-שלבי באפליקציות לנייד כגון FreeOTP, בחר באפשרות הראשונה. עבור מפתחות אבטחה כמו YubiKey, בחר את באפשרות השניה."
 
 msgid "Reset two-factor authentication for mobile apps, such as FreeOTP"
-msgstr ""
+msgstr "הגדרה מחדש של אימות דו-שלבי באמצעות אפליקציה כגון FreeOTP"
 
 msgid "RESET MOBILE APP CREDENTIALS"
-msgstr ""
+msgstr "הגדרה מחדש של מזהים לאפליקצית מובייל"
 
 msgid "Reset Mobile App Credentials"
-msgstr ""
+msgstr "הגדרה מחדש של מזהים לאפליקצית מובייל"
 
 msgid "Reset two-factor authentication for security keys, like a YubiKey"
-msgstr ""
+msgstr "הגדרה מחדש של אימות דו-שלבי באמצעות מפתח כגון YubiKey"
 
 msgid "RESET SECURITY KEY CREDENTIALS"
-msgstr ""
+msgstr "איפוס נתוני מפתח הצפנה"
 
 msgid "Reset Security Key Credentials"
-msgstr ""
+msgstr "איפוס נתוני מפתח הצפנה"
 
 msgid "Download Unread"
-msgstr ""
+msgstr "הורדת הודעות שלא נקראו"
 
 msgid "Download"
-msgstr ""
+msgstr "הורדה"
 
 msgid "Star"
-msgstr ""
+msgstr "סמן כוכב"
 
 msgid "Un-star"
-msgstr ""
+msgstr "הסר כוכב"
 
 msgid "Designation"
-msgstr ""
+msgstr "יעוד"
 
 msgid "Files"
-msgstr ""
+msgstr "קבצים"
 
 msgid "Messages"
-msgstr ""
+msgstr "הודעות"
 
 msgid "Date"
-msgstr ""
+msgstr "תאריך"
 
 msgid "There are no submissions!"
-msgstr ""
+msgstr "אין הודעות!"
 
 msgid "Filter by codename"
-msgstr ""
+msgstr "סינון לפי שם קוד"
 
 msgid "Select All"
-msgstr ""
+msgstr "בחר הכל"
 
 msgid "Select Unread"
-msgstr ""
+msgstr "בחר הודעות שלא נקראו"
 
 msgid "Select None"
-msgstr ""
+msgstr "הסרת בחירה"
 
 msgid "Are you sure you want to reset two-factor authentication for {username}?"
-msgstr ""
+msgstr "האם אתה בטוח שברצונך לאפס הגדרות אימות דו-שלבי למשתמש {username}?"
 
 msgid "Sources selected: "
-msgstr ""
+msgstr "מקורות שנבחרו: "
 
 msgid "Selected language"
-msgstr ""
+msgstr "שפה"
 
 msgid "Choose language"
-msgstr ""
+msgstr "בחר שפה"
 
 msgid "Log in to access the journalist interface"
-msgstr ""
+msgstr "היכנס בכדי לגשת לממשק העיתונאי"
 
 msgid "Password"
-msgstr ""
+msgstr "סיסמה"
 
 msgid "Show password"
-msgstr ""
+msgstr "הצגת סיסמה"
 
 msgid "Log In"
-msgstr ""
+msgstr "כניסה"
 
 msgid "LOG IN"
-msgstr ""
+msgstr "כניסה"
 
 msgid "Field must be between 1 and {max_codename_len} character long."
 msgid_plural "Field must be between 1 and {max_codename_len} characters long."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "שדה באורך תו אחד."
+msgstr[1] "שדה באורך עד {max_codename_len} תוים."
 
 msgid "Invalid input."
-msgstr ""
+msgstr "שגיאה בנתונים."
 
 msgid "Write a message."
-msgstr ""
+msgstr "כתוב הודעה."
 
 msgid "Select a file to upload."
-msgstr ""
+msgstr "בחר קובץ לטעינה."
 
 msgid "Message text too long."
-msgstr ""
+msgstr "הודעה ארוכה מידי."
 
 msgid "Large blocks of text must be uploaded as a file, not copied and pasted."
-msgstr ""
+msgstr "קטעי טקסט ארוכים יש לטעון כקובץ, לא להעתיק ולהדביק."
 
 msgid "Your connection is not anonymous right now!"
-msgstr ""
+msgstr "החיבור שלך אינו אנונימי כרגע!"
 
 msgid "You were redirected because you are already logged in. If you want to create a new account, you should log out first."
-msgstr ""
+msgstr "הופנית מחדש כי אתה כבר מחובר. אם ברצונך ליצור חשבון חדש, קודם עליך להתנתק."
 
 msgid "You are already logged in. Please verify your codename as it may differ from the one displayed on the previous page."
-msgstr ""
+msgstr "אתה כבר מחובר. אנא אמת את שם הקוד שלך מכיוון שהוא עשוי להיות שונה מזה המוצג בעמוד הקודם."
 
 msgid "There was a temporary problem creating your account. Please try again."
-msgstr ""
+msgstr "בעיה זמנית ביצירת החשבון שלך. אנא נסה שוב."
 
 msgid "You must enter a message or choose a file to submit."
-msgstr ""
+msgstr "עליך להזין הודעה או לבחור קובץ לטעינה."
 
 msgid "You must enter a message."
-msgstr ""
+msgstr "עליך להזין הודעה."
 
 msgid "Your first message must be at least {} characters long."
-msgstr ""
+msgstr "ההודעה הראשונה שלך חייבת להיות באורך של {} תווים לפחות."
 
 msgid "Please do not submit your codename!"
-msgstr ""
+msgstr "אין לשלוח את שם הקוד בהודעה!"
 
 msgid "Keep your codename secret, and use it to log in later to check for replies."
-msgstr ""
+msgstr "שמור את שם הקוד שלך בסוד. שם הקוד משמש לכניסה חוזרת ולקריאת תשובות."
 
 msgid "Thank you for sending this information to us. Please check back later for replies."
-msgstr ""
+msgstr "תודה ששלחת לנו מידע זה. אנא חזור מאוחר יותר לקבלת תשובות."
 
 msgid "Thanks! We received your message."
-msgstr ""
+msgstr "תודה! קיבלנו את הודעתך."
 
 msgid "Thanks! We received your file."
-msgstr ""
+msgstr "תודה! קיבלנו את הקובץ."
 
 msgid "Thanks! We received your file and message."
-msgstr ""
+msgstr "תודה! קיבלנו את הקובץ ואת ההודעה שלך."
 
 msgid "Reply deleted"
-msgstr ""
+msgstr "התשובב נמחקה"
 
 msgid "All replies have been deleted"
-msgstr ""
+msgstr "כל התשובות נמחקו"
 
 msgid "Sorry, that is not a recognized codename."
-msgstr ""
+msgstr "מצטערים, זה לא שם קוד מוכר."
 
 msgid "Important"
-msgstr ""
+msgstr "חשוב"
 
 msgid "You were logged out due to inactivity. Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
-msgstr ""
+msgstr "התנתקת עקב חוסר פעילות. לחץ על הלחצן <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>זהות חדשה</b> בסרגל הכלים של דפדפן Tor שלך לפני שתמשיך הלאה. פעולה זו תנקה את נתוני הפעילות של דפדפן Tor במכשיר זה."
 
 msgid "Protecting Journalists and Sources"
-msgstr ""
+msgstr "הגנה על עיתונאים ומקורות"
 
 msgid "Skip to notification"
-msgstr ""
+msgstr "דלג להתראה"
 
 msgid "We're sorry, our SecureDrop is currently offline."
-msgstr ""
+msgstr "אנו מצטערים, ה-SecureDrop שלנו לא פעיל כרגע."
 
 msgid "Please try again later. Check our website for more information."
-msgstr ""
+msgstr "בבקשה נסה שוב מאוחר יותר. בדוק באתר שלנו למידע נוסף."
 
 msgid "LOG OUT"
-msgstr ""
+msgstr "התנתק"
 
 msgid "Server error"
-msgstr ""
+msgstr "שגיאה בשרת"
 
 msgid "Sorry, the website encountered an error and was unable to complete your request."
-msgstr ""
+msgstr "מצטערים, האתר נתקל בשגיאה ולא הצליח להשלים את בקשתך."
 
 msgid "Look up a codename..."
-msgstr ""
+msgstr "חפש שם קוד..."
 
 msgid "Powered by"
-msgstr ""
+msgstr "מופעל ע\"י"
 
 msgid "Please note: Sharing sensitive information may put you at risk, even when using Tor and SecureDrop."
-msgstr ""
+msgstr "שימו לב: שיתוף מידע רגיש עלול לסכן אתכם, גם בעת שימוש ב- Tor וב-SecureDrop."
 
 msgid "SecureDrop is a project of Freedom of the Press Foundation."
-msgstr ""
+msgstr "SecureDrop הוא פרויקט של Freedom of the Press Foundation."
 
 msgid "Get Your Codename"
-msgstr ""
+msgstr "קבל את שם הקוד שלך"
 
 msgid "A <em>codename</em> in SecureDrop functions as both your username and your password."
-msgstr ""
+msgstr "<em>שם הקוד</em> ב-SecureDrop מתפקד הן כשם המשתמש והן כסיסמה."
 
 msgid "You will need this codename to log into our SecureDrop later:"
-msgstr ""
+msgstr "תזדקק לשם הקוד הזה כדי להיכנס ל-SecureDrop שלנו מאוחר יותר:"
 
 msgid "<strong>Keep it secret.</strong> Do not share it with anyone."
-msgstr ""
+msgstr "<strong>שמור אותו בסוד</strong> ואל תשתף עם אף אחד."
 
 msgid "<strong>Keep it safe.</strong> There is no account recovery option."
-msgstr ""
+msgstr "<strong>שמור במקום בטוח.</strong> אין אפשרות לשחזור חשבון."
 
 msgid "Continue"
-msgstr ""
+msgstr "המשך"
 
 msgid "Welcome"
-msgstr ""
+msgstr "ברוכים המאים"
 
 msgid "Your Tor Browser's <a id=\"disable-js\" href=\"\"><b>Security Level</b></a> is too low. Use the <img src=\"{icon}\" alt=\"&quot;Security Level&quot;\"> button in your browser’s toolbar to change it."
-msgstr ""
+msgstr "<a id=\"disable-js\" href=\"\"><b>רמת האבטחה</b></a> של דפדפן Tor שלך נמוכה מדי. השתמש בלחצן <img src=\"{icon}\" alt=\"&quot;רמת אבטחה&quot;\"> בסרגל הכלים של הדפדפן שלך כדי לשנות אותו."
 
 msgid "How to change your security level"
-msgstr ""
+msgstr "כיצד לשנות את רמת האבטחה שלך"
 
 msgid "Click the <img src=\"{icon}\" alt=\"&quot;Security Level&quot; button\"> in the toolbar above"
-msgstr ""
+msgstr "לחץ על הלחצן <img src=\"{icon}\" alt=\"&quot;רמת אבטחה&quot;\"> בסרגל הכלים למעלה"
 
 msgid "Click <b>Change</b> to open Security Level preferences"
-msgstr ""
+msgstr "לחץ על <b>שנה</b> כדי לפתוח את העדפות רמת האבטחה"
 
 msgid "Select <b>Safest</b> and close the preferences tab"
-msgstr ""
+msgstr "בחר <b>בטוח ביותר</b> וסגור את כרטיסיית ההעדפות"
 
 msgid "<a href=\"/\" aria-label=\"Follow these instructions, then refresh this page\">Refresh this page</a>, and you're done!"
-msgstr ""
+msgstr "<a href=\"/\" aria-label=\"עקוב אחר ההוראות האלה, ולאחר מכן רענן את הדף הזה\">רענן דף זה</a>, וסיימת!"
 
 msgid "<strong>It is recommended to use Tor Browser to access SecureDrop:</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
-msgstr ""
+msgstr "<strong>מומלץ להשתמש בדפדפן Tor כדי לגשת אל SecureDrop:</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">למד כיצד להתקין אותו</a>, או התעלם מהאזהרה זו כדי להמשיך."
 
 msgid "<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop version.</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
-msgstr ""
+msgstr "<strong>מומלץ להשתמש בגרסת שולחן העבודה של דפדפן Tor כדי לגשת ל-SecureDrop, מכיוון ש-Orfox אינה מספקת את אותה רמת אבטחה ואנונימיות כמו גרסת שולחן העבודה.</strong> <a class=\"recommend-tor\" href= \"{tor_browser_url}\">למד כיצד להתקין אותו</a>, או התעלם מהאזהרה זו כדי להמשיך."
 
 msgid "{} logo"
-msgstr ""
+msgstr "לוגו של {}"
 
 msgid "First submission"
-msgstr ""
+msgstr "הודעה ראשונה"
 
 msgid "First time submitting to our SecureDrop? Start here."
-msgstr ""
+msgstr "פעם ראשונה ב-SecureDrop שלנו? התחל כאן."
 
 msgid "Get Started"
-msgstr ""
+msgstr "התחל"
 
 msgid "GET STARTED"
-msgstr ""
+msgstr "התחל"
 
 msgid "Return visit"
-msgstr ""
+msgstr "ביקור חוזר"
 
 msgid "Already have a codename? Check for replies or submit something new."
-msgstr ""
+msgstr "כבר יש לך שם קוד? בדוק אם יש תשובות או שלח משהו חדש."
 
 msgid "Log in"
-msgstr ""
+msgstr "כניסה"
 
 msgid "Enter Codename"
-msgstr ""
+msgstr "הזן שם קוד"
 
 msgid "Enter your codename"
-msgstr ""
+msgstr "הזן את שם הקוד שלך"
 
 msgid "CANCEL"
-msgstr ""
+msgstr "ביטול"
 
 msgid "Additional Action Required"
-msgstr ""
+msgstr "נדרשת פעולה נוספת"
 
 msgid "One more thing..."
-msgstr ""
+msgstr "עוד דבר אחד..."
 
 msgid "Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar. This will clear your Tor Browser activity data on this device."
-msgstr ""
+msgstr "לחץ על הלחצן <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>זהות חדשה</b> בסרגל הכלים של דפדפן Tor. פעולה זו תנקה את נתוני הפעילות של דפדפן Tor במכשיר זה."
 
 msgid "Submit Files or Messages"
-msgstr ""
+msgstr "שלח קבצים או הודעות"
 
 msgid "Submit Messages"
-msgstr ""
+msgstr "שליחת הודעות"
 
 msgid "You can submit any kind of file, a message, or both."
-msgstr ""
+msgstr "אפשר לשלוח כל סוג של קובץ, הודעה או שניהם."
 
 msgid "If you are already familiar with GPG, you can optionally encrypt your files and messages with our <a href=\"{url}\" class=\"text-link\">public key</a> before submission. Files are encrypted as they are received by SecureDrop."
-msgstr ""
+msgstr "אם ידוע לך כיצד להשתמש ב- GPG, אפשר גם להצפין את הקבצים וההודעות שלך באמצעות <a href=\"{url}\" class=\"text-link\">המפתח הציבורי</a> שלנו לפני ההגשה. הקבצים מוצפנים בזמן קבלתם ב- SecureDrop."
 
 msgid "If you are already familiar with GPG, you can optionally encrypt your messages with our <a href=\"{url}\" class=\"text-link\">public key</a> before submission."
-msgstr ""
+msgstr "אם ידוע לך כיצד להשתמש ב- GPG, אפשר גם להצפין את ההודעות שלך באמצעות <a href=\"{url}\" class=\"text-link\">המפתח הציבורי</a> שלנו לפני ההגשה."
 
 msgid "<a href=\"{url}\" class=\"text-link\">Learn more</a>."
-msgstr ""
+msgstr "<a href=\"{url}\" class=\"text-link\">למידע נוסף</a>."
 
 msgid "Maximum upload size: 500 MB"
-msgstr ""
+msgstr "גודל העלאה מקסימלי: 500 מגה-בייט"
 
 msgid "If you are only sending a message, it must be at least {} characters long."
-msgstr ""
+msgstr "אם אתה שולח רק הודעה, היא חייבת להיות באורך של לפחות {} תווים."
 
 msgid "Anti-spam check. Do not fill this in!"
-msgstr ""
+msgstr "בדיקת אנטי ספאם. אל תמלא את זה!"
 
 msgid "Submit"
-msgstr ""
+msgstr "שלח"
 
 msgid "Read Replies"
-msgstr ""
+msgstr "קרא תשובות"
 
 msgid "You have received a reply. To protect your identity in the unlikely event someone learns your codename, please delete all replies when you're done with them. This also lets us know that you are aware of our reply. You can respond by submitting new files and messages above."
-msgstr ""
+msgstr "קיבלת תשובה. כדי להגן על זהותך במקרה הבלתי סביר שמישהו יגלה את שם הקוד שלך, אנא מחק את כל התשובות כשתסיים איתם. זה גם מאפשר לנו לדעת שאתה מודע לתשובתנו. אתה יכול להגיב על ידי שליחת קבצים והודעות חדשות למעלה."
 
 msgid "Delete this reply"
-msgstr ""
+msgstr "מחק תשובה הזו"
 
 msgid "Delete reply from {timestamp}?"
-msgstr ""
+msgstr "למחוק את התשובה מ-{timestamp}?"
 
 msgid "Delete All Replies"
-msgstr ""
+msgstr "מחיקת כל התשובות"
 
 msgid "DELETE ALL REPLIES"
-msgstr ""
+msgstr "מחיקת כל התשובות"
 
 msgid "Are you finished with the replies?"
-msgstr ""
+msgstr "סיימת עם התשובות?"
 
 msgid "YES, DELETE ALL REPLIES"
-msgstr ""
+msgstr "כן, מחק את כל התשובות"
 
 msgid "No Messages"
-msgstr ""
+msgstr "אין הודעות"
 
 msgid "Page not found"
-msgstr ""
+msgstr "הדף לא נמצא"
 
 msgid "Sorry, we couldn't locate what you requested."
-msgstr ""
+msgstr "מצטערים, לא הצלחנו לאתר את מה שביקשת."
 
 msgid "WARNING: Proxy Service Detected"
-msgstr ""
+msgstr "אזהרה: זוהה שירות פרוקסי"
 
 msgid "Proxy Service Detected"
-msgstr ""
+msgstr "זוהה שירות פרוקסי"
 
 msgid "You appear to be using a Tor proxy service to access SecureDrop. Proxy services do not protect your anonymity."
-msgstr ""
+msgstr "נראה שאתה משתמש בשירות פרוקסי של Tor כדי לגשת ל-SecureDrop. שירותי פרוקסי אינם מגנים על האנונימיות שלך."
 
 msgid "Anyone monitoring your Internet traffic &mdash; including your government, your Internet provider, or the proxy operator &mdash; may be able to identify you."
-msgstr ""
+msgstr "כל מי שעוקב אחר תעבורת האינטרנט שלך &mdash; כולל הממשלה שלך, ספק האינטרנט שלך או מפעיל ה-proxy &mdash; אולי יוכל לזהות אותך."
 
 msgid "Always use Tor Browser (<code>{}</code>) to access SecureDrop. Valid SecureDrop site addresses end with <code>.onion</code>. The correct address for this site is:"
-msgstr ""
+msgstr "השתמש תמיד בדפדפן Tor (<code>{}</code>) כדי לגשת ל-SecureDrop. כתובות אתר SecureDrop חוקיות מסתיימות ב-<code>.onion</code>. הכתובת הנכונה לאתר זה היא:"
 
 msgid "If you are already using Tor Browser, copy the address above and generate a new identity before you access SecureDrop."
-msgstr ""
+msgstr "אם אתה כבר משתמש בדפדפן Tor, העתק את הכתובת למעלה וצור זהות חדשה לפני שאתה ניגש ל-SecureDrop."
 
 msgid "If there is a reasonable risk of your Internet traffic being monitored, consider connecting from a different location or network."
-msgstr ""
+msgstr "אם קיים סיכון סביר למעקב אחר תעבורת האינטרנט שלך, שקול להתחבר ממיקום אחר או מרשת אחרת."
 
 msgid "You Should Use Tor Browser"
-msgstr ""
+msgstr "עליך להשתמש בדפדפן Tor"
 
 msgid "If you are not using Tor Browser, you <strong>may not be anonymous</strong>."
-msgstr ""
+msgstr "אם אינך משתמש בדפדפן Tor, <strong>ייתכן שאינך אנונימי</strong>."
 
 msgid "If you want to submit information to SecureDrop, we <strong>strongly advise you</strong> to install Tor Browser and use it to access our site safely and anonymously."
-msgstr ""
+msgstr "אם אתה רוצה לשלוח מידע ל-SecureDrop, אנו <strong>ממליצים לך בחום</strong> להתקין את דפדפן Tor ולהשתמש בו כדי לגשת לאתר שלנו בצורה בטוחה ואנונימית."
 
 msgid "Copy and paste the following address into your browser and follow the instructions to download and install Tor Browser:"
-msgstr ""
+msgstr "העתק והדבק את הכתובת הבאה בדפדפן שלך ובצע את ההוראות להורדה והתקנת דפדפן Tor:"
 
 msgid "If there is a chance that downloading Tor Browser raises suspicion and your mail provider is less likely to be monitored, you can send a mail to <kbd>gettor@torproject.org</kbd> and a bot will answer with instructions."
-msgstr ""
+msgstr "אם יש סיכוי שהורדת דפדפן Tor מעוררת חשד וסביר להניח שספק המייל שלך יהיה פחות במעקב, אתה יכול לשלוח דואר לכתובת <kbd>gettor@torproject.org</kbd> ובוט יענה עם הוראות."
 
 msgid "Remember, your codename is:"
-msgstr ""
+msgstr "זכור, שם הקוד שלך הוא:"
 
 msgid "Codename"
-msgstr ""
+msgstr "שם קוד"
 
 msgid "Show Codename"
-msgstr ""
+msgstr "הצד את שם הקוד"
 
 msgid "Why download the team's public key?"
-msgstr ""
+msgstr "למה להוריד את המפתח הציבורי של SecureDrop?"
 
 msgid "SecureDrop encrypts files and messages after they are submitted. Encrypting messages and files before submission can provide an extra layer of security before your data reaches the SecureDrop server."
-msgstr ""
+msgstr "SecureDrop מצפין קבצים והודעות לאחר הגשתם. הצפנת הודעות וקבצים לפני הגשה יכולה לספק שכבת אבטחה נוספת לפני שהנתונים שלך יגיעו לשרת SecureDrop."
 
 msgid "If you are already familiar with the GPG encryption software, you may wish to encrypt your submissions yourself. To do so:"
-msgstr ""
+msgstr "אם אתה כבר מכיר את תוכנת ההצפנה GPG, ייתכן שתרצה להצפין את ההגשות שלך בעצמך. כדי לעשות זאת:"
 
 msgid ""
 "<a href=\"{url}\">Download</a> the public key. It will be saved to a file called:\n"
 "        <p><code>{submission_key_fpr_filename}</code></p>"
-msgstr ""
+msgstr "<a href=\"{url}\">הורד</a> את המפתח הציבורי. זה יישמר בקובץ בשם:\n        <p><code>{submission_key_fpr_filename}</code></p>"
 
 msgid "Import it into your GPG keyring."
-msgstr ""
+msgstr "ייבא אותו למחזיק מפתחות GPG שלך."
 
 msgid "If you are using <a href=\"{url}\">Tails</a>, you can double-click the <code>.asc</code> file you just downloaded and it will be automatically imported to your keyring."
-msgstr ""
+msgstr "אם אתה משתמש ב-<a href=\"{url}\">Tails</a>, אתה יכול ללחוץ פעמיים על הקובץ <code>.asc</code> שהורדת זה עתה והוא יובא אוטומטית למחזיק המפתחות שלך."
 
 msgid "If you are using macOS or Linux, open the terminal. You can import the key with:<p><code>gpg --import /path/to/{submission_key_fpr_filename}</code></p>"
-msgstr ""
+msgstr "אם אתה משתמש ב-macOS או Linux, פתח את המסוף. אתה יכול לייבא את המפתח באמצעות:<p><code>gpg --import /path/to/{submission_key_fpr_filename}</code></p>"
 
 msgid "Encrypt your submission. Open the terminal and enter this gpg command:"
-msgstr ""
+msgstr "הצפן את ההודעה שלך. פתח טרמינל והזן את פקודת gpg הבאה:"
 
 msgid "<code>gpg --recipient '{submission_key_fpr}' --encrypt /path/to/submission</code>"
-msgstr ""
+msgstr "<code>gpg --recipient '{submission_key_fpr}' --encrypt /path/to/submission</code>"
 
 msgid "Upload your encrypted submission. It will have the same filename as the unencrypted file, with .gpg at the end (e.g. <code>internal_memo.pdf.gpg</code>)"
-msgstr ""
+msgstr "העלה את ההודעה המוצפנת שלך. לקובץ יהיה את אותו השם כמו הקובץ הלא מוצפן, עם סיומת ‎.gpg (לדוגמה, <code>internal_memo.pdf.gpg</code>)"
 
 msgid "<strong>Important:</strong> If you wish to remain anonymous, <strong>do not</strong> use GPG to sign the encrypted file (with the <code>--sign</code> or <code>-s</code> flag) as this will reveal your GPG identity to us."
-msgstr ""
+msgstr "<strong>חשוב:</strong> אם ברצונך להישאר אנונימי, <strong>אל</strong> תשתמש ב-GPG כדי לחתום על הקובץ המוצפן (עם <code>--sign</code> או <code>- s</code> flag) מכיוון שזה יחשוף לנו את זהות ה-GPG שלך."
 
 msgid "Back to submission page"
-msgstr ""
+msgstr "חזרה לדף שליחת ההודעות"
 
 #~ msgid "Username \"{user}\" already taken."
 #~ msgstr "שם המשתמש \"{user}\" כבר תפוס."
