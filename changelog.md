@@ -1,8 +1,54 @@
 # Changelog
 
-## 2.7.0~rc1
+## 2.8.0~rc1
 
 
+
+## 2.7.0
+
+### Web applications
+* Use Sequoia and redwood instead of gnupg and pretty_bad_protocol for GPG operations (#6891, #6884, #6913, #6912, #6925, #6926, #6949, #6958, #6892, #6948, #6946, #6970, #6975, #6972, #6983, #6981, #6998, #7000, #7026, #7029, #7035, #7023, #7071)
+* Update translation workflow to support continuous updates (#6953, #6954, #6985, #6997, #6984, #7010, #7034)
+* Update French diceware wordlist (#6936)
+* Replace pretty-bad-protocol dependency with vendored version (#6836, #6907)
+* Import Markup and escape from markupsafe (#6964)
+* Update wordlist to remove potentially confusing or offensive terms (#7008, #7021)
+* Validate the submission key,disable Journalist and Source Interfaces if a weak key is found (#7059)
+* Dependency changes:
+  * Update cryptography from 41.0.1 to 41.0.3 (#6940)
+
+### Operations
+
+* Remove Ansible check for installed Tor version on servers (#6894)
+* Miscellaneous demo server fixes (#6935, #6994)
+* Update default Dockerfile application versions:
+  * geckodriver to 0.33.0 (#6957)
+  * Firefox to 115esr, Tor Browser to 13.0 (#7001)
+* Update securedrop-admin tooling to reject weak GPG keys with a SHA-1 signature (#6928)
+* Use systemd timers to check for disconnected submissions and source listings (#7009)
+* Dependency changes:
+  * Update Ansible from 2.9.26 to 6.7.0 (ansible-core version 2.13.7) (#6830)
+
+### CI
+
+* Replace bandit, flake8, pylint, and isort with ruff; added more checks (#6885, #6932, #6961, #6995)
+* Update CI to run all non-staging tests on i18n branches (#6923)
+* Reduce mypy execution time by skipping redwood compilation and parsing stub (#6971)
+* Miscellaneous CI updates (#6844, #6920)
+
+### Development
+
+* Improve printing of apparmor denials in testinfra suite (#6883)
+* Set "ia" as unavailable locale, "eo" as test locale  (#6919)
+* Add script to auto-backport PRs to release branches (#6875)
+* Miscellaneous development updates (#6842, #6865, #6871, #6882)
+* Update build script to record commit details (#7019, #7038)
+* Dependency changes:
+  * Remove boto and boto3 dependencies (#6890)
+  * Remove hypothesis dependency (#6893)
+  * Update certifi from 2022.12.7 to 2023.7.22 (#6900)
+  * Update pillow from 9.3.0 to 10.0.1 (#6959)
+  * Update markupsafe from 2.0.1 to 2.1.2 (#7014)
 
 ## 2.6.1
 
