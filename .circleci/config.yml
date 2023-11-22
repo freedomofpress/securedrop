@@ -122,7 +122,7 @@ jobs:
   rust-security:
     # Keep version in sync with rust-toolchain.toml
     docker:
-      - image: rust:1.71.1
+      - image: rust:1.74.0
     steps:
       - checkout
       - run:
