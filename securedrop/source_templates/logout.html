@@ -10,7 +10,7 @@
 <section>
   <h2>{{ gettext('One more thing...') }}</h2>
   <p>
-    {{ gettext('Click the <img src={icon} alt="" width="16" height="16">&nbsp;<b>New Identity</b> button in your Tor Browser\'s toolbar. This will clear your Tor Browser activity data on this device.').format(icon=url_for('static', filename='i/torbroom.png'))  }}
+    {{ gettext('Click the <img src={icon} alt="" width="16" height="16">&nbsp;<b>New Identity</b> button in your <abbr title="The Onion Router">Tor</abbr> Browser\'s toolbar. This will clear your Tor Browser activity data on this device.').format(icon=url_for('static', filename='i/torbroom.png'))  }}
   </p>
 </section>
 {% endblock %}
