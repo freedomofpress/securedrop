@@ -94,7 +94,7 @@
 <section aria-labelledby="config-testalert">
   <h2 id="config-testalert">{{ gettext('Alerts') }}</h2>
 
-  <p>{{ gettext('Send an encrypted email to verify if OSSEC alerts work correctly:') }}</p>
+  <p>{{ gettext('Send an encrypted email to verify if <abbr title="Open Source HIDS SECurity">OSSEC</abbr> alerts work correctly:') }}</p>
 
   <form method="post" action="{{ url_for('admin.ossec_test') }}">
     <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
