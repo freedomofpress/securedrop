@@ -15,7 +15,7 @@
   <form action="{{ url_for('admin.update_org_name') }}" method="post">
     <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
     <div><label
-        for="organization_name">{{ gettext('Set the organization name used on the SecureDrop web interfaces:') }}</label>
+        for="organization_name">{{ gettext('Set the organization name used on the SecureDrop <abbr title="World Wide Web">web</abbr> interfaces:') }}</label>
     </div>
     <div>{{ organization_name_form.organization_name() }}</div>
     <div class="section-spacing">
@@ -32,7 +32,7 @@
 <section aria-labelledby="config-logoimage">
   <h2 id="config-logoimage">{{ gettext('Logo Image') }}</h2>
 
-  <p>{{ gettext('Here you can update the image displayed on the SecureDrop web interfaces:') }}</p>
+  <p>{{ gettext('Here you can update the image displayed on the SecureDrop <abbr title="World Wide Web">web</abbr> interfaces:') }}</p>
 
   <img id="current-logo" src="{{ g.logo }}" class="logo small" alt="{{ g.organization_name }}" width="250">
 
