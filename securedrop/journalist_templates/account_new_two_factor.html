@@ -23,7 +23,7 @@
 <mark id="shared-secret">{{ user.formatted_otp_secret }}</mark>
 <p>{{ gettext("Once you have paired FreeOTP with this account, enter the 6-digit verification code below:") }}</p>
 {% else %}
-<h1>{{ gettext('Enable YubiKey (OATH-HOTP)') }}</h1>
+<h1>{{ gettext('Enable YubiKey (<abbr title="HMAC based one-time password algorithm">OATH-HOTP</abbr>)') }}</h1>
 <p>{{ gettext('Once you have configured your YubiKey, enter the 6-digit verification code below:') }}</p>
 {% endif %}
 <form id="check-token" method="post">
