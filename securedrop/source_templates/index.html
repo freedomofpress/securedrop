@@ -22,7 +22,7 @@
   <div id="browser-security-level" class="warning" role="alert">
     <p>{{ gettext('Your Tor Browser\'s <a id="disable-js" href=""><b>Security Level</b></a> is too low. Use the <img src="{icon}" alt="&quot;Security Level&quot;"> button in your browser’s toolbar to change it.').format(icon=url_for("static", filename="i/font-awesome/white/guard.svg")) }}</p>
   </div>
-  {# Warning bubble to help TB users disable JavaScript with Tor Browser's Security Levels
+  {# Warning bubble to help <abbr title="Tor Browser">TB</abbr> users disable JavaScript with <abbr title="The Onion Router">Tor</abbr> Browser's Security Levels
     Included here so the images can preload while the user is first
     reading the page. Hidden by default. #}
   <dialog open id="security-level-info" aria-labelledby="security-level-heading"
