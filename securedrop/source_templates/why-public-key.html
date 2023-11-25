@@ -6,7 +6,7 @@
 <h2>{{ gettext("Why download the team's public key?") }}</h2>
 <p>{{ gettext("SecureDrop encrypts files and messages after they are submitted. Encrypting messages and files before submission can provide an extra layer of security before your data reaches the SecureDrop server.") }}
 </p>
-<p>{{ gettext("If you are already familiar with the GPG encryption software, you may wish to encrypt your submissions yourself. To do so:") }}
+<p>{{ gettext("If you are already familiar with the <abbr title="GNU Privacy Guard">GPG</abbr> encryption software, you may wish to encrypt your submissions yourself. To do so:") }}
 <ol>
     <li>{{ gettext('<a href="{url}">Download</a> the public key. It will be saved to a file called:
         <p><code>{submission_key_fpr_filename}</code></p>').format(url=url_for('info.download_public_key'), submission_key_fpr_filename=submission_key_fpr + '.asc')|safe }}
