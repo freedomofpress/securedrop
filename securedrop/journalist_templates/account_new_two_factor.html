@@ -4,7 +4,7 @@
 
 {% block body %}
 {% if user.is_totp %}
-<h1>{{ gettext('Enable FreeOTP') }}</h1>
+<h1>{{ gettext('Enable <abbr title="two-factor authentication application">FreeOTP</abbr>') }}</h1>
 <p>
   {{ gettext("You're almost done! To finish resetting your two-factor authentication, follow the instructions below to set up FreeOTP. Once you've added the entry for your account in the app, enter one of the 6-digit codes from the app to confirm that two-factor authentication is set up correctly.") }}
 </p>
