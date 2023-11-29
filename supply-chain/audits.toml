@@ -375,7 +375,7 @@ notes = "Rust Project member"
 
 [[trusted.openssl]]
 criteria = "safe-to-deploy"
-user-id = 5 # Steven Fackler (sfackler)
+user-id = 5
 start = "2019-02-22"
 end = "2024-05-02"
 notes = "Rust Project member"
@@ -389,9 +389,16 @@ notes = "Rust Project member"
 
 [[trusted.openssl-sys]]
 criteria = "safe-to-deploy"
-user-id = 5 # Steven Fackler (sfackler)
+user-id = 5
 start = "2019-03-01"
 end = "2024-05-02"
+notes = "Rust Project member"
+
+[[trusted.openssl-sys]]
+criteria = "safe-to-deploy"
+user-id = 163 # Alex Gaynor (alex)
+start = "2023-03-24"
+end = "2024-05-29"
 notes = "Rust Project member"
 
 [[trusted.parking_lot]]
