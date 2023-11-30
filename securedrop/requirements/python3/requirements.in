@@ -4,7 +4,7 @@ babel>=2.9.1
 cffi>=1.14.2
 
 # This version needs Rust for compilation.
-cryptography>=41.0.3
+cryptography>=41.0.5  # >= OpenSSL 3.1.4 for CVE-2023-5363
 
 Flask-Babel>=1.0.0
 Flask-SQLAlchemy==2.5.1
