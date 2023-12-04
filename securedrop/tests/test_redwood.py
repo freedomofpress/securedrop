@@ -1,4 +1,5 @@
 # Integration tests for the redwood Python/Sequoia bridge
+from io import StringIO
 
 import pytest
 from secure_tempfile import SecureTemporaryFile
@@ -28,11 +29,25 @@ def test_encrypt_stream(tmp_path, key_pair):
     assert (SECRET_MESSAGE * iterations) == actual.decode()
 
 
+class DummyReadable:
+    """A fake class with a read() method that fails"""
+
+    def read(self, _len: int) -> None:
+        raise RuntimeError("uhoh")
+
+
 def test_encrypt_stream_bad(tmp_path, key_pair):
     (public_key, secret_key, fingerprint) = key_pair
     not_stream = SECRET_MESSAGE.encode()
-    file = tmp_path / "file.asc"
+    # Passing in a type/object that has no `.read()`
     with pytest.raises(
         redwood.RedwoodError, match="AttributeError: 'bytes' object has no attribute 'read'"
     ):
-        redwood.encrypt_stream([public_key], not_stream, file)
+        redwood.encrypt_stream([public_key], not_stream, tmp_path / "file1.asc")
+    # When `.read()` returns something other than bytes
+    with pytest.raises(
+        redwood.RedwoodError, match="TypeError: 'str' object cannot be converted to 'PyBytes'"
+    ):
+        redwood.encrypt_stream([public_key], StringIO(SECRET_MESSAGE), tmp_path / "file2.asc")
+    with pytest.raises(redwood.RedwoodError, match='error: "RuntimeError: uhoh"'):
+        redwood.encrypt_stream([public_key], DummyReadable(), tmp_path / "file3.asc")

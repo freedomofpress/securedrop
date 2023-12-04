@@ -1,5 +1,5 @@
 use pyo3::types::PyBytes;
-use pyo3::{PyAny, PyResult};
+use pyo3::{intern, PyAny, PyResult};
 use std::io::{self, ErrorKind, Read, Write};
 
 /// Wrapper to implement the `Read` trait around a Python
@@ -11,7 +11,7 @@ pub(crate) struct Stream<'a> {
 impl Stream<'_> {
     /// Read the specified number of bytes out of the object
     fn read_bytes(&self, len: usize) -> PyResult<&PyBytes> {
-        let func = self.reader.getattr("read")?;
+        let func = self.reader.getattr(intern!(self.reader.py(), "read"))?;
         // In Python this is effectively calling `reader.read(len)`
         let bytes = func.call1((len,))?;
         let bytes = bytes.downcast::<PyBytes>()?;
