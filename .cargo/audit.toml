@@ -3,7 +3,7 @@ ignore = [] # advisory IDs to ignore e.g. ["RUSTSEC-2019-0001", ...]
 
 # Output Configuration
 [output]
-deny = ["yanked", "unmaintained"]
+deny = ["warnings"]
 quiet = false
 
 # Target Configuration

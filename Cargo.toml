@@ -3,3 +3,5 @@
 members = [
     "redwood",
 ]
+
+resolver = "2"
