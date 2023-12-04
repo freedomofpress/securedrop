@@ -16,7 +16,7 @@ export GCE_CREDS_FILE
 export BUILD_NUM="${CIRCLE_BUILD_NUM}"
 export PROJECT_ID="securedrop-ci"
 export JOB_NAME="sd-ci-nested"
-export GCLOUD_MACHINE_TYPE="n1-highcpu-4"
+export GCLOUD_MACHINE_TYPE="c2-standard-8"
 GCLOUD_CONTAINER_VER="$(cat "${TOPLEVEL}/devops/gce-nested/gcloud-container.ver")"
 export GCLOUD_CONTAINER_VER
 export CLOUDSDK_COMPUTE_ZONE="us-west1-c"
