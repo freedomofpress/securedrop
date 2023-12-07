@@ -30,14 +30,8 @@ DIR = os.path.dirname(os.path.realpath(__file__))
 VENV_DIR = os.path.join(DIR, ".venv3")
 
 # Space-separated list of apt dependencies
-APT_DEPENDENCIES_STR = "python3-virtualenv \
-                   python3-yaml \
-                   python3-pip \
-                   virtualenv \
-                   libffi-dev \
-                   libssl-dev \
-                   libpython3-dev \
-                   sq-keyring-linter"
+APT_DEPENDENCIES_STR = "python3-virtualenv python3-yaml python3-pip virtualenv \
+libffi-dev libssl-dev libpython3-dev sq-keyring-linter"
 
 
 def setup_logger(verbose: bool = False) -> None:
@@ -111,24 +105,22 @@ def is_missing_dependency() -> bool:
     This applies to existing Tails systems where `securedrop-setup` may not have been
     run recently.
     """
-    # apt-cache -q0 policy $dependency1 $dependency2 $dependency3 | grep "Installed: (none)"
+
     apt_query = f"apt-cache -q0 policy {APT_DEPENDENCIES_STR}".split(" ")
-    grep_command = ["grep", "Installed: (none)"]
 
     try:
         sdlog.info("Checking apt dependencies are installed")
-        apt_process = subprocess.Popen(apt_query, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        apt_query_result = subprocess.run(apt_query, capture_output=True, text=True)
 
-        grep_process = subprocess.Popen(
-            grep_command, stdin=apt_process.stdout, stdout=subprocess.PIPE, stderr=subprocess.PIPE
-        )
+        # If any packages are marked as not installed, return 0
+        if "Installed: (none)" in apt_query_result.stdout:
+            return True
 
-        # Wait for the process to complete before checking the returncode
-        grep_process.communicate()
-        returncode = grep_process.returncode
+        # If any packages couldn't be found, it may point to an apt cache issue
+        if "Unable to locate package" in apt_query_result.stderr:
+            return True
 
-        # If the above command returns 0, then one or more packages are not installed.
-        return returncode == 0
+        return False
 
     except subprocess.CalledProcessError as e:
         sdlog.error("Error checking apt dependencies")
