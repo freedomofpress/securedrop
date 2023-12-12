@@ -1,0 +1,15 @@
+name: Security (cron)
+on:
+  schedule:
+    - cron: '0 3 * * *'
+
+jobs:
+  rust-audit:
+    runs-on: ubuntu-latest
+    # Keep version in sync with rust-toolchain.toml
+    container: rust:1.74.0
+    steps:
+      - uses: actions/checkout@v3
+      - name: Check Rust dependencies
+        run: |
+          make rust-audit
