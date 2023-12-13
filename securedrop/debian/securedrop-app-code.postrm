@@ -19,17 +19,11 @@ set -e
 # the debian-policy package
 . /usr/share/debconf/confmodule
 
-clean_pyc() {
-    find /var/www/securedrop/ -name '*.pyc' -delete
-    find /var/www/securedrop/ -name __pycache__ -delete
-}
-
 case "$1" in
     upgrade|failed-upgrade)
     ;;
 
     remove|abort-install|abort-upgrade|disappear)
-        clean_pyc
     ;;
 
     purge)
