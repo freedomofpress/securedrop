@@ -109,6 +109,11 @@ function docker_run() {
         ci_env=""
     fi
 
+    # Pass -it if we're a tty
+    if test -t 0; then
+        DOCKER_RUN_ARGUMENTS="${DOCKER_RUN_ARGUMENTS} -it"
+    fi
+
     # The --shm-size argument sets up dedicated shared memory for the
     # container. Our tests can fail with the default of 64m.
     $DOCKER_BIN run $ci_env \
@@ -130,7 +135,7 @@ function docker_run() {
            --volume "${TOPLEVEL}:${TOPLEVEL}:Z" \
            --workdir "${TOPLEVEL}/securedrop" \
            --name "${SD_CONTAINER}" \
-           -ti $DOCKER_RUN_ARGUMENTS "${1}" "${@:2}"
+           $DOCKER_RUN_ARGUMENTS "${1}" "${@:2}"
 }
 
 image="securedrop-slim-focal-py3"
