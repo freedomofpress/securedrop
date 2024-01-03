@@ -1,7 +1,7 @@
 # Translations template for SecureDrop.
-# Copyright (C) 2023 Freedom of the Press Foundation
+# Copyright (C) 2024 Freedom of the Press Foundation
 # This file is distributed under the same license as the SecureDrop project.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2023.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2024.
 #
 #, fuzzy
 msgid ""
