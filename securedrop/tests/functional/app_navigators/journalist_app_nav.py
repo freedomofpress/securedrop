@@ -119,6 +119,7 @@ class JournalistAppNavigator:
             return result
 
         cks = cookie_string_from_selenium_cookies(self.driver.get_cookies())
+        assert isinstance(file_url, str)
         raw_content = self._download_content_at_url(file_url, cks)
 
         decryption_result = utils.decrypt_as_journalist(raw_content)
