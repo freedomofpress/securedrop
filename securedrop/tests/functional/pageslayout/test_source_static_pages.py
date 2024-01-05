@@ -1,5 +1,6 @@
 import pytest
 import requests
+from selenium.webdriver.common.by import By
 from tests.functional import tor_utils
 from tests.functional.pageslayout.utils import list_locales, save_static_data
 from tests.functional.web_drivers import WebDriverTypeEnum, get_web_driver
@@ -16,12 +17,11 @@ class TestSourceAppStaticPages:
             web_driver_type=WebDriverTypeEnum.TOR_BROWSER,
             accept_languages=locale_with_commas,
         ) as tor_browser_web_driver:
-
             # When they try to access a page that does not exist
             tor_browser_web_driver.get(f"{sd_servers.source_app_base_url}/does_not_exist")
 
             # Then the right error is displayed
-            message = tor_browser_web_driver.find_element_by_id("page-not-found")
+            message = tor_browser_web_driver.find_element(By.ID, "page-not-found")
             assert message.is_displayed()
 
             save_static_data(tor_browser_web_driver, locale, "source-notfound")

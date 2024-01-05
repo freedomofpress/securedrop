@@ -3,6 +3,7 @@ from pathlib import Path
 from typing import Generator, Tuple
 
 import pytest
+from selenium.webdriver.common.by import By
 from tests.factories import SecureDropConfigFactory
 from tests.functional.app_navigators.source_app_nav import SourceAppNavigator
 from tests.functional.conftest import SdServersFixtureResult, spawn_sd_servers
@@ -45,7 +46,6 @@ class TestSourceAppSessionTimeout:
             source_app_base_url=sd_servers_with_short_timeout.source_app_base_url,
             accept_languages=locale_with_commas,
         ) as navigator:
-
             # And they're logged in and are using the app
             navigator.source_visits_source_homepage()
             navigator.source_clicks_submit_documents_on_homepage()
@@ -58,7 +58,7 @@ class TestSourceAppSessionTimeout:
             navigator.driver.refresh()
 
             # Then the source user sees the "session expired" message
-            notification = navigator.driver.find_element_by_class_name("error")
+            notification = navigator.driver.find_element(By.CLASS_NAME, "error")
             assert notification.text
             if locale == "en_US":
                 expected_text = "You were logged out due to inactivity."

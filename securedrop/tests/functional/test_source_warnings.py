@@ -3,6 +3,7 @@ import shutil
 
 import pytest
 from selenium import webdriver
+from selenium.webdriver.common.by import By
 from tests.functional.app_navigators.source_app_nav import SourceAppNavigator
 from tests.functional.web_drivers import _FIREFOX_PATH
 
@@ -18,6 +19,10 @@ def orbot_web_driver(sd_servers):
     profile = webdriver.FirefoxProfile(f_profile_path2)
     profile.set_preference("general.useragent.override", orbot_user_agent)
 
+    orbot_options = webdriver.FirefoxOptions()
+    orbot_options.binary_location = _FIREFOX_PATH
+    orbot_options.profile = profile
+
     if sd_servers.journalist_app_base_url.find(".onion") != -1:
         # set FF preference to socks proxy in Tor Browser
         profile.set_preference("network.proxy.type", 1)
@@ -27,7 +32,7 @@ def orbot_web_driver(sd_servers):
         profile.set_preference("network.proxy.socks_remote_dns", True)
         profile.set_preference("network.dns.blockDotOnion", False)
     profile.update_preferences()
-    orbot_web_driver = webdriver.Firefox(firefox_binary=_FIREFOX_PATH, firefox_profile=profile)
+    orbot_web_driver = webdriver.Firefox(options=orbot_options)
 
     try:
         driver_user_agent = orbot_web_driver.execute_script("return navigator.userAgent")
@@ -50,12 +55,12 @@ class TestSourceAppBrowserWarnings:
         navigator.source_visits_source_homepage()
 
         # Then they see a warning
-        warning_banner = navigator.driver.find_element_by_id("browser-tb")
+        warning_banner = navigator.driver.find_element(By.ID, "browser-tb")
         assert warning_banner.is_displayed()
         assert "It is recommended to use Tor Browser" in warning_banner.text
 
         # And they are able to dismiss the warning
-        warning_dismiss_button = navigator.driver.find_element_by_id("browser-tb-close")
+        warning_dismiss_button = navigator.driver.find_element(By.ID, "browser-tb-close")
         warning_dismiss_button.click()
 
         def warning_banner_is_hidden():
@@ -75,12 +80,12 @@ class TestSourceAppBrowserWarnings:
         navigator.source_visits_source_homepage()
 
         # Then they see a warning
-        warning_banner = navigator.driver.find_element_by_id("browser-android")
+        warning_banner = navigator.driver.find_element(By.ID, "browser-android")
         assert warning_banner.is_displayed()
         assert "use the desktop version of Tor Browser" in warning_banner.text
 
         # And they are able to dismiss the warning
-        warning_dismiss_button = navigator.driver.find_element_by_id("browser-android-close")
+        warning_dismiss_button = navigator.driver.find_element(By.ID, "browser-android-close")
         warning_dismiss_button.click()
 
         def warning_banner_is_hidden():
@@ -100,6 +105,6 @@ class TestSourceAppBrowserWarnings:
         navigator.source_visits_source_homepage()
 
         # Then they see a warning
-        banner = navigator.driver.find_element_by_id("browser-security-level")
+        banner = navigator.driver.find_element(By.ID, "browser-security-level")
         assert banner.is_displayed()
         assert "Security Level is too low" in banner.text

@@ -19,6 +19,7 @@ from typing import Optional
 
 import pytest
 from selenium.webdriver import ActionChains
+from selenium.webdriver.common.by import By
 from tests.functional.app_navigators.journalist_app_nav import JournalistAppNavigator
 from tests.functional.pageslayout.utils import list_locales, save_static_data
 
@@ -64,11 +65,11 @@ class TestJournalistLayoutAccount:
         journ_app_nav: JournalistAppNavigator, otp_type: str, assert_tooltip_text_is: Optional[str]
     ) -> None:
         reset_form = journ_app_nav.nav_helper.wait_for(
-            lambda: journ_app_nav.driver.find_element_by_id(f"reset-two-factor-{otp_type}")
+            lambda: journ_app_nav.driver.find_element(By.ID, f"reset-two-factor-{otp_type}")
         )
         assert f"/account/reset-2fa-{otp_type}" in reset_form.get_attribute("action")
-        reset_button = journ_app_nav.driver.find_elements_by_css_selector(
-            f"#button-reset-two-factor-{otp_type}"
+        reset_button = journ_app_nav.driver.find_elements(
+            By.CSS_SELECTOR, f"#button-reset-two-factor-{otp_type}"
         )[0]
 
         # 2FA reset buttons show a tooltip with explanatory text on hover.
@@ -77,8 +78,8 @@ class TestJournalistLayoutAccount:
         ActionChains(journ_app_nav.driver).move_to_element(reset_button).perform()
 
         def explanatory_tooltip_is_correct() -> None:
-            explanatory_tooltip = journ_app_nav.driver.find_element_by_css_selector(
-                f"#button-reset-two-factor-{otp_type} span"
+            explanatory_tooltip = journ_app_nav.driver.find_element(
+                By.CSS_SELECTOR, f"#button-reset-two-factor-{otp_type} span"
             )
 
             explanatory_tooltip_opacity = explanatory_tooltip.value_of_css_property("opacity")
@@ -91,7 +92,7 @@ class TestJournalistLayoutAccount:
 
         reset_form.submit()
 
-        alert = journ_app_nav.driver.switch_to_alert()
+        alert = journ_app_nav.driver.switch_to.alert
         alert.accept()
 
     def test_account_new_two_factor_totp(

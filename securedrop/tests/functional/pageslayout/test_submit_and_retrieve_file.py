@@ -1,5 +1,6 @@
 import pytest
 from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.common.by import By
 from tests.functional.app_navigators.journalist_app_nav import JournalistAppNavigator
 from tests.functional.app_navigators.source_app_nav import SourceAppNavigator
 from tests.functional.pageslayout.utils import list_locales, save_static_data
@@ -66,14 +67,14 @@ class TestSubmitAndRetrieveFile:
     @staticmethod
     def _source_deletes_journalist_reply(navigator: SourceAppNavigator) -> None:
         # Get the reply filename so we can use IDs to select the delete buttons
-        reply_filename_element = navigator.driver.find_element_by_name("reply_filename")
+        reply_filename_element = navigator.driver.find_element(By.NAME, "reply_filename")
         reply_filename = reply_filename_element.get_attribute("value")
 
         confirm_dialog_id = f"confirm-delete-{reply_filename}"
         navigator.nav_helper.safe_click_by_css_selector(f"a[href='#{confirm_dialog_id}']")
 
         def confirm_displayed():
-            confirm_dialog = navigator.driver.find_element_by_id(confirm_dialog_id)
+            confirm_dialog = navigator.driver.find_element(By.ID, confirm_dialog_id)
             confirm_dialog.location_once_scrolled_into_view
             assert confirm_dialog.is_displayed()
 
@@ -86,7 +87,7 @@ class TestSubmitAndRetrieveFile:
 
         def reply_deleted():
             if not navigator.accept_languages:
-                notification = navigator.driver.find_element_by_class_name("success")
+                notification = navigator.driver.find_element(By.CLASS_NAME, "success")
                 assert "Reply deleted" in notification.text
 
         navigator.nav_helper.wait_for(reply_deleted)
@@ -95,22 +96,22 @@ class TestSubmitAndRetrieveFile:
     def _journalist_stars_and_unstars_single_message(journ_app_nav: JournalistAppNavigator) -> None:
         # Message begins unstarred
         with pytest.raises(NoSuchElementException):
-            journ_app_nav.driver.find_element_by_id("starred-source-link-1")
+            journ_app_nav.driver.find_element(By.ID, "starred-source-link-1")
 
         # Journalist stars the message
-        journ_app_nav.driver.find_element_by_class_name("button-star").click()
+        journ_app_nav.driver.find_element(By.CLASS_NAME, "button-star").click()
 
         def message_starred():
-            starred = journ_app_nav.driver.find_elements_by_id("starred-source-link-1")
+            starred = journ_app_nav.driver.find_elements(By.ID, "starred-source-link-1")
             assert len(starred) == 1
 
         journ_app_nav.nav_helper.wait_for(message_starred)
 
         # Journalist unstars the message
-        journ_app_nav.driver.find_element_by_class_name("button-star").click()
+        journ_app_nav.driver.find_element(By.CLASS_NAME, "button-star").click()
 
         def message_unstarred():
             with pytest.raises(NoSuchElementException):
-                journ_app_nav.driver.find_element_by_id("starred-source-link-1")
+                journ_app_nav.driver.find_element(By.ID, "starred-source-link-1")
 
         journ_app_nav.nav_helper.wait_for(message_unstarred)

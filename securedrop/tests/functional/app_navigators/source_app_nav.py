@@ -3,6 +3,7 @@ import time
 from contextlib import contextmanager
 from typing import Generator, Optional
 
+from selenium.webdriver.common.by import By
 from selenium.webdriver.firefox.webdriver import WebDriver
 from selenium.webdriver.remote.webelement import WebElement
 from tests.functional.app_navigators._nav_helper import NavigationHelper
@@ -46,14 +47,14 @@ class SourceAppNavigator:
             )
 
     def _is_on_source_homepage(self) -> WebElement:
-        return self.nav_helper.wait_for(lambda: self.driver.find_element_by_id("source-index"))
+        return self.nav_helper.wait_for(lambda: self.driver.find_element(By.ID, "source-index"))
 
     def source_visits_source_homepage(self) -> None:
         self.driver.get(self._source_app_base_url)
         assert self._is_on_source_homepage()
 
     def _is_on_generate_page(self) -> WebElement:
-        return self.nav_helper.wait_for(lambda: self.driver.find_element_by_id("source-generate"))
+        return self.nav_helper.wait_for(lambda: self.driver.find_element(By.ID, "source-generate"))
 
     def source_clicks_submit_documents_on_homepage(self) -> None:
         # It's the source's first time visiting this SecureDrop site, so they
@@ -69,7 +70,7 @@ class SourceAppNavigator:
 
         def submit_page_loaded() -> None:
             if not self.accept_languages:
-                headline = self.driver.find_element_by_id("submit-heading")
+                headline = self.driver.find_element(By.ID, "submit-heading")
                 # Message will either be "Submit Messages" or "Submit Files or Messages" depending
                 #  on whether file uploads are allowed by the instance's config
                 assert "Submit" in headline.text
@@ -78,7 +79,7 @@ class SourceAppNavigator:
         self.nav_helper.wait_for(submit_page_loaded)
 
     def _is_on_logout_page(self) -> WebElement:
-        return self.nav_helper.wait_for(lambda: self.driver.find_element_by_id("source-logout"))
+        return self.nav_helper.wait_for(lambda: self.driver.find_element(By.ID, "source-logout"))
 
     def source_logs_out(self) -> None:
         self.nav_helper.safe_click_by_id("logout")
@@ -87,21 +88,21 @@ class SourceAppNavigator:
     def source_retrieves_codename_from_hint(self) -> str:
         # We use inputs to change CSS states for subsequent elements in the DOM, if it is unchecked
         # the codename is hidden
-        content = self.driver.find_element_by_id("codename-show-checkbox")
+        content = self.driver.find_element(By.ID, "codename-show-checkbox")
         assert content.get_attribute("checked") is None
 
         self.nav_helper.safe_click_by_id("codename-show")
 
         assert content.get_attribute("checked") is not None
-        content_content = self.driver.find_element_by_css_selector("#codename span")
+        content_content = self.driver.find_element(By.CSS_SELECTOR, "#codename span")
         return content_content.text
 
     def source_chooses_to_login(self) -> None:
         self.nav_helper.safe_click_by_css_selector("#return-visit a")
-        self.nav_helper.wait_for(lambda: self.driver.find_elements_by_id("source-login"))
+        self.nav_helper.wait_for(lambda: self.driver.find_elements(By.ID, "source-login"))
 
     def _is_logged_in(self) -> WebElement:
-        return self.nav_helper.wait_for(lambda: self.driver.find_element_by_id("logout"))
+        return self.nav_helper.wait_for(lambda: self.driver.find_element(By.ID, "logout"))
 
     def source_proceeds_to_login(self, codename: str) -> None:
         self.nav_helper.safe_send_keys_by_id("codename", codename)
@@ -110,7 +111,7 @@ class SourceAppNavigator:
         # Check that we've logged in
         assert self._is_logged_in()
 
-        replies = self.driver.find_elements_by_id("replies")
+        replies = self.driver.find_elements(By.ID, "replies")
         assert len(replies) == 1
 
     def source_submits_a_message(self, message: str = "S3cr3t m3ss4ge") -> str:
@@ -123,7 +124,7 @@ class SourceAppNavigator:
         # Wait for confirmation that the message was submitted
         def message_submitted():
             if not self.accept_languages:
-                notification = self.driver.find_element_by_css_selector(".success")
+                notification = self.driver.find_element(By.CSS_SELECTOR, ".success")
                 assert "Thank" in notification.text
                 return notification.text
 
@@ -143,7 +144,7 @@ class SourceAppNavigator:
 
             def file_submitted() -> None:
                 if not self.accept_languages:
-                    notification = self.driver.find_element_by_css_selector(".success")
+                    notification = self.driver.find_element(By.CSS_SELECTOR, ".success")
                     expected_notification = "Thank you for sending this information to us"
                     assert expected_notification in notification.text
 

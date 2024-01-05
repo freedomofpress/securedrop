@@ -1,5 +1,6 @@
 import requests
 import werkzeug
+from selenium.webdriver.common.by import By
 from tests.functional import tor_utils
 from tests.functional.app_navigators.source_app_nav import SourceAppNavigator
 
@@ -9,7 +10,6 @@ from ..test_journalist import VALID_PASSWORD
 
 
 class TestSourceAppCodenameHints:
-
     FIRST_SUBMISSION_TEXT = "Please check back later for replies"
 
     def test_no_codename_hint_on_second_login(self, sd_servers, tor_browser_web_driver):
@@ -29,7 +29,7 @@ class TestSourceAppCodenameHints:
         assert source_codename
 
         # And they are able to close the codename hint UI
-        content = navigator.driver.find_element_by_id("codename-show-checkbox")
+        content = navigator.driver.find_element(By.ID, "codename-show-checkbox")
         assert content.get_attribute("checked") is not None
         navigator.nav_helper.safe_click_by_id("codename-show")
         assert content.get_attribute("checked") is None
@@ -41,7 +41,7 @@ class TestSourceAppCodenameHints:
         navigator.source_proceeds_to_login(codename=source_codename)
 
         # The codename hint UI is no longer present
-        codename = navigator.driver.find_elements_by_css_selector("#codename-reminder")
+        codename = navigator.driver.find_elements(By.CSS_SELECTOR, "#codename-reminder")
         assert len(codename) == 0
 
     def test_submission_notifications_on_first_login(self, sd_servers, tor_browser_web_driver):
@@ -115,17 +115,17 @@ class TestSourceAppCodenamesInMultipleTabs:
 
     @staticmethod
     def _assert_is_on_lookup_page(navigator: SourceAppNavigator) -> None:
-        navigator.nav_helper.wait_for(lambda: navigator.driver.find_element_by_id("upload"))
+        navigator.nav_helper.wait_for(lambda: navigator.driver.find_element(By.ID, "upload"))
 
     @staticmethod
     def _extract_generated_codename(navigator: SourceAppNavigator) -> str:
-        codename = navigator.driver.find_element_by_css_selector("#codename span").text
+        codename = navigator.driver.find_element(By.CSS_SELECTOR, "#codename span").text
         assert codename
         return codename
 
     @staticmethod
     def _extract_flash_message_content(navigator: SourceAppNavigator) -> str:
-        notification = navigator.driver.find_element_by_css_selector(".notification").text
+        notification = navigator.driver.find_element(By.CSS_SELECTOR, ".notification").text
         assert notification
         return notification
 

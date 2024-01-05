@@ -50,7 +50,7 @@ class TestAdminInterfaceAddUser:
         # Log the admin user out
         journ_app_nav.journalist_logs_out()
         journ_app_nav.nav_helper.wait_for(
-            lambda: journ_app_nav.driver.find_element_by_css_selector(".login-form")
+            lambda: journ_app_nav.driver.find_element(By.CSS_SELECTOR, ".login-form")
         )
 
         # And when the new user tries to login
@@ -88,7 +88,7 @@ class TestAdminInterfaceAddUser:
         # Log the admin user out
         journ_app_nav.journalist_logs_out()
         journ_app_nav.nav_helper.wait_for(
-            lambda: journ_app_nav.driver.find_element_by_css_selector(".login-form")
+            lambda: journ_app_nav.driver.find_element(By.CSS_SELECTOR, ".login-form")
         )
 
         # And when the new user tries to login
@@ -138,7 +138,7 @@ class TestAdminInterfaceAddUser:
 
         # Then it fails with an error
         error_msg = journ_app_nav.nav_helper.wait_for(
-            lambda: journ_app_nav.driver.find_element_by_css_selector(".form-validation-error")
+            lambda: journ_app_nav.driver.find_element(By.CSS_SELECTOR, ".form-validation-error")
         )
 
         # And they see the corresponding error message
@@ -237,7 +237,7 @@ class TestAdminInterfaceEditAndDeleteUser:
 
         # Then it succeeds
         def user_edited():
-            flash_msg = journ_app_nav.driver.find_element_by_css_selector(".flash")
+            flash_msg = journ_app_nav.driver.find_element(By.CSS_SELECTOR, ".flash")
             assert "Account updated." in flash_msg.text
 
         journ_app_nav.nav_helper.wait_for(user_edited)
@@ -258,7 +258,7 @@ class TestAdminInterfaceEditAndDeleteUser:
 
         # Then it fails
         def user_edited():
-            flash_msg = journ_app_nav.driver.find_element_by_css_selector(".flash")
+            flash_msg = journ_app_nav.driver.find_element(By.CSS_SELECTOR, ".flash")
             assert "Invalid username" in flash_msg.text
 
         journ_app_nav.nav_helper.wait_for(user_edited)
@@ -289,9 +289,9 @@ class TestAdminInterfaceEditAndDeleteUser:
         )
 
         # When they reset the second journalist's password
-        new_password = journ_app_nav.driver.find_element_by_css_selector("#password").text.strip()
+        new_password = journ_app_nav.driver.find_element(By.CSS_SELECTOR, "#password").text.strip()
         assert new_password
-        reset_pw_btn = journ_app_nav.driver.find_element_by_css_selector("#reset-password")
+        reset_pw_btn = journ_app_nav.driver.find_element(By.CSS_SELECTOR, "#reset-password")
         reset_pw_btn.click()
 
         # Then it succeeds
@@ -343,7 +343,7 @@ class TestAdminInterfaceEditAndDeleteUser:
 
         # Then it succeeds
         def user_deleted():
-            flash_msg = journ_app_nav.driver.find_element_by_css_selector(".flash")
+            flash_msg = journ_app_nav.driver.find_element(By.CSS_SELECTOR, ".flash")
             assert "Deleted user" in flash_msg.text
 
         journ_app_nav.nav_helper.wait_for(user_deleted)
@@ -392,7 +392,7 @@ class TestAdminInterfaceEditConfig:
 
         # Then they don't see the option to upload a file because uploads were disallowed
         with pytest.raises(NoSuchElementException):
-            source_app_nav.driver.find_element_by_class_name("attachment")
+            source_app_nav.driver.find_element(By.CLASS_NAME, "attachment")
 
     @classmethod
     def _admin_updates_document_upload_instance_setting(
@@ -402,8 +402,8 @@ class TestAdminInterfaceEditConfig:
     ) -> None:
         # Retrieve the instance's current upload setting
         upload_element_id = "prevent_document_uploads"
-        instance_currently_allows_file_uploads = not journ_app_nav.driver.find_element_by_id(
-            upload_element_id
+        instance_currently_allows_file_uploads = not journ_app_nav.driver.find_element(
+            By.ID, upload_element_id
         ).is_selected()
 
         # Ensure the new setting is different from the existing setting
@@ -417,7 +417,7 @@ class TestAdminInterfaceEditConfig:
     @staticmethod
     def _admin_submits_instance_settings_form(journ_app_nav: JournalistAppNavigator) -> None:
         def preferences_saved():
-            flash_msg = journ_app_nav.driver.find_element_by_css_selector(".flash")
+            flash_msg = journ_app_nav.driver.find_element(By.CSS_SELECTOR, ".flash")
             assert "Preferences saved." in flash_msg.text
 
         journ_app_nav.nav_helper.wait_for(preferences_saved, timeout=20)
@@ -464,7 +464,7 @@ class TestAdminInterfaceEditConfig:
         source_app_nav.source_continues_to_submit_page()
 
         # Then they see the option to upload a file because uploads were allowed
-        assert source_app_nav.driver.find_element_by_class_name("attachment")
+        assert source_app_nav.driver.find_element(By.CLASS_NAME, "attachment")
 
     def test_orgname_is_changed(
         self, sd_servers_with_clean_state, firefox_web_driver, tor_browser_web_driver
@@ -488,7 +488,7 @@ class TestAdminInterfaceEditConfig:
 
         # When they update the organization's name
         assert "SecureDrop" in journ_app_nav.driver.title
-        journ_app_nav.driver.find_element_by_id("organization_name").clear()
+        journ_app_nav.driver.find_element(By.ID, "organization_name").clear()
         new_org_name = "Walden Inquirer"
         journ_app_nav.nav_helper.safe_send_keys_by_id("organization_name", new_org_name)
         journ_app_nav.nav_helper.safe_click_by_id("submit-update-org-name")

@@ -1,6 +1,7 @@
 from pathlib import Path
 
 import pytest
+from selenium.webdriver.common.by import By
 from tests.factories import SecureDropConfigFactory
 from tests.functional.app_navigators.source_app_nav import SourceAppNavigator
 from tests.functional.conftest import spawn_sd_servers
@@ -55,7 +56,7 @@ class TestSourceAppDesignationCollision:
         # Then the right error message is displayed
         navigator.nav_helper.safe_click_by_css_selector("#create-form button")
         navigator.nav_helper.wait_for(
-            lambda: navigator.driver.find_element_by_css_selector(".error")
+            lambda: navigator.driver.find_element(By.CSS_SELECTOR, ".error")
         )
-        flash_error = navigator.driver.find_element_by_css_selector(".error")
+        flash_error = navigator.driver.find_element(By.CSS_SELECTOR, ".error")
         assert "There was a temporary problem creating your account" in flash_error.text
