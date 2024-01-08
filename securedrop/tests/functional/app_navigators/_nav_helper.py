@@ -10,7 +10,6 @@ from selenium.webdriver.support.wait import WebDriverWait
 
 
 class NavigationHelper:
-
     _TIMEOUT = 10
     _POLL_FREQUENCY = 0.1
 
@@ -76,7 +75,7 @@ class NavigationHelper:
             selenium.common.exceptions.TimeoutException: If the element cannot be found in time.
 
         """
-        els = self.wait_for(lambda: self.driver.find_elements_by_css_selector(selector))
+        els = self.wait_for(lambda: self.driver.find_elements(By.CSS_SELECTOR, selector))
         for el in els:
             clickable_el = WebDriverWait(self.driver, self._TIMEOUT, self._POLL_FREQUENCY).until(
                 expected_conditions.element_to_be_clickable((By.CSS_SELECTOR, selector))

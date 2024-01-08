@@ -1,3 +1,4 @@
+from selenium.webdriver.common.by import By
 from tests.functional.app_navigators.source_app_nav import SourceAppNavigator
 
 
@@ -30,5 +31,5 @@ class TestSourceUserCancels:
         source_app_nav.nav_helper.safe_click_by_css_selector(".form-controls a")
 
         # And the right message is displayed
-        heading = source_app_nav.driver.find_element_by_id("submit-heading")
+        heading = source_app_nav.driver.find_element(By.ID, "submit-heading")
         assert heading.text == "Submit Files or Messages"

@@ -23,6 +23,7 @@ from typing import Callable
 import pytest
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver import ActionChains
+from selenium.webdriver.common.by import By
 from tests.functional.app_navigators.journalist_app_nav import JournalistAppNavigator
 from tests.functional.pageslayout.utils import list_locales, save_static_data
 
@@ -83,17 +84,19 @@ class TestAdminLayoutAddAndEditUser:
         def _admin_visits_reset_2fa_hotp_step() -> None:
             # 2FA reset buttons show a tooltip with explanatory text on hover.
             # Also, confirm the text on the tooltip is the correct one.
-            hotp_reset_button = journ_app_nav.driver.find_elements_by_id("reset-two-factor-hotp")[0]
+            hotp_reset_button = journ_app_nav.driver.find_elements(By.ID, "reset-two-factor-hotp")[
+                0
+            ]
             hotp_reset_button.location_once_scrolled_into_view
             ActionChains(journ_app_nav.driver).move_to_element(hotp_reset_button).perform()
 
             time.sleep(1)
 
-            tip_opacity = journ_app_nav.driver.find_elements_by_css_selector(
-                "#button-reset-two-factor-hotp span.tooltip"
+            tip_opacity = journ_app_nav.driver.find_elements(
+                By.CSS_SELECTOR, "#button-reset-two-factor-hotp span.tooltip"
             )[0].value_of_css_property("opacity")
-            tip_text = journ_app_nav.driver.find_elements_by_css_selector(
-                "#button-reset-two-factor-hotp span.tooltip"
+            tip_text = journ_app_nav.driver.find_elements(
+                By.CSS_SELECTOR, "#button-reset-two-factor-hotp span.tooltip"
             )[0].text
             assert tip_opacity == "1"
 
@@ -111,7 +114,7 @@ class TestAdminLayoutAddAndEditUser:
 
         # Wait for it to succeed
         journ_app_nav.nav_helper.wait_for(
-            lambda: journ_app_nav.driver.find_element_by_css_selector('input[name="otp_secret"]')
+            lambda: journ_app_nav.driver.find_element(By.CSS_SELECTOR, 'input[name="otp_secret"]')
         )
 
     def test_admin_adds_user_totp_and_edits_totp(
@@ -152,23 +155,25 @@ class TestAdminLayoutAddAndEditUser:
         journ_app_nav.admin_visits_user_edit_page(username_of_journalist_to_edit=new_user_username)
 
         def _admin_visits_reset_2fa_totp_step() -> None:
-            totp_reset_button = journ_app_nav.driver.find_elements_by_id("reset-two-factor-totp")[0]
+            totp_reset_button = journ_app_nav.driver.find_elements(By.ID, "reset-two-factor-totp")[
+                0
+            ]
             assert "/admin/reset-2fa-totp" in totp_reset_button.get_attribute("action")
             # 2FA reset buttons show a tooltip with explanatory text on hover.
             # Also, confirm the text on the tooltip is the correct one.
-            totp_reset_button = journ_app_nav.driver.find_elements_by_css_selector(
-                "#button-reset-two-factor-totp"
+            totp_reset_button = journ_app_nav.driver.find_elements(
+                By.CSS_SELECTOR, "#button-reset-two-factor-totp"
             )[0]
             totp_reset_button.location_once_scrolled_into_view
             ActionChains(journ_app_nav.driver).move_to_element(totp_reset_button).perform()
 
             time.sleep(1)
 
-            tip_opacity = journ_app_nav.driver.find_elements_by_css_selector(
-                "#button-reset-two-factor-totp span.tooltip"
+            tip_opacity = journ_app_nav.driver.find_elements(
+                By.CSS_SELECTOR, "#button-reset-two-factor-totp span.tooltip"
             )[0].value_of_css_property("opacity")
-            tip_text = journ_app_nav.driver.find_elements_by_css_selector(
-                "#button-reset-two-factor-totp span.tooltip"
+            tip_text = journ_app_nav.driver.find_elements(
+                By.CSS_SELECTOR, "#button-reset-two-factor-totp span.tooltip"
             )[0].text
 
             assert tip_opacity == "1"
@@ -197,7 +202,7 @@ class TestAdminLayoutAddAndEditUser:
                 try:
                     # This is the button we click to trigger the alert.
                     journ_app_nav.nav_helper.wait_for(
-                        lambda: journ_app_nav.driver.find_elements_by_id(button_to_click)[0]
+                        lambda: journ_app_nav.driver.find_elements(By.ID, button_to_click)[0]
                     )
                 except IndexError:
                     # If the button isn't there, then the alert is up from the last
@@ -251,7 +256,7 @@ class TestAdminLayoutEditConfig:
 
         # Then it succeeds
         def updated_image() -> None:
-            flash_msg = journ_app_nav.driver.find_element_by_css_selector(".flash")
+            flash_msg = journ_app_nav.driver.find_element(By.CSS_SELECTOR, ".flash")
             assert "Image updated." in flash_msg.text
 
         journ_app_nav.nav_helper.wait_for(updated_image, timeout=20)
@@ -279,12 +284,12 @@ class TestAdminLayoutEditConfig:
         journ_app_nav.admin_visits_system_config_page()
 
         # When they try to send an OSSEC alert
-        alert_button = journ_app_nav.driver.find_element_by_id("test-ossec-alert")
+        alert_button = journ_app_nav.driver.find_element(By.ID, "test-ossec-alert")
         alert_button.click()
 
         # Then it succeeds
         def test_alert_sent():
-            flash_msg = journ_app_nav.driver.find_element_by_css_selector(".flash")
+            flash_msg = journ_app_nav.driver.find_element(By.CSS_SELECTOR, ".flash")
             assert "Test alert sent. Please check your email." in flash_msg.text
 
         journ_app_nav.nav_helper.wait_for(test_alert_sent)

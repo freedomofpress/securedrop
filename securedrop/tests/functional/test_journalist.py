@@ -22,6 +22,7 @@ from uuid import uuid4
 import pytest
 from sdconfig import SecureDropConfig
 from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from tests.factories import SecureDropConfigFactory
 from tests.functional.app_navigators.journalist_app_nav import JournalistAppNavigator
@@ -122,7 +123,7 @@ class TestJournalist:
     def _journalist_clicks_delete_collection_link(journ_app_nav: JournalistAppNavigator) -> None:
         journ_app_nav.nav_helper.safe_click_by_id("delete-collection-link")
         journ_app_nav.nav_helper.wait_for(
-            lambda: journ_app_nav.driver.find_element_by_id("delete-collection-confirmation-modal")
+            lambda: journ_app_nav.driver.find_element(By.ID, "delete-collection-confirmation-modal")
         )
 
     def test_journalist_uses_index_delete_collections_button_modal(
@@ -147,7 +148,7 @@ class TestJournalist:
         # And the journalist selected all sources on the index page
         try:
             # If JavaScript is enabled, use the select_all button.
-            journ_app_nav.driver.find_element_by_id("select_all")
+            journ_app_nav.driver.find_element(By.ID, "select_all")
             journ_app_nav.nav_helper.safe_click_by_id("select_all")
         except NoSuchElementException:
             journ_app_nav.nav_helper.safe_click_all_by_css_selector(
@@ -179,7 +180,7 @@ class TestJournalist:
 
         # Then a message shows up to say that the collection was deleted
         def collection_deleted():
-            flash_msg = journ_app_nav.driver.find_element_by_css_selector(".flash")
+            flash_msg = journ_app_nav.driver.find_element(By.CSS_SELECTOR, ".flash")
             assert "The account and all data for the source have been deleted." in flash_msg.text
 
         journ_app_nav.nav_helper.wait_for(collection_deleted)
@@ -194,7 +195,7 @@ class TestJournalist:
     def _journalist_clicks_delete_collections_link(journ_app_nav: JournalistAppNavigator) -> None:
         journ_app_nav.nav_helper.safe_click_by_id("delete-collections-link")
         journ_app_nav.nav_helper.wait_for(
-            lambda: journ_app_nav.driver.find_element_by_id("delete-sources-modal")
+            lambda: journ_app_nav.driver.find_element(By.ID, "delete-sources-modal")
         )
 
     @staticmethod
@@ -209,7 +210,7 @@ class TestJournalist:
     ) -> None:
         journ_app_nav.nav_helper.safe_click_by_id("delete-collections")
         journ_app_nav.nav_helper.wait_for(
-            lambda: journ_app_nav.driver.find_element_by_id("delete-collections-confirm")
+            lambda: journ_app_nav.driver.find_element(By.ID, "delete-collections-confirm")
         )
 
     def test_journalist_interface_ui_with_modal(
@@ -259,14 +260,14 @@ class TestJournalist:
             assert source.text == first_source_designation or source.is_displayed() is False
 
         # And when clicking "select all"
-        select_all = journ_app_nav.driver.find_element_by_id("select_all")
+        select_all = journ_app_nav.driver.find_element(By.ID, "select_all")
         select_all.click()
 
         # Then only the visible source gets selected
-        source_rows = journ_app_nav.driver.find_elements_by_css_selector("#cols li.source")
+        source_rows = journ_app_nav.driver.find_elements(By.CSS_SELECTOR, "#cols li.source")
         for source_row in source_rows:
             source_designation = source_row.get_attribute("data-source-designation")
-            checkbox = source_row.find_element_by_css_selector("input[type=checkbox]")
+            checkbox = source_row.find_element(By.CSS_SELECTOR, "input[type=checkbox]")
             if source_designation == first_source_designation:
                 assert checkbox.is_selected()
             else:
@@ -277,18 +278,18 @@ class TestJournalist:
         filter_box.send_keys(Keys.RETURN)
         select_all.click()
         for source_row in source_rows:
-            checkbox = source_row.find_element_by_css_selector("input[type=checkbox]")
+            checkbox = source_row.find_element(By.CSS_SELECTOR, "input[type=checkbox]")
             assert checkbox.is_selected()
 
         # And then they filter again and click "select none"
         filter_box.send_keys(first_source_designation)
-        select_none = journ_app_nav.driver.find_element_by_id("select_none")
+        select_none = journ_app_nav.driver.find_element(By.ID, "select_none")
         select_none.click()
 
         # Then only the visible source gets de-selected
         for source_row in source_rows:
             source_designation = source_row.get_attribute("data-source-designation")
-            checkbox = source_row.find_element_by_css_selector("input[type=checkbox]")
+            checkbox = source_row.find_element(By.CSS_SELECTOR, "input[type=checkbox]")
             if source_designation == first_source_designation:
                 assert not checkbox.is_selected()
             else:
@@ -301,24 +302,24 @@ class TestJournalist:
 
         for source_row in source_rows:
             assert source_row.is_displayed()
-            checkbox = source_row.find_element_by_css_selector("input[type=checkbox]")
+            checkbox = source_row.find_element(By.CSS_SELECTOR, "input[type=checkbox]")
             assert not checkbox.is_selected()
 
         # And the journalist clicks "select all" then all sources are selected
-        journ_app_nav.driver.find_element_by_id("select_all").click()
-        checkboxes = journ_app_nav.driver.find_elements_by_id("checkbox")
+        journ_app_nav.driver.find_element(By.ID, "select_all").click()
+        checkboxes = journ_app_nav.driver.find_elements(By.ID, "checkbox")
         for checkbox in checkboxes:
             assert checkbox.is_selected()
 
         # And when the journalist clicks "select none" then no sources are selected
-        journ_app_nav.driver.find_element_by_id("select_none").click()
-        checkboxes = journ_app_nav.driver.find_elements_by_id("checkbox")
+        journ_app_nav.driver.find_element(By.ID, "select_none").click()
+        checkboxes = journ_app_nav.driver.find_elements(By.ID, "checkbox")
         for checkbox in checkboxes:
             assert checkbox.is_selected() is False
 
         # And when the journalist clicks "select unread" then all unread sources are selected
         journ_app_nav.journalist_selects_the_first_source()
-        journ_app_nav.driver.find_element_by_id("select_unread").click()
+        journ_app_nav.driver.find_element(By.ID, "select_unread").click()
         checkboxes = journ_app_nav.get_submission_checkboxes_on_current_page()
         for checkbox in checkboxes:
             classes = checkbox.get_attribute("class")
@@ -349,7 +350,7 @@ class TestJournalist:
         # And the journalist selected all sources on the index page
         try:
             # If JavaScript is enabled, use the select_all button.
-            journ_app_nav.driver.find_element_by_id("select_all")
+            journ_app_nav.driver.find_element(By.ID, "select_all")
             journ_app_nav.nav_helper.safe_click_by_id("select_all")
         except NoSuchElementException:
             journ_app_nav.nav_helper.safe_click_all_by_css_selector(
@@ -365,9 +366,9 @@ class TestJournalist:
         # and messages zeroed, and a success flash message present
         def one_source_no_files():
             assert journ_app_nav.count_sources_on_index_page() == 1
-            flash_msg = journ_app_nav.driver.find_element_by_css_selector(".flash")
+            flash_msg = journ_app_nav.driver.find_element(By.CSS_SELECTOR, ".flash")
             assert "The files and messages have been deleted" in flash_msg.text
-            counts = journ_app_nav.driver.find_elements_by_css_selector(".submission-count")
+            counts = journ_app_nav.driver.find_elements(By.CSS_SELECTOR, ".submission-count")
             assert "0 docs" in counts[0].text
             assert "0 messages" in counts[1].text
 
@@ -420,8 +421,8 @@ class TestJournalistMissingFile:
         )
 
         # When the journalist clicks on the source's "n unread" button
-        journ_app_nav.driver.find_element_by_css_selector(
-            "table#collections tr.source > td.unread a"
+        journ_app_nav.driver.find_element(
+            By.CSS_SELECTOR, "table#collections tr.source > td.unread a"
         ).click()
 
         # Then they see the expected error message
@@ -430,7 +431,7 @@ class TestJournalistMissingFile:
 
     @staticmethod
     def _journalist_sees_missing_file_error_message(journ_app_nav: JournalistAppNavigator) -> None:
-        notification = journ_app_nav.driver.find_element_by_css_selector(".error")
+        notification = journ_app_nav.driver.find_element(By.CSS_SELECTOR, ".error")
 
         # We use a definite article ("the" instead of "a") if a single file
         # is downloaded directly.
@@ -455,10 +456,10 @@ class TestJournalistMissingFile:
         )
 
         # When the journalist selects the source and then clicks the "Download" button
-        checkboxes = journ_app_nav.driver.find_elements_by_name("cols_selected")
+        checkboxes = journ_app_nav.driver.find_elements(By.NAME, "cols_selected")
         assert len(checkboxes) == 1
         checkboxes[0].click()
-        journ_app_nav.driver.find_element_by_xpath("//button[@value='download-all']").click()
+        journ_app_nav.driver.find_element(By.XPATH, "//button[@value='download-all']").click()
 
         # Then they see the expected error message
         self._journalist_sees_missing_file_error_message(journ_app_nav)
@@ -480,10 +481,10 @@ class TestJournalistMissingFile:
         )
 
         # When the journalist selects the source then clicks the "Download Unread" button
-        checkboxes = journ_app_nav.driver.find_elements_by_name("cols_selected")
+        checkboxes = journ_app_nav.driver.find_elements(By.NAME, "cols_selected")
         assert len(checkboxes) == 1
         checkboxes[0].click()
-        journ_app_nav.driver.find_element_by_xpath("//button[@value='download-unread']").click()
+        journ_app_nav.driver.find_element(By.XPATH, "//button[@value='download-unread']").click()
 
         # Then they see the expected error message
         self._journalist_sees_missing_file_error_message(journ_app_nav)
@@ -507,9 +508,9 @@ class TestJournalistMissingFile:
         journ_app_nav.journalist_selects_the_first_source()
 
         journ_app_nav.nav_helper.wait_for(
-            lambda: journ_app_nav.driver.find_element_by_css_selector("table#submissions")
+            lambda: journ_app_nav.driver.find_element(By.CSS_SELECTOR, "table#submissions")
         )
-        submissions = journ_app_nav.driver.find_elements_by_css_selector("#submissions a")
+        submissions = journ_app_nav.driver.find_elements(By.CSS_SELECTOR, "#submissions a")
         assert len(submissions) == 1
 
         file_link = submissions[0]
@@ -522,7 +523,7 @@ class TestJournalistMissingFile:
     @staticmethod
     def _journalist_is_on_collection_page(journ_app_nav: JournalistAppNavigator) -> None:
         return journ_app_nav.nav_helper.wait_for(
-            lambda: journ_app_nav.driver.find_element_by_css_selector("div.journalist-view-single")
+            lambda: journ_app_nav.driver.find_element(By.CSS_SELECTOR, "div.journalist-view-single")
         )
 
     def test_select_message_and_download_selected(
@@ -542,10 +543,10 @@ class TestJournalistMissingFile:
         # When the journalist selects the individual message from the source page
         # and clicks "Download Selected"
         journ_app_nav.journalist_selects_the_first_source()
-        checkboxes = journ_app_nav.driver.find_elements_by_name("doc_names_selected")
+        checkboxes = journ_app_nav.driver.find_elements(By.NAME, "doc_names_selected")
         assert len(checkboxes) == 1
         checkboxes[0].click()
-        journ_app_nav.driver.find_element_by_xpath("//button[@value='download']").click()
+        journ_app_nav.driver.find_element(By.XPATH, "//button[@value='download']").click()
 
         # Then they see the expected error message
         self._journalist_sees_missing_file_error_message(journ_app_nav)

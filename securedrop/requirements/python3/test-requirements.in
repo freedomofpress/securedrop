@@ -14,8 +14,8 @@ pytest-cov
 pytest-mock
 requests[socks]>=2.31.0
 setuptools>=56.0.0
-selenium>=3.141.0
-tbselenium>=0.5.2
+selenium>4.15.1
+tbselenium>=0.8.1
 pyvirtualdisplay
 urllib3>=1.26.5
 # mypy and co.
