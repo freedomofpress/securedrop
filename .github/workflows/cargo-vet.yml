@@ -11,7 +11,7 @@ jobs:
     # Keep version in sync with rust-toolchain.toml
     container: rust:1.74.1
     env:
-      CARGO_VET_VERSION: 0.8.0
+      CARGO_VET_VERSION: 0.9.0
     steps:
     - uses: actions/checkout@v4
     - uses: actions/cache@v2
