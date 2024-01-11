@@ -11,16 +11,16 @@
     <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
     <div>
       <div id="index-select-container"></div>
-      <button type="submit" name="action" value="download-unread" class="small icon">
+      <button aria-label="{{ gettext('Download Selected Unread Submissions') }}" type="submit" name="action" value="download-unread" class="small icon">
         {{ gettext('Download Unread') }}
       </button>
-      <button type="submit" name="action" value="download-all" class="small icon">
+      <button aria-label="{{ gettext('Download Selected Submissions') }}" type="submit" name="action" value="download-all" class="small icon">
         {{ gettext('Download') }}
       </button>
-      <button type="submit" name="action" value="star" class="small icon">
+      <button aria-label="{{ gettext('Star Selected Submissions') }}" type="submit" name="action" value="star" class="small icon">
         {{ gettext('Star') }}
       </button>
-      <button type="submit" name="action" value="un-star" class="small icon">
+      <button aria-label="{{ gettext('Un-star Selected Submissions') }}" type="submit" name="action" value="un-star" class="small icon">
         {{ gettext('Un-star') }}
       </button>
       <div class="delete-menu-button"><a href="#delete-sources-modal" id="delete-collections-link"
