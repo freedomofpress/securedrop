@@ -13,7 +13,7 @@ jobs:
       - name: Install Git
         run: |
           apt-get update && apt-get install --yes git
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Install dependencies
         run: |
           DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get install --yes --no-install-recommends \
@@ -34,7 +34,7 @@ jobs:
     # Keep version in sync with rust-toolchain.toml
     container: rust:1.74.1
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Install dependencies
         run: |
           rustup component add rustfmt
@@ -51,7 +51,7 @@ jobs:
       - name: Install dependencies
         run: |
           apt-get update && apt-get install --yes git libqt5designer5 python3-venv
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Install Python dependencies
         run: |
           cd journalist_gui
