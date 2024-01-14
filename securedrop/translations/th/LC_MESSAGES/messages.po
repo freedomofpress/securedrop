@@ -721,7 +721,7 @@ msgstr ""
 msgid "LOG IN"
 msgstr ""
 
-msgid "Field must be between 1 and {max_codename_len} character long."
+msgid "Field must be 1 character long."
 msgid_plural "Field must be between 1 and {max_codename_len} characters long."
 msgstr[0] ""
 
@@ -977,7 +977,7 @@ msgstr ""
 msgid "Sorry, we couldn't locate what you requested."
 msgstr ""
 
-msgid "WARNING: Proxy Service Detected"
+msgid "Warning: Proxy Detected"
 msgstr ""
 
 msgid "Proxy Service Detected"
