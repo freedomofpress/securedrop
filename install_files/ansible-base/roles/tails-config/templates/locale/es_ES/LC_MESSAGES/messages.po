@@ -4,18 +4,7 @@
 # Automatically generated, 2017.
 #
 msgid ""
-msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2018-12-05 08:18+0000\n"
-"Last-Translator: Adolfo Jayme-Barrientos <fitojb@ubuntu.com>\n"
-"Language-Team: Spanish <https://weblate.securedrop.org/projects/securedrop/desktop/es/>\n"
-"Language: es_ES\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2.20\n"
+msgstr "Project-Id-Version: PACKAGE VERSION\nReport-Msgid-Bugs-To: securedrop@freedom.press\nPO-Revision-Date: 2024-01-12 20:30+0000\nLast-Translator: clarailr <clarailr@yahoo.es>\nLanguage-Team: Spanish <https://weblate.securedrop.org/projects/securedrop/desktop/es/>\nLanguage: es_ES\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=2; plural=n != 1;\nX-Generator: Weblate 5.3.1\n"
 
 msgid "Check for SecureDrop Updates"
 msgstr ""
@@ -27,16 +16,16 @@ msgid "Launch Source Interface"
 msgstr ""
 
 msgid "Open File Browser"
-msgstr ""
+msgstr "Abrir Explorador de archivos"
 
 msgid "Open KeePassXC Password Vault"
-msgstr ""
+msgstr "Abrir Almacén de contraseñas de KeePassXC"
 
 msgid "SSH into the App Server"
-msgstr ""
+msgstr "SSH al servidor de aplicaciones"
 
 msgid "SSH into the Monitor Server"
-msgstr ""
+msgstr "SSH al servidor de supervisión"
 
 #. Name
 msgid "SecureDrop Journalist Interface"
