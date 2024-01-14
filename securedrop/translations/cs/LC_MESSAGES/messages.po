@@ -751,11 +751,11 @@ msgstr "Přihlásit se"
 msgid "LOG IN"
 msgstr "PŘIHLÁSIT SE"
 
-msgid "Field must be between 1 and {max_codename_len} character long."
+msgid "Field must be 1 character long."
 msgid_plural "Field must be between 1 and {max_codename_len} characters long."
-msgstr[0] "Pole musí mít 1 až {max_codename_len} znak."
-msgstr[1] "Pole musí mít 1 až {max_codename_len} znaky."
-msgstr[2] "Pole musí mít 1 až {max_codename_len} znaků."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 msgid "Invalid input."
 msgstr "Neplatný vstup."
@@ -1009,8 +1009,8 @@ msgstr "Stránka nenalezena"
 msgid "Sorry, we couldn't locate what you requested."
 msgstr "Promiňte, váš požadavek jsme nenašli."
 
-msgid "WARNING: Proxy Service Detected"
-msgstr "POZOR: Byla detekována proxy služba"
+msgid "Warning: Proxy Detected"
+msgstr ""
 
 msgid "Proxy Service Detected"
 msgstr "Detekována proxy služba"
@@ -1093,6 +1093,15 @@ msgstr "<strong>Důležité:</strong> Chcete-li zůstat v anonymitě, <strong>ne
 
 msgid "Back to submission page"
 msgstr "Zpátky na stránku podání"
+
+#~ msgid "Field must be between 1 and {max_codename_len} character long."
+#~ msgid_plural "Field must be between 1 and {max_codename_len} characters long."
+#~ msgstr[0] "Pole musí mít 1 až {max_codename_len} znak."
+#~ msgstr[1] "Pole musí mít 1 až {max_codename_len} znaky."
+#~ msgstr[2] "Pole musí mít 1 až {max_codename_len} znaků."
+
+#~ msgid "WARNING: Proxy Service Detected"
+#~ msgstr "POZOR: Byla detekována proxy služba"
 
 #~ msgid "Field must be between 1 and {max_codename_len} characters long."
 #~ msgstr "Pole musí mít mezi 1 a {max_codename_len} znaky."
