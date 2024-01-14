@@ -1,18 +1,5 @@
 msgid ""
-msgstr ""
-"Project-Id-Version: SecureDrop \\'0.3.5\\'\n"
-"Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2023-10-15 19:30+0000\n"
-"Last-Translator: Curtis Baltimore <curtisbaltimore@protonmail.com>\n"
-"Language-Team: German <https://weblate.securedrop.org/projects/securedrop/securedrop/de/>\n"
-"Language: de_DE\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.18.2\n"
-"Generated-By: Babel 2.4.0\n"
+msgstr "Project-Id-Version: SecureDrop \\'0.3.5\\'\nReport-Msgid-Bugs-To: securedrop@freedom.press\nPOT-Creation-Date: 2017-09-02 07:28+0000\nPO-Revision-Date: 2024-01-14 13:30+0000\nLast-Translator: Curtis Baltimore <curtisbaltimore@protonmail.com>\nLanguage-Team: German <https://weblate.securedrop.org/projects/securedrop/securedrop/de/>\nLanguage: de_DE\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=2; plural=n != 1;\nX-Generator: Weblate 5.3.1\nGenerated-By: Babel 2.4.0\n"
 
 msgid "Name too long"
 msgstr "Name zu lang"
@@ -737,9 +724,9 @@ msgstr "Anmelden"
 msgid "LOG IN"
 msgstr "ANMELDEN"
 
-msgid "Field must be between 1 and {max_codename_len} character long."
+msgid "Field must be 1 character long."
 msgid_plural "Field must be between 1 and {max_codename_len} characters long."
-msgstr[0] "Das Feld muss zwischen 1 und {max_codename_len} Zeichen lang sein."
+msgstr[0] "Das Feld muss 1 Zeichen lang sein."
 msgstr[1] "Die Felder müssen zwischen 1 und {max_codename_len} Zeichen lang sein."
 
 msgid "Invalid input."
@@ -994,8 +981,8 @@ msgstr "Seite nicht gefunden"
 msgid "Sorry, we couldn't locate what you requested."
 msgstr "Leider konnten wir nicht finden, was Sie angefordert haben."
 
-msgid "WARNING: Proxy Service Detected"
-msgstr "WARNUNG: Proxy-Dienst erkannt"
+msgid "Warning: Proxy Detected"
+msgstr "Warnung: Proxy erkannt"
 
 msgid "Proxy Service Detected"
 msgstr "Proxy-Dienst erkannt"
@@ -1078,6 +1065,14 @@ msgstr "<strong>Wichtig:</strong> Verwenden Sie <strong>nicht</strong> GPG, um d
 
 msgid "Back to submission page"
 msgstr "Zurück zur Einreichungsseite"
+
+#~ msgid "Field must be between 1 and {max_codename_len} character long."
+#~ msgid_plural "Field must be between 1 and {max_codename_len} characters long."
+#~ msgstr[0] "Das Feld muss zwischen 1 und {max_codename_len} Zeichen lang sein."
+#~ msgstr[1] "Die Felder müssen zwischen 1 und {max_codename_len} Zeichen lang sein."
+
+#~ msgid "WARNING: Proxy Service Detected"
+#~ msgstr "WARNUNG: Proxy-Dienst erkannt"
 
 #~ msgid "Field must be between 1 and {max_codename_len} characters long."
 #~ msgstr "Feld muss zwischen 1 und {max_codename_len} Zeichen lang sein."
