@@ -110,9 +110,9 @@ def is_missing_dependency() -> bool:
 
     try:
         sdlog.info("Checking apt dependencies are installed")
-        apt_query_result = subprocess.run(apt_query, capture_output=True, text=True)
+        apt_query_result = subprocess.run(apt_query, capture_output=True, text=True, check=True)
 
-        # If any packages are marked as not installed, return 0
+        # If any packages are marked as not installed, we are missing dependencies
         if "Installed: (none)" in apt_query_result.stdout:
             return True
 
