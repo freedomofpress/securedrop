@@ -34,7 +34,7 @@ requests>=2.31.0
 ruamel.yaml>=0.16.10
 ruff
 safety>2.2.0
-semgrep>=0.98.0
+semgrep>=1.57.0
 setuptools>=56.0.0
 shellcheck-py
 testinfra>=5.3.1
