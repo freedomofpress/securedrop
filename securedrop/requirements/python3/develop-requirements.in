@@ -11,6 +11,7 @@ docker
 dnspython
 html-linter
 importlib-resources
+jinja2>=3.1.3
 markupsafe>=2.0
 molecule>=3.0.1
 molecule-vagrant>=0.3
