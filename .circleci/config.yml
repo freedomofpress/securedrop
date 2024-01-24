@@ -271,7 +271,7 @@ jobs:
           command: |
             fromtag=$(docker images |grep securedrop-test-focal-py3 |head -n1 |awk '{print $2}')
             DOCKER_BUILD_ARGUMENTS="--cache-from securedrop-test-focal-py3:${fromtag:-latest}" securedrop/bin/dev-shell \
-                  bash -c "pip3 install -U -q --upgrade pip && pip3 install -U -q semgrep==1.56.0 && make -C .. semgrep"
+                  bash -c "pip3 install -U -q --upgrade pip && pip3 install -U -q --upgrade semgrep && make -C .. semgrep"
 
   staging-test-with-rebase:
     machine:
