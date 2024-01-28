@@ -117,3 +117,12 @@
     - restart apache2
   tags:
     - apache
+
+- name: Retain no more than one month of apache logs
+  copy:
+    src: apache2-logrotate.conf
+    dest: /etc/logrotate.d/apache2
+    owner: root
+    mode: "0644"
+  tags:
+    - apache
