@@ -146,13 +146,7 @@ def install_apt_dependencies(args: argparse.Namespace) -> None:
         " which was set on Tails login screen"
     )
 
-    apt_command = [
-        "sudo",
-        "su",
-        "-c",
-        f"apt-get update && \
-                   apt-get -q -o=Dpkg::Use-Pty=0 install -y {APT_DEPENDENCIES_STR}",
-    ]
+    apt_command = f"sudo apt-get -q -o=Dpkg::Use-Pty=0 install -y {APT_DEPENDENCIES_STR}".split(" ")
 
     try:
         # Print command results in real-time, to keep Admin apprised
