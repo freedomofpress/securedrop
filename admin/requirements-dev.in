@@ -1,15 +1,16 @@
-coverage>=5.0  # #6091
+coverage>=7.0  # #6091
 d2to1
 flaky
 mock
+packaging==21.3
 pbr
 pip>=21.1
 pip-tools>=6.1.0
 py>=1.11.0
 pylint>=3.0.0
-pytest==3.2.0
+pytest==7.2.0
 requests>=2.26.0
-tox
+tox==3.28.0
 pexpect
 urllib3>=1.26.5
 pytest-catchlog
