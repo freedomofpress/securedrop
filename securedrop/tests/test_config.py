@@ -19,8 +19,12 @@ def test_parse_current_config():
     try:
         current_config_file.write_text(current_sample_config.read_text())
 
-        # When trying to parse it, it succeeds
-        assert _parse_config_from_file(f"tests.{current_config_module}")
+        # When trying to parse it, it succeeds...
+        parsed_config = _parse_config_from_file(f"tests.{current_config_module}")
+        assert parsed_config
+
+        # ...and has one of our `env` values rather than one of Flask's:
+        assert parsed_config.env in ["prod", "dev", "test"]
 
     finally:
         current_config_file.unlink(missing_ok=True)
