@@ -2,7 +2,7 @@
   find:
     name: "/etc"
     patterns: "os-release"
-    contains: "^TAILS_PRODUCT_NAME="
+    contains: "^NAME=\"Tails\""
   register: tails_os_string
 
 - name: Confirm host OS is Tails.
