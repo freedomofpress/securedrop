@@ -649,9 +649,11 @@ pbr==5.1.1 \
     # via
     #   git-url-parse
     #   python-gilt
-peewee==3.15.0 \
-    --hash=sha256:48eac70be812ac84daa5400fb8e7b545e0c83adcfa05c8e2a8612f9ced4da495
-    # via semgrep
+peewee==3.17.1 \
+    --hash=sha256:e009ac4227c4fdc0058a56e822ad5987684f0a1fbb20fed577200785102581c3
+    # via
+    #   -r requirements/python3/develop-requirements.in
+    #   semgrep
 pep517==0.10.0 \
     --hash=sha256:ac59f3f6b9726a49e15a649474539442cf76e0697e39df4869d25e68e880931b \
     --hash=sha256:eba39d201ef937584ad3343df3581069085bacc95454c80188291d5b3ac7a249
