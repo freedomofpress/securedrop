@@ -4,13 +4,13 @@
 #
 #    pip-compile --allow-unsafe --generate-hashes --output-file=requirements-testinfra.txt requirements-ansible.in requirements-testinfra.in requirements.in
 #
-ansible-core==2.13.13 \
-    --hash=sha256:7ad2d8c0a5fa4a59de1809a5f96d2dbf511189c834116f5c72aec9730b51074b \
-    --hash=sha256:f50220254b8e13a79b68e68e759f5bf89f3f3584c907737985a017c699b1c3b6
+ansible-core==2.15.9 \
+    --hash=sha256:25f9b1b5a5af3c0986bd3928ed086eaddb867527fb5c83afef1a03cfad34f345 \
+    --hash=sha256:5b6a4b12aa5358f60933e79d86763e3558862282fb1dc563a29b9999e5849fc3
     # via ansible
-ansible==6.7.0 \
-    --hash=sha256:3cda6e67b1d42516f64ce376bb94c5186ff33d215d155432be5b3c2ec60bf112 \
-    --hash=sha256:c188f3ac8a8583794aadcff0bea87895ead58c19d6f244cd0c342562706e176c
+ansible==8.7.0 \
+    --hash=sha256:3a5ca5152e4547d590e40b542d76b18dbbe2b36da4edd00a13a7c51a374ff737 \
+    --hash=sha256:fa7d3bc2dfdb0ab031df645814ff86b15cb5ec041bfbee4041f795abfa5646ca
     # via -r requirements-ansible.in
 attrs==23.2.0 \
     --hash=sha256:935dc3b529c262f6cf76e50877d35a4bd3c1de194fd41f47a2b7ae8f19971f30 \
