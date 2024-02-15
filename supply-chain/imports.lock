@@ -205,8 +205,8 @@ user-login = "BurntSushi"
 user-name = "Andrew Gallant"
 
 [[publisher.rustix]]
-version = "0.38.18"
-when = "2023-10-09"
+version = "0.38.21"
+when = "2023-10-26"
 user-id = 6825
 user-login = "sunfishcode"
 user-name = "Dan Gohman"
