@@ -114,6 +114,12 @@ function docker_run() {
         DOCKER_RUN_ARGUMENTS="${DOCKER_RUN_ARGUMENTS} -it"
     fi
 
+    if [ -n "${USE_TOR:-}" ]; then
+        # Mount persistent onion services
+        docker volume create sd-onion-services
+        DOCKER_RUN_ARGUMENTS="${DOCKER_RUN_ARGUMENTS} --volume sd-onion-services:/var/lib/tor/services"
+    fi
+
     # The --shm-size argument sets up dedicated shared memory for the
     # container. Our tests can fail with the default of 64m.
     $DOCKER_BIN run $ci_env \

@@ -54,16 +54,28 @@ function maybe_create_config_py() {
 function maybe_use_tor() {
     if [[ -n "${USE_TOR:-}" ]]; then
         echo "Setting up Tor..."
+        if [ ! -d "/var/lib/tor/services" ]; then
+            sudo chown -R debian-tor:debian-tor /var/lib/tor/services
+        else
+            sudo -u debian-tor mkdir -p /var/lib/tor/services
+        fi
         # append torrc lines for SI and JI
-        sudo -u debian-tor mkdir -p /var/lib/tor/services
         echo "HiddenServiceDir /var/lib/tor/services/source/" | sudo tee -a /etc/tor/torrc
         echo "HiddenServicePort 80 127.0.0.1:8080" | sudo tee -a /etc/tor/torrc
         echo "HiddenServiceDir /var/lib/tor/services/journalist/" | sudo tee -a /etc/tor/torrc
         echo "HiddenServicePort 80 127.0.0.1:8081" | sudo tee -a /etc/tor/torrc
         # start Tor to create service directories
         sudo service tor start
-        # create x25519 keypair and journalist client auth file
-        openssl genpkey -algorithm x25519 -out /tmp/k1.prv.pem
+        if sudo test -f "/var/lib/tor/services/journalist_auth_token.prv.pem"; then
+            # recover x25519 key
+            sudo cat /var/lib/tor/services/journalist_auth_token.prv.pem | tee /tmp/k1.prv.pem
+        else
+            echo "Generating new client authorization..."
+            # create x25519 keypair and journalist client auth file
+            openssl genpkey -algorithm x25519 -out /tmp/k1.prv.pem
+            # store private auth token for regeneration after restarts
+            sudo cp /tmp/k1.prv.pem /var/lib/tor/services/journalist_auth_token.prv.pem
+        fi
         grep -v " PRIVATE KEY" < /tmp/k1.prv.pem | base64pem -d | tail --bytes=32 | base32 | sed 's/=//g' > /tmp/k1.prv.key
         openssl pkey -in /tmp/k1.prv.pem -pubout | grep -v " PUBLIC KEY" | base64pem -d | tail --bytes=32 | base32 | sed 's/=//g' > /tmp/k1.pub.key
         echo "descriptor:x25519:$(cat /tmp/k1.pub.key)" | sudo -u debian-tor tee /var/lib/tor/services/journalist/authorized_clients/client.auth
