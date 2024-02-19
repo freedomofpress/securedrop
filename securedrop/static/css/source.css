@@ -486,6 +486,7 @@ header {
 
 #source-index main {
   display: flex;
+  flex-flow: row wrap;
   justify-content: center;
   padding: 0;
   border: 0;
@@ -501,9 +502,16 @@ header {
   min-width: 186px;
 }
 
-#source-index main p {
+#source-index main p:not(.site-message-text){
   width: 230px;
   margin-bottom: 2em;
+}
+
+#source-index .content main header {
+  width: 100%;
+  min-height: 140px;
+  padding: 10px 45px 10px 45px;
+  position: relative;
 }
 
 #source-index .content section:not(#locales-menu):not(#flashed) {
@@ -523,12 +531,12 @@ header {
   padding-left: 65px;
 }
 
-html[dir=ltr] #source-index .content section:not(#locales-menu):not(#flashed):first-child {
-  border-right: 2px solid var(--index-middle-separator);
+html[dir=ltr] #source-index .content section:not(#locales-menu):not(#flashed):last-child {
+  border-left: 2px solid var(--index-middle-separator);
 }
 
-html[dir=rtl] #source-index .content section:not(#locales-menu):not(#flashed):first-child {
-  border-left: 2px solid var(--index-middle-separator);
+html[dir=rtl] #source-index .content section:not(#locales-menu):not(#flashed):last-child {
+  border-right: 2px solid var(--index-middle-separator);
 }
 
 @media only screen and (min-width: 769px) and (max-width: 850px) {

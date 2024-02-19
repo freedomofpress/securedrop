@@ -56,6 +56,17 @@
     </header>
 
     <main>
+      {% if 1==1 %}
+      <header id="site-message">
+      <h2>I am a site message</h2>
+      <p class="site-message-text">
+      I am a bunch of explanatory text. Probably should expect that I could get pretty long, on the order of
+      about 300 characters. I have no formatting options available apart from maybe paragraphs?
+      <br>
+      Yuppp paragraphs are a thing.
+      </p>
+      </header>
+      {% endif %}
       <section id="first-submission" aria-labelledby="first-submission-heading">
         <h2 id="first-submission-heading">{{ gettext('First submission') }}</h2>
         <p>{{ gettext('First time submitting to our SecureDrop? Start here.') }}</p>
