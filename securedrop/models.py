@@ -863,6 +863,10 @@ class InstanceConfig(db.Model):
     # Limits length of org name used in SI and JI titles, image alt texts etc.
     MAX_ORG_NAME_LEN = 64
 
+    # Limits length of site messages
+    MAX_SITE_MSG_TITLE_LEN = 64
+    MAX_SITE_MSG_LEN = 512
+
     __tablename__ = "instance_config"
     version = Column(Integer, primary_key=True)
     valid_until = Column(
@@ -878,6 +882,10 @@ class InstanceConfig(db.Model):
         Boolean, nullable=False, default=False, server_default="0"
     )
 
+    site_msg_enabled = Column(Boolean, default=False)
+    site_msg_title = Column(String(255), nullable=True, default="")
+    site_msg_text = Column(String(MAX_SITE_MSG_LEN), nullable=True, default="")
+
     # Columns not listed here will be included by InstanceConfig.copy() when
     # updating the configuration.
     metadata_cols = ["version", "valid_until"]
@@ -886,13 +894,17 @@ class InstanceConfig(db.Model):
         return (
             "<InstanceConfig(version={}, valid_until={}, "
             "allow_document_uploads={}, organization_name={}, "
-            "initial_message_min_len={}, reject_message_with_codename={})>".format(
+            "initial_message_min_len={}, reject_message_with_codename={}"
+            "site_msg_enabled={}, site_msg_title={}. site_msg_text={})>".format(
                 self.version,
                 self.valid_until,
                 self.allow_document_uploads,
                 self.organization_name,
                 self.initial_message_min_len,
                 self.reject_message_with_codename,
+                self.site_msg_enabled,
+                self.site_msg_title,
+                self.site_msg_txt,
             )
         )
 
@@ -957,6 +969,27 @@ class InstanceConfig(db.Model):
         new = old.copy()
         cls.check_name_acceptable(name)
         new.organization_name = name
+        db.session.add(new)
+
+        db.session.commit()
+
+    @classmethod
+    def update_site_msg_prefs(cls, msg_enabled: bool, msg_title: str, msg_text: str) -> None:
+        old = cls.get_current()
+        old.valid_until = datetime.datetime.utcnow()
+        db.session.add(old)
+
+        new = old.copy()
+        new.site_msg_enabled = msg_enabled
+        if len(msg_title) > cls.MAX_SITE_MSG_TITLE_LEN:
+            raise InvalidNameLength()
+        else:
+            new.site_msg_title = msg_title
+        if len(msg_text) > cls.MAX_SITE_MSG_LEN:
+            raise InvalidNameLength()
+        else:
+            new.site_msg_text = msg_text
+
         db.session.add(new)
 
         db.session.commit()
