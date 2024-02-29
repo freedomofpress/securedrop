@@ -71,6 +71,8 @@ class SecureDropConfig:
 
     RQ_WORKER_NAME: str
 
+    env: str = "prod"
+
     @property
     def TEMP_DIR(self) -> Path:
         # We use a directory under the SECUREDROP_DATA_ROOT instead of `/tmp` because
@@ -114,6 +116,8 @@ def _parse_config_from_file(config_module_name: str) -> SecureDropConfig:
     final_scrypt_params = getattr(
         config_from_local_file, "SCRYPT_PARAMS", dict(N=2**14, r=8, p=1)
     )
+
+    env = getattr(config_from_local_file, "env", "prod")
 
     try:
         final_securedrop_root = Path(config_from_local_file.SECUREDROP_ROOT)
@@ -188,6 +192,7 @@ def _parse_config_from_file(config_module_name: str) -> SecureDropConfig:
     )
 
     return SecureDropConfig(
+        env=env,
         JOURNALIST_APP_FLASK_CONFIG_CLS=parsed_journ_flask_config,
         SOURCE_APP_FLASK_CONFIG_CLS=parsed_source_flask_config,
         GPG_KEY_DIR=final_gpg_key_dir,
