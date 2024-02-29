@@ -1,4 +1,3 @@
-#!/usr/bin/env ansible-playbook
 ---
 # Configures SecureDrop dotfiles persistence on Admin and Journalist
 # Workstations. Should be run after the servers have been installed.
