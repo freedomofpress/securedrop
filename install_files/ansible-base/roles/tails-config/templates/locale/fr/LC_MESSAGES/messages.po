@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2023-10-14 15:30+0000\n"
+"PO-Revision-Date: 2023-11-22 20:30+0000\n"
 "Last-Translator: AO Localization Lab <ao@localizationlab.org>\n"
 "Language-Team: French <https://weblate.securedrop.org/projects/securedrop/desktop/fr/>\n"
 "Language: fr\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.18.2\n"
+"X-Generator: Weblate 5.1.1\n"
 
 msgid "Check for SecureDrop Updates"
 msgstr "Vérifier la présence de mises à jour de SecureDrop"
@@ -40,11 +40,11 @@ msgstr "SSH vers le serveur de surveillance"
 
 #. Name
 msgid "SecureDrop Journalist Interface"
-msgstr "SecureDrop - Interface des journalistes"
+msgstr "SecureDrop – Interface des journalistes"
 
 #. Name
 msgid "SecureDrop Source Interface"
-msgstr "SecureDrop - Interface des sources"
+msgstr "SecureDrop – Interface des sources"
 
 #. Icon
 msgid "{{ tails_config_securedrop_dotfiles }}/securedrop_icon.png"

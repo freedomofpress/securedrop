@@ -741,10 +741,10 @@ msgstr "Iniciar Sessão"
 msgid "LOG IN"
 msgstr "INICIAR SESSÃO"
 
-msgid "Field must be between 1 and {max_codename_len} character long."
+msgid "Field must be 1 character long."
 msgid_plural "Field must be between 1 and {max_codename_len} characters long."
-msgstr[0] "O campo deve entre 1 caractere e  {max_codename_len} caractere."
-msgstr[1] "O campo deve entre 1 caractere e  {max_codename_len} caracteres."
+msgstr[0] ""
+msgstr[1] ""
 
 msgid "Invalid input."
 msgstr "Inseriu caracteres inválidos."
@@ -998,8 +998,8 @@ msgstr "Página não encontrada"
 msgid "Sorry, we couldn't locate what you requested."
 msgstr "Desculpe, não conseguimos localizar o que pediu."
 
-msgid "WARNING: Proxy Service Detected"
-msgstr "ATENÇÃO: Serviço de Proxy Detetado"
+msgid "Warning: Proxy Detected"
+msgstr ""
 
 msgid "Proxy Service Detected"
 msgstr "Serviço de Proxy detetado"
@@ -1082,6 +1082,14 @@ msgstr "<strong>Importante:</strong> para manter o seu anonimato, <strong>não</
 
 msgid "Back to submission page"
 msgstr "Voltar à página de envio"
+
+#~ msgid "Field must be between 1 and {max_codename_len} character long."
+#~ msgid_plural "Field must be between 1 and {max_codename_len} characters long."
+#~ msgstr[0] "O campo deve entre 1 caractere e  {max_codename_len} caractere."
+#~ msgstr[1] "O campo deve entre 1 caractere e  {max_codename_len} caracteres."
+
+#~ msgid "WARNING: Proxy Service Detected"
+#~ msgstr "ATENÇÃO: Serviço de Proxy Detetado"
 
 #~ msgid "Field must be between 1 and {max_codename_len} characters long."
 #~ msgstr "Este campo deve conter entre 1 e {max_codename_len} caracteres."

@@ -741,10 +741,10 @@ msgstr "Kirjaudu"
 msgid "LOG IN"
 msgstr "KIRJAUDU SISÄÄN"
 
-msgid "Field must be between 1 and {max_codename_len} character long."
+msgid "Field must be 1 character long."
 msgid_plural "Field must be between 1 and {max_codename_len} characters long."
-msgstr[0] "Kentässä tulee olla merkkejä 1-{max_codename_len}."
-msgstr[1] "Kentässä tulee olla merkkejä 1-{max_codename_len}."
+msgstr[0] ""
+msgstr[1] ""
 
 msgid "Invalid input."
 msgstr "Syöte ei kelpaa."
@@ -998,8 +998,8 @@ msgstr "Sivua ei löytynyt"
 msgid "Sorry, we couldn't locate what you requested."
 msgstr "Valitettavasti emme löytäneet etsimääsi."
 
-msgid "WARNING: Proxy Service Detected"
-msgstr "VAROITUS: Välityspalvelin havaittu"
+msgid "Warning: Proxy Detected"
+msgstr ""
 
 msgid "Proxy Service Detected"
 msgstr "Välityspalvelin havaittu"
@@ -1082,6 +1082,14 @@ msgstr "<strong>Tärkeää:</strong> Jos haluat pysyä nimettömänä, <strong>�
 
 msgid "Back to submission page"
 msgstr "Takaisin lähetyssivulle"
+
+#~ msgid "Field must be between 1 and {max_codename_len} character long."
+#~ msgid_plural "Field must be between 1 and {max_codename_len} characters long."
+#~ msgstr[0] "Kentässä tulee olla merkkejä 1-{max_codename_len}."
+#~ msgstr[1] "Kentässä tulee olla merkkejä 1-{max_codename_len}."
+
+#~ msgid "WARNING: Proxy Service Detected"
+#~ msgstr "VAROITUS: Välityspalvelin havaittu"
 
 #~ msgid "Field must be between 1 and {max_codename_len} characters long."
 #~ msgstr "Kentän tulee olla 1 - {max_codename_len} merkkiä pitkä."

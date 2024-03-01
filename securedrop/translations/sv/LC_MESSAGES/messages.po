@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SecureDrop 0.5-rc4\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2023-10-12 07:30+0000\n"
+"PO-Revision-Date: 2023-11-15 13:30+0000\n"
 "Last-Translator: Jonas Waga <jonas.waga@schibsted.com>\n"
 "Language-Team: Swedish <https://weblate.securedrop.org/projects/securedrop/securedrop/sv/>\n"
 "Language: sv\n"
@@ -741,10 +741,10 @@ msgstr "Logga in"
 msgid "LOG IN"
 msgstr "LOGGA IN"
 
-msgid "Field must be between 1 and {max_codename_len} character long."
+msgid "Field must be 1 character long."
 msgid_plural "Field must be between 1 and {max_codename_len} characters long."
-msgstr[0] "Fältet måste vara mellan 1 och {max_codename_len} tecken långt."
-msgstr[1] "Fälten måste vara mellan 1 och {max_codename_len} tecken långa."
+msgstr[0] "Fältet måste vara 1 tecken långt."
+msgstr[1] "Fältet måste vara mellan 1 och {max_codename_len} tecken långt."
 
 msgid "Invalid input."
 msgstr "Ogiltigt innehåll."
@@ -998,11 +998,11 @@ msgstr "Sidan kunde inte hittas"
 msgid "Sorry, we couldn't locate what you requested."
 msgstr "Förlåt, vi kunde inte hitta det du begärde."
 
-msgid "WARNING: Proxy Service Detected"
-msgstr "VARNING: Proxy-tjänst har upptäckts"
+msgid "Warning: Proxy Detected"
+msgstr "Varning: Proxy detekterad"
 
 msgid "Proxy Service Detected"
-msgstr "Procytjänst upptäckt"
+msgstr "Proxytjänst upptäckt"
 
 msgid "You appear to be using a Tor proxy service to access SecureDrop. Proxy services do not protect your anonymity."
 msgstr "Du ser ut att använda en Tor proxytjänst för att ansluta till SecureDrop. Proxytjänster skyddar inte din anonymitet."
@@ -1082,6 +1082,14 @@ msgstr "<strong> Viktigt:</strong> Ifall du önskar att förbli anonym, <strong>
 
 msgid "Back to submission page"
 msgstr "Tillbaka till inlämningssidan"
+
+#~ msgid "Field must be between 1 and {max_codename_len} character long."
+#~ msgid_plural "Field must be between 1 and {max_codename_len} characters long."
+#~ msgstr[0] "Fältet måste vara mellan 1 och {max_codename_len} tecken långt."
+#~ msgstr[1] "Fälten måste vara mellan 1 och {max_codename_len} tecken långa."
+
+#~ msgid "WARNING: Proxy Service Detected"
+#~ msgstr "VARNING: Proxy-tjänst har upptäckts"
 
 #~ msgid "Field must be between 1 and {max_codename_len} characters long."
 #~ msgstr "Fältet måste innehålla mellan 1 och {max_codename_len} tecken."

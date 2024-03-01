@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SecureDrop 0.5-rc4\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2023-10-12 07:30+0000\n"
+"PO-Revision-Date: 2023-11-16 10:30+0000\n"
 "Last-Translator: Adam Rak <kitynska@gmail.com>\n"
 "Language-Team: Polish <https://weblate.securedrop.org/projects/securedrop/securedrop/pl/>\n"
 "Language: pl\n"
@@ -751,9 +751,9 @@ msgstr "Zaloguj się"
 msgid "LOG IN"
 msgstr "ZALOGUJ SIĘ"
 
-msgid "Field must be between 1 and {max_codename_len} character long."
+msgid "Field must be 1 character long."
 msgid_plural "Field must be between 1 and {max_codename_len} characters long."
-msgstr[0] "Pole musi mieć długość od 1 do {max_codename_len} znaku."
+msgstr[0] "Pole musi mieć długość 1 znaku."
 msgstr[1] "Pole musi mieć długość od 1 do {max_codename_len} znaków."
 msgstr[2] "Pole musi mieć długość od 1 do {max_codename_len} znaków."
 
@@ -1009,8 +1009,8 @@ msgstr "Nie odnaleziono strony"
 msgid "Sorry, we couldn't locate what you requested."
 msgstr "Niestety, nie udało nam się znaleźć tego, o co prosiłeś."
 
-msgid "WARNING: Proxy Service Detected"
-msgstr "OSTRZEŻENIE: wykryto usługę proxy"
+msgid "Warning: Proxy Detected"
+msgstr "Ostrzeżenie: wykryto proxy"
 
 msgid "Proxy Service Detected"
 msgstr "Wykryto usługę proxy"
@@ -1093,6 +1093,15 @@ msgstr "<strong> Ważne: </strong> jeśli chcesz pozostać anonimowy, <strong> n
 
 msgid "Back to submission page"
 msgstr "Powrót do strony zgłoszenia"
+
+#~ msgid "Field must be between 1 and {max_codename_len} character long."
+#~ msgid_plural "Field must be between 1 and {max_codename_len} characters long."
+#~ msgstr[0] "Pole musi mieć długość od 1 do {max_codename_len} znaku."
+#~ msgstr[1] "Pole musi mieć długość od 1 do {max_codename_len} znaków."
+#~ msgstr[2] "Pole musi mieć długość od 1 do {max_codename_len} znaków."
+
+#~ msgid "WARNING: Proxy Service Detected"
+#~ msgstr "OSTRZEŻENIE: wykryto usługę proxy"
 
 #~ msgid "Field must be between 1 and {max_codename_len} characters long."
 #~ msgstr "Pole musi zawierać od 1 do {max_codename_len} znaków."

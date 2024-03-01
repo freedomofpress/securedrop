@@ -741,10 +741,10 @@ msgstr "Inicia la sessió"
 msgid "LOG IN"
 msgstr "INICIA LA SESSIÓ"
 
-msgid "Field must be between 1 and {max_codename_len} character long."
+msgid "Field must be 1 character long."
 msgid_plural "Field must be between 1 and {max_codename_len} characters long."
-msgstr[0] "El camp ha de tenir entre 1 i {max_codename_len} caràcter."
-msgstr[1] "El camp ha de tenir entre 1 i {max_codename_len} caràcters."
+msgstr[0] ""
+msgstr[1] ""
 
 msgid "Invalid input."
 msgstr "L'entrada no és vàlida."
@@ -998,8 +998,8 @@ msgstr "No s'ha trobat la pàgina"
 msgid "Sorry, we couldn't locate what you requested."
 msgstr "No podem trobar el que demaneu."
 
-msgid "WARNING: Proxy Service Detected"
-msgstr "Atenció: S'ha detectat un servidor intermediari"
+msgid "Warning: Proxy Detected"
+msgstr ""
 
 msgid "Proxy Service Detected"
 msgstr "S'ha detectat un servidor intermediari"
@@ -1082,6 +1082,14 @@ msgstr "<strong>Important:</strong> si voleu romandre en l'anonimat, <strong>no<
 
 msgid "Back to submission page"
 msgstr "Torna a la pàgina d'enviaments"
+
+#~ msgid "Field must be between 1 and {max_codename_len} character long."
+#~ msgid_plural "Field must be between 1 and {max_codename_len} characters long."
+#~ msgstr[0] "El camp ha de tenir entre 1 i {max_codename_len} caràcter."
+#~ msgstr[1] "El camp ha de tenir entre 1 i {max_codename_len} caràcters."
+
+#~ msgid "WARNING: Proxy Service Detected"
+#~ msgstr "Atenció: S'ha detectat un servidor intermediari"
 
 #~ msgid "Field must be between 1 and {max_codename_len} characters long."
 #~ msgstr "El camp ha de tenir entre 1 i {max_codename_len} caràcters."

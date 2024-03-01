@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SecureDrop 2.5.0~rc1\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2023-10-11 23:58+0000\n"
+"PO-Revision-Date: 2023-11-15 13:30+0000\n"
 "Last-Translator: anonymous <noreply@weblate.org>\n"
 "Language-Team: Esperanto <https://weblate.securedrop.org/projects/securedrop/securedrop/eo/>\n"
 "Language: eo\n"
@@ -741,9 +741,9 @@ msgstr "[Log In]"
 msgid "LOG IN"
 msgstr "[LOG IN]"
 
-msgid "Field must be between 1 and {max_codename_len} character long."
+msgid "Field must be 1 character long."
 msgid_plural "Field must be between 1 and {max_codename_len} characters long."
-msgstr[0] "[!!!!!!Field must be between 1 and {max_codename_len} character long.!!!!!!]"
+msgstr[0] "[!!!Field must be 1 character long.!!!]"
 msgstr[1] "[!!!!!!Field must be between 1 and {max_codename_len} characters long.!!!!!!]"
 
 msgid "Invalid input."
@@ -998,8 +998,8 @@ msgstr "[!Page not found!]"
 msgid "Sorry, we couldn't locate what you requested."
 msgstr "[!!!!Sorry, we couldn't locate what you requested.!!!!]"
 
-msgid "WARNING: Proxy Service Detected"
-msgstr "[!!!WARNING: Proxy Service Detected!!!]"
+msgid "Warning: Proxy Detected"
+msgstr "[!!Warning: Proxy Detected!!]"
 
 msgid "Proxy Service Detected"
 msgstr "[!!Proxy Service Detected!!]"
@@ -1082,6 +1082,14 @@ msgstr "[!!!!!!!!!!!!!!!!!!!!!<strong>Important:</strong> If you wish to remain 
 
 msgid "Back to submission page"
 msgstr "[!!Back to submission page!!]"
+
+#~ msgid "Field must be between 1 and {max_codename_len} character long."
+#~ msgid_plural "Field must be between 1 and {max_codename_len} characters long."
+#~ msgstr[0] "[!!!!!!Field must be between 1 and {max_codename_len} character long.!!!!!!]"
+#~ msgstr[1] "[!!!!!!Field must be between 1 and {max_codename_len} characters long.!!!!!!]"
+
+#~ msgid "WARNING: Proxy Service Detected"
+#~ msgstr "[!!!WARNING: Proxy Service Detected!!!]"
 
 #~ msgid "Invalid OTP secret"
 #~ msgstr "[!Invalid OTP secret!]"

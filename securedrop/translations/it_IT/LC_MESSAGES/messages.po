@@ -745,10 +745,10 @@ msgstr "Accedi"
 msgid "LOG IN"
 msgstr "ACCEDI"
 
-msgid "Field must be between 1 and {max_codename_len} character long."
+msgid "Field must be 1 character long."
 msgid_plural "Field must be between 1 and {max_codename_len} characters long."
-msgstr[0] "Il campo deve avere una lunghezza da 1 a {max_codename_len} caratteri."
-msgstr[1] "Il campo deve avere una lunghezza tra 1 e {max_codename_len} caratteri."
+msgstr[0] ""
+msgstr[1] ""
 
 msgid "Invalid input."
 msgstr "Input non valido."
@@ -1002,8 +1002,8 @@ msgstr "Pagina non trovata"
 msgid "Sorry, we couldn't locate what you requested."
 msgstr "Non è stato possibile trovare quello che hai richiesto."
 
-msgid "WARNING: Proxy Service Detected"
-msgstr "ATTENZIONE: rilevato servizio proxy"
+msgid "Warning: Proxy Detected"
+msgstr ""
 
 msgid "Proxy Service Detected"
 msgstr "Rilevata connessione tramite proxy"
@@ -1086,6 +1086,14 @@ msgstr "<strong>Importante:</strong> per rimanere anonimi <strong>non usare</str
 
 msgid "Back to submission page"
 msgstr "Torna alla pagina di invio documenti e messaggi"
+
+#~ msgid "Field must be between 1 and {max_codename_len} character long."
+#~ msgid_plural "Field must be between 1 and {max_codename_len} characters long."
+#~ msgstr[0] "Il campo deve avere una lunghezza da 1 a {max_codename_len} caratteri."
+#~ msgstr[1] "Il campo deve avere una lunghezza tra 1 e {max_codename_len} caratteri."
+
+#~ msgid "WARNING: Proxy Service Detected"
+#~ msgstr "ATTENZIONE: rilevato servizio proxy"
 
 #~ msgid "Field must be between 1 and {max_codename_len} characters long."
 #~ msgstr "Il campo deve avere una lunghezza tra 1 e {max_codename_len} caratteri."
