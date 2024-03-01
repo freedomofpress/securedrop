@@ -241,8 +241,8 @@ defusedxml==0.7.1 \
     --hash=sha256:1bb3032db185915b62d7c6209c5a8792be6a32ab2fedacc84e01b52c51aa3e69 \
     --hash=sha256:a352e7e428770286cc899e2542b6cdaedb2b4953ff269a210103ec58f6198a61
     # via semgrep
-diffoscope==236 \
-    --hash=sha256:84c46840dafffe0223056718e4250ceb52484452a992b85e345e3cf8a2cf7d4b
+diffoscope==256 \
+    --hash=sha256:9937e3d70358d5cc00aa5fa8a3db9dd6be532a0d3cd2d064add2cda736a97c2a
     # via -r requirements/python3/develop-requirements.in
 distro==1.5.0 \
     --hash=sha256:0e58756ae38fbd8fc3020d54badb8eae17c5b9dcbed388b17bb55b8a5928df92 \
