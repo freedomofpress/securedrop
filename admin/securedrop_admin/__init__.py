@@ -63,6 +63,29 @@ I18N_CONF = "securedrop/i18n.json"
 I18N_DEFAULT_LOCALES = {"en_US"}
 
 
+# Check OpenSSH version - ansible requires an extra argument for scp on OpenSSH 9
+def openssh_version() -> int:
+    try:
+        result = subprocess.run(["ssh", "-V"], capture_output=True, text=True)
+        if result.stderr.startswith("OpenSSH_9"):
+            return 9
+        elif result.stderr.startswith("OpenSSH_8"):
+            return 8
+        else:
+            return 0
+    except subprocess.CalledProcessError:
+        return 0
+        pass
+    return 0
+
+
+def ansible_command() -> List[str]:
+    cmd = ["ansible-playbook"]
+    if openssh_version() == 9:
+        cmd = ["ansible-playbook", "--scp-extra-args='-O'"]
+    return cmd
+
+
 class FingerprintException(Exception):
     pass
 
@@ -845,7 +868,8 @@ def install_securedrop(args: argparse.Namespace) -> int:
     sdlog.info("You will be prompted for the sudo password on the " "servers.")
     sdlog.info("The sudo password is only necessary during initial " "installation.")
     return subprocess.check_call(
-        [os.path.join(args.ansible_path, "securedrop-prod.yml"), "--ask-become-pass"],
+        ansible_command()
+        + [os.path.join(args.ansible_path, "securedrop-prod.yml"), "--ask-become-pass"],
         cwd=args.ansible_path,
     )
 
@@ -864,11 +888,8 @@ def backup_securedrop(args: argparse.Namespace) -> int:
     Creates a tarball of submissions and server config, and fetches
     back to the Admin Workstation. Future `restore` actions can be performed
     with the backup tarball."""
-    sdlog.info("Backing up the SecureDrop Application Server")
-    ansible_cmd = [
-        "ansible-playbook",
-        os.path.join(args.ansible_path, "securedrop-backup.yml"),
-    ]
+    sdlog.info("Backing up the Sec Application Server")
+    ansible_cmd = ansible_command() + [os.path.join(args.ansible_path, "securedrop-backup.yml")]
     return subprocess.check_call(ansible_cmd, cwd=args.ansible_path)
 
 
@@ -887,8 +908,7 @@ def restore_securedrop(args: argparse.Namespace) -> int:
     # Would like readable output if there's a problem
     os.environ["ANSIBLE_STDOUT_CALLBACK"] = "debug"
 
-    ansible_cmd = [
-        "ansible-playbook",
+    ansible_cmd = ansible_command() + [
         os.path.join(args.ansible_path, "securedrop-restore.yml"),
         "-e",
     ]
@@ -915,7 +935,7 @@ def run_tails_config(args: argparse.Namespace) -> int:
         "You'll be prompted for the temporary Tails admin password,"
         " which was set on Tails login screen"
     )
-    ansible_cmd = [
+    ansible_cmd = ansible_command() + [
         os.path.join(args.ansible_path, "securedrop-tails.yml"),
         "--ask-become-pass",
         # Passing an empty inventory file to override the automatic dynamic
@@ -1077,10 +1097,10 @@ def update(args: argparse.Namespace) -> int:
 def get_logs(args: argparse.Namespace) -> int:
     """Get logs for forensics and debugging purposes"""
     sdlog.info("Gathering logs for forensics and debugging")
-    ansible_cmd = [
-        "ansible-playbook",
+    ansible_cmd = ansible_command() + [
         os.path.join(args.ansible_path, "securedrop-logs.yml"),
     ]
+
     subprocess.check_call(ansible_cmd, cwd=args.ansible_path)
     sdlog.info(
         "Please send the encrypted logs to securedrop@freedom.press or "
@@ -1107,8 +1127,7 @@ def reset_admin_access(args: argparse.Namespace) -> int:
     """Resets SSH access to the SecureDrop servers, locking it to
     this Admin Workstation."""
     sdlog.info("Resetting SSH access to the SecureDrop servers")
-    ansible_cmd = [
-        "ansible-playbook",
+    ansible_cmd = ansible_command() + [
         os.path.join(args.ansible_path, "securedrop-reset-ssh-key.yml"),
     ]
     return subprocess.check_call(ansible_cmd, cwd=args.ansible_path)

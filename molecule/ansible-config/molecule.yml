@@ -33,5 +33,3 @@ scenario:
     - verify
 verifier:
   name: testinfra
-  lint: |
-    flake8

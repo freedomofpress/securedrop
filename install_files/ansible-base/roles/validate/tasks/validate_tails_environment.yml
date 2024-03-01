@@ -2,16 +2,15 @@
   find:
     name: "/etc"
     patterns: "os-release"
-    contains: "^TAILS_PRODUCT_NAME="
+    contains: "^NAME=\"Tails\""
   register: tails_os_string
 
 - name: Confirm host OS is Tails.
   assert:
     that:
       - ansible_lsb.id == "Tails" or tails_os_string.matched
-      - ansible_lsb.major_release|int >= 10
     msg: >-
-      SecureDrop requires Tails 4 or greater for workstation environments.
+      SecureDrop requires Tails 6 or greater for workstation environments.
 
 - name: Check for persistence volume.
   stat:

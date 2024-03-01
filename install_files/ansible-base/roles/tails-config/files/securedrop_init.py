@@ -120,9 +120,9 @@ for shortcut in ["source.desktop", "journalist.desktop"]:
     )
     subprocess.call(["gio", "set", path_desktop + shortcut, "metadata::trusted", "true"], env=env)
 
-# in Tails 4, reload gnome-shell desktop icons extension to update with changes above
+# in Tails 4 or greater, reload gnome-shell desktop icons extension to update with changes above
 with open("/etc/os-release") as f:
-    is_tails = "TAILS_PRODUCT_NAME" in f.read()
+    is_tails = 'NAME="Tails"' in f.read()
 if is_tails:
     subprocess.call(["gnome-shell-extension-tool", "-r", "desktop-icons@csoriano"], env=env)
 
@@ -165,7 +165,7 @@ with open("/etc/os-release") as file:
     for line in file:
         try:
             k, v = line.strip().split("=")
-            if k == "TAILS_VERSION_ID":
+            if k == "VERSION":
                 tails_current_version = v.strip('"').split(".")
         except ValueError:
             continue

@@ -53,6 +53,15 @@ class TestSecureDropAdmin:
         assert "HIDDEN" not in out
         assert "VISIBLE" in out
 
+    def test_openssh_detection(self):
+        with mock.patch("securedrop_admin.openssh_version", side_effect=[9]):
+            assert securedrop_admin.ansible_command() == [
+                "ansible-playbook",
+                "--scp-extra-args='-O'",
+            ]
+        with mock.patch("securedrop_admin.openssh_version", side_effect=[8]):
+            assert securedrop_admin.ansible_command() == ["ansible-playbook"]
+
     def test_update_check_decorator_when_no_update_needed(self, caplog):
         """
         When a function decorated with `@update_check_required` is run

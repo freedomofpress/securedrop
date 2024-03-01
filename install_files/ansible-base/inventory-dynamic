@@ -131,7 +131,7 @@ def host_is_tails():
     within Tails. We don't want to add SSH extra args if True.
     """
     with open("/etc/os-release") as f:
-        return "TAILS_PRODUCT_NAME" in f.read()
+        return "NAME=\"Tails\"" in f.read()
 
 
 def build_inventory():

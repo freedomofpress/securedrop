@@ -66,7 +66,7 @@ def run_command(command: List[str]) -> Iterator[bytes]:
 
 def is_tails() -> bool:
     with open("/etc/os-release") as f:
-        return "TAILS_PRODUCT_NAME" in f.read()
+        return 'NAME="Tails"' in f.read()
 
 
 def clean_up_old_tails_venv(virtualenv_dir: str = VENV_DIR) -> None:
@@ -80,15 +80,15 @@ def clean_up_old_tails_venv(virtualenv_dir: str = VENV_DIR) -> None:
         with open("/etc/os-release") as f:
             os_release = f.readlines()
             for line in os_release:
-                if line.startswith("TAILS_VERSION_ID="):
+                if line.startswith("VERSION="):
                     version = line.split("=")[1].strip().strip('"')
-                    if version.startswith("5."):
-                        # Tails 5 is based on Python 3.9
-                        python_lib_path = os.path.join(virtualenv_dir, "lib/python3.7")
+                    if version.startswith("6."):
+                        # Tails 6 is based on Python 3.11
+                        python_lib_path = os.path.join(virtualenv_dir, "lib/python3.9")
                         if os.path.exists(python_lib_path):
-                            sdlog.info("Tails 4 virtualenv detected. Removing it.")
+                            sdlog.info("Tails 5 virtualenv detected. Removing it.")
                             shutil.rmtree(virtualenv_dir)
-                            sdlog.info("Tails 4 virtualenv deleted.")
+                            sdlog.info("Tails 5 virtualenv deleted.")
                     break
 
 
@@ -146,13 +146,7 @@ def install_apt_dependencies(args: argparse.Namespace) -> None:
         " which was set on Tails login screen"
     )
 
-    apt_command = [
-        "sudo",
-        "su",
-        "-c",
-        f"apt-get update && \
-                   apt-get -q -o=Dpkg::Use-Pty=0 install -y {APT_DEPENDENCIES_STR}",
-    ]
+    apt_command = f"sudo apt-get -q -o=Dpkg::Use-Pty=0 install -y {APT_DEPENDENCIES_STR}".split(" ")
 
     try:
         # Print command results in real-time, to keep Admin apprised
