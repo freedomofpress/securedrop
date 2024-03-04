@@ -32,7 +32,6 @@ update-python3-requirements:  ## Update Python 3 requirements with pip-compile.
 	@SLIM_BUILD=1 $(DEVSHELL) pip-compile --generate-hashes \
 		--allow-unsafe \
 		--output-file requirements/python3/develop-requirements.txt \
-		../admin/requirements.in \
 		requirements/python3/translation-requirements.in \
 		requirements/python3/develop-requirements.in
 	@SLIM_BUILD=1 $(DEVSHELL) pip-compile --generate-hashes \
