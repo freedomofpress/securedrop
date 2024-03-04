@@ -71,7 +71,7 @@ slack-fail-post-step: &slack-fail-post-step
 jobs:
   lint:
     machine:
-      image: ubuntu-2004:202010-01
+      image: ubuntu-2004:current
       enabled: true
     environment:
       DOCKER_API_VERSION: 1.23
@@ -103,7 +103,7 @@ jobs:
 
   app-tests:
     machine:
-      image: ubuntu-2004:202010-01
+      image: ubuntu-2004:current
       enabled: true
     environment:
       DOCKER_API_VERSION: 1.23
@@ -139,7 +139,7 @@ jobs:
 
   app-page-layout-tests:
     machine:
-      image: ubuntu-2004:202010-01
+      image: ubuntu-2004:current
       enabled: true
     environment:
       DOCKER_API_VERSION: 1.23
@@ -191,7 +191,7 @@ jobs:
 
   translation-tests:
     machine:
-      image: ubuntu-2004:202010-01
+      image: ubuntu-2004:current
       enabled: true
     environment:
       DOCKER_API_VERSION: 1.23
@@ -244,7 +244,7 @@ jobs:
 
   static-analysis-and-no-known-cves:
     machine:
-      image: ubuntu-2004:202010-01
+      image: ubuntu-2004:current
       enabled: true
     environment:
       DOCKER_API_VERSION: 1.23
@@ -275,7 +275,7 @@ jobs:
 
   staging-test-with-rebase:
     machine:
-      image: ubuntu-2004:202010-01
+      image: ubuntu-2004:current
       enabled: true
 
     working_directory: ~/sd
@@ -305,7 +305,7 @@ jobs:
 
   deb-tests:
     machine:
-      image: ubuntu-2004:202010-01
+      image: ubuntu-2004:current
       enabled: true
     environment:
       DOCKER_API_VERSION: 1.23
