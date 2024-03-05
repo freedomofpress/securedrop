@@ -4,7 +4,7 @@ ansible==6.7.0
 ansible-compat<3.0.0
 argon2_cffi>=20.1.0
 black
-cffi>=1.14.2
+cffi>=1.16.0
 cryptography>=41.0.5  # >= OpenSSL 3.1.4 for CVE-2023-5363
 diffoscope
 docker
@@ -14,8 +14,8 @@ html-linter
 importlib-resources
 jinja2>=3.1.3
 markupsafe>=2.1.2
-molecule>=4.0.1
-molecule-vagrant>=1.0.0
+molecule>=3.0.1,<3.0.3
+molecule-vagrant==0.3
 # Needed for ansible network filter
 # http://docs.ansible.com/ansible/latest/playbooks_filters_ipaddr.html
 netaddr
@@ -23,6 +23,7 @@ netaddr
 pip>=21.3
 pip-tools>=6.1.0
 polib
+prompt_toolkit==2.0.9
 psutil>=5.6.6
 pylint>=2.7.0
 # pyenchant is via pylint[spelling]
@@ -39,6 +40,7 @@ safety>2.2.0
 semgrep>=1.57.0
 setuptools>=56.0.0
 shellcheck-py
+six==1.15.0
 testinfra>=5.3.1
 translate-toolkit
 urllib3>=1.26.5
