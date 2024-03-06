@@ -510,8 +510,9 @@ header {
 #source-index .content main header {
   width: 100%;
   min-height: 140px;
-  padding: 10px 45px 10px 45px;
+  padding: 10px 45px 20px 45px;
   position: relative;
+  border-bottom: 2px solid var(--index-middle-separator);
 }
 
 #source-index .content section:not(#locales-menu):not(#flashed) {
@@ -576,11 +577,18 @@ html[dir=rtl] #source-index .content section:not(#locales-menu):not(#flashed):la
     display: block;
     width: 100%;
   }
-  #source-index > .content > main > section:not(#locales-menu):not(#flashed) {
+
+  #source-index > .content > main > header {
     width: auto;
     margin: 0;
     padding-top: 0;
-    min-height: unset;
+    padding-bottom: 20;
+  }
+  #source-index > .content > main > section:not(#locales-menu):not(#flashed) {
+    width: auto;
+    margin: 0;
+    padding-top: 30px;
+    padding-bottom: 30px;
   }
   html[dir=ltr] #source-index > .content > main > section:not(#locales-menu):not(#flashed):first-child {
     border-right: 0;
