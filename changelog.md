@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.8.0~rc2
+
+* Updated GUI updater to use wayland QT plugin by default, falling back to xcb (#7134)
+
 ## 2.8.0~rc1
 
 ### Web applications
