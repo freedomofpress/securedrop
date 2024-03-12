@@ -9,6 +9,7 @@
 ### Web applications
 * Updated strings based on translator feedback (#7057)
 * Improved redwood stream performance and testing (#7070)
+* Update wordlist to remove potentially confusing or offensive terms (#7024)
 * Dependency changes:
   * openssl rust crate from 0.10.57 to 0.10.60 (#7083)
   * cryptography from 41.0.3 to 41.0.7 (#7086)
@@ -19,6 +20,10 @@
 * Removed deprecated mitigation for CVE-2019-3462 (#7053)
 * Improved logic for installing admin tool apt dependencies in Tails (#7088)
 * Added support for Tails 6 to admin tools (#7116)
+* Dependency changes:
+  * Ansible from 6.7.0 to 8.7.0 (#7116)
+  * cffi from 1.14.5 to 1.16.0 (#7116)
+  * pyyaml from 5.4.1 to 6.0.1 (#7116)
 
 ### CI
 * Updated CI to verify that the demo container builds and runs (#7052)
@@ -46,6 +51,8 @@
   * jinja2 from 3.0.2 to 3.1.3 (#7107, #7109)
   * peewee from 3.15.0 to 3.17.1 (#7112)
   * diffoscope from 236 to 256 (#7125)
+  * pillow from 10.0.1 to 10.2.0 (#7107)
+  * semgrep from 0.98.0 to 1.57.0 (#7107)
 * Updated ignored safety alerts:
   * Safety 61893 - CVE-2023-45803 (#7085)
   * Safety 62019 - CVE-2023-46136 (#7085)
@@ -61,7 +68,7 @@
 * Update French diceware wordlist (#6936)
 * Replace pretty-bad-protocol dependency with vendored version (#6836, #6907)
 * Import Markup and escape from markupsafe (#6964)
-* Update wordlist to remove potentially confusing or offensive terms (#7024, #7021)
+* Update wordlist to remove potentially confusing or offensive terms (#7021)
 * Validate the submission key,disable Journalist and Source Interfaces if a weak key is found (#7059)
 * Dependency changes:
   * Update cryptography from 41.0.1 to 41.0.3 (#6940)
