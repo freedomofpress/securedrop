@@ -1,25 +1,23 @@
 # Changelog
 
-## 2.8.0~rc2
-
-* Updated GUI updater to use wayland QT plugin by default, falling back to xcb (#7134)
-
-## 2.8.0~rc1
+## 2.8.0
 
 ### Web applications
 * Updated strings based on translator feedback (#7057)
 * Improved redwood stream performance and testing (#7070)
-* Update wordlist to remove potentially confusing or offensive terms (#7024)
+* Updated wordlist to remove potentially confusing or offensive terms (#7024)
 * Dependency changes:
-  * openssl rust crate from 0.10.57 to 0.10.60 (#7083)
   * cryptography from 41.0.3 to 41.0.7 (#7086)
-  * rustix rust crate from 0.38.18 to 0.38.21 (#7114)
+  * jinja2 from 3.0.2 to 3.1.3 (#7107)
+  * is-terminal rust crate from 0.4.9 to 0.4.12 (#7114)
+  * openssl rust crate from 0.10.57 to 0.10.60 (#7083)
 
 ### Operations
 * Updated copyright strings to reference 2024 (#7099)
-* Removed deprecated mitigation for CVE-2019-3462 (#7053)
+* Removed obsolete mitigation for CVE-2019-3462 (#7053)
 * Improved logic for installing admin tool apt dependencies in Tails (#7088)
 * Added support for Tails 6 to admin tools (#7116)
+* Updated GUI updater to use wayland QT plugin by default, falling back to xcb (#7134)
 * Dependency changes:
   * Ansible from 6.7.0 to 8.7.0 (#7116)
   * cffi from 1.14.5 to 1.16.0 (#7116)
@@ -32,13 +30,13 @@
 * Fixed cargo-vet binary caching (#7065)
 * Upgraded to cargo-vet 0.9.0 (#7101)
 * Enabled dependabot for Github Actions (#7102)
-* Dependabot updates (#7105, #7104, #7108)
 * Fixed broken apt caches in staging-test-with-rebase job (#7110)
+* Dependabot updates (#7105, #7104, #7108)
 
 ### Development
 * Updated packaging logic to exclude config.py (#7014)
 * Fixed broken link in contributing.md (#7028)
-* Added option to specific git remote for backport script (#7044)
+* Added option to specify git remote for backport script (#7044)
 * Updated functional tests to run under Selenium 4 (#7100)
 * Updated docker run parameters to only pass -it if a tty is available (#7098)
 * Updated rust toolchain in CI and Dockerfiles to 1.74.1 (#7091)
@@ -48,17 +46,12 @@
   * MarkupSafe from 2.0.2 to 2.1.2 (#7006)
   * Selenium from 3.141.0 to 4.16.0 (#7100)
   * tbselenium from 0.5.2 to 0.8.1 (#7100)
-  * jinja2 from 3.0.2 to 3.1.3 (#7107, #7109)
+  * jinja2 from 3.0.2 to 3.1.3 (#7109)
   * peewee from 3.15.0 to 3.17.1 (#7112)
   * diffoscope from 236 to 256 (#7125)
   * pillow from 10.0.1 to 10.2.0 (#7107)
   * semgrep from 0.98.0 to 1.57.0 (#7107)
-* Updated ignored safety alerts:
-  * Safety 61893 - CVE-2023-45803 (#7085)
-  * Safety 62019 - CVE-2023-46136 (#7085)
-  * Safety 63066 (#7100)
-  * Safety 63227 (#7100)
-  * Safety 65647 (#7122)
+* Updated ignored safety alerts: 61893, 62019, 63066, 63227, 65647 (#7085, #7100, #7122)
 
 ## 2.7.0
 
