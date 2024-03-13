@@ -1,8 +1,60 @@
 # Changelog
 
-## 2.8.0~rc1
+## 2.9.0~rc1
 
 
+## 2.8.0
+
+### Web applications
+* Updated strings based on translator feedback (#7057)
+* Improved redwood stream performance and testing (#7070)
+* Updated wordlist to remove potentially confusing or offensive terms (#7024)
+* Dependency changes:
+  * cryptography from 41.0.3 to 41.0.7 (#7086)
+  * jinja2 from 3.0.2 to 3.1.3 (#7107)
+  * is-terminal rust crate from 0.4.9 to 0.4.12 (#7114)
+  * openssl rust crate from 0.10.57 to 0.10.60 (#7083)
+
+### Operations
+* Updated copyright strings to reference 2024 (#7099)
+* Removed obsolete mitigation for CVE-2019-3462 (#7053)
+* Improved logic for installing admin tool apt dependencies in Tails (#7088)
+* Added support for Tails 6 to admin tools (#7116)
+* Updated GUI updater to use wayland QT plugin by default, falling back to xcb (#7134)
+* Dependency changes:
+  * Ansible from 6.7.0 to 8.7.0 (#7116)
+  * cffi from 1.14.5 to 1.16.0 (#7116)
+  * pyyaml from 5.4.1 to 6.0.1 (#7116)
+
+### CI
+* Updated CI to verify that the demo container builds and runs (#7052)
+* Updated GCE CI machine type to c2-standard-8 (#7087)
+* Moved various CI jobs to Github Actions (#6969)
+* Fixed cargo-vet binary caching (#7065)
+* Upgraded to cargo-vet 0.9.0 (#7101)
+* Enabled dependabot for Github Actions (#7102)
+* Fixed broken apt caches in staging-test-with-rebase job (#7110)
+* Dependabot updates (#7105, #7104, #7108)
+
+### Development
+* Updated packaging logic to exclude config.py (#7014)
+* Fixed broken link in contributing.md (#7028)
+* Added option to specify git remote for backport script (#7044)
+* Updated functional tests to run under Selenium 4 (#7100)
+* Updated docker run parameters to only pass -it if a tty is available (#7098)
+* Updated rust toolchain in CI and Dockerfiles to 1.74.1 (#7091)
+* Decreased cargo audit error threshold (#7083)
+* Fixed hot reload functionality in dev environment (#7120)
+* Dependency changes:
+  * MarkupSafe from 2.0.2 to 2.1.2 (#7006)
+  * Selenium from 3.141.0 to 4.16.0 (#7100)
+  * tbselenium from 0.5.2 to 0.8.1 (#7100)
+  * jinja2 from 3.0.2 to 3.1.3 (#7109)
+  * peewee from 3.15.0 to 3.17.1 (#7112)
+  * diffoscope from 236 to 256 (#7125)
+  * pillow from 10.0.1 to 10.2.0 (#7107)
+  * semgrep from 0.98.0 to 1.57.0 (#7107)
+* Updated ignored safety alerts: 61893, 62019, 63066, 63227, 65647 (#7085, #7100, #7122)
 
 ## 2.7.0
 
@@ -12,10 +64,11 @@
 * Update French diceware wordlist (#6936)
 * Replace pretty-bad-protocol dependency with vendored version (#6836, #6907)
 * Import Markup and escape from markupsafe (#6964)
-* Update wordlist to remove potentially confusing or offensive terms (#7008, #7021)
+* Update wordlist to remove potentially confusing or offensive terms (#7021)
 * Validate the submission key,disable Journalist and Source Interfaces if a weak key is found (#7059)
 * Dependency changes:
   * Update cryptography from 41.0.1 to 41.0.3 (#6940)
+  * Upgrade sequioa-openpgpg from 1.16.1 to 1.17.0 (#7041)
 
 ### Operations
 
@@ -48,7 +101,8 @@
   * Remove hypothesis dependency (#6893)
   * Update certifi from 2022.12.7 to 2023.7.22 (#6900)
   * Update pillow from 9.3.0 to 10.0.1 (#6959)
-  * Update markupsafe from 2.0.1 to 2.1.2 (#7014)
+  * Update markupsafe from 2.0.1 to 2.1.2 (#7006)
+* Miscellaneous changes (#7008)
 
 ## 2.6.1
 
