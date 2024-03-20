@@ -113,9 +113,7 @@ def _parse_config_from_file(config_module_name: str) -> SecureDropConfig:
 
     final_worker_name = getattr(config_from_local_file, "RQ_WORKER_NAME", "default")
 
-    final_scrypt_params = getattr(
-        config_from_local_file, "SCRYPT_PARAMS", dict(N=2**14, r=8, p=1)
-    )
+    final_scrypt_params = getattr(config_from_local_file, "SCRYPT_PARAMS", dict(N=2**14, r=8, p=1))
 
     env = getattr(config_from_local_file, "env", "prod")
 

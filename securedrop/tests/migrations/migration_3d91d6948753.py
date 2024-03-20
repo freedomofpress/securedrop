@@ -12,7 +12,6 @@ random.seed("ᕕ( ᐛ )ᕗ")
 
 
 class UpgradeTester:
-
     """This migration verifies that the UUID column now exists, and that
     the data migration completed successfully.
     """

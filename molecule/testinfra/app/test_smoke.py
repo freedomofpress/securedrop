@@ -1,6 +1,7 @@
 """
 Basic smoke tests that verify the apps are functioning as expected
 """
+
 import json
 from pathlib import Path
 

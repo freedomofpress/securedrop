@@ -74,9 +74,9 @@ class Helper:
         }
 
         if checksum:
-            params[
-                "checksum"
-            ] = "sha256:f00a787f7492a95e165b470702f4fe9373583fbdc025b2c8bdf0262cc48fcff4"
+            params["checksum"] = (
+                "sha256:f00a787f7492a95e165b470702f4fe9373583fbdc025b2c8bdf0262cc48fcff4"
+            )
             sql = """INSERT INTO submissions (uuid, source_id, filename, size, downloaded, checksum)
                      VALUES (:uuid, :source_id, :filename, :size, :downloaded, :checksum)
                   """
@@ -99,9 +99,9 @@ class Helper:
         }
 
         if checksum:
-            params[
-                "checksum"
-            ] = "sha256:f00a787f7492a95e165b470702f4fe9373583fbdc025b2c8bdf0262cc48fcff4"
+            params["checksum"] = (
+                "sha256:f00a787f7492a95e165b470702f4fe9373583fbdc025b2c8bdf0262cc48fcff4"
+            )
             sql = """INSERT INTO replies (uuid, source_id, journalist_id, filename, size,
                         deleted_by_source, checksum)
                      VALUES (:uuid, :source_id, :journalist_id, :filename, :size,

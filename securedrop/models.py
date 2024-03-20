@@ -222,29 +222,33 @@ class Submission(db.Model):
             }
         )
         return {
-            "source_url": url_for("api.single_source", source_uuid=self.source.uuid)
-            if self.source
-            else None,
-            "submission_url": url_for(
-                "api.single_submission",
-                source_uuid=self.source.uuid,
-                submission_uuid=self.uuid,
-            )
-            if self.source
-            else None,
+            "source_url": (
+                url_for("api.single_source", source_uuid=self.source.uuid) if self.source else None
+            ),
+            "submission_url": (
+                url_for(
+                    "api.single_submission",
+                    source_uuid=self.source.uuid,
+                    submission_uuid=self.uuid,
+                )
+                if self.source
+                else None
+            ),
             "filename": self.filename,
             "size": self.size,
             "is_file": self.is_file,
             "is_message": self.is_message,
             "is_read": self.seen,
             "uuid": self.uuid,
-            "download_url": url_for(
-                "api.download_submission",
-                source_uuid=self.source.uuid,
-                submission_uuid=self.uuid,
-            )
-            if self.source
-            else None,
+            "download_url": (
+                url_for(
+                    "api.download_submission",
+                    source_uuid=self.source.uuid,
+                    submission_uuid=self.uuid,
+                )
+                if self.source
+                else None
+            ),
             "seen_by": list(seen_by),
         }
 
@@ -297,14 +301,14 @@ class Reply(db.Model):
     def to_json(self) -> "Dict[str, Any]":
         seen_by = [r.journalist.uuid for r in SeenReply.query.filter(SeenReply.reply_id == self.id)]
         return {
-            "source_url": url_for("api.single_source", source_uuid=self.source.uuid)
-            if self.source
-            else None,
-            "reply_url": url_for(
-                "api.single_reply", source_uuid=self.source.uuid, reply_uuid=self.uuid
-            )
-            if self.source
-            else None,
+            "source_url": (
+                url_for("api.single_source", source_uuid=self.source.uuid) if self.source else None
+            ),
+            "reply_url": (
+                url_for("api.single_reply", source_uuid=self.source.uuid, reply_uuid=self.uuid)
+                if self.source
+                else None
+            ),
             "filename": self.filename,
             "size": self.size,
             "journalist_username": self.journalist.username,
@@ -338,7 +342,6 @@ class SourceStar(db.Model):
 
 
 class InvalidUsernameException(Exception):
-
     """Raised when a user logs in with an invalid username"""
 
 
@@ -357,18 +360,15 @@ class InvalidNameLength(FirstOrLastNameError):
 
 
 class LoginThrottledException(Exception):
-
     """Raised when a user attempts to log in
     too many times in a given time period"""
 
 
 class WrongPasswordException(Exception):
-
     """Raised when a user logs in with an incorrect password"""
 
 
 class PasswordError(Exception):
-
     """Generic error for passwords that are invalid."""
 
 
@@ -389,7 +389,6 @@ class InvalidPasswordLength(PasswordError):
 
 
 class NonDicewarePassword(PasswordError):
-
     """Raised when attempting to validate a password that is not diceware-like"""
 
 
@@ -843,7 +842,6 @@ class SeenReply(db.Model):
 
 
 class JournalistLoginAttempt(db.Model):
-
     """This model keeps track of journalist's login attempts so we can
     rate limit them in order to prevent attackers from brute forcing
     passwords or two-factor tokens."""

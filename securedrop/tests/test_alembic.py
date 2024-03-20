@@ -67,7 +67,7 @@ def get_schema(app):
 
 def assert_schemas_equal(left, right):
     assert list(left) == list(right), "Left and right do not contain same list of tables"
-    for (table, left_schema) in list(left.items()):
+    for table, left_schema in list(left.items()):
         assert_ddl_equal(left_schema, right[table])
 
 

@@ -77,7 +77,6 @@ def add_journalist():
 
 
 class UpgradeTester:
-
     """This migration verifies that the deleted_by_source column now exists,
     and that the data migration completed successfully.
     """
