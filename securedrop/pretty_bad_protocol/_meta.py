@@ -125,10 +125,7 @@ class GPGBase:
         "import": _parsers.ImportResult,
         "export": _parsers.ExportResult,
         "list": _parsers.ListKeys,
-        "sign": _parsers.Sign,
         "verify": _parsers.Verify,
-        "expire": _parsers.KeyExpirationResult,
-        "signing": _parsers.KeySigningResult,
         "packets": _parsers.ListPackets,
     }
 

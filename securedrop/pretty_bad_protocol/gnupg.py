@@ -29,7 +29,6 @@ A Python interface to GnuPG.
 import encodings
 import functools
 import os
-import re
 import tempfile
 import textwrap
 import time
@@ -38,8 +37,8 @@ from codecs import open
 #: see :pep:`328` http://docs.python.org/2.5/whatsnew/pep-328.html
 from . import _trust, _util
 from ._meta import GPGBase
-from ._parsers import KeyExpirationInterface, _fix_unsafe
-from ._util import _is_list_or_tuple, _is_stream, _make_binary_stream, log
+from ._parsers import _fix_unsafe
+from ._util import _is_list_or_tuple, _make_binary_stream, log
 
 
 class GPG(GPGBase):
@@ -190,126 +189,7 @@ class GPG(GPGBase):
     # For backward compatibility with python-gnupg<=1.3.1:
     _fix_trustdb = fix_trustdb
 
-    @functools.wraps(_trust.import_ownertrust)
-    def import_ownertrust(self, trustdb=None):  # type: ignore[no-untyped-def]
-        _trust.import_ownertrust(self)
-
-    # For backward compatibility with python-gnupg<=1.3.1:
-    _import_ownertrust = import_ownertrust
-
-    @functools.wraps(_trust.export_ownertrust)
-    def export_ownertrust(self, trustdb=None):  # type: ignore[no-untyped-def]
-        _trust.export_ownertrust(self)
-
-    # For backward compatibility with python-gnupg<=1.3.1:
-    _export_ownertrust = export_ownertrust
-
-    def sign(self, data, **kwargs):  # type: ignore[no-untyped-def]
-        """Create a signature for a message string or file.
-
-        Note that this method is not for signing other keys. (In GnuPG's
-        terms, what we all usually call 'keysigning' is actually termed
-        'certification'...) Even though they are cryptographically the same
-        operation, GnuPG differentiates between them, presumedly because these
-        operations are also the same as the decryption operation. If the
-        ``key_usage``s ``C (certification)``, ``S (sign)``, and ``E
-        (encrypt)``, were all the same key, the key would "wear down" through
-        frequent signing usage -- since signing data is usually done often --
-        meaning that the secret portion of the keypair, also used for
-        decryption in this scenario, would have a statistically higher
-        probability of an adversary obtaining an oracle for it (or for a
-        portion of the rounds in the cipher algorithm, depending on the family
-        of cryptanalytic attack used).
-
-        In simpler terms: this function isn't for signing your friends' keys,
-        it's for something like signing an email.
-
-        :type data: :obj:`str` or :obj:`file`
-        :param data: A string or file stream to sign.
-        :param str default_key: The key to sign with.
-        :param str passphrase: The passphrase to pipe to stdin.
-        :param bool clearsign: If True, create a cleartext signature.
-        :param bool detach: If True, create a detached signature.
-        :param bool binary: If True, do not ascii armour the output.
-        :param str digest_algo: The hash digest to use. Again, to see which
-            hashes your GnuPG is capable of using, do:
-            :command:`$ gpg --with-colons --list-config digestname`.
-            The default, if unspecified, is ``'SHA512'``.
-        """
-        if "default_key" in kwargs:
-            log.info("Signing message '{!r}' with keyid: {}".format(data, kwargs["default_key"]))
-        else:
-            log.warn("No 'default_key' given! Using first key on secring.")
-
-        if hasattr(data, "read"):
-            result = self._sign_file(data, **kwargs)
-        elif not _is_stream(data):
-            stream = _make_binary_stream(data, self._encoding)
-            result = self._sign_file(stream, **kwargs)
-            stream.close()
-        else:
-            log.warn(f"Unable to sign message '{data}' with type {type(data)}")
-            result = None
-        return result
-
-    def verify(self, data):  # type: ignore[no-untyped-def]
-        """Verify the signature on the contents of the string ``data``.
-
-        >>> gpg = GPG(homedir="doctests")
-        >>> input = gpg.gen_key_input(Passphrase='foo')
-        >>> key = gpg.gen_key(input)
-        >>> assert key
-        >>> sig = gpg.sign('hello',keyid=key.fingerprint,passphrase='bar')
-        >>> assert not sig
-        >>> sig = gpg.sign('hello',keyid=key.fingerprint,passphrase='foo')
-        >>> assert sig
-        >>> verify = gpg.verify(sig.data)
-        >>> assert verify
-
-        """
-        f = _make_binary_stream(data, self._encoding)
-        result = self.verify_file(f)
-        f.close()
-        return result
-
-    def verify_file(self, file, sig_file=None):  # type: ignore[no-untyped-def]
-        """Verify the signature on the contents of a file or file-like
-        object. Can handle embedded signatures as well as detached
-        signatures. If using detached signatures, the file containing the
-        detached signature should be specified as the ``sig_file``.
-
-        :param file file: A file descriptor object.
-
-        :param str sig_file: A file containing the GPG signature data for
-            ``file``. If given, ``file`` is verified via this detached
-            signature. Its type will be checked with :func:`_util._is_file`.
-        """
-
-        result = self._result_map["verify"](self)
-
-        if sig_file is None:
-            log.debug("verify_file(): Handling embedded signature")
-            args = ["--verify"]
-            proc = self._open_subprocess(args)
-            writer = _util._threaded_copy_data(file, proc.stdin)
-            self._collect_output(proc, result, writer, stdin=proc.stdin)
-        else:
-            if not _util._is_file(sig_file):
-                log.debug("verify_file(): '%r' is not a file" % sig_file)
-                return result
-            log.debug("verify_file(): Handling detached verification")
-            sig_fh = None
-            try:
-                sig_fh = open(sig_file, "rb")
-                args = ["--verify %s -" % sig_fh.name]
-                proc = self._open_subprocess(args)
-                writer = _util._threaded_copy_data(file, proc.stdin)
-                self._collect_output(proc, result, writer, stdin=proc.stdin)
-            finally:
-                if sig_fh and not sig_fh.closed:
-                    sig_fh.close()
-        return result
-
+    # TODO: this is only used by tests
     def import_keys(self, key_data):  # type: ignore[no-untyped-def]
         """
         Import the key_data into our keyring.
@@ -355,24 +235,6 @@ class GPG(GPGBase):
         self._handle_io(["--import"], data, result, binary=True)
         data.close()
         return result
-
-    def recv_keys(self, *keyids, **kwargs):  # type: ignore[no-untyped-def]
-        """Import keys from a keyserver.
-
-        >>> gpg = gnupg.GPG(homedir="doctests")
-        >>> key = gpg.recv_keys('3FF0DB166A7476EA', keyserver='hkp://pgp.mit.edu')
-        >>> assert key
-
-        :param str keyids: Each ``keyids`` argument should be a string
-             containing a keyid to request.
-        :param str keyserver: The keyserver to request the ``keyids`` from;
-             defaults to `gnupg.GPG.keyserver`.
-        """
-        if keyids:
-            keys = " ".join([key for key in keyids])
-            return self._recv_keys(keys, **kwargs)
-        else:
-            log.error("No keyids requested for --recv-keys!")
 
     def delete_keys(self, fingerprints, secret=False, subkeys=False):  # type: ignore[no-untyped-def] # noqa
         """Delete a key, or list of keys, from the current keyring.
@@ -492,87 +354,6 @@ class GPG(GPGBase):
         self._handle_io(args, _make_binary_stream(raw_data, self._encoding), result)
         return result
 
-    def sign_key(self, keyid, default_key=None, passphrase=None):  # type: ignore[no-untyped-def] # noqa
-        """sign (an imported) public key - keyid, with default secret key
-
-        >>> import gnupg
-        >>> gpg = gnupg.GPG(homedir="doctests")
-        >>> key_input = gpg.gen_key_input()
-        >>> key = gpg.gen_key(key_input)
-        >>> gpg.sign_key(key['fingerprint'])
-        >>> gpg.list_sigs(key['fingerprint'])
-
-        :param str keyid: key shortID, longID, fingerprint or email_address
-        :param str passphrase: passphrase used when creating the key, leave None otherwise
-
-        :returns: The result giving status of the key signing...
-                    success can be verified by gpg.list_sigs(keyid)
-        """
-
-        args = []
-        input_command = ""
-        if passphrase:
-            passphrase_arg = "--passphrase-fd 0"
-            input_command = "%s\n" % passphrase
-            args.append(passphrase_arg)
-
-        if default_key:
-            args.append(str("--default-key %s" % default_key))
-
-        args.extend(["--command-fd 0", "--sign-key %s" % keyid])
-
-        p = self._open_subprocess(args)
-        result = self._result_map["signing"](self)
-        confirm_command = "%sy\n" % input_command
-        p.stdin.write(confirm_command.encode())
-        self._collect_output(p, result, stdin=p.stdin)
-        return result
-
-    def list_sigs(self, *keyids):  # type: ignore[no-untyped-def]
-        """Get the signatures for each of the ``keyids``.
-
-        >>> import gnupg
-        >>> gpg = gnupg.GPG(homedir="doctests")
-        >>> key_input = gpg.gen_key_input()
-        >>> key = gpg.gen_key(key_input)
-        >>> assert key.fingerprint
-
-        :rtype: dict
-        :returns: res.sigs is a dictionary whose keys are the uids and whose
-                values are a set of signature keyids.
-        """
-        return self._process_keys(keyids)
-
-    def check_sigs(self, *keyids):  # type: ignore[no-untyped-def]
-        """Validate the signatures for each of the ``keyids``.
-
-        :rtype: dict
-        :returns: res.certs is a dictionary whose keys are the uids and whose
-                values are a set of signature keyids.
-        """
-        return self._process_keys(keyids, check_sig=True)
-
-    def _process_keys(self, keyids, check_sig=False):  # type: ignore[no-untyped-def]
-
-        if len(keyids) > self._batch_limit:
-            raise ValueError(
-                "List signatures is limited to %d keyids simultaneously" % self._batch_limit
-            )
-
-        args = ["--with-colons", "--fixed-list-mode"]
-        arg = "--check-sigs" if check_sig else "--list-sigs"
-
-        if len(keyids):
-            arg += " " + " ".join(keyids)
-
-        args.append(arg)
-
-        proc = self._open_subprocess(args)
-        result = self._result_map["list"](self)
-        self._collect_output(proc, result, stdin=proc.stdin)
-        self._parse_keys(result)
-        return result
-
     def _parse_keys(self, result):  # type: ignore[no-untyped-def]
         lines = result.data.decode(self._encoding, self._decode_errors).splitlines()
         valid_keywords = "pub uid sec fpr sub sig rev".split()
@@ -588,48 +369,6 @@ class GPG(GPGBase):
             keyword = L[0]
             if keyword in valid_keywords:
                 getattr(result, keyword)(L)
-
-    def expire(self, keyid, expiration_time="1y", passphrase=None, expire_subkeys=True):  # type: ignore[no-untyped-def] # noqa
-        """Changes GnuPG key expiration by passing in new time period (from now) through
-            subprocess's stdin
-
-        >>> import gnupg
-        >>> gpg = gnupg.GPG(homedir="doctests")
-        >>> key_input = gpg.gen_key_input()
-        >>> key = gpg.gen_key(key_input)
-        >>> gpg.expire(key.fingerprint, '2w', 'good passphrase')
-
-        :param str keyid: key shortID, longID, email_address or fingerprint
-        :param str expiration_time: 0 or number of days (d), or weeks (*w) , or months (*m)
-                or years (*y) for when to expire the key, from today.
-        :param str passphrase: passphrase used when creating the key, leave None otherwise
-        :param bool expire_subkeys: to indicate whether the subkeys will also change the
-                expiration time by the same period -- default is True
-
-        :returns: The result giving status of the change in expiration...
-                the new expiration date can be obtained by .list_keys()
-        """
-
-        passphrase = passphrase.encode(self._encoding) if passphrase else passphrase
-
-        try:
-            sub_keys_number = len(self.list_sigs(keyid)[0]["subkeys"]) if expire_subkeys else 0
-        except IndexError:
-            sub_keys_number = 0
-
-        expiration_input = KeyExpirationInterface(
-            expiration_time, passphrase
-        ).gpg_interactive_input(sub_keys_number)
-
-        args = ["--command-fd 0", "--edit-key %s" % keyid]
-        p = self._open_subprocess(args)
-        p.stdin.write(expiration_input.encode())
-
-        result = self._result_map["expire"](self)
-        p.stdin.write(expiration_input.encode())
-
-        self._collect_output(p, result, stdin=p.stdin)
-        return result
 
     def gen_key(self, input):  # type: ignore[no-untyped-def]
         """Generate a GnuPG key through batch file key generation. See
@@ -975,113 +714,6 @@ generate keys. Please see
 
         return out
 
-    def encrypt(self, data, *recipients, **kwargs):  # type: ignore[no-untyped-def]
-        """Encrypt the message contained in ``data`` to ``recipients``.
-
-        :param str data: The file or bytestream to encrypt.
-
-        :param str recipients: The recipients to encrypt to. Recipients must
-            be specified keyID/fingerprint. Care should be taken in Python2.x
-            to make sure that the given fingerprint is in fact a string and
-            not a unicode object.  Multiple recipients may be specified by
-            doing ``GPG.encrypt(data, fpr1, fpr2, fpr3)`` etc.
-
-        :param str default_key: The keyID/fingerprint of the key to use for
-            signing. If given, ``data`` will be encrypted and signed.
-
-        :param str passphrase: If given, and ``default_key`` is also given,
-            use this passphrase to unlock the secret portion of the
-            ``default_key`` to sign the encrypted ``data``. Otherwise, if
-            ``default_key`` is not given, but ``symmetric=True``, then use
-            this passphrase as the passphrase for symmetric
-            encryption. Signing and symmetric encryption should *not* be
-            combined when sending the ``data`` to other recipients, else the
-            passphrase to the secret key would be shared with them.
-
-        :param bool armor: If True, ascii armor the output; otherwise, the
-            output will be in binary format. (Default: True)
-
-        :param bool encrypt: If True, encrypt the ``data`` using the
-            ``recipients`` public keys. (Default: True)
-
-        :param bool symmetric: If True, encrypt the ``data`` to ``recipients``
-            using a symmetric key. See the ``passphrase`` parameter. Symmetric
-            encryption and public key encryption can be used simultaneously,
-            and will result in a ciphertext which is decryptable with either
-            the symmetric ``passphrase`` or one of the corresponding private
-            keys.
-
-        :param bool always_trust: If True, ignore trust warnings on recipient
-            keys. If False, display trust warnings.  (default: True)
-
-        :param str output: The output file to write to. If not specified, the
-            encrypted output is returned, and thus should be stored as an
-            object in Python. For example:
-
-        >>> import shutil
-        >>> import gnupg
-        >>> if os.path.exists("doctests"):
-        ...     shutil.rmtree("doctests")
-        >>> gpg = gnupg.GPG(homedir="doctests")
-        >>> key_settings = gpg.gen_key_input(key_type='RSA',
-        ...     key_length=1024,
-        ...     key_usage='ESCA',
-        ...     passphrase='foo')
-        >>> key = gpg.gen_key(key_settings)
-        >>> message = "The crow flies at midnight."
-        >>> encrypted = str(gpg.encrypt(message, key.fingerprint))
-        >>> assert encrypted != message
-        >>> assert not encrypted.isspace()
-        >>> decrypted = str(gpg.decrypt(encrypted, passphrase='foo'))
-        >>> assert not decrypted.isspace()
-        >>> decrypted
-        'The crow flies at midnight.'
-
-
-        :param bool throw_keyids: If True, make all **recipients** keyids be
-            zero'd out in packet information. This is the same as using
-            **hidden_recipients** for all **recipients**. (Default: False).
-
-        :param list hidden_recipients: A list of recipients that should have
-            their keyids zero'd out in packet information.
-
-        :param str cipher_algo: The cipher algorithm to use. To see available
-            algorithms with your version of GnuPG, do:
-            :command:`$ gpg --with-colons --list-config ciphername`.
-            The default ``cipher_algo``, if unspecified, is ``'AES256'``.
-
-        :param str digest_algo: The hash digest to use. Again, to see which
-            hashes your GnuPG is capable of using, do:
-            :command:`$ gpg --with-colons --list-config digestname`.
-            The default, if unspecified, is ``'SHA512'``.
-
-        :param str compress_algo: The compression algorithm to use. Can be one
-            of ``'ZLIB'``, ``'BZIP2'``, ``'ZIP'``, or ``'Uncompressed'``.
-
-        .. seealso:: :meth:`._encrypt`
-        """
-        if _is_stream(data):
-            stream = data
-        else:
-            stream = _make_binary_stream(data, self._encoding)
-        result = self._encrypt(stream, recipients, **kwargs)
-        stream.close()
-        return result
-
-    def decrypt(self, message, **kwargs):  # type: ignore[no-untyped-def]
-        """Decrypt the contents of a string or file-like object ``message``.
-
-        :type message: file or str or :class:`io.BytesIO`
-        :param message: A string or file-like object to decrypt.
-        :param bool always_trust: Instruct GnuPG to ignore trust checks.
-        :param str passphrase: The passphrase for the secret key used for decryption.
-        :param str output: A filename to write the decrypted output to.
-        """
-        stream = _make_binary_stream(message, self._encoding)
-        result = self.decrypt_file(stream, **kwargs)
-        stream.close()
-        return result
-
     def decrypt_file(self, filename, always_trust=False, passphrase=None, output=None):  # type: ignore[no-untyped-def] # noqa
         """Decrypt the contents of a file-like object ``filename`` .
 
@@ -1101,74 +733,3 @@ generate keys. Please see
         self._handle_io(args, filename, result, passphrase, binary=True)
         log.debug("decrypt result: %r", result.data)
         return result
-
-
-class GPGUtilities:
-    """Extra tools for working with GnuPG."""
-
-    def __init__(self, gpg):  # type: ignore[no-untyped-def]
-        """Initialise extra utility functions."""
-        self._gpg = gpg
-
-    def find_key_by_email(self, email, secret=False):  # type: ignore[no-untyped-def]
-        """Find user's key based on their email address.
-
-        :param str email: The email address to search for.
-        :param bool secret: If True, search through secret keyring.
-        """
-        for key in self.list_keys(secret=secret):
-            for uid in key["uids"]:
-                if re.search(email, uid):
-                    return key
-        raise LookupError("GnuPG public key for email %s not found!" % email)
-
-    def find_key_by_subkey(self, subkey):  # type: ignore[no-untyped-def]
-        """Find a key by a fingerprint of one of its subkeys.
-
-        :param str subkey: The fingerprint of the subkey to search for.
-        """
-        for key in self.list_keys():
-            for sub in key["subkeys"]:
-                if sub[0] == subkey:
-                    return key
-        raise LookupError("GnuPG public key for subkey %s not found!" % subkey)
-
-    def send_keys(self, keyserver, *keyids):  # type: ignore[no-untyped-def]
-        """Send keys to a keyserver."""
-        result = self._result_map["list"](self)
-        log.debug("send_keys: %r", keyids)
-        data = _util._make_binary_stream("", self._encoding)
-        args = ["--keyserver", keyserver, "--send-keys"]
-        args.extend(keyids)
-        self._handle_io(args, data, result, binary=True)
-        log.debug("send_keys result: %r", result.__dict__)
-        data.close()
-        return result
-
-    def encrypted_to(self, raw_data):  # type: ignore[no-untyped-def]
-        """Return the key to which raw_data is encrypted to."""
-        # TODO: make this support multiple keys.
-        result = self._gpg.list_packets(raw_data)
-        if not result.key:
-            raise LookupError("Content is not encrypted to a GnuPG key!")
-        try:
-            return self.find_key_by_keyid(result.key)
-        except:  # noqa: E722
-            return self.find_key_by_subkey(result.key)
-
-    def is_encrypted_sym(self, raw_data):  # type: ignore[no-untyped-def]
-        result = self._gpg.list_packets(raw_data)
-        return bool(result.need_passphrase_sym)
-
-    def is_encrypted_asym(self, raw_data):  # type: ignore[no-untyped-def]
-        result = self._gpg.list_packets(raw_data)
-        return bool(result.key)
-
-    def is_encrypted(self, raw_data):  # type: ignore[no-untyped-def]
-        return self.is_encrypted_asym(raw_data) or self.is_encrypted_sym(raw_data)
-
-
-if __name__ == "__main__":
-    from .test import test_gnupg
-
-    test_gnupg.main()
