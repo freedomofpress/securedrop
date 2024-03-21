@@ -4,6 +4,7 @@ https://github.com/freedomofpress/securedrop/blob/5aa8a4432949201893afbac0f506c6
 
 We use it to ensure that we can parse very old config files.
 """
+
 import os
 
 

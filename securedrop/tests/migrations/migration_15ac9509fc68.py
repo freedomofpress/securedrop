@@ -18,7 +18,6 @@ random.seed("ᕕ( ᐛ )ᕗ")
 
 
 class UpgradeTester:
-
     """This migration has no upgrade because there are no tables in the
     database prior to running, so there is no data to load or test.
     """

@@ -272,7 +272,7 @@ def test_i18n():
         ]
     )
 
-    for (locale, translated_msg) in (
+    for locale, translated_msg in (
         ("fr_FR", "code bonjour"),
         ("zh_Hans", "code chinese"),
         ("ar", "code arabic"),

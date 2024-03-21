@@ -6,6 +6,7 @@ import testutils
 sdvars = testutils.securedrop_test_vars
 testinfra_hosts = [sdvars.app_hostname]
 
+
 # Prod Tor services may have unexpected configs
 # TODO: read from admin workstation site-specific file if available
 @pytest.mark.skip_in_prod()

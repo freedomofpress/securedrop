@@ -24,7 +24,6 @@ def create_file_in_dummy_source_dir(filename):
 
 
 class UpgradeTester:
-
     """This migration verifies that any orphaned submission or reply data from
     deleted sources is also deleted.
     """

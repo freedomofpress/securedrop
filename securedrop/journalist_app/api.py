@@ -71,7 +71,7 @@ def make_blueprint() -> Blueprint:
             else:
                 try:
                     json.loads(request.data.decode("utf-8"))
-                except (ValueError):
+                except ValueError:
                     abort(400, "malformed request")
 
     @api.route("/token", methods=["POST"])

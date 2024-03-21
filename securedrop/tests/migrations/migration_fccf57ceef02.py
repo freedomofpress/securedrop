@@ -32,7 +32,6 @@ def add_source():
 
 
 class UpgradeTester:
-
     """This migration verifies that the UUID column now exists, and that
     the data migration completed successfully.
     """

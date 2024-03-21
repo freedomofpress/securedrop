@@ -7,7 +7,6 @@ Flask unittest integration.
 :license: BSD, see LICENSE for more details.
 """
 
-
 import pytest
 from flask import message_flashed, template_rendered
 

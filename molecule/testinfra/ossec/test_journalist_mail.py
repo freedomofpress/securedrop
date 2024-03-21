@@ -63,7 +63,7 @@ class TestJournalistMail(TestBase):
     @pytest.mark.skip(reason=SKIP_REASON)
     def test_procmail(self, host):
         self.service_started(host, "postfix")
-        for (destination, f) in (
+        for destination, f in (
             ("journalist", "alert-journalist-one.txt"),
             ("journalist", "alert-journalist-two.txt"),
             ("ossec", "alert-ossec.txt"),
@@ -108,7 +108,7 @@ class TestJournalistMail(TestBase):
         #
         # encrypted mail to journalist or ossec contact
         #
-        for (who, payload, expected) in (
+        for who, payload, expected in (
             ("journalist", "JOURNALISTPAYLOAD", "JOURNALISTPAYLOAD"),
             ("ossec", "OSSECPAYLOAD", "OSSECPAYLOAD"),
         ):

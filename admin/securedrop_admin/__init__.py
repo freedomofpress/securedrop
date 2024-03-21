@@ -609,7 +609,7 @@ class SiteConfig:
             ("journalist_alert_gpg_public_key", "journalist_gpg_fpr"),
         )
         validate = os.path.join(os.path.dirname(__file__), "..", "bin", "validate-gpg-key.sh")
-        for (public_key, fingerprint) in keys:
+        for public_key, fingerprint in keys:
             if self.config[public_key] == "" and self.config[fingerprint] == "":
                 continue
             public_key = os.path.join(self.args.ansible_path, self.config[public_key])
