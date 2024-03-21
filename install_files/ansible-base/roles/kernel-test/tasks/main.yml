@@ -1,0 +1,25 @@
+- name: Install kernel-auto-test.py script
+  become: true
+  copy:
+    src: kernel-auto-test.py
+    dest: /usr/local/bin/kernel-auto-test.py
+    mode: u=rwx,g=rx,o=rx
+    owner: root
+    group: root
+
+- name: reboot cronjob
+  become: true
+  cron:
+    name: "trigger reboot"
+    user: root
+    minute: 0
+    hour: "*/12"
+    job: "touch /var/run/reboot-required"
+
+- name: test cronjob
+  become: true
+  cron:
+    name: "kernel-test"
+    user: root
+    special_time: "daily"
+    job: "/usr/local/bin/kernel-auto-test.py"
