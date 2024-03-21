@@ -34,7 +34,7 @@ RUN apt-get -y update && apt-get upgrade -y && apt-get install -y \
         unzip \
         zlib1g-dev
 
-ENV RUST_VERSION 1.74.1
+ENV RUST_VERSION 1.78.0
 ENV RUSTUP_VERSION 1.24.3
 ENV RUSTUP_INIT_SHA256 3dc5ef50861ee18657f9db2eeb7392f9c2a6c95c90ab41e45ab4ca71476b4338
 ENV RUSTUP_HOME /opt/rustup

@@ -9,7 +9,7 @@ jobs:
     name: Vet Dependencies
     runs-on: ubuntu-latest
     # Keep version in sync with rust-toolchain.toml
-    container: rust:1.74.1
+    container: rust:1.78.0
     env:
       CARGO_VET_VERSION: 0.9.0
     steps:
