@@ -1,0 +1,68 @@
+- name: Setup passwordless sudo
+  become: true
+  copy:
+    src: 99-kernel-test
+    dest: /etc/sudoers.d/99-kernel-test
+    mode: 0440
+    owner: root
+    group: root
+
+- name: Install securedrop-config for unattended-upgrades, etc.
+  apt:
+    pkg: securedrop-config
+    state: present
+
+- name: Install apt-test signing key
+  apt_key:
+    state: present
+    data: "{{ lookup('file', 'roles/install-fpf-repo/files/apt-test-signing-key.pub') }}"
+    keyring: /etc/apt/trusted.gpg.d/securedrop-keyring-test.gpg
+  tags:
+    - apt
+    - fpf_repo
+
+- name: Setup apt-test repo.
+  apt_repository:
+    repo: deb [arch=amd64] https://apt-test.freedom.press focal main
+    state: present
+    update_cache: yes
+  tags:
+    - apt
+    - fpf_repo
+
+
+- name: Install paxtest
+  apt:
+    pkg: paxtest
+    state: present
+
+- name: Install readelf/strings (needed by spectre-meltdown-checker)
+  apt:
+    pkg: binutils
+    state: present
+
+- name: Set permissions on github-token.json
+  become: true
+  file:
+    path: /etc/github-token.json
+    state: touch
+    mode: 0600
+    owner: root
+    group: root
+
+- name: Install kernel-auto-test.py script
+  become: true
+  copy:
+    src: kernel-auto-test.py
+    dest: /usr/local/bin/kernel-auto-test.py
+    mode: u=rwx,g=rx,o=rx
+    owner: root
+    group: root
+
+- name: test cronjob
+  become: true
+  cron:
+    name: "kernel-test"
+    user: root
+    special_time: "daily"
+    job: "/usr/local/bin/kernel-auto-test.py"

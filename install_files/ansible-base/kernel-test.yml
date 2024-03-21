@@ -1,0 +1,32 @@
+---
+- name: Prepare servers for installation
+  hosts: kernel-test
+  environment:
+    LC_ALL: C
+  gather_facts: no
+  max_fail_percentage: 0
+  any_errors_fatal: yes
+  become: yes
+  roles:
+    - { role: prepare-servers }
+
+- name: Add FPF apt repository and install kernel packages.
+  hosts: kernel-test
+  environment:
+    LC_ALL: C
+  max_fail_percentage: 0
+  any_errors_fatal: yes
+  roles:
+    - { role: install-fpf-repo, tags: fpf }
+    - { role: grsecurity, when: grsecurity, tags: [grsec, grsecurity] }
+  become: yes
+
+- name: Set up testing script
+  hosts: kernel-test
+  environment:
+    LC_ALL: C
+  max_fail_percentage: 0
+  any_errors_fatal: yes
+  roles:
+    - { role: kernel-test }
+  become: yes
