@@ -36,6 +36,11 @@ function remove_unwanted_files() {
         install_files/ansible-base/tor_v3_keys.json \
         build/*.deb
 
+    # Remove any Onion URL from make dev-tor
+    if docker volume inspect sd-onion-services > /dev/null; then
+        docker volume remove sd-onion-services
+    fi
+
     # Remove extraneous copies of the git repos, pulled in
     # via the Molecule upgrade testing scenario.
     rm -rf molecule/upgrade/.molecule/sd-orig \
