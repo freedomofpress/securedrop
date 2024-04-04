@@ -22,10 +22,10 @@
   <form action="/bulk" method="post">
     <div>
       <div id="select-container"></div>
-      <button type="submit" name="action" value="download" class="small icon">
+      <button aria-label="{{ gettext('Download Selected Files') }}" type="submit" name="action" value="download" class="small icon">
         {{ gettext('Download Selected') }}
       </button>
-      <a href="#delete-selected-confirmation-modal" id="delete-selected-link" class="btn small danger">
+      <a aria-label="{{ gettext('Delete Selected Files') }}" href="#delete-selected-confirmation-modal" id="delete-selected-link" class="btn small danger">
         {{ gettext('Delete Selected') }}
       </a>
     </div>
