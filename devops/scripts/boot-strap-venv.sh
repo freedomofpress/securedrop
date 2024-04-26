@@ -18,6 +18,7 @@ venv_instructions() {
 
 function virtualenv_bootstrap() {
     PYTHON_VERSION="3.8"
+    DEV_CONSTRAINT="securedrop/requirements/python3/develop-constraints.txt"
     VIRTUAL_ENV="${VIRTUAL_ENV:-}"  # Just to get around all the "set -u"
     if [ -n "$VIRTUAL_ENV" ]
     then
@@ -53,7 +54,7 @@ function virtualenv_bootstrap() {
             virtualenv -p "${p}" "${VENV}"
         fi
 
-        "${VENV}/bin/pip" install -q -r "securedrop/requirements/python3/develop-requirements.txt"
+        PIP_CONSTRAINT=${DEV_CONSTRAINT} "${VENV}/bin/pip" install -q -r "securedrop/requirements/python3/develop-requirements.txt"
 
         . "${VENV}/bin/activate"
    fi
