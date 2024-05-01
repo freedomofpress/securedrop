@@ -5,6 +5,7 @@ Loads test data into the SecureDrop database.
 """
 
 import argparse
+import calendar
 import datetime
 import io
 import math
@@ -83,10 +84,17 @@ def random_datetime(nullable: bool) -> Optional[datetime.datetime]:
         return None
 
     now = datetime.datetime.now()
+    year = random.randint(2013, now.year)
+    max_day = 366 if calendar.isleap(year) else 365
+    day = random.randint(1, max_day)
+
+    # Calculate the month/day given the year
+    date = datetime.date(year, 1, 1) + datetime.timedelta(days=day - 1)
+
     return datetime.datetime(
-        year=random.randint(2013, now.year),
-        month=random.randint(1, now.month),
-        day=random.randint(1, now.day),
+        year=year,
+        month=date.month,
+        day=date.day,
         hour=random.randint(0, 23),
         minute=random.randint(0, 59),
         second=random.randint(0, 59),
