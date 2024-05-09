@@ -1292,7 +1292,7 @@ def test_download_submission_range(journalist_app, test_files, journalist_api_to
 
         # Download the second half of the data
         range_start = int(len(full_response.data) / 2)
-        range_end = len(full_response.data) - 1
+        range_end = len(full_response.data)
         headers = get_api_headers(journalist_api_token)
         headers["Range"] = f"bytes={range_start}-{range_end}"
         partial_response = app.get(
