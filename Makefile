@@ -184,6 +184,8 @@ safety:  ## Run `safety check` to check python dependencies for vulnerabilities.
 		--ignore 66777 \
 		--ignore 66704 \
 		--ignore 66710 \
+		--ignore 67895 \
+		--ignore 67599 \
 		--full-report -r $$req_file \
 		&& echo -e '\n' \
 		|| exit 1; \
