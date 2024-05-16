@@ -1,3 +1,5 @@
+import binascii
+import hashlib
 import json
 import random
 from datetime import datetime
@@ -232,7 +234,6 @@ def test_user_without_token_cannot_del_protected_endpoints(journalist_app, test_
 def test_attacker_cannot_use_token_after_admin_deletes(
     journalist_app, test_source, journalist_api_token
 ):
-
     with journalist_app.test_client() as app:
         uuid = test_source["source"].uuid
 
@@ -893,7 +894,6 @@ def test_reply_with_valid_square_json_400(
 
 
 def test_malformed_json_400(journalist_app, journalist_api_token, test_journo, test_source):
-
     with journalist_app.app_context():
         uuid = test_source["source"].uuid
         protected_routes = [
@@ -904,7 +904,6 @@ def test_malformed_json_400(journalist_app, journalist_api_token, test_journo, t
         ]
     with journalist_app.test_client() as app:
         for protected_route in protected_routes:
-
             response = app.post(
                 protected_route,
                 data="{this is invalid {json!",
@@ -916,7 +915,6 @@ def test_malformed_json_400(journalist_app, journalist_api_token, test_journo, t
 
 
 def test_empty_json_400(journalist_app, journalist_api_token, test_journo, test_source):
-
     with journalist_app.app_context():
         uuid = test_source["source"].uuid
         protected_routes = [
@@ -925,7 +923,6 @@ def test_empty_json_400(journalist_app, journalist_api_token, test_journo, test_
         ]
     with journalist_app.test_client() as app:
         for protected_route in protected_routes:
-
             response = app.post(
                 protected_route, data="", headers=get_api_headers(journalist_api_token)
             )
@@ -935,7 +932,6 @@ def test_empty_json_400(journalist_app, journalist_api_token, test_journo, test_
 
 
 def test_empty_json_20X(journalist_app, journalist_api_token, test_journo, test_source):
-
     with journalist_app.app_context():
         uuid = test_source["source"].uuid
         protected_routes = [
@@ -944,7 +940,6 @@ def test_empty_json_20X(journalist_app, journalist_api_token, test_journo, test_
         ]
     with journalist_app.test_client() as app:
         for protected_route in protected_routes:
-
             response = app.post(
                 protected_route, data="", headers=get_api_headers(journalist_api_token)
             )
@@ -1246,3 +1241,70 @@ def test_seen_bad_requests(journalist_app, journalist_api_token):
         response = app.post(seen_url, data=json.dumps(data), headers=headers)
         assert response.status_code == 404
         assert response.json["message"] == "reply not found: not-a-reply"
+
+
+def test_download_submission_range(journalist_app, test_files, journalist_api_token):
+    with journalist_app.test_client() as app:
+        submission_uuid = test_files["submissions"][0].uuid
+        uuid = test_files["source"].uuid
+
+        # Download the full file
+        full_response = app.get(
+            url_for(
+                "api.download_submission",
+                source_uuid=uuid,
+                submission_uuid=submission_uuid,
+            ),
+            headers=get_api_headers(journalist_api_token),
+        )
+        assert full_response.status_code == 200
+        assert full_response.mimetype == "application/pgp-encrypted"
+
+        # Verify the etag header is actually the sha256 hash
+        hasher = hashlib.sha256()
+        hasher.update(full_response.data)
+        digest = binascii.hexlify(hasher.digest()).decode("utf-8")
+        digest_str = "sha256:" + digest
+        assert full_response.headers.get("ETag") == digest_str
+
+        # Verify the Content-Length header matches the length of the content
+        assert full_response.headers.get("Content-Length") == str(len(full_response.data))
+
+        # Verify that range requests are accepted
+        assert full_response.headers.get("Accept-Ranges") == "bytes"
+
+        # Download the first 10 bytes of data
+        headers = get_api_headers(journalist_api_token)
+        headers["Range"] = "bytes=0-9"
+        partial_response = app.get(
+            url_for(
+                "api.download_submission",
+                source_uuid=uuid,
+                submission_uuid=submission_uuid,
+            ),
+            headers=headers,
+        )
+        assert partial_response.status_code == 206  # HTTP/1.1 206 Partial Content
+        assert partial_response.mimetype == "application/pgp-encrypted"
+        assert partial_response.headers.get("Content-Length") == "10"
+        assert len(partial_response.data) == 10
+        assert full_response.data[0:10] == partial_response.data
+
+        # Download the second half of the data
+        range_start = int(len(full_response.data) / 2)
+        range_end = len(full_response.data)
+        headers = get_api_headers(journalist_api_token)
+        headers["Range"] = f"bytes={range_start}-{range_end}"
+        partial_response = app.get(
+            url_for(
+                "api.download_submission",
+                source_uuid=uuid,
+                submission_uuid=submission_uuid,
+            ),
+            headers=headers,
+        )
+        assert partial_response.status_code == 206  # HTTP/1.1 206 Partial Content
+        assert partial_response.mimetype == "application/pgp-encrypted"
+        assert partial_response.headers.get("Content-Length") == str(range_end - range_start)
+        assert len(partial_response.data) == range_end - range_start
+        assert full_response.data[range_start:] == partial_response.data

@@ -74,7 +74,7 @@ jobs:
       image: ubuntu-2004:current
       enabled: true
     environment:
-      DOCKER_API_VERSION: 1.23
+      DOCKER_API_VERSION: 1.24
       BASE_OS: focal
     steps:
       - checkout
@@ -106,7 +106,7 @@ jobs:
       image: ubuntu-2004:current
       enabled: true
     environment:
-      DOCKER_API_VERSION: 1.23
+      DOCKER_API_VERSION: 1.24
       BASE_OS: focal
     parallelism: 3
     steps:
@@ -142,7 +142,7 @@ jobs:
       image: ubuntu-2004:current
       enabled: true
     environment:
-      DOCKER_API_VERSION: 1.23
+      DOCKER_API_VERSION: 1.24
       BASE_OS: focal
     parallelism: 5
     steps:
@@ -194,7 +194,7 @@ jobs:
       image: ubuntu-2004:current
       enabled: true
     environment:
-      DOCKER_API_VERSION: 1.23
+      DOCKER_API_VERSION: 1.24
       BASE_OS: focal
     parallelism: 21
     steps:
@@ -247,7 +247,7 @@ jobs:
       image: ubuntu-2004:current
       enabled: true
     environment:
-      DOCKER_API_VERSION: 1.23
+      DOCKER_API_VERSION: 1.24
       BASE_OS: focal
     steps:
       - checkout
@@ -308,7 +308,7 @@ jobs:
       image: ubuntu-2004:current
       enabled: true
     environment:
-      DOCKER_API_VERSION: 1.23
+      DOCKER_API_VERSION: 1.24
       BASE_OS: focal
     steps:
       - checkout

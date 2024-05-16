@@ -371,7 +371,6 @@ def col_delete_data(cols_selected: List[str]) -> werkzeug.Response:
             "error",
         )
     else:
-
         for filesystem_id in cols_selected:
             delete_source_files(filesystem_id)
 
@@ -535,4 +534,5 @@ def serve_file_with_etag(db_obj: Union[Reply, Submission]) -> flask.Response:
 
     response.direct_passthrough = False
     response.headers["Etag"] = db_obj.checksum
+    response.headers["Accept-Ranges"] = "bytes"
     return response
