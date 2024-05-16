@@ -200,18 +200,24 @@ def submit_message(source: Source, journalist_who_saw: Optional[Journalist]) -> 
         db.session.add(seen_message)
 
 
-def submit_file(source: Source, journalist_who_saw: Optional[Journalist]) -> None:
+def submit_file(source: Source, journalist_who_saw: Optional[Journalist], size: int = 0) -> None:
     """
     Adds a single file submitted by a source.
     """
     record_source_interaction(source)
+    if not size:
+        file_bytes = b"This is an example of a plain text file upload"
+    else:
+        file_bytes = os.urandom(size * 1024)
+
     fpath = Storage.get_default().save_file_submission(
         source.filesystem_id,
         source.interaction_count,
         source.journalist_filename,
         "memo.txt",
-        io.BytesIO(b"This is an example of a plain text file upload."),
+        io.BytesIO(file_bytes),
     )
+
     submission = Submission(source, fpath, Storage.get_default())
     db.session.add(submission)
 
@@ -358,7 +364,11 @@ def add_sources(args: argparse.Namespace, journalists: Tuple[Journalist, ...]) -
             seen_message_count -= 1
 
         for _ in range(args.files_per_source):
-            submit_file(source, secrets.choice(journalists) if seen_file_count > 0 else None)
+            submit_file(
+                source,
+                secrets.choice(journalists) if seen_file_count > 0 else None,
+                args.random_file_size,
+            )
             seen_file_count -= 1
 
         if i <= starred_sources_count:
@@ -484,6 +494,13 @@ def parse_arguments() -> argparse.Namespace:
         action="store_true",
         default=False,
     )
+    parser.add_argument(
+        "--random-file-size",
+        help="Create random submission files with size specified (in KB)",
+        type=non_negative_int,
+        default=0,
+    )
+
     return parser.parse_args()
 
 
