@@ -116,7 +116,7 @@ function docker_run() {
 
     if [ -n "${USE_TOR:-}" ]; then
         # Mount persistent onion services
-        docker volume create sd-onion-services
+        $DOCKER_BIN volume inspect sd-onion-services -f " " || $DOCKER_BIN volume create sd-onion-services
         DOCKER_RUN_ARGUMENTS="${DOCKER_RUN_ARGUMENTS} --volume sd-onion-services:/var/lib/tor/services"
     fi
 
