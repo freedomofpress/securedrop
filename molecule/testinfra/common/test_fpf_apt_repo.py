@@ -64,6 +64,7 @@ def test_fpf_apt_repo_fingerprint(host):
         "pub   4096R/00F4AD77 2016-10-20 [expired: 2017-10-20]",
         "pub   4096R/7B22E6A3 2021-05-10 [expired: 2022-07-04]",
         "pub   4096R/7B22E6A3 2021-05-10 [expired: 2023-07-04]",
+        "pub   4096R/7B22E6A3 2021-05-10 [expired: 2024-07-08]",
         "uid                  Freedom of the Press Foundation Master Signing Key",
         "B89A 29DB 2128 160B 8E4B  1B4C BADD E0C7 FC9F 6818",
     ],
