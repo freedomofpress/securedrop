@@ -32,7 +32,7 @@ jobs:
   rust:
     runs-on: ubuntu-latest
     # Keep version in sync with rust-toolchain.toml
-    container: rust:1.74.1
+    container: rust:1.78.0
     steps:
       - uses: actions/checkout@v4
       - name: Install dependencies

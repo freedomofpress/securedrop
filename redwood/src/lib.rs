@@ -334,7 +334,7 @@ mod tests {
             .checked_add(Duration::from_secs(KEY_CREATION_SECONDS_FROM_EPOCH))
             // unwrap: Safe because the value is fixed and we know it won't overflow
             .unwrap();
-        let signature = cert.primary_key().self_signatures().nth(0).unwrap();
+        let signature = cert.primary_key().self_signatures().next().unwrap();
 
         assert_eq!(
             signature.signature_creation_time(),
