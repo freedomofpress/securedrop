@@ -26,8 +26,6 @@ override_dh_auto_install:
 	# Set up virtualenv and install dependencies
 	/usr/bin/python3 -m venv ./debian/securedrop-app-code/opt/venvs/securedrop-app-code
 	./debian/securedrop-app-code/opt/venvs/securedrop-app-code/bin/pip install $(PIP_ARGS) \
-		setuptools-scm==6.0.1
-	./debian/securedrop-app-code/opt/venvs/securedrop-app-code/bin/pip install $(PIP_ARGS) \
 		pip==21.3
 	./debian/securedrop-app-code/opt/venvs/securedrop-app-code/bin/pip install $(PIP_ARGS) \
 		-r requirements/python3/requirements.txt
@@ -63,7 +61,7 @@ override_dh_strip_nondeterminism:
 override_dh_gencontrol:
 	dh_gencontrol -psecuredrop-ossec-agent -- "-v3.6.0+${DEB_VERSION}"
 	dh_gencontrol -psecuredrop-ossec-server -- "-v3.6.0+${DEB_VERSION}"
-	dh_gencontrol -psecuredrop-keyring -- "-v0.2.1+${DEB_VERSION}"
+	dh_gencontrol -psecuredrop-keyring -- "-v0.2.2+${DEB_VERSION}"
 	dh_gencontrol --remaining-packages
 
 #
