@@ -376,6 +376,15 @@ class SiteConfig:
                 lambda config: True,
             ),
             (
+                "securedrop_app_pow_on_source_interface",
+                True,
+                bool,
+                "Whether Tor proof of work should be enabled on Source Interface",
+                SiteConfig.ValidateYesNo(),
+                lambda x: x.lower() == "yes",
+                lambda config: True,
+            ),
+            (
                 "securedrop_app_https_on_source_interface",
                 False,
                 bool,
