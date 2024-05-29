@@ -2,6 +2,26 @@
 
 ## 2.9.0~rc1
 
+### Web applications
+* Added accessibility improvements (#6536)
+
+### Journalist API
+* Added support for HTTP range request for submissions and replies endpoints (#7160)
+
+### Operations
+* Updated SecureDrop signing key with new expiry date of 2027-05-24 (#7167)
+
+### Development
+* Updated rust toolchain to version 1.78.0 (#7147)
+* Added random file generation in loaddata.py (#7161) 
+* Fixed loaddata.py date generation bug (#7156)
+* Updated test signing key (#7150)
+* Added persistence for onion addresses created with `make dev-tor` (#7124)
+* Ignored safety alerts 66278, 65212, 65401, 65193, 65510, 65511, 66700, 66777, 66704, 66710, 70612, 71064 (#7145, #7149, #7157, #7170)
+* Dependency updates:
+  * black from 22.3.0 to 24.3.0 (#7144)
+  * pillow from 10.2.0 to 10.3.0 (#7149)
+
 
 ## 2.8.0
 
