@@ -34,6 +34,35 @@ function show(selector, displayStyle = "revert") {
   });
 }
 
+function disableButtons(selector) {
+  let nodelist = document.querySelectorAll(selector);
+  Array.prototype.forEach.call(nodelist, function(element) {
+    element.disabled = true;
+    element.classList.add("disabled");
+  })
+}
+
+function enableButtons(selector) {
+  let nodelist = document.querySelectorAll(selector);
+  Array.prototype.forEach.call(nodelist, function(element) {
+    element.disabled = false;
+    element.classList.remove("disabled");
+  })
+}
+
+function disableButtonsIfNoCheckedRows() {
+  let buttons = 'button[name="action"]';
+  let deletelink = 'a#delete-collections-link'
+  let checkedboxes = document.querySelectorAll(ROW_SELECTOR_PREFIX + ":not(.hidden) input[type=checkbox]:checked");
+  if (checkedboxes.length == 0) {
+    disableButtons(buttons);
+    disableButtons(deletelink);
+  } else {
+    enableButtons(buttons);
+    enableButtons(deletelink);
+  }
+}
+
 function enhance_ui() {
   // Add the "quick filter" box for the list of sources
   let filterContainer = document.getElementById("filter-container");
@@ -107,10 +136,10 @@ function ready(fn) {
 }
 
 ready(function() {
+  disableButtonsIfNoCheckedRows();
   enhance_ui();
 
   let selectAll = document.getElementById("select_all");
-
   if (selectAll) {
     selectAll.style.cursor = "pointer";
     selectAll.addEventListener("click", function() {
@@ -118,6 +147,7 @@ ready(function() {
       for (let i = 0; i < checkboxes.length; i++) {
         checkboxes[i].checked = true;
       }
+      disableButtonsIfNoCheckedRows();
     });
   }
 
@@ -129,6 +159,7 @@ ready(function() {
       for (let i = 0; i < checkboxes.length; i++) {
         checkboxes[i].checked = false;
       }
+      disableButtonsIfNoCheckedRows();
     });
   }
 
@@ -146,6 +177,11 @@ ready(function() {
       }
     });
   }
+
+  let checkboxes = document.querySelectorAll(ROW_SELECTOR_PREFIX + ":not(.hidden) input[type=checkbox]");
+  for (let i = 0; i < checkboxes.length; i++) {
+    checkboxes[i].addEventListener("click", disableButtonsIfNoCheckedRows);
+    }
 
   // When unread messages are downloaded from the source list, mark
   // the source read.
@@ -247,3 +283,5 @@ ready(function() {
     }
   }
 });
+
+
