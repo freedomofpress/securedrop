@@ -5,6 +5,7 @@
 
 const COLLECTION_SELECTOR_PREFIX = "table";
 const ROW_SELECTOR_PREFIX = COLLECTION_SELECTOR_PREFIX + " tr"
+const CHECKBOX_SELECTOR = ROW_SELECTOR_PREFIX + ':not(.hidden) input[name="cols_selected"]'
 
 function closest(element, selector) {
   let parent = element.parentNode;
@@ -53,7 +54,7 @@ function enableButtons(selector) {
 function disableButtonsIfNoCheckedRows() {
   let buttons = 'button[name="action"]';
   let deletelink = 'a#delete-collections-link'
-  let checkedboxes = document.querySelectorAll(ROW_SELECTOR_PREFIX + ":not(.hidden) input[type=checkbox]:checked");
+  let checkedboxes = document.querySelectorAll(CHECKBOX_SELECTOR + ":checked");
   if (checkedboxes.length == 0) {
     disableButtons(buttons);
     disableButtons(deletelink);
@@ -143,7 +144,7 @@ ready(function() {
   if (selectAll) {
     selectAll.style.cursor = "pointer";
     selectAll.addEventListener("click", function() {
-      let checkboxes = document.querySelectorAll(ROW_SELECTOR_PREFIX + ":not(.hidden) input[type=checkbox]");
+      let checkboxes = document.querySelectorAll(CHECKBOX_SELECTOR);
       for (let i = 0; i < checkboxes.length; i++) {
         checkboxes[i].checked = true;
       }
@@ -155,7 +156,7 @@ ready(function() {
   if (selectNone) {
     selectNone.style.cursor = "pointer";
     selectNone.addEventListener("click", function() {
-      let checkboxes = document.querySelectorAll(ROW_SELECTOR_PREFIX + ":not(.hidden) input[type=checkbox]");
+      let checkboxes = document.querySelectorAll(CHECKBOX_SELECTOR);
       for (let i = 0; i < checkboxes.length; i++) {
         checkboxes[i].checked = false;
       }
@@ -167,7 +168,7 @@ ready(function() {
   if (selectUnread) {
     selectUnread.style.cursor = "pointer";
     selectUnread.addEventListener("click", function() {
-      let checkboxes = document.querySelectorAll(ROW_SELECTOR_PREFIX + " input[type='checkbox']:not(.hidden)");
+      let checkboxes = document.querySelectorAll(CHECKBOX_SELECTOR);
       for (let i = 0; i < checkboxes.length; i++) {
         if (checkboxes[i].classList.contains("unread-cb")) {
           checkboxes[i].checked = true;
@@ -178,7 +179,7 @@ ready(function() {
     });
   }
 
-  let checkboxes = document.querySelectorAll(ROW_SELECTOR_PREFIX + ":not(.hidden) input[type=checkbox]");
+  let checkboxes = document.querySelectorAll(CHECKBOX_SELECTOR);
   for (let i = 0; i < checkboxes.length; i++) {
     checkboxes[i].addEventListener("click", disableButtonsIfNoCheckedRows);
     }
