@@ -379,7 +379,8 @@ class SiteConfig:
                 "securedrop_app_pow_on_source_interface",
                 True,
                 bool,
-                "Whether Tor proof of work should be enabled on Source Interface",
+                "Enable Tor's proof-of-work defense against denial-of-service attacks for the "
+                "Source Interface?",
                 SiteConfig.ValidateYesNo(),
                 lambda x: x.lower() == "yes",
                 lambda config: True,
@@ -388,7 +389,7 @@ class SiteConfig:
                 "securedrop_app_https_on_source_interface",
                 False,
                 bool,
-                "Whether HTTPS should be enabled on " + "Source Interface (requires EV cert)",
+                "Enable HTTPS for the Source Interface (requires EV certificate)?",
                 SiteConfig.ValidateYesNo(),
                 lambda x: x.lower() == "yes",
                 lambda config: True,
