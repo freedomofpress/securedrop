@@ -916,6 +916,7 @@ class TestSiteConfig:
     verify_prompt_monitor_hostname = verify_desc_consistency
     verify_prompt_dns_server = verify_desc_consistency
 
+    verify_prompt_securedrop_app_pow_on_source_interface = verify_prompt_boolean
     verify_prompt_securedrop_app_https_on_source_interface = verify_prompt_boolean
     verify_prompt_enable_ssh_over_tor = verify_prompt_boolean
 
