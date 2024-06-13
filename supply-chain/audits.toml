@@ -478,6 +478,13 @@ start = "2022-11-18"
 end = "2024-04-10"
 notes = "Sequoia developer"
 
+[[trusted.sequoia-openpgp]]
+criteria = "safe-to-deploy"
+user-id = 33711 # Justus Winter (teythoon)
+start = "2019-03-14"
+end = "2024-12-12"
+notes = "Sequoia developer"
+
 [[trusted.sha1collisiondetection]]
 criteria = "safe-to-deploy"
 user-id = 33886 # Neal H. Walfield (nwalfield)
