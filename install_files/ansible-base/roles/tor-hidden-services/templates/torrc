@@ -6,6 +6,10 @@ RunAsDaemon 1
 HiddenServiceDir /var/lib/tor/services/sourcev3
 HiddenServicePort 80 127.0.0.1:80
 
+{% if securedrop_app_pow_on_source_interface|default(False) %}
+HiddenServicePoWDefensesEnabled 1
+{% endif %}
+
 {% if securedrop_app_https_on_source_interface|default(False) %}
 HiddenServicePort 443 127.0.0.1:443
 {% endif %}

@@ -41,6 +41,7 @@ securedrop_app_https_certificate_cert_src: ''
 securedrop_app_https_certificate_chain_src: ''
 securedrop_app_https_certificate_key_src: ''
 securedrop_app_https_on_source_interface: false
+securedrop_app_pow_on_source_interface: true
 securedrop_supported_locales:
 - de_DE
 - es_ES
@@ -73,6 +74,7 @@ securedrop_app_https_certificate_cert_src: ''
 securedrop_app_https_certificate_chain_src: ''
 securedrop_app_https_certificate_key_src: ''
 securedrop_app_https_on_source_interface: false
+securedrop_app_pow_on_source_interface: true
 securedrop_supported_locales:
 - de_DE
 - es_ES
@@ -81,7 +83,7 @@ smtp_relay_port: 587
 ssh_users: sd
 """
 
-HTTPS_OUTPUT = """app_hostname: app
+HTTPS_OUTPUT_NO_POW = """app_hostname: app
 app_ip: 10.20.2.2
 daily_reboot_time: 5
 dns_server:
@@ -105,6 +107,7 @@ securedrop_app_https_certificate_cert_src: sd.crt
 securedrop_app_https_certificate_chain_src: ca.crt
 securedrop_app_https_certificate_key_src: key.asc
 securedrop_app_https_on_source_interface: true
+securedrop_app_pow_on_source_interface: false
 securedrop_supported_locales:
 - de_DE
 - es_ES
@@ -188,9 +191,16 @@ def verify_app_gpg_key_prompt(child):
     )
 
 
+def verify_tor_pow_prompt(child):
+    # We don't need child.expect()'s regex matching, but the prompt is too long
+    # to match on the whole thing.
+    child.expect_exact("Enable Tor's proof-of-work defense", timeout=2)
+
+
 def verify_https_prompt(child):
-    child.expect(
-        rb"Whether HTTPS should be enabled on Source Interface \(requires EV cert\)\:", timeout=2
+    # We don't need child.expect()'s regex matching.
+    child.expect_exact(
+        "Enable HTTPS for the Source Interface (requires EV certificate)?:", timeout=2
     )
 
 
@@ -312,6 +322,9 @@ def test_sdconfig_on_first_run():
     child.sendline("")
     verify_app_gpg_key_prompt(child)
     child.sendline("\b" * 14 + "sd_admin_test.pub")
+    verify_tor_pow_prompt(child)
+    # Default answer is yes
+    child.sendline("")
     verify_https_prompt(child)
     # Default answer is no
     child.sendline("")
@@ -375,7 +388,11 @@ def test_sdconfig_enable_journalist_alerts():
     child.sendline("")
     verify_app_gpg_key_prompt(child)
     child.sendline("\b" * 14 + "sd_admin_test.pub")
+    verify_tor_pow_prompt(child)
+    # Default answer is yes
+    child.sendline("")
     verify_https_prompt(child)
+    child.sendline("")
     # Default answer is no
     child.sendline("")
     verify_app_gpg_fingerprint_prompt(child)
@@ -422,7 +439,7 @@ def test_sdconfig_enable_journalist_alerts():
     verify_install_has_valid_config()
 
 
-def test_sdconfig_enable_https_on_source_interface():
+def test_sdconfig_enable_https_disable_pow_on_source_interface():
     cmd = os.path.join(os.path.dirname(CURRENT_DIR), "securedrop_admin/__init__.py")
     child = pexpect.spawn(f"python {cmd} --force --root {SD_DIR} sdconfig")
     verify_username_prompt(child)
@@ -441,6 +458,10 @@ def test_sdconfig_enable_https_on_source_interface():
     child.sendline("")
     verify_app_gpg_key_prompt(child)
     child.sendline("\b" * 14 + "sd_admin_test.pub")
+    verify_tor_pow_prompt(child)
+    # Default answer is yes
+    # We will press backspace thrice and type no
+    child.sendline("\b\b\bno")
     verify_https_prompt(child)
     # Default answer is no
     # We will press backspace twice and type yes
@@ -490,7 +511,7 @@ def test_sdconfig_enable_https_on_source_interface():
         os.path.join(SD_DIR, "install_files/ansible-base/group_vars/all/site-specific")
     ) as fobj:
         data = fobj.read()
-    assert data == HTTPS_OUTPUT
+    assert data == HTTPS_OUTPUT_NO_POW
 
     verify_install_has_valid_config()
 
