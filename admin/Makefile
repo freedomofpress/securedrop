@@ -2,6 +2,7 @@ DEFAULT_GOAL: help
 
 .PHONY: test
 test:  ## Run tox
+	@echo "NB.  This can be VERY slow.  If you find yourself running this test suite multiple times, you may prefer to \"docker run -it securedrop-admin bash\", install the editor of your choice into the container and edit there, and run \"tox\" directly as you work."
 	bin/dev-shell tox
 
 .PHONY: update-pip-requirements
