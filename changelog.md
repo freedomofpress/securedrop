@@ -1,5 +1,18 @@
 # Changelog
 
+## 2.9.0~rc2
+
+### Web applications
+* Dependency updates:
+  * (Rust) sequoia-openpgp from 1.17.0 to 1.20.0 (#7178)
+
+### Operations
+* Added opt-in Tor PoW defense for the Source Interface (#7175)
+
+### Development
+* Ignored safety alert 70895 (#7179)
+* Added support for development virtualenv in Debian 12 (#7154)
+
 ## 2.9.0~rc1
 
 ### Web applications
