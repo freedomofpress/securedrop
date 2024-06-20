@@ -12,7 +12,7 @@
 
 SecureDrop is an open-source whistleblower submission system that media organizations can use to securely accept documents from, and communicate with anonymous sources. It was originally created by the late Aaron Swartz and is currently managed by the [Freedom of the Press Foundation](https://freedom.press).
 
-## Documentation
+## 📘 Documentation 
 
 SecureDrop's end user documentation is hosted at https://docs.securedrop.org. It is maintained in a standalone repository: https://github.com/freedomofpress/securedrop-docs.
 
@@ -21,27 +21,27 @@ By default, the documentation describes the most recent SecureDrop release. This
 Developer documentation can be found at https://developers.securedrop.org/, maintained in
 https://github.com/freedomofpress/securedrop-dev-docs/.
 
-## Found an issue?
+## 🐞 Found an issue? 
 
 If you're here because you want to report an issue in SecureDrop, please observe the following protocol to do so responsibly:
 
 * If you want to report a **_security issue_**, please use our [bug bounty hosted by Bugcrowd](https://bugcrowd.com/freedomofpress).
 * If filing the issue does not impact security, just create a [GitHub Issue](https://github.com/freedomofpress/securedrop/issues/new).
 
-## How to Install SecureDrop
+## 🛠️ How to Install SecureDrop 🛠️
 
 See the [Installation Guide](https://docs.securedrop.org/en/stable/#installtoc).
 
-## How to Use SecureDrop
+## 📥 How to Use SecureDrop
 
 * [As a source](https://docs.securedrop.org/en/stable/source.html)
 * [As a journalist](https://docs.securedrop.org/en/stable/journalist.html)
 
-## How to Contribute to SecureDrop
+## 🤝 How to Contribute to SecureDrop
 
 See our [contribution page](CONTRIBUTING.md).
 
-## Developer Quickstart
+## 🚀 Developer Quickstart
 
 Ensure you have Docker installed and:
 
@@ -51,11 +51,11 @@ make dev
 
 This will start the source interface on `127.0.0.1:8080` and the journalist interface on `127.0.0.1:8081`. The credentials to login are printed in the Terminal. To login to the journalist interface, you must also [generate a two-factor code](https://developers.securedrop.org/en/latest/setup_development.html#using-the-docker-environment).
 
-## License
+## 📜 License
 
 SecureDrop is open source and released under the [GNU Affero General Public License v3](/LICENSE).
 
-## Wordlists
+## ✨ Wordlists
 
 The wordlist we use to generate source passphrases come from various sources:
 
@@ -63,7 +63,7 @@ The wordlist we use to generate source passphrases come from various sources:
 * [fr.txt](/securedrop/wordlists/fr.txt) is based off Matthieu Weber's [translated diceware list](http://weber.fi.eu.org/index.shtml.en) and the French word list found in [trezor/python-mnemonic](https://github.com/trezor/python-mnemonic/blob/161bec3351dce9c439cd00dc0beaaf09e7906ff8/src/mnemonic/wordlist/french.txt) (MIT licensed).
 
 
-## Acknowledgments
+## 🌟 Acknowledgments
 
 A huge thank you to all SecureDrop contributors! You can see just
 code and documentation contributors in the ["Contributors"](https://github.com/freedomofpress/securedrop/graphs/contributors)
