@@ -14,9 +14,6 @@ set -o pipefail
 
 export BASE_OS="${BASE_OS:-focal}"
 
-echo "Running the gce-start.sh..."
 ./devops/gce-nested/gce-start.sh
-echo "Running the gce-runner.sh..."
 ./devops/gce-nested/gce-runner.sh
-echo "Running the gce-stop.sh..."
 ./devops/gce-nested/gce-stop.sh
