@@ -13,6 +13,7 @@ TOPLEVEL="$(git rev-parse --show-toplevel)"
 function create_gce_ssh_key() {
     # Ensure SSH key in-place
     if [[ ! -f "$SSH_PUBKEY" ]]; then
+        echo "Generating key"
         mkdir -p "$EPHEMERAL_DIRECTORY"
         ssh-keygen -f "$SSH_PRIVKEY" -q -P ""
     fi
@@ -37,6 +38,7 @@ function create_sd_ci_gce_instance() {
       local ci_image
       ci_image="$(find_latest_ci_image)"
       # Fire-up remote instance
+      echo "Fire-up remote instance"
       gcloud_call compute instances create "${FULL_JOB_ID}" \
           --image="$ci_image" \
           --network securedropci \

@@ -50,12 +50,16 @@ function copy_securedrop_repo() {
 }
 
 # Main logic
+echo "copy_securedrop_repo"
 copy_securedrop_repo
 
 # The test results should be collected regardless of pass/fail,
 # so register a trap to ensure the fetch always runs.
 trap fetch_junit_test_results EXIT
 
+echo "make build-debs-notest"
 ssh_gce "make build-debs-notest"
+echo "make build-debs-ossec-notest"
 ssh_gce "make build-debs-ossec-notest"
+echo "make staging"
 ssh_gce "make staging"

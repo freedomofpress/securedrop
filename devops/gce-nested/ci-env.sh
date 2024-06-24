@@ -70,5 +70,5 @@ function gcloud_call() {
         /usr/bin/gcloud --project "${PROJECT_ID}" "$@"
 }
 
-
+echo "generate_gce_creds_file"
 generate_gce_creds_file
