@@ -14,6 +14,12 @@ set -o pipefail
 
 export BASE_OS="${BASE_OS:-focal}"
 
+# Temporary workaround for old gcloud-sdk image
+sudo mkdir -p /etc/systemd/system/docker.service.d
+echo -e "[Service]\nEnvironment=\"DOCKER_ENABLE_DEPRECATED_PULL_SCHEMA_1_IMAGE=true\"" | sudo tee -a /etc/systemd/system/docker.service.d/env.conf
+sudo systemctl daemon-reload
+sudo systemctl restart docker
+
 ./devops/gce-nested/gce-start.sh
 ./devops/gce-nested/gce-runner.sh
 ./devops/gce-nested/gce-stop.sh
