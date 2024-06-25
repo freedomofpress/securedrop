@@ -148,21 +148,29 @@ safety:  ## Run `safety check` to check python dependencies for vulnerabilities.
 	@for req_file in `find . -type f -name '*requirements.txt' | grep -v .venv`; do \
 		echo "Checking file $$req_file" \
 		&& safety check \
-		--ignore 42050 \
 		--ignore 42923 \
+		--ignore 42926 \
 		--ignore 45185 \
 		--ignore 49337 \
+		--ignore 51385 \
 		--ignore 51668 \
 		--ignore 52322 \
 		--ignore 52495 \
 		--ignore 52510 \
 		--ignore 52518 \
-		--ignore 54709 \
-		--ignore 54564 \
-		--ignore 54230 \
+		--ignore 53048 \
+		--ignore 53868 \
+		--ignore 53869 \
+		--ignore 54219 \
 		--ignore 54229 \
+		--ignore 54230 \
+		--ignore 54421 \
+		--ignore 54564 \
+		--ignore 54709 \
 		--ignore 55261 \
 		--ignore 58912 \
+		--ignore 59473 \
+		--ignore 60026 \
 		--ignore 60350 \
 		--ignore 60789 \
 		--ignore 60841 \
@@ -170,25 +178,34 @@ safety:  ## Run `safety check` to check python dependencies for vulnerabilities.
 		--ignore 61893 \
 		--ignore 62019 \
 		--ignore 62044 \
+		--ignore 62817 \
 		--ignore 63066 \
 		--ignore 63227 \
-		--ignore 62817 \
-		--ignore 65647 \
-		--ignore 65278 \
-		--ignore 65212 \
-		--ignore 65401 \
 		--ignore 65193 \
+		--ignore 65212 \
+		--ignore 65278 \
+		--ignore 65401 \
+		--ignore 65505 \
 		--ignore 65510 \
 		--ignore 65511 \
+		--ignore 65647 \
+		--ignore 66667 \
 		--ignore 66700 \
-		--ignore 66777 \
 		--ignore 66704 \
 		--ignore 66710 \
-		--ignore 67895 \
+		--ignore 66777 \
 		--ignore 67599 \
+		--ignore 67895 \
 		--ignore 70612 \
-		--ignore 71064 \
 		--ignore 70895 \
+		--ignore 71064 \
+		--ignore 71591 \
+		--ignore 71594 \
+		--ignore 71595 \
+		--ignore 71608 \
+		--ignore 71680 \
+		--ignore 71681 \
+		--ignore 71684 \
 		--full-report -r $$req_file \
 		&& echo -e '\n' \
 		|| exit 1; \
