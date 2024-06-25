@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.9.0~rc3
+
+### Journalist API
+* Added support for HTTP range request for submissions and replies endpoints (#7160, #7189)
+
+### Development
+* Ignored safety alerts 42926, 51385, 53048, 53868, 53869, 54219, 54421, 59473, 60026, 65505, 66667, 71591, 71594, 71595, 71608, 71680, 71681, 71684 (#7190)
+
 ## 2.9.0~rc2
 
 ### Web applications
