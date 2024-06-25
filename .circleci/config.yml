@@ -280,19 +280,6 @@ jobs:
 
     working_directory: ~/sd
     steps:
-      - setup_remote_docker:
-          version: "26.0.2"
-      - run:
-          command: |
-            ssh remote-docker "sudo mkdir -p /etc/systemd/system/docker.service.d"
-            cat \<< EOF ssh remote-docker "sudo tee -a /etc/systemd/system/docker.service.d/env.conf"
-            {
-            [Service]
-            Environment="DOCKER_ENABLE_DEPRECATED_PULL_SCHEMA_1_IMAGE=true"
-            }
-            EOF
-            ssh remote-docker "sudo systemctl daemon-reload"
-            ssh remote-docker "sudo systemctl restart docker"
       - checkout
       - *rebaseontarget
       - *installenchant
