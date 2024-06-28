@@ -1,7 +1,33 @@
 # Changelog
 
-## 2.9.0~rc1
+## 2.10.0~rc1
 
+
+## 2.9.0
+
+### Web applications
+* Added accessibility improvements (#6536)
+* Dependency updates:
+  * (Rust) sequoia-openpgp from 1.17.0 to 1.20.0 (#7178)
+
+### Journalist API
+* Added support for partial content requests for submissions and replies endpoints (#7160, #7189)
+
+### Operations
+* Added opt-in Tor PoW defense for the Source Interface (#7175)
+* Updated SecureDrop signing key with new expiry date of 2027-05-24 (#7167)
+
+### Development
+* Updated rust toolchain to version 1.78.0 (#7147)
+* Added random file generation in loaddata.py (#7161) 
+* Fixed loaddata.py date generation bug (#7156)
+* Updated test signing key (#7150)
+* Added persistence for onion addresses created with `make dev-tor` (#7124)
+* Ignored safety alerts 66278, 65212, 65401, 65193, 65510, 65511, 66700, 66777, 66704, 66710, 70612, 71064, 42926, 51385, 53048, 53868, 53869, 54219, 54421, 59473, 60026, 65505, 66667, 71591, 71594, 71595, 71608, 71680, 71681, 71684, 70895 (#7145, #7149, #7157, #7170, #7179, #7190)
+* Added support for development virtualenv in Debian 12 (#7154)
+* Dependency updates:
+  * black from 22.3.0 to 24.3.0 (#7144)
+  * pillow from 10.2.0 to 10.3.0 (#7149)
 
 ## 2.8.0
 
