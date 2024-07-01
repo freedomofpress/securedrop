@@ -212,7 +212,7 @@ class GPGBase:
                 assert isinstance(self.options, list), "options not list"
         except (AssertionError, AttributeError) as ae:
             log.error("GPGBase.__init__(): %s" % str(ae))
-            raise RuntimeError(str(ae))
+            raise RuntimeError(str(ae)) from ae
         else:
             self._set_verbose(verbose)
             self.use_agent = use_agent
@@ -391,8 +391,8 @@ class GPGBase:
         read and write permissions for it.
 
         :param str directory: A relative or absolute path to the directory to
-                            use for storing/accessing GnuPG's files, including
-                            keyrings and the trustdb.
+                             use for storing/accessing GnuPG's files, including
+                             keyrings and the trustdb.
         :raises: :exc:`~exceptions.RuntimeError` if unable to find a suitable
                  directory to use.
         """
@@ -417,10 +417,7 @@ class GPGBase:
                 msg = "Unable to set '%s' as GnuPG homedir" % directory
                 log.debug("GPGBase.homedir.setter(): %s" % msg)
                 log.debug(str(ae))
-                raise RuntimeError(str(ae))
-            else:
-                log.info("Setting homedir to '%s'" % hd)
-                self._homedir = hd
+                raise RuntimeError(str(ae)) from ae
 
     homedir = _util.InheritableProperty(_homedir_getter, _homedir_setter)
 
@@ -466,10 +463,7 @@ class GPGBase:
             msg = "Unable to set '%s' as generated keys dir" % directory
             log.debug("GPGBase._generated_keys_setter(): %s" % msg)
             log.debug(str(ae))
-            raise RuntimeError(str(ae))
-        else:
-            log.info("Setting homedir to '%s'" % hd)
-            self.__generated_keys = hd
+            raise RuntimeError(str(ae)) from ae
 
     _generated_keys = _util.InheritableProperty(_generated_keys_getter, _generated_keys_setter)
 

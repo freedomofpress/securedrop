@@ -147,7 +147,7 @@ class SiteConfig:
                 ipaddress.ip_address(document.text)
                 return True
             except ValueError as e:
-                raise ValidationError(message=str(e))
+                raise ValidationError(message=str(e)) from e
 
     class ValidateNameservers(Validator):
         def validate(self, document: Document) -> bool:
@@ -156,13 +156,10 @@ class SiteConfig:
                 raise ValidationError(message="Specify no more than three nameservers.")
             try:
                 all(map(ipaddress.ip_address, candidates))
-            except ValueError:
+            except ValueError as exc:
                 raise ValidationError(
-                    message=(
-                        "DNS server(s) should be a space/comma-separated list "
-                        "of up to {} IP addresses"
-                    ).format(MAX_NAMESERVERS)
-                )
+                    message="DNS server(s) should be a space/comma-separated list of up to {} IP addresses".format(MAX_NAMESERVERS)
+                ) from exc
             return True
 
     @staticmethod
@@ -648,7 +645,7 @@ class SiteConfig:
                         + "needs to be updated. Please contact your SecureDrop administrator, or "
                         + "https://support.freedom.press for assistance."
                     )
-                raise FingerprintException(message)
+                raise FingerprintException(message) from e
         return True
 
     def validate_journalist_alert_email(self) -> bool:
@@ -665,7 +662,7 @@ class SiteConfig:
         try:
             SiteConfig.ValidateEmail().validate(Document(self.config["journalist_alert_email"]))
         except ValidationError as e:
-            raise JournalistAlertEmailException("journalist alerts email: " + e.message)
+            raise JournalistAlertEmailException(f"journalist alerts email: {e.message}")
         return True
 
     def exists(self) -> bool:
@@ -1238,22 +1235,22 @@ def main(argv: List[str]) -> None:
     if args.v:
         return_code = args.func(args)
         if return_code != 0:
-            sys.exit(EXIT_SUBPROCESS_ERROR)
+            raise SystemExit(f'ERROR (run with -v for more): {return_code}')
     else:
         try:
             return_code = args.func(args)
         except KeyboardInterrupt:
             print("Process was interrupted.")
-            sys.exit(EXIT_INTERRUPT)
+            raise SystemExit(EXIT_INTERRUPT)
         except subprocess.CalledProcessError as e:
             print(f"ERROR (run with -v for more): {e}", file=sys.stderr)
-            sys.exit(EXIT_SUBPROCESS_ERROR)
+            raise SystemExit(EXIT_SUBPROCESS_ERROR)
         except Exception as e:
             raise SystemExit(f"ERROR (run with -v for more): {e}")
     if return_code == 0:
-        sys.exit(EXIT_SUCCESS)
+        raise SystemExit(EXIT_SUCCESS)
     else:
-        sys.exit(EXIT_SUBPROCESS_ERROR)
+        raise SystemExit(EXIT_SUBPROCESS_ERROR)
 
 
 if __name__ == "__main__":

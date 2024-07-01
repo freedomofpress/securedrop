@@ -58,10 +58,10 @@ class PassphraseGenerator:
             # Ensure all words are ascii
             try:
                 " ".join(word_list).encode("ascii")
-            except UnicodeEncodeError:
+            except UnicodeEncodeError as exc:
                 raise InvalidWordListError(
                     "The word list for language '{}' contains non-ASCII words."
-                )
+                ) from exc
 
             # Ensure that passphrases longer than what's supported can't be generated
             longest_word = max(word_list, key=len)

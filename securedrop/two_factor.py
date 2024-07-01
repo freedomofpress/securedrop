@@ -48,8 +48,8 @@ class HOTP:
                 secret_as_base32,
                 casefold=True,
             )
-        except binascii.Error:
-            raise OtpSecretInvalid("Secret is not base32-encoded")
+        except binascii.Error as exc:
+            raise OtpSecretInvalid("Secret is not base32-encoded") from exc
 
         self._hotp = hotp.HOTP(
             key=otp_secret_as_bytes,
@@ -101,8 +101,8 @@ class TOTP:
                 secret_as_base32,
                 casefold=True,
             )
-        except binascii.Error:
-            raise OtpSecretInvalid("Secret is not base32-encoded")
+        except binascii.Error as exc:
+            raise OtpSecretInvalid("Secret is not base32-encoded") from exc
 
         self._totp = totp.TOTP(
             key=otp_secret_as_bytes,

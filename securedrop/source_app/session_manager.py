@@ -73,9 +73,9 @@ class SessionManager:
         try:
             user_passphrase = session[cls._SESSION_COOKIE_KEY_FOR_CODENAME]
             date_session_expires = session[cls._SESSION_COOKIE_KEY_FOR_EXPIRATION_DATE]
-        except KeyError:
+        except KeyError as exc:
             cls.log_user_out()
-            raise UserNotLoggedIn()
+            raise UserNotLoggedIn() from exc
 
         if datetime.now(timezone.utc) >= date_session_expires:
             cls.log_user_out()
@@ -86,10 +86,10 @@ class SessionManager:
             source_user = authenticate_source_user(
                 db_session=db_session, supplied_passphrase=user_passphrase
             )
-        except InvalidPassphraseError:
+        except InvalidPassphraseError as exc:
             # The cookie contains a passphrase that is invalid: happens if the user was deleted
             cls.log_user_out()
-            raise UserHasBeenDeleted()
+            raise UserHasBeenDeleted() from exc
 
         return source_user
 

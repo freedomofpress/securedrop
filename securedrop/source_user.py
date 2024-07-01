@@ -117,12 +117,12 @@ def create_source_user(
     db_session.add(source_db_record)
     try:
         db_session.commit()
-    except IntegrityError:
+    except IntegrityError as exc:
         db_session.rollback()
         raise SourcePassphraseCollisionError(
             f"Passphrase already used by another Source (filesystem_id {filesystem_id})"
-        )
-
+        ) from exc
+    
     # Create the source's folder
     os.mkdir(source_app_storage.path(filesystem_id))
 
