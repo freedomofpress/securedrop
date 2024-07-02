@@ -692,8 +692,8 @@ class Journalist(db.Model):
     ) -> "Journalist":
         try:
             user = Journalist.query.filter_by(username=username).one()
-        except NoResultFound:
-            raise InvalidUsernameException(gettext("Invalid username"))
+        except NoResultFound as exc:
+            raise InvalidUsernameException(gettext("Invalid username")) from exc
 
         if user.username in Journalist.INVALID_USERNAMES:
             raise InvalidUsernameException(gettext("Invalid username"))

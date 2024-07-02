@@ -135,10 +135,10 @@ class EncryptionManager:
         # Verify the secret key we got can be read and decrypted by redwood
         try:
             actual_fingerprint = redwood.is_valid_secret_key(secret_key, passphrase)
-        except redwood.RedwoodError:
+        except redwood.RedwoodError as exc:
             # Either Sequoia can't extract the secret key or the passphrase
             # is incorrect.
-            raise GpgKeyNotFoundError()
+            raise GpgKeyNotFoundError() from exc
         if fingerprint != actual_fingerprint:
             # Somehow we exported the wrong key?
             raise GpgKeyNotFoundError()

@@ -57,9 +57,9 @@ def check_iptables_default_drop(rules: dict) -> None:
         for i, rule in enumerate(reversed(chain_rules), 1):
             try:
                 if rules[chain][-i] != rule:
-                    raise ValueError("The iptables default drop rules are incorrect.")
-            except (KeyError, IndexError):
-                raise ValueError("The iptables default drop rules are incorrect.")
+                    raise ValueError("The iptables default drop rules are incorrect.") from None
+            except (KeyError, IndexError) as exc:
+                raise ValueError("The iptables default drop rules are incorrect.") from exc
 
 
 def check_iptables_rules() -> None:

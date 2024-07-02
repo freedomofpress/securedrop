@@ -193,11 +193,11 @@ def _is_allowed(input):  # type: ignore[no-untyped-def]
     try:
         # check that allowed is a subset of all gnupg_options
         assert allowed.issubset(gnupg_options)
-    except AssertionError:
+    except AssertionError as exc:
         raise UsageError(
             "'allowed' isn't a subset of known options, diff: %s"
             % allowed.difference(gnupg_options)
-        )
+        ) from exc
 
     # if we got a list of args, join them
     #
@@ -216,10 +216,10 @@ def _is_allowed(input):  # type: ignore[no-untyped-def]
             # xxx we probably want to use itertools.dropwhile here
             try:
                 assert hyphenated in allowed
-            except AssertionError:
+            except AssertionError as exc:
                 dropped = _fix_unsafe(hyphenated)
                 log.warn("_is_allowed(): Dropping option '%s'..." % dropped)
-                raise ProtectedOption("Option '%s' not supported." % dropped)
+                raise ProtectedOption("Option '%s' not supported." % dropped) from exc
             else:
                 return input
     return None
