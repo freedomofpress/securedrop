@@ -38,7 +38,7 @@ ruamel.yaml>=0.16.10
 ruff
 safety>2.2.0
 semgrep>=1.57.0
-setuptools>=56.0.0
+setuptools>=70.0.0
 shellcheck-py
 six==1.15.0
 testinfra>=5.3.1

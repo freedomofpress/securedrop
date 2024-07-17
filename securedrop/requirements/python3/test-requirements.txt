@@ -75,9 +75,6 @@ coverage==5.3 \
     # via
     #   -r requirements/python3/test-requirements.in
     #   pytest-cov
-easyprocess==0.2.3 \
-    --hash=sha256:94e241cadc9a46f55b5c06000df85618849602e7e1865b8de87576b90a22e61f
-    # via pyvirtualdisplay
 exceptiongroup==1.0.4 \
     --hash=sha256:542adf9dea4055530d6e1279602fa5cb11dab2395fa650b8674eaec35fc4a828 \
     --hash=sha256:bd14967b79cd9bdb54d97323216f8fdf533e278df937aa2a90089e7d6e06e5ec
@@ -246,9 +243,7 @@ pip-tools==6.1.0 \
 pluggy==0.13.1 \
     --hash=sha256:15b2acde666561e1298d71b523007ed7364de07029219b604cf808bfa1c765b0 \
     --hash=sha256:966c145cd83c96502c3c3868f50408687b38434af77734af1e9ca461a4081d2d
-    # via
-    #   -r requirements/python3/test-requirements.in
-    #   pytest
+    # via pytest
 pyparsing==2.4.7 \
     --hash=sha256:c203ec8783bf771a155b207279b9bccb8dea02d8f0c9e5f8ead507bc3246ecc1 \
     --hash=sha256:ef9d7589ef3c200abe66653d3f1ab1033c3c419ae9b9bdb1240a85b024efc88b
@@ -278,9 +273,6 @@ pytest==7.2.0 \
     #   pytest-cov
     #   pytest-mock
     #   pytest-xdist
-pyvirtualdisplay==0.2.1 \
-    --hash=sha256:012883851a992f9c53f0dc6a512765a95cf241bdb734af79e6bdfef95c6e9982
-    # via -r requirements/python3/test-requirements.in
 pyyaml==5.4.1 \
     --hash=sha256:08682f6b72c722394747bddaf0aa62277e02557c0fd1c42cb853016a38f8dedf \
     --hash=sha256:0f5f5786c0e09baddcd8b4b45f20a7b5d61a7e7e99846e3c799b05c7c53fa696 \
@@ -380,9 +372,9 @@ types-requests==2.27.15 \
     --hash=sha256:2d371183c535208d2cc8fe7473d9b49c344c7077eb70302eb708638fb86086a8 \
     --hash=sha256:77d09182a68e447e9e8b0ffc21abf54618b96f07689dffbb6a41cf0356542969
     # via -r requirements/python3/test-requirements.in
-types-setuptools==57.4.11 \
-    --hash=sha256:262f7406e0c7d705ad6bb4526b5b761fa500bf99eab74de85ac3592187d62935 \
-    --hash=sha256:fbb0647569d6fb2f6bc472402265250c0ffa53e60180d2cbfee9e84f085921f0
+types-setuptools==70.3.0.20240710 \
+    --hash=sha256:842cbf399812d2b65042c9d6ff35113bbf282dee38794779aa1f94e597bafc35 \
+    --hash=sha256:bd0db2a4b9f2c49ac5564be4e0fb3125c4c46b1f73eafdcbceffa5b005cceca4
     # via -r requirements/python3/test-requirements.in
 types-urllib3==1.26.11 \
     --hash=sha256:24d64e441168851eb05f1d022de18ae31558f5649c8f1117e384c2e85e31315b \
@@ -411,7 +403,7 @@ pip==21.1.1 \
     --hash=sha256:11d095ed5c15265fc5c15cc40a45188675c239fb0f9913b673a33e54ff7d45f0 \
     --hash=sha256:51ad01ddcd8de923533b01a870e7b987c2eb4d83b50b89e1bf102723ff9fed8b
     # via pip-tools
-setuptools==56.0.0 \
-    --hash=sha256:08a1c0f99455307c48690f00d5c2ac2c1ccfab04df00454fef854ec145b81302 \
-    --hash=sha256:7430499900e443375ba9449a9cc5d78506b801e929fef4a186496012f93683b5
+setuptools==70.3.0 \
+    --hash=sha256:f171bab1dfbc86b132997f26a119f6056a57950d058587841a0082e8830f9dc5 \
+    --hash=sha256:fe384da74336c398e0d956d1cae0669bc02eed936cdb1d49b57de1990dc11ffc
     # via -r requirements/python3/test-requirements.in
