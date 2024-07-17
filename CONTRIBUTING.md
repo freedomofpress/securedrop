@@ -10,4 +10,5 @@ Check out our [Development Roadmap](https://github.com/freedomofpress/securedrop
 For translators, see the [Translator Guide](https://developers.securedrop.org/en/latest/translations.html) to learn how to get started with SecureDrop translations
 in our [translation portal](https://weblate.securedrop.org/).
 
-We also have a public [Gitter channel](https://gitter.im/freedomofpress/securedrop) and a [public Discourse forum](https://forum.securedrop.org/) where you can discuss SecureDrop and ask questions.
+We also have a public [Gitter channel](https://gitter.im/freedomofpress/securedrop) where you can
+discuss SecureDrop and ask questions.
