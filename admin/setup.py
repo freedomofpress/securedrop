@@ -25,7 +25,7 @@ setuptools.setup(
     description="SecureDrop Admin Toolkit",
     url="https://securedrop.org",
     packages=setuptools.find_packages(),
-    scripts=['bin/securedrop-admin'],
+    scripts=["bin/securedrop-admin"],
     classifiers=[
         "Environment :: Console",
         "Intended Audience :: Information Technology",
@@ -36,5 +36,5 @@ setuptools.setup(
         "Programming Language :: Python :: 3",
         "Topic :: Utilities",
     ],
-    python_requires='>=3.11',
+    python_requires=">=3.11",
 )
