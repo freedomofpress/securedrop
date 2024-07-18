@@ -11,5 +11,4 @@ requests>=2.26.0
 tox==3.28.0
 pexpect
 urllib3>=1.26.5
-pytest-catchlog
 setuptools>=70.0.0
