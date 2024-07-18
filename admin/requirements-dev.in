@@ -1,9 +1,7 @@
 coverage>=7.0  # #6091
-d2to1
 flaky
 mock
 packaging==21.3
-pbr
 pip>=21.1
 pip-tools>=6.1.0
 py>=1.11.0
