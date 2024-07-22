@@ -135,15 +135,15 @@ user-login = "cuviper"
 user-name = "Josh Stone"
 
 [[publisher.openssl]]
-version = "0.10.60"
-when = "2023-11-23"
+version = "0.10.66"
+when = "2024-07-21"
 user-id = 163
 user-login = "alex"
 user-name = "Alex Gaynor"
 
 [[publisher.openssl-sys]]
-version = "0.9.96"
-when = "2023-11-23"
+version = "0.9.103"
+when = "2024-07-20"
 user-id = 163
 user-login = "alex"
 user-name = "Alex Gaynor"
