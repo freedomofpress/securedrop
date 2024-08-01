@@ -9,7 +9,7 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get install 
                        apache2-dev coreutils vim \
                        python3-pip python3-all python3-venv virtualenv python3-dev libssl-dev \
                        gnupg2 redis-server git curl wget jq \
-                       enchant libffi-dev sqlite3 gettext sudo tor basez pkg-config
+                       enchant libffi-dev libsqlite3-dev sqlite3 gettext sudo basez pkg-config
 
 # Install Rust using the same steps as <https://github.com/rust-lang/docker-rust>
 # 1) Download rustup-init and verify it matches hardcoded checksum
@@ -20,6 +20,7 @@ ENV RUSTUP_VERSION 1.24.3
 ENV RUSTUP_INIT_SHA256 3dc5ef50861ee18657f9db2eeb7392f9c2a6c95c90ab41e45ab4ca71476b4338
 ENV RUSTUP_HOME /opt/rustup
 ENV CARGO_HOME /opt/cargo
+#ENV ARTI_VERSION 1.2.5
 
 RUN TMPDIR=`mktemp -d` && cd ${TMPDIR} \
         && curl --proto '=https' --tlsv1.2 -OO -sSf https://static.rust-lang.org/rustup/archive/${RUSTUP_VERSION}/x86_64-unknown-linux-gnu/rustup-init \
@@ -27,6 +28,9 @@ RUN TMPDIR=`mktemp -d` && cd ${TMPDIR} \
         && chmod +x rustup-init \
         && ./rustup-init --default-toolchain=${RUST_VERSION} --profile minimal -y \
         && cd && rm -rf ${TMPDIR}
+
+# --version ${ARTI_VERSION}
+RUN /opt/cargo/bin/cargo install --locked --git https://gitlab.torproject.org/gabi-250/arti arti --branch onion-svc-auth --features onion-service-service,restricted-discovery
 
 COPY requirements requirements
 RUN python3 -m venv /opt/venvs/securedrop-app-code && \
