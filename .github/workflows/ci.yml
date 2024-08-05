@@ -110,7 +110,7 @@ jobs:
 
   updater-gui-tests:
     runs-on: ubuntu-latest
-    container: debian:bullseye
+    container: debian:bookworm
     steps:
       - name: Install dependencies
         run: |
