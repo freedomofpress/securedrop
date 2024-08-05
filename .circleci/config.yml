@@ -232,7 +232,7 @@ jobs:
 
   admin-tests:
     docker:
-      - image: debian:bullseye
+      - image: debian:bookworm
     steps:
       - run: apt update && apt-get install -y make jq docker.io
       - checkout
