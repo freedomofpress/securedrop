@@ -8,7 +8,13 @@ defaults:
 jobs:
   lint:
     runs-on: ubuntu-latest
-    container: ubuntu:focal
+    strategy:
+      fail-fast: false
+      matrix:
+        ubuntu_version:
+          - focal
+          - noble
+    container: ubuntu:${{ matrix.ubuntu_version }}
     steps:
       - name: Install Git
         run: |
@@ -17,7 +23,7 @@ jobs:
       - name: Install dependencies
         run: |
           DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get install --yes --no-install-recommends \
-            build-essential python3-virtualenv python3-dev enchant file apache2-dev jq libarchive-tools
+            build-essential python3-virtualenv python3-dev enchant-2 file apache2-dev jq libarchive-tools
           virtualenv .venv
           # TODO: this should be one step, but there are too many conflicting dependencies
           ./.venv/bin/pip install -r securedrop/requirements/python3/test-requirements.txt
