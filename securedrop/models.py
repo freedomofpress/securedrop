@@ -863,9 +863,9 @@ class InstanceConfig(db.Model):
     # Limits length of org name used in SI and JI titles, image alt texts etc.
     MAX_ORG_NAME_LEN = 64
 
-    # Limits length of site messages
-    MAX_SITE_MSG_TITLE_LEN = 64
-    MAX_SITE_MSG_LEN = 512
+    # Limits length of homepage messages
+    MAX_HOMEPAGE_MSG_TITLE_LEN = 64
+    MAX_HOMEPAGE_MSG_LEN = 512
 
     __tablename__ = "instance_config"
     version = Column(Integer, primary_key=True)
@@ -882,9 +882,9 @@ class InstanceConfig(db.Model):
         Boolean, nullable=False, default=False, server_default="0"
     )
 
-    site_msg_enabled = Column(Boolean, default=False)
-    site_msg_title = Column(String(255), nullable=True, default="")
-    site_msg_text = Column(String(MAX_SITE_MSG_LEN), nullable=True, default="")
+    homepage_msg_enabled = Column(Boolean, default=False)
+    homepage_msg_title = Column(String(255), nullable=False, default="")
+    homepage_msg_text = Column(String(MAX_HOMEPAGE_MSG_LEN), nullable=False, default="")
 
     # Columns not listed here will be included by InstanceConfig.copy() when
     # updating the configuration.
@@ -902,9 +902,9 @@ class InstanceConfig(db.Model):
                 self.organization_name,
                 self.initial_message_min_len,
                 self.reject_message_with_codename,
-                self.site_msg_enabled,
-                self.site_msg_title,
-                self.site_msg_txt,
+                self.homepage_msg_enabled,
+                self.homepage_msg_title,
+                self.homepage_msg_txt,
             )
         )
 
@@ -974,21 +974,21 @@ class InstanceConfig(db.Model):
         db.session.commit()
 
     @classmethod
-    def update_site_msg_prefs(cls, msg_enabled: bool, msg_title: str, msg_text: str) -> None:
+    def update_homepage_message(cls, msg_enabled: bool, msg_title: str, msg_text: str) -> None:
         old = cls.get_current()
         old.valid_until = datetime.datetime.utcnow()
         db.session.add(old)
 
         new = old.copy()
-        new.site_msg_enabled = msg_enabled
-        if len(msg_title) > cls.MAX_SITE_MSG_TITLE_LEN:
+        new.homepage_msg_enabled = msg_enabled
+        if len(msg_title) > cls.MAX_HOMEPAGE_MSG_TITLE_LEN:
             raise InvalidNameLength()
         else:
-            new.site_msg_title = msg_title
-        if len(msg_text) > cls.MAX_SITE_MSG_LEN:
+            new.homepage_msg_title = msg_title
+        if len(msg_text) > cls.MAX_HOMEPAGE_MSG_LEN:
             raise InvalidNameLength()
         else:
-            new.site_msg_text = msg_text
+            new.homepage_msg_text = msg_text
 
         db.session.add(new)
 

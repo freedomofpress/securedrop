@@ -53,6 +53,36 @@
   </form>
 </section>
 
+<section aria-labelledby="config-homepage-message">
+  <h2 id="config-homepage-message">{{ gettext('Homepage Message') }}</h2>
+
+  <form action="{{ url_for('admin.update_homepage_message') }}" method="post">
+    <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
+    <div class="config_form_element">
+      {{ homepage_message_form.message_enabled() }}
+      <label
+    for="message_enabled">{{ gettext('Enable Source Interface homepage message') }}</label>
+    </div>
+    <div><label
+        for=message_title">{{ gettext('Set the homepage message title:') }}</label>
+    </div>
+    <div>{{ homepage_message_form.message_title() }}</div>
+
+    <div><label
+        for=message_text">{{ gettext('Set the homepage message:') }}</label>
+    </div>
+    <div>{{ homepage_message_form.message_text() }}</div>
+    <div class="section-spacing">
+      <button type="submit" id="submit-update-homepage_message" class="icon icon-edit"
+        aria-label="{{ gettext('Set Homepage Message') }}">
+        {{ gettext('SET Homepage Message') }}
+      </button>
+    </div>
+    {% set prefs_filter = ["homepage-message-error","homepage-message-success"] %}
+    {% include 'preferences_saved_flash.html' %}
+  </form>
+</section>
+
 <section aria-labelledby="config-preventuploads">
   <h2 id="config-preventuploads">{{ gettext('Submission Preferences') }}</h2>
 

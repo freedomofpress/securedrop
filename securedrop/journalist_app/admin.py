@@ -118,6 +118,38 @@ def make_blueprint() -> Blueprint:
                     )
         return redirect(url_for("admin.manage_config") + "#config-preventuploads")
 
+    @view.route("/update-homepage-message", methods=["POST"])
+    @admin_required
+    def update_homepage_message() -> Optional[werkzeug.Response]:
+        form = HomepageMessageForm()
+        if form.validate_on_submit():
+            # The UI prompt ("prevent") is the opposite of the setting ("allow"):
+            message_enabled = form.message_enabled.data
+
+            if form.message_title.data:
+                message_title = form.message_title.data
+                # TODO: more processing here or is form validation enough?
+            else:
+                message_title = ""
+
+            if form.message_text.data:
+                message_text = form.message_text.data
+                # TODO: more processing here or is form validation enough?
+            else:
+                message_title = ""
+
+            InstanceConfig.update_homepage_message(message_enabled, message_title, message_text)
+            flash(gettext("Preferences saved."), "homepage-message-success")
+            return redirect(url_for("admin.manage_config") + "#config-homepage-message")
+        else:
+            for field, errors in list(form.errors.items()):
+                for error in errors:
+                    flash(
+                        gettext("Preferences not updated.") + " " + error,
+                        "homepage-message-error",
+                    )
+        return redirect(url_for("admin.manage_config") + "#config-homepage-message")
+
     @view.route("/update-org-name", methods=["POST"])
     @admin_required
     def update_org_name() -> Union[str, werkzeug.Response]:
