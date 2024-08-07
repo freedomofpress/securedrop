@@ -9,14 +9,12 @@ pillow>=10.3.0  # Safety 67136 for CVE-2024-28219
 pip-tools>=6.1.0
 pytest>=7.2.0
 pytest-xdist>=3.0.2
-pluggy>=0.13.1
 pytest-cov
 pytest-mock
 requests[socks]>=2.31.0
-setuptools>=56.0.0
+setuptools>=70.0.0
 selenium>4.15.1
 tbselenium>=0.8.1
-pyvirtualdisplay
 urllib3>=1.26.5
 # mypy and co.
 mypy>=1.0
@@ -25,4 +23,4 @@ types-mock
 types-PyYAML
 types-redis
 types-requests
-types-setuptools
+types-setuptools>=70.0.0

@@ -4,10 +4,22 @@
 #
 #    pip-compile --allow-unsafe --generate-hashes --output-file=requirements/python3/bootstrap-requirements.txt requirements/python3/bootstrap-requirements.in
 #
-setuptools-scm==6.0.1 \
-    --hash=sha256:c3bd5f701c8def44a5c0bfe8d407bef3f80342217ef3492b951f3777bd2d915c \
-    --hash=sha256:d1925a69cb07e9b29416a275b9fadb009a23c148ace905b2fb220649a6c18e92
+packaging==24.1 \
+    --hash=sha256:026ed72c8ed3fcce5bf8950572258698927fd1dbda10a5e981cdf0ac37f4f002 \
+    --hash=sha256:5b8f2217dbdbd2f7f384c41c628544e6d52f2d0f53c6d0c3ea61aa5d1d7ff124
+    # via setuptools-scm
+setuptools-scm==8.1.0 \
+    --hash=sha256:42dea1b65771cba93b7a515d65a65d8246e560768a66b9106a592c8e7f26c8a7 \
+    --hash=sha256:897a3226a6fd4a6eb2f068745e49733261a21f70b1bb28fce0339feb978d9af3
     # via -r requirements/python3/bootstrap-requirements.in
+tomli==2.0.1 \
+    --hash=sha256:939de3e7a6161af0c887ef91b7d41a53e7c5a1ca976325f429cb46ea9bc30ecc \
+    --hash=sha256:de526c12914f0c550d15924c62d72abc48d6fe7364aa87328337a31007fe8a4f
+    # via setuptools-scm
+typing-extensions==4.12.2 \
+    --hash=sha256:04e5ca0351e0f3f85c6853954072df659d0d13fac324d0072316b67d7794700d \
+    --hash=sha256:1a7ead55c7e559dd4dee8856e3a88b41225abfe1ce8df57b7c13915fe121ffb8
+    # via setuptools-scm
 wheel==0.38.4 \
     --hash=sha256:965f5259b566725405b05e7cf774052044b1ed30119b5d586b2703aafe8719ac \
     --hash=sha256:b60533f3f5d530e971d6737ca6d58681ee434818fab630c83a734bb10c083ce8
@@ -18,9 +30,9 @@ pip==21.3 \
     --hash=sha256:4a1de8f97884ecfc10b48fe61c234f7e7dcf4490a37217011ad9369d899ad5a6 \
     --hash=sha256:741a61baab1dbce2d8ca415effa48a2b6a964564f81a9f4f1fce4c433346c034
     # via -r requirements/python3/bootstrap-requirements.in
-setuptools==56.0.0 \
-    --hash=sha256:08a1c0f99455307c48690f00d5c2ac2c1ccfab04df00454fef854ec145b81302 \
-    --hash=sha256:7430499900e443375ba9449a9cc5d78506b801e929fef4a186496012f93683b5
+setuptools==70.3.0 \
+    --hash=sha256:f171bab1dfbc86b132997f26a119f6056a57950d058587841a0082e8830f9dc5 \
+    --hash=sha256:fe384da74336c398e0d956d1cae0669bc02eed936cdb1d49b57de1990dc11ffc
     # via
     #   -r requirements/python3/bootstrap-requirements.in
     #   setuptools-scm

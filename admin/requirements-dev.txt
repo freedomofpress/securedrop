@@ -78,9 +78,6 @@ coverage==7.4.1 \
     --hash=sha256:f90515974b39f4dea2f27c0959688621b46d96d5a626cf9c53dbc653a895c05c \
     --hash=sha256:fe558371c1bdf3b8fa03e097c523fb9645b8730399c14fe7721ee9c9e2a545d3
     # via -r requirements-dev.in
-d2to1==0.2.12.post1 \
-    --hash=sha256:49ef2d16862b3efdc81fc5c32eac373b984945cde5fc02bb01a0a11ff03dd825
-    # via -r requirements-dev.in
 dill==0.3.8 \
     --hash=sha256:3ebe3c479ad625c4553aca177444d89b486b1d84982eeacded644afc0cf797ca \
     --hash=sha256:c36ca9ffb54365bdd2f8eb3eff7d2a21237f8452b57ace88b1ac615b7e815bd7
@@ -129,9 +126,7 @@ packaging==21.3 \
 pbr==3.1.1 \
     --hash=sha256:05f61c71aaefc02d8e37c0a3eeb9815ff526ea28b3b76324769e6158d7f95be1 \
     --hash=sha256:60c25b7dfd054ef9bb0ae327af949dd4676aa09ac3a9471cdc871d8a9213f9ac
-    # via
-    #   -r requirements-dev.in
-    #   mock
+    # via mock
 pep517==0.10.0 \
     --hash=sha256:ac59f3f6b9726a49e15a649474539442cf76e0697e39df4869d25e68e880931b \
     --hash=sha256:eba39d201ef937584ad3343df3581069085bacc95454c80188291d5b3ac7a249
@@ -165,7 +160,6 @@ py==1.11.0 \
     --hash=sha256:607c53218732647dff4acdfcd50cb62615cedf612e72d1724fb1a0cc6405b378
     # via
     #   -r requirements-dev.in
-    #   pytest-catchlog
     #   tox
 pylint==3.0.3 \
     --hash=sha256:58c2398b0301e049609a8429789ec6edf3aabe9b6c5fec916acd18639c16de8b \
@@ -175,16 +169,10 @@ pyparsing==3.1.1 \
     --hash=sha256:32c7c0b711493c72ff18a981d24f28aaf9c1fb7ed5e9667c9e84e3db623bdbfb \
     --hash=sha256:ede28a1a32462f5a9705e07aea48001a08f7cf81a021585011deba701581a0db
     # via packaging
-pytest-catchlog==1.2.2 \
-    --hash=sha256:4be15dc5ac1750f83960897f591453040dff044b5966fe24a91c2f7d04ecfcf0 \
-    --hash=sha256:a692966da726b918197cabd20dc0ad4da5503fbdc99baaa192e62579c8a45773
-    # via -r requirements-dev.in
 pytest==7.2.0 \
     --hash=sha256:892f933d339f068883b6fd5a459f03d85bfcb355e4981e146d2c7616c21fef71 \
     --hash=sha256:c4014eb40e10f11f355ad4e3c2fb2c6c6d1919c73f3b5a433de4708202cade59
-    # via
-    #   -r requirements-dev.in
-    #   pytest-catchlog
+    # via -r requirements-dev.in
 requests==2.26.0 \
     --hash=sha256:6c1246513ecd5ecd4528a0906f910e8f0f9c6b8ec72030dc9fd154dc1a6efd24 \
     --hash=sha256:b8aa58f8cf793ffd8782d3d8cb19e66ef36f7aba4353eec859e74678b01b07a7
@@ -225,9 +213,7 @@ pip==21.1.1 \
     # via
     #   -r requirements-dev.in
     #   pip-tools
-setuptools==56.0.0 \
-    --hash=sha256:08a1c0f99455307c48690f00d5c2ac2c1ccfab04df00454fef854ec145b81302 \
-    --hash=sha256:7430499900e443375ba9449a9cc5d78506b801e929fef4a186496012f93683b5
-    # via
-    #   -r requirements-dev.in
-    #   d2to1
+setuptools==70.3.0 \
+    --hash=sha256:f171bab1dfbc86b132997f26a119f6056a57950d058587841a0082e8830f9dc5 \
+    --hash=sha256:fe384da74336c398e0d956d1cae0669bc02eed936cdb1d49b57de1990dc11ffc
+    # via -r requirements-dev.in

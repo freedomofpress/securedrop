@@ -17,4 +17,24 @@
 #
 import setuptools
 
-setuptools.setup(setup_requires=["d2to1", "pbr"], d2to1=True)
+setuptools.setup(
+    name="securedrop-admin",
+    version="0.1.0",
+    author="Freedom of the Press Foundation",
+    author_email="securedrop@freedom.press",
+    description="SecureDrop Admin Toolkit",
+    url="https://securedrop.org",
+    packages=setuptools.find_packages(),
+    scripts=["bin/securedrop-admin"],
+    classifiers=[
+        "Environment :: Console",
+        "Intended Audience :: Information Technology",
+        "Intended Audience :: System Administrators",
+        "Operating System :: POSIX :: Linux",
+        "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
+        "Programming Language :: Python",
+        "Programming Language :: Python :: 3",
+        "Topic :: Utilities",
+    ],
+    python_requires=">=3.11",
+)
