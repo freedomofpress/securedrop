@@ -1,10 +1,8 @@
-{% if ansible_distribution_release == "focal" %}
 // If automatic reboot is enabled and needed, reboot at the specific
 // time instead of immediately
 //  Default: "now"
 Unattended-Upgrade::Automatic-Reboot-Time "{{ daily_reboot_time }}:00";
 APT::Periodic::Enable "1";
-{% endif %}
 // Don't install packages from "Recommends" field, we'll manage dependencies
 // explicitly to avoid pulling in packages from e.g. universe.
 APT::Install-Recommends "false";

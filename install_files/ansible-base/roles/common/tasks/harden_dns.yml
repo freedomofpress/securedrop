@@ -7,12 +7,11 @@
     - dns
     - hardening
 
-- name: Disable systemd-resolved on Focal
+- name: Disable systemd-resolved
   systemd:
     name: systemd-resolved
     state: stopped
     enabled: no
-  when: ansible_distribution_release == 'focal'
   tags:
     - dns
     - hardening
