@@ -48,7 +48,7 @@ def create_app(config: SecureDropConfig) -> Flask:
 
     app.config.from_object(config.JOURNALIST_APP_FLASK_CONFIG_CLS)
 
-    Session(app)
+    Session(app, config)
     csrf = CSRFProtect(app)
 
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False

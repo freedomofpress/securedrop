@@ -213,6 +213,7 @@
   /var/www/securedrop/pretty_bad_protocol/_meta.py r,
   /var/www/securedrop/request_that_secures_file_uploads.py r,
   /var/www/securedrop/rm.py r,
+  /var/www/securedrop/rq_config.py r,
   /var/www/securedrop/sdconfig.py r,
   /var/www/securedrop/secure_tempfile.py r,
   /var/www/securedrop/source.py r,

@@ -86,3 +86,5 @@ DEFAULT_LOCALE = 'en_US'
 
 # How long a session is valid before it expires and logs a user out
 SESSION_EXPIRATION_MINUTES = 120
+
+REDIS_PASSWORD = '{{ redis_password.stdout }}'

@@ -12,6 +12,7 @@ from flask_babel import gettext
 from itsdangerous import BadSignature, URLSafeTimedSerializer
 from models import Journalist
 from redis import Redis
+from sdconfig import SecureDropConfig
 from werkzeug.datastructures import CallbackDict
 
 
@@ -231,20 +232,20 @@ class SessionInterface(FlaskSessionInterface):
 
 
 class Session:
-    def __init__(self, app: Flask) -> None:
+    def __init__(self, app: Flask, sdconfig: SecureDropConfig) -> None:
         self.app = app
         if app is not None:
-            self.init_app(app)
+            self.init_app(app, sdconfig)
 
-    def init_app(self, app: Flask) -> "None":
+    def init_app(self, app: Flask, sdconfig: SecureDropConfig) -> "None":
         """This is used to set up session for your app object.
         :param app: the Flask app object with proper configuration.
         """
-        app.session_interface = self._get_interface(app)  # type: ignore
+        app.session_interface = self._get_interface(app, sdconfig)  # type: ignore
 
-    def _get_interface(self, app: Flask) -> SessionInterface:
+    def _get_interface(self, app: Flask, sdconfig: SecureDropConfig) -> SessionInterface:
         config = app.config.copy()
-        config.setdefault("SESSION_REDIS", Redis())
+        config.setdefault("SESSION_REDIS", Redis(**sdconfig.REDIS_KWARGS))
         config.setdefault("SESSION_LIFETIME", 2 * 60 * 60)
         config.setdefault("SESSION_RENEW_COUNT", 5)
         config.setdefault("SESSION_SIGNER_SALT", "session")

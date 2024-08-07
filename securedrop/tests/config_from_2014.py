@@ -83,3 +83,7 @@ GPG_KEY_DIR = os.path.join(SECUREDROP_ROOT, "keys")
 # depending on the environment
 DATABASE_ENGINE = "sqlite"
 DATABASE_FILE = os.path.join(SECUREDROP_ROOT, "db.sqlite")
+
+# Note: This was added in 2024, but it is generated in postinst in addition to
+# ansible, so 2014-era SecureDrops will have it.
+REDIS_PASSWORD = "1234567890"

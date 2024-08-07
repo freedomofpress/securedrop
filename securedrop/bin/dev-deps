@@ -22,7 +22,11 @@ function run_xvfb() {
 
 function run_redis() {
     rm -f "${REPOROOT}/securedrop/dump.rdb"
-    setsid redis-server >& /tmp/redis.out || cat /tmp/redis.out
+    redis_password=$(cd "${REPOROOT}/securedrop" && python -c "import rq_config; print(rq_config.REDIS_PASSWORD)")
+    echo "$redis_password" > /tmp/redispasswd
+    echo "requirepass ${redis_password}" | sudo -u redis tee -a /etc/redis/redis.conf
+    echo "Starting redis..."
+    sudo service redis-server start
 }
 
 function setup_vncauth {
@@ -47,6 +51,7 @@ function append_to_exit() {
 function maybe_create_config_py() {
     if ! test -f "${REPOROOT}/securedrop/config.py" ; then
         append_to_exit "rm ${REPOROOT}/securedrop/config.py"
+        append_to_exit "rm ${REPOROOT}/securedrop/rq_config.py"
         (cd "$REPOROOT" && make test-config)
     fi
 }
