@@ -1,8 +1,9 @@
 import binascii
 import os
 from datetime import datetime, timezone
-from typing import List, Optional, Union
+from typing import List, Literal, Optional, Union
 
+import argon2
 import flask
 import werkzeug
 from db import db
@@ -12,6 +13,7 @@ from flask_babel import gettext, ngettext
 from journalist_app.sessions import session
 from markupsafe import Markup, escape
 from models import (
+    ARGON2_PARAMS,
     FirstOrLastNameError,
     InvalidPasswordLength,
     InvalidUsernameException,
@@ -427,10 +429,49 @@ def set_name(user: Journalist, first_name: Optional[str], last_name: Optional[st
         flash(gettext("Name not updated: {message}").format(message=e), "error")
 
 
+def set_pending_password(for_: Union[Journalist, Literal["new"]], passphrase: str) -> None:
+    """
+    The user has requested a password change, but hasn't confirmed it yet.
+
+    NOTE: This mutates the current session and not the database.
+
+    We keep track of the hash so we can verify they are using the password
+    we provided for them. It is expected they hit /new-password  →
+    utils.set_diceware_password()
+    """
+    hasher = argon2.PasswordHasher(**ARGON2_PARAMS)
+    # Include the user's id in the hash to avoid possible collisions in case we're
+    # resetting someone else's password.
+    if isinstance(for_, Journalist):
+        id = str(for_.id)
+    else:  # "new"
+        id = for_
+    session[f"pending_password_{id}"] = hasher.hash(passphrase)
+
+
+def verify_pending_password(for_: Union[Journalist, Literal["new"]], passphrase: str) -> None:
+    if isinstance(for_, Journalist):
+        id = str(for_.id)
+    else:  # "new"
+        id = for_
+    pending_password_hash = session.get(f"pending_password_{id}")
+    if pending_password_hash is None:
+        raise PasswordError()
+    hasher = argon2.PasswordHasher(**ARGON2_PARAMS)
+    try:
+        hasher.verify(pending_password_hash, passphrase)
+    except argon2.exceptions.VerificationError:
+        raise PasswordError()
+
+
 def set_diceware_password(
     user: Journalist, password: Optional[str], admin: Optional[bool] = False
 ) -> bool:
     try:
+        if password is not None:
+            # FIXME: password being None will trigger an error in set_password(), we
+            # should turn it into a type error
+            verify_pending_password(user, password)
         # nosemgrep: python.django.security.audit.unvalidated-password.unvalidated-password
         user.set_password(password)
     except PasswordError:
