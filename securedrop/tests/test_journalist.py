@@ -472,7 +472,7 @@ def test_admin_logout_redirects_to_index(config, journalist_app, test_admin):
                 test_admin["password"],
                 test_admin["otp_secret"],
             )
-            resp = app.get(url_for("main.logout"))
+            resp = app.post(url_for("main.logout"))
             ins.assert_redirects(resp, url_for("main.index"))
 
 
@@ -485,7 +485,7 @@ def test_user_logout_redirects_to_index(config, journalist_app, test_journo):
                 test_journo["password"],
                 test_journo["otp_secret"],
             )
-            resp = app.get(url_for("main.logout"))
+            resp = app.post(url_for("main.logout"))
             ins.assert_redirects(resp, url_for("main.index"))
 
 
@@ -3577,16 +3577,27 @@ def test_csrf_error_page(config, journalist_app, locale):
 
     journalist_app.config["WTF_CSRF_ENABLED"] = True
     with journalist_app.test_client() as app:
+        # /login without a CSRF token should redirect...
         with InstrumentedApp(journalist_app) as ins:
             resp = app.post(url_for("main.login"))
             ins.assert_redirects(resp, url_for("main.login"))
 
         resp = app.post(url_for("main.login"), follow_redirects=True)
 
-        # because the session is being cleared when it expires, the
-        # response should always be in English.
+        # ...and show an error.  (Because the session is being cleared when it
+        # expires, the response should always be in English.)
         assert page_language(resp.data) == "en-US"
-        assert "You have been logged out due to inactivity." in resp.data.decode("utf-8")
+        assert (
+            "You have been logged out due to inactivity or a problem with your session."
+            in resp.data.decode("utf-8")
+        )
+
+        # /logout without a CSRF token should also error.
+        resp = app.post(url_for("main.logout"), follow_redirects=True)
+        assert (
+            "You have been logged out due to inactivity or a problem with your session."
+            in resp.data.decode("utf-8")
+        )
 
 
 def test_col_process_aborts_with_bad_action(journalist_app, test_journo):

@@ -68,7 +68,7 @@ def create_app(config: SecureDropConfig) -> Flask:
     @app.errorhandler(CSRFError)
     def handle_csrf_error(e: CSRFError) -> "Response":
         app.logger.error("The CSRF token is invalid.")
-        msg = gettext("You have been logged out due to inactivity.")
+        msg = gettext("You have been logged out due to inactivity or a problem with your session.")
         session.destroy(("error", msg), session.get("locale"))
         return redirect(url_for("main.login"))
 

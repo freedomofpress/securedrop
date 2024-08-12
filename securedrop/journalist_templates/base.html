@@ -25,7 +25,10 @@
     {% if session.get_user() and session.get_user().is_admin %}
     <a href="{{ url_for('admin.index') }}" id="link-admin-index">{{ gettext('Admin') }}</a> |
     {% endif %}
-    <a href="{{ url_for('main.logout') }}" id="link-logout">{{ gettext('Log Out') }}</a>
+    <form id="logout" action="{{ url_for('main.logout') }}" method="post">
+      <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
+      <button id="btn-logout" type="submit" aria-label="{{ gettext('Log Out') }}">{{ gettext('LOG OUT') }}</button>
+    </form>
   </nav>
   {% endif %}
 

@@ -102,7 +102,7 @@ class SourceAppNavigator:
         self.nav_helper.wait_for(lambda: self.driver.find_elements(By.ID, "source-login"))
 
     def _is_logged_in(self) -> WebElement:
-        return self.nav_helper.wait_for(lambda: self.driver.find_element(By.ID, "logout"))
+        return self.nav_helper.wait_for(lambda: self.driver.find_element(By.ID, "btn-logout"))
 
     def source_proceeds_to_login(self, codename: str) -> None:
         self.nav_helper.safe_send_keys_by_id("codename", codename)

@@ -18,7 +18,7 @@
 </nav>
 <section aria-labeledby="change-heading">
   <h2 id="change-heading">{{ gettext('Change Name and Admin Status') }}</h2>
-  <form method="post">
+  <form id="edit-account" method="post">
     <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
     <div>
       <label for="username">{{ gettext('Username') }}</label>

@@ -406,8 +406,9 @@ def make_blueprint(config: SecureDropConfig) -> Blueprint:
 
         return redirect(url_for(".lookup", from_login="1"))
 
-    @view.route("/logout")
-    def logout() -> Union[str, werkzeug.Response]:
+    @view.route("/logout", methods=("POST",))
+    @login_required
+    def logout(logged_in_source: SourceUser) -> Union[str, werkzeug.Response]:
         """
         If a user is logged in, show them a logout page that prompts them to
         click the New Identity button in Tor Browser to complete their session.

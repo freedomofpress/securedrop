@@ -57,7 +57,9 @@ class TestJournalistLayoutAccount:
         journ_app_nav.nav_helper.safe_send_keys_by_css_selector(
             'input[name="otp_secret"]', "123456"
         )
-        journ_app_nav.nav_helper.safe_click_by_css_selector("button[type=submit]")
+        journ_app_nav.nav_helper.safe_click_by_css_selector(
+            "form#account-edit-hotp-secret button[type=submit]"
+        )
         save_static_data(journ_app_nav.driver, locale, "journalist-account_new_two_factor_hotp")
 
     @staticmethod

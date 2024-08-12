@@ -1884,6 +1884,10 @@ body > nav {
   margin: 1em 1em 0 1em;
 }
 
+body > nav form {
+  display: inline;
+}
+
 label {
   cursor: pointer;
 }

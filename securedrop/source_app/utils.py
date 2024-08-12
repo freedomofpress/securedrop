@@ -50,10 +50,11 @@ def clear_session_and_redirect_to_logged_out_page(flask_session: SessionMixin) -
         declarative=gettext("Important"),
         msg_contents=Markup(
             gettext(
-                'You were logged out due to inactivity. Click the <img src={icon} alt="" '
-                'width="16" height="16">&nbsp;<b>New Identity</b> button in your Tor Browser\'s '
-                "toolbar before moving on. This will clear your Tor Browser activity data on "
-                "this device."
+                "You have been logged out due to inactivity or a problem with "
+                'your session. Click the <img src={icon} alt="" width="16" '
+                'height="16">&nbsp;<b>New Identity</b> button in your Tor '
+                "Browser's toolbar before moving on. This will clear your Tor "
+                "Browser activity data on this device."
             ).format(icon=url_for("static", filename="i/torbroom.png"))
         ),
     )
