@@ -51,7 +51,7 @@ function virtualenv_bootstrap() {
         then
             p=$(command -v "python${PYTHON_VERSION}" 2> /dev/null || command -v python3)
             echo "Creating ${p} virtualenv in ${VENV}"
-            virtualenv -p "${p}" "${VENV}"
+            "${p}" -m venv "${VENV}"
         fi
 
         PIP_CONSTRAINT=${DEV_CONSTRAINT} "${VENV}/bin/pip" install -q -r "securedrop/requirements/python3/develop-requirements.txt"

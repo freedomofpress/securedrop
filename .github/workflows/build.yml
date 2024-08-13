@@ -1,0 +1,61 @@
+name: Package builds
+on:
+  - merge_group
+  - push
+  - pull_request
+
+# Only build for latest push/PR unless it's main or release/
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' && !startsWith( github.ref, 'refs/heads/release/' ) }}
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  build-debs:
+    strategy:
+      matrix:
+        build: [one, two]
+    runs-on: ubuntu-latest
+    outputs:
+      artifact_id: ${{ steps.upload.outputs.artifact-id }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.8'
+      - name: Build packages
+        run: |
+          ./builder/build-debs.sh
+          WHAT=ossec ./builder/build-debs.sh
+      - uses: actions/upload-artifact@v4
+        id: upload
+        with:
+          name: build-${{ matrix.build }}
+          path: build
+          if-no-files-found: error
+
+  reproducible-debs:
+    runs-on: ubuntu-latest
+    container: debian:bookworm
+    needs:
+      - build-debs
+    steps:
+      - name: Install dependencies
+        run: |
+          apt-get update && apt-get install --yes diffoscope-minimal \
+            --no-install-recommends
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: "build-*"
+      - name: diffoscope
+        run: |
+          find . -name '*.deb' -exec sha256sum {} \;
+          # FIXME: securedrop-app-code isn't reproducible
+          for pkg in ossec-agent ossec-server securedrop-config securedrop-keyring securedrop-ossec-agent securedrop-ossec-server
+          do
+              echo "Checking ${pkg}..."
+              diffoscope build-one/focal/${pkg}*.deb build-two/focal/${pkg}*.deb
+          done
