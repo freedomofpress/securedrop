@@ -138,6 +138,8 @@ class CatalogVerifier:
         # or 1 (differences); anything else is an error.
         test = self.diffoscope_call(Path(self.mo.fpath), Path(self.mo_target), filtered=False)
         if test.returncode not in [0, 1]:
+            print(test.stdout.decode())
+            print(test.stderr.decode())
             test.check_returncode()
 
         # With filtering, since diffoscope will return 1 on differences
