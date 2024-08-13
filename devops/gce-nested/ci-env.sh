@@ -17,7 +17,6 @@ export BUILD_NUM="${CIRCLE_BUILD_NUM}"
 export PROJECT_ID="securedrop-ci"
 export JOB_NAME="sd-ci-nested"
 export GCLOUD_MACHINE_TYPE="c2-standard-8"
-GCLOUD_CONTAINER_VER="$(cat "${TOPLEVEL}/devops/gce-nested/gcloud-container.ver")"
 export GCLOUD_CONTAINER_VER
 export CLOUDSDK_COMPUTE_ZONE="us-west1-c"
 export EPHEMERAL_DIRECTORY="/tmp/gce-nested"
@@ -30,6 +29,7 @@ export SSH_PUBKEY="${SSH_PRIVKEY}.pub"
 # retrievable via GOOGLE_CREDENTIALS. Let's read that value, decode it,
 # and write it to disk in the CI environment so the gcloud tooling
 # can authenticate.
+# This function is called multiple times and must be idempotent.
 function generate_gce_creds_file() {
     # First check if there is an existing cred file
     if [ ! -f "${GCE_CREDS_FILE}" ]; then
@@ -48,26 +48,25 @@ function generate_gce_creds_file() {
             fi
         fi
     fi
+
+    if ! docker inspect --format '{{ .Id }}' gcloud-config > /dev/null 2>&1; then
+        docker run \
+            --env="CLOUDSDK_COMPUTE_ZONE=${CLOUDSDK_COMPUTE_ZONE}" \
+            --volume "${GCE_CREDS_FILE}:/gce-svc-acct.json" \
+            --name gcloud-config \
+            gcr.io/google.com/cloudsdktool/google-cloud-cli:stable \
+            gcloud auth activate-service-account --key-file /gce-svc-acct.json
+    fi
 }
 
 # Wrapper function to communicate with the gcloud API. Ensure gcloud-sdk
 # container is running, and if so, pass all args to it.
 function gcloud_call() {
-    if ! (docker ps | grep -q gcloud_tool); then
-        docker run --rm \
-                --env="CLOUDSDK_COMPUTE_ZONE=${CLOUDSDK_COMPUTE_ZONE}" \
-                --volume "${EPHEMERAL_DIRECTORY}/gce.pub:/gce.pub" \
-                --volume "${GCE_CREDS_FILE}:/gce-svc-acct.json" \
-                --name gcloud_tool -d \
-                "quay.io/freedomofpress/gcloud-sdk:${GCLOUD_CONTAINER_VER}" \
-                background >/dev/null 2>&1
-        # Give container a moment for gcloud tooling to authenticate
-        # Kept falling over on first calls without this
-        sleep 3
-    fi
-
-    docker exec -i gcloud_tool \
-        /usr/bin/gcloud --project "${PROJECT_ID}" "$@"
+    docker run --rm \
+        --volumes-from gcloud-config \
+        --env="CLOUDSDK_COMPUTE_ZONE=${CLOUDSDK_COMPUTE_ZONE}" \
+        gcr.io/google.com/cloudsdktool/google-cloud-cli:stable \
+        gcloud --project "${PROJECT_ID}" "$@"
 }
 
 
