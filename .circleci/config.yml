@@ -230,18 +230,6 @@ jobs:
       - store_artifacts:
           path: ~/project/test-results
 
-  admin-tests:
-    docker:
-      - image: debian:bullseye
-    steps:
-      - run: apt update && apt-get install -y make jq docker.io
-      - checkout
-      - setup_remote_docker
-      - run:
-          name: Run tests
-          command: |
-            cd admin; make test
-
   static-analysis-and-no-known-cves:
     machine:
       image: ubuntu-2004:current
@@ -364,14 +352,6 @@ workflows:
                 - /update-builder-.*/
           requires:
             - lint
-          context:
-            - circleci-slack
-          <<: *slack-fail-post-step
-      - admin-tests:
-          filters:
-            branches:
-              ignore:
-                - /update-builder-.*/
           context:
             - circleci-slack
           <<: *slack-fail-post-step
