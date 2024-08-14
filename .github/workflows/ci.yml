@@ -29,10 +29,51 @@ jobs:
           source .venv/bin/activate
           make lint
 
-  test-app:
+
+  build-image:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/cache/restore@v4
+        id: cache
+        with:
+          path: ".cache"
+          key: ${{ runner.os }}-image-${{ hashFiles('securedrop/dockerfiles/focal/python3/*') }}
+      - if: ${{ steps.cache.outputs.cache-hit == 'true' }}
+        name: Load layers from cache
+        continue-on-error: true
+        run: |
+          docker load -i .cache/layers.tar
+          rm .cache/layers.tar
+      - name: Build image
+        run: |
+          DOCKER_BUILD_VERBOSE=true ./securedrop/bin/dev-shell true
+      - name: Export image layers
+        run: |
+          mkdir -p .cache
+          docker save -o .cache/layers.tar $(docker images -aq)
+      - uses: actions/cache/save@v4
+        with:
+          path: ".cache"
+          key: ${{ steps.cache.outputs.cache-primary-key }}
+
+  test-app:
+    runs-on: ubuntu-latest
+    needs:
+      - build-image
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/cache/restore@v4
+        id: cache
+        with:
+          path: ".cache"
+          key: ${{ runner.os }}-image-${{ hashFiles('securedrop/dockerfiles/focal/python3/*') }}
+      - if: ${{ steps.cache.outputs.cache-hit == 'true' }}
+        name: Load layers from cache
+        continue-on-error: true
+        run: |
+          docker load -i .cache/layers.tar
+          rm .cache/layers.tar
       - name: Build image
         run: |
           DOCKER_BUILD_VERBOSE=true ./securedrop/bin/dev-shell true
@@ -42,8 +83,21 @@ jobs:
 
   test-functional:
     runs-on: ubuntu-latest
+    needs:
+      - build-image
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/cache/restore@v4
+        id: cache
+        with:
+          path: ".cache"
+          key: ${{ runner.os }}-image-${{ hashFiles('securedrop/dockerfiles/focal/python3/*') }}
+      - if: ${{ steps.cache.outputs.cache-hit == 'true' }}
+        name: Load layers from cache
+        continue-on-error: true
+        run: |
+          docker load -i .cache/layers.tar
+          rm .cache/layers.tar
       - name: Build image
         run: |
           DOCKER_BUILD_VERBOSE=true ./securedrop/bin/dev-shell true
@@ -53,8 +107,21 @@ jobs:
 
   test-pageslayout:
     runs-on: ubuntu-latest
+    needs:
+      - build-image
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/cache/restore@v4
+        id: cache
+        with:
+          path: ".cache"
+          key: ${{ runner.os }}-image-${{ hashFiles('securedrop/dockerfiles/focal/python3/*') }}
+      - if: ${{ steps.cache.outputs.cache-hit == 'true' }}
+        name: Load layers from cache
+        continue-on-error: true
+        run: |
+          docker load -i .cache/layers.tar
+          rm .cache/layers.tar
       - name: Build image
         run: |
           DOCKER_BUILD_VERBOSE=true ./securedrop/bin/dev-shell true
