@@ -9,6 +9,13 @@ set -euo pipefail
 TOPLEVEL=$(git rev-parse --show-toplevel)
 source "${BASH_SOURCE%/*}/../../devops/scripts/ticker"
 
+DOCKER_RUN_ARGUMENTS="${DOCKER_RUN_ARGUMENTS:-}"
+
+# Pass -it if we're a tty
+if test -t 0; then
+    DOCKER_RUN_ARGUMENTS="${DOCKER_RUN_ARGUMENTS} -it"
+fi
+
 function docker_image() {
     local out
     out="$(mktemp)"
@@ -26,16 +33,16 @@ function docker_image() {
 }
 
 function docker_run() {
-    if [ -z "${CIRCLECI-}" ]
+    if [ -z "${CI-}" ]
     then
         docker run \
             --rm \
             --user "${USER:-root}" \
             --volume "${TOPLEVEL}:/sd-root:Z" \
             --workdir "/sd-root/admin" \
-            -ti ${DOCKER_RUN_ARGUMENTS:-} securedrop-admin "$@"
+            ${DOCKER_RUN_ARGUMENTS} securedrop-admin "$@"
     else
-        docker run --rm -ti ${DOCKER_RUN_ARGUMENTS:-} securedrop-admin "$@"
+        docker run --rm ${DOCKER_RUN_ARGUMENTS} securedrop-admin "$@"
     fi
 
 }

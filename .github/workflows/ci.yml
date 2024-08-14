@@ -63,3 +63,11 @@ jobs:
           cd journalist_gui
           source .venv/bin/activate
           QT_QPA_PLATFORM=offscreen python3 test_gui.py -v
+
+  admin-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run tests
+        run: |
+          make -C admin test
