@@ -46,6 +46,7 @@ function create_sd_ci_gce_instance() {
           --metadata "ssh-keys=${SSH_USER_NAME}:$(cat $SSH_PUBKEY)"
 
       # Give box a few more seconds for SSH to become available
+      echo "Sleeping for 20s to wait for SSH to become available"
       sleep 20
   fi
 }

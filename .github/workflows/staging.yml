@@ -1,0 +1,23 @@
+name: Staging
+on:
+  push:
+    branches:
+      - 'stg-*'
+      - 'release/*'
+  schedule:
+    - cron: '0 3 * * *'
+
+jobs:
+  staging:
+    runs-on: ubuntu-latest
+    env:
+      GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run staging tests on GCE
+        run: |
+          make ci-go
+      - name: Teardown (if needed)
+        if: always()
+        run: |
+          make ci-teardown || true

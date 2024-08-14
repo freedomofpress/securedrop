@@ -11,4 +11,4 @@ TOPLEVEL="$(git rev-parse --show-toplevel)"
 . "${TOPLEVEL}/devops/gce-nested/ci-env.sh"
 
 # Destroy remote instance
-gcloud_call --quiet compute instances delete "${JOB_NAME}-${BUILD_NUM}"
+gcloud_call compute instances delete "${JOB_NAME}-${BUILD_NUM}"
