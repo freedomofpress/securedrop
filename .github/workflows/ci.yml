@@ -29,6 +29,45 @@ jobs:
           source .venv/bin/activate
           make lint
 
+  test-app:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build image
+        run: |
+          DOCKER_BUILD_VERBOSE=true ./securedrop/bin/dev-shell true
+      - name: Run application tests
+        run: |
+          make test-app
+
+  test-functional:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build image
+        run: |
+          DOCKER_BUILD_VERBOSE=true ./securedrop/bin/dev-shell true
+      - name: Run functional tests
+        run: |
+          make test-functional
+
+  test-pageslayout:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build image
+        run: |
+          DOCKER_BUILD_VERBOSE=true ./securedrop/bin/dev-shell true
+      - name: Run page layout tests
+        run: |
+          make test-pageslayout
+      - name: Validate HTML (informational)
+        run: |
+          make validate-test-html || true
+      - name: Validate accessibility (informational)
+        run: |
+          make accessibility-summary || true
+
   rust:
     runs-on: ubuntu-latest
     # Keep version in sync with rust-toolchain.toml
