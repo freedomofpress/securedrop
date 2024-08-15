@@ -977,14 +977,16 @@ button.icon[data-tooltip] > span.label:before {
   margin-left: 5px;
 }
 
-a {
+a, button.link {
   text-decoration: none;
   color: #0065db;
+  border: none;
   border-bottom: 1px solid rgba(0, 117, 247, 0.4);
 }
 
-a:hover {
+a:hover, button.link:hover {
   color: #2a319d;
+  border: none;
   border-bottom: 1px solid #2a319d;
 }
 
@@ -5586,6 +5588,14 @@ footer img#footer-logo {
 .form-field-hint {
   font-size: 0.9em;
   font-style: italic;
+}
+
+/* Adapted from <https://stackoverflow.com/a/12642009>. */
+button.link {
+  background-color: #fff;
+  letter-spacing: normal;
+  font: inherit;
+  padding: 0;
 }
 
 #replies .reply {

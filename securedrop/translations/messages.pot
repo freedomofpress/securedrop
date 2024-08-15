@@ -434,9 +434,6 @@ msgstr ""
 msgid "Log Out"
 msgstr ""
 
-msgid "LOG OUT"
-msgstr ""
-
 msgid "Return to All Sources"
 msgstr ""
 
@@ -846,6 +843,9 @@ msgid "We're sorry, our SecureDrop is currently offline."
 msgstr ""
 
 msgid "Please try again later. Check our website for more information."
+msgstr ""
+
+msgid "LOG OUT"
 msgstr ""
 
 msgid "Server error"
