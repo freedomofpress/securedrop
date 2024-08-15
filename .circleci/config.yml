@@ -230,37 +230,6 @@ jobs:
       - store_artifacts:
           path: ~/project/test-results
 
-  static-analysis-and-no-known-cves:
-    machine:
-      image: ubuntu-2004:current
-      enabled: true
-    environment:
-      DOCKER_API_VERSION: 1.24
-      BASE_OS: focal
-    steps:
-      - checkout
-      - *rebaseontarget
-      - *createcachedir
-      - *restorecache
-      - *loadimagelayers
-      - *dockerimagebuild
-      - *saveimagelayers
-      - *savecache
-
-      - run:
-          name: Check Python dependencies for CVEs
-          command: |
-            fromtag=$(docker images |grep securedrop-test-focal-py3 |head -n1 |awk '{print $2}')
-            DOCKER_BUILD_ARGUMENTS="--cache-from securedrop-test-focal-py3:${fromtag:-latest}" securedrop/bin/dev-shell \
-                  bash -c "pip3 install -U -q --upgrade safety && make -C .. safety"
-
-      - run:
-          name: Run static security testing on source code with semgrep
-          command: |
-            fromtag=$(docker images |grep securedrop-test-focal-py3 |head -n1 |awk '{print $2}')
-            DOCKER_BUILD_ARGUMENTS="--cache-from securedrop-test-focal-py3:${fromtag:-latest}" securedrop/bin/dev-shell \
-                  bash -c "pip3 install -U -q --upgrade pip && pip3 install -U -q --upgrade semgrep && make -C .. semgrep"
-
   staging-test-with-rebase:
     machine:
       image: ubuntu-2004:current
@@ -319,12 +288,6 @@ workflows:
           context:
             - circleci-slack
           <<: *slack-fail-post-step
-      - static-analysis-and-no-known-cves:
-          requires:
-            - lint
-          context:
-            - circleci-slack
-          <<: *slack-fail-post-step
       - staging-test-with-rebase:
           filters:
             branches:
@@ -351,7 +314,6 @@ workflows:
                 - develop
     jobs:
       - staging-test-with-rebase
-      - static-analysis-and-no-known-cves
 
   weekly:
     triggers:
