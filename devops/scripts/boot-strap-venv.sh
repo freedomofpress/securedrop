@@ -51,7 +51,13 @@ function virtualenv_bootstrap() {
         then
             p=$(command -v "python${PYTHON_VERSION}" 2> /dev/null || command -v python3)
             echo "Creating ${p} virtualenv in ${VENV}"
-            "${p}" -m venv "${VENV}"
+            # be flexible in venv creation, e.g. staging has virtualenv while
+            # deb-tests (GHA runner) has python3-venv
+            if command -v virtualenv > /dev/null; then
+                virtualenv -p "${p}" "${VENV}"
+            else
+                "${p}" -m venv "${VENV}"
+            fi
         fi
 
         PIP_CONSTRAINT=${DEV_CONSTRAINT} "${VENV}/bin/pip" install -q -r "securedrop/requirements/python3/develop-requirements.txt"
