@@ -4,8 +4,8 @@
 
 # If these scripts are run on developer workstations, the CI env
 # vars populated by CircleCI won't be present; make a sane default.
-if [ -z "${CIRCLE_BUILD_NUM:-}" ]; then
-    export CIRCLE_BUILD_NUM="${USER}"
+if [ -z "${GITHUB_RUN_ID:-}" ]; then
+    export GITHUB_RUN_ID="${USER}"
 fi
 
 # Set common vars we'll need throughout the CI scripts.
@@ -13,7 +13,7 @@ TOPLEVEL="$(git rev-parse --show-toplevel)"
 export TOPLEVEL
 GCE_CREDS_FILE="${TOPLEVEL}/.gce.creds"
 export GCE_CREDS_FILE
-export BUILD_NUM="${CIRCLE_BUILD_NUM}"
+export BUILD_NUM="${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
 export PROJECT_ID="securedrop-ci"
 export JOB_NAME="sd-ci-nested"
 export GCLOUD_MACHINE_TYPE="c2-standard-8"
