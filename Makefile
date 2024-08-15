@@ -316,12 +316,24 @@ otp: ## Show (and opportunistically copy) the current development OTP (to the cl
 
 .PHONY: test
 test:  ## Run the test suite in a Docker container.
-	@echo "███ Running SecureDrop application tests..."
+	@echo "███ Running all SecureDrop tests..."
 	@$(DEVSHELL) $(SDBIN)/run-test -v $${TESTFILES:-tests}
 	@echo
 
-.PHONY: test-focal
-test-focal:  test
+.PHONY: test-app
+test-app:  ## Run the application tests
+	@echo "███ Running SecureDrop application tests..."
+	TESTFILES="$(shell cd securedrop; echo tests/test*py)" $(MAKE) test
+
+.PHONY: test-functional
+test-functional:  ## Run the functional tests
+	@echo "███ Running SecureDrop functional tests..."
+	TESTFILES="$(shell cd securedrop; echo tests/functional/test*py)" $(MAKE) test
+
+.PHONY: test-pageslayout
+test-pageslayout:  ## Run the page layout tests
+	@echo "███ Running page layout tests..."
+	TESTFILES="$(shell cd securedrop; echo tests/functional/pageslayout/test*py)" $(MAKE) test
 
 .PHONY: rust-test
 rust-test:
