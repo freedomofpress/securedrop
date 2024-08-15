@@ -1,0 +1,34 @@
+name: Translation
+on:
+  push:
+  schedule:
+    # Weekly on Sundays
+    - cron: '0 3 * * 0'
+
+jobs:
+  locales:
+    runs-on: ubuntu-latest
+    outputs:
+      locales: ${{ steps.locales.outputs.locales }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Generate locale list
+        id: locales
+        run: |
+          echo "locales=$(make supported-locales)" >> "$GITHUB_OUTPUT"
+
+  test:
+    runs-on: ubuntu-latest
+    needs: locales
+    strategy:
+      fail-fast: false
+      matrix:
+        locale: ${{ fromJson(needs.locales.outputs.locales) }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build image
+        run: |
+          DOCKER_BUILD_VERBOSE=true ./securedrop/bin/dev-shell true
+      - name: Run translation tests
+        run: |
+          LOCALES="${{ matrix.locale }}" make translation-test
