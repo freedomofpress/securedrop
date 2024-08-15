@@ -291,42 +291,6 @@ jobs:
       - store_artifacts:
           path: ~/sd/junit
 
-  deb-tests:
-    machine:
-      image: ubuntu-2004:current
-      enabled: true
-    environment:
-      DOCKER_API_VERSION: 1.24
-      BASE_OS: focal
-    steps:
-      - checkout
-      - run:
-          name: Build debs
-          command: |
-            make build-debs
-      - run:
-          name: Build OSSEC debs
-          command: |
-            make build-debs-ossec
-      - run:
-          name: Second round of builds
-          command: |
-            # TODO: use reprotest in the future
-            mv build/focal build/focal-first
-            make build-debs-notest
-            make build-debs-ossec-notest
-            mv build/focal build/focal-second
-      - run:
-          name: Run diffoscope
-          command: |
-            sha256sum build/focal-*/*.deb
-            # FIXME: securedrop-app-code isn't reproducible
-            for pkg in ossec-agent ossec-server securedrop-config securedrop-keyring securedrop-ossec-agent securedrop-ossec-server
-            do
-                echo "Checking ${pkg}..."
-                ./.venv/bin/diffoscope build/focal-first/${pkg}*.deb build/focal-second/${pkg}*.deb
-            done
-
 workflows:
   version: 2
   securedrop_ci:
@@ -376,10 +340,6 @@ workflows:
           context:
             - circleci-slack
           <<: *slack-fail-post-step
-      - deb-tests:
-          context:
-            - circleci-slack
-          <<: *slack-fail-post-step
 
   nightly:
     triggers:
@@ -402,5 +362,4 @@ workflows:
               only:
                 - develop
     jobs:
-      - deb-tests
       - translation-tests
