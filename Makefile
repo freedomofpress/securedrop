@@ -603,15 +603,6 @@ ci-deb-tests:  ## Test SecureDrop Debian packages in CI environment.
 	@$(SDROOT)/devops/scripts/test-built-packages.sh
 	@echo
 
-.PHONY: build-gcloud-docker
-build-gcloud-docker:  ## Build Docker container for Google Cloud SDK.
-	@echo "Building Docker container for Google Cloud SDK..."
-	@echo "${GCLOUD_VERSION}" > devops/gce-nested/gcloud-container.ver && \
-	@docker build --build-arg="GCLOUD_VERSION=${GCLOUD_VERSION}" \
-				 -f devops/docker/Dockerfile.gcloud \
-				 -t "quay.io/freedomofpress/gcloud-sdk:${GCLOUD_VERSION}" .
-	@echo
-
 .PHONY: vagrant-package
 vagrant-package:  ## Package a Vagrant box of the last stable SecureDrop release.
 	@echo "███ Packaging Vagrant box of last stable SecureDrop release."
