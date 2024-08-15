@@ -1,0 +1,58 @@
+name: Translation
+on:
+  push:
+    branches:
+      - 'l10n-*'
+  pull_request:
+  schedule:
+    # Weekly on Sundays
+    - cron: '0 3 * * 0'
+
+# Only build for latest push/PR unless it's main or release/
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' && !startsWith( github.ref, 'refs/heads/release/' ) }}
+
+jobs:
+  locales:
+    runs-on: ubuntu-latest
+    outputs:
+      locales: ${{ steps.locales.outputs.locales }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Generate locale list
+        id: locales
+        run: |
+          # We only want to run if it's:
+          # 1. A pull request from the weblate-fpf user
+          # 2. A scheduled run
+          # 3. A push to a `l10n-*` branch
+          # Two and Three are checked above, so we just need to check One.
+          if [ "${{ github.event_name }}" = "pull_request" ] && [ "${{ github.actor }}" = "weblate-fpf" ]; then
+            echo "locales=$(make supported-locales)" >> "$GITHUB_OUTPUT"
+          else
+            if [ "${{ github.event_name }}" != "pull_request" ]; then
+              echo "locales=$(make supported-locales)" >> "$GITHUB_OUTPUT"
+            else
+              # skip: non weblate-fpf PR, just output an empty list
+              echo "locales=[]" >> "$GITHUB_OUTPUT"
+            fi
+          fi
+
+  test:
+    runs-on: ubuntu-latest
+    needs: locales
+    # If we're in the skip case above, we'll have an empty list
+    if: "join(fromJSON(needs.locales.outputs.locales), '') != ''"
+    strategy:
+      fail-fast: false
+      matrix:
+        locale: ${{ fromJson(needs.locales.outputs.locales) }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build image
+        run: |
+          DOCKER_BUILD_VERBOSE=true ./securedrop/bin/dev-shell true
+      - name: Run translation tests
+        run: |
+          LOCALES="${{ matrix.locale }}" make translation-test

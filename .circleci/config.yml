@@ -101,47 +101,6 @@ jobs:
             DOCKER_BUILD_ARGUMENTS="--cache-from securedrop-test-focal-py3:${fromtag:-latest}" securedrop/bin/dev-shell \
                   bash -c "/opt/venvs/securedrop-app-code/bin/pip3 install --require-hashes -r requirements/python3/develop-requirements.txt && make -C .. verify-mo"
 
-  translation-tests:
-    machine:
-      image: ubuntu-2004:current
-      enabled: true
-    environment:
-      DOCKER_API_VERSION: 1.24
-      BASE_OS: focal
-    parallelism: 21
-    steps:
-      - run:
-          name: Only run on translation pull requests
-          command: |
-            if [ "$CIRCLE_PR_USERNAME" != "weblate-fpf" ]; then
-                circleci-agent step halt
-            fi
-
-      - checkout
-      - *rebaseontarget
-      - *createcachedir
-      - *restorecache
-      - *loadimagelayers
-      - *dockerimagebuild
-      - *saveimagelayers
-      - *savecache
-
-      - run:
-          name: Run tests
-          command: |
-            sudo apt update && sudo apt install python3-sh python3-babel
-            NUM_SUPPORTED_LOCALES="$(make count-supported-locales)"
-            [[ "$NUM_SUPPORTED_LOCALES" -eq "$CIRCLE_NODE_TOTAL" ]] || { echo "Parallelism (${CIRCLE_NODE_TOTAL} must equal the number of supported languages (${NUM_SUPPORTED_LOCALES})."; exit 1; }
-            export LOCALES="$(make supported-locales | jq --raw-output 'join("\n")' | circleci tests split)"
-            fromtag=$(docker images | grep securedrop-test-focal-py3 | head -n1 | awk '{print $2}')
-            DOCKER_BUILD_ARGUMENTS="--cache-from securedrop-test-focal-py3:${fromtag:-latest}" make translation-test
-
-      - store_test_results:
-          path: ~/project/test-results
-
-      - store_artifacts:
-          path: ~/project/test-results
-
   staging-test-with-rebase:
     machine:
       image: ubuntu-2004:current
@@ -189,12 +148,6 @@ workflows:
           context:
             - circleci-slack
           <<: *slack-fail-post-step
-      - translation-tests:
-          requires:
-            - lint
-          context:
-            - circleci-slack
-          <<: *slack-fail-post-step
 
   nightly:
     triggers:
@@ -206,14 +159,3 @@ workflows:
                 - develop
     jobs:
       - staging-test-with-rebase
-
-  weekly:
-    triggers:
-      - schedule:
-          cron: "0 0 * * 0"
-          filters:
-            branches:
-              only:
-                - develop
-    jobs:
-      - translation-tests
