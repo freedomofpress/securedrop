@@ -49,6 +49,7 @@ function generate_gce_creds_file() {
         fi
     fi
 
+    # Prime the "gcloud-config" container by authenticating from $GCE_CREDS_FILE.
     if ! docker inspect --format '{{ .Id }}' gcloud-config > /dev/null 2>&1; then
         docker run \
             --env="CLOUDSDK_COMPUTE_ZONE=${CLOUDSDK_COMPUTE_ZONE}" \
@@ -59,8 +60,7 @@ function generate_gce_creds_file() {
     fi
 }
 
-# Wrapper function to communicate with the gcloud API. Ensure gcloud-sdk
-# container is running, and if so, pass all args to it.
+# Each gcloud_call() invocation just runs a fresh (note "--rm") instance of the "google-cloud-cli" container primed from "gcloud-config" above.
 function gcloud_call() {
     docker run --rm \
         --volumes-from gcloud-config \
