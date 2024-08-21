@@ -126,6 +126,48 @@
   tags:
     - securedrop_config
 
+- name: Generate 32-byte value for "redis password".
+  shell: "head -c 32 /dev/urandom | base64"
+  register: redis_password
+  when: not config.stat.exists
+  tags:
+    - securedrop_config
+
+- name: Add 32-byte value for "redis password" to config.py.
+  lineinfile:
+    dest: "{{ securedrop_code }}/config.py"
+    regexp: "redis_password"
+    line: "REDIS_PASSWORD = '{{ redis_password.stdout }}'"
+  when: not config.stat.exists
+  tags:
+    - securedrop_config
+
+- name: Create rq_config.py with the redis password
+  copy:
+    content: "REDIS_PASSWORD = \"{{ redis_password.stdout }}\""
+    dest: "{{ securedrop_code }}/rq_config.py"
+    owner: "root"
+    group: "www-data"
+    mode: "0640"
+  when: not config.stat.exists
+  tags:
+    - securedrop_config
+
+- name: Add 32-byte value for "redis password" to /etc/redis/redis.conf.
+  lineinfile:
+    dest: "/etc/redis/redis.conf"
+    regexp: "^requirepass"
+    line: "requirepass {{ redis_password.stdout }}"
+    insertafter: EOF
+  when: not config.stat.exists
+  register: redis_conf
+
+- name: Restart redis
+  service:
+    name: redis-server
+    state: restarted
+  when: redis_conf.changed
+
 - name: Declare Application GPG fingerprint in config.py.
   lineinfile:
     dest: "{{ securedrop_code }}/config.py"

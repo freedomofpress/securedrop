@@ -5,6 +5,7 @@ import pytest
 from db import db
 from encryption import EncryptionManager, GpgDecryptError, GpgKeyNotFoundError
 from passphrases import PassphraseGenerator
+from redis import Redis
 from source_user import create_source_user
 from tests import utils
 
@@ -262,6 +263,7 @@ class TestEncryptionManager:
         encryption_mgr = EncryptionManager(
             gpg_key_dir=tmp_path,
             journalist_pub_key=(config.SECUREDROP_DATA_ROOT / "journalist.pub"),
+            redis=Redis(decode_responses=True, **config.REDIS_KWARGS),
         )
         new_fingerprint = utils.create_legacy_gpg_key(encryption_mgr, source_user, source)
         secret_key = encryption_mgr.get_source_secret_key_from_gpg(

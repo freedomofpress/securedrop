@@ -1,6 +1,7 @@
 import json
 from datetime import datetime, timedelta, timezone
 
+import pytest
 from flask import Response, url_for
 from flask.sessions import session_json_serializer
 from itsdangerous import URLSafeTimedSerializer
@@ -9,9 +10,12 @@ from tests.utils import login_journalist
 from tests.utils.api_helper import get_api_headers
 from two_factor import TOTP
 
-redis = Redis()
-
 NEW_PASSWORD = "another correct horse battery staple generic passphrase"
+
+
+@pytest.fixture()
+def redis(config):
+    return Redis(**config.REDIS_KWARGS)
 
 
 # Helper function to check if session cookie are properly signed
@@ -28,7 +32,7 @@ def _check_sig(session_cookie, journalist_app, api=False):
 
 # Helper function to get a session payload from redis
 # Returns the unserialized session payload
-def _get_session(sid, journalist_app, api=False):
+def _get_session(sid, journalist_app, redis, api=False):
     if api:
         key = "api_" + journalist_app.config["SESSION_KEY_PREFIX"] + sid
     else:
@@ -51,7 +55,7 @@ def _session_from_cookiejar(cookie_jar, journalist_app):
 
 
 # Test a standard login sequence
-def test_session_login(journalist_app, test_journo):
+def test_session_login(journalist_app, test_journo, redis):
     # Given a test client and a valid journalist user
     with journalist_app.test_client() as app:
         # When sending a correct login request
@@ -67,7 +71,7 @@ def test_session_login(journalist_app, test_journo):
         # Then such cookie is properly signed
         sid = _check_sig(session_cookie.value, journalist_app)
         # Then such session cookie has a corresponding payload in redis
-        redis_session = _get_session(sid, journalist_app)
+        redis_session = _get_session(sid, journalist_app, redis)
         ttl = redis.ttl(journalist_app.config["SESSION_KEY_PREFIX"] + sid)
 
         # Then the TTL of such key in redis conforms to the lifetime configuration
@@ -87,7 +91,7 @@ def test_session_login(journalist_app, test_journo):
 
 
 # Test a standard session renewal sequence
-def test_session_renew(journalist_app, test_journo):
+def test_session_renew(journalist_app, test_journo, redis):
     # Given a test client and a valid journalist user
     with journalist_app.test_client() as app:
         # When sending a correct login request
@@ -99,7 +103,7 @@ def test_session_renew(journalist_app, test_journo):
         assert session_cookie is not None
 
         sid = _check_sig(session_cookie.value, journalist_app)
-        redis_session = _get_session(sid, journalist_app)
+        redis_session = _get_session(sid, journalist_app, redis)
         # The `renew_count` must exists in the session payload and must be equal to the app config
         assert redis_session["renew_count"] == journalist_app.config["SESSION_RENEW_COUNT"]
 
@@ -116,7 +120,7 @@ def test_session_renew(journalist_app, test_journo):
         assert resp.status_code == 200
 
         # Then the corresponding renew_count in redis must have been decreased
-        redis_session = _get_session(sid, journalist_app)
+        redis_session = _get_session(sid, journalist_app, redis)
         assert redis_session["renew_count"] == (journalist_app.config["SESSION_RENEW_COUNT"] - 1)
 
         # Then the ttl must have been updated and the new lifetime must be > of app confing lifetime
@@ -126,7 +130,7 @@ def test_session_renew(journalist_app, test_journo):
 
 
 # Test a standard login then logout sequence
-def test_session_logout(journalist_app, test_journo):
+def test_session_logout(journalist_app, test_journo, redis):
     # Given a test client and a valid journalist user
     with journalist_app.test_client() as app:
         # When sending a correct login request
@@ -153,7 +157,7 @@ def test_session_logout(journalist_app, test_journo):
 
 
 # Test the user forced logout when an admin changes the user password
-def test_session_admin_change_password_logout(journalist_app, test_journo, test_admin):
+def test_session_admin_change_password_logout(journalist_app, test_journo, test_admin, redis):
     # Given a test client and a valid journalist user
     with journalist_app.test_client() as app:
         # When sending a correct login request
@@ -204,7 +208,7 @@ def test_session_admin_change_password_logout(journalist_app, test_journo, test_
 
 
 # Test the forced logout when the user changes its password
-def test_session_change_password_logout(journalist_app, test_journo):
+def test_session_change_password_logout(journalist_app, test_journo, redis):
     # Given a test client and a valid journalist user
     with journalist_app.test_client() as app:
         # When sending a correct login request
@@ -260,7 +264,7 @@ def test_session_login_regenerate_sid(journalist_app, test_journo):
 
 
 # Test a standard `get_token` API login
-def test_session_api_login(journalist_app, test_journo):
+def test_session_api_login(journalist_app, test_journo, redis):
     # Given a test client and a valid journalist user
     with journalist_app.test_client() as app:
         # When sending a `get_token` request to the API with valid creds
@@ -282,7 +286,7 @@ def test_session_api_login(journalist_app, test_journo):
 
         # Then such token is properly signed
         sid = _check_sig(resp.json["token"], journalist_app, api=True)
-        redis_session = _get_session(sid, journalist_app, api=True)
+        redis_session = _get_session(sid, journalist_app, redis, api=True)
         # Then the session id in redis match that of the credentials
         assert redis_session["uid"] == test_journo["id"]
 
@@ -314,7 +318,7 @@ def test_session_api_login(journalist_app, test_journo):
 
 
 # test a standard login then logout from API
-def test_session_api_logout(journalist_app, test_journo):
+def test_session_api_logout(journalist_app, test_journo, redis):
     # Given a test client and a valid journalist user
     with journalist_app.test_client() as app:
         # When sending a valid login request and asking an API token
@@ -428,7 +432,7 @@ def test_session_bad_signature(journalist_app, test_journo):
 # To avoid this, save_session() uses a setxx call, which writes in redis only if the key exists.
 # This does not apply when the session is new or is being regenerated.
 # Test that a deleted session cannot be rewritten by a race condition
-def test_session_race_condition(mocker, journalist_app, test_journo):
+def test_session_race_condition(mocker, journalist_app, test_journo, redis):
     # Given a test client and a valid journalist user
     with journalist_app.test_request_context() as app:
         # When manually creating a session in the context

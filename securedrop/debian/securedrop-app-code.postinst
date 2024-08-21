@@ -192,6 +192,22 @@ export_journalist_public_key() {
 
 }
 
+# Password-protect access to Redis
+set_redis_password() {
+    # Only run when upgrading, which means config.py exists and rq_config.py does not.
+    if ! test -f "/var/www/securedrop/rq_config.py" && test -f "/var/www/securedrop/config.py"; then
+        password=$(head -c 32 /dev/urandom | base64)
+        echo "requirepass $password" | sudo -u redis tee -a /etc/redis/redis.conf
+        # Set in config.py for web apps
+        echo "REDIS_PASSWORD = \"$password\"" >> /var/www/securedrop/config.py
+        # Create separate rq_config for rqworker
+        touch /var/www/securedrop/rq_config.py
+        chown root:www-data /var/www/securedrop/rq_config.py
+        chmod 640 /var/www/securedrop/rq_config.py
+        echo "REDIS_PASSWORD = \"$password\"" > /var/www/securedrop/rq_config.py
+        service redis-server restart
+    fi
+}
 
 case "$1" in
     configure)
@@ -290,6 +306,9 @@ case "$1" in
 
     # GPG -> Sequoia migration
     export_journalist_public_key
+
+    # Set redis password
+    set_redis_password
 
     # Version migrations
     database_migration

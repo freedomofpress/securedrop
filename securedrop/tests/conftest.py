@@ -332,6 +332,8 @@ def _start_test_rqworker(worker_name: str, worker_pid_file: Path, securedrop_roo
                 worker_name,
                 "-P",
                 securedrop_root,
+                "-c",
+                "rq_config",
                 "--pid",
                 worker_pid_file,
                 "--logging_level",
