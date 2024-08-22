@@ -19,7 +19,13 @@ from flask_babel import gettext
 from journalist_app.decorators import admin_required
 from journalist_app.forms import LogoForm, NewUserForm, OrgNameForm, SubmissionPreferencesForm
 from journalist_app.sessions import session
-from journalist_app.utils import commit_account_changes, set_diceware_password, validate_hotp_secret
+from journalist_app.utils import (
+    commit_account_changes,
+    set_diceware_password,
+    set_pending_password,
+    validate_hotp_secret,
+    verify_pending_password,
+)
 from models import (
     FirstOrLastNameError,
     InstanceConfig,
@@ -152,6 +158,7 @@ def make_blueprint() -> Blueprint:
                 otp_secret = None
                 if request.form.get("is_hotp", False):
                     otp_secret = request.form.get("otp_secret", "")
+                verify_pending_password(for_="new", passphrase=password)
                 new_user = Journalist(
                     username=username,
                     password=password,
@@ -215,6 +222,8 @@ def make_blueprint() -> Blueprint:
         password = PassphraseGenerator.get_default().generate_passphrase(
             preferred_language=g.localeinfo.language
         )
+        # Store password in session for future verification
+        set_pending_password("new", password)
         return render_template("admin_add_user.html", password=password, form=form)
 
     @view.route("/2fa", methods=("GET", "POST"))
@@ -321,6 +330,8 @@ def make_blueprint() -> Blueprint:
         password = PassphraseGenerator.get_default().generate_passphrase(
             preferred_language=g.localeinfo.language
         )
+        # Store password in session for future verification
+        set_pending_password(user, password)
         return render_template("edit_account.html", user=user, password=password)
 
     @view.route("/delete/<int:user_id>", methods=("POST",))

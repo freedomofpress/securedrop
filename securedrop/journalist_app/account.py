@@ -8,6 +8,7 @@ from journalist_app.sessions import session
 from journalist_app.utils import (
     set_diceware_password,
     set_name,
+    set_pending_password,
     validate_hotp_secret,
     validate_user,
 )
@@ -23,6 +24,8 @@ def make_blueprint() -> Blueprint:
         password = PassphraseGenerator.get_default().generate_passphrase(
             preferred_language=g.localeinfo.language
         )
+        # Store password in session for future verification
+        set_pending_password(session.get_user(), password)
         return render_template("edit_account.html", password=password)
 
     @view.route("/change-name", methods=("POST",))

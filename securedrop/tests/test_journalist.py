@@ -600,6 +600,7 @@ def test_admin_cannot_edit_own_password_without_validation(
         login_journalist(
             app, test_admin["username"], test_admin["password"], test_admin["otp_secret"]
         )
+        utils.prepare_password_change(app, test_admin["id"], VALID_PASSWORD)
 
         resp = app.post(
             url_for("admin.new_password", user_id=test_admin["id"], l=locale),
@@ -618,6 +619,7 @@ def test_admin_cannot_edit_own_password_without_validation(
 def test_admin_edits_user_password_success_response(
     config, journalist_app, test_admin, test_journo, locale
 ):
+    """Verify the flow of an admin resetting another journalist's password"""
     with journalist_app.test_client() as app:
         login_journalist(
             app,
@@ -625,10 +627,14 @@ def test_admin_edits_user_password_success_response(
             test_admin["password"],
             test_admin["otp_secret"],
         )
+        # First obtain a randomly generated password from the server
+        first = app.get(url_for("admin.edit_user", user_id=test_journo["id"], l=locale))
+        password = utils.extract_password(first.data)
 
+        # Then send it back
         resp = app.post(
             url_for("admin.new_password", user_id=test_journo["id"], l=locale),
-            data=dict(password=VALID_PASSWORD_2),
+            data=dict(password=password),
             follow_redirects=True,
         )
         assert resp.status_code == 200
@@ -639,7 +645,7 @@ def test_admin_edits_user_password_success_response(
         with xfail_untranslated_messages(config, locale, msgids):
             resp_text = resp.data.decode("utf-8")
             assert escape(gettext(msgids[0])) in resp_text
-            assert VALID_PASSWORD_2 in resp_text
+            assert password in resp_text
 
 
 @flaky(rerun_filter=utils.flaky_filter_xfail)
@@ -664,6 +670,7 @@ def test_admin_edits_user_password_session_invalidate(
                 test_admin["password"],
                 test_admin["otp_secret"],
             )
+            utils.prepare_password_change(admin_app, test_journo["id"], VALID_PASSWORD_2)
 
             resp = admin_app.post(
                 url_for("admin.new_password", user_id=test_journo["id"], l=locale),
@@ -679,6 +686,68 @@ def test_admin_edits_user_password_session_invalidate(
                 resp_text = resp.data.decode("utf-8")
                 assert escape(gettext(msgids[0])) in resp_text
                 assert VALID_PASSWORD_2 in resp_text
+
+
+@flaky(rerun_filter=utils.flaky_filter_xfail)
+@pytest.mark.parametrize("locale", get_test_locales())
+def test_admin_edits_user_password_invalid_different(
+    config, journalist_app, test_admin, test_journo, locale
+):
+    """Test if the admin submits a different password than the one they received"""
+    with journalist_app.test_client() as app:
+        login_journalist(
+            app,
+            test_admin["username"],
+            test_admin["password"],
+            test_admin["otp_secret"],
+        )
+        # First obtain a randomly generated password from the server
+        first = app.get(url_for("admin.edit_user", user_id=test_journo["id"], l=locale))
+        password = utils.extract_password(first.data)
+
+        # No freak random collisions
+        assert password != VALID_PASSWORD_2
+
+        # Then send back a different password
+        resp = app.post(
+            url_for("admin.new_password", user_id=test_journo["id"], l=locale),
+            data=dict(password=VALID_PASSWORD_2),
+            follow_redirects=True,
+        )
+        assert resp.status_code == 200
+        assert page_language(resp.data) == language_tag(locale)
+        msgids = ["The password you submitted is invalid. Password not changed."]
+        with xfail_untranslated_messages(config, locale, msgids):
+            resp_text = resp.data.decode("utf-8")
+            assert escape(gettext(msgids[0])) in resp_text
+
+
+@flaky(rerun_filter=utils.flaky_filter_xfail)
+@pytest.mark.parametrize("locale", get_test_locales())
+def test_admin_edits_user_password_invalid_nopending(
+    config, journalist_app, test_admin, test_journo, locale
+):
+    """Test if the user submits a password without receiving one from the server first"""
+    with journalist_app.test_client() as app:
+        login_journalist(
+            app,
+            test_admin["username"],
+            test_admin["password"],
+            test_admin["otp_secret"],
+        )
+
+        # We explicitly do not fetch a password from the server nor set a pending one
+        resp = app.post(
+            url_for("admin.new_password", user_id=test_journo["id"], l=locale),
+            data=dict(password=VALID_PASSWORD_2),
+            follow_redirects=True,
+        )
+        assert resp.status_code == 200
+        assert page_language(resp.data) == language_tag(locale)
+        msgids = ["The password you submitted is invalid. Password not changed."]
+        with xfail_untranslated_messages(config, locale, msgids):
+            resp_text = resp.data.decode("utf-8")
+            assert escape(gettext(msgids[0])) in resp_text
 
 
 def test_admin_deletes_invalid_user_404(journalist_app, test_admin):
@@ -725,6 +794,7 @@ def test_admin_edits_user_password_error_response(
             test_admin["password"],
             test_admin["otp_secret"],
         )
+        utils.prepare_password_change(app, test_journo["id"], VALID_PASSWORD_2)
 
         with patch("sqlalchemy.orm.scoping.scoped_session.commit", side_effect=Exception()):
             with InstrumentedApp(journalist_app) as ins:
@@ -750,6 +820,7 @@ def test_user_edits_password_success_response(config, journalist_app, test_journ
         login_journalist(
             app, test_journo["username"], test_journo["password"], test_journo["otp_secret"]
         )
+        utils.prepare_password_change(app, test_journo["id"], VALID_PASSWORD_2)
         token = TOTP(test_journo["otp_secret"]).now()
         resp = app.post(
             url_for("account.new_password", l=locale),
@@ -776,6 +847,7 @@ def test_user_edits_password_expires_session(journalist_app, test_journo):
             app, test_journo["username"], test_journo["password"], test_journo["otp_secret"]
         )
         assert "uid" in session
+        utils.prepare_password_change(app, test_journo["id"], VALID_PASSWORD_2)
 
         with InstrumentedApp(journalist_app) as ins:
             token = TOTP(test_journo["otp_secret"]).now()
@@ -802,6 +874,7 @@ def test_user_edits_password_error_response(config, journalist_app, test_journo,
         login_journalist(
             app, test_journo["username"], test_journo["password"], test_journo["otp_secret"]
         )
+        utils.prepare_password_change(app, test_journo["id"], VALID_PASSWORD_2)
 
         # patch token verification because there are multiple commits
         # to the database and this isolates the one we want to fail
@@ -840,6 +913,7 @@ def test_admin_add_user_when_username_already_taken(config, journalist_app, test
             test_admin["password"],
             test_admin["otp_secret"],
         )
+        utils.prepare_password_change(client, "new", VALID_PASSWORD)
         with InstrumentedApp(journalist_app) as ins:
             resp = client.post(
                 url_for("admin.add_user", l=locale),
@@ -914,6 +988,8 @@ def test_admin_edits_user_password_too_long_warning(journalist_app, test_admin, 
             test_admin["password"],
             test_admin["otp_secret"],
         )
+        utils.prepare_password_change(app, test_journo["id"], overly_long_password)
+
         with InstrumentedApp(journalist_app) as ins:
             app.post(
                 url_for("admin.new_password", user_id=test_journo["id"]),
@@ -945,6 +1021,7 @@ def test_user_edits_password_too_long_warning(config, journalist_app, test_journ
             test_journo["password"],
             test_journo["otp_secret"],
         )
+        utils.prepare_password_change(app, test_journo["id"], overly_long_password)
 
         with InstrumentedApp(journalist_app) as ins:
             app.post(
@@ -980,6 +1057,7 @@ def test_admin_add_user_password_too_long_warning(config, journalist_app, test_a
             test_admin["password"],
             test_admin["otp_secret"],
         )
+        utils.prepare_password_change(app, "new", overly_long_password)
 
         with InstrumentedApp(journalist_app) as ins:
             resp = app.post(
@@ -1014,6 +1092,7 @@ def test_admin_add_user_first_name_too_long_warning(config, journalist_app, test
             test_admin["password"],
             test_admin["otp_secret"],
         )
+        utils.prepare_password_change(app, "new", VALID_PASSWORD)
 
         resp = app.post(
             url_for("admin.add_user", l=locale),
@@ -1047,6 +1126,7 @@ def test_admin_add_user_last_name_too_long_warning(config, journalist_app, test_
             test_admin["password"],
             test_admin["otp_secret"],
         )
+        utils.prepare_password_change(app, "new", VALID_PASSWORD)
 
         resp = app.post(
             url_for("admin.add_user", l=locale),
@@ -1477,6 +1557,7 @@ def test_http_get_on_admin_add_user_page(config, journalist_app, test_admin, loc
 
 
 def test_admin_add_user(journalist_app, test_admin):
+    """Test the workflow of adding a new journalist"""
     username = "dellsberg"
 
     with journalist_app.test_client() as app:
@@ -1487,6 +1568,11 @@ def test_admin_add_user(journalist_app, test_admin):
             test_admin["otp_secret"],
         )
 
+        # Get the autogenerated password
+        first = app.get(url_for("admin.add_user"))
+        assert first.status_code == 200
+        password = utils.extract_password(first.data)
+
         with InstrumentedApp(journalist_app) as ins:
             resp = app.post(
                 url_for("admin.add_user"),
@@ -1494,7 +1580,7 @@ def test_admin_add_user(journalist_app, test_admin):
                     username=username,
                     first_name="",
                     last_name="",
-                    password=VALID_PASSWORD,
+                    password=password,
                     otp_secret="",
                     is_admin=None,
                 ),
@@ -1502,6 +1588,83 @@ def test_admin_add_user(journalist_app, test_admin):
 
             new_user = Journalist.query.filter_by(username=username).one()
             ins.assert_redirects(resp, url_for("admin.new_user_two_factor", uid=new_user.id))
+
+
+@flaky(rerun_filter=utils.flaky_filter_xfail)
+@pytest.mark.parametrize("locale", get_test_locales())
+def test_admin_add_user_invalid_different_password(config, journalist_app, test_admin, locale):
+    """The admin submits a different password than the one given"""
+    username = "dellsberg"
+
+    with journalist_app.test_client() as app:
+        login_journalist(
+            app,
+            test_admin["username"],
+            test_admin["password"],
+            test_admin["otp_secret"],
+        )
+
+        # Get the autogenerated password
+        first = app.get(url_for("admin.add_user", l=locale))
+        assert first.status_code == 200
+        password = utils.extract_password(first.data)
+
+        # No freak random collisions
+        assert password != VALID_PASSWORD
+
+        resp = app.post(
+            url_for("admin.add_user", l=locale),
+            data=dict(
+                username=username,
+                first_name="",
+                last_name="",
+                password=VALID_PASSWORD,
+                otp_secret="",
+                is_admin=None,
+            ),
+        )
+        assert page_language(resp.data) == language_tag(locale)
+        msgids = [
+            "There was an error with the autogenerated password. "
+            "User not created. Please try again."
+        ]
+        with xfail_untranslated_messages(config, locale, msgids):
+            assert escape(gettext(msgids[0])) in resp.data.decode("utf-8")
+
+
+@flaky(rerun_filter=utils.flaky_filter_xfail)
+@pytest.mark.parametrize("locale", get_test_locales())
+def test_admin_add_user_invalid_nopending(config, journalist_app, test_admin, locale):
+    """The admin does not get a random password from the server"""
+    username = "dellsberg"
+
+    with journalist_app.test_client() as app:
+        login_journalist(
+            app,
+            test_admin["username"],
+            test_admin["password"],
+            test_admin["otp_secret"],
+        )
+
+        # We explicitly do not fetch a password from the server nor set a pending one
+        resp = app.post(
+            url_for("admin.add_user", l=locale),
+            data=dict(
+                username=username,
+                first_name="",
+                last_name="",
+                password=VALID_PASSWORD,
+                otp_secret="",
+                is_admin=None,
+            ),
+        )
+        assert page_language(resp.data) == language_tag(locale)
+        msgids = [
+            "There was an error with the autogenerated password. "
+            "User not created. Please try again."
+        ]
+        with xfail_untranslated_messages(config, locale, msgids):
+            assert escape(gettext(msgids[0])) in resp.data.decode("utf-8")
 
 
 @flaky(rerun_filter=utils.flaky_filter_xfail)
@@ -1516,6 +1679,7 @@ def test_admin_add_user_with_invalid_username(config, journalist_app, test_admin
             test_admin["password"],
             test_admin["otp_secret"],
         )
+        utils.prepare_password_change(app, "new", VALID_PASSWORD)
 
         resp = app.post(
             url_for("admin.add_user", l=locale),
@@ -1596,6 +1760,7 @@ def test_admin_add_user_without_username(config, journalist_app, test_admin, loc
             test_admin["password"],
             test_admin["otp_secret"],
         )
+        utils.prepare_password_change(app, "new", VALID_PASSWORD)
 
         resp = app.post(
             url_for("admin.add_user", l=locale),
@@ -1627,6 +1792,9 @@ def test_admin_add_user_too_short_username(config, journalist_app, test_admin, l
             test_admin["password"],
             test_admin["otp_secret"],
         )
+        # this will never be possible in real circumstances, but verify that later
+        # checks would reject such a password
+        utils.prepare_password_change(app, "new", "pentagonpapers")
 
         resp = app.post(
             url_for("admin.add_user", l=locale),
@@ -1668,6 +1836,7 @@ def test_admin_add_user_yubikey_odd_length(config, journalist_app, test_admin, l
             test_admin["password"],
             test_admin["otp_secret"],
         )
+        utils.prepare_password_change(app, "new", VALID_PASSWORD)
 
         resp = app.post(
             url_for("admin.add_user", l=locale),
@@ -1706,6 +1875,7 @@ def test_admin_add_user_yubikey_blank_secret(config, journalist_app, test_admin,
             test_admin["password"],
             test_admin["otp_secret"],
         )
+        utils.prepare_password_change(app, "new", VALID_PASSWORD)
 
         resp = app.post(
             url_for("admin.add_user", l=locale),
@@ -1740,6 +1910,7 @@ def test_admin_add_user_yubikey_valid_length(config, journalist_app, test_admin,
             test_admin["password"],
             test_admin["otp_secret"],
         )
+        utils.prepare_password_change(app, "new", VALID_PASSWORD)
 
         resp = app.post(
             url_for("admin.add_user", l=locale),
@@ -1776,6 +1947,7 @@ def test_admin_add_user_yubikey_correct_length_with_whitespace(
             test_admin["password"],
             test_admin["otp_secret"],
         )
+        utils.prepare_password_change(app, "new", VALID_PASSWORD)
 
         resp = app.post(
             url_for("admin.add_user", l=locale),
@@ -1808,6 +1980,7 @@ def test_admin_sets_user_to_admin(journalist_app, test_admin):
             test_admin["password"],
             test_admin["otp_secret"],
         )
+        utils.prepare_password_change(app, "new", VALID_PASSWORD)
 
         resp = app.post(
             url_for("admin.add_user"),
@@ -1820,6 +1993,7 @@ def test_admin_sets_user_to_admin(journalist_app, test_admin):
                 is_admin=None,
             ),
         )
+        print(resp.data.decode("utf-8"))
         assert resp.status_code in (200, 302)
 
         journo = Journalist.query.filter_by(username=new_user).one()
@@ -1846,6 +2020,7 @@ def test_admin_renames_user(journalist_app, test_admin):
             test_admin["password"],
             test_admin["otp_secret"],
         )
+        utils.prepare_password_change(app, "new", VALID_PASSWORD)
 
         resp = app.post(
             url_for("admin.add_user"),
@@ -1883,6 +2058,7 @@ def test_admin_adds_first_name_last_name_to_user(journalist_app, test_admin):
             test_admin["password"],
             test_admin["otp_secret"],
         )
+        utils.prepare_password_change(app, "new", VALID_PASSWORD)
 
         resp = app.post(
             url_for("admin.add_user"),
@@ -1921,6 +2097,7 @@ def test_admin_adds_invalid_first_last_name_to_user(config, journalist_app, test
             test_admin["password"],
             test_admin["otp_secret"],
         )
+        utils.prepare_password_change(client, "new", VALID_PASSWORD)
 
         resp = client.post(
             url_for("admin.add_user"),
@@ -1974,6 +2151,7 @@ def test_admin_add_user_integrity_error(config, journalist_app, test_admin, mock
             test_admin["password"],
             test_admin["otp_secret"],
         )
+        utils.prepare_password_change(app, "new", VALID_PASSWORD)
 
         with InstrumentedApp(journalist_app) as ins:
             resp = app.post(
@@ -2514,6 +2692,7 @@ def test_incorrect_current_password_change(config, journalist_app, test_journo, 
             test_journo["password"],
             test_journo["otp_secret"],
         )
+        utils.prepare_password_change(app, test_journo["id"], VALID_PASSWORD)
         with InstrumentedApp(journalist_app) as ins:
             resp = app.post(
                 url_for("account.new_password", l=locale),
@@ -2629,6 +2808,7 @@ def test_too_long_user_password_change(config, journalist_app, test_journo, loca
             test_journo["password"],
             test_journo["otp_secret"],
         )
+        utils.prepare_password_change(app, test_journo["id"], overly_long_password)
 
         with InstrumentedApp(journalist_app) as ins:
             resp = app.post(
@@ -2650,6 +2830,7 @@ def test_too_long_user_password_change(config, journalist_app, test_journo, loca
 @flaky(rerun_filter=utils.flaky_filter_xfail)
 @pytest.mark.parametrize("locale", get_test_locales())
 def test_valid_user_password_change(config, journalist_app, test_journo, locale):
+    """Test a successful password change flow"""
     with journalist_app.test_client() as app:
         login_journalist(
             app,
@@ -2658,10 +2839,16 @@ def test_valid_user_password_change(config, journalist_app, test_journo, locale)
             test_journo["otp_secret"],
         )
 
+        # First obtain a randomly generated password from the server
+        first = app.get(url_for("account.edit", l=locale))
+        assert first.status_code == 200
+        password = utils.extract_password(first.data)
+
+        # Then send it back
         resp = app.post(
             url_for("account.new_password", l=locale),
             data=dict(
-                password=VALID_PASSWORD_2,
+                password=password,
                 token=TOTP(test_journo["otp_secret"]).now(),
                 current_password=test_journo["password"],
             ),
@@ -2672,6 +2859,73 @@ def test_valid_user_password_change(config, journalist_app, test_journo, locale)
         msgids = [
             "Password updated. Don't forget to save it in your KeePassX database. New password:"
         ]
+        with xfail_untranslated_messages(config, locale, msgids):
+            assert escape(gettext(msgids[0])) in resp.data.decode("utf-8")
+            assert password in resp.data.decode()
+
+
+@flaky(rerun_filter=utils.flaky_filter_xfail)
+@pytest.mark.parametrize("locale", get_test_locales())
+def test_invalid_user_password_change_different(config, journalist_app, test_journo, locale):
+    """Test if the user submits a different password than the one they received"""
+    with journalist_app.test_client() as app:
+        login_journalist(
+            app,
+            test_journo["username"],
+            test_journo["password"],
+            test_journo["otp_secret"],
+        )
+
+        # First obtain a randomly generated password from the server
+        first = app.get(url_for("account.edit", l=locale))
+        assert first.status_code == 200
+        password = utils.extract_password(first.data)
+
+        # No freak random collisions
+        assert password != VALID_PASSWORD
+
+        # Then send back a different password
+        resp = app.post(
+            url_for("account.new_password", l=locale),
+            data=dict(
+                password=VALID_PASSWORD,
+                token=TOTP(test_journo["otp_secret"]).now(),
+                current_password=test_journo["password"],
+            ),
+            follow_redirects=True,
+        )
+
+        assert page_language(resp.data) == language_tag(locale)
+        msgids = ["The password you submitted is invalid. Password not changed."]
+        with xfail_untranslated_messages(config, locale, msgids):
+            assert escape(gettext(msgids[0])) in resp.data.decode("utf-8")
+
+
+@flaky(rerun_filter=utils.flaky_filter_xfail)
+@pytest.mark.parametrize("locale", get_test_locales())
+def test_invalid_user_password_change_nopending(config, journalist_app, test_journo, locale):
+    """Test if the user submits a password without receiving one from the server first"""
+    with journalist_app.test_client() as app:
+        login_journalist(
+            app,
+            test_journo["username"],
+            test_journo["password"],
+            test_journo["otp_secret"],
+        )
+
+        # We explicitly do not fetch a password from the server nor set a pending one
+        resp = app.post(
+            url_for("account.new_password", l=locale),
+            data=dict(
+                password=VALID_PASSWORD,
+                token=TOTP(test_journo["otp_secret"]).now(),
+                current_password=test_journo["password"],
+            ),
+            follow_redirects=True,
+        )
+
+        assert page_language(resp.data) == language_tag(locale)
+        msgids = ["The password you submitted is invalid. Password not changed."]
         with xfail_untranslated_messages(config, locale, msgids):
             assert escape(gettext(msgids[0])) in resp.data.decode("utf-8")
 

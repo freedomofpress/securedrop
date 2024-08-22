@@ -6,7 +6,7 @@ from flask import Response, url_for
 from flask.sessions import session_json_serializer
 from itsdangerous import URLSafeTimedSerializer
 from redis import Redis
-from tests.utils import login_journalist
+from tests.utils import login_journalist, prepare_password_change
 from tests.utils.api_helper import get_api_headers
 from two_factor import TOTP
 
@@ -182,6 +182,7 @@ def test_session_admin_change_password_logout(journalist_app, test_journo, test_
             test_admin["otp_secret"],
         )
         # When changing password of the journalist (non-admin) user
+        prepare_password_change(admin_app, test_journo["id"], NEW_PASSWORD)
         resp = admin_app.post(
             url_for("admin.new_password", user_id=test_journo["id"]),
             data=dict(password=NEW_PASSWORD),
@@ -223,6 +224,7 @@ def test_session_change_password_logout(journalist_app, test_journo, redis):
         assert (redis.get(journalist_app.config["SESSION_KEY_PREFIX"] + sid)) is not None
 
         # When sending a self change password request
+        prepare_password_change(app, test_journo["id"], NEW_PASSWORD)
         resp = app.post(
             url_for("account.new_password"),
             data=dict(

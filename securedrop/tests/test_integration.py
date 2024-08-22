@@ -606,6 +606,8 @@ def test_user_change_password(journalist_app, test_journo):
         # change password
         new_pw = "another correct horse battery staply long password"
         assert new_pw != test_journo["password"]  # precondition
+        utils.prepare_password_change(app, test_journo["id"], new_pw)
+
         app.post(
             "/account/new-password",
             data=dict(
