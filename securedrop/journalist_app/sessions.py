@@ -117,7 +117,6 @@ class SessionInterface(FlaskSessionInterface):
         self.api_salt = "api_" + salt
         self.header_name = header_name
         self.new = False
-        self.has_same_site_capability = hasattr(self, "get_cookie_samesite")
 
     def _new_session(self, is_api: bool = False, initial: Any = None) -> ServerSideSession:
         sid = self._generate_sid()
@@ -192,11 +191,9 @@ class SessionInterface(FlaskSessionInterface):
             session["renew_count"] -= 1
             expires += self.lifetime
             session.modified = True
-        conditional_cookie_kwargs = {}
         httponly = self.get_cookie_httponly(app)
         secure = self.get_cookie_secure(app)
-        if self.has_same_site_capability:
-            conditional_cookie_kwargs["samesite"] = self.get_cookie_samesite(app)
+        samesite = self.get_cookie_samesite(app)
         val = self.serializer.dumps(dict(session))
         if session.to_regenerate:
             self.redis.delete(self.key_prefix + session.sid)
@@ -217,7 +214,7 @@ class SessionInterface(FlaskSessionInterface):
                 domain=domain,
                 path=path,
                 secure=secure,
-                **conditional_cookie_kwargs,  # type: ignore
+                samesite=samesite,
             )
 
     def logout_user(self, uid: int) -> None:

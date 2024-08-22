@@ -123,3 +123,12 @@ def create_legacy_gpg_key(
     db.session.add(source)
     db.session.commit()
     return result.fingerprint
+
+
+# Helper function to extract a the session cookie from the cookiejar when testing as client
+# Returns the session cookie value
+def _session_from_cookiejar(cookie_jar, flask_app):
+    return next(
+        (cookie for cookie in cookie_jar if cookie.name == flask_app.config["SESSION_COOKIE_NAME"]),
+        None,
+    )

@@ -50,6 +50,7 @@ def create_app(config: SecureDropConfig) -> Flask:
 
     Session(app, config)
     csrf = CSRFProtect(app)
+    app.config["SESSION_COOKIE_SAMESITE"] = "Strict"
 
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     app.config["SQLALCHEMY_DATABASE_URI"] = config.DATABASE_URI

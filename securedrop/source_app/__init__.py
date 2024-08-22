@@ -57,6 +57,7 @@ def create_app(config: SecureDropConfig) -> Flask:
     # take longer than an hour over Tor, we increase the valid window to 24h.
     app.config["WTF_CSRF_TIME_LIMIT"] = 60 * 60 * 24
     CSRFProtect(app)
+    app.config["SESSION_COOKIE_SAMESITE"] = "Strict"
 
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     app.config["SQLALCHEMY_DATABASE_URI"] = config.DATABASE_URI
