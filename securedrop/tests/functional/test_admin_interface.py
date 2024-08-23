@@ -126,7 +126,9 @@ class TestAdminInterfaceAddUser:
             pass
 
         def submit_form_and_stop():
-            journ_app_nav.nav_helper.safe_click_by_css_selector("button[type=submit]")
+            journ_app_nav.nav_helper.safe_click_by_css_selector(
+                "form#admin-add-user button[type=submit]"
+            )
             raise StopAfterFormSubmitted()
 
         try:
@@ -277,7 +279,7 @@ class TestAdminInterfaceEditAndDeleteUser:
         journ_app_nav.nav_helper.safe_send_keys_by_css_selector(
             'input[name="username"]', new_username
         )
-        journ_app_nav.nav_helper.safe_click_by_css_selector("button[type=submit]")
+        journ_app_nav.nav_helper.safe_click_by_css_selector("form#edit-account button[type=submit]")
 
     def test_admin_resets_password(self, sd_servers_with_second_journalist, firefox_web_driver):
         # Given an SD server with a second journalist created

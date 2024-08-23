@@ -272,7 +272,8 @@ def test_login_and_logout(source_app):
         assert resp.status_code == 200
         assert SessionManager.is_user_logged_in(db_session=db.session)
 
-        resp = app.get(url_for("main.logout"), follow_redirects=True)
+        resp = app.post(url_for("main.logout"), follow_redirects=True)
+        assert resp.status_code == 200
         assert not SessionManager.is_user_logged_in(db_session=db.session)
         text = resp.data.decode("utf-8")
 
@@ -600,7 +601,8 @@ def test_submit_codename_second_login(source_app):
         text = resp.data.decode("utf-8")
         assert "Please do not submit your codename!" in text
 
-        resp = app.get(url_for("main.logout"), follow_redirects=True)
+        resp = app.post(url_for("main.logout"), follow_redirects=True)
+        assert resp.status_code == 200
         assert not SessionManager.is_user_logged_in(db_session=db.session)
         text = resp.data.decode("utf-8")
         assert "This will clear your Tor Browser activity data" in text
@@ -948,7 +950,7 @@ def test_source_session_expiration(source_app):
 
         # They get redirected to the index page with the "logged out" message
         text = resp.data.decode("utf-8")
-        assert "You were logged out due to inactivity" in text
+        assert "You have been logged out due to inactivity or a problem with your session." in text
 
 
 def test_source_session_expiration_create(source_app):
@@ -967,7 +969,7 @@ def test_source_session_expiration_create(source_app):
 
         # They get redirected to the index page with the "logged out" message
         text = resp.data.decode("utf-8")
-        assert "You were logged out due to inactivity" in text
+        assert "You have been logged out due to inactivity or a problem with your session." in text
 
 
 def test_source_no_session_expiration_message_when_not_logged_in(source_app):
@@ -986,19 +988,28 @@ def test_source_no_session_expiration_message_when_not_logged_in(source_app):
 
         # The session expiration message is NOT displayed
         text = refreshed_resp.data.decode("utf-8")
-        assert "You were logged out due to inactivity" not in text
+        assert (
+            "You have been logged out due to inactivity or a problem with your session." not in text
+        )
 
 
 def test_csrf_error_page(source_app):
     source_app.config["WTF_CSRF_ENABLED"] = True
     with source_app.test_client() as app:
+        # /create without a CSRF token should redirect...
         with InstrumentedApp(source_app) as ins:
             resp = app.post(url_for("main.create"))
             ins.assert_redirects(resp, url_for("main.index"))
 
+        # ...and show an error message.
         resp = app.post(url_for("main.create"), follow_redirects=True)
         text = resp.data.decode("utf-8")
-        assert "You were logged out due to inactivity" in text
+        assert "You have been logged out due to inactivity or a problem with your session." in text
+
+        # /logout without a CSRF token should also error.
+        resp = app.post(url_for("main.logout"), follow_redirects=True)
+        text = resp.data.decode("utf-8")
+        assert "You have been logged out due to inactivity or a problem with your session." in text
 
 
 def test_source_can_only_delete_own_replies(source_app, app_storage):

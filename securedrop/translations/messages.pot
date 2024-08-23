@@ -33,7 +33,7 @@ msgstr ""
 msgid "{time} ago"
 msgstr ""
 
-msgid "You have been logged out due to inactivity."
+msgid "You have been logged out due to inactivity or a problem with your session."
 msgstr ""
 
 msgid "SecureDrop"
@@ -162,6 +162,9 @@ msgid "You must select one or more items for deletion"
 msgstr ""
 
 msgid "No unread submissions for this source."
+msgstr ""
+
+msgid "You have been logged out due to inactivity."
 msgstr ""
 
 msgid "Account updated."
@@ -821,7 +824,7 @@ msgstr ""
 msgid "Important"
 msgstr ""
 
-msgid "You were logged out due to inactivity. Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
+msgid "You have been logged out due to inactivity or a problem with your session. Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
 msgstr ""
 
 msgid "Protecting Journalists and Sources"

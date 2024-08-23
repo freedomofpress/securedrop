@@ -41,8 +41,10 @@
 
         {% if is_user_logged_in %}
         <nav>
-          <a href="{{ url_for('main.logout') }}" class="btn" id="logout"
-            aria-label="{{ gettext('Log Out') }}">{{ gettext('LOG OUT') }}</a>
+          <form id="logout" action="{{ url_for('main.logout') }}" method="post">
+            <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
+            <button id="btn-logout" type="submit" aria-label="{{ gettext('Log Out') }}">{{ gettext('LOG OUT') }}</button>
+          </form>
         </nav>
         {% endif %}
 

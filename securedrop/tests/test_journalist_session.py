@@ -145,7 +145,7 @@ def test_session_logout(journalist_app, test_journo, redis):
         assert (redis.get(journalist_app.config["SESSION_KEY_PREFIX"] + sid)) is not None
 
         # When sending a logout request from a logged in journalist
-        resp = app.get(url_for("main.logout"), follow_redirects=False)
+        resp = app.post(url_for("main.logout"), follow_redirects=False)
         # Then it redirects to login
         assert resp.status_code == 302
         # Then the session no longer exists in redis

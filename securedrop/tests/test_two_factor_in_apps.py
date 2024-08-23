@@ -27,7 +27,7 @@ class TestTwoFactorInJournalistApp:
             )
             assert resp1.status_code == 200
 
-            resp2 = app.get(url_for("main.logout"), follow_redirects=True)
+            resp2 = app.post(url_for("main.logout"), follow_redirects=True)
             assert resp2.status_code == 200
 
         with journalist_app.app_context():
@@ -140,7 +140,8 @@ class TestTwoFactorInJournalistApp:
                 )
 
             # And they then log out
-            app.get("/logout")
+            resp = app.post("/logout")
+            assert resp.status_code == 302
 
         # When they later try to login using a 2fa token based on their new HOTP secret
         with journalist_app.test_client() as app, InstrumentedApp(journalist_app) as ins:
