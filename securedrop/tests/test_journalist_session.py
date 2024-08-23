@@ -6,7 +6,7 @@ from flask import Response, url_for
 from flask.sessions import session_json_serializer
 from itsdangerous import URLSafeTimedSerializer
 from redis import Redis
-from tests.utils import login_journalist, prepare_password_change
+from tests.utils import _session_from_cookiejar, login_journalist, prepare_password_change
 from tests.utils.api_helper import get_api_headers
 from two_factor import TOTP
 
@@ -41,19 +41,6 @@ def _get_session(sid, journalist_app, redis, api=False):
     return session_json_serializer.loads(redis.get(key))
 
 
-# Helper function to extract a the session cookie from the cookiejar when testing as client
-# Returns the session cookie value
-def _session_from_cookiejar(cookie_jar, journalist_app):
-    return next(
-        (
-            cookie
-            for cookie in cookie_jar
-            if cookie.name == journalist_app.config["SESSION_COOKIE_NAME"]
-        ),
-        None,
-    )
-
-
 # Test a standard login sequence
 def test_session_login(journalist_app, test_journo, redis):
     # Given a test client and a valid journalist user
@@ -67,6 +54,8 @@ def test_session_login(journalist_app, test_journo, redis):
         session_cookie = _session_from_cookiejar(app.cookie_jar, journalist_app)
         # Then there is a session cookie in it
         assert session_cookie is not None
+        # Verify correct `SameSite` value was set on the cookie
+        assert session_cookie.get_nonstandard_attr("SameSite") == "Strict"
 
         # Then such cookie is properly signed
         sid = _check_sig(session_cookie.value, journalist_app)

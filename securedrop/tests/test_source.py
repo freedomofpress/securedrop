@@ -124,6 +124,10 @@ def test_create_new_source(source_app):
         tab_id = next(iter(session["codenames"].keys()))
         resp = app.post(url_for("main.create"), data={"tab_id": tab_id}, follow_redirects=True)
         assert SessionManager.is_user_logged_in(db_session=db.session)
+        session_cookie = utils._session_from_cookiejar(app.cookie_jar, source_app)
+        # Verify correct `SameSite` value was set on the cookie
+        assert session_cookie.get_nonstandard_attr("SameSite") == "Strict"
+
         # should be redirected to /lookup
         text = resp.data.decode("utf-8")
         assert "Submit Files" in text
@@ -255,6 +259,10 @@ def test_login_and_logout(source_app):
         text = resp.data.decode("utf-8")
         assert "Submit Files" in text
         assert SessionManager.is_user_logged_in(db_session=db.session)
+
+        session_cookie = utils._session_from_cookiejar(app.cookie_jar, source_app)
+        # Verify correct `SameSite` value was set on the cookie
+        assert session_cookie.get_nonstandard_attr("SameSite") == "Strict"
 
     with source_app.test_client() as app:
         resp = app.post(url_for("main.login"), data=dict(codename="invalid"), follow_redirects=True)
