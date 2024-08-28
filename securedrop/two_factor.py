@@ -2,8 +2,13 @@ import base64
 import binascii
 import secrets
 from datetime import datetime
+from io import BytesIO
 from typing import Optional
 
+import qrcode
+
+# Using svg because it doesn't require additional dependencies
+import qrcode.image.svg
 from cryptography.hazmat.primitives.hashes import SHA1
 from cryptography.hazmat.primitives.twofactor import InvalidToken, hotp, totp
 
@@ -14,6 +19,14 @@ def random_base32(length: int = 32) -> str:
 
     chars_to_use = list("ABCDEFGHIJKLMNOPQRSTUVWXYZ234567")
     return "".join(secrets.choice(chars_to_use) for _ in range(length))
+
+
+def format_secret(sec: str) -> str:
+    """The OTP secret is easier to read and manually enter if it is all
+    lowercase and split into four groups of four characters. The secret is
+    base32-encoded, so it is case insensitive."""
+    chunks = [sec[i : i + 4] for i in range(0, len(sec), 4)]
+    return " ".join(chunks).lower()
 
 
 class OtpSecretInvalid(Exception):
@@ -137,3 +150,14 @@ class TOTP:
 
     def get_provisioning_uri(self, account_name: str) -> str:
         return self._totp.get_provisioning_uri(account_name=account_name, issuer="SecureDrop")
+
+    def qrcode_svg(self, account_name: str) -> bytes:
+        uri = self.get_provisioning_uri(account_name)
+
+        qr = qrcode.QRCode(box_size=15, image_factory=qrcode.image.svg.SvgPathImage)
+        qr.add_data(uri)
+        img = qr.make_image()
+
+        svg_out = BytesIO()
+        img.save(svg_out)
+        return svg_out.getvalue()
