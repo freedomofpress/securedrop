@@ -4,15 +4,12 @@ import datetime
 import os
 import uuid
 from hmac import compare_digest
-from io import BytesIO
 from logging import Logger
 from typing import Any, Callable, Dict, List, Optional, Union
 
 import argon2
-import qrcode
 
 # Using svg because it doesn't require additional dependencies
-import qrcode.image.svg
 import two_factor
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives.kdf import scrypt
@@ -20,7 +17,6 @@ from db import db
 from encryption import EncryptionManager, GpgKeyNotFoundError
 from flask import url_for
 from flask_babel import gettext, ngettext
-from markupsafe import Markup
 from passphrases import PassphraseGenerator
 from sqlalchemy import Boolean, Column, DateTime, ForeignKey, Integer, LargeBinary, String, Text
 from sqlalchemy.exc import IntegrityError
@@ -615,25 +611,8 @@ class Journalist(db.Model):
             raise ValueError(f"{self} is not using HOTP")
 
     @property
-    def shared_secret_qrcode(self) -> Markup:
-        uri = self.totp.get_provisioning_uri(self.username)
-
-        qr = qrcode.QRCode(box_size=15, image_factory=qrcode.image.svg.SvgPathImage)
-        qr.add_data(uri)
-        img = qr.make_image()
-
-        svg_out = BytesIO()
-        img.save(svg_out)
-        return Markup(svg_out.getvalue().decode("utf-8"))
-
-    @property
     def formatted_otp_secret(self) -> str:
-        """The OTP secret is easier to read and manually enter if it is all
-        lowercase and split into four groups of four characters. The secret is
-        base32-encoded, so it is case insensitive."""
-        sec = self.otp_secret
-        chunks = [sec[i : i + 4] for i in range(0, len(sec), 4)]
-        return " ".join(chunks).lower()
+        return two_factor.format_secret(self.otp_secret)
 
     def verify_2fa_token(self, token: Optional[str]) -> str:
         if not token:
