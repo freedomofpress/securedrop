@@ -2,6 +2,35 @@
 
 ## 2.10.0~rc1
 
+This release contains fixes for issues described in the most recent security audit by 7A Security, see
+our [blog post](TK) for more details. It also contains other maintenance fixes.
+
+### Security
+
+* Don't allow admins to look up arbitrary users' TOTP secrets via the web (SEC-01-001 WP4)
+* Validate user provided same password back to server (SEC-01-002 WP4)
+* Require POST requests for `/logout` for CSRF protection (SEC-01-003 WP4)
+* Set password for redis access (SEC-01-008 WP3)
+* Set `SameSite=Strict` on all cookies for more CSRF protection
+
+### Web applications
+* Dependency updates:
+  * sequoia-openpgp (Rust crate) from 1.20.0 to 1.21.1 (#7197)
+  * setuptools from 56.0.0 to 70.3.0 for CVE-2024-6345 (#7205, #7214)
+  * openssl (Rust crate) from 0.10.60 to 0.10.66 for RUSTSEC-2024-0357 (#7206)
+
+### Journalist Workstation
+* Dependency updates:
+  * setuptools from 56.0.0 to 70.3.0 for CVE-2024-6345 (#7205, #7214)
+  * Remove d2to1 and pbr (#7205)
+
+### Development
+* Don't point people to the decommissioned SecureDrop forum (#7204)
+* Migrate all CI jobs to GitHub Actions (#7216, #7217, #7218, #7219, #7220, #7222, #7223)
+* Improve staging job by using upstream gcloud-sdk image and enforcing GCE VM lifespan (#7215, #7224)
+* Dependency updates:
+  * certifi from 2023.7.22 to 2024.7.4 for CVE-2024-39689 (#7199)
+  * Remove pytest-catchlog (#7199)
 
 ## 2.9.0
 
