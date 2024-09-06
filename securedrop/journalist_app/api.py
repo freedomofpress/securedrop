@@ -8,7 +8,7 @@ from uuid import UUID
 import flask
 import werkzeug
 from db import db
-from flask import Blueprint, abort, jsonify, request
+from flask import Blueprint, abort, current_app, jsonify, request
 from journalist_app import utils
 from journalist_app.sessions import session
 from models import (
@@ -23,6 +23,7 @@ from models import (
 )
 from sqlalchemy import Column
 from sqlalchemy.exc import IntegrityError
+from sqlalchemy.orm.exc import NoResultFound
 from store import NotEncrypted, Storage
 from two_factor import OtpSecretInvalid, OtpTokenInvalid
 from werkzeug.exceptions import default_exceptions
@@ -123,6 +124,55 @@ def make_blueprint() -> Blueprint:
     def get_all_sources() -> Tuple[flask.Response, int]:
         sources = Source.query.filter_by(pending=False, deleted_at=None).all()
         return jsonify({"sources": [source.to_json() for source in sources]}), 200
+
+    @api.route("/sources", methods=["DELETE"])
+    def delete_sources() -> Tuple[flask.Response, int]:
+        """
+        Given a list of `Source` UUIDs, iterate over the list and try to delete
+        each `Source`.  Return HTTP 200 "Success" if all `Source`s were deleted
+        or HTTP 207 "Multi-Status" if some failed.  (There's an argument for
+        HTTP 202 "Accepted", since filesystem-level deletion is still deferred
+        to the shredder; but that's an implementation detail that we can hide
+        from the client.)
+
+        NB. According to RFC 9110 §9.3.5, a client may not assume that a DELETE
+        endpoint will accept a request body, but a DELETE endpoint may do so,
+        and in our case we can rule out middleboxes that might mangle it in
+        transit.
+        """
+        if not isinstance(request.json, list):
+            abort(400, "no sources specified")
+
+        succeeded = []
+        failed = []
+        for source_uuid in request.json:
+            try:
+                # Don't use `get_or_404()`: we'll handle the `NoResultFound`
+                # case ourselves, rather than abort with HTTP 404.
+                source = Source.query.filter(Source.uuid == source_uuid).one()
+                utils.delete_collection(source.filesystem_id)
+                succeeded.append(source_uuid)
+
+            # Deletion is idempotent, so count nonexistent `Source`s as
+            # successes.
+            except NoResultFound:
+                succeeded.append(source_uuid)
+
+            except Exception as exc:
+                current_app.logger.error(f"Failed to delete source {source_uuid}: {exc}")
+                failed.append(source_uuid)
+
+        # Return the lists of both failed and succeeded deletion operations no
+        # matter what, so that the client can act directly on the results.
+        return (
+            jsonify(
+                {
+                    "failed": failed,
+                    "succeeded": succeeded,
+                }
+            ),
+            200 if len(failed) == 0 else 207,  # Success or Multi-Status
+        )
 
     @api.route("/sources/<source_uuid>", methods=["GET", "DELETE"])
     def single_source(source_uuid: str) -> Tuple[flask.Response, int]:
