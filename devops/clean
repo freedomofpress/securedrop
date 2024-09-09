@@ -5,6 +5,14 @@
 set -e
 set -u
 
+USE_PODMAN="${USE_PODMAN:-}"
+
+# Allow opting into using podman with USE_PODMAN=1
+if  [[ -n "${USE_PODMAN}" ]]; then
+    DOCKER_BIN="podman"
+else
+    DOCKER_BIN="docker"
+fi
 
 function remove_unwanted_files() {
 
@@ -37,8 +45,8 @@ function remove_unwanted_files() {
         build/*.deb
 
     # Remove any Onion URL from make dev-tor
-    if docker volume inspect sd-onion-services > /dev/null; then
-        docker volume remove sd-onion-services
+    if $DOCKER_BIN volume inspect sd-onion-services > /dev/null; then
+        $DOCKER_BIN volume remove sd-onion-services
     fi
 
     # Remove extraneous copies of the git repos, pulled in

@@ -53,42 +53,46 @@ function maybe_create_config_py() {
 
 function maybe_use_tor() {
     if [[ -n "${USE_TOR:-}" ]]; then
-        echo "Setting up Tor..."
-        if [ ! -d "/var/lib/tor/services" ]; then
-            sudo chown -R debian-tor:debian-tor /var/lib/tor/services
-        else
-            sudo -u debian-tor mkdir -p /var/lib/tor/services
+        echo "Setting up Arti..."
+
+        mkdir -p /var/lib/arti
+        if [ ! -f "/var/lib/arti/config.toml" ]; then
+            # create config.toml for SI and JI
+            openssl genpkey -algorithm x25519 -out /var/lib/arti/ji_priv.key
+            ji_auth_public=$(openssl pkey -in /var/lib/arti/ji_priv.key -pubout | grep -v " PUBLIC KEY" | base64pem -d | tail --bytes=32 | base32 | sed 's/=//g')
+            cat > /var/lib/arti/config.toml << TOML
+[proxy]
+socks_listen = 9152
+
+[storage]
+# store temporarily
+cache_dir = "/tmp/arti-cache"
+# store persistently
+state_dir = "/var/lib/arti/data"
+
+[onion_services."source"]
+proxy_ports = [
+    ["80", "127.0.0.1:8080"]
+]
+
+[onion_services."journalist"]
+proxy_ports = [
+    ["80", "127.0.0.1:8081"]
+]
+[onion_services."journalist".restricted_discovery]
+enabled = true
+[onion_services."journalist".restricted_discovery.static_keys]
+journalist = "descriptor:x25519:${ji_auth_public}"
+
+TOML
         fi
-        # append torrc lines for SI and JI
-        echo "HiddenServiceDir /var/lib/tor/services/source/" | sudo tee -a /etc/tor/torrc
-        echo "HiddenServicePort 80 127.0.0.1:8080" | sudo tee -a /etc/tor/torrc
-        echo "HiddenServiceDir /var/lib/tor/services/journalist/" | sudo tee -a /etc/tor/torrc
-        echo "HiddenServicePort 80 127.0.0.1:8081" | sudo tee -a /etc/tor/torrc
-        # start Tor to create service directories
-        sudo service tor start
-        if sudo test -f "/var/lib/tor/services/journalist_auth_token.prv.pem"; then
-            # recover x25519 key
-            sudo cat /var/lib/tor/services/journalist_auth_token.prv.pem | tee /tmp/k1.prv.pem
-        else
-            echo "Generating new client authorization..."
-            # create x25519 keypair and journalist client auth file
-            openssl genpkey -algorithm x25519 -out /tmp/k1.prv.pem
-            # store private auth token for regeneration after restarts
-            sudo cp /tmp/k1.prv.pem /var/lib/tor/services/journalist_auth_token.prv.pem
-        fi
-        grep -v " PRIVATE KEY" < /tmp/k1.prv.pem | base64pem -d | tail --bytes=32 | base32 | sed 's/=//g' > /tmp/k1.prv.key
-        openssl pkey -in /tmp/k1.prv.pem -pubout | grep -v " PUBLIC KEY" | base64pem -d | tail --bytes=32 | base32 | sed 's/=//g' > /tmp/k1.pub.key
-        echo "descriptor:x25519:$(cat /tmp/k1.pub.key)" | sudo -u debian-tor tee /var/lib/tor/services/journalist/authorized_clients/client.auth
-        # shellcheck disable=SC2024
-        sudo -u debian-tor cat /var/lib/tor/services/source/hostname > /var/lib/securedrop/source_v3_url
-        # kill and restart Tor to pick up authorized_clients change
-        # (restart a little flaky hence the kill)
-        sudo kill "$(cat /run/tor/tor.pid)"; sudo service tor restart
+        /opt/cargo/bin/arti -c /var/lib/arti/config.toml hss --nickname source onion-name -l none > /var/lib/securedrop/source_v3_url
+        /opt/cargo/bin/arti -c /var/lib/arti/config.toml proxy &
         # print out the addresses and the JI client auth key
 
-        si_address="$(sudo -u debian-tor cat /var/lib/tor/services/source/hostname)"
-        ji_address="$(sudo -u debian-tor cat /var/lib/tor/services/journalist/hostname)"
-        ji_authkey="$(sudo -u debian-tor cat /tmp/k1.prv.key)"
+        si_address="$(/opt/cargo/bin/arti -c /var/lib/arti/config.toml hss --nickname source onion-name -l none)"
+        ji_address="$(/opt/cargo/bin/arti -c /var/lib/arti/config.toml hss --nickname journalist onion-name -l none)"
+        ji_auth_private=$(grep -v " PRIVATE KEY" /var/lib/arti/ji_priv.key | base64pem -d | tail --bytes=32 | base32 | sed 's/=//g')
         sdkey_fpr="$(gpg --with-fingerprint --with-colons ./tests/files/test_journalist_key.pub | grep -e '^fpr' | tr -d 'fpr:')"
 
         cat > /tmp/qubes-config.json <<EOF
@@ -96,7 +100,7 @@ function maybe_use_tor() {
   "submission_key_fpr": "${sdkey_fpr}",
   "hidserv": {
     "hostname": "${ji_address}",
-    "key": "${ji_authkey}"
+    "key": "${ji_auth_private}"
   },
   "environment": "prod",
   "vmsizes": {
@@ -110,7 +114,7 @@ EOF
         echo "--------"
         echo "Source Interface:     http://${si_address}"
         echo "Journalist Interface: http://${ji_address}"
-        echo "Journalist Auth Key:  ${ji_authkey}"
+        echo "Journalist Auth Key:  ${ji_auth_private}"
         echo "--------"
         echo
         echo "SecureDrop Workstation config.json:"
