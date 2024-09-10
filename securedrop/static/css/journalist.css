@@ -796,6 +796,16 @@ a.btn,
   font-size: .8em;
 }
 
+button[disabled], 
+button[disabled]:hover,
+a#delete-collections-link.disabled,
+a#delete-collections-link.disabled:hover {
+  background: lightgrey;
+  color: darkgrey;
+  border:none;
+  cursor: default;
+}
+
 button:not([lang=ar]),
 a.btn:not([lang=ar]),
 .btn:not([lang=ar]) {

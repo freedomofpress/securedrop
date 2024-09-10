@@ -5,6 +5,7 @@
 
 const COLLECTION_SELECTOR_PREFIX = "table";
 const ROW_SELECTOR_PREFIX = COLLECTION_SELECTOR_PREFIX + " tr"
+const CHECKBOX_SELECTOR = ROW_SELECTOR_PREFIX + ':not(.hidden) input[name="cols_selected"]'
 
 function closest(element, selector) {
   let parent = element.parentNode;
@@ -32,6 +33,35 @@ function show(selector, displayStyle = "revert") {
     element.style.display = displayStyle;
     element.classList.remove("hidden");
   });
+}
+
+function disableButtons(selector) {
+  let nodelist = document.querySelectorAll(selector);
+  Array.prototype.forEach.call(nodelist, function(element) {
+    element.disabled = true;
+    element.classList.add("disabled");
+  })
+}
+
+function enableButtons(selector) {
+  let nodelist = document.querySelectorAll(selector);
+  Array.prototype.forEach.call(nodelist, function(element) {
+    element.disabled = false;
+    element.classList.remove("disabled");
+  })
+}
+
+function disableButtonsIfNoCheckedRows() {
+  let buttons = 'button[name="action"]';
+  let deletelink = 'a#delete-collections-link'
+  let checkedboxes = document.querySelectorAll(CHECKBOX_SELECTOR + ":checked");
+  if (checkedboxes.length == 0) {
+    disableButtons(buttons);
+    disableButtons(deletelink);
+  } else {
+    enableButtons(buttons);
+    enableButtons(deletelink);
+  }
 }
 
 function enhance_ui() {
@@ -107,17 +137,18 @@ function ready(fn) {
 }
 
 ready(function() {
+  disableButtonsIfNoCheckedRows();
   enhance_ui();
 
   let selectAll = document.getElementById("select_all");
-
   if (selectAll) {
     selectAll.style.cursor = "pointer";
     selectAll.addEventListener("click", function() {
-      let checkboxes = document.querySelectorAll(ROW_SELECTOR_PREFIX + ":not(.hidden) input[type=checkbox]");
+      let checkboxes = document.querySelectorAll(CHECKBOX_SELECTOR);
       for (let i = 0; i < checkboxes.length; i++) {
         checkboxes[i].checked = true;
       }
+      disableButtonsIfNoCheckedRows();
     });
   }
 
@@ -125,10 +156,11 @@ ready(function() {
   if (selectNone) {
     selectNone.style.cursor = "pointer";
     selectNone.addEventListener("click", function() {
-      let checkboxes = document.querySelectorAll(ROW_SELECTOR_PREFIX + ":not(.hidden) input[type=checkbox]");
+      let checkboxes = document.querySelectorAll(CHECKBOX_SELECTOR);
       for (let i = 0; i < checkboxes.length; i++) {
         checkboxes[i].checked = false;
       }
+      disableButtonsIfNoCheckedRows();
     });
   }
 
@@ -136,7 +168,7 @@ ready(function() {
   if (selectUnread) {
     selectUnread.style.cursor = "pointer";
     selectUnread.addEventListener("click", function() {
-      let checkboxes = document.querySelectorAll(ROW_SELECTOR_PREFIX + " input[type='checkbox']:not(.hidden)");
+      let checkboxes = document.querySelectorAll(CHECKBOX_SELECTOR);
       for (let i = 0; i < checkboxes.length; i++) {
         if (checkboxes[i].classList.contains("unread-cb")) {
           checkboxes[i].checked = true;
@@ -146,6 +178,11 @@ ready(function() {
       }
     });
   }
+
+  let checkboxes = document.querySelectorAll(CHECKBOX_SELECTOR);
+  for (let i = 0; i < checkboxes.length; i++) {
+    checkboxes[i].addEventListener("click", disableButtonsIfNoCheckedRows);
+    }
 
   // When unread messages are downloaded from the source list, mark
   // the source read.
@@ -247,3 +284,5 @@ ready(function() {
     }
   }
 });
+
+
