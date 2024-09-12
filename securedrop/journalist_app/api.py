@@ -28,6 +28,8 @@ from store import NotEncrypted, Storage
 from two_factor import OtpSecretInvalid, OtpTokenInvalid
 from werkzeug.exceptions import default_exceptions
 
+MAX_BATCH_SIZE = 50  # requests
+
 
 def get_or_404(model: db.Model, object_id: str, column: Column) -> db.Model:
     result = model.query.filter(column == object_id).one_or_none()
@@ -128,24 +130,30 @@ def make_blueprint() -> Blueprint:
     @api.route("/sources", methods=["DELETE"])
     def delete_sources() -> Tuple[flask.Response, int]:
         """
-        Given a list of `Source` UUIDs, iterate over the list and try to delete
-        each `Source`.  Return HTTP 200 "Success" if all `Source`s were deleted
-        or HTTP 207 "Multi-Status" if some failed.  (There's an argument for
-        HTTP 202 "Accepted", since filesystem-level deletion is still deferred
-        to the shredder; but that's an implementation detail that we can hide
-        from the client.)
+        Given a list of at most `MAX_BATCH_SIZE `Source` UUIDs, iterate over the
+        list and try to delete each `Source`.  Return HTTP 200 "Success" if all
+        `Source`s were deleted or HTTP 207 "Multi-Status" if some failed.
+        (There's an argument for HTTP 202 "Accepted", since filesystem-level
+        deletion is still deferred to the shredder; but that's an implementation
+        detail that we can hide from the client.)
+
+        Batching (under `MAX_BATCH_SIZE`) and retrying (of `Source`s returned as
+        `failed`) are responsibilities of the client.
 
         NB. According to RFC 9110 §9.3.5, a client may not assume that a DELETE
         endpoint will accept a request body, but a DELETE endpoint may do so,
         and in our case we can rule out middleboxes that might mangle it in
         transit.
         """
-        if not isinstance(request.json, list):
+        data = request.json
+        if not isinstance(data, list):
             abort(400, "no sources specified")
+        elif len(data) > MAX_BATCH_SIZE:
+            abort(413, f"bulk requests may have at most {MAX_BATCH_SIZE} items")
 
         succeeded = []
         failed = []
-        for source_uuid in request.json:
+        for source_uuid in data:
             try:
                 # Don't use `get_or_404()`: we'll handle the `NoResultFound`
                 # case ourselves, rather than abort with HTTP 404.
