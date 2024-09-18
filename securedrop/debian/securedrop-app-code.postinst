@@ -251,11 +251,15 @@ case "$1" in
     chown -R root:root /var/www/securedrop
     chmod 755 /var/www/securedrop
 
-    # Make sure config.py is owned by root and readable by www-data,
+    # Make sure config.py and rq_config.py are owned by root and readable by www-data,
     # but not world-readable
     if [ -f "/var/www/securedrop/config.py" ]; then
         chown root:www-data /var/www/securedrop/config.py
         chmod 640 /var/www/securedrop/config.py
+    fi
+    if [ -f "/var/www/securedrop/rq_config.py" ]; then
+        chown root:www-data /var/www/securedrop/rq_config.py
+        chmod 640 /var/www/securedrop/rq_config.py
     fi
     # And logo needs to be writable by webserver user
     # If there's no custom logo yet, copy the default in its place
