@@ -717,7 +717,7 @@ class GPGBase:
 
         self.verbose = verbose
 
-    def _collect_output(self, process, result, writer=None, stdin=None):  # type: ignore[no-untyped-def] # noqa
+    def _collect_output(self, process, result, writer=None, stdin=None):  # type: ignore[no-untyped-def]
         """Drain the subprocesses output streams, writing the collected output
         to the result. If a writer thread (writing to the subprocess) is given,
         make sure it's joined before returning. If a stdin stream is given,
@@ -748,7 +748,7 @@ class GPGBase:
         stderr.close()
         stdout.close()
 
-    def _handle_io(self, args, file, result, passphrase=False, binary=False):  # type: ignore[no-untyped-def] # noqa
+    def _handle_io(self, args, file, result, passphrase=False, binary=False):  # type: ignore[no-untyped-def]
         """Handle a call to GPG - pass input data, collect output data."""
         p = self._open_subprocess(args, passphrase)
         if not binary:
@@ -1041,7 +1041,7 @@ class GPGBase:
 
         return result
 
-    def _add_recipient_string(self, args, hidden_recipients, recipient):  # type: ignore[no-untyped-def] # noqa
+    def _add_recipient_string(self, args, hidden_recipients, recipient):  # type: ignore[no-untyped-def]
         if isinstance(hidden_recipients, (list, tuple)):
             if [s for s in hidden_recipients if recipient in str(s)]:
                 args.append("--hidden-recipient %s" % recipient)

@@ -8,7 +8,7 @@ from tests.functional.app_navigators.source_app_nav import SourceAppNavigator
 from tests.functional.web_drivers import _FIREFOX_PATH
 
 
-@pytest.fixture()
+@pytest.fixture
 def orbot_web_driver(sd_servers):
     # Create new profile and driver with the orbot user agent
     orbot_user_agent = "Mozilla/5.0 (Android; Mobile; rv:52.0) Gecko/20100101 Firefox/52.0"

@@ -32,7 +32,7 @@ IPTABLES_RULES_DEFAULT_DROP = {
 
 
 def list_iptables_rules() -> dict:
-    result = subprocess.run(["iptables", "-S"], capture_output=True)
+    result = subprocess.run(["iptables", "-S"], capture_output=True, check=False)
     rules = result.stdout.decode("utf-8").splitlines()
     policies = [r for r in rules if r.startswith("-P")]
     input_rules = [r for r in rules if r.startswith("-A INPUT")]

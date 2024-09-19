@@ -117,10 +117,7 @@ def is_missing_dependency() -> bool:
             return True
 
         # If any packages couldn't be found, it may point to an apt cache issue
-        if "Unable to locate package" in apt_query_result.stderr:
-            return True
-
-        return False
+        return "Unable to locate package" in apt_query_result.stderr
 
     except subprocess.CalledProcessError as e:
         sdlog.error("Error checking apt dependencies")
@@ -259,12 +256,12 @@ def install_pip_dependencies(
     ]
 
     ansible_ver = subprocess.run(
-        maybe_torify() + ansible_vercheck_cmd, text=True, capture_output=True
+        maybe_torify() + ansible_vercheck_cmd, text=True, capture_output=True, check=False
     )
     if ansible_ver.stdout.startswith("2.9"):
         sdlog.info("Ansible is out-of-date, removing it.")
         delete_result = subprocess.run(
-            maybe_torify() + ansible_uninstall_cmd, capture_output=True, text=True
+            maybe_torify() + ansible_uninstall_cmd, capture_output=True, text=True, check=False
         )
         if delete_result.returncode != 0:
             sdlog.error(

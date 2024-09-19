@@ -70,7 +70,7 @@ class TestJournalistMail(TestBase):
         ):
             # Look up CWD, in case tests move in the future
             current_dir = os.path.dirname(os.path.abspath(__file__))
-            self.ansible(host, "copy", "dest=/tmp/{f} src={d}/{f}".format(f=f, d=current_dir))
+            self.ansible(host, "copy", f"dest=/tmp/{f} src={current_dir}/{f}")
             assert self.run(host, "/var/ossec/process_submissions_today.sh forget")
             assert self.run(host, "postsuper -d ALL")
             assert self.run(host, f"cat /tmp/{f} | mail -s 'abc' root@localhost")
@@ -96,10 +96,10 @@ class TestJournalistMail(TestBase):
             assert self.run(host, f"! mailq | grep -q {who}@ossec.test")
             assert self.run(
                 host,
-                """
+                f"""
                 ( echo 'Subject: TEST' ; echo ; echo -e '{payload}' ) | \
                 /var/ossec/send_encrypted_alarm.sh {who}
-                """.format(who=who, payload=payload),
+                """,
             )
             assert self.wait_for_command(host, f"mailq | grep -q {who}@ossec.test")
 
@@ -114,12 +114,12 @@ class TestJournalistMail(TestBase):
             trigger(who, payload)
             assert self.run(
                 host,
-                """
+                f"""
                 job=$(mailq | sed -n -e '2p' | cut -f1 -d ' ')
                 postcat -q $job | tee /dev/stderr | \
                    gpg --homedir /var/ossec/.gnupg --decrypt 2>&1 | \
                    grep -q {expected}
-                """.format(expected=expected),
+                """,
             )
         #
         # failure to encrypt must trigger an emergency mail to ossec contact

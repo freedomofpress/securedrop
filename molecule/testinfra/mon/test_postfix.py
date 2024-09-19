@@ -37,11 +37,8 @@ def test_postfix_generic_maps(host):
     """
     assert host.file("/etc/postfix/generic").exists
     assert host.file("/etc/postfix/generic").contains(
-        "^ossec@{} {}@{}".format(
-            securedrop_test_vars.monitor_hostname,
-            securedrop_test_vars.sasl_username,
-            securedrop_test_vars.sasl_domain,
-        )
+        f"^ossec@{securedrop_test_vars.monitor_hostname} {securedrop_test_vars.sasl_username}@"
+        f"{securedrop_test_vars.sasl_domain}"
     )
     assert host.file("/etc/postfix/main.cf").contains("^smtp_generic_maps")
     assert host.file("/etc/postfix/main.cf").contains(

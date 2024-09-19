@@ -24,12 +24,12 @@ depends_on = None
 def raw_sql_grab_orphaned_objects(table_name: str) -> str:
     """Objects that have a source ID that doesn't exist in the
     sources table OR a NULL source ID should be deleted."""
-    return (  # noqa: S608
-        "SELECT id, filename, source_id FROM {table} "
+    return (
+        f"SELECT id, filename, source_id FROM {table_name} "  # noqa: S608
         "WHERE source_id NOT IN (SELECT id FROM sources) "
-        "UNION SELECT id, filename, source_id FROM {table} "
+        f"UNION SELECT id, filename, source_id FROM {table_name} "
         "WHERE source_id IS NULL"
-    ).format(table=table_name)
+    )
 
 
 def upgrade() -> None:

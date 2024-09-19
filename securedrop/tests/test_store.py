@@ -20,7 +20,7 @@ from store import Storage, async_add_checksum_for_file, queued_add_checksum_for_
 from tests import utils
 
 
-@pytest.fixture()
+@pytest.fixture
 def test_storage() -> Generator[Storage, None, None]:
     # Setup the filesystem for the storage object
     with TemporaryDirectory() as data_dir_name:

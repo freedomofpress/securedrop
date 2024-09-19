@@ -9,7 +9,7 @@ testinfra_hosts = [sdvars.app_hostname]
 
 # Prod Tor services may have unexpected configs
 # TODO: read from admin workstation site-specific file if available
-@pytest.mark.skip_in_prod()
+@pytest.mark.skip_in_prod
 @pytest.mark.parametrize("tor_service", sdvars.tor_services)
 def test_tor_service_directories(host, tor_service):
     """
@@ -23,7 +23,7 @@ def test_tor_service_directories(host, tor_service):
         assert f.group == "debian-tor"
 
 
-@pytest.mark.skip_in_prod()
+@pytest.mark.skip_in_prod
 @pytest.mark.parametrize("tor_service", sdvars.tor_services)
 def test_tor_service_hostnames(host, tor_service):
     """
@@ -58,7 +58,7 @@ def test_tor_service_hostnames(host, tor_service):
             assert re.search(f"^{ths_hostname_regex_v3}$", f.content_string)
 
 
-@pytest.mark.skip_in_prod()
+@pytest.mark.skip_in_prod
 @pytest.mark.parametrize("tor_service", sdvars.tor_services)
 def test_tor_services_config(host, tor_service):
     """

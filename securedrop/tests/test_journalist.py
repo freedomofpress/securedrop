@@ -1714,10 +1714,7 @@ def test_deleted_user_cannot_login(config, journalist_app, locale):
             ]
             with xfail_untranslated_messages(config, locale, msgids):
                 ins.assert_message_flashed(
-                    "{} {}".format(
-                        gettext(msgids[0]),
-                        gettext(msgids[1]),
-                    ),
+                    f"{gettext(msgids[0])} {gettext(msgids[1])}",
                     "error",
                 )
 
@@ -3500,7 +3497,7 @@ def test_download_selected_submissions_previously_downloaded(
             )
 
 
-@pytest.fixture()
+@pytest.fixture
 def selected_missing_files(journalist_app, test_source, app_storage):
     """Fixture for the download tests with missing files in storage."""
     source = Source.query.get(test_source["id"])

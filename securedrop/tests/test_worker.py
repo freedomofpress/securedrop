@@ -28,7 +28,7 @@ def start_rq_worker(config, queue_name):
             "rq_config",
             queue_name,
         ],
-        preexec_fn=os.setsid,
+        preexec_fn=os.setsid,  # noqa: PLW1509
     )
 
 

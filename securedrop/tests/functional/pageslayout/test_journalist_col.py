@@ -37,7 +37,7 @@ def _create_source_and_submission_and_delete_source_key(config_in_use: SecureDro
     EncryptionManager.get_default().delete_source_key_pair(source_user.filesystem_id)
 
 
-@pytest.fixture()
+@pytest.fixture
 def sd_servers_with_deleted_source_key(
     setup_journalist_key_and_gpg_folder: Tuple[str, Path],
     setup_rqworker: Tuple[str, Path],
@@ -64,7 +64,7 @@ def sd_servers_with_deleted_source_key(
 
 
 @pytest.mark.parametrize("locale", list_locales())
-@pytest.mark.pagelayout()
+@pytest.mark.pagelayout
 class TestJournalistLayoutCol:
     def test_col_with_and_without_documents(
         self, locale, sd_servers_with_submitted_file, firefox_web_driver

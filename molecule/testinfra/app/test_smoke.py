@@ -60,7 +60,7 @@ def test_redwood(host):
     assert len(parsed[2]) == 40
 
 
-@pytest.mark.skip_in_prod()
+@pytest.mark.skip_in_prod
 def test_weak_submission_key(host):
     """
     If the Submission Key is weak (e.g. has a SHA-1 signature),

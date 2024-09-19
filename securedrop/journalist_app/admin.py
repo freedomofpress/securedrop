@@ -216,7 +216,7 @@ def make_blueprint() -> Blueprint:
                         ),
                         "error",
                     )
-                    current_app.logger.error("Adding user " "'{}' failed: {}".format(username, e))
+                    current_app.logger.error("Adding user " f"'{username}' failed: {e}")
 
             if form_valid:
                 if new_user.is_totp:
@@ -423,9 +423,8 @@ def make_blueprint() -> Blueprint:
             abort(403)
         elif not user:
             current_app.logger.error(
-                "Admin {} tried to delete nonexistent user with pk={}".format(
-                    session.get_user().username, user_id
-                )
+                f"Admin {session.get_user().username} tried to delete nonexistent user with "
+                f"pk={user_id}"
             )
             abort(404)
         elif user.is_deleted_user():
@@ -456,9 +455,8 @@ def make_blueprint() -> Blueprint:
 
         if user.id == session.get_uid():
             current_app.logger.error(
-                "Admin {} tried to change their password without validation.".format(
-                    session.get_user().username
-                )
+                f"Admin {session.get_user().username} tried to change their password without "
+                "validation."
             )
             abort(403)
 

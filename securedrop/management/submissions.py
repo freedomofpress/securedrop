@@ -160,9 +160,8 @@ def delete_disconnected_fs_submissions(args: argparse.Namespace) -> None:
                 time_elapsed += file_elapsed
                 rate = bytes_deleted / time_elapsed
                 print(
-                    "elapsed: {:.2f}s rate: {:.1f} MB/s overall rate: {:.1f} MB/s".format(
-                        file_elapsed, filesize / 1048576 / file_elapsed, rate / 1048576
-                    )
+                    f"elapsed: {file_elapsed:.2f}s rate: {filesize / 1048576 / file_elapsed:.1f} "
+                    f"MB/s overall rate: {rate / 1048576:.1f} MB/s"
                 )
             else:
                 print(f"Not removing {f}.")

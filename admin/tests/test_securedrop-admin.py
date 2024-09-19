@@ -841,7 +841,7 @@ class TestSiteConfig:
         if callable(default):
             default = default()
         assert site_config.user_prompt_config_one(desc, None) == default
-        assert type(default) == etype
+        assert type(default) is etype
 
     def verify_desc_consistency(self, site_config, desc):
         self.verify_desc_consistency_optional(site_config, desc)
@@ -929,7 +929,7 @@ class TestSiteConfig:
         (var, default, etype, prompt, validator, transform, condition) = desc
         # verify the default passes validation
         assert site_config.user_prompt_config_one(desc, None) == default
-        assert type(default) == etype
+        assert type(default) is etype
 
     def verify_prompt_fingerprint(self, site_config, desc):
         self.verify_prompt_not_empty(site_config, desc)
@@ -956,7 +956,7 @@ class TestSiteConfig:
         (var, default, etype, prompt, validator, transform, condition) = desc
         # verify the default passes validation
         assert site_config.user_prompt_config_one(desc, None) == default
-        assert type(default) == etype
+        assert type(default) is etype
         assert site_config.user_prompt_config_one(desc, "fr_FR en_US") == ["fr_FR", "en_US"]
         assert site_config.user_prompt_config_one(desc, ["fr_FR", "en_US"]) == ["fr_FR", "en_US"]
         assert site_config.user_prompt_config_one(desc, "") == []

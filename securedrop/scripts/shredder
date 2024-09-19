@@ -11,9 +11,9 @@ import time
 
 sys.path.insert(0, "/var/www/securedrop")
 
-import journalist_app  # noqa: E402
-from sdconfig import SecureDropConfig  # noqa: E402
-from store import Storage  # noqa: E402
+import journalist_app
+from sdconfig import SecureDropConfig
+from store import Storage
 
 
 def parse_args():

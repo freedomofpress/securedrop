@@ -101,6 +101,8 @@ known-third-party = ["journalist_app", "management", "source_app", "tests"]
 "securedrop/pretty_bad_protocol/*.py" = [
     # legacy code that still uses `assert`
     "S101",
+    # too much % formatting, not worth fixing for now
+    "UP031",
 ]
 
 [tool.mypy]

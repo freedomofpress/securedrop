@@ -39,7 +39,7 @@ def test_ossec_agent_installed(host):
 
 
 # Permissions don't match between Ansible and OSSEC deb packages postinst.
-@pytest.mark.xfail()
+@pytest.mark.xfail
 def test_ossec_keyfile_present(host):
     """ensure client keyfile for ossec-agent is present"""
     pattern = "^1024 {} {} [0-9a-f]{{64}}$".format(

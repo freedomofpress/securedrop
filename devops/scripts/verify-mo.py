@@ -21,7 +21,7 @@ import os
 import shlex
 import subprocess
 from pathlib import Path
-from typing import Any, Iterator, Optional, Set
+from typing import Iterator, Set
 
 import polib
 from translate.tools.pocompile import convertmo
@@ -59,9 +59,9 @@ class CatalogVerifier:
 
     def __exit__(
         self,
-        exc_type: Optional[Any],
-        exc_value: Optional[Any],
-        traceback: Optional[Any],
+        exc_type: object,
+        exc_value: object,
+        traceback: object,
     ) -> None:
         """Clean up."""
 
@@ -113,11 +113,12 @@ class CatalogVerifier:
         # because we want to inherit the Python virtual environment
         # in which we're invoked.
         # nosemgrep: python.lang.security.audit.subprocess-shell-true.subprocess-shell-true
-        return subprocess.run(
+        return subprocess.run(  # noqa: S602
             cmd,
             capture_output=True,
             env=os.environ,
-            shell=True,  # noqa: S602
+            shell=True,
+            check=False,
         )
 
     def reproduce(self) -> None:

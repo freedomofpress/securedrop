@@ -113,9 +113,7 @@ def test_grsecurity_paxtest(host):
             paxtest_cmd += " | grep -P '^(Executable|Return)'"
             paxtest_results = host.check_output(paxtest_cmd)
 
-        paxtest_template_path = "{}/paxtest_results.j2".format(
-            os.path.dirname(os.path.abspath(__file__))
-        )
+        paxtest_template_path = f"{os.path.dirname(os.path.abspath(__file__))}/paxtest_results.j2"
 
         memcpy_result = "Killed"
         # Versions of paxtest newer than 0.9.12 or so will report
