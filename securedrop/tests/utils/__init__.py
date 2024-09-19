@@ -1,11 +1,14 @@
 import datetime
+import re
 from pathlib import Path
 
+import argon2
 import flask
 import models
 from db import db
 from encryption import EncryptionManager
 from flask.testing import FlaskClient
+from models import ARGON2_PARAMS
 from source_user import SourceUser
 from tests.utils import asynchronous, db_helper  # noqa: F401
 from two_factor import TOTP
@@ -68,6 +71,22 @@ def login_journalist(
     _reset_journalist_last_token(username)
 
 
+def extract_password(html: bytes) -> str:
+    search = re.search(r'<input name="password" type="hidden" value="(.*?)">', html.decode())
+    if search:
+        return search.group(1)
+    else:
+        raise ValueError("Could not find password in HTML")
+
+
+def prepare_password_change(app_test_client: FlaskClient, id: int, new_password: str) -> None:
+    """A reimplementation of utils.set_pending_password() for tests"""
+    with app_test_client.session_transaction() as session:
+        session[f"pending_password_{id}"] = argon2.PasswordHasher(**ARGON2_PARAMS).hash(
+            new_password
+        )
+
+
 def decrypt_as_journalist(ciphertext: bytes) -> bytes:
     return redwood.decrypt(
         ciphertext=ciphertext,
@@ -104,3 +123,12 @@ def create_legacy_gpg_key(
     db.session.add(source)
     db.session.commit()
     return result.fingerprint
+
+
+# Helper function to extract a the session cookie from the cookiejar when testing as client
+# Returns the session cookie value
+def _session_from_cookiejar(cookie_jar, flask_app):
+    return next(
+        (cookie for cookie in cookie_jar if cookie.name == flask_app.config["SESSION_COOKIE_NAME"]),
+        None,
+    )

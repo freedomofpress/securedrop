@@ -48,8 +48,9 @@ def create_app(config: SecureDropConfig) -> Flask:
 
     app.config.from_object(config.JOURNALIST_APP_FLASK_CONFIG_CLS)
 
-    Session(app)
+    Session(app, config)
     csrf = CSRFProtect(app)
+    app.config["SESSION_COOKIE_SAMESITE"] = "Strict"
 
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     app.config["SQLALCHEMY_DATABASE_URI"] = config.DATABASE_URI
@@ -68,7 +69,7 @@ def create_app(config: SecureDropConfig) -> Flask:
     @app.errorhandler(CSRFError)
     def handle_csrf_error(e: CSRFError) -> "Response":
         app.logger.error("The CSRF token is invalid.")
-        msg = gettext("You have been logged out due to inactivity.")
+        msg = gettext("You have been logged out due to inactivity or a problem with your session.")
         session.destroy(("error", msg), session.get("locale"))
         return redirect(url_for("main.login"))
 

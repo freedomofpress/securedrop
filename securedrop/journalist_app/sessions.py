@@ -12,6 +12,7 @@ from flask_babel import gettext
 from itsdangerous import BadSignature, URLSafeTimedSerializer
 from models import Journalist
 from redis import Redis
+from sdconfig import SecureDropConfig
 from werkzeug.datastructures import CallbackDict
 
 
@@ -116,7 +117,6 @@ class SessionInterface(FlaskSessionInterface):
         self.api_salt = "api_" + salt
         self.header_name = header_name
         self.new = False
-        self.has_same_site_capability = hasattr(self, "get_cookie_samesite")
 
     def _new_session(self, is_api: bool = False, initial: Any = None) -> ServerSideSession:
         sid = self._generate_sid()
@@ -191,11 +191,9 @@ class SessionInterface(FlaskSessionInterface):
             session["renew_count"] -= 1
             expires += self.lifetime
             session.modified = True
-        conditional_cookie_kwargs = {}
         httponly = self.get_cookie_httponly(app)
         secure = self.get_cookie_secure(app)
-        if self.has_same_site_capability:
-            conditional_cookie_kwargs["samesite"] = self.get_cookie_samesite(app)
+        samesite = self.get_cookie_samesite(app)
         val = self.serializer.dumps(dict(session))
         if session.to_regenerate:
             self.redis.delete(self.key_prefix + session.sid)
@@ -216,7 +214,7 @@ class SessionInterface(FlaskSessionInterface):
                 domain=domain,
                 path=path,
                 secure=secure,
-                **conditional_cookie_kwargs,  # type: ignore
+                samesite=samesite,
             )
 
     def logout_user(self, uid: int) -> None:
@@ -231,20 +229,20 @@ class SessionInterface(FlaskSessionInterface):
 
 
 class Session:
-    def __init__(self, app: Flask) -> None:
+    def __init__(self, app: Flask, sdconfig: SecureDropConfig) -> None:
         self.app = app
         if app is not None:
-            self.init_app(app)
+            self.init_app(app, sdconfig)
 
-    def init_app(self, app: Flask) -> "None":
+    def init_app(self, app: Flask, sdconfig: SecureDropConfig) -> "None":
         """This is used to set up session for your app object.
         :param app: the Flask app object with proper configuration.
         """
-        app.session_interface = self._get_interface(app)  # type: ignore
+        app.session_interface = self._get_interface(app, sdconfig)  # type: ignore
 
-    def _get_interface(self, app: Flask) -> SessionInterface:
+    def _get_interface(self, app: Flask, sdconfig: SecureDropConfig) -> SessionInterface:
         config = app.config.copy()
-        config.setdefault("SESSION_REDIS", Redis())
+        config.setdefault("SESSION_REDIS", Redis(**sdconfig.REDIS_KWARGS))
         config.setdefault("SESSION_LIFETIME", 2 * 60 * 60)
         config.setdefault("SESSION_RENEW_COUNT", 5)
         config.setdefault("SESSION_SIGNER_SALT", "session")

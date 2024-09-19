@@ -12,6 +12,8 @@ from sdconfig import (
 from tests.functional.db_session import _get_fake_db_module
 from tests.utils.db_helper import reset_database
 
+REDIS_PASSWORD = Path("/tmp/redispasswd").read_text().strip()
+
 
 def _generate_random_token() -> str:
     return secrets.token_hex(32)
@@ -95,6 +97,7 @@ class SecureDropConfigFactory:
             SOURCE_TEMPLATES_DIR=DEFAULT_SECUREDROP_ROOT / "source_templates",
             JOURNALIST_TEMPLATES_DIR=DEFAULT_SECUREDROP_ROOT / "journalist_templates",
             DEFAULT_LOCALE=DEFAULT_LOCALE,
+            REDIS_PASSWORD=REDIS_PASSWORD,
         )
 
         # Delete any previous/existing DB and initialize a new one

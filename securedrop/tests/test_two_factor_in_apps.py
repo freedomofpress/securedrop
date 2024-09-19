@@ -27,7 +27,7 @@ class TestTwoFactorInJournalistApp:
             )
             assert resp1.status_code == 200
 
-            resp2 = app.get(url_for("main.logout"), follow_redirects=True)
+            resp2 = app.post(url_for("main.logout"), follow_redirects=True)
             assert resp2.status_code == 200
 
         with journalist_app.app_context():
@@ -129,18 +129,25 @@ class TestTwoFactorInJournalistApp:
             # Who goes to the page to reset their 2fa as HOTP
             otp_secret = "0123456789abcdef0123456789abcdef01234567"
             b32_otp_secret = b32encode(unhexlify(otp_secret)).decode("ascii")
-            with InstrumentedApp(journalist_app) as ins:
-                resp = app.post("/account/reset-2fa-hotp", data=dict(otp_secret=otp_secret))
-                ins.assert_redirects(resp, "/account/2fa")
+            resp = app.post("/account/reset-2fa-hotp", data=dict(otp_secret=otp_secret))
+            assert resp.status_code == 200
+            assert (
+                '<form id="check-token" method="post" action="/account/verify-2fa-hotp">'
+                in resp.data.decode()
+            )
 
+            with InstrumentedApp(journalist_app) as ins:
                 # And they successfully confirm the reset
-                app.post("/account/2fa", data=dict(token=HOTP(b32_otp_secret).generate(0)))
+                app.post(
+                    "/account/verify-2fa-hotp", data=dict(token=HOTP(b32_otp_secret).generate(0))
+                )
                 ins.assert_message_flashed(
                     "Your two-factor credentials have been reset successfully.", "notification"
                 )
 
             # And they then log out
-            app.get("/logout")
+            resp = app.post("/logout")
+            assert resp.status_code == 302
 
         # When they later try to login using a 2fa token based on their new HOTP secret
         with journalist_app.test_client() as app, InstrumentedApp(journalist_app) as ins:
@@ -173,8 +180,12 @@ class TestTwoFactorInAdminApp:
             invalid_token = "000000"
             with InstrumentedApp(journalist_app) as ins:
                 resp = app.post(
-                    url_for("admin.new_user_two_factor", uid=test_admin["id"]),
-                    data=dict(token=invalid_token),
+                    url_for("admin.new_user_two_factor_totp"),
+                    data=dict(
+                        token=invalid_token,
+                        otp_secret=test_admin["otp_secret"],
+                        userid=test_admin["id"],
+                    ),
                 )
 
                 # Then the corresponding error message is displayed
@@ -198,7 +209,10 @@ class TestTwoFactorInAdminApp:
             # When they try to submit an invalid token for setting up 2fa for themselves
             invalid_token = "000000"
             with InstrumentedApp(journalist_app) as ins:
-                resp = app.post(url_for("account.new_two_factor"), data=dict(token=invalid_token))
+                resp = app.post(
+                    url_for("account.new_two_factor_totp"),
+                    data=dict(token=invalid_token, otp_secret=test_journo["otp_secret"]),
+                )
 
                 # Then the corresponding error message is displayed
                 assert resp.status_code == 200

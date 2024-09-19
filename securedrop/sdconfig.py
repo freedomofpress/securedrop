@@ -71,6 +71,8 @@ class SecureDropConfig:
 
     RQ_WORKER_NAME: str
 
+    REDIS_PASSWORD: str
+
     env: str = "prod"
 
     @property
@@ -87,6 +89,11 @@ class SecureDropConfig:
     @property
     def DATABASE_URI(self) -> str:
         return f"sqlite:///{self.DATABASE_FILE}"
+
+    @property
+    def REDIS_KWARGS(self) -> Dict[str, str]:
+        """kwargs to pass to `redis.Redis` constructor"""
+        return {"password": self.REDIS_PASSWORD}
 
     @classmethod
     def get_current(cls) -> "SecureDropConfig":
@@ -114,6 +121,9 @@ def _parse_config_from_file(config_module_name: str) -> SecureDropConfig:
     final_worker_name = getattr(config_from_local_file, "RQ_WORKER_NAME", "default")
 
     final_scrypt_params = getattr(config_from_local_file, "SCRYPT_PARAMS", dict(N=2**14, r=8, p=1))
+    final_redis_password = getattr(config_from_local_file, "REDIS_PASSWORD", None)
+    if final_redis_password is None:
+        raise RuntimeError("REDIS_PASSWORD must be set in config.py")
 
     env = getattr(config_from_local_file, "env", "prod")
 
@@ -211,4 +221,5 @@ def _parse_config_from_file(config_module_name: str) -> SecureDropConfig:
         SUPPORTED_LOCALES=final_supp_locales,
         SESSION_EXPIRATION_MINUTES=final_sess_expiration_mins,
         RQ_WORKER_NAME=final_worker_name,
+        REDIS_PASSWORD=final_redis_password,
     )

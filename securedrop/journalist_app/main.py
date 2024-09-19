@@ -57,7 +57,7 @@ def make_blueprint() -> Blueprint:
 
         return render_template("login.html")
 
-    @view.route("/logout")
+    @view.route("/logout", methods=("POST",))
     def logout() -> werkzeug.Response:
         session.destroy()
         return redirect(url_for("main.index"))

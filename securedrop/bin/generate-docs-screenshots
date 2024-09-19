@@ -7,11 +7,11 @@ source "${BASH_SOURCE%/*}/dev-deps"
 
 run_xvfb &
 run_tor &
-run_redis &
 run_x11vnc &
 urandom
 build_redwood
 maybe_create_config_py
+run_redis
 
 pybabel compile --directory translations/
 pytest -v --page-layout "${@:-tests/functional/pageslayout}"

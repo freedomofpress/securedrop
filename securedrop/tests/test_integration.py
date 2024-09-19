@@ -45,7 +45,8 @@ def test_submit_message(journalist_app, source_app, test_journo, app_storage):
             follow_redirects=True,
         )
         assert resp.status_code == 200
-        app.get("/logout")
+        resp = app.post("/logout")
+        assert resp.status_code == 200
 
     # Request the Journalist Interface index
     with journalist_app.test_client() as app:
@@ -140,7 +141,8 @@ def test_submit_file(journalist_app, source_app, test_journo, app_storage):
             follow_redirects=True,
         )
         assert resp.status_code == 200
-        app.get("/logout")
+        resp = app.post("/logout")
+        assert resp.status_code == 200
 
     with journalist_app.test_client() as app:
         login_journalist(
@@ -236,7 +238,8 @@ def _helper_test_reply(journalist_app, source_app, test_journo, test_reply):
         assert resp.status_code == 200
         source_user = SessionManager.get_logged_in_user(db_session=db.session)
         filesystem_id = source_user.filesystem_id
-        app.get("/logout")
+        resp = app.post("/logout")
+        assert resp.status_code == 200
 
     with journalist_app.test_client() as app:
         login_journalist(
@@ -320,7 +323,8 @@ def _helper_test_reply(journalist_app, source_app, test_journo, test_reply):
         text = resp.data.decode("utf-8")
         assert "Reply deleted" in text
 
-        app.get("/logout")
+        resp = app.post("/logout")
+        assert resp.status_code == 200
 
 
 def _helper_filenames_delete(journalist_app, soup, i):
@@ -456,7 +460,8 @@ def test_delete_collections(mocker, journalist_app, source_app, test_journo):
                 ),
                 follow_redirects=True,
             )
-            app.get("/logout")
+            resp = app.post("/logout")
+            assert resp.status_code == 200
 
     with journalist_app.test_client() as app:
         login_journalist(
@@ -606,6 +611,8 @@ def test_user_change_password(journalist_app, test_journo):
         # change password
         new_pw = "another correct horse battery staply long password"
         assert new_pw != test_journo["password"]  # precondition
+        utils.prepare_password_change(app, test_journo["id"], new_pw)
+
         app.post(
             "/account/new-password",
             data=dict(
@@ -615,7 +622,8 @@ def test_user_change_password(journalist_app, test_journo):
             ),
         )
         # logout
-        app.get("/logout")
+        resp = app.post("/logout")
+        assert resp.status_code == 302
 
     # start a new client/context to be sure we've cleared the session
     with journalist_app.test_client() as app:

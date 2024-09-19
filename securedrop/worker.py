@@ -7,6 +7,7 @@ from rq.exceptions import InvalidJobOperation, NoSuchJobError
 from rq.queue import Queue
 from rq.registry import StartedJobRegistry
 from rq.worker import Worker, WorkerStatus
+from sdconfig import SecureDropConfig
 
 
 def create_queue(name: str, timeout: int = 3600) -> Queue:
@@ -15,7 +16,8 @@ def create_queue(name: str, timeout: int = 3600) -> Queue:
 
     If ``name`` is omitted, ``config.RQ_WORKER_NAME`` is used.
     """
-    return Queue(name=name, connection=Redis(), default_timeout=timeout)
+    config = SecureDropConfig.get_current()
+    return Queue(name=name, connection=Redis(**config.REDIS_KWARGS), default_timeout=timeout)
 
 
 def rq_workers(queue: Queue = None) -> List[Worker]:
@@ -23,7 +25,8 @@ def rq_workers(queue: Queue = None) -> List[Worker]:
     Returns the list of current rq ``Worker``s.
     """
 
-    return Worker.all(connection=Redis(), queue=queue)
+    config = SecureDropConfig.get_current()
+    return Worker.all(connection=Redis(**config.REDIS_KWARGS), queue=queue)
 
 
 def worker_for_job(job_id: str) -> Optional[Worker]:

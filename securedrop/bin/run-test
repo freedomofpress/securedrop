@@ -20,12 +20,12 @@ source "${BASH_SOURCE%/*}/dev-deps"
 
 run_xvfb
 run_tor &
-run_redis &
 setup_vncauth
 run_x11vnc &
 urandom
 build_redwood
 maybe_create_config_py
+run_redis
 
 if [ -n "${CIRCLE_BRANCH:-}" ] ; then
     touch tests/log/firefox.log

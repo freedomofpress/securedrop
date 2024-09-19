@@ -55,7 +55,7 @@ class JournalistAppNavigator:
         self.nav_helper.safe_send_keys_by_css_selector('input[name="token"]', otp.now())
 
         if should_submit_login_form:
-            self.nav_helper.safe_click_by_css_selector('button[type="submit"]')
+            self.nav_helper.safe_click_by_css_selector('form#login button[type="submit"]')
 
     def journalist_logs_in(
         self,
@@ -71,7 +71,7 @@ class JournalistAppNavigator:
         )
 
         # Successful login should redirect to the index
-        self.nav_helper.wait_for(lambda: self.driver.find_element(By.ID, "link-logout"))
+        self.nav_helper.wait_for(lambda: self.driver.find_element(By.ID, "btn-logout"))
         assert self.is_on_journalist_homepage()
 
     def journalist_checks_messages(self) -> None:
@@ -259,7 +259,7 @@ class JournalistAppNavigator:
             callback_before_submitting_add_user_step()
 
         # Submit the form
-        self.nav_helper.safe_click_by_css_selector("button[type=submit]")
+        self.nav_helper.safe_click_by_css_selector("form#admin-add-user button[type=submit]")
 
         # Submitting the add user form should redirect to the 2FA page
         self.nav_helper.wait_for(lambda: self.driver.find_element(By.ID, "check-token"))
@@ -290,7 +290,7 @@ class JournalistAppNavigator:
         if callback_before_submitting_2fa_step:
             callback_before_submitting_2fa_step()
 
-        self.nav_helper.safe_click_by_css_selector("button[type=submit]")
+        self.nav_helper.safe_click_by_css_selector("form#check-token button[type=submit]")
 
         # Verify the two-factor authentication
         def user_token_added():
@@ -311,7 +311,7 @@ class JournalistAppNavigator:
 
     def journalist_logs_out(self) -> None:
         # Click the logout link
-        self.nav_helper.safe_click_by_id("link-logout")
+        self.nav_helper.safe_click_by_id("logout")
         self.nav_helper.wait_for(lambda: self.driver.find_element(By.CSS_SELECTOR, ".login-form"))
 
         # Logging out should redirect back to the login page
