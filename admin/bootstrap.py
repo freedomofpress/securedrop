@@ -185,7 +185,6 @@ def envsetup(args: argparse.Namespace, virtualenv_dir: str = VENV_DIR) -> None:
 
     # virtualenv doesnt exist? Install dependencies and create
     if not os.path.exists(virtualenv_dir):
-
         # Technically you can create a virtualenv from within python
         # but pip can only be run over Tor on Tails, and debugging that
         # along with instaling a third-party dependency is not worth

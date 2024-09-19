@@ -31,7 +31,6 @@ class TestSourceLayoutTorBrowser:
             source_app_base_url=sd_servers.source_app_base_url,
             accept_languages=locale_with_commas,
         ) as navigator:
-
             # And they have disabled JS in their browser
             disable_js(navigator.driver)
 

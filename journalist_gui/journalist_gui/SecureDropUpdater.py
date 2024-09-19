@@ -17,7 +17,6 @@ ESCAPE_POD = re.compile(r"\x1B\[[0-?]*[ -/]*[@-~]")
 
 
 def password_is_set():
-
     pwd_flag = subprocess.check_output(["passwd", "--status"]).decode("utf-8").split()[1]
 
     if pwd_flag == "NP":
@@ -26,7 +25,6 @@ def password_is_set():
 
 
 def prevent_second_instance(app: QtWidgets.QApplication, name: str) -> None:
-
     # Null byte triggers abstract namespace
     IDENTIFIER = "\0" + name
     ALREADY_BOUND_ERRNO = 98

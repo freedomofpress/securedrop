@@ -207,7 +207,6 @@ if tails_current_version:
             )
 
             if "OK" in verify_proc:
-
                 # Updating the cert chain requires sudo privileges
                 os.setresgid(0, 0, -1)
                 os.setresuid(0, 0, -1)

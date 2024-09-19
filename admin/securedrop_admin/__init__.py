@@ -769,7 +769,6 @@ def update_check_required(cmd_name: str) -> Callable[[_FuncT], _FuncT]:
 
             update_status, latest_tag = check_for_updates(cli_args)
             if update_status is True:
-
                 # Useful for troubleshooting
                 branch_status = get_git_branch(cli_args)
 

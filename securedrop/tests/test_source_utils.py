@@ -9,7 +9,6 @@ from .test_journalist import VALID_PASSWORD
 
 
 def test_check_url_file(config):
-
     assert check_url_file("nosuchfile", "whatever") is None
 
     try:

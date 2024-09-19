@@ -168,7 +168,6 @@ def make_blueprint() -> Blueprint:
                 )
             )
         else:
-
             flash(
                 Markup(
                     "<b>{}</b> {}".format(

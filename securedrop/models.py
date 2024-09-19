@@ -426,7 +426,6 @@ class Journalist(db.Model):
         is_admin: bool = False,
         otp_secret: "Optional[str]" = None,
     ) -> None:
-
         self.check_username_acceptable(username)
         self.username = username
         if first_name:

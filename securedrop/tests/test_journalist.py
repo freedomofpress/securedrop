@@ -1184,7 +1184,6 @@ def test_admin_edits_user_invalid_username_deleted(
 
 
 def test_admin_resets_user_hotp_format_non_hexa(journalist_app, test_admin, test_journo):
-
     with journalist_app.test_client() as app:
         login_journalist(
             app,
@@ -1225,7 +1224,6 @@ def test_admin_resets_user_hotp_format_non_hexa(journalist_app, test_admin, test
 def test_admin_resets_user_hotp_format_too_short(
     journalist_app, test_admin, test_journo, the_secret
 ):
-
     with journalist_app.test_client() as app:
         login_journalist(
             app,
@@ -1256,8 +1254,9 @@ def test_admin_resets_user_hotp_format_too_short(
             assert journo.is_totp
 
             ins.assert_message_flashed(
-                "HOTP secrets are 40 characters long"
-                " - you have entered {num}.".format(num=len(the_secret.replace(" ", ""))),
+                "HOTP secrets are 40 characters long" " - you have entered {num}.".format(
+                    num=len(the_secret.replace(" ", ""))
+                ),
                 "error",
             )
 
@@ -1294,7 +1293,6 @@ def test_admin_resets_user_hotp(journalist_app, test_admin, test_journo):
 
 
 def test_admin_resets_user_hotp_error(mocker, journalist_app, test_admin, test_journo):
-
     bad_secret = "0123456789ABCDZZ0123456789ABCDZZ01234567"
     error_message = "SOMETHING WRONG!"
     mocked_error_logger = mocker.patch("journalist.app.logger.error")

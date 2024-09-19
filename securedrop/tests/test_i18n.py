@@ -157,7 +157,6 @@ def verify_i18n(app):
             )
 
     with app.test_client() as c:
-
         # a request without Accept-Language or "l" argument gets the
         # default locale
         page = c.get("/login")

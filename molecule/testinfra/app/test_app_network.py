@@ -11,7 +11,6 @@ testinfra_hosts = [securedrop_test_vars.app_hostname]
 
 @pytest.mark.skip_in_prod()
 def test_app_iptables_rules(host):
-
     local = host.get_host("local://")
 
     # Build a dict of variables to pass to jinja for iptables comparison

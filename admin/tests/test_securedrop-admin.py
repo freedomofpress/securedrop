@@ -76,9 +76,7 @@ class TestSecureDropAdmin:
             "securedrop_admin.check_for_updates", side_effect=[[False, "1.5.0"]]
         ) as mocked_check, mock.patch(
             "securedrop_admin.get_git_branch", side_effect=["develop"]
-        ), mock.patch(
-            "sys.exit"
-        ) as mocked_exit:
+        ), mock.patch("sys.exit") as mocked_exit:
             # The decorator itself interprets --force
             args = argparse.Namespace(force=False)
             rv = securedrop_admin.update_check_required("update_check_test")(lambda _: 100)(args)
@@ -101,9 +99,7 @@ class TestSecureDropAdmin:
             "securedrop_admin.check_for_updates", side_effect=[[True, "1.5.0"]]
         ) as mocked_check, mock.patch(
             "securedrop_admin.get_git_branch", side_effect=["bad_branch"]
-        ), mock.patch(
-            "sys.exit"
-        ) as mocked_exit:
+        ), mock.patch("sys.exit") as mocked_exit:
             # The decorator itself interprets --force
             args = argparse.Namespace(force=False)
             securedrop_admin.update_check_required("update_check_test")(lambda _: _)(args)
@@ -125,9 +121,7 @@ class TestSecureDropAdmin:
             "securedrop_admin.check_for_updates", side_effect=[[True, "1.5.0"]]
         ) as mocked_check, mock.patch(
             "securedrop_admin.get_git_branch", side_effect=["develop"]
-        ), mock.patch(
-            "sys.exit"
-        ) as mocked_exit:
+        ), mock.patch("sys.exit") as mocked_exit:
             # The decorator itself interprets --force
             args = argparse.Namespace(force=True)
             rv = securedrop_admin.update_check_required("update_check_test")(lambda _: 100)(args)

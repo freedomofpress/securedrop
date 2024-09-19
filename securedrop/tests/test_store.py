@@ -169,7 +169,6 @@ def test_verify_regular_submission_in_sourcedir_returns_true(test_storage):
 
 
 def test_verify_invalid_file_extension_in_sourcedir_raises_exception(test_storage):
-
     source_directory, file_path = create_file_in_source_dir(
         test_storage.storage_path, "example-filesystem-id", "not_valid.txt"
     )
@@ -181,7 +180,6 @@ def test_verify_invalid_file_extension_in_sourcedir_raises_exception(test_storag
 
 
 def test_verify_invalid_filename_in_sourcedir_raises_exception(test_storage):
-
     source_directory, file_path = create_file_in_source_dir(
         test_storage.storage_path, "example-filesystem-id", "NOTVALID.gpg"
     )

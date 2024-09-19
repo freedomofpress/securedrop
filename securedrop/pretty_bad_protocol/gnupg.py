@@ -553,7 +553,6 @@ class GPG(GPGBase):
         return self._process_keys(keyids, check_sig=True)
 
     def _process_keys(self, keyids, check_sig=False):  # type: ignore[no-untyped-def]
-
         if len(keyids) > self._batch_limit:
             raise ValueError(
                 "List signatures is limited to %d keyids simultaneously" % self._batch_limit
@@ -963,9 +962,7 @@ class GPG(GPGBase):
 This directory was created by python-gnupg, on {}, and
 it contains saved batch files, which can be given to GnuPG to automatically
 generate keys. Please see
-{}""".format(
-                    _util.now(), links
-                )  # sometimes python is awesome.
+{}""".format(_util.now(), links)  # sometimes python is awesome.
 
                 with open(readme, "a+") as fh:
                     [fh.write(line) for line in explain]

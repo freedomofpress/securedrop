@@ -414,8 +414,9 @@ def set_clean_tmp_parser(subps: _SubParsersAction, name: str) -> None:
         default=default_days,
         type=int,
         help=(
-            "remove files not modified in a given number of DAYS "
-            "(default {} days)".format(default_days)
+            "remove files not modified in a given number of DAYS " "(default {} days)".format(
+                default_days
+            )
         ),
     )
     parser.add_argument(

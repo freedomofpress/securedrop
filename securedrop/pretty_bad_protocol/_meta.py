@@ -20,7 +20,6 @@
 attribute creation and handling.
 """
 
-
 import atexit
 import codecs
 import encodings

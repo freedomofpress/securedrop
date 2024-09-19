@@ -85,7 +85,6 @@ class WeblateUploader:
         request_limit: int,
         canonicalization_rules: List[Tuple[str, str]],
     ) -> None:
-
         if len(token) != 40:
             raise BadOrMissingTokenError(
                 "API token is not in expected 40 character format.", base_url

@@ -303,7 +303,6 @@ class Storage:
         filename: Optional[str],
         stream: BinaryIO,
     ) -> str:
-
         if filename is not None:
             sanitized_filename = secure_filename(filename)
         else:

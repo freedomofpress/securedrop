@@ -99,9 +99,7 @@ class TestJournalistMail(TestBase):
                 """
                 ( echo 'Subject: TEST' ; echo ; echo -e '{payload}' ) | \
                 /var/ossec/send_encrypted_alarm.sh {who}
-                """.format(
-                    who=who, payload=payload
-                ),
+                """.format(who=who, payload=payload),
             )
             assert self.wait_for_command(host, f"mailq | grep -q {who}@ossec.test")
 
@@ -121,9 +119,7 @@ class TestJournalistMail(TestBase):
                 postcat -q $job | tee /dev/stderr | \
                    gpg --homedir /var/ossec/.gnupg --decrypt 2>&1 | \
                    grep -q {expected}
-                """.format(
-                    expected=expected
-                ),
+                """.format(expected=expected),
             )
         #
         # failure to encrypt must trigger an emergency mail to ossec contact

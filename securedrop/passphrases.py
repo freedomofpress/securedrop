@@ -18,7 +18,6 @@ class InvalidWordListError(Exception):
 
 
 class PassphraseGenerator:
-
     PASSPHRASE_WORDS_COUNT = 7
 
     # Enforce a reasonable maximum length for passphrases to avoid DoS
