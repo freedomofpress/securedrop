@@ -10,12 +10,9 @@ if [[ -n "$PY_FILES" ]]; then
     if [[ ! -v VIRTUAL_ENV ]]; then
         source .venv/bin/activate
     fi
-    echo "Checking:"
-    echo "$PY_FILES"
-    # Run black against changed python files for this commit
-    black --check --diff ${PY_FILES//$'\n'/ }
     # Run ruff (against all files, it's fast enough)
-    ruff check . --diff && echo "ruff passed!"
+    ruff format . && ruff check . --diff \
+        && echo "ruff passed!"
 else
     exit 0
 fi

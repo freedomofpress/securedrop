@@ -61,16 +61,6 @@ update-pip-requirements: update-admin-pip-requirements update-python3-requiremen
 #
 #################
 
-.PHONY: check-black
-check-black: ## Check Python source code formatting with black
-	@echo "███ Running black check..."
-	@black --check --diff .
-	@echo
-
-.PHONY: black
-black: ## Update Python source code formatting with black
-	@black securedrop .
-
 .PHONY: ansible-config-lint
 ansible-config-lint: ## Run custom Ansible linting tasks.
 	@echo "███ Linting Ansible configuration..."
@@ -94,14 +84,18 @@ app-lint-full: ## Test pylint compliance, with no checks disabled.
 	@echo
 
 .PHONY: check-ruff
-check-ruff:  ## Lint Python source files.
+check-ruff:  ## Check linting and formatting of Python source files.
 	@echo "███ Running ruff..."
-	@ruff check . --show-source
+	@ruff format . --diff
+	@ruff check .
 	@echo
 
 .PHONY: ruff
 ruff: ## Update Python source file formatting.
+	@ruff format .
 	@ruff check . --fix
+
+fix: ruff ## Apply automatic fixes.
 
 # The --disable=names is required to use the BEM syntax
 # # https://csswizardry.com/2013/01/mindbemding-getting-your-head-round-bem-syntax/
@@ -139,7 +133,7 @@ yamllint:  ## Lint YAML files (does not validate syntax!).
 # While the order mostly doesn't matter here, keep "check-ruff" first, since it
 # gives the broadest coverage and runs (and therefore fails) fastest.
 .PHONY: lint
-lint: check-ruff ansible-config-lint app-lint check-black html-lint shellcheck typelint yamllint check-strings check-supported-locales check-desktop-files ## Runs all lint checks
+lint: check-ruff ansible-config-lint app-lint html-lint shellcheck typelint yamllint check-strings check-supported-locales check-desktop-files ## Runs all lint checks
 
 .PHONY: safety
 safety:  ## Run `safety check` to check python dependencies for vulnerabilities.

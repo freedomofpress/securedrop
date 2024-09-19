@@ -2,13 +2,10 @@
 name = "securedrop"
 requires-python = ">=3.8"
 
-[tool.black]
-line-length = 100
-target-version = ["py38"]
-# Don't use `extend`, we want the default behavior that honors .gitignore rules
-
 [tool.ruff]
 line-length = 100
+extend-include = ["securedrop/scripts/*"]
+[tool.ruff.lint]
 select = [
     # pycodestyle errors
     "E",
@@ -79,14 +76,13 @@ ignore = [
     # nested if and with statements, too many violations for now
     "SIM102", "SIM117",
 ]
-extend-include = ["securedrop/scripts/*"]
 
-[tool.ruff.isort]
+[tool.ruff.lint.isort]
 # ruff's isort is smart enough to know these are first party, but let's treat
 # them as third-party to match O.G. isort until we fix our package layout
 known-third-party = ["journalist_app", "management", "source_app", "tests"]
 
-[tool.ruff.per-file-ignores]
+[tool.ruff.lint.per-file-ignores]
 "**/test**.py" = [
     # use of `assert`
     "S101",
