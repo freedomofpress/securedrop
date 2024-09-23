@@ -18,9 +18,7 @@ molecule-vagrant==0.3
 # Needed for ansible network filter
 # http://docs.ansible.com/ansible/latest/playbooks_filters_ipaddr.html
 netaddr
-# Now also pin pip due to https://github.com/jazzband/pip-tools/issues/853
-pip>=21.3
-pip-tools>=6.1.0
+pip
 polib
 prompt_toolkit==2.0.9
 psutil>=5.6.6
@@ -43,4 +41,5 @@ six==1.15.0
 testinfra>=5.3.1
 translate-toolkit
 urllib3>=1.26.5
+uv
 yamllint
