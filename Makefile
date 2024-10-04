@@ -425,9 +425,10 @@ $(DESKTOP_POT): ${DESKTOP_BASE}/*.in
 		--output-file $@
 	@rm ${DESKTOP_LOCALE_DIR}/*.po
 
-# Render desktop list from "i18n.json".
+# Render the list of desktop locales from those in entries "i18n.json" that
+# include a "desktop" key.
 $(DESKTOP_I18N_CONF):
-	@jq --raw-output '.supported_locales[].desktop' ${I18N_CONF} > $@
+	@jq --raw-output '.supported_locales[].desktop | values' ${I18N_CONF} > $@
 
 ## Supported locales
 
