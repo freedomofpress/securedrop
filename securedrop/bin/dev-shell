@@ -58,7 +58,7 @@ function docker_image() {
            --build-arg=USER_ID="$(id -u)" \
            --build-arg=USER_NAME="${USER:-root}" \
            -t "${1}" \
-           --file "${TOPLEVEL}/securedrop/dockerfiles/focal/python3/${2}" \
+           --file "${TOPLEVEL}/securedrop/dockerfiles/${BASE_OS:-focal}/python3/${2}" \
            "${TOPLEVEL}/securedrop" > $out
 }
 
@@ -136,7 +136,7 @@ function docker_run() {
            -e LANG=C.UTF-8 \
            -e TEST_LOCALES \
            -e PATH \
-           -e BASE_OS="focal" \
+	   -e BASE_OS="${BASE_OS:-focal}" \
            --user "${USER:-root}" \
            --volume "${TOPLEVEL}:${TOPLEVEL}:Z" \
            --workdir "${TOPLEVEL}/securedrop" \
@@ -144,10 +144,10 @@ function docker_run() {
            $DOCKER_RUN_ARGUMENTS "${1}" "${@:2}"
 }
 
-image="securedrop-slim-focal-py3"
+image="securedrop-slim-${BASE_OS:-focal}-py3"
 docker_image "$image" "SlimDockerfile"
 if  [[ -z "${SLIM_BUILD}" ]]; then
-    image="securedrop-test-focal-py3"
+    image="securedrop-test-${BASE_OS:-focal}-py3"
     docker_image "$image" "Dockerfile"
 fi
 
