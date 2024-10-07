@@ -4,19 +4,7 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2018.
 #
 msgid ""
-msgstr ""
-"Project-Id-Version: SecureDrop 0.8.0~rc1\n"
-"Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2023-12-29 18:30+0000\n"
-"Last-Translator: Dimitris Maroulidis <dmaroulidis@dimitrismaroulidis.com>\n"
-"Language-Team: Greek <https://weblate.securedrop.org/projects/securedrop/securedrop/el/>\n"
-"Language: el\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.2.1\n"
-"Generated-By: Babel 2.5.1\n"
+msgstr "Project-Id-Version: SecureDrop 0.8.0~rc1\nReport-Msgid-Bugs-To: securedrop@freedom.press\nPO-Revision-Date: 2024-09-23 19:33+0000\nLast-Translator: Dimitris Maroulidis <dmaroulidis@dimitrismaroulidis.com>\nLanguage-Team: Greek <https://weblate.securedrop.org/projects/securedrop/securedrop/el/>\nLanguage: el\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=2; plural=n != 1;\nX-Generator: Weblate 5.7.1\nGenerated-By: Babel 2.5.1\n"
 
 msgid "Name too long"
 msgstr "Το όνομα είναι πολύ μεγάλο"
@@ -35,8 +23,8 @@ msgstr "Άκυρο όνομα χρήστη"
 msgid "{time} ago"
 msgstr "πριν από {time}"
 
-msgid "You have been logged out due to inactivity."
-msgstr "Αποσυνδεθήκατε λόγω αδράνειας."
+msgid "You have been logged out due to inactivity or a problem with your session."
+msgstr "Έχετε αποσυνδεθεί λόγω αδράνειας ή προβλήματος με τη συνεδρία σας."
 
 msgid "SecureDrop"
 msgstr "SecureDrop"
@@ -166,6 +154,9 @@ msgstr "Πρέπει να επιλέξετε ένα ή παραπάνω αντι
 msgid "No unread submissions for this source."
 msgstr "Δεν υπάρχουν μη αναγνωσμένες υποβολές για αυτή την πηγή."
 
+msgid "You have been logged out due to inactivity."
+msgstr "Αποσυνδεθήκατε λόγω αδράνειας."
+
 msgid "Account updated."
 msgstr "Ο λογαριασμός ενημερώθηκε."
 
@@ -283,6 +274,21 @@ msgstr "Συνέχεια για αλλαγή μυστικού"
 msgid "CONTINUE"
 msgstr "ΣΥΝΕΧΕΙΑ"
 
+msgid "Enable YubiKey (OATH-HOTP)"
+msgstr "Ενεργοποίηση YubiKey (OATH-HOTP)"
+
+msgid "Once you have configured your YubiKey, enter the 6-digit verification code below:"
+msgstr "Όταν ολοκληρώσετε την παραμετροποίηση του YubiKey σας, πληκτρολογήστε τον εξαψήφιο κωδικό επαλήθευσης παρακάτω:"
+
+msgid "Verification code"
+msgstr "Κωδικός επαλήθευσης"
+
+msgid "Submit verification code"
+msgstr "Υποβολή κωδικού επαλήθευσης"
+
+msgid "SUBMIT"
+msgstr "ΥΠΟΒΟΛΗ"
+
 msgid "Enable FreeOTP"
 msgstr "Ενεργοποίηση του FreeOTP"
 
@@ -306,21 +312,6 @@ msgstr "Δεν μπορείτε να σαρώσετε το barcode; Μπορεί
 
 msgid "Once you have paired FreeOTP with this account, enter the 6-digit verification code below:"
 msgstr "Όταν συνδέσετε το FreeOTP με αυτό τον λογαριασμό, πληκτρολογήστε τον εξαψήφιο κωδικό επαλήθευσης παρακάτω:"
-
-msgid "Enable YubiKey (OATH-HOTP)"
-msgstr "Ενεργοποίηση YubiKey (OATH-HOTP)"
-
-msgid "Once you have configured your YubiKey, enter the 6-digit verification code below:"
-msgstr "Όταν ολοκληρώσετε την παραμετροποίηση του YubiKey σας, πληκτρολογήστε τον εξαψήφιο κωδικό επαλήθευσης παρακάτω:"
-
-msgid "Verification code"
-msgstr "Κωδικός επαλήθευσης"
-
-msgid "Submit verification code"
-msgstr "Υποβολή κωδικού επαλήθευσης"
-
-msgid "SUBMIT"
-msgstr "ΥΠΟΒΟΛΗ"
 
 msgid "Admin Interface"
 msgstr "Διεπαφή διαχείρισης"
@@ -370,8 +361,8 @@ msgstr "ΔΙΑΓΡΑΦΗ"
 msgid "No users to display"
 msgstr "Δεν υπάρχουν χρήστες για να προβληθούν"
 
-msgid "Update instance config"
-msgstr "Ενημέρωση παραμετροποίησης εγκατάστασης"
+msgid "Update instance configuration"
+msgstr "Ενημέρωση ρυθμίσεων εγκατάστασης"
 
 msgid "INSTANCE CONFIG"
 msgstr "ΠΑΡΑΜΕΤΡΟΠΟΙΗΣΗ ΕΓΚΑΤΑΣΤΑΣΗΣ"
@@ -409,14 +400,14 @@ msgstr "Αλλαγή μυστικού HOTP"
 msgid "Enter a new HOTP secret formatted as a 40-digit hexadecimal string. Spaces will be ignored:"
 msgstr "Εισαγωγή ενός νέου μυστικού HOTP σε μορφή δεκαεξαδικής συμβολοσειράς (hex string) 40 ψηφίων. Τα κενά θα αγνοηθούν:"
 
+msgid "Once you have configured your YubiKey, enter the 6-digit code below:"
+msgstr "Όταν ολοκληρώσετε την παραμετροποίηση του YubiKey σας, πληκτρολογήστε τον εξαψήφιο κωδικό παρακάτω:"
+
 msgid "You're almost done! To finish adding this new user, have them follow the instructions below to set up two-factor authentication with FreeOTP. Once they've added an entry for this account in the app, have them enter one of the 6-digit codes from the app to confirm that two-factor authentication is set up correctly."
 msgstr "Έχετε σχεδόν τελειώσει. Για να ολοκληρώσετε την προσθήκη του νέου χρήστη, ζητήστε του να ακολουθήσει τις παρακάτω οδηγίες για να ρυθμίσει την πιστοποίηση δύο παραγόντων με το FreeOTP. Μόλις προσθέσουν μια εγγραφή για αυτό τον λογαριασμό στην εφαρμογή, ζητήστε τους να εισάγουν έναν από τους εξαψήφιους κωδικούς από την εφαρμογή για να επιβεβαιώσουν ότι η πιστοποίηση δύο παραγόντων έχει ρυθμιστεί σωστά."
 
 msgid "Can't scan the barcode? You can manually pair FreeOTP with this account by entering the following two-factor secret into the app:"
 msgstr "Δεν μπορείτε να σαρώσετε το barcode; Μπορείτε να συνδέσετε το FreeOTP με το λογαριασμό SecureDrop σας χειροκίνητα, εισάγοντας το παρακάτω μυστικό δυο παραγόντων στην εφαρμογή:"
-
-msgid "Once you have configured your YubiKey, enter the 6-digit code below:"
-msgstr "Όταν ολοκληρώσετε την παραμετροποίηση του YubiKey σας, πληκτρολογήστε τον εξαψήφιο κωδικό παρακάτω:"
 
 msgid "Navigation"
 msgstr "Πλοήγηση"
@@ -433,6 +424,9 @@ msgstr "Διαχείριση"
 msgid "Log Out"
 msgstr "Αποσύνδεση"
 
+msgid "Return to All Sources"
+msgstr "Επιστροφή σε Όλες Οι Πηγές"
+
 msgid "Powered by <b>SecureDrop {version}</b>."
 msgstr "Με την υποστήριξη του <b>SecureDrop {version}</b>."
 
@@ -445,8 +439,14 @@ msgstr "Όλες οι πηγές"
 msgid "All messages, files, and replies from sources are stored as encrypted files for security. To read them, you will need to decrypt them on your Secure Viewing Station."
 msgstr "Όλα τα μηνύματα, αρχεία και απαντήσεις αποθηκεύονται ως κρυπτογραφημένα αρχεία για ασφάλεια. Για να τα διαβάσετε, θα πρέπει να τα αποκρυπτογραφήσετε στον Σταθμό Ασφαλούς Προβολής."
 
+msgid "Download Selected Files"
+msgstr "Λήψη επιλεγμένων αρχείων"
+
 msgid "Download Selected"
 msgstr "Λήψη επιλεγμένων"
+
+msgid "Delete Selected Files"
+msgstr "Διαγραφή επιλεγμένων αρχείων"
 
 msgid "Delete Selected"
 msgstr "Διαγραφή επιλεγμένων"
@@ -675,14 +675,26 @@ msgstr "ΕΠΑΝΑΦΟΡΑ ΣΤΟΙΧΕΙΩΝ ΠΙΣΤΟΠΟΙΗΣΗΣ ΚΛΕΙ�
 msgid "Reset Security Key Credentials"
 msgstr "Επαναφορά διαπιστευτηρίων κλειδιού ασφαλείας"
 
+msgid "Download Selected Unread Submissions"
+msgstr "Λήψη επιλεγμένων μη αναγνωσμένων υποβολών"
+
 msgid "Download Unread"
 msgstr "Κατέβασμα μη αναγνωσμένων"
+
+msgid "Download Selected Submissions"
+msgstr "Λήψη επιλεγμένων υποβολών"
 
 msgid "Download"
 msgstr "Λήψη"
 
+msgid "Star Selected Submissions"
+msgstr ""
+
 msgid "Star"
 msgstr "Αστέρι"
+
+msgid "Un-star Selected Submissions"
+msgstr ""
 
 msgid "Un-star"
 msgstr "Απο-επισήμανση"
@@ -735,8 +747,8 @@ msgstr "Κωδικός πρόσβασης"
 msgid "Show password"
 msgstr "Προβολή κωδικού"
 
-msgid "Log In"
-msgstr "Σύνδεση"
+msgid "Log In to Journalist Interface"
+msgstr ""
 
 msgid "LOG IN"
 msgstr "ΣΥΝΔΕΣΗ"
@@ -812,14 +824,20 @@ msgstr "Συγγνώμη, το κωδικό όνομα δεν αναγνωρίζ
 msgid "Important"
 msgstr "Σημαντικό"
 
-msgid "You were logged out due to inactivity. Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
-msgstr "Αποσυνδεθήκατε λόγω αδράνειας. Πατήστε το κουμπί <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>Νέα Ταυτότητα</b> στη γραμμή εργαλείων του Tor Browser σας πριν συνεχίσετε. Αυτό θα διαγράψει τα δεδομένα δραστηριότητας του Tor Browser σε αυτή τη συσκευή."
+msgid "You have been logged out due to inactivity or a problem with your session. Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
+msgstr ""
 
 msgid "Protecting Journalists and Sources"
 msgstr "Προστατεύοντας δημοσιογράφους και πηγές"
 
 msgid "Skip to notification"
 msgstr "Προχωρήστε στην ειδοποίηση"
+
+msgid "Return to Submission Page"
+msgstr ""
+
+msgid "Return to Home Page"
+msgstr ""
 
 msgid "We're sorry, our SecureDrop is currently offline."
 msgstr "Συγγνώμη, αυτή τη στιγμή το SecureDrop μας είναι εκτός σύνδεσης."
@@ -863,8 +881,8 @@ msgstr "<strong>Κρατήστε το μυστικό.</strong> Μην το μο�
 msgid "<strong>Keep it safe.</strong> There is no account recovery option."
 msgstr "<strong>Κρατήστε το ασφαλές.</strong> Δεν υπάρχει δυνατότητα ανάκτησης λογαριασμού."
 
-msgid "Continue"
-msgstr "Συνέχεια"
+msgid "Continue to Submission Page"
+msgstr ""
 
 msgid "Welcome"
 msgstr "Καλωσήρθατε"
@@ -890,8 +908,8 @@ msgstr "<a href=\"/\" aria-label=\"Ακολουθήστε αυτές τις οδ
 msgid "<strong>It is recommended to use Tor Browser to access SecureDrop:</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
 msgstr "<strong>Προτείνεται να χρησιμοποιείτε τον Tor Browser για να επισκέπτεστε το SecureDrop:</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Μάθετε πως να τον εγκαταστήσετε</a>, ή αγνοήστε αυτή την προειδοποίηση για να συνεχίσετε."
 
-msgid "<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop version.</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
-msgstr "<strong>Προτείνεται να χρησιμοποιήσετε την έκδοση για υπολογιστή του Tor browser για να επισκεφτείτε το SecureDrop, καθώς ο Orfox δεν παρέχει το ίδιο επίπεδο ασφάλειας και ανωνυμίας με την έκδοση για υπολογιστή.</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Μάθετε πώς να τον εγκαταστήσετε</a>, ή αγνοήστε αυτή την προειδοποίηση για να συνεχίσετε."
+msgid "<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop version.</strong> <a class=\"recommend-tor\" aria-label=\"Learn how to install Tor Browser\" href=\"{tor_browser_url}\" >Learn how to install it</a>, or ignore this warning to continue."
+msgstr ""
 
 msgid "{} logo"
 msgstr "Λογότυπο της/του {}"
@@ -902,8 +920,8 @@ msgstr "Πρώτη υποβολή"
 msgid "First time submitting to our SecureDrop? Start here."
 msgstr "Υποβάλετε κάτι στο SecureDrop μας για πρώτη φορά; Ξεκινήστε από εδώ."
 
-msgid "Get Started"
-msgstr "Ας ξεκινήσουμε"
+msgid "Get Started With Your First Submission"
+msgstr ""
 
 msgid "GET STARTED"
 msgstr "ΞΕΚΙΝΗΣΤΕ"
@@ -914,6 +932,9 @@ msgstr "Επιστροφή"
 msgid "Already have a codename? Check for replies or submit something new."
 msgstr "Έχετε ήδη κωδικό όνομα; Ελέγξτε για απαντήσεις ή υποβάλετε κάτι καινούριο."
 
+msgid "Log In Using Your Codename"
+msgstr ""
+
 msgid "Log in"
 msgstr "Σύνδεση"
 
@@ -923,11 +944,17 @@ msgstr "Εισαγωγή κωδικού ονόματος"
 msgid "Enter your codename"
 msgstr "Γράψτε το κωδικό όνομά σας"
 
+msgid "Cancel and Return to Previous Page"
+msgstr ""
+
 msgid "CANCEL"
 msgstr "ΑΚΥΡΩΣΗ"
 
 msgid "Additional Action Required"
 msgstr "Απαιτείται επιπλέον ενέργεια"
+
+msgid "Log Back In"
+msgstr ""
 
 msgid "One more thing..."
 msgstr "Κάτι ακόμα..."
@@ -962,8 +989,11 @@ msgstr "Αν στέλνετε μόνο ένα μήνυμα, αυτό πρέπε�
 msgid "Anti-spam check. Do not fill this in!"
 msgstr "Έλεγχος anti-spam. Μην το συμπληρώσετε!"
 
-msgid "Submit"
-msgstr "Υποβολή"
+msgid "Cancel and Clear Uploaded Content"
+msgstr ""
+
+msgid "Submit Uploaded Content"
+msgstr ""
 
 msgid "Read Replies"
 msgstr "Ανάγνωση απαντήσεων"
@@ -976,6 +1006,9 @@ msgstr "Διαγραφή αυτής της απάντησης"
 
 msgid "Delete reply from {timestamp}?"
 msgstr "Διαγραφή απάντησης από {timestamp};"
+
+msgid "Delete Reply"
+msgstr ""
 
 msgid "Delete All Replies"
 msgstr "Διαγραφή όλων των απαντήσεων"
@@ -1040,6 +1073,9 @@ msgstr "Θυμήσου, το κωδικό όνομά σου είναι:"
 msgid "Codename"
 msgstr "Κωδικό όνομα"
 
+msgid "Reveal Codename"
+msgstr ""
+
 msgid "Show Codename"
 msgstr "Εμφάνιση κωδικού ονόματος"
 
@@ -1082,6 +1118,27 @@ msgstr "<strong>Σημαντικό:</strong> Αν επιθυμείτε να δι
 
 msgid "Back to submission page"
 msgstr "Πίσω στη σελίδα υποβολών"
+
+#~ msgid "You were logged out due to inactivity. Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
+#~ msgstr "Αποσυνδεθήκατε λόγω αδράνειας. Πατήστε το κουμπί <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>Νέα Ταυτότητα</b> στη γραμμή εργαλείων του Tor Browser σας πριν συνεχίσετε. Αυτό θα διαγράψει τα δεδομένα δραστηριότητας του Tor Browser σε αυτή τη συσκευή."
+
+#~ msgid "Update instance config"
+#~ msgstr "Ενημέρωση παραμετροποίησης εγκατάστασης"
+
+#~ msgid "Log In"
+#~ msgstr "Σύνδεση"
+
+#~ msgid "Continue"
+#~ msgstr "Συνέχεια"
+
+#~ msgid "<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop version.</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
+#~ msgstr "<strong>Προτείνεται να χρησιμοποιήσετε την έκδοση για υπολογιστή του Tor browser για να επισκεφτείτε το SecureDrop, καθώς ο Orfox δεν παρέχει το ίδιο επίπεδο ασφάλειας και ανωνυμίας με την έκδοση για υπολογιστή.</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Μάθετε πώς να τον εγκαταστήσετε</a>, ή αγνοήστε αυτή την προειδοποίηση για να συνεχίσετε."
+
+#~ msgid "Get Started"
+#~ msgstr "Ας ξεκινήσουμε"
+
+#~ msgid "Submit"
+#~ msgstr "Υποβολή"
 
 #~ msgid "Field must be between 1 and {max_codename_len} character long."
 #~ msgid_plural "Field must be between 1 and {max_codename_len} characters long."
