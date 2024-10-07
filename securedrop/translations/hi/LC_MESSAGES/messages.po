@@ -35,8 +35,8 @@ msgstr "यह उपयोगकर्ता नाम अमान्य ह�
 msgid "{time} ago"
 msgstr "{time} पहले"
 
-msgid "You have been logged out due to inactivity."
-msgstr "निष्क्रियता के कारण आपको लॉग आउट कर दिया गया है|"
+msgid "You have been logged out due to inactivity or a problem with your session."
+msgstr ""
 
 msgid "SecureDrop"
 msgstr "SecureDrop"
@@ -166,6 +166,9 @@ msgstr "आपको हटाने के लिए एक या अधिक
 msgid "No unread submissions for this source."
 msgstr "इस स्रोत के लिए कोई अपठित सबमिशन नहीं है |"
 
+msgid "You have been logged out due to inactivity."
+msgstr "निष्क्रियता के कारण आपको लॉग आउट कर दिया गया है|"
+
 msgid "Account updated."
 msgstr "खाता अपडेट किया गया।"
 
@@ -283,6 +286,21 @@ msgstr ""
 msgid "CONTINUE"
 msgstr "जारी रखें"
 
+msgid "Enable YubiKey (OATH-HOTP)"
+msgstr "YubiKey सक्षम करें (OATH-HOTP)"
+
+msgid "Once you have configured your YubiKey, enter the 6-digit verification code below:"
+msgstr "एक बार जब आप अपने YubiKey को कॉन्फ़िगर कर लेते हैं, तो नीचे 6 अंकों का सत्यापन कोड डालें:"
+
+msgid "Verification code"
+msgstr "प्रमाणीकरण संख्या"
+
+msgid "Submit verification code"
+msgstr ""
+
+msgid "SUBMIT"
+msgstr "जमा करें"
+
 msgid "Enable FreeOTP"
 msgstr "FreeOTP सक्षम करें"
 
@@ -306,21 +324,6 @@ msgstr "बारकोड को स्कैन नहीं कर सकत�
 
 msgid "Once you have paired FreeOTP with this account, enter the 6-digit verification code below:"
 msgstr "एक बार जब आप इस खाते के साथ मुफ्त OTP जोड़ लेते हो, नीचे 6 अंकों के सत्यापन कोड डालें:"
-
-msgid "Enable YubiKey (OATH-HOTP)"
-msgstr "YubiKey सक्षम करें (OATH-HOTP)"
-
-msgid "Once you have configured your YubiKey, enter the 6-digit verification code below:"
-msgstr "एक बार जब आप अपने YubiKey को कॉन्फ़िगर कर लेते हैं, तो नीचे 6 अंकों का सत्यापन कोड डालें:"
-
-msgid "Verification code"
-msgstr "प्रमाणीकरण संख्या"
-
-msgid "Submit verification code"
-msgstr ""
-
-msgid "SUBMIT"
-msgstr "जमा करें"
 
 msgid "Admin Interface"
 msgstr "व्यवस्थापक अंतराफलक"
@@ -370,7 +373,7 @@ msgstr "हटाएँ"
 msgid "No users to display"
 msgstr "प्रदर्शित करने के लिए कोई उपयोगकर्ता नहीं"
 
-msgid "Update instance config"
+msgid "Update instance configuration"
 msgstr ""
 
 msgid "INSTANCE CONFIG"
@@ -409,14 +412,14 @@ msgstr ""
 msgid "Enter a new HOTP secret formatted as a 40-digit hexadecimal string. Spaces will be ignored:"
 msgstr ""
 
+msgid "Once you have configured your YubiKey, enter the 6-digit code below:"
+msgstr "एक बार जब आप अपने YubiKey को कॉन्फ़िगर कर लेते हैं, तो नीचे 6 अंकों का कोड डालें:"
+
 msgid "You're almost done! To finish adding this new user, have them follow the instructions below to set up two-factor authentication with FreeOTP. Once they've added an entry for this account in the app, have them enter one of the 6-digit codes from the app to confirm that two-factor authentication is set up correctly."
 msgstr "लगभग काम हो गया! इस नए उपयोगकर्ता को जोड़ने के लिए, उनको नीचे दिए गए निर्देशों का पालन करने को बोले , जिसमें दो-कारक प्रमाणीकरण को FreeOTP के साथ स्थापित किया गया है। ऐप में इस खाते के लिए एक प्रवेश जोड़ लेने के बाद, उन्हें एप से 6-अंकों वाले कोडों में से एक को दर्ज करने को कहें ताकि यह पुष्टि हो सके की दो-कारक प्रमाणीकरण को सही तरीके से सेटअप किया गया है|"
 
 msgid "Can't scan the barcode? You can manually pair FreeOTP with this account by entering the following two-factor secret into the app:"
 msgstr "बारकोड को स्कैन नहीं कर सकते? आप इस खाते के साथ ऐप में निम्नलिखित दो-कारक रहस्य दर्ज करके खुद से नि: शुल्क जोड सकते हैं:"
-
-msgid "Once you have configured your YubiKey, enter the 6-digit code below:"
-msgstr "एक बार जब आप अपने YubiKey को कॉन्फ़िगर कर लेते हैं, तो नीचे 6 अंकों का कोड डालें:"
 
 msgid "Navigation"
 msgstr ""
@@ -433,6 +436,9 @@ msgstr "व्यवस्थापक"
 msgid "Log Out"
 msgstr "लोग आउट"
 
+msgid "Return to All Sources"
+msgstr ""
+
 msgid "Powered by <b>SecureDrop {version}</b>."
 msgstr ""
 
@@ -445,8 +451,14 @@ msgstr "सभी स्रोत"
 msgid "All messages, files, and replies from sources are stored as encrypted files for security. To read them, you will need to decrypt them on your Secure Viewing Station."
 msgstr "स्रोतों से सभी संदेश, फ़ाइलें और उत्तर सुरक्षा के लिए एन्क्रिप्टेड फ़ाइलों के रूप में संग्रहीत किए जाते हैं। उन्हें पढ़ने के लिए, आपको उन्हें अपने सिक्योर व्यूइंग स्टेशन पर डिक्रिप्ट करना होगा।"
 
+msgid "Download Selected Files"
+msgstr ""
+
 msgid "Download Selected"
 msgstr "डाउनलोड चयनित"
+
+msgid "Delete Selected Files"
+msgstr ""
 
 msgid "Delete Selected"
 msgstr "चयनित मिटाएं"
@@ -665,14 +677,26 @@ msgstr "सुरक्षा कुंजी क्रेडेंशियल�
 msgid "Reset Security Key Credentials"
 msgstr ""
 
+msgid "Download Selected Unread Submissions"
+msgstr ""
+
 msgid "Download Unread"
 msgstr "न पढ़े मसाज डाउनलोड करें"
+
+msgid "Download Selected Submissions"
+msgstr ""
 
 msgid "Download"
 msgstr "डाउनलोड"
 
+msgid "Star Selected Submissions"
+msgstr ""
+
 msgid "Star"
 msgstr "तारांकित करें"
+
+msgid "Un-star Selected Submissions"
+msgstr ""
 
 msgid "Un-star"
 msgstr "स्टार को हटा दें"
@@ -725,7 +749,7 @@ msgstr "पासवर्ड"
 msgid "Show password"
 msgstr "पासवर्ड दिखाएं"
 
-msgid "Log In"
+msgid "Log In to Journalist Interface"
 msgstr ""
 
 msgid "LOG IN"
@@ -802,13 +826,19 @@ msgstr "क्षमा करें, वह एक मान्यता प्
 msgid "Important"
 msgstr "जरूरी"
 
-msgid "You were logged out due to inactivity. Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
-msgstr "आप निष्क्रियता के कारण लॉग आउट हो गया. आगे बढ़ने से पहले अपने Tor ब्राउज़र के टूलबार में <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b> नई पहचान </b> बटन पर क्लिक करें."
+msgid "You have been logged out due to inactivity or a problem with your session. Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
+msgstr ""
 
 msgid "Protecting Journalists and Sources"
 msgstr "पत्रकारों और स्रोतों की रक्षा करते हुए"
 
 msgid "Skip to notification"
+msgstr ""
+
+msgid "Return to Submission Page"
+msgstr ""
+
+msgid "Return to Home Page"
 msgstr ""
 
 msgid "We're sorry, our SecureDrop is currently offline."
@@ -853,7 +883,7 @@ msgstr ""
 msgid "<strong>Keep it safe.</strong> There is no account recovery option."
 msgstr ""
 
-msgid "Continue"
+msgid "Continue to Submission Page"
 msgstr ""
 
 msgid "Welcome"
@@ -880,8 +910,8 @@ msgstr ""
 msgid "<strong>It is recommended to use Tor Browser to access SecureDrop:</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
 msgstr "<strong>SecureDrop तक पहुंचने के लिए Tor ब्राउज़र का उपयोग करने की अनुशंसा की जाती है:</strong><a class=\"recommend-tor\" href=\"{tor_browser_url}\">इसे इस्तमाल करने के बारे में जानें</a>, या जारी रखने के लिए इस चेतावनी को अनदेखा करें|"
 
-msgid "<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop version.</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
-msgstr "<strong>यह अनुशंसा की जाती है कि आप SecureDrop तक पहुंचने के लिए Tor ब्राउजर के डेस्कटॉप संस्करण का उपयोग करें, क्योंकि Orfox समान स्तर की सुरक्षा और डेस्कटॉप संस्करण के जितना गुमनाम नहीं प्रदान करता है।</strong><a class=\"recommend-tor\" href=\"{tor_browser_url}\">इसे इंस्टॉल करने के बारे में जानें</a>, या जारी रखने के लिए इस चेतावनी को अनदेखा करें।"
+msgid "<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop version.</strong> <a class=\"recommend-tor\" aria-label=\"Learn how to install Tor Browser\" href=\"{tor_browser_url}\" >Learn how to install it</a>, or ignore this warning to continue."
+msgstr ""
 
 msgid "{} logo"
 msgstr ""
@@ -892,7 +922,7 @@ msgstr "पहला सबमिशन"
 msgid "First time submitting to our SecureDrop? Start here."
 msgstr "पहली बार हमारे सिक्योरड्रॉप को सबमिट करना?, तो यहां से शुरू करें।"
 
-msgid "Get Started"
+msgid "Get Started With Your First Submission"
 msgstr ""
 
 msgid "GET STARTED"
@@ -904,6 +934,9 @@ msgstr "वापसी का दौरा"
 msgid "Already have a codename? Check for replies or submit something new."
 msgstr "पहले से ही एक संकेत नाम है? उत्तर के लिए जांचें या कुछ नया सबमिट करें।"
 
+msgid "Log In Using Your Codename"
+msgstr ""
+
 msgid "Log in"
 msgstr ""
 
@@ -913,10 +946,16 @@ msgstr "संकेत नाम दर्ज करें"
 msgid "Enter your codename"
 msgstr "आपका संकेत नाम दर्ज करें"
 
+msgid "Cancel and Return to Previous Page"
+msgstr ""
+
 msgid "CANCEL"
 msgstr "रद्द करें"
 
 msgid "Additional Action Required"
+msgstr ""
+
+msgid "Log Back In"
 msgstr ""
 
 msgid "One more thing..."
@@ -952,7 +991,10 @@ msgstr ""
 msgid "Anti-spam check. Do not fill this in!"
 msgstr ""
 
-msgid "Submit"
+msgid "Cancel and Clear Uploaded Content"
+msgstr ""
+
+msgid "Submit Uploaded Content"
 msgstr ""
 
 msgid "Read Replies"
@@ -965,6 +1007,9 @@ msgid "Delete this reply"
 msgstr "यह उत्तर हटाएं"
 
 msgid "Delete reply from {timestamp}?"
+msgstr ""
+
+msgid "Delete Reply"
 msgstr ""
 
 msgid "Delete All Replies"
@@ -1030,6 +1075,9 @@ msgstr "याद रखें, आपका संकेत नाम है:"
 msgid "Codename"
 msgstr ""
 
+msgid "Reveal Codename"
+msgstr ""
+
 msgid "Show Codename"
 msgstr ""
 
@@ -1072,6 +1120,12 @@ msgstr "<strong>महत्वपूर्ण:</strong> यदि आप गु
 
 msgid "Back to submission page"
 msgstr "सबमिशन पृष्ठ पर वापस जाएं"
+
+#~ msgid "You were logged out due to inactivity. Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
+#~ msgstr "आप निष्क्रियता के कारण लॉग आउट हो गया. आगे बढ़ने से पहले अपने Tor ब्राउज़र के टूलबार में <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b> नई पहचान </b> बटन पर क्लिक करें."
+
+#~ msgid "<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop version.</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
+#~ msgstr "<strong>यह अनुशंसा की जाती है कि आप SecureDrop तक पहुंचने के लिए Tor ब्राउजर के डेस्कटॉप संस्करण का उपयोग करें, क्योंकि Orfox समान स्तर की सुरक्षा और डेस्कटॉप संस्करण के जितना गुमनाम नहीं प्रदान करता है।</strong><a class=\"recommend-tor\" href=\"{tor_browser_url}\">इसे इंस्टॉल करने के बारे में जानें</a>, या जारी रखने के लिए इस चेतावनी को अनदेखा करें।"
 
 #~ msgid "Field must be between 1 and {max_codename_len} characters long."
 #~ msgstr "फ़ील्ड 1 और {max_codename_len} वर्णों के बीच लंबा होना चाहिए।"
