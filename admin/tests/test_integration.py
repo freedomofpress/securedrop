@@ -531,7 +531,7 @@ GIT_CONFIG = """[core]
 """
 
 
-@pytest.fixture()
+@pytest.fixture
 def securedrop_git_repo(tmpdir):
     cwd = os.getcwd()
     os.chdir(str(tmpdir))

@@ -130,32 +130,20 @@ class GPG(GPGBase):
 
         log.info(
             textwrap.dedent(
-                """
+                f"""
         Initialised settings:
-        binary: {}
-        binary version: {}
-        homedir: {}
-        ignore_homedir_permissions: {}
-        keyring: {}
-        secring: {}
-        default_preference_list: {}
-        keyserver: {}
-        options: {}
-        verbose: {}
-        use_agent: {}
-        """.format(
-                    self.binary,
-                    self.binary_version,
-                    self.homedir,
-                    self.ignore_homedir_permissions,
-                    self.keyring,
-                    self.secring,
-                    self.default_preference_list,
-                    self.keyserver,
-                    self.options,
-                    str(self.verbose),
-                    str(self.use_agent),
-                )
+        binary: {self.binary}
+        binary version: {self.binary_version}
+        homedir: {self.homedir}
+        ignore_homedir_permissions: {self.ignore_homedir_permissions}
+        keyring: {self.keyring}
+        secring: {self.secring}
+        default_preference_list: {self.default_preference_list}
+        keyserver: {self.keyserver}
+        options: {self.options}
+        verbose: {str(self.verbose)}
+        use_agent: {str(self.use_agent)}
+        """
             )
         )
 
@@ -374,7 +362,7 @@ class GPG(GPGBase):
         else:
             log.error("No keyids requested for --recv-keys!")
 
-    def delete_keys(self, fingerprints, secret=False, subkeys=False):  # type: ignore[no-untyped-def] # noqa
+    def delete_keys(self, fingerprints, secret=False, subkeys=False):  # type: ignore[no-untyped-def]
         """Delete a key, or list of keys, from the current keyring.
 
         The keys must be referred to by their full fingerprints for GnuPG to
@@ -410,7 +398,7 @@ class GPG(GPGBase):
         self._collect_output(p, result, stdin=p.stdin)
         return result
 
-    def export_keys(self, keyids, secret=False, subkeys=False, passphrase=None):  # type: ignore[no-untyped-def] # noqa
+    def export_keys(self, keyids, secret=False, subkeys=False, passphrase=None):  # type: ignore[no-untyped-def]
         """Export the indicated ``keyids``.
 
         :param str keyids: A keyid or fingerprint in any format that GnuPG will
@@ -492,7 +480,7 @@ class GPG(GPGBase):
         self._handle_io(args, _make_binary_stream(raw_data, self._encoding), result)
         return result
 
-    def sign_key(self, keyid, default_key=None, passphrase=None):  # type: ignore[no-untyped-def] # noqa
+    def sign_key(self, keyid, default_key=None, passphrase=None):  # type: ignore[no-untyped-def]
         """sign (an imported) public key - keyid, with default secret key
 
         >>> import gnupg
@@ -553,7 +541,6 @@ class GPG(GPGBase):
         return self._process_keys(keyids, check_sig=True)
 
     def _process_keys(self, keyids, check_sig=False):  # type: ignore[no-untyped-def]
-
         if len(keyids) > self._batch_limit:
             raise ValueError(
                 "List signatures is limited to %d keyids simultaneously" % self._batch_limit
@@ -589,7 +576,7 @@ class GPG(GPGBase):
             if keyword in valid_keywords:
                 getattr(result, keyword)(L)
 
-    def expire(self, keyid, expiration_time="1y", passphrase=None, expire_subkeys=True):  # type: ignore[no-untyped-def] # noqa
+    def expire(self, keyid, expiration_time="1y", passphrase=None, expire_subkeys=True):  # type: ignore[no-untyped-def]
         """Changes GnuPG key expiration by passing in new time period (from now) through
             subprocess's stdin
 
@@ -680,7 +667,7 @@ class GPG(GPGBase):
 
         return key
 
-    def gen_key_input(self, separate_keyring=False, save_batchfile=False, testing=False, **kwargs):  # type: ignore[no-untyped-def] # noqa
+    def gen_key_input(self, separate_keyring=False, save_batchfile=False, testing=False, **kwargs):  # type: ignore[no-untyped-def]
         """Generate a batch file for input to :meth:`~gnupg.GPG.gen_key`.
 
         The GnuPG batch file key generation feature allows unattended key
@@ -959,13 +946,11 @@ class GPG(GPGBase):
                 else:
                     docs = ""  # docstring=None if run with "python -OO"
                 links = "\n".join(x.strip() for x in docs.splitlines()[-2:])
-                explain = """
-This directory was created by python-gnupg, on {}, and
+                explain = f"""
+This directory was created by python-gnupg, on {_util.now()}, and
 it contains saved batch files, which can be given to GnuPG to automatically
 generate keys. Please see
-{}""".format(
-                    _util.now(), links
-                )  # sometimes python is awesome.
+{links}"""  # sometimes python is awesome.
 
                 with open(readme, "a+") as fh:
                     [fh.write(line) for line in explain]
@@ -1082,7 +1067,7 @@ generate keys. Please see
         stream.close()
         return result
 
-    def decrypt_file(self, filename, always_trust=False, passphrase=None, output=None):  # type: ignore[no-untyped-def] # noqa
+    def decrypt_file(self, filename, always_trust=False, passphrase=None, output=None):  # type: ignore[no-untyped-def]
         """Decrypt the contents of a file-like object ``filename`` .
 
         :param str filename: A file-like object to decrypt.

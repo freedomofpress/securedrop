@@ -22,7 +22,6 @@ The functions within this module take an instance of :class:`gnupg.GPGBase` or
 a suitable subclass as their first argument.
 """
 
-
 import os
 
 from . import _util

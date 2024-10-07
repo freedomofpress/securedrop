@@ -16,7 +16,7 @@ def test_remove_pending_sources_none_pending(n, m, source_app, config, app_stora
 
     with source_app.app_context():
         sources = []
-        for i in range(0, n):
+        for i in range(n):
             source_user = create_source_user(
                 db_session=db.session,
                 source_passphrase=PassphraseGenerator.get_default().generate_passphrase(),
@@ -53,7 +53,7 @@ def test_remove_pending_sources_all_pending(n, m, source_app, config, app_storag
 
     with source_app.app_context():
         sources = []
-        for i in range(0, n):
+        for i in range(n):
             source_user = create_source_user(
                 db_session=db.session,
                 source_passphrase=PassphraseGenerator.get_default().generate_passphrase(),

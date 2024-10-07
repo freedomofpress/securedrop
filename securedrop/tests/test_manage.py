@@ -61,11 +61,11 @@ def test_get_yubikey_usage_no():
 def test_handle_invalid_secret(journalist_app, config, mocker, capsys):
     """Regression test for bad secret logic in manage.py"""
 
-    mocker.patch("manage._get_username", return_value="ntoll"),
-    mocker.patch("manage._get_first_name", return_value=""),
-    mocker.patch("manage._get_last_name", return_value=""),
-    mocker.patch("manage._get_yubikey_usage", return_value=True),
-    mocker.patch("manage.obtain_input", side_effect=YUBIKEY_HOTP),
+    mocker.patch("manage._get_username", return_value="ntoll")
+    mocker.patch("manage._get_first_name", return_value="")
+    mocker.patch("manage._get_last_name", return_value="")
+    mocker.patch("manage._get_yubikey_usage", return_value=True)
+    mocker.patch("manage.obtain_input", side_effect=YUBIKEY_HOTP)
 
     with journalist_app.app_context() as context:
         # We will try to provide one invalid and one valid secret

@@ -122,8 +122,8 @@ class InstrumentedApp:
         """
         valid_status_codes = (301, 302, 303, 305, 307)
         valid_status_code_str = ", ".join([str(code) for code in valid_status_codes])
-        not_redirect = "HTTP Status {} expected but got {}".format(
-            valid_status_code_str, response.status_code
+        not_redirect = (
+            f"HTTP Status {valid_status_code_str} expected but got {response.status_code}"
         )
         assert response.status_code in (valid_status_codes, message) or not_redirect
         assert response.location == expected_location, message

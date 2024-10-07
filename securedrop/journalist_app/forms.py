@@ -27,7 +27,6 @@ class RequiredIf(DataRequired):
         *args: Any,
         **kwargs: Any,
     ) -> None:
-
         self.other_field_name = other_field_name
         if custom_message is not None:
             self.custom_message = custom_message

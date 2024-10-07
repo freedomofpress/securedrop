@@ -68,7 +68,7 @@ def test_tor_torrc_sandbox(host):
     assert not f.contains("^.*Sandbox.*$")
 
 
-@pytest.mark.skip_in_prod()
+@pytest.mark.skip_in_prod
 def test_tor_v2_onion_url_file_absent(host):
     v2_url_filepath = "/var/lib/securedrop/source_v2_url"
     with host.sudo():
@@ -76,7 +76,7 @@ def test_tor_v2_onion_url_file_absent(host):
         assert not f.exists
 
 
-@pytest.mark.skip_in_prod()
+@pytest.mark.skip_in_prod
 def test_tor_v3_onion_url_readable_by_app(host):
     v3_url_filepath = "/var/lib/securedrop/source_v3_url"
     with host.sudo():

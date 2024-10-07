@@ -53,15 +53,12 @@ if __name__ == "__main__":
         sys.exit(0)
 
     print(
-        "The Tor configuration on the app server offers version {} services.".format(
-            strset(server_versions)
-        )
+        f"The Tor configuration on the app server offers version {strset(server_versions)} "
+        "services."
     )
 
     print(
-        "The Tor configuration in this backup offers version {} services.".format(
-            strset(backup_versions)
-        )
+        f"The Tor configuration in this backup offers version {strset(backup_versions)} services."
     )
 
     print("\nIncompatible configuration: Restoring a backup including a different ")

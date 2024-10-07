@@ -8,8 +8,8 @@ import time
 
 sys.path.insert(0, "/var/www/securedrop")
 
-from sdconfig import SecureDropConfig  # noqa: E402
-from worker import requeue_interrupted_jobs  # noqa: E402
+from sdconfig import SecureDropConfig
+from worker import requeue_interrupted_jobs
 
 
 def parse_args():

@@ -817,9 +817,7 @@ def test_authorized_user_can_add_reply(
 
         source = Source.query.get(source_id)
 
-        expected_filename = "{}-{}-reply.gpg".format(
-            source.interaction_count, source.journalist_filename
-        )
+        expected_filename = f"{source.interaction_count}-{source.journalist_filename}-reply.gpg"
 
         expected_filepath = Path(app_storage.path(source.filesystem_id, expected_filename))
 

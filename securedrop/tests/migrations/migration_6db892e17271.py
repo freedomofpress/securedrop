@@ -126,7 +126,6 @@ class UpgradeTester:
 
 
 class DowngradeTester:
-
     SOURCE_NUM = 200
     JOURNO_NUM = 20
 

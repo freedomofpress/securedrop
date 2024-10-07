@@ -157,9 +157,8 @@ class Storage:
         absolute = os.path.realpath(joined)
         if not self.verify(absolute):
             raise PathException(
-                """Could not resolve ("{}", "{}") to a path within the store.""".format(
-                    filesystem_id, filename
-                )
+                f'Could not resolve ("{filesystem_id}", "{filename}") to a path within '
+                "the store."
             )
         return absolute
 
@@ -303,7 +302,6 @@ class Storage:
         filename: Optional[str],
         stream: BinaryIO,
     ) -> str:
-
         if filename is not None:
             sanitized_filename = secure_filename(filename)
         else:

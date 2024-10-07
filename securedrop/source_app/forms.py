@@ -10,7 +10,6 @@ from wtforms.validators import InputRequired, Length, Regexp, ValidationError
 
 
 class LoginForm(FlaskForm):
-
     codename = PasswordField(
         "codename",
         validators=[

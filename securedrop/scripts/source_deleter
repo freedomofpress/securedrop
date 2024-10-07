@@ -11,8 +11,8 @@ import time
 
 sys.path.insert(0, "/var/www/securedrop")
 
-import journalist_app  # noqa: E402
-from sdconfig import SecureDropConfig  # noqa: E402
+import journalist_app
+from sdconfig import SecureDropConfig
 
 
 def parse_args():
@@ -21,7 +21,10 @@ def parse_args():
         description="Utility for asynchronous deletion of SecureDrop sources and their data.",
     )
     parser.add_argument(
-        "-i", "--interval", type=int, help="Keep running every 'interval' seconds.",
+        "-i",
+        "--interval",
+        type=int,
+        help="Keep running every 'interval' seconds.",
     )
 
     return parser.parse_args()
@@ -36,9 +39,7 @@ def purge_deleted_sources():
 
 def main():
     args = parse_args()
-    logging.basicConfig(
-        format="%(asctime)s %(levelname)s %(message)s", level=logging.INFO
-    )
+    logging.basicConfig(format="%(asctime)s %(levelname)s %(message)s", level=logging.INFO)
     if args.interval:
         logging.info(f"Purging deleted sources every {args.interval} seconds.")
         while 1:

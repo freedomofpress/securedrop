@@ -17,13 +17,9 @@ def test_securedrop_rqrequeue_service(host):
             "Wants=redis-server.service",
             "",
             "[Service]",
-            'Environment=PYTHONPATH="{}:{}"'.format(
-                securedrop_test_vars.securedrop_code,
-                securedrop_test_vars.securedrop_venv_site_packages,
-            ),
-            "ExecStart={}/python /var/www/securedrop/scripts/rqrequeue --interval 60".format(
-                securedrop_test_vars.securedrop_venv_bin
-            ),
+            f'Environment=PYTHONPATH="{securedrop_test_vars.securedrop_code}:{securedrop_test_vars.securedrop_venv_site_packages}"',
+            f"ExecStart={securedrop_test_vars.securedrop_venv_bin}/python /var/www/securedrop/"
+            "scripts/rqrequeue --interval 60",
             "PrivateDevices=yes",
             "PrivateTmp=yes",
             "ProtectSystem=full",

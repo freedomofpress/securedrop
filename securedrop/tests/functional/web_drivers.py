@@ -41,7 +41,7 @@ def _create_torbrowser_driver(
 ) -> TorBrowserDriver:
     logging.info("Creating TorBrowserDriver")
     log_file = open(_LOGFILE_PATH, "a")
-    log_file.write("\n\n[%s] Running Functional Tests\n" % str(datetime.now()))
+    log_file.write(f"\n\n[{datetime.now()}] Running Functional Tests\n")
     log_file.flush()
 
     # Don't use Tor when reading from localhost, and turn off private

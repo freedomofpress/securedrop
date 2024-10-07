@@ -5,7 +5,6 @@ from two_factor import HOTP, TOTP, OtpSecretInvalid, OtpTokenInvalid
 
 
 class TestHOTP:
-
     _SECRET = "YQTEGUTJCMBETH3KUUZZMRWZAVBKGT5O"
     _VALID_TOKEN = "464263"
     _VALID_TOKEN_COUNTER = 12
@@ -67,7 +66,6 @@ class TestHOTP:
 
 
 class TestTOTP:
-
     _SECRET = "JHCOGO7VCER3EJ4L"
     _VALID_TOKEN = "705334"
     _VALID_TOKEN_GENERATED_AT = 1666515039
