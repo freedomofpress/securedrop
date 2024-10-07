@@ -82,7 +82,6 @@ class UpgradeTester:
 
     def check_upgrade(self):
         with self.app.app_context():
-
             # check that the flagged column is gone
             with pytest.raises(OperationalError, match=".*sources has no column named flagged.*"):
                 self.add_source()

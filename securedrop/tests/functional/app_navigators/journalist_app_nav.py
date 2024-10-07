@@ -111,7 +111,7 @@ class JournalistAppNavigator:
         # using requests, but we need to pass the cookies for logged in user
         # for Flask to allow this.
         def cookie_string_from_selenium_cookies(
-            cookies: Iterable[Dict[str, str]]
+            cookies: Iterable[Dict[str, str]],
         ) -> Dict[str, str]:
             result = {}
             for cookie in cookies:

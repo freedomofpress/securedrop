@@ -6,6 +6,7 @@ Automatically backport a PR to a release branch
 
 The `gh` CLI must be set up and already authenticated.
 """
+
 import argparse
 import json
 import subprocess

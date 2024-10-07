@@ -812,9 +812,8 @@ def test_login_with_overly_long_codename(source_app):
         assert resp.status_code == 200
         text = resp.data.decode("utf-8")
         assert (
-            "Field must be between 1 and {} characters long.".format(
-                PassphraseGenerator.MAX_PASSPHRASE_LENGTH
-            )
+            f"Field must be between 1 and {PassphraseGenerator.MAX_PASSPHRASE_LENGTH} characters "
+            "long."
         ) in text
 
 

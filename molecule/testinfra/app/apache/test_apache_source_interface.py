@@ -79,20 +79,14 @@ def test_apache_config_source_interface_headers_per_distro(host):
   AllowOverride None
   Require all denied
 </Directory>
-""".strip(
-            "\n"
-        ),
+""".strip("\n"),
         """
 <Directory {}/static>
   Require all granted
   # Cache static resources for 1 hour
   Header set Cache-Control "max-age=3600"
 </Directory>
-""".strip(
-            "\n"
-        ).format(
-            securedrop_test_vars.securedrop_code
-        ),
+""".strip("\n").format(securedrop_test_vars.securedrop_code),
         """
 <Directory {}>
   Options None
@@ -104,11 +98,7 @@ def test_apache_config_source_interface_headers_per_distro(host):
     Require all denied
   </LimitExcept>
 </Directory>
-""".strip(
-            "\n"
-        ).format(
-            securedrop_test_vars.securedrop_code
-        ),
+""".strip("\n").format(securedrop_test_vars.securedrop_code),
     ],
 )
 def test_apache_config_source_interface_access_control(host, apache_opt):

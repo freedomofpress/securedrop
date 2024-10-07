@@ -76,9 +76,7 @@ class TestSecureDropAdmin:
             "securedrop_admin.check_for_updates", side_effect=[[False, "1.5.0"]]
         ) as mocked_check, mock.patch(
             "securedrop_admin.get_git_branch", side_effect=["develop"]
-        ), mock.patch(
-            "sys.exit"
-        ) as mocked_exit:
+        ), mock.patch("sys.exit") as mocked_exit:
             # The decorator itself interprets --force
             args = argparse.Namespace(force=False)
             rv = securedrop_admin.update_check_required("update_check_test")(lambda _: 100)(args)
@@ -101,9 +99,7 @@ class TestSecureDropAdmin:
             "securedrop_admin.check_for_updates", side_effect=[[True, "1.5.0"]]
         ) as mocked_check, mock.patch(
             "securedrop_admin.get_git_branch", side_effect=["bad_branch"]
-        ), mock.patch(
-            "sys.exit"
-        ) as mocked_exit:
+        ), mock.patch("sys.exit") as mocked_exit:
             # The decorator itself interprets --force
             args = argparse.Namespace(force=False)
             securedrop_admin.update_check_required("update_check_test")(lambda _: _)(args)
@@ -125,9 +121,7 @@ class TestSecureDropAdmin:
             "securedrop_admin.check_for_updates", side_effect=[[True, "1.5.0"]]
         ) as mocked_check, mock.patch(
             "securedrop_admin.get_git_branch", side_effect=["develop"]
-        ), mock.patch(
-            "sys.exit"
-        ) as mocked_exit:
+        ), mock.patch("sys.exit") as mocked_exit:
             # The decorator itself interprets --force
             args = argparse.Namespace(force=True)
             rv = securedrop_admin.update_check_required("update_check_test")(lambda _: 100)(args)
@@ -847,7 +841,7 @@ class TestSiteConfig:
         if callable(default):
             default = default()
         assert site_config.user_prompt_config_one(desc, None) == default
-        assert type(default) == etype
+        assert type(default) is etype
 
     def verify_desc_consistency(self, site_config, desc):
         self.verify_desc_consistency_optional(site_config, desc)
@@ -935,7 +929,7 @@ class TestSiteConfig:
         (var, default, etype, prompt, validator, transform, condition) = desc
         # verify the default passes validation
         assert site_config.user_prompt_config_one(desc, None) == default
-        assert type(default) == etype
+        assert type(default) is etype
 
     def verify_prompt_fingerprint(self, site_config, desc):
         self.verify_prompt_not_empty(site_config, desc)
@@ -962,7 +956,7 @@ class TestSiteConfig:
         (var, default, etype, prompt, validator, transform, condition) = desc
         # verify the default passes validation
         assert site_config.user_prompt_config_one(desc, None) == default
-        assert type(default) == etype
+        assert type(default) is etype
         assert site_config.user_prompt_config_one(desc, "fr_FR en_US") == ["fr_FR", "en_US"]
         assert site_config.user_prompt_config_one(desc, ["fr_FR", "en_US"]) == ["fr_FR", "en_US"]
         assert site_config.user_prompt_config_one(desc, "") == []

@@ -114,9 +114,8 @@ def configure_babel(config: SecureDropConfig, app: Flask) -> Babel:
     # verify that Babel is only using the translations we told it about
     if list(babel.translation_directories) != [translations_directory]:
         raise ValueError(
-            "Babel translation directories ({}) do not match SecureDrop configuration ({})".format(
-                babel.translation_directories, [translations_directory]
-            )
+            f"Babel translation directories ({babel.translation_directories}) do not match "
+            f"SecureDrop configuration ({[translations_directory]})"
         )
 
     # register the function used to determine the locale of a request

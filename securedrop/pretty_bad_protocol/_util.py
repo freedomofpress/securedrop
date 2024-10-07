@@ -399,7 +399,7 @@ def _threaded_copy_data(instream, outstream):  # type: ignore[no-untyped-def]
     return copy_thread
 
 
-def _which(executable, flags=os.X_OK, abspath_only=False, disallow_symlinks=False):  # type: ignore[no-untyped-def] # noqa
+def _which(executable, flags=os.X_OK, abspath_only=False, disallow_symlinks=False):  # type: ignore[no-untyped-def]
     """Borrowed from Twisted's :mod:twisted.python.proutils .
 
     Search PATH for executable files with the given name.
@@ -468,7 +468,7 @@ def _write_passphrase(stream, passphrase, encoding):  # type: ignore[no-untyped-
 class InheritableProperty:
     """Based on the emulation of PyProperty_Type() in Objects/descrobject.c"""
 
-    def __init__(self, fget=None, fset=None, fdel=None, doc=None):  # type: ignore[no-untyped-def] # noqa
+    def __init__(self, fget=None, fset=None, fdel=None, doc=None):  # type: ignore[no-untyped-def]
         self.fget = fget
         self.fset = fset
         self.fdel = fdel

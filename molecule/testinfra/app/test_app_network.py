@@ -9,9 +9,8 @@ securedrop_test_vars = testutils.securedrop_test_vars
 testinfra_hosts = [securedrop_test_vars.app_hostname]
 
 
-@pytest.mark.skip_in_prod()
+@pytest.mark.skip_in_prod
 def test_app_iptables_rules(host):
-
     local = host.get_host("local://")
 
     # Build a dict of variables to pass to jinja for iptables comparison
@@ -32,9 +31,7 @@ def test_app_iptables_rules(host):
     # Build iptables scrape cmd, purge comments + counters
     iptables = r"iptables-save | sed 's/ \[[0-9]*\:[0-9]*\]//g' | egrep -v '^#'"
     environment = os.environ.get("SECUREDROP_TESTINFRA_TARGET_HOST", "staging")
-    iptables_file = "{}/iptables-app-{}.j2".format(
-        os.path.dirname(os.path.abspath(__file__)), environment
-    )
+    iptables_file = f"{os.path.dirname(os.path.abspath(__file__))}/iptables-app-{environment}.j2"
 
     # template out a local iptables jinja file
     jinja_iptables = Template(open(iptables_file).read())

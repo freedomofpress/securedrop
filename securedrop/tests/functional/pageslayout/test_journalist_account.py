@@ -25,7 +25,7 @@ from tests.functional.pageslayout.utils import list_locales, save_static_data
 
 
 @pytest.mark.parametrize("locale", list_locales())
-@pytest.mark.pagelayout()
+@pytest.mark.pagelayout
 class TestJournalistLayoutAccount:
     def test_account_edit_and_set_hotp_secret(
         self, locale, sd_servers_with_clean_state, firefox_web_driver

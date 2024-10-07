@@ -21,7 +21,7 @@ from tests.functional.pageslayout.utils import list_locales, save_static_data
 
 
 @pytest.mark.parametrize("locale", list_locales())
-@pytest.mark.pagelayout()
+@pytest.mark.pagelayout
 class TestJournalistLayoutDelete:
     def test_delete_none(self, locale, sd_servers_with_submitted_file, firefox_web_driver):
         # Given an SD server with a file submitted by a source

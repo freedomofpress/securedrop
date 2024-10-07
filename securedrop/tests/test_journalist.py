@@ -1184,7 +1184,6 @@ def test_admin_edits_user_invalid_username_deleted(
 
 
 def test_admin_resets_user_hotp_format_non_hexa(journalist_app, test_admin, test_journo):
-
     with journalist_app.test_client() as app:
         login_journalist(
             app,
@@ -1225,7 +1224,6 @@ def test_admin_resets_user_hotp_format_non_hexa(journalist_app, test_admin, test
 def test_admin_resets_user_hotp_format_too_short(
     journalist_app, test_admin, test_journo, the_secret
 ):
-
     with journalist_app.test_client() as app:
         login_journalist(
             app,
@@ -1256,8 +1254,9 @@ def test_admin_resets_user_hotp_format_too_short(
             assert journo.is_totp
 
             ins.assert_message_flashed(
-                "HOTP secrets are 40 characters long"
-                " - you have entered {num}.".format(num=len(the_secret.replace(" ", ""))),
+                "HOTP secrets are 40 characters long" " - you have entered {num}.".format(
+                    num=len(the_secret.replace(" ", ""))
+                ),
                 "error",
             )
 
@@ -1294,7 +1293,6 @@ def test_admin_resets_user_hotp(journalist_app, test_admin, test_journo):
 
 
 def test_admin_resets_user_hotp_error(mocker, journalist_app, test_admin, test_journo):
-
     bad_secret = "0123456789ABCDZZ0123456789ABCDZZ01234567"
     error_message = "SOMETHING WRONG!"
     mocked_error_logger = mocker.patch("journalist.app.logger.error")
@@ -1716,10 +1714,7 @@ def test_deleted_user_cannot_login(config, journalist_app, locale):
             ]
             with xfail_untranslated_messages(config, locale, msgids):
                 ins.assert_message_flashed(
-                    "{} {}".format(
-                        gettext(msgids[0]),
-                        gettext(msgids[1]),
-                    ),
+                    f"{gettext(msgids[0])} {gettext(msgids[1])}",
                     "error",
                 )
 
@@ -3502,7 +3497,7 @@ def test_download_selected_submissions_previously_downloaded(
             )
 
 
-@pytest.fixture()
+@pytest.fixture
 def selected_missing_files(journalist_app, test_source, app_storage):
     """Fixture for the download tests with missing files in storage."""
     source = Source.query.get(test_source["id"])

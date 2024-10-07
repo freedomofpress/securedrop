@@ -38,7 +38,6 @@ class OtpTokenInvalid(Exception):
 
 
 class HOTP:
-
     # Current parameters for HOTP
     _LENGTH = 6
 
@@ -91,7 +90,6 @@ class HOTP:
 
 
 class TOTP:
-
     # Current parameters for TOTP
     _LENGTH = 6
     _TIME_STEP = 30

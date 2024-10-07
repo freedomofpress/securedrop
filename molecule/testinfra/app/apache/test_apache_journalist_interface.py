@@ -111,20 +111,14 @@ def test_apache_logging_journalist_interface(host):
   AllowOverride None
   Require all denied
 </Directory>
-""".strip(
-            "\n"
-        ),
+""".strip("\n"),
         """
 <Directory {}/static>
   Require all granted
   # Cache static resources for 1 hour
   Header set Cache-Control "max-age=3600"
 </Directory>
-""".strip(
-            "\n"
-        ).format(
-            securedrop_test_vars.securedrop_code
-        ),
+""".strip("\n").format(securedrop_test_vars.securedrop_code),
         """
 <Directory {}>
   Options None
@@ -136,11 +130,7 @@ def test_apache_logging_journalist_interface(host):
     Require all denied
   </LimitExcept>
 </Directory>
-""".strip(
-            "\n"
-        ).format(
-            securedrop_test_vars.securedrop_code
-        ),
+""".strip("\n").format(securedrop_test_vars.securedrop_code),
     ],
 )
 def test_apache_config_journalist_interface_access_control(host, apache_opt):

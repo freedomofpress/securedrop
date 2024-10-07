@@ -7,7 +7,7 @@ from tests.functional.web_drivers import WebDriverTypeEnum, get_web_driver
 from version import __version__
 
 
-@pytest.mark.pagelayout()
+@pytest.mark.pagelayout
 class TestSourceAppStaticPages:
     @pytest.mark.parametrize("locale", list_locales())
     def test_notfound(self, locale, sd_servers):

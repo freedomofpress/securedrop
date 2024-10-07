@@ -20,7 +20,6 @@
 options.
 """
 
-
 import re
 from collections import OrderedDict
 
@@ -231,9 +230,7 @@ def _is_hex(string):  # type: ignore[no-untyped-def]
 
     :param str string: The string to check.
     """
-    if HEXADECIMAL.match(string):
-        return True
-    return False
+    return bool(HEXADECIMAL.match(string))
 
 
 def _sanitise(*args):  # type: ignore[no-untyped-def]
@@ -1005,9 +1002,7 @@ class GenKey:
         self.secring = None
 
     def __nonzero__(self):  # type: ignore[no-untyped-def]
-        if self.fingerprint:
-            return True
-        return False
+        return bool(self.fingerprint)
 
     __bool__ = __nonzero__
 
@@ -1300,7 +1295,7 @@ class ImportResult:
 
         #: Counts of all the status message results, :data:`_fields` which
         #: have appeared.
-        self.counts = OrderedDict(zip(self._fields, [int(0) for x in range(len(self._fields))]))
+        self.counts = OrderedDict(zip(self._fields, [0 for x in range(len(self._fields))]))
 
         #: A list of strings containing the fingerprints of the GnuPG keyIDs
         #: imported.
@@ -1318,9 +1313,7 @@ class ImportResult:
         """
         if self.counts["not_imported"] > 0:
             return False
-        if len(self.fingerprints) == 0:
-            return False
-        return True
+        return len(self.fingerprints) != 0
 
     __bool__ = __nonzero__
 
@@ -1408,7 +1401,7 @@ class ExportResult:
 
         #: Counts of all the status message results, :data:`_fields` which
         #: have appeared.
-        self.counts = OrderedDict(zip(self._fields, [int(0) for x in range(len(self._fields))]))
+        self.counts = OrderedDict(zip(self._fields, [0 for x in range(len(self._fields))]))
 
         #: A list of strings containing the fingerprints of the GnuPG keyIDs
         #: exported.
@@ -1422,9 +1415,7 @@ class ExportResult:
         """
         if self.counts["not_imported"] > 0:
             return False
-        if len(self.fingerprints) == 0:
-            return False
-        return True
+        return len(self.fingerprints) != 0
 
     __bool__ = __nonzero__
 
@@ -1785,9 +1776,7 @@ class Crypt(Verify):
         self.data_filename = None
 
     def __nonzero__(self):  # type: ignore[no-untyped-def]
-        if self.ok:
-            return True
-        return False
+        return self.ok
 
     __bool__ = __nonzero__
 

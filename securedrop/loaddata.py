@@ -381,16 +381,10 @@ def add_sources(args: argparse.Namespace, journalists: Tuple[Journalist, ...]) -
                 add_reply(source, journalist_who_replied, journalist_who_saw)
 
         print(
-            "Created source {}/{} (codename: '{}', journalist designation '{}', "
-            "files: {}, messages: {}, replies: {})".format(
-                i,
-                args.source_count,
-                codename,
-                source.journalist_designation,
-                args.files_per_source,
-                args.messages_per_source,
-                args.replies_per_source if i <= replied_sources_count else 0,
-            )
+            f"Created source {i}/{args.source_count} (codename: '{codename}', "
+            f"journalist designation '{source.journalist_designation}', "
+            f"files: {args.files_per_source}, messages: {args.messages_per_source}, "
+            f"replies: {args.replies_per_source if i <= replied_sources_count else 0})"
         )
 
 

@@ -7,7 +7,7 @@ from pathlib import Path
 import pytest
 
 
-@pytest.fixture()
+@pytest.fixture
 def _journalist_pubkey():
     """provision a valid public key for the JI startup check"""
     path = Path("/tmp/securedrop/journalist.pub")

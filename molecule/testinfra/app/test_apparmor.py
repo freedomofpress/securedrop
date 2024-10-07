@@ -103,7 +103,7 @@ def test_aastatus_unconfined(host):
     expected_unconfined = 0
 
     unconfined_chk = str(
-        "{} processes are unconfined but have" " a profile defined".format(expected_unconfined)
+        f"{expected_unconfined} processes are unconfined but have" " a profile defined"
     )
     with host.sudo():
         aa_status_output = host.check_output("aa-status")

@@ -22,7 +22,7 @@ from tests.functional.pageslayout.utils import list_locales, save_static_data
 
 
 @pytest.mark.parametrize("locale", list_locales())
-@pytest.mark.pagelayout()
+@pytest.mark.pagelayout
 class TestSourceLayoutTorBrowser:
     def test_index_and_logout(self, locale, sd_servers):
         # Given a source user accessing the app from their browser
@@ -31,7 +31,6 @@ class TestSourceLayoutTorBrowser:
             source_app_base_url=sd_servers.source_app_base_url,
             accept_languages=locale_with_commas,
         ) as navigator:
-
             # And they have disabled JS in their browser
             disable_js(navigator.driver)
 

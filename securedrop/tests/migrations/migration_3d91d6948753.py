@@ -24,7 +24,6 @@ class UpgradeTester:
 
     def load_data(self):
         with self.app.app_context():
-
             for _ in range(self.SOURCE_NUM):
                 self.add_source()
 
@@ -58,7 +57,6 @@ class UpgradeTester:
 
 
 class DowngradeTester:
-
     SOURCE_NUM = 200
 
     def __init__(self, config):
@@ -67,7 +65,6 @@ class DowngradeTester:
 
     def load_data(self):
         with self.app.app_context():
-
             for _ in range(self.SOURCE_NUM):
                 self.add_source()
 

@@ -36,7 +36,7 @@ def sd_servers_with_short_timeout(
 
 
 @pytest.mark.parametrize("locale", list_locales())
-@pytest.mark.pagelayout()
+@pytest.mark.pagelayout
 class TestSourceAppSessionTimeout:
     def test_source_session_timeout(self, locale, sd_servers_with_short_timeout):
         # Given an SD server with a very short session timeout

@@ -86,7 +86,6 @@ class UpgradeTester:
 
 
 class DowngradeTester:
-
     JOURNO_NUM = 20
 
     def __init__(self, config):

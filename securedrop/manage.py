@@ -19,18 +19,18 @@ from passphrases import PassphraseGenerator
 
 sys.path.insert(0, "/var/www/securedrop")
 
-import qrcode  # noqa: E402
-from sqlalchemy.orm.exc import NoResultFound  # noqa: E402
+import qrcode
+from sqlalchemy.orm.exc import NoResultFound
 
 if not os.environ.get("SECUREDROP_ENV"):
     os.environ["SECUREDROP_ENV"] = "dev"
 
 
-from db import db  # noqa: E402
-from management import SecureDropConfig, app_context  # noqa: E402
-from management.run import run  # noqa: E402
-from management.sources import remove_pending_sources  # noqa: E402
-from management.submissions import (  # noqa: E402
+from db import db
+from management import SecureDropConfig, app_context
+from management.run import run
+from management.sources import remove_pending_sources
+from management.submissions import (
     add_check_db_disconnect_parser,
     add_check_fs_disconnect_parser,
     add_delete_db_disconnect_parser,
@@ -39,7 +39,7 @@ from management.submissions import (  # noqa: E402
     add_list_fs_disconnect_parser,
     add_were_there_submissions_today,
 )
-from models import FirstOrLastNameError, InvalidUsernameException, Journalist  # noqa: E402
+from models import FirstOrLastNameError, InvalidUsernameException, Journalist
 
 logging.basicConfig(format="%(asctime)s %(levelname)s %(message)s")
 log = logging.getLogger(__name__)
@@ -197,8 +197,8 @@ def _add_user(is_admin: bool = False, context: Optional[AppContext] = None) -> i
                     if len(tmp_str) != 40:
                         print(
                             "The length of the secret is not correct. "
-                            "Expected 40 characters, but received {}. "
-                            "Try again.".format(len(tmp_str))
+                            f"Expected 40 characters, but received {len(tmp_str)}. "
+                            "Try again."
                         )
                         continue
                 if otp_secret:
@@ -239,7 +239,7 @@ def _add_user(is_admin: bool = False, context: Optional[AppContext] = None) -> i
                     'you will need to change the "Non-ASCII Font", which '
                     "is your profile's Text settings.\n\nCan't scan the "
                     "barcode? Enter following shared secret manually:"
-                    "\n{}\n".format(user.formatted_otp_secret)
+                    f"\n{user.formatted_otp_secret}\n"
                 )
         return 0
 
@@ -249,11 +249,9 @@ def _get_username_to_delete() -> str:
 
 
 def _get_delete_confirmation(username: str) -> bool:
-    confirmation = obtain_input(
-        "Are you sure you want to delete user " '"{}" (y/n)?'.format(username)
-    )
+    confirmation = obtain_input("Are you sure you want to delete user " f'"{username}" (y/n)?')
     if confirmation.lower() != "y":
-        print('Confirmation not received: user "{}" was NOT ' "deleted".format(username))
+        print(f'Confirmation not received: user "{username}" was NOT ' "deleted")
         return False
     return True
 
@@ -414,14 +412,13 @@ def set_clean_tmp_parser(subps: _SubParsersAction, name: str) -> None:
         default=default_days,
         type=int,
         help=(
-            "remove files not modified in a given number of DAYS "
-            "(default {} days)".format(default_days)
+            "remove files not modified in a given number of DAYS " f"(default {default_days} days)"
         ),
     )
     parser.add_argument(
         "--directory",
         default=config.TEMP_DIR,
-        help=("remove old files from DIRECTORY " "(default {})".format(config.TEMP_DIR)),
+        help=("remove old files from DIRECTORY " f"(default {config.TEMP_DIR})"),
     )
     parser.set_defaults(func=clean_tmp)
 

@@ -28,9 +28,8 @@ def test_fpf_apt_repo_present(host):
         f = host.file("/etc/apt/sources.list.d/apt_test_freedom_press.list")
     else:
         f = host.file("/etc/apt/sources.list.d/apt_freedom_press.list")
-    repo_regex = r"^deb \[arch=amd64\] {} {} main$".format(
-        re.escape(test_vars.fpf_apt_repo_url), re.escape(host.system_info.codename)
-    )
+    repo_regex = rf"^deb \[arch=amd64\] {re.escape(test_vars.fpf_apt_repo_url)} "
+    rf"{re.escape(host.system_info.codename)} main$"
     assert f.contains(repo_regex)
 
 
@@ -60,7 +59,6 @@ def test_fpf_apt_repo_fingerprint(host):
     "old_pubkey",
     [
         "pub   4096R/FC9F6818 2014-10-26 [expired: 2016-10-27]",
-        "pub   4096R/00F4AD77 2016-10-20 [expired: 2017-10-20]",
         "pub   4096R/00F4AD77 2016-10-20 [expired: 2017-10-20]",
         "pub   4096R/7B22E6A3 2021-05-10 [expired: 2022-07-04]",
         "pub   4096R/7B22E6A3 2021-05-10 [expired: 2023-07-04]",

@@ -81,7 +81,6 @@ class Helper:
 
 
 class UpgradeTester(Helper):
-
     JOURNO_NUM = 100
 
     def __init__(self, config):
@@ -149,7 +148,6 @@ class UpgradeTester(Helper):
 
 
 class DowngradeTester(Helper):
-
     JOURNO_NUM = 100
 
     def __init__(self, config):

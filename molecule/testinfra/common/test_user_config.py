@@ -88,7 +88,7 @@ def test_tmux_installed(host):
     assert host.package("tmux").is_installed
 
 
-@pytest.mark.skip_in_prod()
+@pytest.mark.skip_in_prod
 def test_sudoers_tmux_env_deprecated(host):
     """
     Previous version of the Ansible config set the tmux config

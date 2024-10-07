@@ -99,7 +99,7 @@ def setup_journalist_key_and_gpg_folder() -> Generator[Tuple[str, Path], None, N
         shutil.rmtree(tmp_gpg_dir, ignore_errors=True)
 
 
-@pytest.fixture()
+@pytest.fixture
 def config(
     setup_journalist_key_and_gpg_folder: Tuple[str, Path],
     setup_rqworker: Tuple[str, str],
@@ -119,7 +119,7 @@ def config(
         yield config
 
 
-@pytest.fixture()
+@pytest.fixture
 def alembic_config(config: SecureDropConfig) -> Generator[Path, None, None]:
     base_dir = path.join(path.dirname(__file__), "..")
     migrations_dir = path.join(base_dir, "alembic")
@@ -148,12 +148,12 @@ def alembic_config(config: SecureDropConfig) -> Generator[Path, None, None]:
         os.environ["SECUREDROP_ENV"] = previous_env_value
 
 
-@pytest.fixture()
+@pytest.fixture
 def app_storage(config: SecureDropConfig) -> "Storage":
     return Storage(str(config.STORE_DIR), str(config.TEMP_DIR))
 
 
-@pytest.fixture()
+@pytest.fixture
 def source_app(config: SecureDropConfig, app_storage: Storage) -> Generator[Flask, None, None]:
     with mock.patch("store.Storage.get_default") as mock_storage_global:
         mock_storage_global.return_value = app_storage
@@ -168,7 +168,7 @@ def source_app(config: SecureDropConfig, app_storage: Storage) -> Generator[Flas
                 db.drop_all()
 
 
-@pytest.fixture()
+@pytest.fixture
 def journalist_app(config: SecureDropConfig, app_storage: Storage) -> Generator[Flask, None, None]:
     with mock.patch("store.Storage.get_default") as mock_storage_global:
         mock_storage_global.return_value = app_storage
@@ -183,7 +183,7 @@ def journalist_app(config: SecureDropConfig, app_storage: Storage) -> Generator[
                 db.drop_all()
 
 
-@pytest.fixture()
+@pytest.fixture
 def test_journo(journalist_app: Flask) -> Dict[str, Any]:
     with journalist_app.app_context():
         user, password = utils.db_helper.init_journalist(is_admin=False)
@@ -201,7 +201,7 @@ def test_journo(journalist_app: Flask) -> Dict[str, Any]:
         }
 
 
-@pytest.fixture()
+@pytest.fixture
 def test_admin(journalist_app: Flask) -> Dict[str, Any]:
     with journalist_app.app_context():
         user, password = utils.db_helper.init_journalist(is_admin=True)
@@ -216,7 +216,7 @@ def test_admin(journalist_app: Flask) -> Dict[str, Any]:
         }
 
 
-@pytest.fixture()
+@pytest.fixture
 def test_source(journalist_app: Flask, app_storage: Storage) -> Dict[str, Any]:
     with journalist_app.app_context():
         passphrase = PassphraseGenerator.get_default().generate_passphrase()
@@ -237,7 +237,7 @@ def test_source(journalist_app: Flask, app_storage: Storage) -> Dict[str, Any]:
         }
 
 
-@pytest.fixture()
+@pytest.fixture
 def test_submissions(journalist_app: Flask, app_storage: Storage) -> Dict[str, Any]:
     with journalist_app.app_context():
         source, codename = utils.db_helper.init_source(app_storage)
@@ -251,7 +251,7 @@ def test_submissions(journalist_app: Flask, app_storage: Storage) -> Dict[str, A
         }
 
 
-@pytest.fixture()
+@pytest.fixture
 def test_files(journalist_app, test_journo, app_storage):
     with journalist_app.app_context():
         source, codename = utils.db_helper.init_source(app_storage)
@@ -267,7 +267,7 @@ def test_files(journalist_app, test_journo, app_storage):
         }
 
 
-@pytest.fixture()
+@pytest.fixture
 def test_files_deleted_journalist(journalist_app, test_journo, app_storage):
     with journalist_app.app_context():
         source, codename = utils.db_helper.init_source(app_storage)
@@ -286,7 +286,7 @@ def test_files_deleted_journalist(journalist_app, test_journo, app_storage):
         }
 
 
-@pytest.fixture()
+@pytest.fixture
 def journalist_api_token(journalist_app, test_journo):
     with journalist_app.test_client() as app:
         valid_token = TOTP(test_journo["otp_secret"]).now()

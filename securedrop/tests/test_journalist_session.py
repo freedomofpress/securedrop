@@ -13,7 +13,7 @@ from two_factor import TOTP
 NEW_PASSWORD = "another correct horse battery staple generic passphrase"
 
 
-@pytest.fixture()
+@pytest.fixture
 def redis(config):
     return Redis(**config.REDIS_KWARGS)
 

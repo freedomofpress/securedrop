@@ -90,9 +90,7 @@ def test_apache_ports_config(host, port):
     assert f.group == "root"
     assert f.mode == 0o644
 
-    listening_regex = "^Listen {}:{}$".format(
-        re.escape(securedrop_test_vars.apache_listening_address), port
-    )
+    listening_regex = f"^Listen {re.escape(securedrop_test_vars.apache_listening_address)}:{port}$"
     assert f.contains(listening_regex)
 
 

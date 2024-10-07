@@ -66,7 +66,7 @@ I18N_DEFAULT_LOCALES = {"en_US"}
 # Check OpenSSH version - ansible requires an extra argument for scp on OpenSSH 9
 def openssh_version() -> int:
     try:
-        result = subprocess.run(["ssh", "-V"], capture_output=True, text=True)
+        result = subprocess.run(["ssh", "-V"], capture_output=True, text=True, check=False)
         if result.stderr.startswith("OpenSSH_9"):
             return 9
         elif result.stderr.startswith("OpenSSH_8"):
@@ -75,7 +75,6 @@ def openssh_version() -> int:
             return 0
     except subprocess.CalledProcessError:
         return 0
-        pass
     return 0
 
 
@@ -130,14 +129,14 @@ class SiteConfig:
 
     class ValidateTime(Validator):
         def validate(self, document: Document) -> bool:
-            if document.text.isdigit() and int(document.text) in range(0, 24):
+            if document.text.isdigit() and int(document.text) in range(24):
                 return True
             raise ValidationError(message="Must be an integer between 0 and 23")
 
     class ValidateUser(Validator):
         def validate(self, document: Document) -> bool:
             text = document.text
-            if text != "" and text != "root" and text != "amnesia":
+            if text not in ("", "root", "amnesia"):
                 return True
             raise ValidationError(message="Must not be root, amnesia or an empty string")
 
@@ -160,8 +159,8 @@ class SiteConfig:
                 raise ValidationError(
                     message=(
                         "DNS server(s) should be a space/comma-separated list "
-                        "of up to {} IP addresses"
-                    ).format(MAX_NAMESERVERS)
+                        f"of up to {MAX_NAMESERVERS} IP addresses"
+                    )
                 )
             return True
 
@@ -194,7 +193,7 @@ class SiteConfig:
     class ValidateYesNo(Validator):
         def validate(self, document: Document) -> bool:
             text = document.text.lower()
-            if text == "yes" or text == "no":
+            if text in ("yes", "no"):
                 return True
             raise ValidationError(message="Must be either yes or no")
 
@@ -769,7 +768,6 @@ def update_check_required(cmd_name: str) -> Callable[[_FuncT], _FuncT]:
 
             update_status, latest_tag = check_for_updates(cli_args)
             if update_status is True:
-
                 # Useful for troubleshooting
                 branch_status = get_git_branch(cli_args)
 
@@ -793,7 +791,7 @@ def update_check_required(cmd_name: str) -> Callable[[_FuncT], _FuncT]:
                 )
                 sdlog.error(
                     "If you are certain you want to proceed, run:\n\n\t"
-                    "./securedrop-admin --force {}\n".format(cmd_name)
+                    f"./securedrop-admin --force {cmd_name}\n"
                 )
                 sdlog.error("To apply the latest updates, run:\n\n\t" "./securedrop-admin update\n")
                 sdlog.error(

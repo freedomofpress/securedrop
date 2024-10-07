@@ -25,7 +25,7 @@ ALL_MIGRATIONS = [
 WHITESPACE_REGEX = re.compile(r"\s+")
 
 
-@pytest.fixture()
+@pytest.fixture
 def _reset_db(config: SecureDropConfig) -> None:
     # The config fixture creates all the models in the DB, but most alembic tests expect an
     #  empty DB, so we reset the DB via this fixture

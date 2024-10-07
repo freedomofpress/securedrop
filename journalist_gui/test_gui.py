@@ -101,7 +101,6 @@ class WindowTestCase(AppTestCase):
         assert self.window.tabWidget.currentIndex() == 0
 
     def test_output_tab(self):
-
         tab = self.window.tabWidget.tabBar()
         QTest.mouseClick(tab, Qt.LeftButton)
         assert self.window.tabWidget.currentIndex() == self.window.tabWidget.indexOf(

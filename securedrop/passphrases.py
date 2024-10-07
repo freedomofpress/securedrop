@@ -18,7 +18,6 @@ class InvalidWordListError(Exception):
 
 
 class PassphraseGenerator:
-
     PASSPHRASE_WORDS_COUNT = 7
 
     # Enforce a reasonable maximum length for passphrases to avoid DoS
@@ -47,12 +46,9 @@ class PassphraseGenerator:
             word_list_size = len(word_list)
             if word_list_size < self._WORD_LIST_MINIMUM_SIZE:
                 raise InvalidWordListError(
-                    "The word list for language '{}' only contains {} long-enough words;"
-                    " minimum required is {} words.".format(
-                        language,
-                        word_list_size,
-                        self._WORD_LIST_MINIMUM_SIZE,
-                    )
+                    f"The word list for language '{language}' only contains {word_list_size}"
+                    " long-enough words;"
+                    f" minimum required is {self._WORD_LIST_MINIMUM_SIZE} words."
                 )
 
             # Ensure all words are ascii
@@ -69,14 +65,11 @@ class PassphraseGenerator:
             longest_passphrase_length += self.PASSPHRASE_WORDS_COUNT  # One space between each word
             if longest_passphrase_length >= self.MAX_PASSPHRASE_LENGTH:
                 raise InvalidWordListError(
-                    "Passphrases over the maximum length ({}) may be generated:"
-                    " longest word in word list for language '{}' is '{}' and number of words per"
-                    " passphrase is {}".format(
-                        self.MAX_PASSPHRASE_LENGTH,
-                        language,
-                        longest_word,
-                        self.PASSPHRASE_WORDS_COUNT,
-                    )
+                    f"Passphrases over the maximum length ({self.MAX_PASSPHRASE_LENGTH}) "
+                    "may be generated:"
+                    f" longest word in word list for language '{language}' is '{longest_word}' "
+                    "and number of words per"
+                    f" passphrase is {self.PASSPHRASE_WORDS_COUNT}"
                 )
 
             # Ensure that passphrases shorter than what's supported can't be generated
@@ -85,14 +78,11 @@ class PassphraseGenerator:
             shortest_passphrase_length += self.PASSPHRASE_WORDS_COUNT
             if shortest_passphrase_length <= self.MIN_PASSPHRASE_LENGTH:
                 raise InvalidWordListError(
-                    "Passphrases under the minimum length ({}) may be generated:"
-                    " shortest word in word list for language '{}' is '{}' and number of words per"
-                    " passphrase is {}".format(
-                        self.MIN_PASSPHRASE_LENGTH,
-                        language,
-                        shortest_word,
-                        self.PASSPHRASE_WORDS_COUNT,
-                    )
+                    f"Passphrases under the minimum length ({self.MIN_PASSPHRASE_LENGTH}) "
+                    "may be generated:"
+                    f" shortest word in word list for language '{language}' is '{shortest_word}' "
+                    "and number of words per"
+                    f" passphrase is {self.PASSPHRASE_WORDS_COUNT}"
                 )
 
     @classmethod

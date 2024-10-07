@@ -12,6 +12,7 @@ At a high level, this script:
 * Copy and rename that into the Python package structure
 * Build a Python wheel using setuptools
 """
+
 import argparse
 import os
 import shutil

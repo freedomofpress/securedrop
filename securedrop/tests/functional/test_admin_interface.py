@@ -169,7 +169,7 @@ def _create_second_journalist(config_in_use: SecureDropConfig) -> None:
         db_session_for_sd_servers.commit()
 
 
-@pytest.fixture()
+@pytest.fixture
 def sd_servers_with_second_journalist(
     setup_journalist_key_and_gpg_folder: Tuple[str, Path],
     setup_rqworker: Tuple[str, Path],
