@@ -35,8 +35,8 @@ msgstr ""
 msgid "{time} ago"
 msgstr "{time} முன்பு"
 
-msgid "You have been logged out due to inactivity."
-msgstr "செயலின்மையால் நீங்கள் விடுபதிகை செய்யப்பட்டுள்ளீர்கள்."
+msgid "You have been logged out due to inactivity or a problem with your session."
+msgstr ""
 
 msgid "SecureDrop"
 msgstr "SecureDrop"
@@ -166,6 +166,9 @@ msgstr "நீக்கம் செய்ய ஒன்றோ அல்லது
 msgid "No unread submissions for this source."
 msgstr "இந்த மூலத்திற்கான படிக்கப்படாத அனுப்புகைகள் ஏதுமில்லை."
 
+msgid "You have been logged out due to inactivity."
+msgstr "செயலின்மையால் நீங்கள் விடுபதிகை செய்யப்பட்டுள்ளீர்கள்."
+
 msgid "Account updated."
 msgstr "பயனர்கணக்கு புதுப்பிக்கப்பட்டுள்ளது."
 
@@ -283,6 +286,21 @@ msgstr ""
 msgid "CONTINUE"
 msgstr "தொடர்க"
 
+msgid "Enable YubiKey (OATH-HOTP)"
+msgstr "YubiKey (OATH-HOTP)-ஐ இயலச்செய்க"
+
+msgid "Once you have configured your YubiKey, enter the 6-digit verification code below:"
+msgstr "உங்களுடைய YubiKey ஐ நீங்கள் உருவமைவு செய்தபின், 6-இலக்கச் சரிபார்ப்புக் குறியை கீழே உள்ளிடுக:"
+
+msgid "Verification code"
+msgstr "சரிபார்ப்புக் குறி"
+
+msgid "Submit verification code"
+msgstr ""
+
+msgid "SUBMIT"
+msgstr "அனுப்பிடுக"
+
 msgid "Enable FreeOTP"
 msgstr "தளையற்ற ஒபகவை (FreeOTP) இயலச்செய்"
 
@@ -306,21 +324,6 @@ msgstr "வரிக்குறியை ஊடறிய முடியவி�
 
 msgid "Once you have paired FreeOTP with this account, enter the 6-digit verification code below:"
 msgstr "இந்தக் கணக்குடன் தளையற்ற ஒபகவை இணைத்த பிறகு, 6-இலக்கச் சரிபார்ப்புக் குறியைக் கீழே உள்ளிடுக:"
-
-msgid "Enable YubiKey (OATH-HOTP)"
-msgstr "YubiKey (OATH-HOTP)-ஐ இயலச்செய்க"
-
-msgid "Once you have configured your YubiKey, enter the 6-digit verification code below:"
-msgstr "உங்களுடைய YubiKey ஐ நீங்கள் உருவமைவு செய்தபின், 6-இலக்கச் சரிபார்ப்புக் குறியை கீழே உள்ளிடுக:"
-
-msgid "Verification code"
-msgstr "சரிபார்ப்புக் குறி"
-
-msgid "Submit verification code"
-msgstr ""
-
-msgid "SUBMIT"
-msgstr "அனுப்பிடுக"
 
 msgid "Admin Interface"
 msgstr "நிர்வாக இடைமுகம்"
@@ -370,7 +373,7 @@ msgstr "நீக்கிடுக"
 msgid "No users to display"
 msgstr "காண்பிக்கப் பயனர்கள் யாரும் இல்லை"
 
-msgid "Update instance config"
+msgid "Update instance configuration"
 msgstr ""
 
 msgid "INSTANCE CONFIG"
@@ -409,14 +412,14 @@ msgstr ""
 msgid "Enter a new HOTP secret formatted as a 40-digit hexadecimal string. Spaces will be ignored:"
 msgstr ""
 
+msgid "Once you have configured your YubiKey, enter the 6-digit code below:"
+msgstr "உங்களுடைய YubiKey ஐ உருவமைவு செய்தபின், அந்த 6-இலக்கக் குறியைக் கீழே உள்ளிடுக:"
+
 msgid "You're almost done! To finish adding this new user, have them follow the instructions below to set up two-factor authentication with FreeOTP. Once they've added an entry for this account in the app, have them enter one of the 6-digit codes from the app to confirm that two-factor authentication is set up correctly."
 msgstr "நீங்கள் ஏறத்தாழ முடித்துவிட்டீர்கள்! புதுப்பயனர் சேர்க்கையை முடிக்க, அவர்களை கீழுள்ள அறிவுறுத்தல்களைப் பின்பற்றி இருகூற்றுக் குறியடன் தளையற்ற ஒபகவை அமைக்கச் செய்திடுக. செயலியில் இந்தக் கணக்கை அவர்கள் உள்ளிட்டு இணைத்தவுடன், இருகூற்றுக் குறி சரியாக அமைக்கப்பட்டதை உறுதிசெய்யும் பொருட்டு அவர்களைச் செயலியிலிருந்து பெற்ற 6-இலக்கக் குறிகளுள் ஒன்றை உள்ளிடச் செய்திடுக."
 
 msgid "Can't scan the barcode? You can manually pair FreeOTP with this account by entering the following two-factor secret into the app:"
 msgstr "வரிக்குறியை ஊடறிய முடியவில்லையா? பின்வரும் இருகூற்று மறைசெய்தியைச் செயலியில் உள்ளிட்டு தஒபகவை (FreeOTP) இந்தக் கணக்குடன் நீங்களே இணைத்திட முடியும்:"
-
-msgid "Once you have configured your YubiKey, enter the 6-digit code below:"
-msgstr "உங்களுடைய YubiKey ஐ உருவமைவு செய்தபின், அந்த 6-இலக்கக் குறியைக் கீழே உள்ளிடுக:"
 
 msgid "Navigation"
 msgstr ""
@@ -433,6 +436,9 @@ msgstr "நிர்வாகி"
 msgid "Log Out"
 msgstr "விடுபதிகை"
 
+msgid "Return to All Sources"
+msgstr ""
+
 msgid "Powered by <b>SecureDrop {version}</b>."
 msgstr ""
 
@@ -445,8 +451,14 @@ msgstr "எல்லா மூலங்கள்"
 msgid "All messages, files, and replies from sources are stored as encrypted files for security. To read them, you will need to decrypt them on your Secure Viewing Station."
 msgstr "மூலங்களிமிருந்து வரும் எல்லா சேதிகளும் கோப்புகளும் மறுமொழிகளும் பாதுகாப்பிற்காக மறைகுறியிடப்பட்டு செமிக்கப்படுகின்றன. அவற்றைப் படிக்க, நீங்கள் உங்களுடைய பாதுகாக்கப்பட்ட காணும் நிலையத்தில் அவற்றின் மறைகுறியை விலக்கவேண்டும்."
 
+msgid "Download Selected Files"
+msgstr ""
+
 msgid "Download Selected"
 msgstr "தேர்ந்தெடுக்கப்பட்டதைப் பதிவிறக்குக"
+
+msgid "Delete Selected Files"
+msgstr ""
 
 msgid "Delete Selected"
 msgstr "தேர்ந்தெடுக்கப்பட்டதைப் நீக்கிடுக"
@@ -665,14 +677,26 @@ msgstr "பாதுகாப்புச் சாவிச் சான்ற�
 msgid "Reset Security Key Credentials"
 msgstr ""
 
+msgid "Download Selected Unread Submissions"
+msgstr ""
+
 msgid "Download Unread"
 msgstr "படிக்கப்படாதவற்றைப் பதிவிறக்குக"
+
+msgid "Download Selected Submissions"
+msgstr ""
 
 msgid "Download"
 msgstr "பதிவிறக்குக"
 
+msgid "Star Selected Submissions"
+msgstr ""
+
 msgid "Star"
 msgstr "விண்மீன் குறியிடுக"
+
+msgid "Un-star Selected Submissions"
+msgstr ""
 
 msgid "Un-star"
 msgstr "விண்மீன் குறியை நீக்குக"
@@ -725,7 +749,7 @@ msgstr "கடவுச்சொல்"
 msgid "Show password"
 msgstr "கடவுச்சொல்வைக் காட்டுக"
 
-msgid "Log In"
+msgid "Log In to Journalist Interface"
 msgstr ""
 
 msgid "LOG IN"
@@ -802,13 +826,19 @@ msgstr "பொறுத்தருள்க, அது ஒரு அறிய�
 msgid "Important"
 msgstr "முக்கியம்"
 
-msgid "You were logged out due to inactivity. Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
+msgid "You have been logged out due to inactivity or a problem with your session. Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
 msgstr ""
 
 msgid "Protecting Journalists and Sources"
 msgstr "இதழியலாளர்களையும் மூலங்களையும் பாதுகாத்தல்"
 
 msgid "Skip to notification"
+msgstr ""
+
+msgid "Return to Submission Page"
+msgstr ""
+
+msgid "Return to Home Page"
 msgstr ""
 
 msgid "We're sorry, our SecureDrop is currently offline."
@@ -853,7 +883,7 @@ msgstr ""
 msgid "<strong>Keep it safe.</strong> There is no account recovery option."
 msgstr ""
 
-msgid "Continue"
+msgid "Continue to Submission Page"
 msgstr ""
 
 msgid "Welcome"
@@ -880,7 +910,7 @@ msgstr ""
 msgid "<strong>It is recommended to use Tor Browser to access SecureDrop:</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
 msgstr ""
 
-msgid "<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop version.</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
+msgid "<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop version.</strong> <a class=\"recommend-tor\" aria-label=\"Learn how to install Tor Browser\" href=\"{tor_browser_url}\" >Learn how to install it</a>, or ignore this warning to continue."
 msgstr ""
 
 msgid "{} logo"
@@ -892,7 +922,7 @@ msgstr "முதல் அனுப்புகை"
 msgid "First time submitting to our SecureDrop? Start here."
 msgstr "நமது SecureDrop-இல் முதன்முறையாகச் அனுப்புகின்றீர்களா? இங்கே தொடங்குக."
 
-msgid "Get Started"
+msgid "Get Started With Your First Submission"
 msgstr ""
 
 msgid "GET STARTED"
@@ -904,6 +934,9 @@ msgstr "மறு வருகை"
 msgid "Already have a codename? Check for replies or submit something new."
 msgstr "ஏற்கனவே ஒரு குறிப்பெயர் உள்ளதா? மறுமொழிகளைப் பார்த்திடுக அல்லது ஏதேனும் புதியதாகச் அனுப்பிடுக."
 
+msgid "Log In Using Your Codename"
+msgstr ""
+
 msgid "Log in"
 msgstr ""
 
@@ -913,10 +946,16 @@ msgstr "குறிப்பெயரை உள்ளிடுக"
 msgid "Enter your codename"
 msgstr "உங்களுடைய குறிப்பெயரை உள்ளிடுக"
 
+msgid "Cancel and Return to Previous Page"
+msgstr ""
+
 msgid "CANCEL"
 msgstr "விடுக"
 
 msgid "Additional Action Required"
+msgstr ""
+
+msgid "Log Back In"
 msgstr ""
 
 msgid "One more thing..."
@@ -952,7 +991,10 @@ msgstr ""
 msgid "Anti-spam check. Do not fill this in!"
 msgstr ""
 
-msgid "Submit"
+msgid "Cancel and Clear Uploaded Content"
+msgstr ""
+
+msgid "Submit Uploaded Content"
 msgstr ""
 
 msgid "Read Replies"
@@ -965,6 +1007,9 @@ msgid "Delete this reply"
 msgstr ""
 
 msgid "Delete reply from {timestamp}?"
+msgstr ""
+
+msgid "Delete Reply"
 msgstr ""
 
 msgid "Delete All Replies"
@@ -1028,6 +1073,9 @@ msgid "Remember, your codename is:"
 msgstr "நினைவில கொள்க, உங்கள் குறிப்பெயர்:"
 
 msgid "Codename"
+msgstr ""
+
+msgid "Reveal Codename"
 msgstr ""
 
 msgid "Show Codename"
