@@ -23,8 +23,11 @@ from tests.utils.i18n import get_test_locales
 
 # Function-scoped so that tests can be run in parallel if needed
 @pytest.fixture
-def firefox_web_driver() -> WebDriver:  # type: ignore
-    with get_web_driver(web_driver_type=WebDriverTypeEnum.FIREFOX) as web_driver:
+def firefox_web_driver(locale: str = "en_US") -> WebDriver:  # type: ignore
+    with get_web_driver(
+        web_driver_type=WebDriverTypeEnum.FIREFOX,
+        accept_languages=locale.replace("_", "-"),
+    ) as web_driver:
         yield web_driver
 
 
