@@ -35,8 +35,8 @@ msgstr ""
 msgid "{time} ago"
 msgstr "{time} قبل"
 
-msgid "You have been logged out due to inactivity."
-msgstr "شما به علت عدم فعالیت از سیستم خارج شده‌اید."
+msgid "You have been logged out due to inactivity or a problem with your session."
+msgstr ""
 
 msgid "SecureDrop"
 msgstr "سکیوردراپ"
@@ -166,6 +166,9 @@ msgstr "شما باید یک یا چند گزینه را برای حذف‌شد�
 msgid "No unread submissions for this source."
 msgstr "هیچ محتوای ارسالی خوانده نشده‌‌ای از این منبع آگاه یافت نشد."
 
+msgid "You have been logged out due to inactivity."
+msgstr "شما به علت عدم فعالیت از سیستم خارج شده‌اید."
+
 msgid "Account updated."
 msgstr "حساب‌ به‌روزرسانی شد."
 
@@ -283,6 +286,21 @@ msgstr ""
 msgid "CONTINUE"
 msgstr "ادامه"
 
+msgid "Enable YubiKey (OATH-HOTP)"
+msgstr "فعالسازی (YubiKey (OATH-HOTP"
+
+msgid "Once you have configured your YubiKey, enter the 6-digit verification code below:"
+msgstr "پس از آنکه YubiKey خود را پیکربندی کردید، کد اعتبارسنجی ۶ رقمی را در قسمت زیر وارد کنید:"
+
+msgid "Verification code"
+msgstr "کد تأیید اعتبار"
+
+msgid "Submit verification code"
+msgstr ""
+
+msgid "SUBMIT"
+msgstr "ارسال"
+
 msgid "Enable FreeOTP"
 msgstr "فعال سازی FreeOTP"
 
@@ -306,21 +324,6 @@ msgstr "نمی‌توانید رمزینه را اسکن کنید؟ شما می�
 
 msgid "Once you have paired FreeOTP with this account, enter the 6-digit verification code below:"
 msgstr "پس از آن که FreeOpt را به این حساب متصل کردید، کد اعتبارسنجی ۶ رقمی بدست آمده را در قسمت زیر وارد کنید:"
-
-msgid "Enable YubiKey (OATH-HOTP)"
-msgstr "فعالسازی (YubiKey (OATH-HOTP"
-
-msgid "Once you have configured your YubiKey, enter the 6-digit verification code below:"
-msgstr "پس از آنکه YubiKey خود را پیکربندی کردید، کد اعتبارسنجی ۶ رقمی را در قسمت زیر وارد کنید:"
-
-msgid "Verification code"
-msgstr "کد تأیید اعتبار"
-
-msgid "Submit verification code"
-msgstr ""
-
-msgid "SUBMIT"
-msgstr "ارسال"
 
 msgid "Admin Interface"
 msgstr "رابط مدیریت"
@@ -370,7 +373,7 @@ msgstr "حذف"
 msgid "No users to display"
 msgstr "کاربری برای نمایش وجود ندارد"
 
-msgid "Update instance config"
+msgid "Update instance configuration"
 msgstr ""
 
 msgid "INSTANCE CONFIG"
@@ -409,14 +412,14 @@ msgstr ""
 msgid "Enter a new HOTP secret formatted as a 40-digit hexadecimal string. Spaces will be ignored:"
 msgstr ""
 
+msgid "Once you have configured your YubiKey, enter the 6-digit code below:"
+msgstr "پس از آنکه YubiKey خود را پیکربندی کردید، کد 6 رقمی بدست آمده را در قسمت زیر وارد کنید:"
+
 msgid "You're almost done! To finish adding this new user, have them follow the instructions below to set up two-factor authentication with FreeOTP. Once they've added an entry for this account in the app, have them enter one of the 6-digit codes from the app to confirm that two-factor authentication is set up correctly."
 msgstr ""
 
 msgid "Can't scan the barcode? You can manually pair FreeOTP with this account by entering the following two-factor secret into the app:"
 msgstr ""
-
-msgid "Once you have configured your YubiKey, enter the 6-digit code below:"
-msgstr "پس از آنکه YubiKey خود را پیکربندی کردید، کد 6 رقمی بدست آمده را در قسمت زیر وارد کنید:"
 
 msgid "Navigation"
 msgstr ""
@@ -433,6 +436,9 @@ msgstr "مدیر"
 msgid "Log Out"
 msgstr "خروج"
 
+msgid "Return to All Sources"
+msgstr ""
+
 msgid "Powered by <b>SecureDrop {version}</b>."
 msgstr ""
 
@@ -445,8 +451,14 @@ msgstr "تمام منابع آگاه"
 msgid "All messages, files, and replies from sources are stored as encrypted files for security. To read them, you will need to decrypt them on your Secure Viewing Station."
 msgstr ""
 
+msgid "Download Selected Files"
+msgstr ""
+
 msgid "Download Selected"
 msgstr "بارگیری موارد انتخاب شده"
+
+msgid "Delete Selected Files"
+msgstr ""
 
 msgid "Delete Selected"
 msgstr "حذف موارد انتخاب شده"
@@ -665,14 +677,26 @@ msgstr ""
 msgid "Reset Security Key Credentials"
 msgstr ""
 
+msgid "Download Selected Unread Submissions"
+msgstr ""
+
 msgid "Download Unread"
 msgstr "دانلود خوانده نشده"
+
+msgid "Download Selected Submissions"
+msgstr ""
 
 msgid "Download"
 msgstr "دانلود"
 
+msgid "Star Selected Submissions"
+msgstr ""
+
 msgid "Star"
 msgstr "ستاره"
+
+msgid "Un-star Selected Submissions"
+msgstr ""
 
 msgid "Un-star"
 msgstr "بدون ستاره"
@@ -725,7 +749,7 @@ msgstr "رمز عبور"
 msgid "Show password"
 msgstr ""
 
-msgid "Log In"
+msgid "Log In to Journalist Interface"
 msgstr ""
 
 msgid "LOG IN"
@@ -802,13 +826,19 @@ msgstr ""
 msgid "Important"
 msgstr ""
 
-msgid "You were logged out due to inactivity. Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
+msgid "You have been logged out due to inactivity or a problem with your session. Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
 msgstr ""
 
 msgid "Protecting Journalists and Sources"
 msgstr "حفاظت از روزنامه نگاران و منابع"
 
 msgid "Skip to notification"
+msgstr ""
+
+msgid "Return to Submission Page"
+msgstr ""
+
+msgid "Return to Home Page"
 msgstr ""
 
 msgid "We're sorry, our SecureDrop is currently offline."
@@ -853,7 +883,7 @@ msgstr ""
 msgid "<strong>Keep it safe.</strong> There is no account recovery option."
 msgstr ""
 
-msgid "Continue"
+msgid "Continue to Submission Page"
 msgstr ""
 
 msgid "Welcome"
@@ -880,7 +910,7 @@ msgstr ""
 msgid "<strong>It is recommended to use Tor Browser to access SecureDrop:</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
 msgstr ""
 
-msgid "<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop version.</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
+msgid "<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop version.</strong> <a class=\"recommend-tor\" aria-label=\"Learn how to install Tor Browser\" href=\"{tor_browser_url}\" >Learn how to install it</a>, or ignore this warning to continue."
 msgstr ""
 
 msgid "{} logo"
@@ -892,7 +922,7 @@ msgstr ""
 msgid "First time submitting to our SecureDrop? Start here."
 msgstr ""
 
-msgid "Get Started"
+msgid "Get Started With Your First Submission"
 msgstr ""
 
 msgid "GET STARTED"
@@ -904,6 +934,9 @@ msgstr ""
 msgid "Already have a codename? Check for replies or submit something new."
 msgstr ""
 
+msgid "Log In Using Your Codename"
+msgstr ""
+
 msgid "Log in"
 msgstr ""
 
@@ -913,10 +946,16 @@ msgstr ""
 msgid "Enter your codename"
 msgstr ""
 
+msgid "Cancel and Return to Previous Page"
+msgstr ""
+
 msgid "CANCEL"
 msgstr ""
 
 msgid "Additional Action Required"
+msgstr ""
+
+msgid "Log Back In"
 msgstr ""
 
 msgid "One more thing..."
@@ -952,7 +991,10 @@ msgstr ""
 msgid "Anti-spam check. Do not fill this in!"
 msgstr ""
 
-msgid "Submit"
+msgid "Cancel and Clear Uploaded Content"
+msgstr ""
+
+msgid "Submit Uploaded Content"
 msgstr ""
 
 msgid "Read Replies"
@@ -965,6 +1007,9 @@ msgid "Delete this reply"
 msgstr ""
 
 msgid "Delete reply from {timestamp}?"
+msgstr ""
+
+msgid "Delete Reply"
 msgstr ""
 
 msgid "Delete All Replies"
@@ -1028,6 +1073,9 @@ msgid "Remember, your codename is:"
 msgstr ""
 
 msgid "Codename"
+msgstr ""
+
+msgid "Reveal Codename"
 msgstr ""
 
 msgid "Show Codename"
