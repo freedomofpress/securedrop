@@ -35,8 +35,8 @@ msgstr "שם משתמש שגוי"
 msgid "{time} ago"
 msgstr "לפני {time}"
 
-msgid "You have been logged out due to inactivity."
-msgstr "יצאת עקב חוסר פעילות."
+msgid "You have been logged out due to inactivity or a problem with your session."
+msgstr ""
 
 msgid "SecureDrop"
 msgstr "SecureDrop"
@@ -166,6 +166,9 @@ msgstr "עליך לבחור פריט אחד או יותר למחיקה"
 msgid "No unread submissions for this source."
 msgstr "אין טפסים שלא נקראו עבור המקור הזה."
 
+msgid "You have been logged out due to inactivity."
+msgstr "יצאת עקב חוסר פעילות."
+
 msgid "Account updated."
 msgstr "החשבון עודכן."
 
@@ -283,6 +286,21 @@ msgstr "המשך בשינוי קוד"
 msgid "CONTINUE"
 msgstr "המשך"
 
+msgid "Enable YubiKey (OATH-HOTP)"
+msgstr "הפעלת (OATH-HOTP)"
+
+msgid "Once you have configured your YubiKey, enter the 6-digit verification code below:"
+msgstr "לאחר הגדרת ה- YubiKey שלך, הזן את קוד האימות בן 6 הספרות למטה:"
+
+msgid "Verification code"
+msgstr "קוד אימות"
+
+msgid "Submit verification code"
+msgstr "הזן קוד אימות"
+
+msgid "SUBMIT"
+msgstr "שלח"
+
 msgid "Enable FreeOTP"
 msgstr "אפשר FreeOTP"
 
@@ -306,21 +324,6 @@ msgstr "לא מצליחים לסרוק את הברקוד? ניתן לשייך Fr
 
 msgid "Once you have paired FreeOTP with this account, enter the 6-digit verification code below:"
 msgstr "לאחר ששייכת FreeOTP לחשבון זה, הזן את קוד האימות בן 6 הספרות למטה:"
-
-msgid "Enable YubiKey (OATH-HOTP)"
-msgstr "הפעלת (OATH-HOTP)"
-
-msgid "Once you have configured your YubiKey, enter the 6-digit verification code below:"
-msgstr "לאחר הגדרת ה- YubiKey שלך, הזן את קוד האימות בן 6 הספרות למטה:"
-
-msgid "Verification code"
-msgstr "קוד אימות"
-
-msgid "Submit verification code"
-msgstr "הזן קוד אימות"
-
-msgid "SUBMIT"
-msgstr "שלח"
 
 msgid "Admin Interface"
 msgstr "ממשק ניהול"
@@ -370,8 +373,8 @@ msgstr "מחק"
 msgid "No users to display"
 msgstr "אין משתמשים לתצוגה"
 
-msgid "Update instance config"
-msgstr "עדכן תצורה"
+msgid "Update instance configuration"
+msgstr ""
 
 msgid "INSTANCE CONFIG"
 msgstr "עדכן תצורה"
@@ -409,14 +412,14 @@ msgstr "החלף קוד HOTP"
 msgid "Enter a new HOTP secret formatted as a 40-digit hexadecimal string. Spaces will be ignored:"
 msgstr "הזן קוד HOTP חדש כמחרוזת הקסדצימלית בת 40 ספרות. אין חשיבות לרווחים:"
 
+msgid "Once you have configured your YubiKey, enter the 6-digit code below:"
+msgstr "אחרי שהגדרת את הYubiKey שלך, הקלד מטה את ששת הספרות שהתקבלו:"
+
 msgid "You're almost done! To finish adding this new user, have them follow the instructions below to set up two-factor authentication with FreeOTP. Once they've added an entry for this account in the app, have them enter one of the 6-digit codes from the app to confirm that two-factor authentication is set up correctly."
 msgstr "כמעט סיימתם! כדי לסיים את הוספת המשתמש החדש, בקש ממנו לבצע את ההוראות שלהלן כדי להגדיר אימות דו-שלבי עם FreeOTP. לאחר ביצוע ההוספה עבור חשבון זה באפליקציה, על המשתמש להזין קוד בן 6 הספרות מהאפליקציה בכדי לאשר שאימות דו-שלבי מוגדר כהלכה."
 
 msgid "Can't scan the barcode? You can manually pair FreeOTP with this account by entering the following two-factor secret into the app:"
 msgstr "לא מצליחים לסרוק את הברקוד? ניתן לשייך FreeOTP באופן ידני לחשבון זה על ידי הזנת הקוד הדו-שלבי הבא באפליקציה:"
-
-msgid "Once you have configured your YubiKey, enter the 6-digit code below:"
-msgstr "אחרי שהגדרת את הYubiKey שלך, הקלד מטה את ששת הספרות שהתקבלו:"
 
 msgid "Navigation"
 msgstr "ניווט"
@@ -433,6 +436,9 @@ msgstr "מנהל"
 msgid "Log Out"
 msgstr "התנתק"
 
+msgid "Return to All Sources"
+msgstr ""
+
 msgid "Powered by <b>SecureDrop {version}</b>."
 msgstr "Powered by <b>SecureDrop {version}</b>."
 
@@ -445,8 +451,14 @@ msgstr "כל המקורות"
 msgid "All messages, files, and replies from sources are stored as encrypted files for security. To read them, you will need to decrypt them on your Secure Viewing Station."
 msgstr "כל ההודעות, הקבצים והתשובות ממקורות מאוחסנים כקבצים מוצפנים לצורך אבטחה. כדי לקרוא אותם, תצטרך לפענח אותם בתחנת הצפייה המאובטחת שלך."
 
+msgid "Download Selected Files"
+msgstr ""
+
 msgid "Download Selected"
 msgstr "הורד נבחרים"
+
+msgid "Delete Selected Files"
+msgstr ""
 
 msgid "Delete Selected"
 msgstr "מחק נבחרים"
@@ -675,14 +687,26 @@ msgstr "איפוס נתוני מפתח הצפנה"
 msgid "Reset Security Key Credentials"
 msgstr "איפוס נתוני מפתח הצפנה"
 
+msgid "Download Selected Unread Submissions"
+msgstr ""
+
 msgid "Download Unread"
 msgstr "הורדת הודעות שלא נקראו"
+
+msgid "Download Selected Submissions"
+msgstr ""
 
 msgid "Download"
 msgstr "הורדה"
 
+msgid "Star Selected Submissions"
+msgstr ""
+
 msgid "Star"
 msgstr "סמן כוכב"
+
+msgid "Un-star Selected Submissions"
+msgstr ""
 
 msgid "Un-star"
 msgstr "הסר כוכב"
@@ -735,8 +759,8 @@ msgstr "סיסמה"
 msgid "Show password"
 msgstr "הצגת סיסמה"
 
-msgid "Log In"
-msgstr "כניסה"
+msgid "Log In to Journalist Interface"
+msgstr ""
 
 msgid "LOG IN"
 msgstr "כניסה"
@@ -812,14 +836,20 @@ msgstr "מצטערים, זה לא שם קוד מוכר."
 msgid "Important"
 msgstr "חשוב"
 
-msgid "You were logged out due to inactivity. Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
-msgstr "התנתקת עקב חוסר פעילות. לחץ על הלחצן <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>זהות חדשה</b> בסרגל הכלים של דפדפן Tor שלך לפני שתמשיך הלאה. פעולה זו תנקה את נתוני הפעילות של דפדפן Tor במכשיר זה."
+msgid "You have been logged out due to inactivity or a problem with your session. Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
+msgstr ""
 
 msgid "Protecting Journalists and Sources"
 msgstr "הגנה על עיתונאים ומקורות"
 
 msgid "Skip to notification"
 msgstr "דלג להתראה"
+
+msgid "Return to Submission Page"
+msgstr ""
+
+msgid "Return to Home Page"
+msgstr ""
 
 msgid "We're sorry, our SecureDrop is currently offline."
 msgstr "אנו מצטערים, ה-SecureDrop שלנו לא פעיל כרגע."
@@ -863,8 +893,8 @@ msgstr "<strong>שמור אותו בסוד</strong> ואל תשתף עם אף א
 msgid "<strong>Keep it safe.</strong> There is no account recovery option."
 msgstr "<strong>שמור במקום בטוח.</strong> אין אפשרות לשחזור חשבון."
 
-msgid "Continue"
-msgstr "המשך"
+msgid "Continue to Submission Page"
+msgstr ""
 
 msgid "Welcome"
 msgstr "ברוכים הבאים"
@@ -890,8 +920,8 @@ msgstr "<a href=\"/\" aria-label=\"עקוב אחר ההוראות האלה, ול
 msgid "<strong>It is recommended to use Tor Browser to access SecureDrop:</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
 msgstr "<strong>מומלץ להשתמש בדפדפן Tor כדי לגשת אל SecureDrop:</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">למד כיצד להתקין אותו</a>, או התעלם מהאזהרה זו כדי להמשיך."
 
-msgid "<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop version.</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
-msgstr "<strong>מומלץ להשתמש בגרסת שולחן העבודה של דפדפן Tor כדי לגשת ל-SecureDrop, מכיוון ש-Orfox אינה מספקת את אותה רמת אבטחה ואנונימיות כמו גרסת שולחן העבודה.</strong> <a class=\"recommend-tor\" href= \"{tor_browser_url}\">למד כיצד להתקין אותו</a>, או התעלם מהאזהרה זו כדי להמשיך."
+msgid "<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop version.</strong> <a class=\"recommend-tor\" aria-label=\"Learn how to install Tor Browser\" href=\"{tor_browser_url}\" >Learn how to install it</a>, or ignore this warning to continue."
+msgstr ""
 
 msgid "{} logo"
 msgstr "לוגו של {}"
@@ -902,8 +932,8 @@ msgstr "הודעה ראשונה"
 msgid "First time submitting to our SecureDrop? Start here."
 msgstr "פעם ראשונה ב-SecureDrop שלנו? התחל כאן."
 
-msgid "Get Started"
-msgstr "התחל"
+msgid "Get Started With Your First Submission"
+msgstr ""
 
 msgid "GET STARTED"
 msgstr "התחל"
@@ -914,6 +944,9 @@ msgstr "ביקור חוזר"
 msgid "Already have a codename? Check for replies or submit something new."
 msgstr "כבר יש לך שם קוד? בדוק אם יש תשובות או שלח משהו חדש."
 
+msgid "Log In Using Your Codename"
+msgstr ""
+
 msgid "Log in"
 msgstr "כניסה"
 
@@ -923,11 +956,17 @@ msgstr "הזן שם קוד"
 msgid "Enter your codename"
 msgstr "הזן את שם הקוד שלך"
 
+msgid "Cancel and Return to Previous Page"
+msgstr ""
+
 msgid "CANCEL"
 msgstr "ביטול"
 
 msgid "Additional Action Required"
 msgstr "נדרשת פעולה נוספת"
+
+msgid "Log Back In"
+msgstr ""
 
 msgid "One more thing..."
 msgstr "עוד דבר אחד..."
@@ -962,8 +1001,11 @@ msgstr "אם אתה שולח רק הודעה, היא חייבת להיות בא�
 msgid "Anti-spam check. Do not fill this in!"
 msgstr "בדיקת אנטי ספאם. אל תמלא את זה!"
 
-msgid "Submit"
-msgstr "שלח"
+msgid "Cancel and Clear Uploaded Content"
+msgstr ""
+
+msgid "Submit Uploaded Content"
+msgstr ""
 
 msgid "Read Replies"
 msgstr "מענה מהמערכת"
@@ -976,6 +1018,9 @@ msgstr "מחק תשובה הזו"
 
 msgid "Delete reply from {timestamp}?"
 msgstr "למחוק את התשובה מ-{timestamp}?"
+
+msgid "Delete Reply"
+msgstr ""
 
 msgid "Delete All Replies"
 msgstr "מחיקת כל התשובות"
@@ -1040,6 +1085,9 @@ msgstr "זכור, שם הקוד שלך הוא:"
 msgid "Codename"
 msgstr "שם קוד"
 
+msgid "Reveal Codename"
+msgstr ""
+
 msgid "Show Codename"
 msgstr "הצג שם קוד"
 
@@ -1082,6 +1130,27 @@ msgstr "<strong>חשוב:</strong> אם ברצונך להישאר אנונימי
 
 msgid "Back to submission page"
 msgstr "חזרה לדף שליחת ההודעות"
+
+#~ msgid "You were logged out due to inactivity. Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
+#~ msgstr "התנתקת עקב חוסר פעילות. לחץ על הלחצן <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>זהות חדשה</b> בסרגל הכלים של דפדפן Tor שלך לפני שתמשיך הלאה. פעולה זו תנקה את נתוני הפעילות של דפדפן Tor במכשיר זה."
+
+#~ msgid "Update instance config"
+#~ msgstr "עדכן תצורה"
+
+#~ msgid "Log In"
+#~ msgstr "כניסה"
+
+#~ msgid "Continue"
+#~ msgstr "המשך"
+
+#~ msgid "<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop version.</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
+#~ msgstr "<strong>מומלץ להשתמש בגרסת שולחן העבודה של דפדפן Tor כדי לגשת ל-SecureDrop, מכיוון ש-Orfox אינה מספקת את אותה רמת אבטחה ואנונימיות כמו גרסת שולחן העבודה.</strong> <a class=\"recommend-tor\" href= \"{tor_browser_url}\">למד כיצד להתקין אותו</a>, או התעלם מהאזהרה זו כדי להמשיך."
+
+#~ msgid "Get Started"
+#~ msgstr "התחל"
+
+#~ msgid "Submit"
+#~ msgstr "שלח"
 
 #~ msgid "Field must be between 1 and {max_codename_len} character long."
 #~ msgid_plural "Field must be between 1 and {max_codename_len} characters long."
