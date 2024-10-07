@@ -33,6 +33,7 @@ class TestJournalistLayout:
             accept_languages=locale_with_commas,
         )
         journ_app_nav.driver.get(f"{sd_servers.journalist_app_base_url}/login")
+        journ_app_nav.got_expected_language(locale)
         save_static_data(journ_app_nav.driver, locale, "journalist-login")
 
         # And they log into the app and are an admin
