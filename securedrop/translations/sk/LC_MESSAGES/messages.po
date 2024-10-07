@@ -36,8 +36,8 @@ msgstr "Neplatné prihlasovacie meno"
 msgid "{time} ago"
 msgstr "pred {time}"
 
-msgid "You have been logged out due to inactivity."
-msgstr "Boli ste odhlásení z dôvodu nečinnosti."
+msgid "You have been logged out due to inactivity or a problem with your session."
+msgstr ""
 
 msgid "SecureDrop"
 msgstr "SecureDrop"
@@ -170,6 +170,9 @@ msgstr "Musíte vybrať jednu či viac položiek na zmazanie"
 msgid "No unread submissions for this source."
 msgstr "Žiadne neprečítané podania od tohto zdroja."
 
+msgid "You have been logged out due to inactivity."
+msgstr "Boli ste odhlásení z dôvodu nečinnosti."
+
 msgid "Account updated."
 msgstr "Účet bol aktualizovaný."
 
@@ -293,6 +296,21 @@ msgstr "Pokračujte na zmenu hesla"
 msgid "CONTINUE"
 msgstr "ĎALEJ"
 
+msgid "Enable YubiKey (OATH-HOTP)"
+msgstr "Povoliť YubiKey (OATH-HOTP)"
+
+msgid "Once you have configured your YubiKey, enter the 6-digit verification code below:"
+msgstr "Akonáhle nastavíte svoj YubiKey, zadajte šesťmiestny overovací kód nižšie:"
+
+msgid "Verification code"
+msgstr "Overovací kód"
+
+msgid "Submit verification code"
+msgstr "Zadajte overovací kód"
+
+msgid "SUBMIT"
+msgstr "POTVRDIŤ"
+
 msgid "Enable FreeOTP"
 msgstr "Zapnúť FreeOTP"
 
@@ -316,21 +334,6 @@ msgstr "Nemôžete nasnímať čiarový kód? Môžete manuálne spárovať Free
 
 msgid "Once you have paired FreeOTP with this account, enter the 6-digit verification code below:"
 msgstr "Po spárovaní FreeOTP s týmto účtom, zadajte šesťmiestny overovací kód nižšie:"
-
-msgid "Enable YubiKey (OATH-HOTP)"
-msgstr "Povoliť YubiKey (OATH-HOTP)"
-
-msgid "Once you have configured your YubiKey, enter the 6-digit verification code below:"
-msgstr "Akonáhle nastavíte svoj YubiKey, zadajte šesťmiestny overovací kód nižšie:"
-
-msgid "Verification code"
-msgstr "Overovací kód"
-
-msgid "Submit verification code"
-msgstr "Zadajte overovací kód"
-
-msgid "SUBMIT"
-msgstr "POTVRDIŤ"
 
 msgid "Admin Interface"
 msgstr "Administračné rozhranie"
@@ -380,8 +383,8 @@ msgstr "ZMAZAŤ"
 msgid "No users to display"
 msgstr "Žiadni používatelia na zobrazenie"
 
-msgid "Update instance config"
-msgstr "Aktualizovať konfiguráciu prípadu"
+msgid "Update instance configuration"
+msgstr ""
 
 msgid "INSTANCE CONFIG"
 msgstr "NASTAVENIE INŠTANCIE"
@@ -419,14 +422,14 @@ msgstr "Zmeniť heslo HOTP"
 msgid "Enter a new HOTP secret formatted as a 40-digit hexadecimal string. Spaces will be ignored:"
 msgstr "Zadajte nové HOTP secret vo formáte 40-číselného šestnástkového radu. Medzery nebudú zohľadnené:"
 
+msgid "Once you have configured your YubiKey, enter the 6-digit code below:"
+msgstr "Akonáhle nastavíte svoj YubiKey, zadajte šesťmiestny kód nižšie:"
+
 msgid "You're almost done! To finish adding this new user, have them follow the instructions below to set up two-factor authentication with FreeOTP. Once they've added an entry for this account in the app, have them enter one of the 6-digit codes from the app to confirm that two-factor authentication is set up correctly."
 msgstr "Už to skoro máte! Pre dokončenie pridávania tohto používateľa, požiadajte danú osobu o nasledovanie nižšie uvedených pokynov na nastavenie dvojfaktorovej autentifikácie pomocou FreeOTP. Akonáhle si používateľ pridá záznam pre tento účet do aplikácie, požiadajte ich, aby zadali jeden zo šesťmiestnych kódov. Týmto kódom sa potvrdí správnosť fungovania dvojfaktorovej autentifikácie."
 
 msgid "Can't scan the barcode? You can manually pair FreeOTP with this account by entering the following two-factor secret into the app:"
 msgstr "Nemôžete nasnímať čiarový kód? Môžete manuálne spárovať FreeOTP s týmto účtom zadaním nasledujúceho dvojfaktorového tajomstva do aplikácie:"
-
-msgid "Once you have configured your YubiKey, enter the 6-digit code below:"
-msgstr "Akonáhle nastavíte svoj YubiKey, zadajte šesťmiestny kód nižšie:"
 
 msgid "Navigation"
 msgstr "Navigácia"
@@ -443,6 +446,9 @@ msgstr "Administrátor"
 msgid "Log Out"
 msgstr "Odhlásiť sa"
 
+msgid "Return to All Sources"
+msgstr ""
+
 msgid "Powered by <b>SecureDrop {version}</b>."
 msgstr "Používa systém <b>SecureDrop {version}</b>."
 
@@ -455,8 +461,14 @@ msgstr "Všetky zdroje"
 msgid "All messages, files, and replies from sources are stored as encrypted files for security. To read them, you will need to decrypt them on your Secure Viewing Station."
 msgstr "Všetky správy, súbory a odpovede od zdrojov sú kvôli zabezpečeniu ukladané ako šifrované súbory. Aby ste si ich mohli prečítať, musíte ich najprv dešifrovať na bezpečnom počítači (Secure Viewing Station)."
 
+msgid "Download Selected Files"
+msgstr ""
+
 msgid "Download Selected"
 msgstr "Stiahnuť vybrané"
+
+msgid "Delete Selected Files"
+msgstr ""
 
 msgid "Delete Selected"
 msgstr "Zmazať vybrané"
@@ -685,14 +697,26 @@ msgstr "RESETOVAŤ PRIHLASOVACIE ÚDAJE BEZPEČNOSTNÉHO KĽÚČA"
 msgid "Reset Security Key Credentials"
 msgstr "Znovu nastaviť údaje k bezpečnostnému kľúču"
 
+msgid "Download Selected Unread Submissions"
+msgstr ""
+
 msgid "Download Unread"
 msgstr "Stiahnuť neprečítané"
+
+msgid "Download Selected Submissions"
+msgstr ""
 
 msgid "Download"
 msgstr "Stiahnuť"
 
+msgid "Star Selected Submissions"
+msgstr ""
+
 msgid "Star"
 msgstr "Označiť"
+
+msgid "Un-star Selected Submissions"
+msgstr ""
 
 msgid "Un-star"
 msgstr "Odznačiť"
@@ -745,8 +769,8 @@ msgstr "Heslo"
 msgid "Show password"
 msgstr "Ukázať heslo"
 
-msgid "Log In"
-msgstr "Prihlásiť sa"
+msgid "Log In to Journalist Interface"
+msgstr ""
 
 msgid "LOG IN"
 msgstr "PRIHLÁSIŤ SA"
@@ -823,14 +847,20 @@ msgstr "Prepáčte, toto krycie meno nie je používané."
 msgid "Important"
 msgstr "Dôležité"
 
-msgid "You were logged out due to inactivity. Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
-msgstr "Boli ste odhlásení z dôvodu nečinnosti. Skôr než budete pokračovať, kliknite na ikonu <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>Nová identita</b> na lište prehliadača Tor. Tým sa vymažú dáta o aktivite Tor prehliadača na tomto zariadení."
+msgid "You have been logged out due to inactivity or a problem with your session. Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
+msgstr ""
 
 msgid "Protecting Journalists and Sources"
 msgstr "Chránime novinárov a zdroje"
 
 msgid "Skip to notification"
 msgstr "Preskočiť na upozornenie"
+
+msgid "Return to Submission Page"
+msgstr ""
+
+msgid "Return to Home Page"
+msgstr ""
 
 msgid "We're sorry, our SecureDrop is currently offline."
 msgstr "Prepáčte, náš SecureDrop je v súčasnosti offline."
@@ -874,8 +904,8 @@ msgstr "<strong>Udržujte v tajnosti.</strong> S nikým nezdieľajte."
 msgid "<strong>Keep it safe.</strong> There is no account recovery option."
 msgstr "<strong>Udržujte ho bezpečí.</strong> Obnovenie účtu nie je možné."
 
-msgid "Continue"
-msgstr "Pokračovať"
+msgid "Continue to Submission Page"
+msgstr ""
 
 msgid "Welcome"
 msgstr "Vitajte"
@@ -901,8 +931,8 @@ msgstr "<a href=\"/\" aria-label=\"Postupujte podľa inštrukcií a potom obnovt
 msgid "<strong>It is recommended to use Tor Browser to access SecureDrop:</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
 msgstr "<strong>Pre prístup k SecureDrop odporúčame použiť prehliadač Tor:</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Zistite ako ho nainštalovať</a>, alebo ignorujte toto upozornenie a pokračujte ďalej."
 
-msgid "<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop version.</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
-msgstr "<strong>Pre prístup k SecureDrop odporúčame používať desktopovú verziu prehliadača Tor, pretože Orfox neposkytuje rovnakú úroveň zabezpečenia a anonymitu ako desktopová verzia.</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Zistite ako ju nainštalovať</a>, alebo ignorujte toto upozornenie a pokračujte ďalej."
+msgid "<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop version.</strong> <a class=\"recommend-tor\" aria-label=\"Learn how to install Tor Browser\" href=\"{tor_browser_url}\" >Learn how to install it</a>, or ignore this warning to continue."
+msgstr ""
 
 msgid "{} logo"
 msgstr "{} logo"
@@ -913,8 +943,8 @@ msgstr "Prvé podanie"
 msgid "First time submitting to our SecureDrop? Start here."
 msgstr "Podávate cez náš SecureDrop prvýkrát? Začnite tu."
 
-msgid "Get Started"
-msgstr "Začnite"
+msgid "Get Started With Your First Submission"
+msgstr ""
 
 msgid "GET STARTED"
 msgstr "ZAČAŤ"
@@ -925,6 +955,9 @@ msgstr "Vraciam sa"
 msgid "Already have a codename? Check for replies or submit something new."
 msgstr "Už máte krycie meno? Skontrolujte odpovede alebo pošlite niečo nové."
 
+msgid "Log In Using Your Codename"
+msgstr ""
+
 msgid "Log in"
 msgstr "Prihlásiť sa"
 
@@ -934,11 +967,17 @@ msgstr "Zadať krycie meno"
 msgid "Enter your codename"
 msgstr "Zadajte svoje krycie meno"
 
+msgid "Cancel and Return to Previous Page"
+msgstr ""
+
 msgid "CANCEL"
 msgstr "ZRUŠIŤ"
 
 msgid "Additional Action Required"
 msgstr "Je vyžadovaná ďalšia akcia"
+
+msgid "Log Back In"
+msgstr ""
 
 msgid "One more thing..."
 msgstr "Ešte posledná vec..."
@@ -973,8 +1012,11 @@ msgstr "Ak odosielate iba správu, musí mať aspoň {} znakov."
 msgid "Anti-spam check. Do not fill this in!"
 msgstr "Ochrana proti SPAMu. Nevypĺňajte!"
 
-msgid "Submit"
-msgstr "Odoslať"
+msgid "Cancel and Clear Uploaded Content"
+msgstr ""
+
+msgid "Submit Uploaded Content"
+msgstr ""
 
 msgid "Read Replies"
 msgstr "Prečítať si odpovede"
@@ -987,6 +1029,9 @@ msgstr "Zmazať túto odpoveď"
 
 msgid "Delete reply from {timestamp}?"
 msgstr "Zmazať odpoveď z {timestamp}?"
+
+msgid "Delete Reply"
+msgstr ""
 
 msgid "Delete All Replies"
 msgstr "Zmazať všetky odpovede"
@@ -1051,6 +1096,9 @@ msgstr "Pamätajte, vaše krycie meno je:"
 msgid "Codename"
 msgstr "Krycie meno"
 
+msgid "Reveal Codename"
+msgstr ""
+
 msgid "Show Codename"
 msgstr "Zobraziť Krycie meno"
 
@@ -1093,6 +1141,27 @@ msgstr "<strong>Dôležité:</strong> Ak chcete zostať v anonymite, <strong>nep
 
 msgid "Back to submission page"
 msgstr "Späť na stránku podania"
+
+#~ msgid "You were logged out due to inactivity. Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
+#~ msgstr "Boli ste odhlásení z dôvodu nečinnosti. Skôr než budete pokračovať, kliknite na ikonu <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>Nová identita</b> na lište prehliadača Tor. Tým sa vymažú dáta o aktivite Tor prehliadača na tomto zariadení."
+
+#~ msgid "Update instance config"
+#~ msgstr "Aktualizovať konfiguráciu prípadu"
+
+#~ msgid "Log In"
+#~ msgstr "Prihlásiť sa"
+
+#~ msgid "Continue"
+#~ msgstr "Pokračovať"
+
+#~ msgid "<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop version.</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
+#~ msgstr "<strong>Pre prístup k SecureDrop odporúčame používať desktopovú verziu prehliadača Tor, pretože Orfox neposkytuje rovnakú úroveň zabezpečenia a anonymitu ako desktopová verzia.</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Zistite ako ju nainštalovať</a>, alebo ignorujte toto upozornenie a pokračujte ďalej."
+
+#~ msgid "Get Started"
+#~ msgstr "Začnite"
+
+#~ msgid "Submit"
+#~ msgstr "Odoslať"
 
 #~ msgid "Field must be between 1 and {max_codename_len} character long."
 #~ msgid_plural "Field must be between 1 and {max_codename_len} characters long."
