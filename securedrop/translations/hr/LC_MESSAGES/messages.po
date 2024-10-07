@@ -36,8 +36,8 @@ msgstr "Neispravno korisničko ime"
 msgid "{time} ago"
 msgstr "prije {time}"
 
-msgid "You have been logged out due to inactivity."
-msgstr "Odjavljeni ste zbog neaktivnosti."
+msgid "You have been logged out due to inactivity or a problem with your session."
+msgstr ""
 
 msgid "SecureDrop"
 msgstr "SecureDrop"
@@ -170,6 +170,9 @@ msgstr "Morate odabrati jednu ili više stavki za brisanje"
 msgid "No unread submissions for this source."
 msgstr "Nema nepročitanih predaja za ovaj izvor."
 
+msgid "You have been logged out due to inactivity."
+msgstr "Odjavljeni ste zbog neaktivnosti."
+
 msgid "Account updated."
 msgstr "Račun ažuriran."
 
@@ -293,6 +296,21 @@ msgstr "Nastavi za mijenjanje tajne"
 msgid "CONTINUE"
 msgstr "NASTAVI"
 
+msgid "Enable YubiKey (OATH-HOTP)"
+msgstr "Omogućite YubiKey (OATH-HOTP)"
+
+msgid "Once you have configured your YubiKey, enter the 6-digit verification code below:"
+msgstr "Nakon postavljanja YubiKey-a, unesite 6-znamenkasti verifikacijski kod ispod:"
+
+msgid "Verification code"
+msgstr "Verifikacijski kod"
+
+msgid "Submit verification code"
+msgstr "Predaj verifikacijski kod"
+
+msgid "SUBMIT"
+msgstr "POŠALJI"
+
 msgid "Enable FreeOTP"
 msgstr "Omogući FreeOTP"
 
@@ -316,21 +334,6 @@ msgstr "Ne možete skenirati barkod? Možete ručno upariti FreeOTP sa svojim Se
 
 msgid "Once you have paired FreeOTP with this account, enter the 6-digit verification code below:"
 msgstr "Nakon uparivanja FreeOTP-a s ovim računom, unesite 6-znamenkasti verifikacijski kod ispod:"
-
-msgid "Enable YubiKey (OATH-HOTP)"
-msgstr "Omogućite YubiKey (OATH-HOTP)"
-
-msgid "Once you have configured your YubiKey, enter the 6-digit verification code below:"
-msgstr "Nakon postavljanja YubiKey-a, unesite 6-znamenkasti verifikacijski kod ispod:"
-
-msgid "Verification code"
-msgstr "Verifikacijski kod"
-
-msgid "Submit verification code"
-msgstr "Predaj verifikacijski kod"
-
-msgid "SUBMIT"
-msgstr "POŠALJI"
 
 msgid "Admin Interface"
 msgstr "Administratorsko sučelje"
@@ -380,8 +383,8 @@ msgstr "OBRIŠI"
 msgid "No users to display"
 msgstr "Nema korisnika za prikaz"
 
-msgid "Update instance config"
-msgstr "Ažuriraj konfiguraciju instance"
+msgid "Update instance configuration"
+msgstr ""
 
 msgid "INSTANCE CONFIG"
 msgstr "KONFIGURACIJA INSTANCE"
@@ -419,14 +422,14 @@ msgstr "Promijeni HOTP tajnu"
 msgid "Enter a new HOTP secret formatted as a 40-digit hexadecimal string. Spaces will be ignored:"
 msgstr "Unesite novu HOTP tajnu formatiranu kao 40-znamenkasti heksadecimalni niz. Razmaci će se zanemariti:"
 
+msgid "Once you have configured your YubiKey, enter the 6-digit code below:"
+msgstr "Nakon što konfigurirate YubiKey, unesite 6-znamenkasti kod ispod:"
+
 msgid "You're almost done! To finish adding this new user, have them follow the instructions below to set up two-factor authentication with FreeOTP. Once they've added an entry for this account in the app, have them enter one of the 6-digit codes from the app to confirm that two-factor authentication is set up correctly."
 msgstr "Skoro ste gotovi! Kako bi dovršili dodavanje novog korisnika, uputite ga neka prati niže navedene upute kako bi postavio dvofaktorsku autentikaciju s FreeOTP-om. Nakon što korisnik doda unos za ovaj račun u aplikaciju, uputite ga da unese jedan od 6-znamenkastih kodova iz aplikacije kako bi potvrdio da je dvofaktorska autentikacija uspješno postavljena."
 
 msgid "Can't scan the barcode? You can manually pair FreeOTP with this account by entering the following two-factor secret into the app:"
 msgstr "Ne možete skenirati barkod? Možete ručno upariti FreeOTP s ovim računom tako da unesete sljedeću dvofaktorsku tajnu u aplikaciju:"
-
-msgid "Once you have configured your YubiKey, enter the 6-digit code below:"
-msgstr "Nakon što konfigurirate YubiKey, unesite 6-znamenkasti kod ispod:"
 
 msgid "Navigation"
 msgstr "Navigacija"
@@ -443,6 +446,9 @@ msgstr "Administrator"
 msgid "Log Out"
 msgstr "Odjava"
 
+msgid "Return to All Sources"
+msgstr ""
+
 msgid "Powered by <b>SecureDrop {version}</b>."
 msgstr "Powered by <b>SecureDrop {version}</b>."
 
@@ -455,8 +461,14 @@ msgstr "Svi izvori"
 msgid "All messages, files, and replies from sources are stored as encrypted files for security. To read them, you will need to decrypt them on your Secure Viewing Station."
 msgstr "Svi dokumenti, datoteke i odgovori izvora se spremaju kao enkriptirane datoteke zbog sigurnosti. Kako bi ih čitali, morate ih dekriptirati na svojoj Stanici za sigurno pregledavanje."
 
+msgid "Download Selected Files"
+msgstr ""
+
 msgid "Download Selected"
 msgstr "Preuzmi odabrano"
+
+msgid "Delete Selected Files"
+msgstr ""
 
 msgid "Delete Selected"
 msgstr "Obriši odabrano"
@@ -685,14 +697,26 @@ msgstr "Ponovno postavi vjerodajnice sigurnosnog ključa"
 msgid "Reset Security Key Credentials"
 msgstr "Ponovno postavi vjerodajnice sigurnosnog ključa"
 
+msgid "Download Selected Unread Submissions"
+msgstr ""
+
 msgid "Download Unread"
 msgstr "Preuzmi nepročitano"
+
+msgid "Download Selected Submissions"
+msgstr ""
 
 msgid "Download"
 msgstr "Preuzmi"
 
+msgid "Star Selected Submissions"
+msgstr ""
+
 msgid "Star"
 msgstr "Stavi zvijezdu"
+
+msgid "Un-star Selected Submissions"
+msgstr ""
 
 msgid "Un-star"
 msgstr "Ukloni zvijezdu"
@@ -745,8 +769,8 @@ msgstr "Lozinka"
 msgid "Show password"
 msgstr "Pokaži lozinku"
 
-msgid "Log In"
-msgstr "Prijava"
+msgid "Log In to Journalist Interface"
+msgstr ""
 
 msgid "LOG IN"
 msgstr "Prijava"
@@ -823,14 +847,20 @@ msgstr "Žao nam je, to nije prepoznato kodno ime."
 msgid "Important"
 msgstr "Važno"
 
-msgid "You were logged out due to inactivity. Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
-msgstr "Odjavljeni ste zbog neaktivnosti. Pritisnite gumb <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>Novi identitet</b> u alatnoj traci vašeg Tor preglednika prije nego što nastavite. Ovo će obrisati Vaše podatke o aktivnosti u Tor pregledniku na ovom uređaju."
+msgid "You have been logged out due to inactivity or a problem with your session. Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
+msgstr ""
 
 msgid "Protecting Journalists and Sources"
 msgstr "Zaštita novinara i izvora"
 
 msgid "Skip to notification"
 msgstr "Prijeđi na obavijest"
+
+msgid "Return to Submission Page"
+msgstr ""
+
+msgid "Return to Home Page"
+msgstr ""
 
 msgid "We're sorry, our SecureDrop is currently offline."
 msgstr "Žao nam je, naš SecureDrop je trenutno nedostupan."
@@ -874,8 +904,8 @@ msgstr "<strong>Držite ga tajnim.</strong> Nemojte ga dijelite s drugima."
 msgid "<strong>Keep it safe.</strong> There is no account recovery option."
 msgstr "<strong>Držite ga sigurnim.</strong> Ne postoji opcija za oporavak računa."
 
-msgid "Continue"
-msgstr "Nastavi"
+msgid "Continue to Submission Page"
+msgstr ""
 
 msgid "Welcome"
 msgstr "Dobrodošli"
@@ -901,8 +931,8 @@ msgstr "<a href=\"/\" aria-label=\"Slijedite ove upute, a zatim osvježite ovu s
 msgid "<strong>It is recommended to use Tor Browser to access SecureDrop:</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
 msgstr "<strong>Preporučuje se korištenje Tor preglednika za pristup SecureDrop-u:</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Saznajte kako ga instalirati</a> ili zanemarite ovo upozorenje i nastavite."
 
-msgid "<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop version.</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
-msgstr "<strong>Preporučuje se da koristite desktop verziju Tor preglednika za pristup SecureDrop-u, jer Orfox ne pruža istu razinu sigurnosti i anonimnosti kao desktop verzija.</strong> <a class=\"recommend-tor\" href= \"{tor_browser_url}\">Saznajte kako ga instalirati</a> ili zanemarite ovo upozorenje i nastavite."
+msgid "<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop version.</strong> <a class=\"recommend-tor\" aria-label=\"Learn how to install Tor Browser\" href=\"{tor_browser_url}\" >Learn how to install it</a>, or ignore this warning to continue."
+msgstr ""
 
 msgid "{} logo"
 msgstr "{} logo"
@@ -913,8 +943,8 @@ msgstr "Prva predaja"
 msgid "First time submitting to our SecureDrop? Start here."
 msgstr "Prvi put predajete na SecureDrop? Počnite ovdje."
 
-msgid "Get Started"
-msgstr "Počnite"
+msgid "Get Started With Your First Submission"
+msgstr ""
 
 msgid "GET STARTED"
 msgstr "Počnite"
@@ -925,6 +955,9 @@ msgstr "Povratni posjet"
 msgid "Already have a codename? Check for replies or submit something new."
 msgstr "Već imate kodno ime? Provjerite odgovore ili predajte nešto novo."
 
+msgid "Log In Using Your Codename"
+msgstr ""
+
 msgid "Log in"
 msgstr "Prijavite se"
 
@@ -934,11 +967,17 @@ msgstr "Unesite kodno ime"
 msgid "Enter your codename"
 msgstr "Unesite svoje kodno ime"
 
+msgid "Cancel and Return to Previous Page"
+msgstr ""
+
 msgid "CANCEL"
 msgstr "Otkaži"
 
 msgid "Additional Action Required"
 msgstr "Zahtijeva dodatnu radnju"
+
+msgid "Log Back In"
+msgstr ""
 
 msgid "One more thing..."
 msgstr "Još jedna stvar..."
@@ -973,8 +1012,11 @@ msgstr "Ako samo šaljete poruku, ona mora sadržati barem {} znakova."
 msgid "Anti-spam check. Do not fill this in!"
 msgstr "Anti-spam provjera. Ovo nemojte ispuniti!"
 
-msgid "Submit"
-msgstr "Predaj"
+msgid "Cancel and Clear Uploaded Content"
+msgstr ""
+
+msgid "Submit Uploaded Content"
+msgstr ""
 
 msgid "Read Replies"
 msgstr "Pročitajte odgovore"
@@ -987,6 +1029,9 @@ msgstr "Obriši ovaj odgovor"
 
 msgid "Delete reply from {timestamp}?"
 msgstr "Obrisati odgovor od {timestamp}?"
+
+msgid "Delete Reply"
+msgstr ""
 
 msgid "Delete All Replies"
 msgstr "Obriši sve odgovore"
@@ -1051,6 +1096,9 @@ msgstr "Zapamtite, Vaše kodno ime je:"
 msgid "Codename"
 msgstr "Kodno ime"
 
+msgid "Reveal Codename"
+msgstr ""
+
 msgid "Show Codename"
 msgstr "Pokaži kodno ime"
 
@@ -1093,6 +1141,27 @@ msgstr "<strong>Važno:</strong> Ako želite ostati anonimni, <strong>nemojte</s
 
 msgid "Back to submission page"
 msgstr "Natrag na stranicu predaje"
+
+#~ msgid "You were logged out due to inactivity. Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
+#~ msgstr "Odjavljeni ste zbog neaktivnosti. Pritisnite gumb <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>Novi identitet</b> u alatnoj traci vašeg Tor preglednika prije nego što nastavite. Ovo će obrisati Vaše podatke o aktivnosti u Tor pregledniku na ovom uređaju."
+
+#~ msgid "Update instance config"
+#~ msgstr "Ažuriraj konfiguraciju instance"
+
+#~ msgid "Log In"
+#~ msgstr "Prijava"
+
+#~ msgid "Continue"
+#~ msgstr "Nastavi"
+
+#~ msgid "<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop version.</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
+#~ msgstr "<strong>Preporučuje se da koristite desktop verziju Tor preglednika za pristup SecureDrop-u, jer Orfox ne pruža istu razinu sigurnosti i anonimnosti kao desktop verzija.</strong> <a class=\"recommend-tor\" href= \"{tor_browser_url}\">Saznajte kako ga instalirati</a> ili zanemarite ovo upozorenje i nastavite."
+
+#~ msgid "Get Started"
+#~ msgstr "Počnite"
+
+#~ msgid "Submit"
+#~ msgstr "Predaj"
 
 #~ msgid "Field must be between 1 and {max_codename_len} character long."
 #~ msgid_plural "Field must be between 1 and {max_codename_len} characters long."
