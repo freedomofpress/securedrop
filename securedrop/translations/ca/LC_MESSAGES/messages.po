@@ -35,8 +35,8 @@ msgstr "El nom d'usuari no és vàlid"
 msgid "{time} ago"
 msgstr "fa {time}"
 
-msgid "You have been logged out due to inactivity."
-msgstr "S'ha desconnectat la sessió per inactivitat."
+msgid "You have been logged out due to inactivity or a problem with your session."
+msgstr ""
 
 msgid "SecureDrop"
 msgstr "SecureDrop"
@@ -166,6 +166,9 @@ msgstr "Cal que seleccioneu un o més elements per suprimir"
 msgid "No unread submissions for this source."
 msgstr "Aquesta font no té cap enviament sense llegir."
 
+msgid "You have been logged out due to inactivity."
+msgstr "S'ha desconnectat la sessió per inactivitat."
+
 msgid "Account updated."
 msgstr "S’ha actualitzat el compte."
 
@@ -283,6 +286,21 @@ msgstr "Canvia el secret"
 msgid "CONTINUE"
 msgstr "CONTINUA"
 
+msgid "Enable YubiKey (OATH-HOTP)"
+msgstr "Activa la YubiKey (OATH-HOTP)"
+
+msgid "Once you have configured your YubiKey, enter the 6-digit verification code below:"
+msgstr "Quan hàgiu configurat la YubiKey, introduïu el codi de verificació de sis dígits:"
+
+msgid "Verification code"
+msgstr "Codi de verificació"
+
+msgid "Submit verification code"
+msgstr "Envia el codi de verificació"
+
+msgid "SUBMIT"
+msgstr "ENVIA"
+
 msgid "Enable FreeOTP"
 msgstr "Activa el FreeOTP"
 
@@ -306,21 +324,6 @@ msgstr "No podeu escanejar el codi de barres? Podeu vincular manualment el FreeO
 
 msgid "Once you have paired FreeOTP with this account, enter the 6-digit verification code below:"
 msgstr "Quan hàgiu vinculat el FreeOTP amb aquest compte, introduïu el codi de verificació de sis dígits:"
-
-msgid "Enable YubiKey (OATH-HOTP)"
-msgstr "Activa la YubiKey (OATH-HOTP)"
-
-msgid "Once you have configured your YubiKey, enter the 6-digit verification code below:"
-msgstr "Quan hàgiu configurat la YubiKey, introduïu el codi de verificació de sis dígits:"
-
-msgid "Verification code"
-msgstr "Codi de verificació"
-
-msgid "Submit verification code"
-msgstr "Envia el codi de verificació"
-
-msgid "SUBMIT"
-msgstr "ENVIA"
 
 msgid "Admin Interface"
 msgstr "Interfície administrativa"
@@ -370,8 +373,8 @@ msgstr "SUPRIMEIX"
 msgid "No users to display"
 msgstr "No hi ha cap usuari per mostrar"
 
-msgid "Update instance config"
-msgstr "Actualitza la configuració de la instància"
+msgid "Update instance configuration"
+msgstr ""
 
 msgid "INSTANCE CONFIG"
 msgstr "PARÀMETRES D’INSTÀNCIA"
@@ -409,14 +412,14 @@ msgstr "Canvia el secret HOTP"
 msgid "Enter a new HOTP secret formatted as a 40-digit hexadecimal string. Spaces will be ignored:"
 msgstr "Inseriu un secret nou HOTP format per una cadena hexadecimal de 40 caràcters. Els espais seran ignorats:"
 
+msgid "Once you have configured your YubiKey, enter the 6-digit code below:"
+msgstr "Quan hàgiu configurat la YubiKey, introduïu aquest codi de sis dígits:"
+
 msgid "You're almost done! To finish adding this new user, have them follow the instructions below to set up two-factor authentication with FreeOTP. Once they've added an entry for this account in the app, have them enter one of the 6-digit codes from the app to confirm that two-factor authentication is set up correctly."
 msgstr "Gairebé heu acabat! Per finalitzar l'addició d'aquest usuari nou, seguiu les instruccions per configurar l'autenticació de factor doble amb el FreeOTP. Una vegada hagin afegit una entrada per a aquest compte en l'aplicació, cal que ingressin un dels codis de 6 dígits de l'aplicació per confirmar que l'autenticació de factor doble està configurada correctament."
 
 msgid "Can't scan the barcode? You can manually pair FreeOTP with this account by entering the following two-factor secret into the app:"
 msgstr "No podeu escanejar el codi de barres? Podeu vincular manualment el FreeOTP amb aquest compte, inserint el codi de factor doble a l'aplicació:"
-
-msgid "Once you have configured your YubiKey, enter the 6-digit code below:"
-msgstr "Quan hàgiu configurat la YubiKey, introduïu aquest codi de sis dígits:"
 
 msgid "Navigation"
 msgstr "Navegació"
@@ -433,6 +436,9 @@ msgstr "Administrador"
 msgid "Log Out"
 msgstr "Tanca la sessió"
 
+msgid "Return to All Sources"
+msgstr ""
+
 msgid "Powered by <b>SecureDrop {version}</b>."
 msgstr "Funciona amb <b>SecureDrop {version}</b>."
 
@@ -445,8 +451,14 @@ msgstr "Totes les fonts"
 msgid "All messages, files, and replies from sources are stored as encrypted files for security. To read them, you will need to decrypt them on your Secure Viewing Station."
 msgstr "Per motius de seguretat, tots els missatges, fitxers i respostes de les fonts s'emmagatzemen com a fitxers xifrats. Per llegir-los, desxifreu-los únicament en un dispositiu de visualització segura."
 
+msgid "Download Selected Files"
+msgstr ""
+
 msgid "Download Selected"
 msgstr "Baixa la selecció"
+
+msgid "Delete Selected Files"
+msgstr ""
 
 msgid "Delete Selected"
 msgstr "Suprimeix la selecció"
@@ -675,14 +687,26 @@ msgstr "RESTABLEIX LES CREDENCIALS DE CLAUS DE SEGURETAT"
 msgid "Reset Security Key Credentials"
 msgstr "Reinicia les claus i credencials de seguretat"
 
+msgid "Download Selected Unread Submissions"
+msgstr ""
+
 msgid "Download Unread"
 msgstr "Baixa les pendents de llegir"
+
+msgid "Download Selected Submissions"
+msgstr ""
 
 msgid "Download"
 msgstr "Baixa"
 
+msgid "Star Selected Submissions"
+msgstr ""
+
 msgid "Star"
 msgstr "Marca"
+
+msgid "Un-star Selected Submissions"
+msgstr ""
 
 msgid "Un-star"
 msgstr "Desmarca"
@@ -735,8 +759,8 @@ msgstr "Contrasenya"
 msgid "Show password"
 msgstr "Mostra la contrasenya"
 
-msgid "Log In"
-msgstr "Inicia la sessió"
+msgid "Log In to Journalist Interface"
+msgstr ""
 
 msgid "LOG IN"
 msgstr "INICIA LA SESSIÓ"
@@ -812,14 +836,20 @@ msgstr "No es reconeix aquest nom en clau."
 msgid "Important"
 msgstr "Important"
 
-msgid "You were logged out due to inactivity. Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
-msgstr "S'ha tancat la sessió per inactivitat. Feu clic al botó <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>Identitat nova</b> de la barra d'eines del navegador Tor abans d'anar-vos-en. Això buidarà les dades d'activitat en el navegador Tor d'aquest aparell."
+msgid "You have been logged out due to inactivity or a problem with your session. Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
+msgstr ""
 
 msgid "Protecting Journalists and Sources"
 msgstr "Protegeix els periodistes i les fonts"
 
 msgid "Skip to notification"
 msgstr "Accedeix a la notificació"
+
+msgid "Return to Submission Page"
+msgstr ""
+
+msgid "Return to Home Page"
+msgstr ""
 
 msgid "We're sorry, our SecureDrop is currently offline."
 msgstr "Vaja, el nostre SecureDrop és fora de línia."
@@ -863,8 +893,8 @@ msgstr "<strong>Mantingueu-lo secret.</strong> No el compartiu amb ningú."
 msgid "<strong>Keep it safe.</strong> There is no account recovery option."
 msgstr "<strong>Mantingueu-lo segur.</strong> No hi ha cap opció de restauració."
 
-msgid "Continue"
-msgstr "Continua"
+msgid "Continue to Submission Page"
+msgstr ""
 
 msgid "Welcome"
 msgstr "Us donem la benvinguda"
@@ -890,8 +920,8 @@ msgstr "<a href=\"/\" aria-label=\"Seguiu les instruccions, actualitzeu la pàgi
 msgid "<strong>It is recommended to use Tor Browser to access SecureDrop:</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
 msgstr "<strong>És recomanable l'ús del navegador Tor per accedir al SecureDrop:</strong><a class=\"recommend-tor\" href=\"{tor_browser_url}\">Apreneu com instal·lar-lo</a> o ignoreu aquest avís per a continuar."
 
-msgid "<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop version.</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
-msgstr "<strong>És recomanable que useu la versió d'escriptori del navegador Tor per a accedir al SecureDrop, atès que l'Orfox no proporciona el mateix nivell de seguretat i anonimat que la versió d'escriptori.</strong><a class=\"recommend-tor\" href=\"{tor_browser_url}\">Apreneu com instal·lar-lo</a> o ignoreu aquest avís per a continuar."
+msgid "<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop version.</strong> <a class=\"recommend-tor\" aria-label=\"Learn how to install Tor Browser\" href=\"{tor_browser_url}\" >Learn how to install it</a>, or ignore this warning to continue."
+msgstr ""
 
 msgid "{} logo"
 msgstr "Logotip del {}"
@@ -902,8 +932,8 @@ msgstr "Primer enviament"
 msgid "First time submitting to our SecureDrop? Start here."
 msgstr "És el primer cop que envieu informació amb el SecureDrop? Comenceu aquí."
 
-msgid "Get Started"
-msgstr "Primers passos"
+msgid "Get Started With Your First Submission"
+msgstr ""
 
 msgid "GET STARTED"
 msgstr "PRIMERS PASSOS"
@@ -914,6 +944,9 @@ msgstr "Cap novetat?"
 msgid "Already have a codename? Check for replies or submit something new."
 msgstr "Si ja teniu un nom en clau, entreu i comproveu les respostes o envieu quelcom nou."
 
+msgid "Log In Using Your Codename"
+msgstr ""
+
 msgid "Log in"
 msgstr "Inicia la sessió"
 
@@ -923,11 +956,17 @@ msgstr "Introduïu el nom en clau"
 msgid "Enter your codename"
 msgstr "Introduïu el vostre nom en clau"
 
+msgid "Cancel and Return to Previous Page"
+msgstr ""
+
 msgid "CANCEL"
 msgstr "CANCEL·LA"
 
 msgid "Additional Action Required"
 msgstr "Cal una acció addicional"
+
+msgid "Log Back In"
+msgstr ""
 
 msgid "One more thing..."
 msgstr "Una cosa més..."
@@ -962,8 +1001,11 @@ msgstr "Si només esteu enviant un missatge, aquest cal que tingui com a mínim 
 msgid "Anti-spam check. Do not fill this in!"
 msgstr "Comprovació de contingut brossa. Deixeu-ho sense emplenar!"
 
-msgid "Submit"
-msgstr "Envia"
+msgid "Cancel and Clear Uploaded Content"
+msgstr ""
+
+msgid "Submit Uploaded Content"
+msgstr ""
 
 msgid "Read Replies"
 msgstr "Llegiu les respostes"
@@ -976,6 +1018,9 @@ msgstr "Suprimeix aquesta resposta"
 
 msgid "Delete reply from {timestamp}?"
 msgstr "Voleu suprimir la resposta de {timestamp}?"
+
+msgid "Delete Reply"
+msgstr ""
 
 msgid "Delete All Replies"
 msgstr "Suprimeix totes les respostes"
@@ -1040,6 +1085,9 @@ msgstr "Recordeu, el vostre nom en clau és:"
 msgid "Codename"
 msgstr "Nom en clau"
 
+msgid "Reveal Codename"
+msgstr ""
+
 msgid "Show Codename"
 msgstr "Mostra el nom en clau"
 
@@ -1082,6 +1130,27 @@ msgstr "<strong>Important:</strong> si voleu romandre en l'anonimat, <strong>no<
 
 msgid "Back to submission page"
 msgstr "Torna a la pàgina d'enviaments"
+
+#~ msgid "You were logged out due to inactivity. Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
+#~ msgstr "S'ha tancat la sessió per inactivitat. Feu clic al botó <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>Identitat nova</b> de la barra d'eines del navegador Tor abans d'anar-vos-en. Això buidarà les dades d'activitat en el navegador Tor d'aquest aparell."
+
+#~ msgid "Update instance config"
+#~ msgstr "Actualitza la configuració de la instància"
+
+#~ msgid "Log In"
+#~ msgstr "Inicia la sessió"
+
+#~ msgid "Continue"
+#~ msgstr "Continua"
+
+#~ msgid "<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop version.</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
+#~ msgstr "<strong>És recomanable que useu la versió d'escriptori del navegador Tor per a accedir al SecureDrop, atès que l'Orfox no proporciona el mateix nivell de seguretat i anonimat que la versió d'escriptori.</strong><a class=\"recommend-tor\" href=\"{tor_browser_url}\">Apreneu com instal·lar-lo</a> o ignoreu aquest avís per a continuar."
+
+#~ msgid "Get Started"
+#~ msgstr "Primers passos"
+
+#~ msgid "Submit"
+#~ msgstr "Envia"
 
 #~ msgid "Field must be between 1 and {max_codename_len} character long."
 #~ msgid_plural "Field must be between 1 and {max_codename_len} characters long."
