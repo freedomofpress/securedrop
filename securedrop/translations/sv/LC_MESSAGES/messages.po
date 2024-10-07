@@ -4,19 +4,7 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
 #
 msgid ""
-msgstr ""
-"Project-Id-Version: SecureDrop 0.5-rc4\n"
-"Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2023-11-15 13:30+0000\n"
-"Last-Translator: Jonas Waga <jonas.waga@schibsted.com>\n"
-"Language-Team: Swedish <https://weblate.securedrop.org/projects/securedrop/securedrop/sv/>\n"
-"Language: sv\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.18.2\n"
-"Generated-By: Babel 2.4.0\n"
+msgstr "Project-Id-Version: SecureDrop 0.5-rc4\nReport-Msgid-Bugs-To: securedrop@freedom.press\nPO-Revision-Date: 2024-09-20 10:33+0000\nLast-Translator: Jonas Waga <jonas.waga@schibsted.com>\nLanguage-Team: Swedish <https://weblate.securedrop.org/projects/securedrop/securedrop/sv/>\nLanguage: sv\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=2; plural=n != 1;\nX-Generator: Weblate 5.7.1\nGenerated-By: Babel 2.4.0\n"
 
 msgid "Name too long"
 msgstr "Namnet är för långt"
@@ -35,8 +23,8 @@ msgstr "Inkorrekt användarnamn"
 msgid "{time} ago"
 msgstr "{time} sedan"
 
-msgid "You have been logged out due to inactivity."
-msgstr "Du har blivit utloggad på grund av inaktivitet."
+msgid "You have been logged out due to inactivity or a problem with your session."
+msgstr "Du har loggats ut pågrund av inaktivitet eller problem med din session."
 
 msgid "SecureDrop"
 msgstr "SecureDrop"
@@ -166,6 +154,9 @@ msgstr "Du måste välja ett eller flera meddelanden för radering"
 msgid "No unread submissions for this source."
 msgstr "Det finns inga olästa inlämningar från denna källa."
 
+msgid "You have been logged out due to inactivity."
+msgstr "Du har blivit utloggad på grund av inaktivitet."
+
 msgid "Account updated."
 msgstr "Kontot uppdaterat."
 
@@ -283,6 +274,21 @@ msgstr "Fortsätt ändra hemlighet"
 msgid "CONTINUE"
 msgstr "FORTSÄTT"
 
+msgid "Enable YubiKey (OATH-HOTP)"
+msgstr "Aktivera YubiKey (OATH-HOTP)"
+
+msgid "Once you have configured your YubiKey, enter the 6-digit verification code below:"
+msgstr "När du har konfigurerat din Yubikey, ange den sexsiffriga verifieringskoden nedan:"
+
+msgid "Verification code"
+msgstr "Verifikationskod"
+
+msgid "Submit verification code"
+msgstr "Skicka verifieringskod"
+
+msgid "SUBMIT"
+msgstr "SKICKA IN"
+
 msgid "Enable FreeOTP"
 msgstr "Aktivera FreeOTP"
 
@@ -306,21 +312,6 @@ msgstr "Kan ni inte skanna koden? Du kan manuellt koppla FreeOTP med ditt Secure
 
 msgid "Once you have paired FreeOTP with this account, enter the 6-digit verification code below:"
 msgstr "När du har kopplat FreeOTP till kontot, ange sedan den sexsiffriga verifieringskoden nedan:"
-
-msgid "Enable YubiKey (OATH-HOTP)"
-msgstr "Aktivera YubiKey (OATH-HOTP)"
-
-msgid "Once you have configured your YubiKey, enter the 6-digit verification code below:"
-msgstr "När du har konfigurerat din Yubikey, ange den sexsiffriga verifieringskoden nedan:"
-
-msgid "Verification code"
-msgstr "Verifikationskod"
-
-msgid "Submit verification code"
-msgstr "Skicka verifieringskod"
-
-msgid "SUBMIT"
-msgstr "SKICKA IN"
 
 msgid "Admin Interface"
 msgstr "Administratörsgränssnitt"
@@ -370,8 +361,8 @@ msgstr "TA BORT"
 msgid "No users to display"
 msgstr "Inga användare att visa"
 
-msgid "Update instance config"
-msgstr "Uppdatera konfiguration"
+msgid "Update instance configuration"
+msgstr "Uppdatera instansens konfiguration"
 
 msgid "INSTANCE CONFIG"
 msgstr "INSTANS-KONFIGURATION"
@@ -409,14 +400,14 @@ msgstr "Ändra HOTP-hemlighet"
 msgid "Enter a new HOTP secret formatted as a 40-digit hexadecimal string. Spaces will be ignored:"
 msgstr "Skriv in en ny HOTP-hemlighet formaterad som en 40-tecken hexadecimal-sträng. Mellanslag kommer att ignoreras:"
 
+msgid "Once you have configured your YubiKey, enter the 6-digit code below:"
+msgstr "När du har konfigurerat din Yubikey, ange den sexsiffriga koden nedan:"
+
 msgid "You're almost done! To finish adding this new user, have them follow the instructions below to set up two-factor authentication with FreeOTP. Once they've added an entry for this account in the app, have them enter one of the 6-digit codes from the app to confirm that two-factor authentication is set up correctly."
 msgstr "Du är nästan klar! För att avsluta användarkonfigureringen, följ instruktionerna nedan för att sätta upp tvåfaktorsautentisering med FreeOTP. När det här kontot har lagts till i appen, mata in den sexsiffriga koden från appen för att bekräfta tvåfaktorsautentiseringen."
 
 msgid "Can't scan the barcode? You can manually pair FreeOTP with this account by entering the following two-factor secret into the app:"
 msgstr "Kan du inte skanna koden? Du kan manuellt koppla FreeOTP till detta konto genom att skriva in denna tvåfaktorhemligheten i FreeOTP:"
-
-msgid "Once you have configured your YubiKey, enter the 6-digit code below:"
-msgstr "När du har konfigurerat din Yubikey, ange den sexsiffriga koden nedan:"
 
 msgid "Navigation"
 msgstr "Navigering"
@@ -433,6 +424,9 @@ msgstr "Admin"
 msgid "Log Out"
 msgstr "Logga ut"
 
+msgid "Return to All Sources"
+msgstr "Tillbaka till Alla Källor"
+
 msgid "Powered by <b>SecureDrop {version}</b>."
 msgstr "Körs på <b>SecureDrop {version}</b>."
 
@@ -445,8 +439,14 @@ msgstr "Alla källor"
 msgid "All messages, files, and replies from sources are stored as encrypted files for security. To read them, you will need to decrypt them on your Secure Viewing Station."
 msgstr "Alla meddelanden, filer och svar sparas som krypterade filer av säkerhetsskäl. För att läsa dessa, behöver du avkryptera dem på din “Secure Viewing Station”."
 
+msgid "Download Selected Files"
+msgstr "Ladda ner valda filer"
+
 msgid "Download Selected"
 msgstr "Ladda ned markerade"
+
+msgid "Delete Selected Files"
+msgstr "Radera valda filer"
 
 msgid "Delete Selected"
 msgstr "Radera markerade"
@@ -675,14 +675,26 @@ msgstr "ÅTERSTÄLL SÄKERHETSNYCKELSUPPGIFTER"
 msgid "Reset Security Key Credentials"
 msgstr "Nollställ säkerhetsnyckel-uppgifter"
 
+msgid "Download Selected Unread Submissions"
+msgstr "Ladda ned de valda och olästa inlämningarna"
+
 msgid "Download Unread"
 msgstr "Ladda ned olästa"
+
+msgid "Download Selected Submissions"
+msgstr "Ladda ned de valda inlämningarna"
 
 msgid "Download"
 msgstr "Ladda ned"
 
+msgid "Star Selected Submissions"
+msgstr "Stjärnmarkera valda inlämningar"
+
 msgid "Star"
 msgstr "Stjärnmärk"
+
+msgid "Un-star Selected Submissions"
+msgstr "Ta bort stjärnmarkering på valda inlämningar"
 
 msgid "Un-star"
 msgstr "Ta bort stjärnmärkning"
@@ -735,8 +747,8 @@ msgstr "Lösenord"
 msgid "Show password"
 msgstr "Visa lösenord"
 
-msgid "Log In"
-msgstr "Logga in"
+msgid "Log In to Journalist Interface"
+msgstr "Logga in i journalistgränssnittet"
 
 msgid "LOG IN"
 msgstr "LOGGA IN"
@@ -812,14 +824,20 @@ msgstr "Tyvärr, detta kodnamn är okänt."
 msgid "Important"
 msgstr "Viktigt"
 
-msgid "You were logged out due to inactivity. Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
-msgstr "Du loggades ut på grund av inaktivitet. Klicka på knappen <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>Ny identitet</b> i ditt Tor Browser-verktygsfält innan du går vidare. Detta rensar dina Tor Browser-aktivitetsdata på den här enheten."
+msgid "You have been logged out due to inactivity or a problem with your session. Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
+msgstr "Du har loggats utpågrund av inaktivitet eller problem med din session. Klicka på <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> knappen i din TorBrowser för att gå vidare. Detta kommer att rensa din Tor Browsers aktivitet på den här enheten."
 
 msgid "Protecting Journalists and Sources"
 msgstr "Skyddar journalister och källor"
 
 msgid "Skip to notification"
 msgstr "Hoppa till notifiering"
+
+msgid "Return to Submission Page"
+msgstr "Återgå till inlämningssida"
+
+msgid "Return to Home Page"
+msgstr "Återgår till startsida"
 
 msgid "We're sorry, our SecureDrop is currently offline."
 msgstr "Vi ber om ursäkt, men vår SecureDrop är för närvarande offline."
@@ -863,8 +881,8 @@ msgstr "<strong>Håll det hemligt.</strong> Dela det inte med någon."
 msgid "<strong>Keep it safe.</strong> There is no account recovery option."
 msgstr "<strong>Håll det säkert.</strong> Det finns inget sätt att återställa det."
 
-msgid "Continue"
-msgstr "Fortsätt"
+msgid "Continue to Submission Page"
+msgstr "Fortsätt till inlämningssidan"
 
 msgid "Welcome"
 msgstr "Välkommen"
@@ -890,8 +908,8 @@ msgstr "<a href=\"/\" aria-label=\"Följ dessa instruktioner och uppdatera sedan
 msgid "<strong>It is recommended to use Tor Browser to access SecureDrop:</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
 msgstr "<strong>Det är rekommenderat att använda Tor Browser för att använda SecureDrop:</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\"> Lär dig hur den installeras</a>, eller ignorera denna varning och fortsätt."
 
-msgid "<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop version.</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
-msgstr "<strong> Det är rekommenderat att använda datorversionen av TorBrowser för att använda SecureDrop, då Orfox inte erbjuder samma nivå av säkerhet och anonymitet som datorversionen.</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\"> Lär dig hur den installeras</a> eller ignorera denna varning och fortsätt."
+msgid "<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop version.</strong> <a class=\"recommend-tor\" aria-label=\"Learn how to install Tor Browser\" href=\"{tor_browser_url}\" >Learn how to install it</a>, or ignore this warning to continue."
+msgstr "<strong>Det är rekommenderat att använda datorversionen av Tor Browser för åtkomst till SecureDrop, eftersom Orfox inte ger samma nivå av säkerhet och anonymitet som datorversionen. <a class=\"recommend-tor\" aria-label=\"Learn how to install Tor Browser\" href=\"{tor_browser_url}\" >Lär dig hur du installerar </a>, eller ignorera denna varningen för att fortsätta."
 
 msgid "{} logo"
 msgstr "{} logga"
@@ -902,8 +920,8 @@ msgstr "Första inlämning"
 msgid "First time submitting to our SecureDrop? Start here."
 msgstr "Är det här första gången du skickar in information till vår SecureDrop? Börja här."
 
-msgid "Get Started"
-msgstr "Komma igång"
+msgid "Get Started With Your First Submission"
+msgstr "Påbörja din första inlämning"
 
 msgid "GET STARTED"
 msgstr "BÖRJA HÄR"
@@ -914,6 +932,9 @@ msgstr "Återkommande besök"
 msgid "Already have a codename? Check for replies or submit something new."
 msgstr "Har du redan ett kodnamn? Kontrollera om du fått svar eller lämna in något nytt."
 
+msgid "Log In Using Your Codename"
+msgstr "Logga in med ditt kodnamn"
+
 msgid "Log in"
 msgstr "Logga in"
 
@@ -923,11 +944,17 @@ msgstr "Ange kodnamn"
 msgid "Enter your codename"
 msgstr "Ange ditt kodnamn"
 
+msgid "Cancel and Return to Previous Page"
+msgstr "Avbryt och återgå till föregående sida"
+
 msgid "CANCEL"
 msgstr "AVBRYT"
 
 msgid "Additional Action Required"
 msgstr "Mer information krävs"
+
+msgid "Log Back In"
+msgstr "Logga in igen"
 
 msgid "One more thing..."
 msgstr "En sak till…"
@@ -962,8 +989,11 @@ msgstr "Om du enbart skickar ett meddelande, så måste det vara minst {} tecken
 msgid "Anti-spam check. Do not fill this in!"
 msgstr "Anti-spam-kontroll. Fyll inte i detta!"
 
-msgid "Submit"
-msgstr "Skicka in"
+msgid "Cancel and Clear Uploaded Content"
+msgstr "Avbryt och rensa uppladdat innehåll"
+
+msgid "Submit Uploaded Content"
+msgstr "Skicka in uppladdat innehål"
 
 msgid "Read Replies"
 msgstr "Läs svar"
@@ -976,6 +1006,9 @@ msgstr "Ta bort detta svar"
 
 msgid "Delete reply from {timestamp}?"
 msgstr "Radera svar från {timestamp}?"
+
+msgid "Delete Reply"
+msgstr "Radera svar"
 
 msgid "Delete All Replies"
 msgstr "Ta bort alla svar"
@@ -1040,6 +1073,9 @@ msgstr "Kom ihåg, ditt kodnamn är:"
 msgid "Codename"
 msgstr "Kodnamn"
 
+msgid "Reveal Codename"
+msgstr "Visa kodnamn"
+
 msgid "Show Codename"
 msgstr "Visa kodnamn"
 
@@ -1082,6 +1118,27 @@ msgstr "<strong> Viktigt:</strong> Ifall du önskar att förbli anonym, <strong>
 
 msgid "Back to submission page"
 msgstr "Tillbaka till inlämningssidan"
+
+#~ msgid "You were logged out due to inactivity. Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
+#~ msgstr "Du loggades ut på grund av inaktivitet. Klicka på knappen <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>Ny identitet</b> i ditt Tor Browser-verktygsfält innan du går vidare. Detta rensar dina Tor Browser-aktivitetsdata på den här enheten."
+
+#~ msgid "Update instance config"
+#~ msgstr "Uppdatera konfiguration"
+
+#~ msgid "Log In"
+#~ msgstr "Logga in"
+
+#~ msgid "Continue"
+#~ msgstr "Fortsätt"
+
+#~ msgid "<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop version.</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
+#~ msgstr "<strong> Det är rekommenderat att använda datorversionen av TorBrowser för att använda SecureDrop, då Orfox inte erbjuder samma nivå av säkerhet och anonymitet som datorversionen.</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\"> Lär dig hur den installeras</a> eller ignorera denna varning och fortsätt."
+
+#~ msgid "Get Started"
+#~ msgstr "Komma igång"
+
+#~ msgid "Submit"
+#~ msgstr "Skicka in"
 
 #~ msgid "Field must be between 1 and {max_codename_len} character long."
 #~ msgid_plural "Field must be between 1 and {max_codename_len} characters long."
