@@ -4,20 +4,7 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
 #
 msgid ""
-msgstr ""
-"Project-Id-Version: SecureDrop 0.3.12\n"
-"Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"POT-Creation-Date: 2017-09-02 07:28+0000\n"
-"PO-Revision-Date: 2023-10-26 11:30+0000\n"
-"Last-Translator: kwadronaut <kwadronaut@autistici.org>\n"
-"Language-Team: Dutch <https://weblate.securedrop.org/projects/securedrop/securedrop/nl/>\n"
-"Language: nl\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.18.2\n"
-"Generated-By: Babel 2.4.0\n"
+msgstr "Project-Id-Version: SecureDrop 0.3.12\nReport-Msgid-Bugs-To: securedrop@freedom.press\nPOT-Creation-Date: 2017-09-02 07:28+0000\nPO-Revision-Date: 2024-09-25 14:33+0000\nLast-Translator: kwadronaut <kwadronaut@autistici.org>\nLanguage-Team: Dutch <https://weblate.securedrop.org/projects/securedrop/securedrop/nl/>\nLanguage: nl\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=2; plural=n != 1;\nX-Generator: Weblate 5.7.1\nGenerated-By: Babel 2.4.0\n"
 
 msgid "Name too long"
 msgstr "Naam is te lang"
@@ -36,8 +23,8 @@ msgstr "Gebruikersnaam wijzigen"
 msgid "{time} ago"
 msgstr "{time} geleden"
 
-msgid "You have been logged out due to inactivity."
-msgstr "U bent wegens inactiviteit uitgelogd."
+msgid "You have been logged out due to inactivity or a problem with your session."
+msgstr "U bent uitgelogd vanwege inactiviteit of een probleem met uw sessie."
 
 msgid "SecureDrop"
 msgstr "SecureDrop"
@@ -167,6 +154,9 @@ msgstr "U moet één of meer items selecteren om te verwijderen"
 msgid "No unread submissions for this source."
 msgstr "Geen ongelezen inzendingen van deze bron."
 
+msgid "You have been logged out due to inactivity."
+msgstr "U bent wegens inactiviteit uitgelogd."
+
 msgid "Account updated."
 msgstr "Account bijgewerkt."
 
@@ -284,6 +274,21 @@ msgstr "Ga door met het veranderen van het geheim"
 msgid "CONTINUE"
 msgstr "DOORGAAN"
 
+msgid "Enable YubiKey (OATH-HOTP)"
+msgstr "YubiKey inschakelen (OATH-HOTP)"
+
+msgid "Once you have configured your YubiKey, enter the 6-digit verification code below:"
+msgstr "Zodra u uw YubiKey geconfigureerd heeft, voert u de zescijferige authenticatiecode hieronder in:"
+
+msgid "Verification code"
+msgstr "Verificatiecode"
+
+msgid "Submit verification code"
+msgstr "Stuur verificatiecode"
+
+msgid "SUBMIT"
+msgstr "VERSTUREN"
+
 msgid "Enable FreeOTP"
 msgstr "FreeOTP inschakelen"
 
@@ -307,21 +312,6 @@ msgstr "Lukt het scannen van de barcode niet? U kunt handmatig FreeOTP aan uw Se
 
 msgid "Once you have paired FreeOTP with this account, enter the 6-digit verification code below:"
 msgstr "Zodra u FreeOTP aan uw account hebt gelinkt, voer dan hieronder de zescijferige verificatiecode in:"
-
-msgid "Enable YubiKey (OATH-HOTP)"
-msgstr "YubiKey inschakelen (OATH-HOTP)"
-
-msgid "Once you have configured your YubiKey, enter the 6-digit verification code below:"
-msgstr "Zodra u uw YubiKey geconfigureerd heeft, voert u de zescijferige authenticatiecode hieronder in:"
-
-msgid "Verification code"
-msgstr "Verificatiecode"
-
-msgid "Submit verification code"
-msgstr "Stuur verificatiecode"
-
-msgid "SUBMIT"
-msgstr "VERSTUREN"
 
 msgid "Admin Interface"
 msgstr "Beheerdersinterface"
@@ -371,8 +361,8 @@ msgstr "VERWIJDER"
 msgid "No users to display"
 msgstr "Geen gebruikers om weer te geven"
 
-msgid "Update instance config"
-msgstr "De configuratie van de instantie bijwerken"
+msgid "Update instance configuration"
+msgstr "Instantie configuratie bijwerken"
 
 msgid "INSTANCE CONFIG"
 msgstr "CONFIGURATIE INSTANTIE"
@@ -410,14 +400,14 @@ msgstr "Verander HOTP-geheim"
 msgid "Enter a new HOTP secret formatted as a 40-digit hexadecimal string. Spaces will be ignored:"
 msgstr "Voeg een nieuw HOTP-geheim toe, als een 40-cijferige hexadecimale string. Spaties worden genegeerd:"
 
+msgid "Once you have configured your YubiKey, enter the 6-digit code below:"
+msgstr "Zodra u uw YubiKey geconfigureerd heeft, voert u de zescijferige code hieronder in:"
+
 msgid "You're almost done! To finish adding this new user, have them follow the instructions below to set up two-factor authentication with FreeOTP. Once they've added an entry for this account in the app, have them enter one of the 6-digit codes from the app to confirm that two-factor authentication is set up correctly."
 msgstr "U bent bijna klaar! Om het toevoegen van deze nieuwe gebruiker af te ronden, moet u de gebruiker de onderstaande instructies laten volgen om de tweestapsauthenticatie met FreeOTP in te stellen. Zodra dit account is toegevoegd, moet u de gebruiker vervolgens de zescijferige code uit de app invoeren om te bevestigen dat de tweestapsauthenticatie succesvol is ingericht."
 
 msgid "Can't scan the barcode? You can manually pair FreeOTP with this account by entering the following two-factor secret into the app:"
 msgstr "Lukt het niet de barcode te scannen? U kunt handmatig FreeOTP aan dit account linken door onderstaande authenticatiecode in de applicatie in te voeren:"
-
-msgid "Once you have configured your YubiKey, enter the 6-digit code below:"
-msgstr "Zodra u uw YubiKey geconfigureerd heeft, voert u de zescijferige code hieronder in:"
 
 msgid "Navigation"
 msgstr "Navigatie"
@@ -434,6 +424,9 @@ msgstr "Beheerder"
 msgid "Log Out"
 msgstr "Uitloggen"
 
+msgid "Return to All Sources"
+msgstr "Terug naar Alle Bronnen"
+
 msgid "Powered by <b>SecureDrop {version}</b>."
 msgstr "Mogelijk gemaakt door <b>SecureDrop {version}</b>."
 
@@ -446,8 +439,14 @@ msgstr "Alle bronnen"
 msgid "All messages, files, and replies from sources are stored as encrypted files for security. To read them, you will need to decrypt them on your Secure Viewing Station."
 msgstr "Alle berichten, bestanden en antwoorden van bronnen worden opgeslagen als versleutelde bestanden om veiligheidsredenen. Om ze te lezen, moeten ze ontsleuteld worden op uw Secure Viewing Station."
 
+msgid "Download Selected Files"
+msgstr "Download geselecteerde bestanden"
+
 msgid "Download Selected"
 msgstr "Geselecteerde downloaden"
+
+msgid "Delete Selected Files"
+msgstr "Verwijder geselecteerde bestanden"
 
 msgid "Delete Selected"
 msgstr "Geselecteerde verwijderen"
@@ -676,14 +675,26 @@ msgstr "HERSTEL INSTELLINGEN VOOR BEVEILIGINGSSLEUTEL"
 msgid "Reset Security Key Credentials"
 msgstr "Herstel beveiligingssleutel authentificatie"
 
+msgid "Download Selected Unread Submissions"
+msgstr "Download geselecteerde ongelezen inzendingen"
+
 msgid "Download Unread"
 msgstr "Ongelezen downloaden"
+
+msgid "Download Selected Submissions"
+msgstr "Download geselecteerde inzendingen"
 
 msgid "Download"
 msgstr "Downloaden"
 
+msgid "Star Selected Submissions"
+msgstr "Geselecteerde inzending markeren"
+
 msgid "Star"
 msgstr "Markeren"
+
+msgid "Un-star Selected Submissions"
+msgstr "Verwijder ster van de geselecteerde inzending"
 
 msgid "Un-star"
 msgstr "De-markeren"
@@ -736,16 +747,16 @@ msgstr "Wachtwoord"
 msgid "Show password"
 msgstr "Toon wachtwoord"
 
-msgid "Log In"
-msgstr "Inloggen"
+msgid "Log In to Journalist Interface"
+msgstr "Inloggen op de interface voor journalisten"
 
 msgid "LOG IN"
 msgstr "INLOGGEN"
 
 msgid "Field must be 1 character long."
 msgid_plural "Field must be between 1 and {max_codename_len} characters long."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Het veld moet 1 teken bevatten."
+msgstr[1] "Het veld moet tussen 1 en {max_codename_len} tekens bevatten."
 
 msgid "Invalid input."
 msgstr "Ongeldige invoer."
@@ -813,14 +824,20 @@ msgstr "Helaas is dit een onbekende codenaam."
 msgid "Important"
 msgstr "Belangrijk"
 
-msgid "You were logged out due to inactivity. Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
-msgstr "U bent uitgelogd vanwege inactiviteit. Klik op de <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>Nieuwe identiteit</b>-knop in de werkbalk van uw Tor Browser voordat u verder gaat. Hierdoor wordt uw Tor Browser geschiedenis van dit apparaat gewist."
+msgid "You have been logged out due to inactivity or a problem with your session. Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
+msgstr "U bent uitgelogd vanwege inactiviteit of een probleem met uw sessie. Klik op knop <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>Nieuwe Identiteit</b> in de werkbalk van uw Tor Browser voordat u verdergaat. Dist wist je Tor browser activiteiten op dit apparaat."
 
 msgid "Protecting Journalists and Sources"
 msgstr "Journalisten en bronnen beschermen"
 
 msgid "Skip to notification"
 msgstr "Ga direct naar melding"
+
+msgid "Return to Submission Page"
+msgstr "Terug naar de inzendingenpagina"
+
+msgid "Return to Home Page"
+msgstr "Aanmelden met uw codenaam"
 
 msgid "We're sorry, our SecureDrop is currently offline."
 msgstr "Het spijt ons, onze SecureDrop is momenteel offline."
@@ -864,8 +881,8 @@ msgstr "<strong>Hou het geheim.</strong> Deel het met niemand."
 msgid "<strong>Keep it safe.</strong> There is no account recovery option."
 msgstr "<strong>Hou het veilig.</strong> Er is geen optie om het account te herstellen."
 
-msgid "Continue"
-msgstr "Ga verder"
+msgid "Continue to Submission Page"
+msgstr "Ga door naar de inzendingspagina"
 
 msgid "Welcome"
 msgstr "Welkom"
@@ -891,8 +908,8 @@ msgstr "<a href=\"/\" aria-label=\"Volg deze instructies en ververs dan deze pag
 msgid "<strong>It is recommended to use Tor Browser to access SecureDrop:</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
 msgstr "<strong>Het wordt aangeraden om de Tor Browser te gebruiken om SecureDrop te bezoeken:</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Lees hier informatie om deze te installeren</a> of negeer deze waarschuwing om door te gaan."
 
-msgid "<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop version.</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
-msgstr "<strong>Het wordt aangeraden om de desktop-versie van de Tor Browser te gebruiken om SecureDrop te bezoeken, want Orfox biedt niet hetzelfde veiligheids- en anonimiteitsniveau als de desktop-versie.</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Leer hier hoe deze te installeren is</a> of negeer deze waarschuwing om door te gaan."
+msgid "<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop version.</strong> <a class=\"recommend-tor\" aria-label=\"Learn how to install Tor Browser\" href=\"{tor_browser_url}\" >Learn how to install it</a>, or ignore this warning to continue."
+msgstr "<strong>Het wordt aangeraden om de desktopversie van Tor Browser te gebruiken om toegang te krijgen tot SecureDrop, omdad Orfox niet dezelfde mate van beveiliging en anonimiteit biedt. </strong> <a class=\"recommend-tor\" aria-label=\"Leer hoe je de Tor Browser kunt installeren\" href=\"{tor_browser_url}\" >Leer hoe je het kunt installeren</a>, of negeer deze waarschuwing om door te gaan."
 
 msgid "{} logo"
 msgstr "Logo van {}"
@@ -903,8 +920,8 @@ msgstr "Eerste inzending"
 msgid "First time submitting to our SecureDrop? Start here."
 msgstr "Eerste keer dat u iets naar onze SecureDrop inzendt? Begin hier."
 
-msgid "Get Started"
-msgstr "Aan de slag gaan"
+msgid "Get Started With Your First Submission"
+msgstr "Begin met je eerste inzending"
 
 msgid "GET STARTED"
 msgstr "BEGIN"
@@ -915,6 +932,9 @@ msgstr "Vervolgbezoek"
 msgid "Already have a codename? Check for replies or submit something new."
 msgstr "Hebt u al een codenaam? Controleer of er antwoorden zijn of stuur iets nieuws in."
 
+msgid "Log In Using Your Codename"
+msgstr "Log in met uw codenaam"
+
 msgid "Log in"
 msgstr "Inloggen"
 
@@ -924,11 +944,17 @@ msgstr "Codenaam invoeren"
 msgid "Enter your codename"
 msgstr "Voer uw codenaam in"
 
+msgid "Cancel and Return to Previous Page"
+msgstr "Annuleren en terugkeren naar de vorige pagina"
+
 msgid "CANCEL"
 msgstr "ANNULEREN"
 
 msgid "Additional Action Required"
 msgstr "Extra handeling vereist"
+
+msgid "Log Back In"
+msgstr "Opnieuw inloggen"
 
 msgid "One more thing..."
 msgstr "Nog één ding…"
@@ -963,8 +989,11 @@ msgstr "Als u enkel een bericht stuurt, moet het ten minste {} tekens lang zijn.
 msgid "Anti-spam check. Do not fill this in!"
 msgstr "Anti-spam controle. Vul dit niet in!"
 
-msgid "Submit"
-msgstr "Versturen"
+msgid "Cancel and Clear Uploaded Content"
+msgstr "Annuleren en geüploade inhoud wissen"
+
+msgid "Submit Uploaded Content"
+msgstr "Geüploade inhoud indienen"
 
 msgid "Read Replies"
 msgstr "Reacties lezen"
@@ -977,6 +1006,9 @@ msgstr "Deze reactie verwijderen"
 
 msgid "Delete reply from {timestamp}?"
 msgstr "Antwoord van {timestamp} verwijderen?"
+
+msgid "Delete Reply"
+msgstr "Antwoord verwijderen"
 
 msgid "Delete All Replies"
 msgstr "Alle reactie verwijderen?"
@@ -1000,7 +1032,7 @@ msgid "Sorry, we couldn't locate what you requested."
 msgstr "Sorry, we kunnen niet vinden wat u zoekt."
 
 msgid "Warning: Proxy Detected"
-msgstr ""
+msgstr "Waarschuwing: Proxy gedetecteerd"
 
 msgid "Proxy Service Detected"
 msgstr "Proxyservice gedetecteerd"
@@ -1040,6 +1072,9 @@ msgstr "Vergeet niet, uw codenaam is:"
 
 msgid "Codename"
 msgstr "Codenaam"
+
+msgid "Reveal Codename"
+msgstr "Toon codenaam"
 
 msgid "Show Codename"
 msgstr "Toon codenaam"
@@ -1083,6 +1118,27 @@ msgstr "<strong>Belangrijk:</strong> Als u anoniem wilt blijven, gebruik dan <st
 
 msgid "Back to submission page"
 msgstr "Terug naar inzendingenpagina"
+
+#~ msgid "You were logged out due to inactivity. Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
+#~ msgstr "U bent uitgelogd vanwege inactiviteit. Klik op de <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>Nieuwe identiteit</b>-knop in de werkbalk van uw Tor Browser voordat u verder gaat. Hierdoor wordt uw Tor Browser geschiedenis van dit apparaat gewist."
+
+#~ msgid "Update instance config"
+#~ msgstr "De configuratie van de instantie bijwerken"
+
+#~ msgid "Log In"
+#~ msgstr "Inloggen"
+
+#~ msgid "Continue"
+#~ msgstr "Ga verder"
+
+#~ msgid "<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop version.</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
+#~ msgstr "<strong>Het wordt aangeraden om de desktop-versie van de Tor Browser te gebruiken om SecureDrop te bezoeken, want Orfox biedt niet hetzelfde veiligheids- en anonimiteitsniveau als de desktop-versie.</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Leer hier hoe deze te installeren is</a> of negeer deze waarschuwing om door te gaan."
+
+#~ msgid "Get Started"
+#~ msgstr "Aan de slag gaan"
+
+#~ msgid "Submit"
+#~ msgstr "Versturen"
 
 #~ msgid "Field must be between 1 and {max_codename_len} character long."
 #~ msgid_plural "Field must be between 1 and {max_codename_len} characters long."
