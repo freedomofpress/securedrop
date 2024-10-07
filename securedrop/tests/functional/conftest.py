@@ -18,6 +18,7 @@ from source_user import SourceUser
 from tests.factories import SecureDropConfigFactory
 from tests.functional.db_session import get_database_session
 from tests.functional.web_drivers import WebDriverTypeEnum, get_web_driver
+from tests.utils.i18n import get_test_locales
 
 
 # Function-scoped so that tests can be run in parallel if needed
@@ -209,6 +210,7 @@ def sd_servers(
         GPG_KEY_DIR=gpg_key_dir,
         JOURNALIST_KEY=journalist_key_fingerprint,
         RQ_WORKER_NAME=worker_name,
+        SUPPORTED_LOCALES=get_test_locales(),
     )
 
     # Spawn the apps in separate processes
