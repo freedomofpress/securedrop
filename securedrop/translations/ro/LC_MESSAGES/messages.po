@@ -36,8 +36,8 @@ msgstr "Nume de utilizator nevalid"
 msgid "{time} ago"
 msgstr "acum {time}"
 
-msgid "You have been logged out due to inactivity."
-msgstr "Ai fost deconectat(ă) din cauza inactivității."
+msgid "You have been logged out due to inactivity or a problem with your session."
+msgstr ""
 
 msgid "SecureDrop"
 msgstr "SecureDrop"
@@ -170,6 +170,9 @@ msgstr "Trebuie să selectezi unul sau mai multe elemente pentru ștergere"
 msgid "No unread submissions for this source."
 msgstr "Nu sunt trimiteri necitite de la această sursă."
 
+msgid "You have been logged out due to inactivity."
+msgstr "Ai fost deconectat(ă) din cauza inactivității."
+
 msgid "Account updated."
 msgstr "Contul a fost actualizat."
 
@@ -293,6 +296,21 @@ msgstr ""
 msgid "CONTINUE"
 msgstr "CONTINUĂ"
 
+msgid "Enable YubiKey (OATH-HOTP)"
+msgstr "Activează YubiKey (OATH-HOTP)"
+
+msgid "Once you have configured your YubiKey, enter the 6-digit verification code below:"
+msgstr "După ce ai configurat cheia fizică YubiKey, introdu aici mai jos codul de verificare din 6 cifre:"
+
+msgid "Verification code"
+msgstr "Cod de verificare"
+
+msgid "Submit verification code"
+msgstr ""
+
+msgid "SUBMIT"
+msgstr "TRIMITE"
+
 msgid "Enable FreeOTP"
 msgstr "Activează FreeOTP"
 
@@ -316,21 +334,6 @@ msgstr "Nu poți scana codul de bare? Poți asocia manual FreeOTP cu contul tău
 
 msgid "Once you have paired FreeOTP with this account, enter the 6-digit verification code below:"
 msgstr "După ce ai asociat FreeOTP cu acest cont, introdu aici mai jos codul de verificare din 6 cifre:"
-
-msgid "Enable YubiKey (OATH-HOTP)"
-msgstr "Activează YubiKey (OATH-HOTP)"
-
-msgid "Once you have configured your YubiKey, enter the 6-digit verification code below:"
-msgstr "După ce ai configurat cheia fizică YubiKey, introdu aici mai jos codul de verificare din 6 cifre:"
-
-msgid "Verification code"
-msgstr "Cod de verificare"
-
-msgid "Submit verification code"
-msgstr ""
-
-msgid "SUBMIT"
-msgstr "TRIMITE"
 
 msgid "Admin Interface"
 msgstr "Interfață de administrare"
@@ -380,7 +383,7 @@ msgstr "ȘTERGE"
 msgid "No users to display"
 msgstr "Nu sunt utilizatori de afișat"
 
-msgid "Update instance config"
+msgid "Update instance configuration"
 msgstr ""
 
 msgid "INSTANCE CONFIG"
@@ -419,14 +422,14 @@ msgstr ""
 msgid "Enter a new HOTP secret formatted as a 40-digit hexadecimal string. Spaces will be ignored:"
 msgstr ""
 
+msgid "Once you have configured your YubiKey, enter the 6-digit code below:"
+msgstr "După ce ai configurat cheia fizică YubiKey, introdu codul de 6 cifre de mai jos:"
+
 msgid "You're almost done! To finish adding this new user, have them follow the instructions below to set up two-factor authentication with FreeOTP. Once they've added an entry for this account in the app, have them enter one of the 6-digit codes from the app to confirm that two-factor authentication is set up correctly."
 msgstr "Aproape că ai terminat! Pentru a finaliza adăugarea acestui utilizator, trebuie să îi spui să urmeze instrucțiunile de mai jos pentru setarea autentificării cu doi factori folosind FreeOTP. După ce utilizatorul a adăugat acest cont în aplicație, spune-i să introducă unul dintre codurile de 6 cifre din aplicație pentru a confirma că autentificarea cu doi factori este setată corect."
 
 msgid "Can't scan the barcode? You can manually pair FreeOTP with this account by entering the following two-factor secret into the app:"
 msgstr "Nu poți scana codul de bare? Poți asocia manual FreeOTP cu acest cont introducând în aplicație următorul cod secret de autentificare cu doi factori:"
-
-msgid "Once you have configured your YubiKey, enter the 6-digit code below:"
-msgstr "După ce ai configurat cheia fizică YubiKey, introdu codul de 6 cifre de mai jos:"
 
 msgid "Navigation"
 msgstr ""
@@ -443,6 +446,9 @@ msgstr "Administrator"
 msgid "Log Out"
 msgstr "Deconectare"
 
+msgid "Return to All Sources"
+msgstr ""
+
 msgid "Powered by <b>SecureDrop {version}</b>."
 msgstr ""
 
@@ -455,8 +461,14 @@ msgstr "Toate sursele"
 msgid "All messages, files, and replies from sources are stored as encrypted files for security. To read them, you will need to decrypt them on your Secure Viewing Station."
 msgstr "Toate mesajele, fișierele și răspunsurile de la surse sunt stocate ca fișiere criptate pentru securitate. Pentru a le citi, trebuie să le decriptezi pe stația de afișare securizată."
 
+msgid "Download Selected Files"
+msgstr ""
+
 msgid "Download Selected"
 msgstr "Descarcă selecția"
+
+msgid "Delete Selected Files"
+msgstr ""
 
 msgid "Delete Selected"
 msgstr "Șterge selecția"
@@ -675,14 +687,26 @@ msgstr "RESETEAZĂ DATELE DE AUTENTIFICARE PENTRU CHEIA DE SECURITATE"
 msgid "Reset Security Key Credentials"
 msgstr ""
 
+msgid "Download Selected Unread Submissions"
+msgstr ""
+
 msgid "Download Unread"
 msgstr "Descarcă necitite"
+
+msgid "Download Selected Submissions"
+msgstr ""
 
 msgid "Download"
 msgstr "Descarcă"
 
+msgid "Star Selected Submissions"
+msgstr ""
+
 msgid "Star"
 msgstr "Marchează cu stea"
+
+msgid "Un-star Selected Submissions"
+msgstr ""
 
 msgid "Un-star"
 msgstr "Elimină marcajul cu stea"
@@ -735,7 +759,7 @@ msgstr "Parolă"
 msgid "Show password"
 msgstr "Arată parola"
 
-msgid "Log In"
+msgid "Log In to Journalist Interface"
 msgstr ""
 
 msgid "LOG IN"
@@ -813,13 +837,19 @@ msgstr "Ne pare rău, acesta nu este un nume de cod recunoscut."
 msgid "Important"
 msgstr "Important"
 
-msgid "You were logged out due to inactivity. Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
-msgstr "Ai fost deconectat(ă) din cauza inactivității. Dă clic pe butonul <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>Identitate nouă</b> din bara de instrumente a browserului Tor înainte de a merge mai departe. Îți va șterge activitatea din browserul Tor de pe acest dispozitiv."
+msgid "You have been logged out due to inactivity or a problem with your session. Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
+msgstr ""
 
 msgid "Protecting Journalists and Sources"
 msgstr "Pentru protecția jurnaliștilor și a surselor"
 
 msgid "Skip to notification"
+msgstr ""
+
+msgid "Return to Submission Page"
+msgstr ""
+
+msgid "Return to Home Page"
 msgstr ""
 
 msgid "We're sorry, our SecureDrop is currently offline."
@@ -864,7 +894,7 @@ msgstr ""
 msgid "<strong>Keep it safe.</strong> There is no account recovery option."
 msgstr ""
 
-msgid "Continue"
+msgid "Continue to Submission Page"
 msgstr ""
 
 msgid "Welcome"
@@ -891,8 +921,8 @@ msgstr ""
 msgid "<strong>It is recommended to use Tor Browser to access SecureDrop:</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
 msgstr "<strong>Îți recomandăm să folosești browserul Tor pentru a accesa SecureDrop:</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Află cum îl poți instala</a> sau ignoră acest avertisment pentru a continua."
 
-msgid "<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop version.</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
-msgstr "<strong>Îți recomandăm să folosești browserul Tor în versiunea pentru calculator ca să accesezi SecureDrop, deoarece Orfox nu oferă același nivel de securitate și anonimitate.</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Află cum îl poți instala</a> sau ignoră acest avertisment pentru a continua."
+msgid "<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop version.</strong> <a class=\"recommend-tor\" aria-label=\"Learn how to install Tor Browser\" href=\"{tor_browser_url}\" >Learn how to install it</a>, or ignore this warning to continue."
+msgstr ""
 
 msgid "{} logo"
 msgstr ""
@@ -903,7 +933,7 @@ msgstr "Prima trimitere"
 msgid "First time submitting to our SecureDrop? Start here."
 msgstr "Este prima dată când trimiți ceva pe SecureDrop? Începe de aici."
 
-msgid "Get Started"
+msgid "Get Started With Your First Submission"
 msgstr ""
 
 msgid "GET STARTED"
@@ -915,6 +945,9 @@ msgstr "Am revenit"
 msgid "Already have a codename? Check for replies or submit something new."
 msgstr "Ai deja un nume de cod? Vezi dacă ai primit răspunsuri sau trimite ceva nou."
 
+msgid "Log In Using Your Codename"
+msgstr ""
+
 msgid "Log in"
 msgstr ""
 
@@ -924,10 +957,16 @@ msgstr "Introdu numele de cod"
 msgid "Enter your codename"
 msgstr "Introdu numele tău de cod"
 
+msgid "Cancel and Return to Previous Page"
+msgstr ""
+
 msgid "CANCEL"
 msgstr "RENUNȚĂ"
 
 msgid "Additional Action Required"
+msgstr ""
+
+msgid "Log Back In"
 msgstr ""
 
 msgid "One more thing..."
@@ -963,7 +1002,10 @@ msgstr ""
 msgid "Anti-spam check. Do not fill this in!"
 msgstr ""
 
-msgid "Submit"
+msgid "Cancel and Clear Uploaded Content"
+msgstr ""
+
+msgid "Submit Uploaded Content"
 msgstr ""
 
 msgid "Read Replies"
@@ -976,6 +1018,9 @@ msgid "Delete this reply"
 msgstr "Ștergi acest răspuns"
 
 msgid "Delete reply from {timestamp}?"
+msgstr ""
+
+msgid "Delete Reply"
 msgstr ""
 
 msgid "Delete All Replies"
@@ -1041,6 +1086,9 @@ msgstr "Reține, numele tău de cod este:"
 msgid "Codename"
 msgstr ""
 
+msgid "Reveal Codename"
+msgstr ""
+
 msgid "Show Codename"
 msgstr ""
 
@@ -1083,6 +1131,12 @@ msgstr "<strong>Important:</strong> Dacă vrei să rămâi anonim(ă), <strong>n
 
 msgid "Back to submission page"
 msgstr "Înapoi la pagina de trimitere"
+
+#~ msgid "You were logged out due to inactivity. Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
+#~ msgstr "Ai fost deconectat(ă) din cauza inactivității. Dă clic pe butonul <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>Identitate nouă</b> din bara de instrumente a browserului Tor înainte de a merge mai departe. Îți va șterge activitatea din browserul Tor de pe acest dispozitiv."
+
+#~ msgid "<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop version.</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
+#~ msgstr "<strong>Îți recomandăm să folosești browserul Tor în versiunea pentru calculator ca să accesezi SecureDrop, deoarece Orfox nu oferă același nivel de securitate și anonimitate.</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Află cum îl poți instala</a> sau ignoră acest avertisment pentru a continua."
 
 #~ msgid "Field must be between 1 and {max_codename_len} characters long."
 #~ msgstr "Câmpul trebuie să aibă între 1 și {max_codename_len} caractere."
