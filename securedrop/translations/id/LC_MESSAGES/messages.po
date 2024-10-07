@@ -34,8 +34,8 @@ msgstr ""
 msgid "{time} ago"
 msgstr "{time} lalu"
 
-msgid "You have been logged out due to inactivity."
-msgstr "Anda telah keluar karena tidak aktif."
+msgid "You have been logged out due to inactivity or a problem with your session."
+msgstr ""
 
 msgid "SecureDrop"
 msgstr "SecureDrop"
@@ -162,6 +162,9 @@ msgstr "Anda harus memilih satu atau lebih item untuk dihapus"
 msgid "No unread submissions for this source."
 msgstr "Tidak ada kiriman yang belum dibaca dari sumber ini."
 
+msgid "You have been logged out due to inactivity."
+msgstr "Anda telah keluar karena tidak aktif."
+
 msgid "Account updated."
 msgstr "Akun telah dimutakhirkan."
 
@@ -273,6 +276,21 @@ msgstr ""
 msgid "CONTINUE"
 msgstr "LANJUT"
 
+msgid "Enable YubiKey (OATH-HOTP)"
+msgstr "Aktifkan YubiKey (OATH-HOTP)"
+
+msgid "Once you have configured your YubiKey, enter the 6-digit verification code below:"
+msgstr "Setelah Anda mengonfigurasi YubiKey Anda, masukkan 6 digit kode verifikasi di bawah ini:"
+
+msgid "Verification code"
+msgstr "Kode verifikasi"
+
+msgid "Submit verification code"
+msgstr ""
+
+msgid "SUBMIT"
+msgstr "KIRIM"
+
 msgid "Enable FreeOTP"
 msgstr "Hidupkan FreeOTP"
 
@@ -296,21 +314,6 @@ msgstr "Tidak dapat memindai barcode? Anda dapat memasangkan FreeOTP secara manu
 
 msgid "Once you have paired FreeOTP with this account, enter the 6-digit verification code below:"
 msgstr "Setelah Anda memasangkan FreeOTP ke akun ini, masukkan 6 digit kode verifikasi di bawah ini:"
-
-msgid "Enable YubiKey (OATH-HOTP)"
-msgstr "Aktifkan YubiKey (OATH-HOTP)"
-
-msgid "Once you have configured your YubiKey, enter the 6-digit verification code below:"
-msgstr "Setelah Anda mengonfigurasi YubiKey Anda, masukkan 6 digit kode verifikasi di bawah ini:"
-
-msgid "Verification code"
-msgstr "Kode verifikasi"
-
-msgid "Submit verification code"
-msgstr ""
-
-msgid "SUBMIT"
-msgstr "KIRIM"
 
 msgid "Admin Interface"
 msgstr "Antarmuka Admin"
@@ -360,7 +363,7 @@ msgstr "HAPUS"
 msgid "No users to display"
 msgstr "Tidak ada pengguna untuk ditampilkan"
 
-msgid "Update instance config"
+msgid "Update instance configuration"
 msgstr ""
 
 msgid "INSTANCE CONFIG"
@@ -399,14 +402,14 @@ msgstr ""
 msgid "Enter a new HOTP secret formatted as a 40-digit hexadecimal string. Spaces will be ignored:"
 msgstr ""
 
+msgid "Once you have configured your YubiKey, enter the 6-digit code below:"
+msgstr "Setelah Anda mengonfigurasi YubiKey milik Anda, masukkan 6 digit kode di bawah ini:"
+
 msgid "You're almost done! To finish adding this new user, have them follow the instructions below to set up two-factor authentication with FreeOTP. Once they've added an entry for this account in the app, have them enter one of the 6-digit codes from the app to confirm that two-factor authentication is set up correctly."
 msgstr "Kamu hampir selesai! Untuk menyelesaikan penambahan pengguna baru ini, minta mereka untuk mengikuti petunjuk di bawah ini guna menyiapkan autentikasi dua faktor menggunakan FreeOTP. Setelah mereka menambahkan entri untuk akun ini di aplikasi, minta mereka memasukkan salah satu dari kode 6 digit pada aplikasi untuk mengonfirmasi bahwa autentikasi dua faktor telah diatur dengan benar."
 
 msgid "Can't scan the barcode? You can manually pair FreeOTP with this account by entering the following two-factor secret into the app:"
 msgstr "Tidak dapat memindai barcode? Anda dapat memasangkan FreeOTP secara manual dengan akun ini dengan memasukkan rahasia dua faktor berikut ke dalam aplikasi:"
-
-msgid "Once you have configured your YubiKey, enter the 6-digit code below:"
-msgstr "Setelah Anda mengonfigurasi YubiKey milik Anda, masukkan 6 digit kode di bawah ini:"
 
 msgid "Navigation"
 msgstr ""
@@ -423,6 +426,9 @@ msgstr "Administrasi"
 msgid "Log Out"
 msgstr "Log keluar"
 
+msgid "Return to All Sources"
+msgstr ""
+
 msgid "Powered by <b>SecureDrop {version}</b>."
 msgstr ""
 
@@ -435,8 +441,14 @@ msgstr "Semua sumber"
 msgid "All messages, files, and replies from sources are stored as encrypted files for security. To read them, you will need to decrypt them on your Secure Viewing Station."
 msgstr "Semua pesan, file, dan balasan dari sumber disimpan sebagai file terenkripsi untuk keamanan. Untuk membacanya, Anda perlu mendekripsinya di Secure Viewing Station Anda."
 
+msgid "Download Selected Files"
+msgstr ""
+
 msgid "Download Selected"
 msgstr "Unduh yang pilih"
+
+msgid "Delete Selected Files"
+msgstr ""
 
 msgid "Delete Selected"
 msgstr "Hapus yang dipilih"
@@ -655,14 +667,26 @@ msgstr "ATUR ULANG KREDENSIAL KUNCI KEAMANAN"
 msgid "Reset Security Key Credentials"
 msgstr ""
 
+msgid "Download Selected Unread Submissions"
+msgstr ""
+
 msgid "Download Unread"
 msgstr "Unduh Belum Terbaca"
+
+msgid "Download Selected Submissions"
+msgstr ""
 
 msgid "Download"
 msgstr "Unduh"
 
+msgid "Star Selected Submissions"
+msgstr ""
+
 msgid "Star"
 msgstr "Bintang"
+
+msgid "Un-star Selected Submissions"
+msgstr ""
 
 msgid "Un-star"
 msgstr "Hapus bintang"
@@ -715,7 +739,7 @@ msgstr "Kata Sandi"
 msgid "Show password"
 msgstr "Tampilkan kata sandi"
 
-msgid "Log In"
+msgid "Log In to Journalist Interface"
 msgstr ""
 
 msgid "LOG IN"
@@ -791,13 +815,19 @@ msgstr "Maaf, itu bukan nama kode yang dikenali."
 msgid "Important"
 msgstr ""
 
-msgid "You were logged out due to inactivity. Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
+msgid "You have been logged out due to inactivity or a problem with your session. Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
 msgstr ""
 
 msgid "Protecting Journalists and Sources"
 msgstr "Melindungi Jurnalis dan Sumber"
 
 msgid "Skip to notification"
+msgstr ""
+
+msgid "Return to Submission Page"
+msgstr ""
+
+msgid "Return to Home Page"
 msgstr ""
 
 msgid "We're sorry, our SecureDrop is currently offline."
@@ -842,7 +872,7 @@ msgstr ""
 msgid "<strong>Keep it safe.</strong> There is no account recovery option."
 msgstr ""
 
-msgid "Continue"
+msgid "Continue to Submission Page"
 msgstr ""
 
 msgid "Welcome"
@@ -869,7 +899,7 @@ msgstr ""
 msgid "<strong>It is recommended to use Tor Browser to access SecureDrop:</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
 msgstr ""
 
-msgid "<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop version.</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
+msgid "<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop version.</strong> <a class=\"recommend-tor\" aria-label=\"Learn how to install Tor Browser\" href=\"{tor_browser_url}\" >Learn how to install it</a>, or ignore this warning to continue."
 msgstr ""
 
 msgid "{} logo"
@@ -881,7 +911,7 @@ msgstr ""
 msgid "First time submitting to our SecureDrop? Start here."
 msgstr ""
 
-msgid "Get Started"
+msgid "Get Started With Your First Submission"
 msgstr ""
 
 msgid "GET STARTED"
@@ -893,6 +923,9 @@ msgstr ""
 msgid "Already have a codename? Check for replies or submit something new."
 msgstr ""
 
+msgid "Log In Using Your Codename"
+msgstr ""
+
 msgid "Log in"
 msgstr ""
 
@@ -902,10 +935,16 @@ msgstr ""
 msgid "Enter your codename"
 msgstr ""
 
+msgid "Cancel and Return to Previous Page"
+msgstr ""
+
 msgid "CANCEL"
 msgstr ""
 
 msgid "Additional Action Required"
+msgstr ""
+
+msgid "Log Back In"
 msgstr ""
 
 msgid "One more thing..."
@@ -941,7 +980,10 @@ msgstr ""
 msgid "Anti-spam check. Do not fill this in!"
 msgstr ""
 
-msgid "Submit"
+msgid "Cancel and Clear Uploaded Content"
+msgstr ""
+
+msgid "Submit Uploaded Content"
 msgstr ""
 
 msgid "Read Replies"
@@ -954,6 +996,9 @@ msgid "Delete this reply"
 msgstr ""
 
 msgid "Delete reply from {timestamp}?"
+msgstr ""
+
+msgid "Delete Reply"
 msgstr ""
 
 msgid "Delete All Replies"
@@ -1017,6 +1062,9 @@ msgid "Remember, your codename is:"
 msgstr ""
 
 msgid "Codename"
+msgstr ""
+
+msgid "Reveal Codename"
 msgstr ""
 
 msgid "Show Codename"
