@@ -1,5 +1,18 @@
 msgid ""
-msgstr "Project-Id-Version: SecureDrop \\'0.3.5\\'\nReport-Msgid-Bugs-To: securedrop@freedom.press\nPOT-Creation-Date: 2017-09-02 07:28+0000\nPO-Revision-Date: 2024-01-14 13:30+0000\nLast-Translator: Curtis Baltimore <curtisbaltimore@protonmail.com>\nLanguage-Team: German <https://weblate.securedrop.org/projects/securedrop/securedrop/de/>\nLanguage: de_DE\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=2; plural=n != 1;\nX-Generator: Weblate 5.3.1\nGenerated-By: Babel 2.4.0\n"
+msgstr ""
+"Project-Id-Version: SecureDrop \\'0.3.5\\'\n"
+"Report-Msgid-Bugs-To: securedrop@freedom.press\n"
+"POT-Creation-Date: 2017-09-02 07:28+0000\n"
+"PO-Revision-Date: 2024-01-14 13:30+0000\n"
+"Last-Translator: Curtis Baltimore <curtisbaltimore@protonmail.com>\n"
+"Language-Team: German <https://weblate.securedrop.org/projects/securedrop/securedrop/de/>\n"
+"Language: de_DE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.3.1\n"
+"Generated-By: Babel 2.4.0\n"
 
 msgid "Name too long"
 msgstr "Name zu lang"
@@ -18,8 +31,8 @@ msgstr "Ungültiger Benutzername"
 msgid "{time} ago"
 msgstr "vor {time}"
 
-msgid "You have been logged out due to inactivity."
-msgstr "Sie wurden wegen Inaktivität abgemeldet."
+msgid "You have been logged out due to inactivity or a problem with your session."
+msgstr ""
 
 msgid "SecureDrop"
 msgstr "SecureDrop"
@@ -149,6 +162,9 @@ msgstr "Sie müssen einen oder mehrere Einträge zum Löschen auswählen"
 msgid "No unread submissions for this source."
 msgstr "Keine ungelesenen Einreichungen für diese Quelle."
 
+msgid "You have been logged out due to inactivity."
+msgstr "Sie wurden wegen Inaktivität abgemeldet."
+
 msgid "Account updated."
 msgstr "Konto aktualisiert."
 
@@ -266,6 +282,21 @@ msgstr "Änderung des Geheimnisses fortsetzen"
 msgid "CONTINUE"
 msgstr "FORTSETZEN"
 
+msgid "Enable YubiKey (OATH-HOTP)"
+msgstr "YubiKey aktivieren (OATH-HOTP)"
+
+msgid "Once you have configured your YubiKey, enter the 6-digit verification code below:"
+msgstr "Geben sie den folgenden 6-stelligen Validierungscode unten ein, sobald Sie Ihren YubiKey konfiguriert haben:"
+
+msgid "Verification code"
+msgstr "Bestätigungscode"
+
+msgid "Submit verification code"
+msgstr "Bestätigungscode einreichen"
+
+msgid "SUBMIT"
+msgstr "EINREICHEN"
+
 msgid "Enable FreeOTP"
 msgstr "FreeOTP aktivieren"
 
@@ -289,21 +320,6 @@ msgstr "Können Sie den Barcode nicht scannen? Um FreeOTP manuell mit Ihrem Secu
 
 msgid "Once you have paired FreeOTP with this account, enter the 6-digit verification code below:"
 msgstr "Geben Sie unten den folgenden 6-stelligen Code ein, sobald Sie FreeOTP mit diesem Konto verknüpft haben:"
-
-msgid "Enable YubiKey (OATH-HOTP)"
-msgstr "YubiKey aktivieren (OATH-HOTP)"
-
-msgid "Once you have configured your YubiKey, enter the 6-digit verification code below:"
-msgstr "Geben sie den folgenden 6-stelligen Validierungscode unten ein, sobald Sie Ihren YubiKey konfiguriert haben:"
-
-msgid "Verification code"
-msgstr "Bestätigungscode"
-
-msgid "Submit verification code"
-msgstr "Bestätigungscode einreichen"
-
-msgid "SUBMIT"
-msgstr "EINREICHEN"
 
 msgid "Admin Interface"
 msgstr "Adminoberfläche"
@@ -353,8 +369,8 @@ msgstr "LÖSCHEN"
 msgid "No users to display"
 msgstr "Keine Benutzer anzuzeigen"
 
-msgid "Update instance config"
-msgstr "Instanzkonfiguration aktualisieren"
+msgid "Update instance configuration"
+msgstr ""
 
 msgid "INSTANCE CONFIG"
 msgstr "INSTANZKONFIGURATION"
@@ -392,14 +408,14 @@ msgstr "HOTP-Geheimnis ändern"
 msgid "Enter a new HOTP secret formatted as a 40-digit hexadecimal string. Spaces will be ignored:"
 msgstr "Geben Sie ein neues HOTP-Geheimnis ein, das als 40-stellige hexadezimale Zeichenkette formatiert ist. Leerzeichen werden ignoriert:"
 
+msgid "Once you have configured your YubiKey, enter the 6-digit code below:"
+msgstr "Geben sie den folgenden 6-stelligen Code unten ein, sobald Sie Ihren YubiKey konfiguriert haben:"
+
 msgid "You're almost done! To finish adding this new user, have them follow the instructions below to set up two-factor authentication with FreeOTP. Once they've added an entry for this account in the app, have them enter one of the 6-digit codes from the app to confirm that two-factor authentication is set up correctly."
 msgstr "Sie sind fast fertig! Um das Hinzufügen dieses neuen Nutzers abzuschließen, muss dieser den untenstehenden Anweisungen folgen, um die Zwei-Faktor-Authentifizierung mit FreeOTP einzurichten. Sobald der Nutzer in der App einen Eintrag für dieses Konto hinzugefügt hat, muss er einen der 6-stelligen Codes aus der App eingeben, um zu bestätigen, dass die Zwei-Faktor-Authentifizierung erfolgreich eingerichtet ist."
 
 msgid "Can't scan the barcode? You can manually pair FreeOTP with this account by entering the following two-factor secret into the app:"
 msgstr "Können Sie den Barcode nicht scannen? Um FreeOTP manuell mit diesem Konto zu verbinden, geben Sie den folgenden Zwei-Faktor-Schlüssel in die App ein:"
-
-msgid "Once you have configured your YubiKey, enter the 6-digit code below:"
-msgstr "Geben sie den folgenden 6-stelligen Code unten ein, sobald Sie Ihren YubiKey konfiguriert haben:"
 
 msgid "Navigation"
 msgstr "Navigation"
@@ -416,6 +432,9 @@ msgstr "Admin"
 msgid "Log Out"
 msgstr "Abmelden"
 
+msgid "Return to All Sources"
+msgstr ""
+
 msgid "Powered by <b>SecureDrop {version}</b>."
 msgstr "Ermöglicht von <b>SecureDrop {version}</b>."
 
@@ -428,8 +447,14 @@ msgstr "Alle Quellen"
 msgid "All messages, files, and replies from sources are stored as encrypted files for security. To read them, you will need to decrypt them on your Secure Viewing Station."
 msgstr "Alle Nachrichten, Dateien und Antworten von Quellen werden aus Sicherheitsgründen als verschlüsselte Dateien gespeichert. Damit Sie sie lesen können, müssen Sie sie auf Ihrer Sicheren Ansichtsstation entschlüsseln."
 
+msgid "Download Selected Files"
+msgstr ""
+
 msgid "Download Selected"
 msgstr "Herunterladen ausgewählt"
+
+msgid "Delete Selected Files"
+msgstr ""
 
 msgid "Delete Selected"
 msgstr "Löschen ausgewählt"
@@ -658,14 +683,26 @@ msgstr "SICHERHEITSSCHLÜSSEL ZUGANGSDATEN ZURÜCKSETZEN"
 msgid "Reset Security Key Credentials"
 msgstr "Sicherheitsschlüssel-Anmeldeinformationen zurücksetzen"
 
+msgid "Download Selected Unread Submissions"
+msgstr ""
+
 msgid "Download Unread"
 msgstr "Ungelesene herunterladen"
+
+msgid "Download Selected Submissions"
+msgstr ""
 
 msgid "Download"
 msgstr "Herunterladen"
 
+msgid "Star Selected Submissions"
+msgstr ""
+
 msgid "Star"
 msgstr "Markieren"
+
+msgid "Un-star Selected Submissions"
+msgstr ""
 
 msgid "Un-star"
 msgstr "Markieren rückgängig machen"
@@ -718,8 +755,8 @@ msgstr "Passwort"
 msgid "Show password"
 msgstr "Passwort anzeigen"
 
-msgid "Log In"
-msgstr "Anmelden"
+msgid "Log In to Journalist Interface"
+msgstr ""
 
 msgid "LOG IN"
 msgstr "ANMELDEN"
@@ -795,14 +832,20 @@ msgstr "Entschuldigung, das ist kein erkannter Deckname."
 msgid "Important"
 msgstr "Wichtig"
 
-msgid "You were logged out due to inactivity. Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
-msgstr "Sie wurden wegen Inaktivität abgemeldet. Klicken Sie auf die Schaltfläche <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>Neue Identität</b> in der Werkzeugleiste Ihres Tor-Browsers bevor Sie weitermachen. Dies löscht Ihre Tor-Browser-Aktivitätsdaten auf diesem Gerät."
+msgid "You have been logged out due to inactivity or a problem with your session. Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
+msgstr ""
 
 msgid "Protecting Journalists and Sources"
 msgstr "Schützt Journalisten und Quellen"
 
 msgid "Skip to notification"
 msgstr "Zur Benachrichtigung springen"
+
+msgid "Return to Submission Page"
+msgstr ""
+
+msgid "Return to Home Page"
+msgstr ""
 
 msgid "We're sorry, our SecureDrop is currently offline."
 msgstr "Es tut uns leid, unser SecureDrop ist derzeit offline."
@@ -846,8 +889,8 @@ msgstr "<strong>Halten Sie es geheim.</strong> Teilen Sie es mit niemandem."
 msgid "<strong>Keep it safe.</strong> There is no account recovery option."
 msgstr "<strong>Bewahren Sie es sicher auf.</strong> Es gibt keine Option zur Wiederherstellung des Kontos."
 
-msgid "Continue"
-msgstr "Fortsetzen"
+msgid "Continue to Submission Page"
+msgstr ""
 
 msgid "Welcome"
 msgstr "Willkommen"
@@ -873,8 +916,8 @@ msgstr "<a href=\"/\" aria-label=\"Befolgen Sie diese Anweisungen und aktualisie
 msgid "<strong>It is recommended to use Tor Browser to access SecureDrop:</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
 msgstr "<strong>Es wird empfohlen, für den Zugriff auf SecureDrop den Tor-Browser zu verwenden:</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Erfahren Sie, wie Sie ihn installieren</a> oder ignorieren Sie diese Warnung, um fortzufahren."
 
-msgid "<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop version.</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
-msgstr "<strong>Es wird empfohlen, für den Zugriff auf SecureDrop die Desktop-Version des Tor-Browsers zu verwenden, da Orfox nicht das gleiche Maß an Sicherheit und Anonymität bietet wie die Desktop-Version.</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Erfahren Sie, wie Sie ihn installieren</a> oder ignorieren Sie diese Warnung, um fortzufahren."
+msgid "<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop version.</strong> <a class=\"recommend-tor\" aria-label=\"Learn how to install Tor Browser\" href=\"{tor_browser_url}\" >Learn how to install it</a>, or ignore this warning to continue."
+msgstr ""
 
 msgid "{} logo"
 msgstr "{} Logo"
@@ -885,8 +928,8 @@ msgstr "Erste Einreichung"
 msgid "First time submitting to our SecureDrop? Start here."
 msgstr "Erstmalige Einreichung bei unserem SecureDrop? Beginnen Sie hier."
 
-msgid "Get Started"
-msgstr "Los geht's"
+msgid "Get Started With Your First Submission"
+msgstr ""
 
 msgid "GET STARTED"
 msgstr "ERSTE SCHRITTE"
@@ -897,6 +940,9 @@ msgstr "Wiederholungsbesuch"
 msgid "Already have a codename? Check for replies or submit something new."
 msgstr "Haben Sie bereits einen Decknamen? Schauen Sie nach Antworten oder reichen Sie etwas Neues ein."
 
+msgid "Log In Using Your Codename"
+msgstr ""
+
 msgid "Log in"
 msgstr "Anmeldung"
 
@@ -906,11 +952,17 @@ msgstr "Deckname eingeben"
 msgid "Enter your codename"
 msgstr "Geben Sie Ihren Decknamen ein"
 
+msgid "Cancel and Return to Previous Page"
+msgstr ""
+
 msgid "CANCEL"
 msgstr "ABBRECHEN"
 
 msgid "Additional Action Required"
 msgstr "Zusätzliche Maßnahmen erforderlich"
+
+msgid "Log Back In"
+msgstr ""
 
 msgid "One more thing..."
 msgstr "Eine Sache noch..."
@@ -945,8 +997,11 @@ msgstr "Wenn Sie nur eine Nachricht senden, muss diese mindestens {} Zeichen lan
 msgid "Anti-spam check. Do not fill this in!"
 msgstr "Anti-Spam-Test. Bitte nichts eintragen!"
 
-msgid "Submit"
-msgstr "Absenden"
+msgid "Cancel and Clear Uploaded Content"
+msgstr ""
+
+msgid "Submit Uploaded Content"
+msgstr ""
 
 msgid "Read Replies"
 msgstr "Antworten lesen"
@@ -959,6 +1014,9 @@ msgstr "Diese Antwort löschen"
 
 msgid "Delete reply from {timestamp}?"
 msgstr "Antwort von {timestamp} löschen?"
+
+msgid "Delete Reply"
+msgstr ""
 
 msgid "Delete All Replies"
 msgstr "Alle Antworten löschen"
@@ -1023,6 +1081,9 @@ msgstr "Denken Sie daran, Ihr Deckname ist:"
 msgid "Codename"
 msgstr "Deckname"
 
+msgid "Reveal Codename"
+msgstr ""
+
 msgid "Show Codename"
 msgstr "Deckname anzeigen"
 
@@ -1065,6 +1126,27 @@ msgstr "<strong>Wichtig:</strong> Verwenden Sie <strong>nicht</strong> GPG, um d
 
 msgid "Back to submission page"
 msgstr "Zurück zur Einreichungsseite"
+
+#~ msgid "You were logged out due to inactivity. Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
+#~ msgstr "Sie wurden wegen Inaktivität abgemeldet. Klicken Sie auf die Schaltfläche <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>Neue Identität</b> in der Werkzeugleiste Ihres Tor-Browsers bevor Sie weitermachen. Dies löscht Ihre Tor-Browser-Aktivitätsdaten auf diesem Gerät."
+
+#~ msgid "Update instance config"
+#~ msgstr "Instanzkonfiguration aktualisieren"
+
+#~ msgid "Log In"
+#~ msgstr "Anmelden"
+
+#~ msgid "Continue"
+#~ msgstr "Fortsetzen"
+
+#~ msgid "<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop version.</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
+#~ msgstr "<strong>Es wird empfohlen, für den Zugriff auf SecureDrop die Desktop-Version des Tor-Browsers zu verwenden, da Orfox nicht das gleiche Maß an Sicherheit und Anonymität bietet wie die Desktop-Version.</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Erfahren Sie, wie Sie ihn installieren</a> oder ignorieren Sie diese Warnung, um fortzufahren."
+
+#~ msgid "Get Started"
+#~ msgstr "Los geht's"
+
+#~ msgid "Submit"
+#~ msgstr "Absenden"
 
 #~ msgid "Field must be between 1 and {max_codename_len} character long."
 #~ msgid_plural "Field must be between 1 and {max_codename_len} characters long."
