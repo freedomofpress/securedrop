@@ -1,0 +1,40 @@
+# Translations template for SecureDrop.
+# Copyright (C) 2024 Freedom of the Press Foundation
+# This file is distributed under the same license as the SecureDrop project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2024.
+#
+msgid ""
+msgstr "Project-Id-Version: SecureDrop VERSION\nReport-Msgid-Bugs-To: securedrop@freedom.press\nPO-Revision-Date: 2024-09-27 06:33+0000\nLast-Translator: Adam Rak <kitynska@gmail.com>\nLanguage-Team: Polish <https://weblate.securedrop.org/projects/securedrop/desktop/pl/>\nLanguage: pl\nMIME-Version: 1.0\nContent-Type: text/plain; charset=utf-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\nX-Generator: Weblate 5.7.1\nGenerated-By: Babel 2.12.1\n"
+
+msgid "Check for SecureDrop Updates"
+msgstr "Sprawdź aktualizacje SecureDrop"
+
+msgid "Launch Journalist Interface"
+msgstr "Uruchom interfejs dziennikarza"
+
+msgid "Launch Source Interface"
+msgstr "Uruchom interfejs źródła"
+
+msgid "Open File Browser"
+msgstr "Otwórz przeglądarkę plików"
+
+msgid "Open KeePassXC Password Vault"
+msgstr "Otwórz menedżer haseł KeePassXC"
+
+msgid "SSH into the App Server"
+msgstr "SSH do serwera aplikacji"
+
+msgid "SSH into the Monitor Server"
+msgstr "SSH do serwera monitora"
+
+#. Name
+msgid "SecureDrop Journalist Interface"
+msgstr "Interfejs dziennikarza SecureDrop"
+
+#. Name
+msgid "SecureDrop Source Interface"
+msgstr "Interfejs źródła SecureDrop"
+
+#. Icon
+msgid "{{ tails_config_securedrop_dotfiles }}/securedrop_icon.png"
+msgstr "{{ tails_config_securedrop_dotfiles }}/securedrop_icon.png"
