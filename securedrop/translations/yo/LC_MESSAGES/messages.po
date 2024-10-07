@@ -34,7 +34,7 @@ msgstr ""
 msgid "{time} ago"
 msgstr "{àkókò} sẹ́yìn"
 
-msgid "You have been logged out due to inactivity."
+msgid "You have been logged out due to inactivity or a problem with your session."
 msgstr ""
 
 msgid "SecureDrop"
@@ -162,6 +162,9 @@ msgstr ""
 msgid "No unread submissions for this source."
 msgstr "Kò sí ìfàkalẹ̀ àìkà fún orísun yìí."
 
+msgid "You have been logged out due to inactivity."
+msgstr ""
+
 msgid "Account updated."
 msgstr "Àfikún sí ìṣàmúlò."
 
@@ -273,6 +276,21 @@ msgstr ""
 msgid "CONTINUE"
 msgstr "TẸ̀SÍWÁJÚ"
 
+msgid "Enable YubiKey (OATH-HOTP)"
+msgstr "Fàyè gba YubiKey (OATH-HOTP)"
+
+msgid "Once you have configured your YubiKey, enter the 6-digit verification code below:"
+msgstr ""
+
+msgid "Verification code"
+msgstr "Odù ìjẹ́rìí-sí-òtítọ́"
+
+msgid "Submit verification code"
+msgstr ""
+
+msgid "SUBMIT"
+msgstr "TARÍSỌ́HÙNÚN"
+
 msgid "Enable FreeOTP"
 msgstr "Fàyè gba FreeOTP"
 
@@ -296,21 +314,6 @@ msgstr ""
 
 msgid "Once you have paired FreeOTP with this account, enter the 6-digit verification code below:"
 msgstr ""
-
-msgid "Enable YubiKey (OATH-HOTP)"
-msgstr "Fàyè gba YubiKey (OATH-HOTP)"
-
-msgid "Once you have configured your YubiKey, enter the 6-digit verification code below:"
-msgstr ""
-
-msgid "Verification code"
-msgstr "Odù ìjẹ́rìí-sí-òtítọ́"
-
-msgid "Submit verification code"
-msgstr ""
-
-msgid "SUBMIT"
-msgstr "TARÍSỌ́HÙNÚN"
 
 msgid "Admin Interface"
 msgstr "Ìwò-ojú Alákòóso"
@@ -360,7 +363,7 @@ msgstr "PARẸ́"
 msgid "No users to display"
 msgstr "Kò sí àwọn òǹlò láti fi ṣe àfihàn"
 
-msgid "Update instance config"
+msgid "Update instance configuration"
 msgstr ""
 
 msgid "INSTANCE CONFIG"
@@ -399,14 +402,14 @@ msgstr ""
 msgid "Enter a new HOTP secret formatted as a 40-digit hexadecimal string. Spaces will be ignored:"
 msgstr ""
 
+msgid "Once you have configured your YubiKey, enter the 6-digit code below:"
+msgstr "Bí o bá ti gbé YubiKey sí i, fi odù nọ́mbà mẹ́fà sísàlẹ̀:"
+
 msgid "You're almost done! To finish adding this new user, have them follow the instructions below to set up two-factor authentication with FreeOTP. Once they've added an entry for this account in the app, have them enter one of the 6-digit codes from the app to confirm that two-factor authentication is set up correctly."
 msgstr ""
 
 msgid "Can't scan the barcode? You can manually pair FreeOTP with this account by entering the following two-factor secret into the app:"
 msgstr ""
-
-msgid "Once you have configured your YubiKey, enter the 6-digit code below:"
-msgstr "Bí o bá ti gbé YubiKey sí i, fi odù nọ́mbà mẹ́fà sísàlẹ̀:"
 
 msgid "Navigation"
 msgstr ""
@@ -423,6 +426,9 @@ msgstr "Alákòóso"
 msgid "Log Out"
 msgstr "Fàṣẹjáde"
 
+msgid "Return to All Sources"
+msgstr ""
+
 msgid "Powered by <b>SecureDrop {version}</b>."
 msgstr ""
 
@@ -435,8 +441,14 @@ msgstr "Gbogbo orísun"
 msgid "All messages, files, and replies from sources are stored as encrypted files for security. To read them, you will need to decrypt them on your Secure Viewing Station."
 msgstr ""
 
+msgid "Download Selected Files"
+msgstr ""
+
 msgid "Download Selected"
 msgstr "Ìgbàsílẹ̀ ti wà ní yíyàn"
+
+msgid "Delete Selected Files"
+msgstr ""
 
 msgid "Delete Selected"
 msgstr "Parẹ́ ti wà ní yíyàn"
@@ -655,14 +667,26 @@ msgstr ""
 msgid "Reset Security Key Credentials"
 msgstr ""
 
+msgid "Download Selected Unread Submissions"
+msgstr ""
+
 msgid "Download Unread"
 msgstr "Gba Àìkà sílẹ̀"
+
+msgid "Download Selected Submissions"
+msgstr ""
 
 msgid "Download"
 msgstr "Gbà-sílẹ̀"
 
+msgid "Star Selected Submissions"
+msgstr ""
+
 msgid "Star"
 msgstr "Sàmì ìràwọ̀"
+
+msgid "Un-star Selected Submissions"
+msgstr ""
 
 msgid "Un-star"
 msgstr "Yọ àmì ìràwọ̀"
@@ -715,7 +739,7 @@ msgstr "Ọ̀rọ̀-ìfiwọlé"
 msgid "Show password"
 msgstr ""
 
-msgid "Log In"
+msgid "Log In to Journalist Interface"
 msgstr ""
 
 msgid "LOG IN"
@@ -791,13 +815,19 @@ msgstr "Ó dun'ni, ìyẹn kì í ṣe orúkọ-odù tí a dá mọ̀."
 msgid "Important"
 msgstr ""
 
-msgid "You were logged out due to inactivity. Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
+msgid "You have been logged out due to inactivity or a problem with your session. Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
 msgstr ""
 
 msgid "Protecting Journalists and Sources"
 msgstr "Ìdáàbòbo Oníròyìn àti àwọn Orísun ìròyìn"
 
 msgid "Skip to notification"
+msgstr ""
+
+msgid "Return to Submission Page"
+msgstr ""
+
+msgid "Return to Home Page"
 msgstr ""
 
 msgid "We're sorry, our SecureDrop is currently offline."
@@ -842,7 +872,7 @@ msgstr ""
 msgid "<strong>Keep it safe.</strong> There is no account recovery option."
 msgstr ""
 
-msgid "Continue"
+msgid "Continue to Submission Page"
 msgstr ""
 
 msgid "Welcome"
@@ -869,7 +899,7 @@ msgstr ""
 msgid "<strong>It is recommended to use Tor Browser to access SecureDrop:</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
 msgstr ""
 
-msgid "<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop version.</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
+msgid "<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop version.</strong> <a class=\"recommend-tor\" aria-label=\"Learn how to install Tor Browser\" href=\"{tor_browser_url}\" >Learn how to install it</a>, or ignore this warning to continue."
 msgstr ""
 
 msgid "{} logo"
@@ -881,7 +911,7 @@ msgstr "Àfisílẹ̀ àkọ́kọ́"
 msgid "First time submitting to our SecureDrop? Start here."
 msgstr "Ìgbà àkọ́kọ́ tí o ó lo SecureDrop wa? Bẹ̀rẹ̀ níbí."
 
-msgid "Get Started"
+msgid "Get Started With Your First Submission"
 msgstr ""
 
 msgid "GET STARTED"
@@ -893,6 +923,9 @@ msgstr "Àbẹ̀wò padà"
 msgid "Already have a codename? Check for replies or submit something new."
 msgstr "O ti ní orúkọ-odù tẹ́lẹ̀? Wo èsì tàbí fi nǹkan tuntun sílẹ̀."
 
+msgid "Log In Using Your Codename"
+msgstr ""
+
 msgid "Log in"
 msgstr ""
 
@@ -902,10 +935,16 @@ msgstr "Fi orúkọ-odù sílẹ̀"
 msgid "Enter your codename"
 msgstr "Fi orúkọ-odù rẹ sílẹ̀"
 
+msgid "Cancel and Return to Previous Page"
+msgstr ""
+
 msgid "CANCEL"
 msgstr "FAGILÉ"
 
 msgid "Additional Action Required"
+msgstr ""
+
+msgid "Log Back In"
 msgstr ""
 
 msgid "One more thing..."
@@ -941,7 +980,10 @@ msgstr ""
 msgid "Anti-spam check. Do not fill this in!"
 msgstr ""
 
-msgid "Submit"
+msgid "Cancel and Clear Uploaded Content"
+msgstr ""
+
+msgid "Submit Uploaded Content"
 msgstr ""
 
 msgid "Read Replies"
@@ -954,6 +996,9 @@ msgid "Delete this reply"
 msgstr ""
 
 msgid "Delete reply from {timestamp}?"
+msgstr ""
+
+msgid "Delete Reply"
 msgstr ""
 
 msgid "Delete All Replies"
@@ -1017,6 +1062,9 @@ msgid "Remember, your codename is:"
 msgstr "Rántí, orúkọ-odù rẹ ni:"
 
 msgid "Codename"
+msgstr ""
+
+msgid "Reveal Codename"
 msgstr ""
 
 msgid "Show Codename"
