@@ -393,7 +393,7 @@ def _sanitise(*args):  # type: ignore[no-untyped-def]
     def is_flag(x):  # type: ignore[no-untyped-def]
         return x.startswith("--")
 
-    def _make_filo(args_string):  # type: ignore[no-untyped-def]
+    def _make_filo(arg):  # type: ignore[no-untyped-def]
         filo = arg.split(" ")
         filo.reverse()
         log.debug("_make_filo(): Converted to reverse list: %s" % filo)
