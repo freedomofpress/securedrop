@@ -62,6 +62,8 @@ class Message:
             message_type = MessageType.WARNING
         elif "Notice" in fields[0]:
             message_type = MessageType.NOTICE
+        else:
+            raise ValueError(f"Unexpected message type: {fields[0]}")
 
         return Message(
             message_type=message_type,
