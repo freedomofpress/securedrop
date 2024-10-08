@@ -1,7 +1,7 @@
 alembic
 argon2_cffi>=20.1.0
 babel>=2.9.1
-cffi>=1.14.2
+cffi==1.16.0
 
 # This version needs Rust for compilation.
 cryptography>=41.0.5  # >= OpenSSL 3.1.4 for CVE-2023-5363
