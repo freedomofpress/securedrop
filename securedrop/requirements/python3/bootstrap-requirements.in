@@ -1,4 +1,4 @@
-pip>=21.3
+pip>=24.2
 setuptools>=70.0.0
 setuptools-scm>=8.0.0
 wheel>=0.38.1
