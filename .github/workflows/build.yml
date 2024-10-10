@@ -18,6 +18,7 @@ jobs:
     strategy:
       matrix:
         build: [one, two]
+        ubuntu_version: [focal, noble]
     runs-on: ubuntu-latest
     outputs:
       artifact_id: ${{ steps.upload.outputs.artifact-id }}
@@ -28,8 +29,8 @@ jobs:
           python-version: '3.8'
       - name: Build packages
         run: |
-          ./builder/build-debs.sh
-          WHAT=ossec ./builder/build-debs.sh
+          UBUNTU_VERSION=${{ matrix.ubuntu_version }} ./builder/build-debs.sh
+          UBUNTU_VERSION=${{ matrix.ubuntu_version }} WHAT=ossec ./builder/build-debs.sh
       - uses: actions/upload-artifact@v4
         id: upload
         with:
@@ -38,6 +39,9 @@ jobs:
           if-no-files-found: error
 
   reproducible-debs:
+    strategy:
+      matrix:
+        ubuntu_version: [focal, noble]
     runs-on: ubuntu-latest
     container: debian:bookworm
     needs:
@@ -57,5 +61,5 @@ jobs:
           for pkg in ossec-agent ossec-server securedrop-config securedrop-keyring securedrop-ossec-agent securedrop-ossec-server
           do
               echo "Checking ${pkg}..."
-              diffoscope build-one/focal/${pkg}*.deb build-two/focal/${pkg}*.deb
+              diffoscope build-one/${{ matrix.ubuntu_version }}/${pkg}*.deb build-two/${{ matrix.ubuntu_version }}/${pkg}*.deb
           done

@@ -8,6 +8,7 @@ setuptools.setup(
     author="Freedom of the Press Foundation",
     author_email="securedrop@freedom.press",
     description="SecureDrop Server",
+    packages=[],
     long_description=long_description,
     long_description_content_type="text/markdown",
     license="AGPLv3+",
