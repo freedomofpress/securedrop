@@ -1,8 +1,5 @@
-FROM ubuntu:focal
-
-# additional meta-data makes it easier to clean up, find
-LABEL org="Freedom of the Press"
-LABEL image_name="focal-sd-builder-app"
+ARG UBUNTU_VERSION=focal
+FROM ubuntu:${UBUNTU_VERSION}
 
 ARG DEBIAN_FRONTEND=noninteractive
 RUN apt-get -y update && apt-get upgrade -y && apt-get install -y \
@@ -57,4 +54,5 @@ RUN gpg --import /tmp/OSSEC-ARCHIVE-KEY.asc && gpg --export > /ossec.gpg \
 
 COPY build-debs-ossec.sh /build-debs-ossec
 COPY build-debs-securedrop.sh /build-debs-securedrop
+COPY fixup-changelog.sh /fixup-changelog
 COPY dep-check.sh /dep-check

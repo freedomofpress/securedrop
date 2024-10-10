@@ -21,12 +21,15 @@ pip3 download --no-deps --require-hashes -r requirements/python3/requirements.tx
 rm -f /usr/share/python-wheels/setuptools-*.whl
 mv /tmp/requirements-download/setuptools-*.whl /usr/share/python-wheels/
 
+# Add the distro suffix to the version
+bash /fixup-changelog
+
 # Build the package
 dpkg-buildpackage -us -uc
 
 # Copy the built artifacts back and print checksums
 source /etc/os-release
-mkdir -p /src/build/focal
-mv -v ../*.{buildinfo,changes,deb,tar.gz} /src/build/focal
-cd /src/build/focal
+mkdir -p "/src/build/${VERSION_CODENAME}"
+mv -v ../*.{buildinfo,changes,deb,tar.gz} "/src/build/${VERSION_CODENAME}"
+cd "/src/build/${VERSION_CODENAME}"
 sha256sum ./*
