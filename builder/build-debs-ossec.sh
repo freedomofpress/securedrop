@@ -19,10 +19,14 @@ cd ossec-hids-${OSSEC_VERSION}
 # Copy the debian/ tree into place
 cp -Rv /src/ossec/ossec-"${VARIANT}"/debian debian
 
+# Add the distro suffix to the version
+bash /fixup-changelog
+
 # Build the package
 dpkg-buildpackage -us -uc
 
 # Copy the built artifacts back and print checksums
-mv -v ../*.{buildinfo,changes,deb,tar.gz} /src/build/focal
-cd /src/build/focal
+source /etc/os-release
+mv -v ../*.{buildinfo,changes,deb,tar.gz} "/src/build/${VERSION_CODENAME}"
+cd "/src/build/${VERSION_CODENAME}"
 sha256sum ./*
