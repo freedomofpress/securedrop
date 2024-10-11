@@ -76,8 +76,10 @@ def test_app_code_venv(host):
     """
     Ensure the securedrop-app-code virtualenv is correct.
     """
-    cmd = f"""test -z $VIRTUAL_ENV && . {sdvars.securedrop_venv}/bin/activate && "
-    "test "$VIRTUAL_ENV" = "{sdvars.securedrop_venv}" """
+    cmd = (
+        f"test -z $VIRTUAL_ENV && . {sdvars.securedrop_venv}/bin/activate && "
+        + f'test "$VIRTUAL_ENV" = "{sdvars.securedrop_venv}" '
+    )
 
     result = host.run(cmd)
     assert result.rc == 0
