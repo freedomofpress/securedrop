@@ -33,7 +33,7 @@ provisioner:
       callback_whitelist: "profile_tasks, timer"
       interpreter_python: auto
   options:
-    e: "@qubes-vars.yml"
+    e: "@molecule/qubes-staging-focal/qubes-vars.yml"
   playbooks:
     converge: ../../install_files/ansible-base/securedrop-staging.yml
   env:

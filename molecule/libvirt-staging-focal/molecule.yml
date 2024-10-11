@@ -47,7 +47,7 @@ provisioner:
     defaults:
       interpreter_python: auto
   options:
-    e: "@ansible-override-vars.yml"
+    e: "@molecule/libvirt-staging-focal/ansible-override-vars.yml"
   playbooks:
     converge: ../../install_files/ansible-base/securedrop-staging.yml
     create: create.yml
@@ -71,6 +71,6 @@ verifier:
   options:
     n: auto
     v: 2
-    junit-xml: ../../junit/testinfra-results.xml
+    junit-xml: junit/testinfra-results.xml
   env:
     SECUREDROP_TARGET_DISTRIBUTION: focal
