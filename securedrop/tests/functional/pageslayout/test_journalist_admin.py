@@ -25,23 +25,22 @@ from selenium.common.exceptions import TimeoutException
 from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
 from tests.functional.app_navigators.journalist_app_nav import JournalistAppNavigator
-from tests.functional.pageslayout.utils import list_locales, save_static_data
+from tests.functional.pageslayout.utils import save_static_data
 
 
-@pytest.mark.parametrize("locale", list_locales())
 @pytest.mark.pagelayout
 class TestAdminLayoutAddAndEditUser:
     def test_admin_adds_user_hotp_and_edits_hotp(
-        self, locale, sd_servers_with_clean_state, firefox_web_driver
+        self, sd_servers_with_clean_state, firefox_web_driver
     ):
         # Given an SD server
         # And a journalist logging into the journalist interface as an admin
         assert sd_servers_with_clean_state.journalist_is_admin
-        locale_with_commas = locale.replace("_", "-")
+        locale = firefox_web_driver.locale
         journ_app_nav = JournalistAppNavigator(
             journalist_app_base_url=sd_servers_with_clean_state.journalist_app_base_url,
             web_driver=firefox_web_driver,
-            accept_languages=locale_with_commas,
+            accept_languages=locale,
         )
         journ_app_nav.journalist_logs_in(
             username=sd_servers_with_clean_state.journalist_username,
@@ -118,16 +117,16 @@ class TestAdminLayoutAddAndEditUser:
         )
 
     def test_admin_adds_user_totp_and_edits_totp(
-        self, locale, sd_servers_with_clean_state, firefox_web_driver
+        self, sd_servers_with_clean_state, firefox_web_driver
     ):
         # Given an SD server
         # And a journalist logging into the journalist interface as an admin
         assert sd_servers_with_clean_state.journalist_is_admin
-        locale_with_commas = locale.replace("_", "-")
+        locale = firefox_web_driver.locale
         journ_app_nav = JournalistAppNavigator(
             journalist_app_base_url=sd_servers_with_clean_state.journalist_app_base_url,
             web_driver=firefox_web_driver,
-            accept_languages=locale_with_commas,
+            accept_languages=locale,
         )
         journ_app_nav.journalist_logs_in(
             username=sd_servers_with_clean_state.journalist_username,
@@ -223,18 +222,17 @@ class TestAdminLayoutAddAndEditUser:
                 logging.info("Selenium has failed to click; retrying.")
 
 
-@pytest.mark.parametrize("locale", list_locales())
 @pytest.mark.pagelayout
 class TestAdminLayoutEditConfig:
-    def test_admin_changes_logo(self, locale, sd_servers_with_clean_state, firefox_web_driver):
+    def test_admin_changes_logo(self, sd_servers_with_clean_state, firefox_web_driver):
         # Given an SD server
         # And a journalist logging into the journalist interface as an admin
         assert sd_servers_with_clean_state.journalist_is_admin
-        locale_with_commas = locale.replace("_", "-")
+        locale = firefox_web_driver.locale
         journ_app_nav = JournalistAppNavigator(
             journalist_app_base_url=sd_servers_with_clean_state.journalist_app_base_url,
             web_driver=firefox_web_driver,
-            accept_languages=locale_with_commas,
+            accept_languages=locale,
         )
         journ_app_nav.journalist_logs_in(
             username=sd_servers_with_clean_state.journalist_username,
@@ -264,15 +262,15 @@ class TestAdminLayoutEditConfig:
         # Take a screenshot
         save_static_data(journ_app_nav.driver, locale, "journalist-admin_changes_logo_image")
 
-    def test_ossec_alert_button(self, locale, sd_servers, firefox_web_driver):
+    def test_ossec_alert_button(self, sd_servers, firefox_web_driver):
         # Given an SD server
         # And a journalist logging into the journalist interface as an admin
         assert sd_servers.journalist_is_admin
-        locale_with_commas = locale.replace("_", "-")
+        locale = firefox_web_driver.locale
         journ_app_nav = JournalistAppNavigator(
             journalist_app_base_url=sd_servers.journalist_app_base_url,
             web_driver=firefox_web_driver,
-            accept_languages=locale_with_commas,
+            accept_languages=locale,
         )
         journ_app_nav.journalist_logs_in(
             username=sd_servers.journalist_username,

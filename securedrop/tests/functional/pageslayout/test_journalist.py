@@ -17,20 +17,19 @@
 #
 import pytest
 from tests.functional.app_navigators.journalist_app_nav import JournalistAppNavigator
-from tests.functional.pageslayout.utils import list_locales, save_static_data
+from tests.functional.pageslayout.utils import save_static_data
 
 
-@pytest.mark.parametrize("locale", list_locales())
 @pytest.mark.pagelayout
 class TestJournalistLayout:
-    def test_login_index_and_edit(self, locale, sd_servers, firefox_web_driver):
+    def test_login_index_and_edit(self, sd_servers, firefox_web_driver, request):
+        locale = firefox_web_driver.locale
         # Given an SD server
         # And a journalist accessing the journalist interface
-        locale_with_commas = locale.replace("_", "-")
         journ_app_nav = JournalistAppNavigator(
             journalist_app_base_url=sd_servers.journalist_app_base_url,
             web_driver=firefox_web_driver,
-            accept_languages=locale_with_commas,
+            accept_languages=locale,
         )
         journ_app_nav.driver.get(f"{sd_servers.journalist_app_base_url}/login")
         journ_app_nav.got_expected_language(locale)
@@ -55,14 +54,14 @@ class TestJournalistLayout:
         journ_app_nav.journalist_visits_edit_account()
         save_static_data(journ_app_nav.driver, locale, "journalist-edit_account_user")
 
-    def test_index_entered_text(self, locale, sd_servers, firefox_web_driver):
+    def test_index_entered_text(self, sd_servers, firefox_web_driver):
         # Given an SD server
         # And a journalist accessing the journalist interface
-        locale_with_commas = locale.replace("_", "-")
+        locale = firefox_web_driver.locale
         journ_app_nav = JournalistAppNavigator(
             journalist_app_base_url=sd_servers.journalist_app_base_url,
             web_driver=firefox_web_driver,
-            accept_languages=locale_with_commas,
+            accept_languages=locale,
         )
 
         # Take a screenshot of the login page with the form completed
@@ -75,15 +74,15 @@ class TestJournalistLayout:
         save_static_data(journ_app_nav.driver, locale, "journalist-index_with_text")
 
     def test_index_with_submission_and_select_documents(
-        self, locale, sd_servers_with_submitted_file, firefox_web_driver
+        self, sd_servers_with_submitted_file, firefox_web_driver
     ):
         # Given an SD server with an already-submitted file
         # And a journalist logging into the journalist interface
-        locale_with_commas = locale.replace("_", "-")
+        locale = firefox_web_driver.locale
         journ_app_nav = JournalistAppNavigator(
             journalist_app_base_url=sd_servers_with_submitted_file.journalist_app_base_url,
             web_driver=firefox_web_driver,
-            accept_languages=locale_with_commas,
+            accept_languages=locale,
         )
 
         # Take a screenshot of the index page when there is a source and submission
@@ -116,27 +115,27 @@ class TestJournalistLayout:
         )
         save_static_data(journ_app_nav.driver, locale, "journalist-composes_reply")
 
-    def test_fail_to_visit_admin(self, locale, sd_servers, firefox_web_driver):
+    def test_fail_to_visit_admin(self, sd_servers, firefox_web_driver):
         # Given an SD server
         # And someone accessing the journalist interface
-        locale_with_commas = locale.replace("_", "-")
+        locale = firefox_web_driver.locale
         journ_app_nav = JournalistAppNavigator(
             journalist_app_base_url=sd_servers.journalist_app_base_url,
             web_driver=firefox_web_driver,
-            accept_languages=locale_with_commas,
+            accept_languages=locale,
         )
         # Take a screenshot of them trying to force-browse to the admin interface
         journ_app_nav.driver.get(f"{sd_servers.journalist_app_base_url}/admin")
         save_static_data(journ_app_nav.driver, locale, "journalist-code-fail_to_visit_admin")
 
-    def test_fail_login(self, locale, sd_servers, firefox_web_driver):
+    def test_fail_login(self, sd_servers, firefox_web_driver):
         # Given an SD server
         # And someone accessing the journalist interface
-        locale_with_commas = locale.replace("_", "-")
+        locale = firefox_web_driver.locale
         journ_app_nav = JournalistAppNavigator(
             journalist_app_base_url=sd_servers.journalist_app_base_url,
             web_driver=firefox_web_driver,
-            accept_languages=locale_with_commas,
+            accept_languages=locale,
         )
 
         # Take a screenshot of trying to log in using invalid credentials
