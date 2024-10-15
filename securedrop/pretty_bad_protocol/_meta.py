@@ -530,7 +530,8 @@ class GPGBase:
 
         if self.keyring:
             cmd.append("--no-default-keyring --keyring %s" % self.keyring)
-        if self.secring:
+        if self.secring and self.binary_version != "2.4.4":
+            # In GnuPG 2.4.4, --secret-keyring has no effect
             cmd.append("--secret-keyring %s" % self.secring)
 
         if passphrase:
