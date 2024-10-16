@@ -3,4 +3,4 @@ markupsafe>=1.1
 prompt_toolkit==2.0.9
 pyyaml>=6.0.1
 setuptools>=70.0.0
-six==1.15.0
+six>=1.16.0
