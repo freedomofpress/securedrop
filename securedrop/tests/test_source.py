@@ -14,8 +14,9 @@ import pytest
 import version
 from db import db
 from encryption import EncryptionManager, GpgDecryptError, GpgKeyNotFoundError
-from flask import escape, g, request, session, url_for
+from flask import g, request, session, url_for
 from journalist_app.utils import delete_collection
+from markupsafe import escape
 from models import InstanceConfig, Reply, Source
 from passphrases import PassphraseGenerator
 from source_app import api as source_app_api

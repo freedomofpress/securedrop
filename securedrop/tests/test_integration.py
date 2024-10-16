@@ -10,8 +10,8 @@ import journalist_app as journalist_app_module
 from bs4 import BeautifulSoup
 from db import db
 from encryption import EncryptionManager
-from flask import escape
 from journalist_app.sessions import session
+from markupsafe import escape
 from source_app.session_manager import SessionManager
 from store import Storage
 from tests import utils
