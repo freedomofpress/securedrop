@@ -15,10 +15,11 @@ import pytest
 from db import db
 from encryption import EncryptionManager, GpgKeyNotFoundError
 from flaky import flaky
-from flask import escape, g, url_for
+from flask import g, url_for
 from flask_babel import gettext, ngettext
 from journalist_app.sessions import session
 from journalist_app.utils import mark_seen
+from markupsafe import escape
 from models import (
     InstanceConfig,
     InvalidPasswordLength,
