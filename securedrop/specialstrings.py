@@ -1,4 +1,5 @@
 # ruff: noqa
+# pylint: skip-file
 strings = [
     """This is a test message without markup!""",
     """This is a test message with markup and characters such as \\, \\, \', \" and ". """
