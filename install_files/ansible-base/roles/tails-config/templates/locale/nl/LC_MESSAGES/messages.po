@@ -4,39 +4,28 @@
 # Automatically generated, 2017.
 #
 msgid ""
-msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2017-12-01 13:48+0000\n"
-"Last-Translator: kwadronaut <kwadronaut@autistici.org>\n"
-"Language-Team: Dutch <https://weblate.securedrop.org/projects/securedrop/desktop/nl/>\n"
-"Language: nl\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2.17.1\n"
+msgstr "Project-Id-Version: PACKAGE VERSION\nReport-Msgid-Bugs-To: securedrop@freedom.press\nPO-Revision-Date: 2024-10-01 11:33+0000\nLast-Translator: kwadronaut <kwadronaut@autistici.org>\nLanguage-Team: Dutch <https://weblate.securedrop.org/projects/securedrop/desktop/nl/>\nLanguage: nl\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=2; plural=n != 1;\nX-Generator: Weblate 5.7.1\n"
 
 msgid "Check for SecureDrop Updates"
-msgstr ""
+msgstr "Controleer op SecureDrop updates"
 
 msgid "Launch Journalist Interface"
-msgstr ""
+msgstr "Start interface voor journalisten"
 
 msgid "Launch Source Interface"
-msgstr ""
+msgstr "Start interface voor bron"
 
 msgid "Open File Browser"
-msgstr ""
+msgstr "Open bestandsverkenner"
 
 msgid "Open KeePassXC Password Vault"
-msgstr ""
+msgstr "KeePassXc-database ontgrendelen"
 
 msgid "SSH into the App Server"
-msgstr ""
+msgstr "SSH naar de App server"
 
 msgid "SSH into the Monitor Server"
-msgstr ""
+msgstr "SSH naar de Monitor server"
 
 #. Name
 msgid "SecureDrop Journalist Interface"
@@ -48,4 +37,4 @@ msgstr "Securedrop - interface voor bronnen"
 
 #. Icon
 msgid "{{ tails_config_securedrop_dotfiles }}/securedrop_icon.png"
-msgstr ""
+msgstr "{{ tails_config_securedrop_dotfiles }}/securedrop_icon.png"

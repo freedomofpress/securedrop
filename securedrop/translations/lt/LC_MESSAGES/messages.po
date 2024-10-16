@@ -36,8 +36,8 @@ msgstr ""
 msgid "{time} ago"
 msgstr "Prieš {time}"
 
-msgid "You have been logged out due to inactivity."
-msgstr "Jūs buvote atjungtas dėl neveiklumo."
+msgid "You have been logged out due to inactivity or a problem with your session."
+msgstr ""
 
 msgid "SecureDrop"
 msgstr "SecureDrop"
@@ -170,6 +170,9 @@ msgstr "Turite pasirinkti vieną ar daugiau elementų, kuriuos norite ištrinti"
 msgid "No unread submissions for this source."
 msgstr "Nėra neskaitytų šio šaltinio pateikimų."
 
+msgid "You have been logged out due to inactivity."
+msgstr "Jūs buvote atjungtas dėl neveiklumo."
+
 msgid "Account updated."
 msgstr "Paskyra atnaujinta."
 
@@ -293,6 +296,21 @@ msgstr ""
 msgid "CONTINUE"
 msgstr "TĘSTI"
 
+msgid "Enable YubiKey (OATH-HOTP)"
+msgstr "Aktyvuoti YubiKey (OATH-HOTP)"
+
+msgid "Once you have configured your YubiKey, enter the 6-digit verification code below:"
+msgstr "Sukonfigūravę „YubiKey“, įveskite 6 skaitmenų patvirtinimo kodą:"
+
+msgid "Verification code"
+msgstr "Patvirtinimo kodas"
+
+msgid "Submit verification code"
+msgstr ""
+
+msgid "SUBMIT"
+msgstr "PATEIKTI"
+
 msgid "Enable FreeOTP"
 msgstr "Įgalinti „FreeOTP“"
 
@@ -316,21 +334,6 @@ msgstr "Negalite nuskaityti brūkšninio kodo? Tuomet rankiniu būdu galite susi
 
 msgid "Once you have paired FreeOTP with this account, enter the 6-digit verification code below:"
 msgstr "Susieję „FreeOTP“ su šia paskyra, įveskite 6 skaitmenų patvirtinimo kodą:"
-
-msgid "Enable YubiKey (OATH-HOTP)"
-msgstr "Aktyvuoti YubiKey (OATH-HOTP)"
-
-msgid "Once you have configured your YubiKey, enter the 6-digit verification code below:"
-msgstr "Sukonfigūravę „YubiKey“, įveskite 6 skaitmenų patvirtinimo kodą:"
-
-msgid "Verification code"
-msgstr "Patvirtinimo kodas"
-
-msgid "Submit verification code"
-msgstr ""
-
-msgid "SUBMIT"
-msgstr "PATEIKTI"
 
 msgid "Admin Interface"
 msgstr "Administratoriaus sąsaja"
@@ -380,7 +383,7 @@ msgstr "IŠTRINTI"
 msgid "No users to display"
 msgstr "Nėra vartotojų, kuriuos būtų galima rodyti"
 
-msgid "Update instance config"
+msgid "Update instance configuration"
 msgstr ""
 
 msgid "INSTANCE CONFIG"
@@ -419,14 +422,14 @@ msgstr ""
 msgid "Enter a new HOTP secret formatted as a 40-digit hexadecimal string. Spaces will be ignored:"
 msgstr ""
 
+msgid "Once you have configured your YubiKey, enter the 6-digit code below:"
+msgstr "Sukonfigūravę „YubiKey“, toliau įveskite 6 skaitmenų kodą:"
+
 msgid "You're almost done! To finish adding this new user, have them follow the instructions below to set up two-factor authentication with FreeOTP. Once they've added an entry for this account in the app, have them enter one of the 6-digit codes from the app to confirm that two-factor authentication is set up correctly."
 msgstr "Beveik baigta! Norėdami baigti pridėti naują vartotoją, paprašykite, kad atlikdami toliau nurodytas instrukcijas nustatytumėte dviejų veiksnių autentifikavimą naudodami „FreeOTP“. Pridėję šios paskyros įrašą programoje, leiskite jiems įvesti vieną iš 6 skaitmenų kodų iš programos, kad patvirtintumėte, jog dviejų veiksnių autentifikavimas nustatytas teisingai."
 
 msgid "Can't scan the barcode? You can manually pair FreeOTP with this account by entering the following two-factor secret into the app:"
 msgstr "Negalite nuskaityti brūkšninio kodo? Tuomet rankiniu būdu galite susieti „FreeOTP“ su šia paskyra, į programėlę įvesdami šią dviejų veiksnių paslaptį:"
-
-msgid "Once you have configured your YubiKey, enter the 6-digit code below:"
-msgstr "Sukonfigūravę „YubiKey“, toliau įveskite 6 skaitmenų kodą:"
 
 msgid "Navigation"
 msgstr ""
@@ -443,6 +446,9 @@ msgstr "Administratorius"
 msgid "Log Out"
 msgstr "Atsijungti"
 
+msgid "Return to All Sources"
+msgstr ""
+
 msgid "Powered by <b>SecureDrop {version}</b>."
 msgstr ""
 
@@ -455,8 +461,14 @@ msgstr "Visi šaltiniai"
 msgid "All messages, files, and replies from sources are stored as encrypted files for security. To read them, you will need to decrypt them on your Secure Viewing Station."
 msgstr "Visi pranešimai, failai ir atsakymai iš šaltinių saugomi kaip užšifruoti failai. Norėdami juos perskaityti, turėsite juos iššifruoti saugioje peržiūros stotyje."
 
+msgid "Download Selected Files"
+msgstr ""
+
 msgid "Download Selected"
 msgstr "Atsisiųsti pasirinktus"
+
+msgid "Delete Selected Files"
+msgstr ""
 
 msgid "Delete Selected"
 msgstr "Ištrinti pasirinktus"
@@ -675,14 +687,26 @@ msgstr "ATSTATYTI SAUGUMO RAKTO KREDENTALUS"
 msgid "Reset Security Key Credentials"
 msgstr ""
 
+msgid "Download Selected Unread Submissions"
+msgstr ""
+
 msgid "Download Unread"
 msgstr "Atsisiųsti neperskaitytus"
+
+msgid "Download Selected Submissions"
+msgstr ""
 
 msgid "Download"
 msgstr "Atsisiųsti"
 
+msgid "Star Selected Submissions"
+msgstr ""
+
 msgid "Star"
 msgstr "Pažymėti žvaigždute"
+
+msgid "Un-star Selected Submissions"
+msgstr ""
 
 msgid "Un-star"
 msgstr "Pašalinti žvaigždutę"
@@ -735,7 +759,7 @@ msgstr "Slaptažodis"
 msgid "Show password"
 msgstr "Rodyti slaptažodį"
 
-msgid "Log In"
+msgid "Log In to Journalist Interface"
 msgstr ""
 
 msgid "LOG IN"
@@ -813,13 +837,19 @@ msgstr "Atsiprašome, bet šis slapyvardis neatpažintas."
 msgid "Important"
 msgstr "Svarbu"
 
-msgid "You were logged out due to inactivity. Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
+msgid "You have been logged out due to inactivity or a problem with your session. Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
 msgstr ""
 
 msgid "Protecting Journalists and Sources"
 msgstr "Žurnalistų ir šaltinių apsauga"
 
 msgid "Skip to notification"
+msgstr ""
+
+msgid "Return to Submission Page"
+msgstr ""
+
+msgid "Return to Home Page"
 msgstr ""
 
 msgid "We're sorry, our SecureDrop is currently offline."
@@ -864,7 +894,7 @@ msgstr ""
 msgid "<strong>Keep it safe.</strong> There is no account recovery option."
 msgstr ""
 
-msgid "Continue"
+msgid "Continue to Submission Page"
 msgstr ""
 
 msgid "Welcome"
@@ -891,7 +921,7 @@ msgstr ""
 msgid "<strong>It is recommended to use Tor Browser to access SecureDrop:</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
 msgstr ""
 
-msgid "<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop version.</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
+msgid "<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop version.</strong> <a class=\"recommend-tor\" aria-label=\"Learn how to install Tor Browser\" href=\"{tor_browser_url}\" >Learn how to install it</a>, or ignore this warning to continue."
 msgstr ""
 
 msgid "{} logo"
@@ -903,7 +933,7 @@ msgstr "Pirmasis pateikimas"
 msgid "First time submitting to our SecureDrop? Start here."
 msgstr "Pirmą kartą įkeliate į „SecureDrop“? Pradėti čia."
 
-msgid "Get Started"
+msgid "Get Started With Your First Submission"
 msgstr ""
 
 msgid "GET STARTED"
@@ -915,6 +945,9 @@ msgstr "Grįžimas"
 msgid "Already have a codename? Check for replies or submit something new."
 msgstr "Jau turite kodinį pavadinimą? Patikrinkite, ar nėra atsakymų, arba pateikite ką nors naujo."
 
+msgid "Log In Using Your Codename"
+msgstr ""
+
 msgid "Log in"
 msgstr ""
 
@@ -924,10 +957,16 @@ msgstr "Įveskite kodo pavadinimą"
 msgid "Enter your codename"
 msgstr "Įveskite jūsų kodo pavadinimą"
 
+msgid "Cancel and Return to Previous Page"
+msgstr ""
+
 msgid "CANCEL"
 msgstr "ATŠAUKTI"
 
 msgid "Additional Action Required"
+msgstr ""
+
+msgid "Log Back In"
 msgstr ""
 
 msgid "One more thing..."
@@ -963,7 +1002,10 @@ msgstr ""
 msgid "Anti-spam check. Do not fill this in!"
 msgstr ""
 
-msgid "Submit"
+msgid "Cancel and Clear Uploaded Content"
+msgstr ""
+
+msgid "Submit Uploaded Content"
 msgstr ""
 
 msgid "Read Replies"
@@ -976,6 +1018,9 @@ msgid "Delete this reply"
 msgstr ""
 
 msgid "Delete reply from {timestamp}?"
+msgstr ""
+
+msgid "Delete Reply"
 msgstr ""
 
 msgid "Delete All Replies"
@@ -1039,6 +1084,9 @@ msgid "Remember, your codename is:"
 msgstr "Atminkite, kad jūsų kodo pavadinimas yra:"
 
 msgid "Codename"
+msgstr ""
+
+msgid "Reveal Codename"
 msgstr ""
 
 msgid "Show Codename"

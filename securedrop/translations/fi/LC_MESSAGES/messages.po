@@ -4,19 +4,7 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
 #
 msgid ""
-msgstr ""
-"Project-Id-Version: SecureDrop 0.5-rc4\n"
-"Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2023-10-15 16:30+0000\n"
-"Last-Translator: Jiri Grönroos <jiri.gronroos@iki.fi>\n"
-"Language-Team: Finnish <https://weblate.securedrop.org/projects/securedrop/securedrop/fi/>\n"
-"Language: fi\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.18.2\n"
-"Generated-By: Babel 2.4.0\n"
+msgstr "Project-Id-Version: SecureDrop 0.5-rc4\nReport-Msgid-Bugs-To: securedrop@freedom.press\nPO-Revision-Date: 2024-09-24 08:33+0000\nLast-Translator: Ricky Tigg <ricky.tigg@gmail.com>\nLanguage-Team: Finnish <https://weblate.securedrop.org/projects/securedrop/securedrop/fi/>\nLanguage: fi\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=2; plural=n != 1;\nX-Generator: Weblate 5.7.1\nGenerated-By: Babel 2.4.0\n"
 
 msgid "Name too long"
 msgstr "Nimi on liian pitkä"
@@ -35,8 +23,8 @@ msgstr "Virheellinen käyttäjätunnus"
 msgid "{time} ago"
 msgstr "{time} sitten"
 
-msgid "You have been logged out due to inactivity."
-msgstr "Sinut on kirjattu ulos pitkän epäaktiivisuuden vuoksi."
+msgid "You have been logged out due to inactivity or a problem with your session."
+msgstr "Sinut on kirjattu ulos käyttämättömyyden tai istunnon ongelman vuoksi."
 
 msgid "SecureDrop"
 msgstr "SecureDrop"
@@ -166,6 +154,9 @@ msgstr "Valitse yksi tai useampi kohde poistettavaksi"
 msgid "No unread submissions for this source."
 msgstr "Ei avaamattomia palautuksia tältä lähteeltä."
 
+msgid "You have been logged out due to inactivity."
+msgstr "Sinut on kirjattu ulos pitkän epäaktiivisuuden vuoksi."
+
 msgid "Account updated."
 msgstr "Tili päivitetty."
 
@@ -283,6 +274,21 @@ msgstr "Jatka salaisuuden vaihtamiseen"
 msgid "CONTINUE"
 msgstr "JATKA"
 
+msgid "Enable YubiKey (OATH-HOTP)"
+msgstr "Aktivoi YubiKey (OATH-HOTP)"
+
+msgid "Once you have configured your YubiKey, enter the 6-digit verification code below:"
+msgstr "Kun olet määrittänyt YubiKeysi, anna 6-numeroinen varmistuskoodi alla olevaan kenttään:"
+
+msgid "Verification code"
+msgstr "Varmistuskoodi"
+
+msgid "Submit verification code"
+msgstr "Lähetä vahvistuskoodi"
+
+msgid "SUBMIT"
+msgstr "LÄHETÄ"
+
 msgid "Enable FreeOTP"
 msgstr "Aktivoi FreeOTP"
 
@@ -307,21 +313,6 @@ msgstr "Etkö pysty skannaamaan QR-koodia? Voit parittaa FreeOTP:n käsin Secure
 msgid "Once you have paired FreeOTP with this account, enter the 6-digit verification code below:"
 msgstr "Kun olet parittanut FreeOTP:n tunnuksesi kanssa, anna 6-numeroinen koodi alla olevaan kenttään:"
 
-msgid "Enable YubiKey (OATH-HOTP)"
-msgstr "Aktivoi YubiKey (OATH-HOTP)"
-
-msgid "Once you have configured your YubiKey, enter the 6-digit verification code below:"
-msgstr "Kun olet määrittänyt YubiKeysi, anna 6-numeroinen varmistuskoodi alla olevaan kenttään:"
-
-msgid "Verification code"
-msgstr "Varmistuskoodi"
-
-msgid "Submit verification code"
-msgstr "Lähetä vahvistuskoodi"
-
-msgid "SUBMIT"
-msgstr "LÄHETÄ"
-
 msgid "Admin Interface"
 msgstr "Ylläpitäjän käyttöliittymä"
 
@@ -344,7 +335,7 @@ msgid "Created"
 msgstr "Luotu"
 
 msgid "Last login"
-msgstr "Edellinen kirjautuminen"
+msgstr "Viimeinen sisäänkirjautuminen"
 
 msgid "Edit user {username}"
 msgstr "Muokkaa käyttäjää {username}"
@@ -370,8 +361,8 @@ msgstr "POISTA"
 msgid "No users to display"
 msgstr "Ei käyttäjiä näytettäväksi"
 
-msgid "Update instance config"
-msgstr "Päivitä instanssin konfiguraatio"
+msgid "Update instance configuration"
+msgstr "Päivitä ilmentymän kokoonpano"
 
 msgid "INSTANCE CONFIG"
 msgstr "INSTANSSIN KONFIGURAATIO"
@@ -409,14 +400,14 @@ msgstr "Vaihta HOTP-salaisuus"
 msgid "Enter a new HOTP secret formatted as a 40-digit hexadecimal string. Spaces will be ignored:"
 msgstr "Anna uusi HOTP-salaisuus muotoiltuna 40-numeroiseksi heksadesimaalin merkkijonoksi. Välilyönnit jätetään huomiotta:"
 
+msgid "Once you have configured your YubiKey, enter the 6-digit code below:"
+msgstr "Kun olet määrittänyt YubiKey:n, syötä kuusinumeroinen koodi alla:"
+
 msgid "You're almost done! To finish adding this new user, have them follow the instructions below to set up two-factor authentication with FreeOTP. Once they've added an entry for this account in the app, have them enter one of the 6-digit codes from the app to confirm that two-factor authentication is set up correctly."
 msgstr "Olet melkein valmis! Viimeistelläksesi uuden käyttäjän lisäämisen, pyydä häntä seuraamaan alla olevia ohjeita kaksivaiheisen tunnistautumismekanismin asentamiseksi FreeOTP:lla. Kun hän on lisännyt merkinnän tätä tiliä varten sovellukseen, pyydä häntä antamaan yksi sovelluksen 6-numeroisista koodeista varmistaaksesi, että kaksivaiheinen tunnistautumismekanismi on asetettu oikein."
 
 msgid "Can't scan the barcode? You can manually pair FreeOTP with this account by entering the following two-factor secret into the app:"
 msgstr "Etkö voi skannata QR-koodia? Voit parittaa FreeOTP:n käsin tämän tilin kanssa syöttämällä seuraavan kaksivaiheisen tunnistautumisen salaisuuden sovellukseen:"
-
-msgid "Once you have configured your YubiKey, enter the 6-digit code below:"
-msgstr "Syötä 6-numeroinen koodi allaolevaan kenttään määritettyäsi YbiKey-avaimesi:"
 
 msgid "Navigation"
 msgstr "Liikkuminen"
@@ -433,6 +424,9 @@ msgstr "Ylläpitäjä"
 msgid "Log Out"
 msgstr "Kirjaudu ulos"
 
+msgid "Return to All Sources"
+msgstr "Palaa 'Kaikki lähteet':een"
+
 msgid "Powered by <b>SecureDrop {version}</b>."
 msgstr "Taustavoimana <b>SecureDrop {version}</b>."
 
@@ -445,8 +439,14 @@ msgstr "Kaikki lähteet"
 msgid "All messages, files, and replies from sources are stored as encrypted files for security. To read them, you will need to decrypt them on your Secure Viewing Station."
 msgstr "Kaikki viestit, tiedostot ja vastaukset lähteeltä tallennetaan salattuina tiedostoina tietoturvan vuoksi. Niiden lukeminen vaatii, että purat salauksen Secure Viewing Station -tietokoneella."
 
+msgid "Download Selected Files"
+msgstr "Lataa valitut tiedostot"
+
 msgid "Download Selected"
 msgstr "Lataa valitut"
+
+msgid "Delete Selected Files"
+msgstr "Poista valitut tiedostot"
 
 msgid "Delete Selected"
 msgstr "Poista valitut"
@@ -646,7 +646,7 @@ msgid "RESET PASSWORD"
 msgstr "PALAUTA SALASANA"
 
 msgid "Reset Two-Factor Authentication"
-msgstr "Nollaa kaksivaiheinen tunnistautuminen"
+msgstr "Nollaa kaksifaktorinen todennus"
 
 msgid "If a user's two-factor authentication credentials have been lost or compromised, you can reset them here. <em>If you do this, make sure the user is present and ready to set up their device with the new two-factor credentials. Otherwise, they will be locked out of their account.</em>"
 msgstr "Jos käyttäjän kaksivaiheisen tunnistautumisen tiedot ovat kadonneet tai joutuneet vääriin käsiin, voit nollata ne täällä. <em>Jos teet tämän, varmista että käyttäjä on läsnä, ja että hän on valmiina asettamaan laitteelleensa uudet kaksivaiheisen tunnistautumisen tiedot. Muutoin he lukkiutuvat ulos tunnuksistaan.</em>"
@@ -675,14 +675,26 @@ msgstr "NOLLAA FYYSISEN TUNNISTAUTUMISAVAIMEN PÄÄSYTIEDOT"
 msgid "Reset Security Key Credentials"
 msgstr "Nollaa turva-avaimen kirjautumistiedot"
 
+msgid "Download Selected Unread Submissions"
+msgstr "Lataa valitut lukemattomat lähetykset"
+
 msgid "Download Unread"
 msgstr "Lataa lukemattomat"
+
+msgid "Download Selected Submissions"
+msgstr "Lataa valitut lähetykset"
 
 msgid "Download"
 msgstr "Lataa"
 
+msgid "Star Selected Submissions"
+msgstr "Aseta tähti valituille lähetyksille"
+
 msgid "Star"
 msgstr "Merkitse suosikiksi"
+
+msgid "Un-star Selected Submissions"
+msgstr "Poista tähti valituista lähetyksistä"
 
 msgid "Un-star"
 msgstr "Poista suosikeista"
@@ -735,16 +747,16 @@ msgstr "Salasana"
 msgid "Show password"
 msgstr "Näytä salasana"
 
-msgid "Log In"
-msgstr "Kirjaudu"
+msgid "Log In to Journalist Interface"
+msgstr "Kirjaudu sisään Ttoimittajan käyttöliittymään"
 
 msgid "LOG IN"
 msgstr "KIRJAUDU SISÄÄN"
 
 msgid "Field must be 1 character long."
 msgid_plural "Field must be between 1 and {max_codename_len} characters long."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Kentän on oltava yhden merkin pituinen."
+msgstr[1] "Kentän on oltava 1–{max_codename_len} merkin pituinen."
 
 msgid "Invalid input."
 msgstr "Syöte ei kelpaa."
@@ -812,14 +824,20 @@ msgstr "Koodinimeä ei valitettavasti tunnistettu."
 msgid "Important"
 msgstr "Tärkeää"
 
-msgid "You were logged out due to inactivity. Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
-msgstr "Sinut kirjattiin ulos toimettomuuden vuoksi. Napsauta <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>Uusi identiteetti</b> -painiketta Tor-selaimen työkalupalkista, ennen kuin jatkat. Tämä tyhjentää Tor-selaimen käyttötiedot tältä laitteelta."
+msgid "You have been logged out due to inactivity or a problem with your session. Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
+msgstr "Sinut on kirjattu ulos käyttämättömyyden tai istunnon ongelman vuoksi. Napsauta <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>Uusi identiteetti</b> -painiketta Tor Browser -työkalurivillä ennen kuin jatkat. Tämä tyhjentää Tor Browser -toimintatietosi tältä laitteelta."
 
 msgid "Protecting Journalists and Sources"
 msgstr "Suojaa journalisteja ja lähteitä"
 
 msgid "Skip to notification"
 msgstr "Siirry ilmoitukseen"
+
+msgid "Return to Submission Page"
+msgstr "Palaa lähetyssivulle"
+
+msgid "Return to Home Page"
+msgstr "Palaa kotisivulle"
 
 msgid "We're sorry, our SecureDrop is currently offline."
 msgstr "Valitettavasti tämä SecureDrop ei palvele juuri tällä hetkellä."
@@ -834,10 +852,10 @@ msgid "Server error"
 msgstr "Palvelinvirhe"
 
 msgid "Sorry, the website encountered an error and was unable to complete your request."
-msgstr "Verkkosivusto kohtasi virheen, eikä voinut suorittaa pyyntöäsi."
+msgstr "Verkkosivulla tapahtui virhe eikä pyyntöäsi voitu suorittaa."
 
 msgid "Look up a codename..."
-msgstr "Etsi koodinimi..."
+msgstr "Etsi koodinimellä..."
 
 msgid "Powered by"
 msgstr "Palvelun tarjoaa"
@@ -863,8 +881,8 @@ msgstr "<strong>Pidä se omana salaisuutenasi.</strong> Älä jaa sitä kenenkä
 msgid "<strong>Keep it safe.</strong> There is no account recovery option."
 msgstr "<strong>Pidä se turvassa.</strong> Tiliä ei ole mahdollista palauttaa."
 
-msgid "Continue"
-msgstr "Jatka"
+msgid "Continue to Submission Page"
+msgstr "Jatka lähetyssivulle"
 
 msgid "Welcome"
 msgstr "Tervetuloa"
@@ -890,8 +908,8 @@ msgstr "<a href=\"/\" aria-label=\"Seuraa näitä ohjeita ja päivitä sitten si
 msgid "<strong>It is recommended to use Tor Browser to access SecureDrop:</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
 msgstr "<strong>Tor-selaimen käyttö on erittäin suositeltavaa, kun käytät SecureDropia:</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Lue asennusohjeet</a>, tai jätä tämä varoitus huomioimatta ja jatka."
 
-msgid "<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop version.</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
-msgstr "<strong>SecureDropin käyttämiseksi on suositeltavaa käyttää Tor-selaimen työpöytäversiota, sillä Orfox ei tarjoa samaa turvallisuuden tasoa ja anonymiteettiä kuin työpöytäversio.</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Lue asennusohjeet</a>, tai ohita tämä varoitus ja jatka."
+msgid "<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop version.</strong> <a class=\"recommend-tor\" aria-label=\"Learn how to install Tor Browser\" href=\"{tor_browser_url}\" >Learn how to install it</a>, or ignore this warning to continue."
+msgstr "<strong>On suositeltavaa käyttää Tor-selaimen työpöytäversiota SecureDropin käyttämiseen, koska Orfox ei tarjoa samaa suojaustasoa ja nimettömyyttä kuin työpöytäversio.</strong><a class=\"recommend-tor\" aria-label=\"Learn how to install Tor Browser\" href=\"{tor_browser_url}\" >, tai jätä tämä varoitus huomioimatta jatkaaksesi."
 
 msgid "{} logo"
 msgstr "Organisaation {} logo"
@@ -902,8 +920,8 @@ msgstr "Ensimmäinen lähetys"
 msgid "First time submitting to our SecureDrop? Start here."
 msgstr "Jos tämä on ensimmäinen kerta kun lähetät tiedostoja journalisteille, aloita tästä."
 
-msgid "Get Started"
-msgstr "Aloitetaan"
+msgid "Get Started With Your First Submission"
+msgstr "Aloita ensimmäisellä lähetykselläsi"
 
 msgid "GET STARTED"
 msgstr "ALOITA"
@@ -914,6 +932,9 @@ msgstr "Paluuvierailu"
 msgid "Already have a codename? Check for replies or submit something new."
 msgstr "Onko sinulla jo koodinimi? Tarkista vastaukset, tai lähetä jotain uutta."
 
+msgid "Log In Using Your Codename"
+msgstr "Kirjaudu sisään koodinimelläsi"
+
 msgid "Log in"
 msgstr "Kirjaudu sisään"
 
@@ -923,11 +944,17 @@ msgstr "Anna koodinimi"
 msgid "Enter your codename"
 msgstr "Anna koodinimesi"
 
+msgid "Cancel and Return to Previous Page"
+msgstr "Peruuta ja palaa edelliselle sivulle"
+
 msgid "CANCEL"
 msgstr "PERUUTA"
 
 msgid "Additional Action Required"
 msgstr "Lisätoimenpiteitä tarvitaan"
+
+msgid "Log Back In"
+msgstr "Kirjaudu takaisin sisään"
 
 msgid "One more thing..."
 msgstr "Yksi asia vielä..."
@@ -962,8 +989,11 @@ msgstr "Jos lähetät pelkän viestin, siinä tulee olla vähintään {} merkki�
 msgid "Anti-spam check. Do not fill this in!"
 msgstr "Roskapostin tarkistus. Älä täytä tätä kenttää!"
 
-msgid "Submit"
-msgstr "Lähetä"
+msgid "Cancel and Clear Uploaded Content"
+msgstr "Peruuta ja tyhjennä ladattu sisältö"
+
+msgid "Submit Uploaded Content"
+msgstr "Lähetä ladattu sisältö"
 
 msgid "Read Replies"
 msgstr "Lue vastauksia"
@@ -976,6 +1006,9 @@ msgstr "Poista tämä vastaus"
 
 msgid "Delete reply from {timestamp}?"
 msgstr "Poistetaanko vastaus ajankohdalta {timestamp}?"
+
+msgid "Delete Reply"
+msgstr "Poista vastaus"
 
 msgid "Delete All Replies"
 msgstr "Poista kaikki vastaukset"
@@ -999,7 +1032,7 @@ msgid "Sorry, we couldn't locate what you requested."
 msgstr "Valitettavasti emme löytäneet etsimääsi."
 
 msgid "Warning: Proxy Detected"
-msgstr ""
+msgstr "Varoitus: Välityspalvelin havaittu"
 
 msgid "Proxy Service Detected"
 msgstr "Välityspalvelin havaittu"
@@ -1020,7 +1053,7 @@ msgid "If there is a reasonable risk of your Internet traffic being monitored, c
 msgstr "Jos koet mahdolliseksi, että Internet-liikennettäsi tarkkaillaan, pyri muodostamaan yhteys eri sijainnista ja/tai verkosta."
 
 msgid "You Should Use Tor Browser"
-msgstr "Sinun tulisi käyttää Tor-selainta"
+msgstr "Sinun tulisi käyttää Tor Browser -selainta"
 
 msgid "If you are not using Tor Browser, you <strong>may not be anonymous</strong>."
 msgstr "Jos et käytä Tor Browser -selainta, <strong>nimettömyytesi ei ole taattu</strong>."
@@ -1029,7 +1062,7 @@ msgid "If you want to submit information to SecureDrop, we <strong>strongly advi
 msgstr "Jos haluat jakaa tietoa SecureDropin kautta, suosittelemme <strong>vahvasti</strong> että lataat Tor Browser -selaimen ja käytät sitä tavoittaaksesi sivustomme turvallisesti ja anonyymisti."
 
 msgid "Copy and paste the following address into your browser and follow the instructions to download and install Tor Browser:"
-msgstr "Kopioi ja liitä seuraava osoite selaimeesi ja asenna Tor-selain seuraamalla ohjeita:"
+msgstr "Kopioi ja liitä seuraava osoite selaimeesi ja seuraa ohjeita ladataksesi ja asentaaksesi Tor Browser -selaimen:"
 
 msgid "If there is a chance that downloading Tor Browser raises suspicion and your mail provider is less likely to be monitored, you can send a mail to <kbd>gettor@torproject.org</kbd> and a bot will answer with instructions."
 msgstr "Jos mahdollista, että Tor-selaimen lataaminen herättää epäilyksiä, ja sähköpostipalveluasi tarkkaillaan pienemmällä todennäköisyydellä, voit lähettää sähköpostia <kbd>gettor@torproject.org</kbd> ja saat vastauksena ohjeistuksen, kuinka menetellä."
@@ -1039,6 +1072,9 @@ msgstr "Muista, koodinimesi on:"
 
 msgid "Codename"
 msgstr "Koodinimi"
+
+msgid "Reveal Codename"
+msgstr "Paljasta koodinimi"
 
 msgid "Show Codename"
 msgstr "Näytä koodinimi"
@@ -1082,6 +1118,27 @@ msgstr "<strong>Tärkeää:</strong> Jos haluat pysyä nimettömänä, <strong>�
 
 msgid "Back to submission page"
 msgstr "Takaisin lähetyssivulle"
+
+#~ msgid "You were logged out due to inactivity. Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
+#~ msgstr "Sinut kirjattiin ulos toimettomuuden vuoksi. Napsauta <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>Uusi identiteetti</b> -painiketta Tor-selaimen työkalupalkista, ennen kuin jatkat. Tämä tyhjentää Tor-selaimen käyttötiedot tältä laitteelta."
+
+#~ msgid "Update instance config"
+#~ msgstr "Päivitä instanssin konfiguraatio"
+
+#~ msgid "Log In"
+#~ msgstr "Kirjaudu"
+
+#~ msgid "Continue"
+#~ msgstr "Jatka"
+
+#~ msgid "<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop version.</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
+#~ msgstr "<strong>SecureDropin käyttämiseksi on suositeltavaa käyttää Tor-selaimen työpöytäversiota, sillä Orfox ei tarjoa samaa turvallisuuden tasoa ja anonymiteettiä kuin työpöytäversio.</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Lue asennusohjeet</a>, tai ohita tämä varoitus ja jatka."
+
+#~ msgid "Get Started"
+#~ msgstr "Aloitetaan"
+
+#~ msgid "Submit"
+#~ msgstr "Lähetä"
 
 #~ msgid "Field must be between 1 and {max_codename_len} character long."
 #~ msgid_plural "Field must be between 1 and {max_codename_len} characters long."

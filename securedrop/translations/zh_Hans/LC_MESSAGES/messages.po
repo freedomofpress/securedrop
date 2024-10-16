@@ -34,8 +34,8 @@ msgstr "无效的用户名"
 msgid "{time} ago"
 msgstr "{time} 之前"
 
-msgid "You have been logged out due to inactivity."
-msgstr "您因过久未活动而被登出。"
+msgid "You have been logged out due to inactivity or a problem with your session."
+msgstr ""
 
 msgid "SecureDrop"
 msgstr "SecureDrop"
@@ -162,6 +162,9 @@ msgstr "未选择要删除的集合"
 msgid "No unread submissions for this source."
 msgstr "该线人无未读内容。"
 
+msgid "You have been logged out due to inactivity."
+msgstr "您因过久未活动而被登出。"
+
 msgid "Account updated."
 msgstr "账号已更新。"
 
@@ -273,6 +276,21 @@ msgstr "前去更改密码"
 msgid "CONTINUE"
 msgstr "继续"
 
+msgid "Enable YubiKey (OATH-HOTP)"
+msgstr "启用 YubiKey（OATH-HOTP）"
+
+msgid "Once you have configured your YubiKey, enter the 6-digit verification code below:"
+msgstr "当您配置好 YubiKey 后，请输入下方的 6 位验证码："
+
+msgid "Verification code"
+msgstr "验证码"
+
+msgid "Submit verification code"
+msgstr "提交验证码"
+
+msgid "SUBMIT"
+msgstr "提交"
+
 msgid "Enable FreeOTP"
 msgstr "启用 FreeOTP"
 
@@ -296,21 +314,6 @@ msgstr "无法扫描二维码？您可手动输入下列两步验证密钥以将
 
 msgid "Once you have paired FreeOTP with this account, enter the 6-digit verification code below:"
 msgstr "当你配对此账户至 FreeOTP 后，请输入下方的 6 位验证码："
-
-msgid "Enable YubiKey (OATH-HOTP)"
-msgstr "启用 YubiKey（OATH-HOTP）"
-
-msgid "Once you have configured your YubiKey, enter the 6-digit verification code below:"
-msgstr "当您配置好 YubiKey 后，请输入下方的 6 位验证码："
-
-msgid "Verification code"
-msgstr "验证码"
-
-msgid "Submit verification code"
-msgstr "提交验证码"
-
-msgid "SUBMIT"
-msgstr "提交"
 
 msgid "Admin Interface"
 msgstr "管理员界面"
@@ -360,8 +363,8 @@ msgstr "删除"
 msgid "No users to display"
 msgstr "无用户可显示"
 
-msgid "Update instance config"
-msgstr "更新实例配置"
+msgid "Update instance configuration"
+msgstr ""
 
 msgid "INSTANCE CONFIG"
 msgstr "实例配置"
@@ -399,14 +402,14 @@ msgstr "更改 HOTP 密码"
 msgid "Enter a new HOTP secret formatted as a 40-digit hexadecimal string. Spaces will be ignored:"
 msgstr "输入新的 HOTP 密码，格式为40位十六进制数，空格会被忽略："
 
+msgid "Once you have configured your YubiKey, enter the 6-digit code below:"
+msgstr "当你配置好 YubiKey 后，输入下面的 6 位口令："
+
 msgid "You're almost done! To finish adding this new user, have them follow the instructions below to set up two-factor authentication with FreeOTP. Once they've added an entry for this account in the app, have them enter one of the 6-digit codes from the app to confirm that two-factor authentication is set up correctly."
 msgstr "就快完成了！要完成新用户的添加，请让他们按照下面的说明去设置 FreeOTP 双重验证。在他们添加账号到 app 里后，让他们输入应用中其中一个 6 位密码，以确认双重验证正确设置了。"
 
 msgid "Can't scan the barcode? You can manually pair FreeOTP with this account by entering the following two-factor secret into the app:"
 msgstr "无法扫描二维码？您可手动输入下列两步验证密钥以将您的账户关联至 FreeOTP:"
-
-msgid "Once you have configured your YubiKey, enter the 6-digit code below:"
-msgstr "当你配置好 YubiKey 后，输入下面的 6 位口令："
 
 msgid "Navigation"
 msgstr "导航"
@@ -423,6 +426,9 @@ msgstr "管理员"
 msgid "Log Out"
 msgstr "登出"
 
+msgid "Return to All Sources"
+msgstr ""
+
 msgid "Powered by <b>SecureDrop {version}</b>."
 msgstr "由 <b>SecureDrop {version}</b> 提供支持。"
 
@@ -435,8 +441,14 @@ msgstr "所有线人"
 msgid "All messages, files, and replies from sources are stored as encrypted files for security. To read them, you will need to decrypt them on your Secure Viewing Station."
 msgstr "安全起见，线人的所有消息、文件和回复都经过加密存储。如果想要阅读，必须在脱机安全机上解密。"
 
+msgid "Download Selected Files"
+msgstr ""
+
 msgid "Download Selected"
 msgstr "下载所选的部分"
+
+msgid "Delete Selected Files"
+msgstr ""
 
 msgid "Delete Selected"
 msgstr "删除所选的部分"
@@ -665,14 +677,26 @@ msgstr "重置安全密钥凭证"
 msgid "Reset Security Key Credentials"
 msgstr "重置安全密钥凭证"
 
+msgid "Download Selected Unread Submissions"
+msgstr ""
+
 msgid "Download Unread"
 msgstr "下载未读项"
+
+msgid "Download Selected Submissions"
+msgstr ""
 
 msgid "Download"
 msgstr "下载"
 
+msgid "Star Selected Submissions"
+msgstr ""
+
 msgid "Star"
 msgstr "标星"
+
+msgid "Un-star Selected Submissions"
+msgstr ""
 
 msgid "Un-star"
 msgstr "去星"
@@ -725,8 +749,8 @@ msgstr "密码"
 msgid "Show password"
 msgstr "显示密码"
 
-msgid "Log In"
-msgstr "登录"
+msgid "Log In to Journalist Interface"
+msgstr ""
 
 msgid "LOG IN"
 msgstr "登录"
@@ -801,14 +825,20 @@ msgstr "很抱歉，此代号无效。"
 msgid "Important"
 msgstr "重中之重"
 
-msgid "You were logged out due to inactivity. Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
-msgstr "您因为长时间无操作而被注销。再继续操作前，点击 Tor 浏览器工具栏上的<img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>新身份</b>按钮。这能清除此设备上 Tor 浏览器的活动记录。"
+msgid "You have been logged out due to inactivity or a problem with your session. Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
+msgstr ""
 
 msgid "Protecting Journalists and Sources"
 msgstr "庇护记者及线人"
 
 msgid "Skip to notification"
 msgstr "跳至通知"
+
+msgid "Return to Submission Page"
+msgstr ""
+
+msgid "Return to Home Page"
+msgstr ""
 
 msgid "We're sorry, our SecureDrop is currently offline."
 msgstr "抱歉，SecureDrop目前不可用。"
@@ -852,8 +882,8 @@ msgstr "<strong>妥善保管</strong>，不要向他人透露。"
 msgid "<strong>Keep it safe.</strong> There is no account recovery option."
 msgstr "<strong>请妥善保管</strong>，无法找回代号。"
 
-msgid "Continue"
-msgstr "继续"
+msgid "Continue to Submission Page"
+msgstr ""
 
 msgid "Welcome"
 msgstr "欢迎"
@@ -879,8 +909,8 @@ msgstr "<a href=\"/\" aria-label=\"根据指引操作后刷新页面\">刷新此
 msgid "<strong>It is recommended to use Tor Browser to access SecureDrop:</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
 msgstr "<strong>我们推荐您搭配 Tor 浏览器访问 SecureDrop：</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">了解如何安装</a>，您也可以忽略此警告继续访问。"
 
-msgid "<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop version.</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
-msgstr "<strong>我们推荐您使用桌面版 Tor 浏览器访问 SecureDrop，Orfox 相对桌面版而言无法提供相同水准的安全性和匿名性。</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">了解如何安装</a>，您也可以忽略此警告继续访问。"
+msgid "<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop version.</strong> <a class=\"recommend-tor\" aria-label=\"Learn how to install Tor Browser\" href=\"{tor_browser_url}\" >Learn how to install it</a>, or ignore this warning to continue."
+msgstr ""
 
 msgid "{} logo"
 msgstr "{} 图标"
@@ -891,8 +921,8 @@ msgstr "首次提交"
 msgid "First time submitting to our SecureDrop? Start here."
 msgstr "首次提交至我们的 SecureDrop？从此开始。"
 
-msgid "Get Started"
-msgstr "从这里开始"
+msgid "Get Started With Your First Submission"
+msgstr ""
 
 msgid "GET STARTED"
 msgstr "开始入门"
@@ -903,6 +933,9 @@ msgstr "回到访问"
 msgid "Already have a codename? Check for replies or submit something new."
 msgstr "已有代码？查看回复或提交新内容。"
 
+msgid "Log In Using Your Codename"
+msgstr ""
+
 msgid "Log in"
 msgstr "登录"
 
@@ -912,11 +945,17 @@ msgstr "输入代码"
 msgid "Enter your codename"
 msgstr "输入您的代号"
 
+msgid "Cancel and Return to Previous Page"
+msgstr ""
+
 msgid "CANCEL"
 msgstr "取消"
 
 msgid "Additional Action Required"
 msgstr "需要其他操作"
+
+msgid "Log Back In"
+msgstr ""
 
 msgid "One more thing..."
 msgstr "还有一件事..."
@@ -951,8 +990,11 @@ msgstr "纯文本消息需要至少 {} 个字符。"
 msgid "Anti-spam check. Do not fill this in!"
 msgstr "人机验证：请勿填写此文本框！"
 
-msgid "Submit"
-msgstr "提交"
+msgid "Cancel and Clear Uploaded Content"
+msgstr ""
+
+msgid "Submit Uploaded Content"
+msgstr ""
 
 msgid "Read Replies"
 msgstr "阅读回复"
@@ -965,6 +1007,9 @@ msgstr "是否删除此回复"
 
 msgid "Delete reply from {timestamp}?"
 msgstr "删除 {timestamp} 的回复？"
+
+msgid "Delete Reply"
+msgstr ""
 
 msgid "Delete All Replies"
 msgstr "删除所有回复"
@@ -1029,6 +1074,9 @@ msgstr "请牢记您的代号："
 msgid "Codename"
 msgstr "代号"
 
+msgid "Reveal Codename"
+msgstr ""
+
 msgid "Show Codename"
 msgstr "显示代号"
 
@@ -1071,6 +1119,27 @@ msgstr "<strong>重要提示：</strong>若您想保持匿名身份，<strong>�
 
 msgid "Back to submission page"
 msgstr "返回提交页面"
+
+#~ msgid "You were logged out due to inactivity. Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
+#~ msgstr "您因为长时间无操作而被注销。再继续操作前，点击 Tor 浏览器工具栏上的<img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>新身份</b>按钮。这能清除此设备上 Tor 浏览器的活动记录。"
+
+#~ msgid "Update instance config"
+#~ msgstr "更新实例配置"
+
+#~ msgid "Log In"
+#~ msgstr "登录"
+
+#~ msgid "Continue"
+#~ msgstr "继续"
+
+#~ msgid "<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop version.</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
+#~ msgstr "<strong>我们推荐您使用桌面版 Tor 浏览器访问 SecureDrop，Orfox 相对桌面版而言无法提供相同水准的安全性和匿名性。</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">了解如何安装</a>，您也可以忽略此警告继续访问。"
+
+#~ msgid "Get Started"
+#~ msgstr "从这里开始"
+
+#~ msgid "Submit"
+#~ msgstr "提交"
 
 #~ msgid "Field must be between 1 and {max_codename_len} character long."
 #~ msgid_plural "Field must be between 1 and {max_codename_len} characters long."

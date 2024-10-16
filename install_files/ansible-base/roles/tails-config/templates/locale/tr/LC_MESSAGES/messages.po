@@ -4,39 +4,28 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 msgid ""
-msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2023-11-06 02:30+0000\n"
-"Last-Translator: Erdoğan Yağız Şahin <erdy@protonmail.ch>\n"
-"Language-Team: Turkish <https://weblate.securedrop.org/projects/securedrop/desktop/tr/>\n"
-"Language: tr\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.18.2\n"
+msgstr "Project-Id-Version: PACKAGE VERSION\nReport-Msgid-Bugs-To: securedrop@freedom.press\nPO-Revision-Date: 2024-03-29 03:30+0000\nLast-Translator: Erdoğan Yağız Şahin <erdy@protonmail.ch>\nLanguage-Team: Turkish <https://weblate.securedrop.org/projects/securedrop/desktop/tr/>\nLanguage: tr\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=2; plural=n != 1;\nX-Generator: Weblate 5.3.1\n"
 
 msgid "Check for SecureDrop Updates"
-msgstr "SecureDrop Güncellemelerini Kontrol Edin"
+msgstr "SecureDrop Güncellemelerini Kontrol Et"
 
 msgid "Launch Journalist Interface"
-msgstr "Gazeteci Arayüzüne Giriş Yap"
+msgstr "Gazeteci Arayüzünü Başlat"
 
 msgid "Launch Source Interface"
-msgstr "Kaynak Arayüzüne Giriş Yap"
+msgstr "Kaynak Arayüzünü Başlat"
 
 msgid "Open File Browser"
 msgstr "Dosya Tarayıcısını Aç"
 
 msgid "Open KeePassXC Password Vault"
-msgstr "KeePassXC Şifrelerini Gör"
+msgstr "KeePassXC Parola Yöneticisini Aç"
 
 msgid "SSH into the App Server"
-msgstr "Uygulama Sunucusunda SSH"
+msgstr "Uygulama Sunucusuna SSH bağlantısı kur"
 
 msgid "SSH into the Monitor Server"
-msgstr "Görüntüleme Sunucusunda SSH"
+msgstr "Gözetim Sunucusuna SSH bağlantısı kur"
 
 #. Name
 msgid "SecureDrop Journalist Interface"
