@@ -26,7 +26,7 @@ pylint>=3
 # pyenchant is via pylint[spelling]
 pyenchant>=3.2.1
 pynacl>=1.4.0
-pytest>=7.2.0
+pytest>=7.4.4,<8
 pytest-xdist>=3.0.2
 python-vagrant
 pyyaml>=6.0.1
