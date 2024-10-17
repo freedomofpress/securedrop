@@ -1,3 +1,9 @@
+securedrop (2.10.1+focal) focal; urgency=medium
+
+  * see changelog.md
+
+ -- SecureDrop Team <securedrop@freedom.press>  Thu, 17 Oct 2024 12:04:45 -0700
+
 securedrop (2.10.0+focal) focal; urgency=medium
 
   * see changelog.md
