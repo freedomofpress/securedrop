@@ -4,6 +4,7 @@
 * Czech (``cs``)
 * German (``de_DE``)
 * Greek (``el``)
+* English (``en_US``)
 * Spanish (``es_ES``)
 * French (``fr_FR``)
 * Hindi (``hi``)

@@ -20,6 +20,9 @@
       "name": "Greek",
       "desktop": "el"
     },
+    "en_US": {
+      "name": "English"
+    },
     "es_ES": {
       "name": "Spanish",
       "desktop": "es_ES"

@@ -35,6 +35,14 @@ class JournalistAppNavigator:
         self.driver = web_driver
         self.accept_languages = accept_languages
 
+    def got_expected_language(self, locale: str) -> None:
+        expected = locale.replace("_", "-")
+
+        html = self.nav_helper.wait_for(lambda: self.driver.find_element(By.TAG_NAME, "html"))
+        actual = html.get_attribute("lang")
+
+        assert actual == expected
+
     def is_on_journalist_homepage(self) -> WebElement:
         return self.nav_helper.wait_for(
             lambda: self.driver.find_element(By.CSS_SELECTOR, "div.journalist-view-all")

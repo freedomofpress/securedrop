@@ -17,20 +17,19 @@
 #
 import pytest
 from tests.functional.app_navigators.journalist_app_nav import JournalistAppNavigator
-from tests.functional.pageslayout.utils import list_locales, save_static_data
+from tests.functional.pageslayout.utils import save_static_data
 
 
-@pytest.mark.parametrize("locale", list_locales())
 @pytest.mark.pagelayout
 class TestJournalistLayoutDelete:
-    def test_delete_none(self, locale, sd_servers_with_submitted_file, firefox_web_driver):
+    def test_delete_none(self, sd_servers_with_submitted_file, firefox_web_driver):
         # Given an SD server with a file submitted by a source
         # And a journalist logged into the journalist interface
-        locale_with_commas = locale.replace("_", "-")
+        locale = firefox_web_driver.locale
         journ_app_nav = JournalistAppNavigator(
             journalist_app_base_url=sd_servers_with_submitted_file.journalist_app_base_url,
             web_driver=firefox_web_driver,
-            accept_languages=locale_with_commas,
+            accept_languages=locale,
         )
         journ_app_nav.journalist_logs_in(
             username=sd_servers_with_submitted_file.journalist_username,
@@ -46,16 +45,14 @@ class TestJournalistLayoutDelete:
         journ_app_nav.journalist_confirm_delete_selected()
         save_static_data(journ_app_nav.driver, locale, "journalist-delete_none")
 
-    def test_delete_one_confirmation(
-        self, locale, sd_servers_with_submitted_file, firefox_web_driver
-    ):
+    def test_delete_one_confirmation(self, sd_servers_with_submitted_file, firefox_web_driver):
         # Given an SD server with a file submitted by a source
         # And a journalist logged into the journalist interface
-        locale_with_commas = locale.replace("_", "-")
+        locale = firefox_web_driver.locale
         journ_app_nav = JournalistAppNavigator(
             journalist_app_base_url=sd_servers_with_submitted_file.journalist_app_base_url,
             web_driver=firefox_web_driver,
-            accept_languages=locale_with_commas,
+            accept_languages=locale,
         )
         journ_app_nav.journalist_logs_in(
             username=sd_servers_with_submitted_file.journalist_username,
@@ -73,16 +70,14 @@ class TestJournalistLayoutDelete:
         journ_app_nav.journalist_clicks_delete_selected_link()
         save_static_data(journ_app_nav.driver, locale, "journalist-delete_one_confirmation")
 
-    def test_delete_all_confirmation(
-        self, locale, sd_servers_with_submitted_file, firefox_web_driver
-    ):
+    def test_delete_all_confirmation(self, sd_servers_with_submitted_file, firefox_web_driver):
         # Given an SD server with a file submitted by a source
         # And a journalist logged into the journalist interface
-        locale_with_commas = locale.replace("_", "-")
+        locale = firefox_web_driver.locale
         journ_app_nav = JournalistAppNavigator(
             journalist_app_base_url=sd_servers_with_submitted_file.journalist_app_base_url,
             web_driver=firefox_web_driver,
-            accept_languages=locale_with_commas,
+            accept_languages=locale,
         )
         journ_app_nav.journalist_logs_in(
             username=sd_servers_with_submitted_file.journalist_username,
@@ -97,14 +92,14 @@ class TestJournalistLayoutDelete:
         journ_app_nav.journalist_clicks_delete_all_and_sees_confirmation()
         save_static_data(journ_app_nav.driver, locale, "journalist-delete_all_confirmation")
 
-    def test_delete_one(self, locale, sd_servers_with_submitted_file, firefox_web_driver):
+    def test_delete_one(self, sd_servers_with_submitted_file, firefox_web_driver):
         # Given an SD server with a file submitted by a source
         # And a journalist logged into the journalist interface
-        locale_with_commas = locale.replace("_", "-")
+        locale = firefox_web_driver.locale
         journ_app_nav = JournalistAppNavigator(
             journalist_app_base_url=sd_servers_with_submitted_file.journalist_app_base_url,
             web_driver=firefox_web_driver,
-            accept_languages=locale_with_commas,
+            accept_languages=locale,
         )
         journ_app_nav.journalist_logs_in(
             username=sd_servers_with_submitted_file.journalist_username,
@@ -124,14 +119,14 @@ class TestJournalistLayoutDelete:
         # Take a screenshot
         save_static_data(journ_app_nav.driver, locale, "journalist-delete_one")
 
-    def test_delete_all(self, locale, sd_servers_with_submitted_file, firefox_web_driver):
+    def test_delete_all(self, sd_servers_with_submitted_file, firefox_web_driver):
         # Given an SD server with a file submitted by a source
         # And a journalist logged into the journalist interface
-        locale_with_commas = locale.replace("_", "-")
+        locale = firefox_web_driver.locale
         journ_app_nav = JournalistAppNavigator(
             journalist_app_base_url=sd_servers_with_submitted_file.journalist_app_base_url,
             web_driver=firefox_web_driver,
-            accept_languages=locale_with_commas,
+            accept_languages=locale,
         )
         journ_app_nav.journalist_logs_in(
             username=sd_servers_with_submitted_file.journalist_username,

@@ -112,6 +112,10 @@ def _create_firefox_driver(
     if not firefox_driver:
         raise Exception("Could not create Firefox web driver")
 
+    # Add this attribute to the returned driver object so that tests using this
+    # fixture can know what locale it's parameterized with.
+    firefox_driver.locale = accept_languages or "en_US"  # type: ignore[attr-defined]
+
     return firefox_driver
 
 

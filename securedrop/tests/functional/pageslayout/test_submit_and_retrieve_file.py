@@ -3,21 +3,20 @@ from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
 from tests.functional.app_navigators.journalist_app_nav import JournalistAppNavigator
 from tests.functional.app_navigators.source_app_nav import SourceAppNavigator
-from tests.functional.pageslayout.utils import list_locales, save_static_data
+from tests.functional.pageslayout.utils import save_static_data
 
 
-@pytest.mark.parametrize("locale", list_locales())
 @pytest.mark.pagelayout
 class TestSubmitAndRetrieveFile:
     def test_submit_and_retrieve_happy_path(
-        self, locale, sd_servers_with_clean_state, tor_browser_web_driver, firefox_web_driver
+        self, sd_servers_with_clean_state, tor_browser_web_driver, firefox_web_driver
     ):
         # Given a source user accessing the app from their browser
-        locale_with_commas = locale.replace("_", "-")
+        locale = firefox_web_driver.locale
         source_app_nav = SourceAppNavigator(
             source_app_base_url=sd_servers_with_clean_state.source_app_base_url,
             web_driver=tor_browser_web_driver,
-            accept_languages=locale_with_commas,
+            accept_languages=locale,
         )
 
         # And they created an account

@@ -24,7 +24,7 @@ from sdconfig import SecureDropConfig
 from tests.factories import SecureDropConfigFactory
 from tests.functional.app_navigators.journalist_app_nav import JournalistAppNavigator
 from tests.functional.conftest import SdServersFixtureResult, spawn_sd_servers
-from tests.functional.pageslayout.utils import list_locales, save_static_data
+from tests.functional.pageslayout.utils import save_static_data
 
 
 def _create_source_and_submission_and_delete_source_key(config_in_use: SecureDropConfig) -> None:
@@ -63,19 +63,18 @@ def sd_servers_with_deleted_source_key(
         yield sd_servers_result
 
 
-@pytest.mark.parametrize("locale", list_locales())
 @pytest.mark.pagelayout
 class TestJournalistLayoutCol:
     def test_col_with_and_without_documents(
-        self, locale, sd_servers_with_submitted_file, firefox_web_driver
+        self, sd_servers_with_submitted_file, firefox_web_driver
     ):
         # Given an SD server with an already-submitted file
         # And a journalist logging into the journalist interface
-        locale_with_commas = locale.replace("_", "-")
+        locale = firefox_web_driver.locale
         journ_app_nav = JournalistAppNavigator(
             journalist_app_base_url=sd_servers_with_submitted_file.journalist_app_base_url,
             web_driver=firefox_web_driver,
-            accept_languages=locale_with_commas,
+            accept_languages=locale,
         )
         journ_app_nav.journalist_logs_in(
             username=sd_servers_with_submitted_file.journalist_username,
@@ -105,14 +104,14 @@ class TestJournalistLayoutCol:
         journ_app_nav.nav_helper.wait_for(submission_deleted)
         save_static_data(journ_app_nav.driver, locale, "journalist-col_no_document")
 
-    def test_col_has_no_key(self, locale, sd_servers_with_deleted_source_key, firefox_web_driver):
+    def test_col_has_no_key(self, sd_servers_with_deleted_source_key, firefox_web_driver):
         # Given an SD server with an already-submitted file, but the source's key was deleted
         # And a journalist logging into the journalist interface
-        locale_with_commas = locale.replace("_", "-")
+        locale = firefox_web_driver.locale
         journ_app_nav = JournalistAppNavigator(
             journalist_app_base_url=sd_servers_with_deleted_source_key.journalist_app_base_url,
             web_driver=firefox_web_driver,
-            accept_languages=locale_with_commas,
+            accept_languages=locale,
         )
         journ_app_nav.journalist_logs_in(
             username=sd_servers_with_deleted_source_key.journalist_username,

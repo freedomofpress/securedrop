@@ -27,7 +27,6 @@ with open('securedrop/config.py', 'w') as f:
     text += '\n'
     supported_locales = subprocess.check_output(['make', '--quiet', 'supported-locales']).decode().strip()
     text += f'SUPPORTED_LOCALES = {supported_locales}\n'
-    text += 'SUPPORTED_LOCALES.append("en_US")\n'
     f.write(text)
 
 with open('securedrop/rq_config.py', 'w') as f:
