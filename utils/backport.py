@@ -24,7 +24,7 @@ title = json.loads(
 )["title"]
 commits = json.loads(
     subprocess.check_output(
-        ["gh", "api", f"repos/{{owner}}/{{repo}}/pulls/{args.pr}/commits"], text=True
+        ["gh", "api", "--paginate", f"repos/{{owner}}/{{repo}}/pulls/{args.pr}/commits"], text=True
     )
 )
 
