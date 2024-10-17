@@ -16,6 +16,7 @@ parser = argparse.ArgumentParser(description="Backport a PR")
 parser.add_argument("pr", type=int, help="the # of the PR to backport")
 parser.add_argument("version", help="the release version to target with the backport")
 parser.add_argument("remote", default="origin", help="the git remote to use (defaults to origin)")
+parser.add_argument("--skip", default=[], action="append", help="don't cherry-pick these commits")
 args = parser.parse_args()
 
 title = json.loads(
@@ -26,13 +27,21 @@ commits = json.loads(
         ["gh", "api", f"repos/{{owner}}/{{repo}}/pulls/{args.pr}/commits"], text=True
     )
 )
-print(f'Backporting {len(commits)} commits from "{title}"')
+
+# NB. It's tempting to do something like `set(commit_hashes) -= set(args.skip)`
+# here, but we must preserve the order of commits, and it's not worth pulling
+# in an ordered-set implementation just for this.
+commit_hashes = [commit["sha"] for commit in commits]
+for skip_hash in args.skip:
+    commit_hashes.remove(skip_hash)
+
+print(f'Backporting {len(commit_hashes)}/{len(commits)} commits from "{title}"')
 branch = f"backport-{args.pr}"
 base = f"release/{args.version}"
 remote = args.remote
 subprocess.check_call(["git", "fetch", remote])
 subprocess.check_call(["git", "checkout", "-b", branch, f"{remote}/{base}"])
-subprocess.check_call(["git", "cherry-pick", "-x"] + [commit["sha"] for commit in commits])
+subprocess.check_call(["git", "cherry-pick", "-x"] + commit_hashes)
 if input("OK to push and create PR? [y/N]").lower() != "y":
     sys.exit()
 subprocess.check_call(["git", "push", "-u", remote, branch])
