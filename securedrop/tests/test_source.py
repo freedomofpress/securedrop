@@ -5,7 +5,7 @@ import shutil
 import subprocess
 import time
 from datetime import datetime, timedelta, timezone
-from io import BytesIO, StringIO
+from io import BytesIO
 from pathlib import Path
 from unittest import mock
 from unittest.mock import ANY, patch
@@ -125,9 +125,9 @@ def test_create_new_source(source_app):
         tab_id = next(iter(session["codenames"].keys()))
         resp = app.post(url_for("main.create"), data={"tab_id": tab_id}, follow_redirects=True)
         assert SessionManager.is_user_logged_in(db_session=db.session)
-        session_cookie = utils._session_from_cookiejar(app.cookie_jar, source_app)
+        session_cookie = utils._session_from_cookiejar(app._cookies, source_app)
         # Verify correct `SameSite` value was set on the cookie
-        assert session_cookie.get_nonstandard_attr("SameSite") == "Strict"
+        assert session_cookie.same_site == "Strict"
 
         # should be redirected to /lookup
         text = resp.data.decode("utf-8")
@@ -261,9 +261,9 @@ def test_login_and_logout(source_app):
         assert "Submit Files" in text
         assert SessionManager.is_user_logged_in(db_session=db.session)
 
-        session_cookie = utils._session_from_cookiejar(app.cookie_jar, source_app)
+        session_cookie = utils._session_from_cookiejar(app._cookies, source_app)
         # Verify correct `SameSite` value was set on the cookie
-        assert session_cookie.get_nonstandard_attr("SameSite") == "Strict"
+        assert session_cookie.same_site == "Strict"
 
     with source_app.test_client() as app:
         resp = app.post(url_for("main.login"), data=dict(codename="invalid"), follow_redirects=True)
@@ -477,7 +477,7 @@ def test_submit_message(source_app):
         _dummy_submission(app)
         resp = app.post(
             url_for("main.submit"),
-            data=dict(msg="This is a test.", fh=(StringIO(""), "")),
+            data=dict(msg="This is a test.", fh=(BytesIO(b""), "")),
             follow_redirects=True,
         )
         assert resp.status_code == 200
@@ -489,7 +489,7 @@ def test_submit_empty_message(source_app):
     with source_app.test_client() as app:
         new_codename(app, session)
         resp = app.post(
-            url_for("main.submit"), data=dict(msg="", fh=(StringIO(""), "")), follow_redirects=True
+            url_for("main.submit"), data=dict(msg="", fh=(BytesIO(b""), "")), follow_redirects=True
         )
         assert resp.status_code == 200
         text = resp.data.decode("utf-8")
@@ -505,7 +505,7 @@ def test_submit_big_message(source_app):
         _dummy_submission(app)
         resp = app.post(
             url_for("main.submit"),
-            data=dict(msg="AA" * (1024 * 512), fh=(StringIO(""), "")),
+            data=dict(msg="AA" * (1024 * 512), fh=(BytesIO(b""), "")),
             follow_redirects=True,
         )
         assert resp.status_code == 200
@@ -524,7 +524,7 @@ def test_submit_initial_short_message(source_app):
         new_codename(app, session)
         resp = app.post(
             url_for("main.submit"),
-            data=dict(msg="A" * 5, fh=(StringIO(""), "")),
+            data=dict(msg="A" * 5, fh=(BytesIO(b""), "")),
             follow_redirects=True,
         )
         assert resp.status_code == 200
@@ -533,7 +533,7 @@ def test_submit_initial_short_message(source_app):
         # Now retry with a longer message
         resp = app.post(
             url_for("main.submit"),
-            data=dict(msg="A" * 25, fh=(StringIO(""), "")),
+            data=dict(msg="A" * 25, fh=(BytesIO(b""), "")),
             follow_redirects=True,
         )
         assert resp.status_code == 200
@@ -542,7 +542,7 @@ def test_submit_initial_short_message(source_app):
         # Now send another short message, that should still be accepted since
         # it's no longer the initial one
         resp = app.post(
-            url_for("main.submit"), data=dict(msg="A", fh=(StringIO(""), "")), follow_redirects=True
+            url_for("main.submit"), data=dict(msg="A", fh=(BytesIO(b""), "")), follow_redirects=True
         )
         assert resp.status_code == 200
         text = resp.data.decode("utf-8")
@@ -586,7 +586,7 @@ def test_submit_antispam(source_app):
         _dummy_submission(app)
         resp = app.post(
             url_for("main.submit"),
-            data=dict(msg="Test", fh=(StringIO(""), ""), text="blah"),
+            data=dict(msg="Test", fh=(BytesIO(b""), ""), text="blah"),
             follow_redirects=True,
         )
         assert resp.status_code == 403
@@ -603,7 +603,7 @@ def test_submit_codename_second_login(source_app):
         codename = new_codename(app, session)
         resp = app.post(
             url_for("main.submit"),
-            data=dict(msg=codename, fh=(StringIO(""), "")),
+            data=dict(msg=codename, fh=(BytesIO(b""), "")),
             follow_redirects=True,
         )
         assert resp.status_code == 200
@@ -622,7 +622,7 @@ def test_submit_codename_second_login(source_app):
 
         resp = app.post(
             url_for("main.submit"),
-            data=dict(msg=codename, fh=(StringIO(""), "")),
+            data=dict(msg=codename, fh=(BytesIO(b""), "")),
             follow_redirects=True,
         )
         assert resp.status_code == 200
@@ -641,7 +641,7 @@ def test_submit_codename(source_app):
         codename = new_codename(app, session)
         resp = app.post(
             url_for("main.submit"),
-            data=dict(msg=codename, fh=(StringIO(""), "")),
+            data=dict(msg=codename, fh=(BytesIO(b""), "")),
             follow_redirects=True,
         )
         assert resp.status_code == 200
@@ -652,7 +652,7 @@ def test_submit_codename(source_app):
         # Now resubmit the codename, should be accepted.
         resp = app.post(
             url_for("main.submit"),
-            data=dict(msg=codename, fh=(StringIO(""), "")),
+            data=dict(msg=codename, fh=(BytesIO(b""), "")),
             follow_redirects=True,
         )
         assert resp.status_code == 200
@@ -893,7 +893,7 @@ def test_failed_normalize_timestamps_logs_warning(source_app):
                 _dummy_submission(app)
                 resp = app.post(
                     url_for("main.submit"),
-                    data=dict(msg="This is a test.", fh=(StringIO(""), "")),
+                    data=dict(msg="This is a test.", fh=(BytesIO(b""), "")),
                     follow_redirects=True,
                 )
                 assert resp.status_code == 200
