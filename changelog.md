@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.10.1
+
+* Update translations (#7143, #7259)
+
 ## 2.10.0
 
 This release contains fixes for issues described in the most recent security audit by 7A Security, see
