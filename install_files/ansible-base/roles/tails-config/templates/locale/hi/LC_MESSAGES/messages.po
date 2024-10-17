@@ -4,7 +4,7 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 msgid ""
-msgstr "Project-Id-Version: PACKAGE VERSION\nReport-Msgid-Bugs-To: securedrop@freedom.press\nPO-Revision-Date: 2024-04-01 09:30+0000\nLast-Translator: Shivam Maurya <shivam.maurya22ug@apu.edu.in>\nLanguage-Team: Hindi <https://weblate.securedrop.org/projects/securedrop/desktop/hi/>\nLanguage: hi\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=2; plural=n != 1;\nX-Generator: Weblate 5.3.1\n"
+msgstr "Project-Id-Version: PACKAGE VERSION\nReport-Msgid-Bugs-To: securedrop@freedom.press\nPO-Revision-Date: 2024-10-17 17:02+0000\nLast-Translator: Cory Francis Myers <cory@freedom.press>\nLanguage-Team: Hindi <https://weblate.securedrop.org/projects/securedrop/desktop/hi/>\nLanguage: hi\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=2; plural=n != 1;\nX-Generator: Weblate 5.7.1\n"
 
 msgid "Check for SecureDrop Updates"
 msgstr "SecureDrop के नए अपडेट्स के लिए चेक करे"
@@ -37,4 +37,4 @@ msgstr "SecureDrop स्रोत अंतराफलक"
 
 #. Icon
 msgid "{{ tails_config_securedrop_dotfiles }}/securedrop_icon.png"
-msgstr "सभी क्षेत्रो मे हम एक ही तरह के आइकॉन फाइल प्रयोग करते है"
+msgstr "{{ tails_config_securedrop_dotfiles }}/securedrop_icon.png"
