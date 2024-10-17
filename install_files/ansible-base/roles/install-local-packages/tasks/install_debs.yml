@@ -7,22 +7,8 @@
     dest: /root/
   with_items: "{{ local_deb_packages }}"
 
-# Using a two-pass approach for installing local deb packages.
-# The first pass uses `apt`, which will intelligently resolve dependencies;
-# a useful attribute, particular for the initial provisioning run. On subsequent
-# runs, however, the apt module will skip installation, since the version in
-# the DEBIAN/control file hasn't changed.
+# Install all the packages we just copied using apt, which will resolve
+# dependencies for us. Use --reinstall to forcibly install them even if
+# the version is the same.
 - name: Install locally built deb packages (via apt).
-  apt:
-    deb: /root/{{ item.1 }}
-  ignore_errors: yes
-  with_indexed_items: "{{ local_deb_packages }}"
-
-# Using `dpkg` via `command` to ensure installation ensure installation
-# every time, regardless of whether packages changed. SecureDrop deb package
-# builds are not deterministic, so the `copy` task above will always report
-# changed. Once the `apt` task above has installed the packages, only the
-# `dpkg -i` calls will reinstall, ensuring the latest local code changes are used.
-- name: Install locally built deb packages (via dpkg).
-  command: dpkg -i /root/{{ item }}
-  with_items: "{{ local_deb_packages }}"
+  command: apt-get install --reinstall --yes /root/{{ local_deb_packages | join(' /root/') }}
