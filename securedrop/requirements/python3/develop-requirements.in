@@ -37,7 +37,7 @@ safety>2.2.0
 semgrep>=1.57.0
 setuptools>=70.0.0
 shellcheck-py
-six==1.15.0
+six>=1.16.0
 testinfra>=5.3.1
 translate-toolkit
 urllib3>=1.26.5

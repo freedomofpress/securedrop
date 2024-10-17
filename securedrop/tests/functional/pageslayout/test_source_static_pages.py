@@ -51,6 +51,6 @@ class TestSourceAppStaticPages:
 
         # Then it succeeds and the right information is returned
         returned_data = response.json()
-        assert returned_data["server_os"] == "20.04"
+        assert returned_data["server_os"] in ["20.04", "24.04"]
         assert returned_data["sd_version"] == __version__
         assert returned_data["gpg_fpr"]

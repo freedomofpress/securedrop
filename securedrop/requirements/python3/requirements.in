@@ -1,4 +1,4 @@
-alembic
+alembic>=1.1.0,<1.1.1
 argon2_cffi>=20.1.0
 babel>=2.9.1
 cffi==1.16.0

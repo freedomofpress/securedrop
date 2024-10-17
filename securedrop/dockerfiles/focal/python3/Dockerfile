@@ -1,4 +1,5 @@
-FROM securedrop-slim-focal-py3
+ARG UBUNTU_VERSION=focal
+FROM securedrop-slim-${UBUNTU_VERSION}-py3
 
 RUN apt-get update  && apt-get install -y \
     libgtk2.0 devscripts xvfb x11vnc \
@@ -8,7 +9,7 @@ RUN apt-get update  && apt-get install -y \
     default-jdk \
     # For diffoscope:
     libarchive13 libmagic1 \
-    libasound2 libdbus-glib-1-2 libgtk2.0-0 libfontconfig1 libxrender1 \
+    libasound2-dev libdbus-glib-1-2 libgtk2.0-0 libfontconfig1 libxrender1 \
     libcairo-gobject2 libgtk-3-0 libstartup-notification0 npm && \
     npm install --global html_codesniffer@2.5.1
 
@@ -43,7 +44,7 @@ RUN curl -LO https://archive.mozilla.org/pub/firefox/releases/${FF_VERSION}/linu
     gpgv --keyring ./mozilla.keyring firefox-${FF_VERSION}.tar.bz2.asc firefox-${FF_VERSION}.tar.bz2 && \
     tar xjf firefox-*.tar.bz2 && \
     mv firefox /usr/bin && \
-    rm -f firefox-${FF_VERSION}.tar.bz2.asc firefox-${FF_VERSION}.tar.bz2 
+    rm -f firefox-${FF_VERSION}.tar.bz2.asc firefox-${FF_VERSION}.tar.bz2
 
 # Install geckodriver
 RUN wget https://github.com/mozilla/geckodriver/releases/download/${GECKODRIVER_VERSION}/geckodriver-${GECKODRIVER_VERSION}-linux64.tar.gz && \

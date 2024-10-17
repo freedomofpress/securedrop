@@ -175,17 +175,20 @@ function reset_demo() {
 }
 
 function build_redwood() {
+    source /etc/os-release
     # For the demo, we build the wheel at container build time instead of
     # during launch, so skip this part
     if [[ -z "${SKIP_REDWOOD_BUILD:-}" ]]; then
         # Create a debug build of redwood and install it in the app-code virtualenv
         # TODO: add live reload support
         # We tell cargo to put its registry/crate cache and build cache in the target/ folder so
-        # it persists instead of being recreated from scratch each time the container starts.
+        # it persists instead of being recreated from scratch each time the container starts. The
+        # cache needs to be split across OS versions because it can't tell that it's supposed to
+        # link to a different libssl version.
         # n.b. we can't re-use the host's caches because of permission differences
         PATH="$PATH:/opt/cargo/bin/" \
         CARGO_HOME="${REPOROOT}/target/cargo-dev" \
-            python3 "${REPOROOT}/redwood/build-wheel.py" --redwood "${REPOROOT}/redwood" --target "${REPOROOT}/target/dev"
+            python3 "${REPOROOT}/redwood/build-wheel.py" --redwood "${REPOROOT}/redwood" --target "${REPOROOT}/target/dev-${VERSION_CODENAME}"
         /opt/venvs/securedrop-app-code/bin/pip install "${REPOROOT}"/redwood/redwood-*.whl
     fi
 }
