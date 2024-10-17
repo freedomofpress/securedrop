@@ -51,11 +51,11 @@ def test_session_login(journalist_app, test_journo, redis):
         )
 
         # When checking the local session cookie jar
-        session_cookie = _session_from_cookiejar(app.cookie_jar, journalist_app)
+        session_cookie = _session_from_cookiejar(app._cookies, journalist_app)
         # Then there is a session cookie in it
         assert session_cookie is not None
         # Verify correct `SameSite` value was set on the cookie
-        assert session_cookie.get_nonstandard_attr("SameSite") == "Strict"
+        assert session_cookie.same_site == "Strict"
 
         # Then such cookie is properly signed
         sid = _check_sig(session_cookie.value, journalist_app)
@@ -88,7 +88,7 @@ def test_session_renew(journalist_app, test_journo, redis):
             app, test_journo["username"], test_journo["password"], test_journo["otp_secret"]
         )
         # Then check session existence, signature, and redis payload
-        session_cookie = _session_from_cookiejar(app.cookie_jar, journalist_app)
+        session_cookie = _session_from_cookiejar(app._cookies, journalist_app)
         assert session_cookie is not None
 
         sid = _check_sig(session_cookie.value, journalist_app)
@@ -127,7 +127,7 @@ def test_session_logout(journalist_app, test_journo, redis):
             app, test_journo["username"], test_journo["password"], test_journo["otp_secret"]
         )
         # Then check session as in the previous tests
-        session_cookie = _session_from_cookiejar(app.cookie_jar, journalist_app)
+        session_cookie = _session_from_cookiejar(app._cookies, journalist_app)
         assert session_cookie is not None
 
         sid = _check_sig(session_cookie.value, journalist_app)
@@ -153,7 +153,7 @@ def test_session_admin_change_password_logout(journalist_app, test_journo, test_
         login_journalist(
             app, test_journo["username"], test_journo["password"], test_journo["otp_secret"]
         )
-        session_cookie = _session_from_cookiejar(app.cookie_jar, journalist_app)
+        session_cookie = _session_from_cookiejar(app._cookies, journalist_app)
         assert session_cookie is not None
         # Then save the cookie for later
         cookie_val = session_cookie.value
@@ -206,7 +206,7 @@ def test_session_change_password_logout(journalist_app, test_journo, redis):
             app, test_journo["username"], test_journo["password"], test_journo["otp_secret"]
         )
         # Then check session as the previous tests
-        session_cookie = _session_from_cookiejar(app.cookie_jar, journalist_app)
+        session_cookie = _session_from_cookiejar(app._cookies, journalist_app)
         assert session_cookie is not None
 
         sid = _check_sig(session_cookie.value, journalist_app)
@@ -242,14 +242,14 @@ def test_session_login_regenerate_sid(journalist_app, test_journo):
         assert resp.status_code == 200
 
         # Given a valid unauthenticated session id from the previous request
-        session_cookie_pre_login = _session_from_cookiejar(app.cookie_jar, journalist_app)
+        session_cookie_pre_login = _session_from_cookiejar(app._cookies, journalist_app)
         assert session_cookie_pre_login is not None
 
         # When sending a valid login request using the same client (same cookiejar)
         login_journalist(
             app, test_journo["username"], test_journo["password"], test_journo["otp_secret"]
         )
-        session_cookie_post_login = _session_from_cookiejar(app.cookie_jar, journalist_app)
+        session_cookie_post_login = _session_from_cookiejar(app._cookies, journalist_app)
         # Then the two session ids are different as the session id gets regenerated post login
         assert session_cookie_post_login != session_cookie_pre_login
 
