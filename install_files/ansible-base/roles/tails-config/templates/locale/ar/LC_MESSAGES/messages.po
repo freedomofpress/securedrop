@@ -4,18 +4,7 @@
 # Automatically generated, 2017.
 #
 msgid ""
-msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2023-10-18 01:30+0000\n"
-"Last-Translator: Soufiane Hti <ifreelance.0@gmail.com>\n"
-"Language-Team: Arabic <https://weblate.securedrop.org/projects/securedrop/desktop/ar/>\n"
-"Language: ar\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
-"X-Generator: Weblate 4.18.2\n"
+msgstr "Project-Id-Version: PACKAGE VERSION\nReport-Msgid-Bugs-To: securedrop@freedom.press\nPO-Revision-Date: 2024-10-17 17:02+0000\nLast-Translator: Cory Francis Myers <cory@freedom.press>\nLanguage-Team: Arabic <https://weblate.securedrop.org/projects/securedrop/desktop/ar/>\nLanguage: ar\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\nX-Generator: Weblate 5.7.1\n"
 
 msgid "Check for SecureDrop Updates"
 msgstr "التحقق من وجود تحديثات SecureDrop"
@@ -48,4 +37,4 @@ msgstr "واجهة SecureDrop للمصدر"
 
 #. Icon
 msgid "{{ tails_config_securedrop_dotfiles }}/securedrop_icon.png"
-msgstr "‎{{ tails_config_securedrop_dotfiles }}/securedrop_icon.png"
+msgstr "{{ tails_config_securedrop_dotfiles }}/securedrop_icon.png"
