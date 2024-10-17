@@ -4,39 +4,28 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 msgid ""
-msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2018-03-08 13:50+0000\n"
-"Last-Translator: Muhammad Usman <muhdusman98@gmail.com>\n"
-"Language-Team: Hindi <https://weblate.securedrop.org/projects/securedrop/desktop/hi/>\n"
-"Language: hi\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2.18\n"
+msgstr "Project-Id-Version: PACKAGE VERSION\nReport-Msgid-Bugs-To: securedrop@freedom.press\nPO-Revision-Date: 2024-10-17 17:02+0000\nLast-Translator: Cory Francis Myers <cory@freedom.press>\nLanguage-Team: Hindi <https://weblate.securedrop.org/projects/securedrop/desktop/hi/>\nLanguage: hi\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=2; plural=n != 1;\nX-Generator: Weblate 5.7.1\n"
 
 msgid "Check for SecureDrop Updates"
-msgstr ""
+msgstr "SecureDrop के नए अपडेट्स के लिए चेक करे"
 
 msgid "Launch Journalist Interface"
-msgstr ""
+msgstr "पत्रकार मोड मे जाए"
 
 msgid "Launch Source Interface"
-msgstr ""
+msgstr "स्रोत (सोर्स) मोड मे जाए"
 
 msgid "Open File Browser"
-msgstr ""
+msgstr "फ़ाइल ब्राउज़र खोले"
 
 msgid "Open KeePassXC Password Vault"
-msgstr ""
+msgstr "KeePassXC पासवर्ड वॉल्ट खोले"
 
 msgid "SSH into the App Server"
-msgstr ""
+msgstr "ऐप्प के सर्वर मे एसएसएच भेजे"
 
 msgid "SSH into the Monitor Server"
-msgstr ""
+msgstr "मॉनिटर के सर्वर मे एसएसएच भेजे"
 
 #. Name
 msgid "SecureDrop Journalist Interface"
@@ -48,4 +37,4 @@ msgstr "SecureDrop स्रोत अंतराफलक"
 
 #. Icon
 msgid "{{ tails_config_securedrop_dotfiles }}/securedrop_icon.png"
-msgstr ""
+msgstr "{{ tails_config_securedrop_dotfiles }}/securedrop_icon.png"

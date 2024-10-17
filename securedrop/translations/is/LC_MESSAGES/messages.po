@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SecureDrop 0.12.0~rc1\n"
 "Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2023-11-16 10:30+0000\n"
+"PO-Revision-Date: 2024-09-09 14:32+0000\n"
 "Last-Translator: Sveinn í Felli <sv1@fellsnet.is>\n"
 "Language-Team: Icelandic <https://weblate.securedrop.org/projects/securedrop/securedrop/is/>\n"
 "Language: is\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n % 10 != 1 || n % 100 == 11;\n"
-"X-Generator: Weblate 4.18.2\n"
+"X-Generator: Weblate 5.6.2\n"
 "Generated-By: Babel 2.5.1\n"
 
 msgid "Name too long"
@@ -35,8 +35,8 @@ msgstr "Ógilt notandanafn"
 msgid "{time} ago"
 msgstr "Fyrir {time} síðan"
 
-msgid "You have been logged out due to inactivity."
-msgstr "Þú hefur verið skráð/ur út vegna aðgerðaleysis."
+msgid "You have been logged out due to inactivity or a problem with your session."
+msgstr ""
 
 msgid "SecureDrop"
 msgstr "SecureDrop"
@@ -166,6 +166,9 @@ msgstr "Þú verður að velja eitt eða fleiri atriði til eyðingar"
 msgid "No unread submissions for this source."
 msgstr "Engar ólesnar innsendingar hjá þessum heimildarmanni."
 
+msgid "You have been logged out due to inactivity."
+msgstr "Þú hefur verið skráð/ur út vegna aðgerðaleysis."
+
 msgid "Account updated."
 msgstr "Aðgangur uppfærður."
 
@@ -245,7 +248,7 @@ msgstr[0] "1 ólesið"
 msgstr[1] "{num} ólesin"
 
 msgid "When the account for a source is deleted:"
-msgstr "Þegar notandaaðgangur heimildarmanns er eytt:"
+msgstr "Þegar notandaaðgangi heimildarmanns er eytt:"
 
 msgid "The source will no longer be able to log in with their codename."
 msgstr "Heimildarmaðurinn mun ekki lengur geta skráð sig inn með kóðanafninu sínu."
@@ -283,6 +286,21 @@ msgstr "Haltu áfram til að skipta um leynilykil"
 msgid "CONTINUE"
 msgstr "HALDA ÁFRAM"
 
+msgid "Enable YubiKey (OATH-HOTP)"
+msgstr "Virkja YubiKey (OATH-HOTP)"
+
+msgid "Once you have configured your YubiKey, enter the 6-digit verification code below:"
+msgstr "Þegar þú hefur sett upp YubiKey (dulritunarlykill), settu inn 6-stafa sannvottunarkóðann hér fyrir neðan:"
+
+msgid "Verification code"
+msgstr "Sannvottunarkóði"
+
+msgid "Submit verification code"
+msgstr "Senda inn sannvottunarkóða"
+
+msgid "SUBMIT"
+msgstr "SENDA INN"
+
 msgid "Enable FreeOTP"
 msgstr "Virkja FreeOTP"
 
@@ -306,21 +324,6 @@ msgstr "Nærðu ekki að skanna strikamerkið? Þú getur parað FreeOTP handvir
 
 msgid "Once you have paired FreeOTP with this account, enter the 6-digit verification code below:"
 msgstr "Þegar þú hefur lokið skönnun strikamerkisins, settu inn 6-stafa sannvottunarkóðann hér fyrir neðan:"
-
-msgid "Enable YubiKey (OATH-HOTP)"
-msgstr "Virkja YubiKey (OATH-HOTP)"
-
-msgid "Once you have configured your YubiKey, enter the 6-digit verification code below:"
-msgstr "Þegar þú hefur sett upp YubiKey (dulritunarlykill), settu inn 6-stafa sannvottunarkóðann hér fyrir neðan:"
-
-msgid "Verification code"
-msgstr "Sannvottunarkóði"
-
-msgid "Submit verification code"
-msgstr "Senda inn sannvottunarkóða"
-
-msgid "SUBMIT"
-msgstr "SENDA INN"
 
 msgid "Admin Interface"
 msgstr "Stjórnunarviðmót"
@@ -370,8 +373,8 @@ msgstr "EYÐA"
 msgid "No users to display"
 msgstr "Engir notendur til að birta"
 
-msgid "Update instance config"
-msgstr "Uppfæra uppsetningu tilviks"
+msgid "Update instance configuration"
+msgstr "Uppfæra uppsetningu þjónsins"
 
 msgid "INSTANCE CONFIG"
 msgstr "UPPSETNING Á KERFISEINTAKI"
@@ -409,14 +412,14 @@ msgstr "Skipta um HOTP-leynilykil"
 msgid "Enter a new HOTP secret formatted as a 40-digit hexadecimal string. Spaces will be ignored:"
 msgstr "Settu inn nýjan HOTP-leynilykil sniðinn sem 40-stafa hex-streng. Bil verða hunsuð:"
 
+msgid "Once you have configured your YubiKey, enter the 6-digit code below:"
+msgstr "Þegar þú hefur sett upp YubiKey (dulritunarlykill), settu inn 6-stafa kóðann hér fyrir neðan:"
+
 msgid "You're almost done! To finish adding this new user, have them follow the instructions below to set up two-factor authentication with FreeOTP. Once they've added an entry for this account in the app, have them enter one of the 6-digit codes from the app to confirm that two-factor authentication is set up correctly."
 msgstr "Þetta er næstum því búið! Til að klára að bæta við þessum nýja notanda, láttu hán fara eftir leiðbeiningunum hér fyrir neðan til að setja upp tvíþátta-auðkenningu með FreeOTP. Eftir að hán hefur sett inn færslu með þessum aðgangi í forritið, þá á hán að setja inn einn af 6-stafa kóðunum úr forritinu til að staðfesta að tvíþátta auðkenningin sé rétt uppsett."
 
 msgid "Can't scan the barcode? You can manually pair FreeOTP with this account by entering the following two-factor secret into the app:"
 msgstr "Nærðu ekki að skanna strikamerkið? Þú getur parað FreeOTP handvirkt við þennan notandaaðgang með því að setja eftirfarandi tvíþátta-leyniorð inn í forritið:"
-
-msgid "Once you have configured your YubiKey, enter the 6-digit code below:"
-msgstr "Þegar þú hefur sett upp YubiKey (dulritunarlykill), settu inn 6-stafa kóðann hér fyrir neðan:"
 
 msgid "Navigation"
 msgstr "Flakk"
@@ -433,6 +436,9 @@ msgstr "Stjórnandi"
 msgid "Log Out"
 msgstr "Skrá út"
 
+msgid "Return to All Sources"
+msgstr "Til baka í alla heimildarmenn"
+
 msgid "Powered by <b>SecureDrop {version}</b>."
 msgstr "Keyrt með <b>SecureDrop {version}</b>."
 
@@ -445,8 +451,14 @@ msgstr "Allir heimildarmenn"
 msgid "All messages, files, and replies from sources are stored as encrypted files for security. To read them, you will need to decrypt them on your Secure Viewing Station."
 msgstr "Öll skilaboð, skrár og svör frá heimildarmönnum eru geymd dulrituð af öryggisástæðum. Til að lesa þau, þarftu að afkóða þau í öruggu skoðunarstöðinni þinni (Secure Viewing Station)."
 
+msgid "Download Selected Files"
+msgstr "Sækja valdar skrár"
+
 msgid "Download Selected"
 msgstr "Sækja valið"
+
+msgid "Delete Selected Files"
+msgstr "Eyða völdum skrám"
 
 msgid "Delete Selected"
 msgstr "Eyða völdu"
@@ -652,7 +664,7 @@ msgid "If a user's two-factor authentication credentials have been lost or compr
 msgstr "Ef tvíþátta auðkenningargögn notanda hafa týnst eða orðið berskjölduð, geturðu endurstillt þau hér. <em>Ef þú gerir þetta, skaltu ganga úr skugga um að notandinn sé á staðnum og allt sé til reiðu til að setja upp tvíþátta auðkenningu á viðkomandi tæki. Annars verður notandinn útilokað frá aðgangnum sínum.</em>"
 
 msgid "If your two-factor authentication credentials have been lost or compromised, or you got a new device, you can reset your credentials here. <em>If you do this, make sure you are ready to set up your new device, otherwise you will be locked out of your account.</em>"
-msgstr "Ef tvíþátta auðkenningargögnin þín hafa týnst eða orðið berskjölduð - eða ef þú sért komin/n/ð með nýtt tæki - geturðu endurstillt auðkennin þín hér. <em>Ef þú gerir þetta, skaltu ganga úr skugga um að allt sé til reiðu til að setja upp nýja tækið þitt, annars útilokast þú frá aðgangnum þínum.</em>"
+msgstr "Ef tvíþátta auðkenningargögnin þín hafa týnst eða orðið berskjölduð - eða ef þú sért með nýtt tæki - geturðu endurstillt auðkennin þín hér. <em>Ef þú gerir þetta, skaltu ganga úr skugga um að allt sé til reiðu til að setja upp nýja tækið þitt, annars útilokast þú frá aðgangnum þínum.</em>"
 
 msgid "To reset two-factor authentication for mobile apps such as FreeOTP, choose the first option. For security keys like the YubiKey, choose the second one."
 msgstr "Til að endurstilla tvíþátta-auðkenningu fyrir farsímaforrit á borð við FreeOTP, veldu fyrri valkostinn. Fyrir öryggislykla eins og Yubikey, veldu seinni valkostinn."
@@ -675,14 +687,26 @@ msgstr "ENDURSTILLA AUÐKENNI ÖRYGGISLYKILS"
 msgid "Reset Security Key Credentials"
 msgstr "Endurstilla auðkenni öryggislykils"
 
+msgid "Download Selected Unread Submissions"
+msgstr "Sækja valdar ólesnar innsendingar"
+
 msgid "Download Unread"
 msgstr "Niðurhal ólesið"
+
+msgid "Download Selected Submissions"
+msgstr "Sækja valdar innsendingar"
 
 msgid "Download"
 msgstr "Sækja"
 
+msgid "Star Selected Submissions"
+msgstr "Stjörnumerkja valdar innsendingar"
+
 msgid "Star"
 msgstr "Stjörnumerkja"
+
+msgid "Un-star Selected Submissions"
+msgstr "Taka stjörnu af völdum innsendingum"
 
 msgid "Un-star"
 msgstr "Fjarlægja stjörnumerkingu"
@@ -735,8 +759,8 @@ msgstr "Lykilorð"
 msgid "Show password"
 msgstr "Birta lykilorð"
 
-msgid "Log In"
-msgstr "Skrá inn"
+msgid "Log In to Journalist Interface"
+msgstr "Skrá inn í blaðamannaviðmótið"
 
 msgid "LOG IN"
 msgstr "SKRÁ INN"
@@ -812,14 +836,20 @@ msgstr "Því miður, þetta er ekki þekkt kóðanafn."
 msgid "Important"
 msgstr "Mikilvægt"
 
-msgid "You were logged out due to inactivity. Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
-msgstr "Þú varst skráð/ur út vegna ónógrar virkni. Smelltu á hnappinn <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>Nýtt auðkenni</b> í verkfærastiku Tor-vafrans áður en haldið er áfram. Það mun hreinsa út allar fyrri aðgerðir Tor-vafrans á þessu tæki."
+msgid "You have been logged out due to inactivity or a problem with your session. Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
+msgstr ""
 
 msgid "Protecting Journalists and Sources"
 msgstr "Verndum frétta- og heimildarmenn"
 
 msgid "Skip to notification"
 msgstr "Fara áfram í tilkynningu"
+
+msgid "Return to Submission Page"
+msgstr "Til baka á innsendingasíðuna"
+
+msgid "Return to Home Page"
+msgstr "Fara aftur á upphafssíðu"
 
 msgid "We're sorry, our SecureDrop is currently offline."
 msgstr "Því miður, SecureDrop-netþjónninn okkar er ótengdur þessa stundina."
@@ -863,8 +893,8 @@ msgstr "<strong>Haltu því leyndu.</strong> Ekki deila því með neinum."
 msgid "<strong>Keep it safe.</strong> There is no account recovery option."
 msgstr "<strong>Geymdu það á öruggum stað.</strong> Það er engin önnur leið til að endurheimta aðganginn þinn."
 
-msgid "Continue"
-msgstr "Halda áfram"
+msgid "Continue to Submission Page"
+msgstr "Halda áfram á innsendingasíðuna"
 
 msgid "Welcome"
 msgstr "Velkomin"
@@ -890,8 +920,8 @@ msgstr "<a href=\"/\" aria-label=\"Farðu eftir þessum leiðbeiningum og endurl
 msgid "<strong>It is recommended to use Tor Browser to access SecureDrop:</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
 msgstr "<strong>Mælt er með því að nota Tor-vafrann til að fá aðkomu að SecureDrop:</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Sjáðu hvernig á að setja upp Tor-vafrann</a>, eða hunsaðu þessa aðvörun til að halda áfram."
 
-msgid "<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop version.</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
-msgstr "<strong>Mælt er með því að nota skjáborðsútgáfu Tor-vafrans til aðgangs að SecureDrop, þar sem Orfox gefur ekki sama stig öryggis og nafnleyndar eins og skjáborðsútgáfurnar.</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Sjáðu hvernig á að setja upp Tor-vafrann</a>, eða hunsaðu þessa aðvörun til að halda áfram."
+msgid "<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop version.</strong> <a class=\"recommend-tor\" aria-label=\"Learn how to install Tor Browser\" href=\"{tor_browser_url}\" >Learn how to install it</a>, or ignore this warning to continue."
+msgstr "<strong>Mælt er með því að nota skjáborðsútgáfu Tor-vafrans til aðgangs að SecureDrop, þar sem Orfox gefur ekki sama stig öryggis og nafnleyndar eins og skjáborðsútgáfurnar.</strong> <a class=\"recommend-tor\" aria-label=\"Sjáðu hvernig á að setja upp Tor-vafrann\" href=\"{tor_browser_url}\" >Sjáðu hvernig á að setja upp Tor-vafrann</a>, eða hunsaðu þessa aðvörun til að halda áfram."
 
 msgid "{} logo"
 msgstr "{} táknmerki"
@@ -902,8 +932,8 @@ msgstr "Fyrsta innsending"
 msgid "First time submitting to our SecureDrop? Start here."
 msgstr "Er þetta í fyrsta skipti sem þú sendir eitthvað inn á SecureDrop-tilvikið okkar? Byrjaðu þá hér."
 
-msgid "Get Started"
-msgstr "Komast í gang"
+msgid "Get Started With Your First Submission"
+msgstr "Förum af stað í fyrstu innsendinguna þína"
 
 msgid "GET STARTED"
 msgstr "BYRJA HÉR"
@@ -912,7 +942,10 @@ msgid "Return visit"
 msgstr "Endurkomu heimsókn"
 
 msgid "Already have a codename? Check for replies or submit something new."
-msgstr "Ertu þegar með kóðanafn? Skoðaðu  svör eða sendu inn eitthvað nýtt."
+msgstr "Ertu þegar með kóðanafn? Skoðaðu svör eða sendu inn eitthvað nýtt."
+
+msgid "Log In Using Your Codename"
+msgstr "Skráðu þig inn með kóðanafninu þínu"
 
 msgid "Log in"
 msgstr "Innskráning"
@@ -923,11 +956,17 @@ msgstr "Settu inn kóðanafn"
 msgid "Enter your codename"
 msgstr "Settu inn kóðanafnið þitt"
 
+msgid "Cancel and Return to Previous Page"
+msgstr "Hætta og fara aftur á fyrri síðu"
+
 msgid "CANCEL"
 msgstr "HÆTTA VIÐ"
 
 msgid "Additional Action Required"
 msgstr "Viðbótaraðgerð nauðsynleg"
+
+msgid "Log Back In"
+msgstr "Skráðu þig aftur inn"
 
 msgid "One more thing..."
 msgstr "Eitt í viðbót..."
@@ -962,8 +1001,11 @@ msgstr "Ef þú ert aðeins að senda skilaboð, þurfa þau að vera að vera a
 msgid "Anti-spam check. Do not fill this in!"
 msgstr "Athugun á ruslsendingu. Ekki fylla inn í þetta!"
 
-msgid "Submit"
-msgstr "Senda inn"
+msgid "Cancel and Clear Uploaded Content"
+msgstr "Hætta við og hreinsa innsent efni"
+
+msgid "Submit Uploaded Content"
+msgstr "Senda innsent efni"
 
 msgid "Read Replies"
 msgstr "Lesa svör"
@@ -976,6 +1018,9 @@ msgstr "Eyða þessu svari"
 
 msgid "Delete reply from {timestamp}?"
 msgstr "Eyða svari frá {timestamp}?"
+
+msgid "Delete Reply"
+msgstr "Eyða svari"
 
 msgid "Delete All Replies"
 msgstr "Eyða öllum svörum"
@@ -1040,6 +1085,9 @@ msgstr "Mundu, kóðanafnið þitt er:"
 msgid "Codename"
 msgstr "Kóðanafn"
 
+msgid "Reveal Codename"
+msgstr "Birta kóðanafn"
+
 msgid "Show Codename"
 msgstr "Birta kóðanafn"
 
@@ -1082,6 +1130,27 @@ msgstr "<strong>Mikilvægt:</strong> Ef þú óskar áframhaldandi nafnleyndar, 
 
 msgid "Back to submission page"
 msgstr "Til baka á innsendingasíðuna"
+
+#~ msgid "You were logged out due to inactivity. Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
+#~ msgstr "Þú varst skráð/ur út vegna ónógrar virkni. Smelltu á hnappinn <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>Nýtt auðkenni</b> í verkfærastiku Tor-vafrans áður en haldið er áfram. Það mun hreinsa út allar fyrri aðgerðir Tor-vafrans á þessu tæki."
+
+#~ msgid "Update instance config"
+#~ msgstr "Uppfæra uppsetningu tilviks"
+
+#~ msgid "Log In"
+#~ msgstr "Skrá inn"
+
+#~ msgid "Continue"
+#~ msgstr "Halda áfram"
+
+#~ msgid "<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop version.</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
+#~ msgstr "<strong>Mælt er með því að nota skjáborðsútgáfu Tor-vafrans til aðgangs að SecureDrop, þar sem Orfox gefur ekki sama stig öryggis og nafnleyndar eins og skjáborðsútgáfurnar.</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Sjáðu hvernig á að setja upp Tor-vafrann</a>, eða hunsaðu þessa aðvörun til að halda áfram."
+
+#~ msgid "Get Started"
+#~ msgstr "Komast í gang"
+
+#~ msgid "Submit"
+#~ msgstr "Senda inn"
 
 #~ msgid "Field must be between 1 and {max_codename_len} character long."
 #~ msgid_plural "Field must be between 1 and {max_codename_len} characters long."
