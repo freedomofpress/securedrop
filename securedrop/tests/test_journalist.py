@@ -3804,7 +3804,9 @@ def test_journalist_session_expiration(journalist_app, test_journo, locale):
         session.pop("csrf_token", None)
         session.pop("locale", None)
         session.pop("renew_count", None)
-        assert not session, session
+        assert session == {
+            "_flashes": [("error", "You have been logged out due to inactivity.")]
+        }, session
 
 
 @flaky(rerun_filter=utils.flaky_filter_xfail)

@@ -23,12 +23,6 @@ class ServerSideSession(CallbackDict, SessionMixin):
         def on_update(self: ServerSideSession) -> None:
             self.modified = True
 
-        if initial and "uid" in initial:
-            self.set_uid(initial["uid"])
-            self.set_user()
-        else:
-            self.uid: Optional[int] = None
-            self.user = None
         CallbackDict.__init__(self, initial, on_update)
         self.sid = sid
         self.token: str = token
@@ -39,6 +33,7 @@ class ServerSideSession(CallbackDict, SessionMixin):
         self.modified = False
         self.flash: Optional[Tuple[str, str]] = None
         self.locale: Optional[str] = None
+        self.user = None
 
     def get_token(self) -> Optional[str]:
         return self.token
@@ -46,26 +41,28 @@ class ServerSideSession(CallbackDict, SessionMixin):
     def get_lifetime(self) -> datetime:
         return datetime.now(timezone.utc) + timedelta(seconds=self.lifetime)
 
-    def set_user(self) -> None:
-        if self.uid is not None:
-            self.user = Journalist.query.get(self.uid)
+    def get_user(self) -> Optional[Journalist]:
+        if self.user:
+            if self.user.id == self.get_uid():
+                # User is set and it matches the correct ID
+                return self.user
+            else:
+                # User is set, but it does not match the desired ID
+                self.user = None
+                # FIXME??
+                # self.to_destroy = True
+        self.user = Journalist.query.get(self.get_uid())
         if self.user is None:
             # The uid has no match in the database, and this should really not happen
-            self.uid = None
+            self["uid"] = None
             self.to_destroy = True
-
-    def get_user(self) -> Optional[Journalist]:
         return self.user
 
     def get_uid(self) -> Optional[int]:
-        return self.uid
-
-    def set_uid(self, uid: int) -> None:
-        self.user = None
-        self.uid = uid
+        return self.get("uid")
 
     def logged_in(self) -> bool:
-        return self.uid is not None
+        return self.get_uid() is not None
 
     def destroy(
         self, flash: Optional[Tuple[str, str]] = None, locale: Optional[str] = None
@@ -73,7 +70,6 @@ class ServerSideSession(CallbackDict, SessionMixin):
         # The parameters are needed to pass the information to the new session
         self.locale = locale
         self.flash = flash
-        self.uid = None
         self.user = None
         self.to_destroy = True
 
@@ -144,7 +140,7 @@ class SessionInterface(FlaskSessionInterface):
             else:
                 return self._new_session(is_api)
         else:
-            sid = request.cookies.get(app.session_cookie_name)
+            sid = request.cookies.get(app.config["SESSION_COOKIE_NAME"])
         if sid:
             try:
                 sid = self._get_signer(app).loads(sid)
@@ -208,7 +204,7 @@ class SessionInterface(FlaskSessionInterface):
         if not session.is_api and (session.new or session.to_regenerate):
             response.headers.add("Vary", "Cookie")
             response.set_cookie(
-                app.session_cookie_name,
+                app.config["SESSION_COOKIE_NAME"],
                 session.token,
                 httponly=httponly,
                 domain=domain,
