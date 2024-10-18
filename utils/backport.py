@@ -31,9 +31,7 @@ commits = json.loads(
 # NB. It's tempting to do something like `set(commit_hashes) -= set(args.skip)`
 # here, but we must preserve the order of commits, and it's not worth pulling
 # in an ordered-set implementation just for this.
-commit_hashes = [commit["sha"] for commit in commits]
-for skip_hash in args.skip:
-    commit_hashes.remove(skip_hash)
+commit_hashes = [commit["sha"] for commit in commits if commit["sha"] not in args.skip]
 
 print(f'Backporting {len(commit_hashes)}/{len(commits)} commits from "{title}"')
 branch = f"backport-{args.pr}"
