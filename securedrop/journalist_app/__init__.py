@@ -93,7 +93,9 @@ def create_app(config: SecureDropConfig) -> Flask:
         return render_template("error.html", error=error), error.code
 
     for code in default_exceptions:
-        app.errorhandler(code)(_handle_http_exception)
+        # n.b. this is not possible to type properly, see comments on flask's
+        # typing.ErrorHandlerCallable
+        app.register_error_handler(code, _handle_http_exception)  # type: ignore
 
     i18n.configure(config, app)
 
