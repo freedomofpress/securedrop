@@ -43,6 +43,9 @@ subprocess.check_call(["git", "cherry-pick", "-x"] + commit_hashes)
 if input("OK to push and create PR? [y/N]").lower() != "y":
     sys.exit()
 subprocess.check_call(["git", "push", "-u", remote, branch])
+
+skip_list = ", ".join(args.skip)
+skip_message = f", excluding {skip_list}" if len(args.skip) > 0 else ""
 body = f"""\
 ## Status
 
@@ -56,7 +59,7 @@ Backport of #{args.pr}.
 
 * [ ] CI is passing
 * [ ] base is `{base}`
-* [ ] Only contains changes from #{args.pr}.
+* [ ] Only contains changes from #{args.pr} #{skip_message}
 """
 print(body)
 
