@@ -19,7 +19,8 @@ jobs:
       matrix:
         build: [one, two]
         ubuntu_version: [focal, noble]
-    runs-on: ubuntu-latest
+    # TODO: change this back to ubuntu-latest once it is consistently 24.04
+    runs-on: ubuntu-24.04
     outputs:
       artifact_id: ${{ steps.upload.outputs.artifact-id }}
     steps:
