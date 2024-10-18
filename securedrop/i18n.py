@@ -126,7 +126,9 @@ def parse_locale_set(codes: List[str]) -> Set[Locale]:
     return {Locale.parse(code) for code in codes}
 
 
-def validate_locale_configuration(config: SecureDropConfig, app: Flask, babel: Babel) -> Set[Locale]:
+def validate_locale_configuration(
+    config: SecureDropConfig, app: Flask, babel: Babel
+) -> Set[Locale]:
     """
     Check that configured locales are available in the filesystem and therefore usable by
     Babel.  Warn about configured locales that are not usable, unless we're left with
