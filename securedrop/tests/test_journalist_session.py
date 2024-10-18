@@ -185,10 +185,8 @@ def test_session_admin_change_password_logout(journalist_app, test_journo, test_
     with journalist_app.test_client() as app:
         # Add our original cookie back into the session, and try to re-use it
         app.set_cookie(
-            "localhost.localdomain",
-            "js",
-            cookie_val,
-            domain=".localhost.localdomain",
+            key="js",
+            value=cookie_val,
             httponly=True,
             path="/",
         )
