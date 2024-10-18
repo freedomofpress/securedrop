@@ -1,7 +1,10 @@
 #!/bin/bash
 # shellcheck disable=SC2230
 
-## Usage: ./update_version.sh <version>
+# Usage: ./update_version.sh <version> will set <version> in each version file,
+# commit the changes, and create a tag.  Both the commit and the tag will have
+# the message "SecureDrop <version>", which you can amend after the fact if
+# need be.
 
 set -e
 
@@ -65,8 +68,7 @@ export DEBFULLNAME="${DEBFULLNAME:-SecureDrop Team}"
 # Update the Focal changelog in the Debian package
 dch -b -v "${NEW_VERSION}+focal" -D focal -c securedrop/debian/changelog
 # Commit the change
-# Due to `set -e`, providing an empty commit message here will cause the script to abort early.
-git commit -a
+git commit -a -m "SecureDrop ${NEW_VERSION}"
 
 echo "[ok] Version update complete and committed."
 
@@ -80,7 +82,7 @@ else
   TAG_VERSION="${NEW_VERSION}"
 fi
 
-git tag -a "${TAG_VERSION}"
+git tag -a "${TAG_VERSION}" -m "SecureDrop ${NEW_VERSION}"
 TAGFILE="${TAG_VERSION}.tag"
 git cat-file tag "${TAG_VERSION}" > "${TAGFILE}"
 echo "A tag has been generated: ${TAGFILE}"
