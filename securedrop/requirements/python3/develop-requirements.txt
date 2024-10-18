@@ -937,6 +937,7 @@ setuptools==70.3.0 \
     --hash=sha256:fe384da74336c398e0d956d1cae0669bc02eed936cdb1d49b57de1990dc11ffc
     # via
     #   -r requirements/python3/develop-requirements.in
+    #   -r requirements/python3/translation-requirements.in
     #   safety
     #   selinux
     #   yamllint

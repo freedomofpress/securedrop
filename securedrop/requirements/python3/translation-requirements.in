@@ -1,2 +1,4 @@
 babel>=2.10
 BabelGladeExtractor
+# needed for babel<2.14.0, see https://github.com/python-babel/babel/issues/1040
+setuptools
