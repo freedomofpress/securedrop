@@ -243,7 +243,7 @@ def test_journalist_key_redirects_to_public_key(source_app):
         resp = app.get(url_for("info.download_journalist_key"))
         assert resp.status_code == 301
         resp = app.get(url_for("info.download_journalist_key"), follow_redirects=True)
-        assert request.path == url_for("info.download_public_key")
+        assert resp.request.path == url_for("info.download_public_key")
         assert redwood.is_valid_public_key(resp.data.decode("utf-8"))
 
 
