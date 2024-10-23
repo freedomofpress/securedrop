@@ -1,4 +1,4 @@
-beautifulsoup4
+beautifulsoup4>=4.8.2,<4.9
 blinker
 coverage>=5.0  # #6091
 flaky
@@ -8,7 +8,7 @@ pathlib2
 pillow>=10.3.0  # Safety 67136 for CVE-2024-28219
 pytest>=7.2.0
 pytest-xdist>=3.0.2
-pytest-cov
+pytest-cov>=2.12,<3
 pytest-mock
 requests[socks]>=2.31.0
 setuptools>=70.0.0

@@ -226,8 +226,8 @@ user-login = "Amanieu"
 user-name = "Amanieu d'Antras"
 
 [[publisher.sequoia-openpgp]]
-version = "1.21.1"
-when = "2024-06-28"
+version = "1.21.2"
+when = "2024-07-10"
 user-id = 33711
 user-login = "teythoon"
 user-name = "Justus Winter"

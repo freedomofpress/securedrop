@@ -11,7 +11,6 @@ RUN apt-get -y update && apt-get upgrade -y && apt-get install -y \
         debhelper \
         devscripts \
         dh-python \
-        dh-systemd \
         gdb \
         git \
         gnupg2 \
@@ -27,7 +26,6 @@ RUN apt-get -y update && apt-get upgrade -y && apt-get install -y \
         python3-venv \
         python3-virtualenv \
         rsync \
-        sqlite \
         sudo \
         tzdata \
         libevent-dev \
