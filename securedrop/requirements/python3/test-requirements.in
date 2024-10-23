@@ -13,7 +13,7 @@ pytest-mock
 requests[socks]>=2.31.0
 setuptools>=70.0.0
 selenium>4.15.1
-tbselenium>=0.8.1
+tbselenium>=0.9
 urllib3>=1.26.5
 # mypy and co.
 mypy>=1.0

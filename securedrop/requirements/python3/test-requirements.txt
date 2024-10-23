@@ -347,8 +347,8 @@ sqlalchemy-stubs==0.4 \
     --hash=sha256:5eec7aa110adf9b957b631799a72fef396b23ff99fe296df726645d01e312aa5 \
     --hash=sha256:c665d6dd4482ef642f01027fa06c3d5e91befabb219dc71fc2a09e7d7695f7ae
     # via -r requirements/python3/test-requirements.in
-tbselenium==0.8.1 \
-    --hash=sha256:b40df4f339459d90e8c9e6fd66f7ebf9baabbc5b79d8ca7c94ebcb092f7e1726
+tbselenium==0.9.0 \
+    --hash=sha256:18ad648abd240c6493a00370044f2bcacdbf1e13e870da75e69d4ce225ec087a
     # via -r requirements/python3/test-requirements.in
 toml==0.10.2 \
     --hash=sha256:806143ae5bfb6a3c6e736a764057db0e6a0e05e338b5630894a5f779cabb4f9b \
