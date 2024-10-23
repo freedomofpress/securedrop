@@ -59,5 +59,4 @@ trap fetch_junit_test_results EXIT
 #ssh_gce "UBUNTU_VERSION=${BASE_OS} make build-debs-notest"
 #ssh_gce "UBUNTU_VERSION=${BASE_OS} make build-debs-ossec-notest"
 ssh_gce "vagrant --version"
-ssh_gce "BASE_OS=${BASE_OS} make staging" ||:
-ssh_gce "cat /home/sdci/.cache/molecule/securedrop-source/libvirt-staging-noble/vagrant.err"
+ssh_gce "BASE_OS=${BASE_OS} make staging"

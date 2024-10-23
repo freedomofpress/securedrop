@@ -8,10 +8,7 @@ lint: |
 
 platforms:
   - name: app-staging
-    box: bento/ubuntu-24.04
-    box_version: "202404.26.0"
-    provider_raw_config_args:
-      - "disk_size = '5GB'"
+    box: cloud-image/ubuntu-24.04
     raw_config_args:
       - "cpu_mode = 'host-passthrough'"
       - "video_type = 'virtio'"
@@ -27,10 +24,7 @@ platforms:
       - staging
 
   - name: mon-staging
-    box: bento/ubuntu-24.04
-    box_version: "202404.26.0"
-    provider_raw_config_args:
-      - "disk_size = '5GB'"
+    box: cloud-image/ubuntu-24.04
     raw_config_args:
       - "cpu_mode = 'host-passthrough'"
       - "video_type = 'virtio'"
