@@ -1057,40 +1057,29 @@ def update(args: argparse.Namespace) -> int:
         # Check if any strings in good_sig_text match against gpg_lines[]
         good_sig_matches = [s for s in gpg_lines if any(xs in s for xs in good_sig_text)]
 
-        # To ensure that an adversary cannot name a malicious key good_sig_text
-        # we check that bad_sig_text does not appear, that the release key
-        # appears on the second line of the output, and that there is a single
-        # match from good_sig_text[]
         if (
             any(key in gpg_lines[1] for key in RELEASE_KEYS)
             and len(good_sig_matches) == 1
             and bad_sig_text not in sig_result
         ):
-            # Finally, we check that there is no branch of the same name
-            # prior to reporting success.
+            # Check for duplicate branch name
             cmd = ["git", "show-ref", "--heads", "--verify", f"refs/heads/{latest_tag}"]
             try:
-                # We expect this to produce a non-zero exit code, which
-                # will produce a subprocess.CalledProcessError
                 subprocess.check_output(cmd, stderr=subprocess.STDOUT, cwd=args.root)
-                sdlog.info("Signature verification failed.")
+                sdlog.error("Update failed: Branch name collision detected")
                 return 1
             except subprocess.CalledProcessError as e:
                 if "not a valid ref" in e.output.decode("utf-8"):
-                    # Then there is no duplicate branch.
                     sdlog.info("Signature verification successful.")
-                else:  # If any other exception occurs, we bail.
-                    sdlog.info("Signature verification failed.")
+                else:
+                    sdlog.error("Update failed: Git command error")
                     return 1
-        else:  # If anything else happens, fail and exit 1
-            sdlog.info("Signature verification failed.")
+        else:
+            sdlog.error("Update failed: Invalid signature format")
             return 1
 
     except subprocess.CalledProcessError:
-        # If there is no signature, or if the signature does not verify,
-        # then git tag -v exits subprocess.check_output will exit 1
-        # and subprocess.check_output will throw a CalledProcessError
-        sdlog.info("Signature verification failed.")
+        sdlog.error("Update failed: Missing or invalid signature")
         return 1
 
     # Only if the proper signature verifies do we check out the latest
@@ -1256,3 +1245,4 @@ def main(argv: List[str]) -> None:
 
 if __name__ == "__main__":
     main(sys.argv[1:])
+
