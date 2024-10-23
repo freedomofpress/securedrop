@@ -1,0 +1,56 @@
+---
+- name: Create
+  hosts: localhost
+  connection: local
+  vars:
+    molecule_file: "{{ lookup('env', 'MOLECULE_FILE') }}"
+    molecule_instance_config: "{{ lookup('env', 'MOLECULE_INSTANCE_CONFIG') }}"
+    molecule_yml: "{{ lookup('file', molecule_file) | from_yaml }}"
+  tasks:
+
+    - name: Create molecule instance(s)
+      vagrant:
+        instance_name: "{{ item.name }}"
+        instance_interfaces: "{{ item.interfaces | default(omit) }}"
+        instance_raw_config_args: "{{ item.instance_raw_config_args | default(omit) }}"
+
+        platform_box: "{{ item.box }}"
+        platform_box_version: "{{ item.box_version | default(omit) }}"
+        platform_box_url: "{{ item.box_url | default(omit) }}"
+
+        provider_name: "{{ molecule_yml.driver.provider.name }}"
+        provider_memory: "{{ item.memory | default(omit) }}"
+        provider_cpus: "{{ item.cpus | default(omit) }}"
+        provider_raw_config_args: "{{ item.raw_config_args | default(omit) }}"
+        force_stop: yes
+
+        state: up
+      register: server
+      loop: "{{ molecule_yml.platforms | flatten(levels=1) }}"
+
+    # Mandatory configuration for Molecule to function.
+
+    - name: Populate instance config dict
+      set_fact:
+        instance_conf_dict: {
+          'instance': "{{ item.Host }}",
+          'address': "{{ item.HostName }}",
+          'user': "{{ item.User }}",
+          'port': "{{ item.Port }}",
+          'identity_file': "{{ item.IdentityFile }}", }
+      loop: "{{ server.results | flatten(levels=1) }}"
+      register: instance_config_dict
+      when: server.changed | bool
+
+    - name: Convert instance config dict to a list
+      set_fact:
+        instance_conf: "{{ instance_config_dict.results | map(attribute='ansible_facts.instance_conf_dict') | list }}"
+      when: server.changed | bool
+
+    - name: Dump instance config
+      copy:
+        content: |
+          # Molecule managed
+          {{ instance_conf | to_json | from_json }}
+        dest: "{{ molecule_instance_config }}"
+      when: server.changed | bool

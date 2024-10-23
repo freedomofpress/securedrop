@@ -12,6 +12,8 @@ jobs:
     runs-on: ubuntu-latest
     env:
       GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+      UBUNTU_VERSION: noble
+      BASE_OS: noble
     steps:
       - uses: actions/checkout@v4
       - name: Run staging tests on GCE

@@ -14,7 +14,9 @@ set -o pipefail
 
 . ./devops/scripts/boot-strap-venv.sh
 
-securedrop_staging_scenario="$(./devops/scripts/select-staging-env "${1}")"
+BASE_OS="${BASE_OS:-focal}"
+
+securedrop_staging_scenario="$(./devops/scripts/select-staging-env "${BASE_OS}")"
 
 if [ -z "$TEST_DATA_FILE" ]
 then

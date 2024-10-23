@@ -1,0 +1,35 @@
+---
+
+- name: Destroy
+  hosts: localhost
+  connection: local
+  vars:
+    molecule_file: "{{ lookup('env', 'MOLECULE_FILE') }}"
+    molecule_instance_config: "{{ lookup('env',' MOLECULE_INSTANCE_CONFIG') }}"
+    molecule_yml: "{{ lookup('file', molecule_file) | from_yaml }}"
+    molecule_ephemeral_directory: "{{ lookup('env', 'MOLECULE_EPHEMERAL_DIRECTORY') }}"
+  tasks:
+    - name: Destroy molecule instance(s)
+      vagrant:
+        instance_name: "{{ item.name }}"
+        platform_box: "{{ item.box }}"
+        provider_name: "{{ molecule_yml.driver.provider.name }}"
+        force_stop: "{{ item.force_stop | default(True) }}"
+
+        state: destroy
+      register: server
+      loop: "{{ molecule_yml.platforms | flatten(levels=1) }}"
+
+    # Mandatory configuration for Molecule to function.
+
+    - name: Populate instance config
+      set_fact:
+        instance_conf: {}
+
+    - name: Dump instance config
+      copy:
+        content: |
+          # Molecule managed
+          {{ instance_conf | to_json | from_json | to_yaml }}
+        dest: "{{ molecule_instance_config }}"
+      when: server.changed | bool
