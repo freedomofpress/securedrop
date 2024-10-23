@@ -15,39 +15,11 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-import json
-from typing import Union
 
 import pytest
-import tbselenium
 from tbselenium.utils import disable_js
 from tests.functional.app_navigators.source_app_nav import SourceAppNavigator
 from tests.functional.pageslayout.utils import list_locales, save_static_data
-
-
-# Monkey  Patch set_tbb_pref until a new version of tbselenium > 0.8.1 is released
-def monkey_patch_set_tbb_pref(
-    driver: tbselenium.tbdriver.TorBrowserDriver, name: str, value: Union[bool, str, int]
-) -> None:
-    try:
-        script = "Services.prefs."
-        if isinstance(value, bool):
-            script += "setBoolPref"
-        elif isinstance(value, (str)):
-            script += "setStringPref"
-        else:
-            script += "setIntPref"
-        script += f"({json.dumps(name)}, {json.dumps(value)});"
-
-        with driver.context(driver.CONTEXT_CHROME):
-            driver.execute_script(script)
-    except Exception:
-        raise
-    finally:
-        driver.set_context(driver.CONTEXT_CONTENT)
-
-
-tbselenium.utils.set_tbb_pref = monkey_patch_set_tbb_pref
 
 
 @pytest.mark.parametrize("locale", list_locales())
