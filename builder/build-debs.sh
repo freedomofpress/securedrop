@@ -26,25 +26,26 @@ export OCI_RUN_ARGUMENTS
 export OCI_BIN
 
 WHAT="${WHAT:-securedrop}"
+export UBUNTU_VERSION="${UBUNTU_VERSION:-focal}"
 
 cd "$(git rev-parse --show-toplevel)"
 
 . ./builder/image_prep.sh
 
-mkdir -p build/focal
+mkdir -p "build/${UBUNTU_VERSION}"
 
 if [[ $WHAT == "ossec" ]]; then
     # We need to build each variant separately because it dirties the container
     $OCI_BIN run --rm $OCI_RUN_ARGUMENTS \
         -e VARIANT=agent --entrypoint "/build-debs-ossec" \
-        fpf.local/sd-server-builder
+        fpf.local/sd-server-builder-${UBUNTU_VERSION}
     $OCI_BIN run --rm $OCI_RUN_ARGUMENTS \
         -e VARIANT=server --entrypoint "/build-debs-ossec" \
-        fpf.local/sd-server-builder
+        fpf.local/sd-server-builder-${UBUNTU_VERSION}
 else
     $OCI_BIN run --rm $OCI_RUN_ARGUMENTS \
         --entrypoint "/build-debs-securedrop" \
-        fpf.local/sd-server-builder
+        fpf.local/sd-server-builder-${UBUNTU_VERSION}
 fi
 
 NOTEST="${NOTEST:-}"

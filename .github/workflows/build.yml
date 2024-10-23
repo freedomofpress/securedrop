@@ -18,7 +18,9 @@ jobs:
     strategy:
       matrix:
         build: [one, two]
-    runs-on: ubuntu-latest
+        ubuntu_version: [focal, noble]
+    # TODO: change this back to ubuntu-latest once it is consistently 24.04
+    runs-on: ubuntu-24.04
     outputs:
       artifact_id: ${{ steps.upload.outputs.artifact-id }}
     steps:
@@ -28,16 +30,21 @@ jobs:
           python-version: '3.8'
       - name: Build packages
         run: |
-          ./builder/build-debs.sh
-          WHAT=ossec ./builder/build-debs.sh
+          UBUNTU_VERSION=${{ matrix.ubuntu_version }} ./builder/build-debs.sh
+      - name: Build OSSEC packages
+        run: |
+          UBUNTU_VERSION=${{ matrix.ubuntu_version }} WHAT=ossec ./builder/build-debs.sh
       - uses: actions/upload-artifact@v4
         id: upload
         with:
-          name: build-${{ matrix.build }}
-          path: build
+          name: ${{ matrix.ubuntu_version }}-${{ matrix.build }}
+          path: build/${{ matrix.ubuntu_version }}
           if-no-files-found: error
 
   reproducible-debs:
+    strategy:
+      matrix:
+        ubuntu_version: [focal, noble]
     runs-on: ubuntu-latest
     container: debian:bookworm
     needs:
@@ -49,7 +56,7 @@ jobs:
             --no-install-recommends
       - uses: actions/download-artifact@v4
         with:
-          pattern: "build-*"
+          pattern: "${{ matrix.ubuntu_version }}-*"
       - name: diffoscope
         run: |
           find . -name '*.deb' -exec sha256sum {} \;
@@ -57,5 +64,5 @@ jobs:
           for pkg in ossec-agent ossec-server securedrop-config securedrop-keyring securedrop-ossec-agent securedrop-ossec-server
           do
               echo "Checking ${pkg}..."
-              diffoscope build-one/focal/${pkg}*.deb build-two/focal/${pkg}*.deb
+              diffoscope ${{ matrix.ubuntu_version }}-one/${pkg}*.deb ${{ matrix.ubuntu_version }}-two/${pkg}*.deb
           done

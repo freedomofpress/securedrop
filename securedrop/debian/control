@@ -10,7 +10,7 @@ Package: securedrop-app-code
 Architecture: amd64
 Conflicts: libapache2-mod-wsgi, supervisor
 Replaces: libapache2-mod-wsgi, supervisor
-Depends: ${dist:Depends}, ${misc:Depends}, ${python3:Depends}, apache2, apparmor-utils, coreutils, gnupg2, libapache2-mod-xsendfile, libpython3.8, paxctld, python3, python3-distutils, redis-server, securedrop-config, securedrop-keyring, sqlite3
+Depends: ${dist:Depends}, ${misc:Depends}, ${python3:Depends}, apache2, apparmor-utils, coreutils, gnupg2, libapache2-mod-xsendfile, paxctld, python3, redis-server, securedrop-config, securedrop-keyring, sqlite3
 Description: SecureDrop application code, dependencies, Apache configuration, systemd services, and AppArmor profiles. This package will put the AppArmor profiles in enforce mode.
 
 Package: securedrop-config

@@ -5,11 +5,13 @@ from pathlib import Path
 
 import pytest
 
+UBUNTU_VERSION = os.environ.get("UBUNTU_VERSION", "focal")
 SECUREDROP_ROOT = Path(
     subprocess.check_output(["git", "rev-parse", "--show-toplevel"]).decode().strip()
 )
-DEB_PATHS = list((SECUREDROP_ROOT / "build/focal").glob("*.deb"))
-SITE_PACKAGES = "/opt/venvs/securedrop-app-code/lib/python3.8/site-packages"
+DEB_PATHS = list((SECUREDROP_ROOT / f"build/{UBUNTU_VERSION}").glob("*.deb"))
+PYTHON_VERSION = {"focal": "8", "noble": "12"}[UBUNTU_VERSION]
+SITE_PACKAGES = f"/opt/venvs/securedrop-app-code/lib/python3.{PYTHON_VERSION}/site-packages"
 
 
 @pytest.fixture(scope="module")
@@ -70,7 +72,7 @@ def test_deb_package_contains_expected_conffiles(deb: Path):
         "/var/www/securedrop/.well-known/pki-validation/",
         "/var/www/securedrop/translations/messages.pot",
         "/var/www/securedrop/translations/de_DE/LC_MESSAGES/messages.mo",
-        f"{SITE_PACKAGES}/redwood/redwood.cpython-38-x86_64-linux-gnu.so",
+        f"{SITE_PACKAGES}/redwood/redwood.cpython-3{PYTHON_VERSION}-x86_64-linux-gnu.so",
     ],
 )
 def test_app_code_paths(securedrop_app_code_contents: str, path: str):

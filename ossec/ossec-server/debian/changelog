@@ -1,4 +1,4 @@
-ossec-server (3.6.0+focal) focal; urgency=low
+ossec-server (3.6.0) unstable; urgency=low
 
   [ SecureDrop Team ]
   * Release Notes https://github.com/ossec/ossec-hids/releases/tag/3.6.0
