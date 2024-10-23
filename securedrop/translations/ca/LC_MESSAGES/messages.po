@@ -4,19 +4,7 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
 #
 msgid ""
-msgstr ""
-"Project-Id-Version: SecureDrop 0.5-rc4\n"
-"Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2023-10-19 13:30+0000\n"
-"Last-Translator: \"Benet (BennyBeat) R. i Camps\" <bennybeat@gmail.com>\n"
-"Language-Team: Catalan <https://weblate.securedrop.org/projects/securedrop/securedrop/ca/>\n"
-"Language: ca\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.18.2\n"
-"Generated-By: Babel 2.4.0\n"
+msgstr "Project-Id-Version: SecureDrop 0.5-rc4\nReport-Msgid-Bugs-To: securedrop@freedom.press\nPO-Revision-Date: 2024-10-23 20:33+0000\nLast-Translator: victor dargallo <victordargallo@disroot.org>\nLanguage-Team: Catalan <https://weblate.securedrop.org/projects/securedrop/securedrop/ca/>\nLanguage: ca\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=2; plural=n != 1;\nX-Generator: Weblate 5.7.1\nGenerated-By: Babel 2.4.0\n"
 
 msgid "Name too long"
 msgstr "El nom és massa llarg"
@@ -36,7 +24,7 @@ msgid "{time} ago"
 msgstr "fa {time}"
 
 msgid "You have been logged out due to inactivity or a problem with your session."
-msgstr ""
+msgstr "S'ha tancat la sessió per inactivitat o per un problema amb la vostra sessió."
 
 msgid "SecureDrop"
 msgstr "SecureDrop"
@@ -374,7 +362,7 @@ msgid "No users to display"
 msgstr "No hi ha cap usuari per mostrar"
 
 msgid "Update instance configuration"
-msgstr ""
+msgstr "Actualitza la configuració de la instància"
 
 msgid "INSTANCE CONFIG"
 msgstr "PARÀMETRES D’INSTÀNCIA"
@@ -437,7 +425,7 @@ msgid "Log Out"
 msgstr "Tanca la sessió"
 
 msgid "Return to All Sources"
-msgstr ""
+msgstr "Torna a Totes les fonts"
 
 msgid "Powered by <b>SecureDrop {version}</b>."
 msgstr "Funciona amb <b>SecureDrop {version}</b>."
@@ -452,13 +440,13 @@ msgid "All messages, files, and replies from sources are stored as encrypted fil
 msgstr "Per motius de seguretat, tots els missatges, fitxers i respostes de les fonts s'emmagatzemen com a fitxers xifrats. Per llegir-los, desxifreu-los únicament en un dispositiu de visualització segura."
 
 msgid "Download Selected Files"
-msgstr ""
+msgstr "Baixa els fitxers seleccionats"
 
 msgid "Download Selected"
 msgstr "Baixa la selecció"
 
 msgid "Delete Selected Files"
-msgstr ""
+msgstr "Suprimeix els fitxers seleccionats"
 
 msgid "Delete Selected"
 msgstr "Suprimeix la selecció"
@@ -688,25 +676,25 @@ msgid "Reset Security Key Credentials"
 msgstr "Reinicia les claus i credencials de seguretat"
 
 msgid "Download Selected Unread Submissions"
-msgstr ""
+msgstr "Baixa els enviaments seleccionats no llegits"
 
 msgid "Download Unread"
 msgstr "Baixa les pendents de llegir"
 
 msgid "Download Selected Submissions"
-msgstr ""
+msgstr "Baixa els enviaments seleccionats"
 
 msgid "Download"
 msgstr "Baixa"
 
 msgid "Star Selected Submissions"
-msgstr ""
+msgstr "Marca els enviaments seleccionats"
 
 msgid "Star"
 msgstr "Marca"
 
 msgid "Un-star Selected Submissions"
-msgstr ""
+msgstr "Desmarca els enviaments seleccionats"
 
 msgid "Un-star"
 msgstr "Desmarca"
@@ -760,15 +748,15 @@ msgid "Show password"
 msgstr "Mostra la contrasenya"
 
 msgid "Log In to Journalist Interface"
-msgstr ""
+msgstr "Inicieu sessió a la interfície de periodista"
 
 msgid "LOG IN"
 msgstr "INICIA LA SESSIÓ"
 
 msgid "Field must be 1 character long."
 msgid_plural "Field must be between 1 and {max_codename_len} characters long."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "El camp ha de tenir 1 caràcter."
+msgstr[1] "El camp ha de tenir entre 1 i {max_codename_len} caràcters."
 
 msgid "Invalid input."
 msgstr "L'entrada no és vàlida."
@@ -837,7 +825,7 @@ msgid "Important"
 msgstr "Important"
 
 msgid "You have been logged out due to inactivity or a problem with your session. Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
-msgstr ""
+msgstr "S'ha tancat la sessió per inactivitat o per un problema amb la vostra sessió. Feu clic al botó <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>Nova identitat</b> a la barra d'eines del vostre Navegador Tor abans de continuar. Això esborrarà les dades d'activitat del Navegador Tor en aquest dispositiu."
 
 msgid "Protecting Journalists and Sources"
 msgstr "Protegeix els periodistes i les fonts"
@@ -846,10 +834,10 @@ msgid "Skip to notification"
 msgstr "Accedeix a la notificació"
 
 msgid "Return to Submission Page"
-msgstr ""
+msgstr "Torna a la pàgina d'enviament"
 
 msgid "Return to Home Page"
-msgstr ""
+msgstr "Torna a la pàgina d'inici"
 
 msgid "We're sorry, our SecureDrop is currently offline."
 msgstr "Vaja, el nostre SecureDrop és fora de línia."
@@ -894,7 +882,7 @@ msgid "<strong>Keep it safe.</strong> There is no account recovery option."
 msgstr "<strong>Mantingueu-lo segur.</strong> No hi ha cap opció de restauració."
 
 msgid "Continue to Submission Page"
-msgstr ""
+msgstr "Continua a la pàgina d'enviament"
 
 msgid "Welcome"
 msgstr "Us donem la benvinguda"
@@ -921,7 +909,7 @@ msgid "<strong>It is recommended to use Tor Browser to access SecureDrop:</stron
 msgstr "<strong>És recomanable l'ús del navegador Tor per accedir al SecureDrop:</strong><a class=\"recommend-tor\" href=\"{tor_browser_url}\">Apreneu com instal·lar-lo</a> o ignoreu aquest avís per a continuar."
 
 msgid "<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Orfox does not provide the same level of security and anonymity as the desktop version.</strong> <a class=\"recommend-tor\" aria-label=\"Learn how to install Tor Browser\" href=\"{tor_browser_url}\" >Learn how to install it</a>, or ignore this warning to continue."
-msgstr ""
+msgstr "<strong>Es recomana que utilitzeu la versió d'escriptori del Navegador Tor per accedir al SecureDrop, ja que Orfox no ofereix el mateix nivell de seguretat i anonimat que la versió d'escriptori.</strong> <a class=\"recommend-tor\" aria-label=\"Més informació sobre com instal·lar el Navegador Tor\" href=\"{tor_browser_url}\" >Més informació sobre com instal·lar-lo</a>, o ignoreu aquest avís per continuar."
 
 msgid "{} logo"
 msgstr "Logotip del {}"
@@ -933,7 +921,7 @@ msgid "First time submitting to our SecureDrop? Start here."
 msgstr "És el primer cop que envieu informació amb el SecureDrop? Comenceu aquí."
 
 msgid "Get Started With Your First Submission"
-msgstr ""
+msgstr "Comenceu amb el vostre primer enviament"
 
 msgid "GET STARTED"
 msgstr "PRIMERS PASSOS"
@@ -945,7 +933,7 @@ msgid "Already have a codename? Check for replies or submit something new."
 msgstr "Si ja teniu un nom en clau, entreu i comproveu les respostes o envieu quelcom nou."
 
 msgid "Log In Using Your Codename"
-msgstr ""
+msgstr "Inicieu sessió amb el vostre nom en clau"
 
 msgid "Log in"
 msgstr "Inicia la sessió"
@@ -957,7 +945,7 @@ msgid "Enter your codename"
 msgstr "Introduïu el vostre nom en clau"
 
 msgid "Cancel and Return to Previous Page"
-msgstr ""
+msgstr "Cancel·la i torna a la pàgina anterior"
 
 msgid "CANCEL"
 msgstr "CANCEL·LA"
@@ -966,7 +954,7 @@ msgid "Additional Action Required"
 msgstr "Cal una acció addicional"
 
 msgid "Log Back In"
-msgstr ""
+msgstr "Torna a iniciar sessió"
 
 msgid "One more thing..."
 msgstr "Una cosa més..."
@@ -1002,10 +990,10 @@ msgid "Anti-spam check. Do not fill this in!"
 msgstr "Comprovació de contingut brossa. Deixeu-ho sense emplenar!"
 
 msgid "Cancel and Clear Uploaded Content"
-msgstr ""
+msgstr "Cancel·la i esborra el contingut penjat"
 
 msgid "Submit Uploaded Content"
-msgstr ""
+msgstr "Envia el contingut penjat"
 
 msgid "Read Replies"
 msgstr "Llegiu les respostes"
@@ -1020,7 +1008,7 @@ msgid "Delete reply from {timestamp}?"
 msgstr "Voleu suprimir la resposta de {timestamp}?"
 
 msgid "Delete Reply"
-msgstr ""
+msgstr "Suprimeix la resposta"
 
 msgid "Delete All Replies"
 msgstr "Suprimeix totes les respostes"
@@ -1044,7 +1032,7 @@ msgid "Sorry, we couldn't locate what you requested."
 msgstr "No podem trobar el que demaneu."
 
 msgid "Warning: Proxy Detected"
-msgstr ""
+msgstr "Avís: s'ha detectat un servidor intermediari"
 
 msgid "Proxy Service Detected"
 msgstr "S'ha detectat un servidor intermediari"
@@ -1086,7 +1074,7 @@ msgid "Codename"
 msgstr "Nom en clau"
 
 msgid "Reveal Codename"
-msgstr ""
+msgstr "Mostra el nom en clau"
 
 msgid "Show Codename"
 msgstr "Mostra el nom en clau"
