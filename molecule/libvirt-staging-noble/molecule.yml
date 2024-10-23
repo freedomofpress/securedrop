@@ -9,6 +9,7 @@ lint: |
 platforms:
   - name: app-staging
     box: bento/ubuntu-24.04
+    box_version: "202404.26.0"
     raw_config_args:
       - "cpu_mode = 'host-passthrough'"
       - "video_type = 'virtio'"
@@ -25,6 +26,7 @@ platforms:
 
   - name: mon-staging
     box: bento/ubuntu-24.04
+    box_version: "202404.26.0"
     raw_config_args:
       - "cpu_mode = 'host-passthrough'"
       - "video_type = 'virtio'"
