@@ -13,9 +13,9 @@ RUN apt-get update  && apt-get install -y \
     npm install --global html_codesniffer@2.5.1
 
 # Current versions of the test browser software. Tor Browser is based
-# on a specific version of Firefox, noted in Help > About Tor Browser.
-# Ideally we'll keep those in sync.
-ENV FF_VERSION 115.3.1esr
+# on a specific version of Firefox - we download both for generic and TBB testing
+
+# We should use the version of geckodriver corresponding to the above Firefox version.
 ENV GECKODRIVER_VERSION v0.35.0
 
 # Import Tor release signing key
@@ -32,12 +32,14 @@ RUN TBB_VERSION=$(curl -s https://aus1.torproject.org/torbrowser/update_3/releas
     mkdir -p /root/.local/tbb && mv tor-browser /root/.local/tbb && \
     rm -f tor.keyring tor-browser-linux-x86_64-${TBB_VERSION}.tar.xz.asc tor-browser-linux-x86_64-${TBB_VERSION}.tar.xz
 
-# Import Mozilla release signing key
-ENV MOZILLA_RELEASE_KEY_FINGERPRINT "14F26682D0916CDD81E37B6D61B7B526D98F0353"
-RUN curl -s https://archive.mozilla.org/pub/firefox/releases/${FF_VERSION}/KEY | gpg2 --import -
 
-# Install the version of Firefox on which Tor Browser is based
-RUN curl -LO https://archive.mozilla.org/pub/firefox/releases/${FF_VERSION}/linux-x86_64/en-US/firefox-${FF_VERSION}.tar.bz2 && \
+# Import Mozilla release signing key and install the version of Firefox on which
+# Tor Browser is based
+ENV MOZILLA_RELEASE_KEY_FINGERPRINT "14F26682D0916CDD81E37B6D61B7B526D98F0353"
+
+RUN FF_VERSION=$(curl -s https://aus1.torproject.org/torbrowser/update_3/release/Linux_x86_64-gcc3/x/ALL | grep -oP '(?<=platformVersion=")[^"]*' | head -1)esr && \
+curl -s https://archive.mozilla.org/pub/firefox/releases/${FF_VERSION}/KEY | gpg2 --import - && \
+curl -LO https://archive.mozilla.org/pub/firefox/releases/${FF_VERSION}/linux-x86_64/en-US/firefox-${FF_VERSION}.tar.bz2 && \
     curl -LO https://archive.mozilla.org/pub/firefox/releases/${FF_VERSION}/linux-x86_64/en-US/firefox-${FF_VERSION}.tar.bz2.asc && \
     gpg2 --output ./mozilla.keyring --export ${MOZILLA_RELEASE_KEY_FINGERPRINT} && \
     gpgv --keyring ./mozilla.keyring firefox-${FF_VERSION}.tar.bz2.asc firefox-${FF_VERSION}.tar.bz2 && \
