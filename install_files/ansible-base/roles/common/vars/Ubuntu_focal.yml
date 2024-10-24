@@ -7,7 +7,6 @@ securedrop_kernel_packages_to_remove:
 resolvconf_target_filepath: /etc/resolv.conf
 
 securedrop_common_packages:
-  - apt-transport-https
   - iptables-persistent
   - unattended-upgrades
   - tmux
