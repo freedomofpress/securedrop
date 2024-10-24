@@ -237,6 +237,24 @@ dev-tor:  ## Run the development server with onion services in a Docker containe
 	@OFFSET_PORTS='false' DOCKER_BUILD_VERBOSE='true' USE_TOR='true' SLIM_BUILD=1 $(DEVSHELL) $(SDBIN)/run
 	@echo
 
+.PHONY:
+dev-get-id:  ## (DOCKER ONLY) Get the ID of the running "make dev" or "make dev-tor" container.
+	@docker ps --format json --filter "name=securedrop-dev" | jq -r ".ID"
+
+.PHONY:
+dev-enter:  ## (DOCKER ONLY) Start a shell directly in the running "make dev" or "make dev-tor" container.
+	@docker exec -it \
+		$(shell make dev-get-id) \
+		bash
+
+.PHONY: dev-load-data
+dev-load-data:  ## (DOCKER ONLY) Run "loaddata.py" in the running "make dev" or "make dev-tor" container. Set $NUM_JOURNALISTS and/or $NUM_SOURCES on the command line as needed.
+	@docker exec -it \
+		-e NUM_JOURNALISTS \
+		-e NUM_SOURCES \
+		$(shell make dev-get-id) \
+		./loaddata.py
+
 .PHONY: demo-landing-page
 demo-landing-page: ## Serve the landing page for the SecureDrop demo
 	@echo "███ Building Docker image..."
