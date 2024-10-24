@@ -18,12 +18,18 @@ from source_user import SourceUser
 from tests.factories import SecureDropConfigFactory
 from tests.functional.db_session import get_database_session
 from tests.functional.web_drivers import WebDriverTypeEnum, get_web_driver
+from tests.utils.i18n import get_test_locales
 
 
-# Function-scoped so that tests can be run in parallel if needed
-@pytest.fixture
-def firefox_web_driver() -> WebDriver:  # type: ignore
-    with get_web_driver(web_driver_type=WebDriverTypeEnum.FIREFOX) as web_driver:
+# Function-scoped so that tests can be run in parallel if needed.  The fixture
+# needs to know the locale at setup time, so we do that parameterization here
+# rather than at the test level.
+@pytest.fixture(params=get_test_locales())
+def firefox_web_driver(request) -> WebDriver:  # type: ignore
+    locale = request.param.replace("_", "-")
+    with get_web_driver(
+        web_driver_type=WebDriverTypeEnum.FIREFOX, accept_languages=locale
+    ) as web_driver:
         yield web_driver
 
 
@@ -209,6 +215,7 @@ def sd_servers(
         GPG_KEY_DIR=gpg_key_dir,
         JOURNALIST_KEY=journalist_key_fingerprint,
         RQ_WORKER_NAME=worker_name,
+        SUPPORTED_LOCALES=get_test_locales(),
     )
 
     # Spawn the apps in separate processes
