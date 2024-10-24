@@ -47,7 +47,7 @@ securedrop_supported_locales:
 - es_ES
 smtp_relay: smtp.gmail.com
 smtp_relay_port: 587
-ssh_users: sd
+ssh_users: sdadmin
 """
 
 JOURNALIST_ALERT_OUTPUT = """app_hostname: app
@@ -80,7 +80,7 @@ securedrop_supported_locales:
 - es_ES
 smtp_relay: smtp.gmail.com
 smtp_relay_port: 587
-ssh_users: sd
+ssh_users: sdadmin
 """
 
 HTTPS_OUTPUT_NO_POW = """app_hostname: app
@@ -113,7 +113,7 @@ securedrop_supported_locales:
 - es_ES
 smtp_relay: smtp.gmail.com
 smtp_relay_port: 587
-ssh_users: sd
+ssh_users: sdadmin
 """
 
 

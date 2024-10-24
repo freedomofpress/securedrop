@@ -17,5 +17,5 @@ securedrop_supported_locales:
 - en_US
 smtp_relay: smtp.gmail.com
 smtp_relay_port: 587
-ssh_users: sd
+ssh_users: sdadmin
 user_defined_variable: "must not be discarded"

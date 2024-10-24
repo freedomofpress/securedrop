@@ -304,7 +304,7 @@ class SiteConfig:
         self.desc: List[_DescEntryType] = [
             (
                 "ssh_users",
-                "sd",
+                "sdadmin",
                 str,
                 "Username for SSH access to the servers",
                 SiteConfig.ValidateUser(),
