@@ -37,9 +37,9 @@ apache_packages:
 apache_templates:
   - src: ports.conf
     dest: /etc/apache2/ports.conf
-  - src: sites-available/{{ ansible_distribution_release }}/journalist.conf
+  - src: sites-available/journalist.conf
     dest: /etc/apache2/sites-available/journalist.conf
-  - src: sites-available/{{ ansible_distribution_release }}/source.conf
+  - src: sites-available/source.conf
     dest: /etc/apache2/sites-available/source.conf
 
 # Apache modules required for the SecureDrop application. Will be enabled.
