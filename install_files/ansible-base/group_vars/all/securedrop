@@ -19,7 +19,7 @@ remote_host_ref: "{{ ansible_host|default(inventory_hostname) }}"
 development_dependencies: []
 
 # Installing the securedrop-app-code.deb package
-securedrop_target_distribution: focal
+securedrop_target_distribution: noble
 securedrop_app_code_deb: "securedrop-app-code_{{ securedrop_version }}+{{ securedrop_target_distribution }}_amd64" # do not enter .deb extension
 
 # Enable Tor over SSH by default
