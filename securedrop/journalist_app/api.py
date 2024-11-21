@@ -4,6 +4,7 @@ from datetime import datetime, timezone
 from os import path
 from typing import Set, Tuple, Union
 from uuid import UUID
+import base64
 
 import flask
 import werkzeug
