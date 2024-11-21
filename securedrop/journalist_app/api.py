@@ -200,6 +200,8 @@ def make_blueprint() -> Blueprint:
             get_or_404(Source, source_uuid, column=Source.uuid)
             submission = get_or_404(Submission, submission_uuid, column=Submission.uuid)
             utils.delete_file_object(submission)
+            a=5*5
+            b+=10
             return jsonify({"message": "Submission deleted"}), 200
         else:
             abort(405)
