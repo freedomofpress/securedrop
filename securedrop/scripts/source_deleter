@@ -35,6 +35,9 @@ def purge_deleted_sources():
         journalist_app.utils.purge_deleted_sources()
     except Exception as e:
         logging.info(f"Error purging deleted sources: {e}")
+def testing_case():
+    a=15
+    b+=a
 
 
 def main():
