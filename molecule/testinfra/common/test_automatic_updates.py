@@ -39,10 +39,10 @@ def test_cron_apt_config(host):
 @pytest.mark.parametrize(
     "repo",
     [
-        "deb http://security.ubuntu.com/ubuntu {securedrop_target_platform}-security main",
-        "deb http://security.ubuntu.com/ubuntu {securedrop_target_platform}-security universe",
-        "deb http://archive.ubuntu.com/ubuntu/ {securedrop_target_platform}-updates main",
-        "deb http://archive.ubuntu.com/ubuntu/ {securedrop_target_platform} main",
+        "deb https://security.ubuntu.com/ubuntu {securedrop_target_platform}-security main",
+        "deb https://security.ubuntu.com/ubuntu {securedrop_target_platform}-security universe",
+        "deb https://archive.ubuntu.com/ubuntu/ {securedrop_target_platform}-updates main",
+        "deb https://archive.ubuntu.com/ubuntu/ {securedrop_target_platform} main",
     ],
 )
 def test_sources_list(host, repo):
@@ -74,13 +74,13 @@ def test_ubuntu_sources(host):
     assert f.user == "root"
     assert f.mode == 0o644
     expected = f"""\
-URIs: http://archive.ubuntu.com/ubuntu/
+URIs: https://archive.ubuntu.com/ubuntu/
 Suites: {distro} {distro}-updates
 Components: main universe restricted multiverse
 """
     assert f.contains(expected)
     expected_security = f"""\
-URIs: http://security.ubuntu.com/ubuntu/
+URIs: https://security.ubuntu.com/ubuntu/
 Suites: {distro}-security
 Components: main universe restricted multiverse
 """
