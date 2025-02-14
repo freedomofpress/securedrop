@@ -13,6 +13,16 @@
 - name: Perform migration
   when: not already_finished
   block:
+    - debug:
+        msg: "Taking a backup before the upgrade begins"
+
+    - name: Backup
+      include_role: backup
+      when: ossec_is_client
+
+    - debug:
+        msg: "Backup finished; starting the upgrade"
+
     - name: Instruct upgrade to begin
       ansible.builtin.copy:
         # It's okay to enable both app and mon here to simplify the logic,
@@ -90,3 +100,11 @@
         search_regex: '"finished":"Done"'
         sleep: 5
         timeout: 300
+
+    # Delete the backup file
+    - name: Delete backup
+      when: ossec_is_client
+      delegate_to: localhost
+      file:
+        path: "./{{ backup_filename }}"
+        state: absent
