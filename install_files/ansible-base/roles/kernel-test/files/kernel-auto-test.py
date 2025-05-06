@@ -30,13 +30,31 @@ hardware = Path("/sys/devices/virtual/dmi/id/product_name").read_text().strip()
 
 print(f"I am beginning to test {current} on {hardware}")
 
+# paxtest
 paxtest = subprocess.run(["paxtest", "blackhat"], stderr=subprocess.STDOUT, stdout=subprocess.PIPE,
-    check=False)
+
+# Spectre & Meltdown Checker
 fetch = subprocess.check_output(["curl", "-L", "https://meltdown.ovh"])
 Path("/tmp/spectre-meltdown-checker.sh").write_bytes(fetch)  # noqa: S108
 checker = subprocess.run(
     ["bash", "/tmp/spectre-meltdown-checker.sh", "--no-color"],  # noqa: S108
     stderr=subprocess.STDOUT, stdout=subprocess.PIPE,
+    check=False,
+)
+
+# grsecurity test suite
+CLONE = "/tmp/securedrop"
+subprocess.check_output(["git", "clone", "https://github.com/freedomofpress/securedrop", CLONE])
+subprocess.check_output(["make", "venv"], cwd=CLONE)
+test_suite = subprocess.run(
+    [
+        "sh",
+        "-c",
+        "'source .venv/bin/activate && py.test molecule/testinfra/test_grsecurity_local.py'",
+    ],
+    cwd=CLONE,
+    stderr=subprocess.STDOUT,
+    stdout=subprocess.PIPE,
     check=False,
 )
 
@@ -64,6 +82,7 @@ def create_gist(command, result):
 
 paxtest_gist = create_gist("paxtest", paxtest)
 checker_gist = create_gist("spectre-meltdown-checker.sh", checker)
+test_suite_gist = create_gist("test_grsecurity_local.py", test_suite)
 
 template = f"""\
 Hello SecureDrop team,
@@ -75,6 +94,7 @@ If you're seeing this comment it means it successfully booted!
 I ran:
 * paxtest, exit code: {paxtest.returncode} ([logs]({paxtest_gist}))
 * spectre-meltdown-checker.sh, exit code: {checker.returncode} ([logs]({checker_gist}))
+* test_grsecurity_local.py, exit code: {test_suite.returncode} ([logs]({test_suite_gist}))
 
 Cheers,
 Your friendly kernel testing robot
