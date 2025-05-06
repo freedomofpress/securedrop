@@ -31,14 +31,17 @@ hardware = Path("/sys/devices/virtual/dmi/id/product_name").read_text().strip()
 print(f"I am beginning to test {current} on {hardware}")
 
 # paxtest
-paxtest = subprocess.run(["paxtest", "blackhat"], stderr=subprocess.STDOUT, stdout=subprocess.PIPE,
+paxtest = subprocess.run(
+    ["paxtest", "blackhat"], stderr=subprocess.STDOUT, stdout=subprocess.PIPE, check=False
+)
 
 # Spectre & Meltdown Checker
 fetch = subprocess.check_output(["curl", "-L", "https://meltdown.ovh"])
 Path("/tmp/spectre-meltdown-checker.sh").write_bytes(fetch)  # noqa: S108
 checker = subprocess.run(
     ["bash", "/tmp/spectre-meltdown-checker.sh", "--no-color"],  # noqa: S108
-    stderr=subprocess.STDOUT, stdout=subprocess.PIPE,
+    stderr=subprocess.STDOUT,
+    stdout=subprocess.PIPE,
     check=False,
 )
 
@@ -58,6 +61,7 @@ test_suite = subprocess.run(
     check=False,
 )
 
+
 def create_gist(command, result):
     headers = {
         "Authorization": f"Bearer {GIST_TOKEN}",
@@ -75,10 +79,11 @@ def create_gist(command, result):
         "https://api.github.com/gists",
         data=json.dumps(data).encode(),
         headers=headers,
-        method="POST"
+        method="POST",
     )
     with urllib.request.urlopen(req) as response:
         return json.loads(response.read().decode())["html_url"]
+
 
 paxtest_gist = create_gist("paxtest", paxtest)
 checker_gist = create_gist("spectre-meltdown-checker.sh", checker)
@@ -102,17 +107,21 @@ Your friendly kernel testing robot
 
 print(template)
 
+
 def search_issues(kernel_version):
     headers = {
         "Accept": "application/vnd.github+json",
         "Content-Type": "application/json",
     }
-    query = urllib.parse.quote(f"repo:freedomofpress/securedrop {kernel_version} in:title state:open")
+    query = urllib.parse.quote(
+        f"repo:freedomofpress/securedrop {kernel_version} in:title state:open"
+    )
     url = f"https://api.github.com/search/issues?q={query}"
     print(f"Searching via {url}")
     req = urllib.request.Request(url, headers=headers)
     with urllib.request.urlopen(req) as response:
         return json.loads(response.read().decode())["items"]
+
 
 def create_issue(title, body):
     print("Creating issue")
@@ -127,6 +136,7 @@ def create_issue(title, body):
     with urllib.request.urlopen(req) as response:
         return json.loads(response.read().decode())
 
+
 def create_comment(issue_number, body):
     print("Leaving comment")
     headers = {
@@ -139,6 +149,7 @@ def create_comment(issue_number, body):
     req = urllib.request.Request(url, data=data, headers=headers, method="POST")
     with urllib.request.urlopen(req) as response:
         return json.loads(response.read().decode())
+
 
 issue_body = f"""\
 Dearest SecureDrop developers,
