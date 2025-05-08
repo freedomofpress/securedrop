@@ -31,14 +31,14 @@
     - fpf_repo
 
 
-- name: Install paxtest
+- name: Install required packages for kernel testing
   apt:
-    pkg: paxtest
-    state: present
-
-- name: Install readelf/strings (needed by spectre-meltdown-checker)
-  apt:
-    pkg: binutils
+    pkg:
+      - paxtest
+      - binutils
+      - build-essential
+      - python3-virtualenv
+      - python3-dev
     state: present
 
 - name: Set permissions on github-token.json

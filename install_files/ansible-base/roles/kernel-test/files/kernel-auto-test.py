@@ -48,7 +48,9 @@ checker_results = subprocess.run(
 # grsecurity test suite
 CLONE = Path("/tmp/securedrop")  # noqa: S108
 subprocess.check_output(["rm", "-rf", CLONE])
-subprocess.check_output(["git", "clone", "https://github.com/freedomofpress/securedrop", CLONE])
+subprocess.check_output(
+    ["git", "clone", "https://github.com/freedomofpress/securedrop", "--depth=1", CLONE]
+)
 subprocess.check_output(["make", "venv"], cwd=CLONE)
 
 TEST_SUITE_CONTENTS = """
@@ -63,16 +65,17 @@ TEST_SUITE_PATH.write_text(TEST_SUITE_CONTENTS)
 
 test_suite_results = subprocess.run(
     [
-        # Single-shot command in the virtual environment:
-        "sh",
-        "-c",
-        f"'source .venv/bin/activate && py.test {TEST_SUITE_PATH}'",
+        ".venv/bin/pytest",
+        "-v",
+        TEST_SUITE_PATH,
     ],
     cwd=CLONE,
     stderr=subprocess.STDOUT,
     stdout=subprocess.PIPE,
     check=False,
 )
+# TODO: test_grsecurity removes paxtest for now, so we need to reinstall it
+subprocess.check_call(["apt-get", "install", "-y", "paxtest"])
 
 
 def create_gist(command, result):
