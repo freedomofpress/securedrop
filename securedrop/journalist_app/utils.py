@@ -392,10 +392,17 @@ def col_delete_data(cols_selected: List[str]) -> werkzeug.Response:
 
 def delete_collection(filesystem_id: str) -> None:
     """deletes source account including files and reply key"""
+    # Define the safe root directory for storage paths
+    safe_root = Storage.get_default().root_directory()
+
     # Delete the source's collection of submissions
     path = Storage.get_default().path(filesystem_id)
-    if os.path.exists(path):
-        Storage.get_default().move_to_shredder(path)
+    normalized_path = os.path.normpath(path)
+    if not normalized_path.startswith(safe_root):
+        raise ValueError(f"Invalid filesystem_id: {filesystem_id}")
+
+    if os.path.exists(normalized_path):
+        Storage.get_default().move_to_shredder(normalized_path)
 
     # Delete the source's reply keypair
     EncryptionManager.get_default().delete_source_key_pair(filesystem_id)
