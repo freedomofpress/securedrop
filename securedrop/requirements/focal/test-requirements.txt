@@ -16,9 +16,6 @@ beautifulsoup4==4.8.2 \
     --hash=sha256:9fbb4d6e48ecd30bcacc5b63b94088192dcda178513b2ae3c394229f8911b887 \
     --hash=sha256:e1505eeed31b0f4ce2dbb3bc8eb256c04cc2b3b72af7d551a4ab6efd5cbe5dae
     # via -r requirements/test-requirements.in
-blinker==1.4 \
-    --hash=sha256:471aee25f3992bd325afa3772f1063dbdbbca947a041b8b89466dc00d606f8b6
-    # via -r requirements/test-requirements.in
 certifi==2024.7.4 \
     --hash=sha256:5a1e7645bc0ec61a09e26c36f6106dd4cf40c6db3a1fb6352b0244e7fb057c7b \
     --hash=sha256:c198e21b1289c2ab85ee4e67bb4b4ef3ead0892059901a8d5b622f24a1101e90
@@ -145,10 +142,6 @@ packaging==25.0 \
     --hash=sha256:29572ef2b1f17581046b3a2227d5c611fb25ec70ca1ba8554b24b0e69331a484 \
     --hash=sha256:d443872c98d677bf60f6a1f2f8c1cb748e8fe762d2bf9d3148b5599295b0fc4f
     # via pytest
-pathlib2==2.3.5 \
-    --hash=sha256:0ec8205a157c80d7acc301c0b18fbd5d44fe655968f5d947b6ecef5290fc35db \
-    --hash=sha256:6cd9a47b597b37cc57de1c05e56fb1a1c9cc9fab04fe78c29acd090418529868
-    # via -r requirements/test-requirements.in
 pbr==3.1.1 \
     --hash=sha256:05f61c71aaefc02d8e37c0a3eeb9815ff526ea28b3b76324769e6158d7f95be1 \
     --hash=sha256:60c25b7dfd054ef9bb0ae327af949dd4676aa09ac3a9471cdc871d8a9213f9ac
@@ -327,9 +320,7 @@ setuptools==75.3.2 \
 six==1.11.0 \
     --hash=sha256:70e8a77beed4562e7f14fe23a786b54f6296e34344c23bc42f07b15018ff98e9 \
     --hash=sha256:832dc0e10feb1aa2c68dcc57dbb658f1c7e65b9b61af69048abc87a2db00a0eb
-    # via
-    #   mock
-    #   pathlib2
+    # via mock
 sniffio==1.3.0 \
     --hash=sha256:e60305c5e5d314f5389259b7f22aaa33d8f7dee49763119234af3755c55b9101 \
     --hash=sha256:eecefdce1e5bbfb7ad2eeaabf7c1eeb404d7757c379bd1f7e5cce9d8bf425384
