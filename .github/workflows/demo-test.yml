@@ -33,7 +33,7 @@ jobs:
         with:
           persist-credentials: false
       - name: Download artifact
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v6
         with:
           name: ${{ needs.build.outputs.artifact-name }}
       - name: Restore container image
