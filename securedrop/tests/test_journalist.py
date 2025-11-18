@@ -3321,7 +3321,7 @@ def test_download_selected_submissions_and_replies(
             ),
         )
 
-    # The download request was succesful, and the app returned a zipfile
+    # The download request was successful, and the app returned a zipfile
     assert resp.status_code == 200
     assert resp.content_type == "application/zip"
     assert zipfile.is_zipfile(BytesIO(resp.data))
@@ -3395,7 +3395,7 @@ def test_download_selected_submissions_and_replies_previously_seen(
             ),
         )
 
-    # The download request was succesful, and the app returned a zipfile
+    # The download request was successful, and the app returned a zipfile
     assert resp.status_code == 200
     assert resp.content_type == "application/zip"
     assert zipfile.is_zipfile(BytesIO(resp.data))
@@ -3466,7 +3466,7 @@ def test_download_selected_submissions_previously_downloaded(
             ),
         )
 
-    # The download request was succesful, and the app returned a zipfile
+    # The download request was successful, and the app returned a zipfile
     assert resp.status_code == 200
     assert resp.content_type == "application/zip"
     assert zipfile.is_zipfile(BytesIO(resp.data))
@@ -3611,7 +3611,7 @@ def test_download_unread_all_sources(journalist_app, test_journo, app_storage):
             data=dict(action="download-unread", cols_selected=selected),
         )
 
-    # The download request was succesful, and the app returned a zipfile
+    # The download request was successful, and the app returned a zipfile
     assert resp.status_code == 200
     assert resp.content_type == "application/zip"
     assert zipfile.is_zipfile(BytesIO(resp.data))
@@ -3686,7 +3686,7 @@ def test_download_all_selected_sources(journalist_app, test_journo, app_storage)
             data=dict(action="download-all", cols_selected=selected),
         )
 
-    # The download request was succesful, and the app returned a zipfile
+    # The download request was successful, and the app returned a zipfile
     assert resp.status_code == 200
     assert resp.content_type == "application/zip"
     assert zipfile.is_zipfile(BytesIO(resp.data))
