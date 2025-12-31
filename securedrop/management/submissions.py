@@ -78,6 +78,69 @@ def delete_disconnected_db_submissions(args: argparse.Namespace) -> None:
             print("Not removing disconnected submissions in database.")
 
 
+def find_disconnected_db_replies(path: str) -> List[Reply]:
+    """
+    Finds Reply records whose file does not exist.
+    """
+    replies = db.session.query(Reply).order_by(Reply.id, Reply.filename).all()
+
+    files_in_fs = {}
+    for directory, _subdirs, files in os.walk(path):
+        for f in files:
+            files_in_fs[f] = os.path.abspath(os.path.join(directory, f))
+
+    return [r for r in replies if r.filename not in files_in_fs]
+
+
+def check_for_disconnected_db_replies(args: argparse.Namespace) -> None:
+    """
+    Check for Reply records whose files are missing.
+    """
+    with app_context():
+        disconnected = find_disconnected_db_replies(args.store_dir)
+        if disconnected:
+            print(
+                "There are replies in the database with no corresponding files. "
+                'Run "manage.py list-disconnected-db-replies" for details.'
+            )
+        else:
+            print("No problems were found. All replies' files are present.")
+
+
+def list_disconnected_db_replies(args: argparse.Namespace) -> None:
+    """
+    List the IDs of Reply records whose files are missing.
+    """
+    with app_context():
+        disconnected_replies = find_disconnected_db_replies(args.store_dir)
+        if disconnected_replies:
+            print(
+                'Run "manage.py delete-disconnected-db-replies" to delete these records.',
+                file=sys.stderr,
+            )
+        for r in disconnected_replies:
+            print(r.id)
+
+
+def delete_disconnected_db_replies(args: argparse.Namespace) -> None:
+    """
+    Delete Reply records whose files are missing.
+    """
+    with app_context():
+        disconnected_replies = find_disconnected_db_replies(args.store_dir)
+        ids = [r.id for r in disconnected_replies]
+
+        remove = args.force
+        if not args.force:
+            remove = input("Enter 'y' to delete all replies missing files: ") == "y"
+        if remove:
+            print(f"Removing reply IDs {ids}...")
+            db.session.query(Reply).filter(Reply.id.in_(ids)).delete(synchronize_session="fetch")
+            db.session.commit()
+        else:
+            print("Not removing disconnected replies in database.")
+
+
 def find_disconnected_fs_submissions(path: str) -> List[str]:
     """
     Finds files in the store that lack a Submission or Reply record.
@@ -189,6 +252,14 @@ def add_check_db_disconnect_parser(subps: _SubParsersAction) -> None:
     check_db_disconnect_subp.set_defaults(func=check_for_disconnected_db_submissions)
 
 
+def add_check_db_disconnect_replies_parser(subps: _SubParsersAction) -> None:
+    check_db_disconnect_replies_subp = subps.add_parser(
+        "check-disconnected-db-replies",
+        help="Check for replies that exist in the database but not the filesystem.",
+    )
+    check_db_disconnect_replies_subp.set_defaults(func=check_for_disconnected_db_replies)
+
+
 def add_check_fs_disconnect_parser(subps: _SubParsersAction) -> None:
     check_fs_disconnect_subp = subps.add_parser(
         "check-disconnected-fs-submissions",
@@ -204,6 +275,17 @@ def add_delete_db_disconnect_parser(subps: _SubParsersAction) -> None:
     )
     delete_db_disconnect_subp.set_defaults(func=delete_disconnected_db_submissions)
     delete_db_disconnect_subp.add_argument(
+        "--force", action="store_true", help="Do not ask for confirmation."
+    )
+
+
+def add_delete_db_disconnect_replies_parser(subps: _SubParsersAction) -> None:
+    delete_db_disconnect_replies_subp = subps.add_parser(
+        "delete-disconnected-db-replies",
+        help="Delete replies that exist in the database but not the filesystem.",
+    )
+    delete_db_disconnect_replies_subp.set_defaults(func=delete_disconnected_db_replies)
+    delete_db_disconnect_replies_subp.add_argument(
         "--force", action="store_true", help="Do not ask for confirmation."
     )
 
@@ -225,6 +307,14 @@ def add_list_db_disconnect_parser(subps: _SubParsersAction) -> None:
         help="List submissions that exist in the database but not the filesystem.",
     )
     list_db_disconnect_subp.set_defaults(func=list_disconnected_db_submissions)
+
+
+def add_list_db_disconnect_replies_parser(subps: _SubParsersAction) -> None:
+    list_db_disconnect_replies_subp = subps.add_parser(
+        "list-disconnected-db-replies",
+        help="List replies that exist in the database but not the filesystem.",
+    )
+    list_db_disconnect_replies_subp.set_defaults(func=list_disconnected_db_replies)
 
 
 def add_list_fs_disconnect_parser(subps: _SubParsersAction) -> None:

@@ -32,10 +32,13 @@ from management.run import run
 from management.sources import remove_pending_sources
 from management.submissions import (
     add_check_db_disconnect_parser,
+    add_check_db_disconnect_replies_parser,
     add_check_fs_disconnect_parser,
     add_delete_db_disconnect_parser,
+    add_delete_db_disconnect_replies_parser,
     add_delete_fs_disconnect_parser,
     add_list_db_disconnect_parser,
+    add_list_db_disconnect_replies_parser,
     add_list_fs_disconnect_parser,
     add_were_there_submissions_today,
 )
@@ -366,10 +369,13 @@ def get_args() -> argparse.ArgumentParser:
     remove_pending_sources_subp.set_defaults(func=remove_pending_sources)
 
     add_check_db_disconnect_parser(subps)
+    add_check_db_disconnect_replies_parser(subps)
     add_check_fs_disconnect_parser(subps)
     add_delete_db_disconnect_parser(subps)
+    add_delete_db_disconnect_replies_parser(subps)
     add_delete_fs_disconnect_parser(subps)
     add_list_db_disconnect_parser(subps)
+    add_list_db_disconnect_replies_parser(subps)
     add_list_fs_disconnect_parser(subps)
 
     # Cleanup the SD temp dir
