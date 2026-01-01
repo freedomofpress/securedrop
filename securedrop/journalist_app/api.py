@@ -120,7 +120,11 @@ def make_blueprint() -> Blueprint:
 
     @api.route("/sources", methods=["GET"])
     def get_all_sources() -> Tuple[flask.Response, int]:
-        sources = Source.query.filter_by(pending=False, deleted_at=None).all()
+        sources = (
+            Source.query.filter_by(pending=False, deleted_at=None)
+            .filter(Source.last_updated.isnot(None))
+            .all()
+        )
         return jsonify({"sources": [source.to_api_v1() for source in sources]}), 200
 
     @api.route("/sources/<source_uuid>", methods=["GET", "DELETE"])
