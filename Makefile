@@ -335,6 +335,7 @@ $(POT): securedrop
 		--project="SecureDrop" \
 		--msgid-bugs-address=securedrop@freedom.press \
 		--copyright-holder="Freedom of the Press Foundation" \
+		--header-comment=$$'# Translations template for PROJECT.\n# This file is distributed under the same license as the PROJECT project.\n#' \
 		--add-comments="Translators:" \
 		--strip-comments \
 		--add-location=never \
@@ -363,6 +364,7 @@ $(DESKTOP_POT): ${DESKTOP_BASE}/*.in
 		--project=SecureDrop \
 		--msgid-bugs-address=securedrop@freedom.press \
 		--copyright-holder="Freedom of the Press Foundation" \
+		--header-comment=$$'# Translations template for PROJECT.\n# This file is distributed under the same license as the PROJECT project.\n#' \
 		--add-location=never \
 		--sort-output \
 		$^
