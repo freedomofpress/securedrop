@@ -8,13 +8,13 @@ ansible==6.7.0 \
     --hash=sha256:3cda6e67b1d42516f64ce376bb94c5186ff33d215d155432be5b3c2ec60bf112 \
     --hash=sha256:c188f3ac8a8583794aadcff0bea87895ead58c19d6f244cd0c342562706e176c
     # via
-    #   -r requirements/develop-requirements.in
+    #   -r develop-requirements.in
     #   ansible-lint
 ansible-compat==2.2.7 \
     --hash=sha256:08deddcd0a1dc6baabe674b07c6ff882118492c123d281f56f01905271a7ffc4 \
     --hash=sha256:77fd80841279d8b0664df61faab65c32275d1a2b0079f60bf30c3d44251f6301
     # via
-    #   -r requirements/develop-requirements.in
+    #   -r develop-requirements.in
     #   molecule
 ansible-core==2.13.7 \
     --hash=sha256:6005c24e45ff59497a7fe24411825fcba862585bc6bde83d6d48242c97042aba \
@@ -23,7 +23,7 @@ ansible-core==2.13.7 \
 ansible-lint==4.2.0 \
     --hash=sha256:b9fc9a6564f5d60a4284497f966f38ef78f0e2505edbe2bd1225f1ade31c2d8a \
     --hash=sha256:eb925d8682d70563ccb80e2aca7b3edf84fb0b768cea3edc6846aac7abdc414a
-    # via -r requirements/develop-requirements.in
+    # via -r develop-requirements.in
 anyio==4.11.0 \
     --hash=sha256:0287e96f4d26d4149305414d4e3bc32f0dcd0862365a4bddea19d7a1ec38c4fc \
     --hash=sha256:82a8d0b81e318cc5ce71a5f1f8b5c4e63619620b63141ef8c995fa0db95a57c4
@@ -49,7 +49,7 @@ argon2-cffi==20.1.0 \
     --hash=sha256:cc0e028b209a5483b6846053d5fd7165f460a1f14774d79e632e75e7ae64b82b \
     --hash=sha256:d8029b2d3e4b4cea770e9e5a0104dd8fa185c1724a0f01528ae4826a6d25f97d \
     --hash=sha256:da7f0445b71db6d3a72462e04f36544b0de871289b0bc8a7cc87c0f5ec7079fa
-    # via -r requirements/develop-requirements.in
+    # via -r develop-requirements.in
 arrow==0.10.0 \
     --hash=sha256:805906f09445afc1f0fc80187db8fe07670e3b25cdafa09b8d8ac264a8c0c722
     # via cookiecutter
@@ -66,15 +66,6 @@ attrs==23.2.0 \
     #   pytest
     #   referencing
     #   semgrep
-babel==2.12.1 \
-    --hash=sha256:b4246fb7677d3b98f501a39d43396d3cafdc8eadb045f4a31be01863f655c610 \
-    --hash=sha256:cc2d99999cd01d44420ae725a21c9e3711b3aadc7976d6147f622d8581963455
-    # via
-    #   -r requirements/translation-requirements.in
-    #   babelgladeextractor
-babelgladeextractor==0.7.0 \
-    --hash=sha256:bcf805e28b4bb18c8b6909a65a7cf5c7c2bcbf4ae50b164878c9682d22271798
-    # via -r requirements/translation-requirements.in
 bcrypt==4.1.2 \
     --hash=sha256:02d9ef8915f72dd6daaef40e0baeef8a017ce624369f09754baf32bb32dba25f \
     --hash=sha256:1c28973decf4e0e69cee78c68e30a523be441972c826703bb93099868a8ff5b5 \
@@ -216,7 +207,7 @@ cffi==2.0.0 \
     --hash=sha256:fc7de24befaeae77ba923797c7c87834c73648a05a4bde34b3b7e5588973a453 \
     --hash=sha256:fe562eb1a64e67dd297ccc4f5addea2501664954f2692b69a76449ec7913ecbf
     # via
-    #   -r requirements/develop-requirements.in
+    #   -r develop-requirements.in
     #   argon2-cffi
     #   cryptography
     #   pynacl
@@ -279,12 +270,12 @@ cryptography==41.0.7 \
     --hash=sha256:e3114da6d7f95d2dee7d3f4eec16dacff819740bbab931aff8648cb13c5ff5e7 \
     --hash=sha256:f983596065a18a2183e7f79ab3fd4c475205b839e02cbc0efbbf9666c4b3083d
     # via
-    #   -r requirements/develop-requirements.in
+    #   -r develop-requirements.in
     #   ansible-core
     #   paramiko
 diffoscope==256 \
     --hash=sha256:9937e3d70358d5cc00aa5fa8a3db9dd6be532a0d3cd2d064add2cda736a97c2a
-    # via -r requirements/develop-requirements.in
+    # via -r develop-requirements.in
 dill==0.3.9 \
     --hash=sha256:468dff3b89520b474c0397703366b7b95eebe6303f108adf9b19da1f702be87a \
     --hash=sha256:81aa267dddf68cbfe8029c42ca9ec6a4ab3b22371d1c450abc54422577b4512c
@@ -296,11 +287,11 @@ distro==1.5.0 \
 dnspython==1.15.0 \
     --hash=sha256:40f563e1f7a7b80dc5a4e76ad75c23da53d62f1e15e6e517293b04e1f84ead7c \
     --hash=sha256:861e6e58faa730f9845aaaa9c6c832851fbf89382ac52915a51f89c71accdd31
-    # via -r requirements/develop-requirements.in
+    # via -r develop-requirements.in
 docker==4.4.2 \
     --hash=sha256:20d71afc593486f2297bb7fb7406b03876f31894337e914a5062050c65085cab \
     --hash=sha256:67f33d4cf95182db631a17eef7d666d2c91f624c1d3fbc4df6009cb2f2a4c604
-    # via -r requirements/develop-requirements.in
+    # via -r develop-requirements.in
 docopt==0.6.2 \
     --hash=sha256:49b3a825280bd66b3aa83585ef59c4a8c82f2c8a522dbe754a8bc8d08c85c491
     # via
@@ -338,7 +329,7 @@ h11==0.16.0 \
     #   uvicorn
 html-linter==0.4.0 \
     --hash=sha256:342dad677f2fc810a2562fde0959046ed0d8fa1387bd9e085869e908c1941191
-    # via -r requirements/develop-requirements.in
+    # via -r develop-requirements.in
 httpcore==1.0.9 \
     --hash=sha256:2d400746a40668fc9dec9810239072b40b4484b640a8c38fd654a024c7a1bf55 \
     --hash=sha256:6e34463af53fd2ab5d807f399a9b45ea31c3dfa2276f15a2c3f00afff6e176e8
@@ -365,7 +356,7 @@ importlib-metadata==8.7.0 \
 importlib-resources==1.5.0 \
     --hash=sha256:6f87df66833e1942667108628ec48900e02a4ab4ad850e25fbf07cb17cf734ca \
     --hash=sha256:85dc0b9b325ff78c8bef2e4ff42616094e16b98ebd5e3b50fe7e2f0bbcdcde49
-    # via -r requirements/develop-requirements.in
+    # via -r develop-requirements.in
 iniconfig==1.0.1 \
     --hash=sha256:80cf40c597eb564e86346103f609d74efce0f6b4d4f30ec8ce9e2c26411ba437 \
     --hash=sha256:e5f92f89355a67de0595932a6c6c02ab4afddc6fcdc0bfc5becd0d60884d3f69
@@ -378,7 +369,7 @@ jinja2==3.1.6 \
     --hash=sha256:0137fb05990d35f1275a587e9aee6d56da821fc83491a0fb838183be43f66d6d \
     --hash=sha256:85ece4451f492d0c13c5dd7c13a64681a86afae63a5f347908daf103ce6d2f67
     # via
-    #   -r requirements/develop-requirements.in
+    #   -r develop-requirements.in
     #   ansible-core
     #   cookiecutter
     #   molecule
@@ -596,7 +587,7 @@ markupsafe==2.1.2 \
     --hash=sha256:f2bfb563d0211ce16b63c7cb9395d2c682a23187f54c3d79bfec33e6705473c6 \
     --hash=sha256:f8ffb705ffcf5ddd0e80b65ddf7bed7ee4f5a441ea7d3419e861a12eaf41af58
     # via
-    #   -r requirements/develop-requirements.in
+    #   -r develop-requirements.in
     #   jinja2
 mccabe==0.6.1 \
     --hash=sha256:ab8a6258860da4b6677da4bd2fe5dc2c659cff31b3ee4f7f5d64e79735b80d42 \
@@ -614,16 +605,16 @@ molecule==3.6.1 \
     --hash=sha256:3b7d5ba2978c15a034df8c7aa59dec5436f7d3260d1f9db2c78ae14ae3a9deeb \
     --hash=sha256:f7f57d6b3b775e876bea2a46e368eee72d391e163f8175acf29fef797a280248
     # via
-    #   -r requirements/develop-requirements.in
+    #   -r develop-requirements.in
     #   molecule-vagrant
 molecule-vagrant==1.0.0 \
     --hash=sha256:c58a3826b4665194a99d837da98039f3abb664482cd27565973bfd4f1f70bbb1 \
     --hash=sha256:fc1e988147226ada8288475b768c52a37366c8b50d30b91635cacfc64e1468c3
-    # via -r requirements/develop-requirements.in
+    # via -r develop-requirements.in
 netaddr==0.7.19 \
     --hash=sha256:38aeec7cdd035081d3a4c306394b19d677623bf76fa0913f6695127c7753aefd \
     --hash=sha256:56b3558bd71f3f6999e4c52e349f38660e54a7a8a9943335f73dfc96883e08ca
-    # via -r requirements/develop-requirements.in
+    # via -r develop-requirements.in
 opentelemetry-api==1.37.0 \
     --hash=sha256:540735b120355bd5112738ea53621f8d5edb35ebcd6fe21ada3ab1c61d1cd9a7 \
     --hash=sha256:accf2024d3e89faec14302213bc39550ec0f4095d1cf5ca688e1bfb1c8612f47
@@ -694,10 +685,6 @@ pathspec==0.9.0 \
 peewee==3.18.3 \
     --hash=sha256:62c3d93315b1a909360c4b43c3a573b47557a1ec7a4583a71286df2a28d4b72e
     # via semgrep
-pip==25.2 \
-    --hash=sha256:578283f006390f85bb6282dffb876454593d637f5d1be494b5202ce4877e71f2 \
-    --hash=sha256:6d67a2b4e7f14d8b31b8b52648866fa717f45a1eb70e83002f4331d07e953717
-    # via -r requirements/base-requirements.in
 platformdirs==4.3.6 \
     --hash=sha256:357fb2acbc885b0419afd3ce3ed34564c13c9b95c89360cd9563f73aa5e2b907 \
     --hash=sha256:73e575e1408ab8103900836b97580d5307456908a03e92031bab39e4554cc3fb
@@ -711,12 +698,12 @@ pluggy==0.13.1 \
 polib==1.2.0 \
     --hash=sha256:1c77ee1b81feb31df9bca258cbc58db1bbb32d10214b173882452c73af06d62d \
     --hash=sha256:f3ef94aefed6e183e342a8a269ae1fc4742ba193186ad76f175938621dbfc26b
-    # via -r requirements/develop-requirements.in
+    # via -r develop-requirements.in
 prompt-toolkit==2.0.9 \
     --hash=sha256:11adf3389a996a6d45cc277580d0d53e8a5afd281d0c9ec71b28e6f121463780 \
     --hash=sha256:2519ad1d8038fd5fc8e770362237ad0364d16a7650fb5724af6997ed5515e3c1 \
     --hash=sha256:977c6583ae813a37dc1c2e1b715892461fcbdaa57f6fc62f33a528c4886c8f55
-    # via -r requirements/develop-requirements.in
+    # via -r develop-requirements.in
 protobuf==6.33.0 \
     --hash=sha256:140303d5c8d2037730c548f8c7b93b20bb1dc301be280c378b82b8894589c954 \
     --hash=sha256:25c9e1963c6734448ea2d308cfa610e692b801304ba0908d7bfa564ac5132995 \
@@ -742,7 +729,7 @@ psutil==7.0.0 \
     --hash=sha256:84df4eb63e16849689f76b1ffcb36db7b8de703d1bc1fe41773db487621b6c17 \
     --hash=sha256:a5f098451abc2828f7dc6b58d44b532b22f2088f4999a937557b603ce72b1993 \
     --hash=sha256:ba3fcef7523064a6c9da440fc4d6bd07da93ac726b5733c29027d7dc95b39d99
-    # via -r requirements/develop-requirements.in
+    # via -r develop-requirements.in
 pycparser==2.21 \
     --hash=sha256:8ee45429555515e1f6b185e78100aea234072576aa43ab53aefcae078162fca9 \
     --hash=sha256:e644fdec12f7872f86c58ff790da456218b10f863970249516d60a5eaca77206
@@ -885,7 +872,7 @@ pyenchant==3.2.1 \
     --hash=sha256:49e0b255bef9356f57eeeee1d983ffa8599c0a46727d55cddbc71ec26226ca80 \
     --hash=sha256:5e206a1d6596904a922496f6c9f7d0b964b243905f401f5f2f40ea4d1f74e2cf \
     --hash=sha256:e8546c28b630f6d9f76642166656e337df2a1849cbef2b8ee198e7f64266f4ee
-    # via -r requirements/develop-requirements.in
+    # via -r develop-requirements.in
 pygments==2.17.2 \
     --hash=sha256:b27c2826c47d0f3219f29554824c30c5e8945175d888647acd804ddd04af846c \
     --hash=sha256:da46cec9fd2de5be3a8a784f434e4c4ab670b4ff54d605c4c2717e9d49c4c367
@@ -893,7 +880,7 @@ pygments==2.17.2 \
 pylint==3.2.7 \
     --hash=sha256:02f4aedeac91be69fb3b4bea997ce580a4ac68ce58b89eaefeaf06749df73f4b \
     --hash=sha256:1b7a721b575eaeaa7d39db076b6e7743c993ea44f57979127c517c6c572c803e
-    # via -r requirements/develop-requirements.in
+    # via -r develop-requirements.in
 pynacl==1.4.0 \
     --hash=sha256:06cbb4d9b2c4bd3c8dc0d267416aaed79906e7b33f114ddbf0911969794b1cc4 \
     --hash=sha256:11335f09060af52c97137d4ac54285bcb7df0cef29014a1a4efe64ac065434c4 \
@@ -914,23 +901,23 @@ pynacl==1.4.0 \
     --hash=sha256:ea6841bc3a76fa4942ce00f3bda7d436fda21e2d91602b9e21b7ca9ecab8f3ff \
     --hash=sha256:f8851ab9041756003119368c1e6cd0b9c631f46d686b3904b18c0139f4419f80
     # via
-    #   -r requirements/develop-requirements.in
+    #   -r develop-requirements.in
     #   paramiko
 pytest==7.2.0 \
     --hash=sha256:892f933d339f068883b6fd5a459f03d85bfcb355e4981e146d2c7616c21fef71 \
     --hash=sha256:c4014eb40e10f11f355ad4e3c2fb2c6c6d1919c73f3b5a433de4708202cade59
     # via
-    #   -r requirements/develop-requirements.in
+    #   -r develop-requirements.in
     #   pytest-testinfra
     #   pytest-xdist
 pytest-testinfra==10.2.2 \
     --hash=sha256:537fd5eb88da618c1f461248aa20594cf8d44512e8519b239837e83875e1e9cd \
     --hash=sha256:b785602b0aa868c858e4ef121a8cc0d13a81c04b74ec0364d70969540f8e7c31
-    # via -r requirements/develop-requirements.in
+    # via -r develop-requirements.in
 pytest-xdist==3.0.2 \
     --hash=sha256:688da9b814370e891ba5de650c9327d1a9d861721a524eb917e620eec3e90291 \
     --hash=sha256:9feb9a18e1790696ea23e1434fa73b325ed4998b0e9fcb221f16fd1945e6df1b
-    # via -r requirements/develop-requirements.in
+    # via -r develop-requirements.in
 python-dateutil==2.6.1 \
     --hash=sha256:891c38b2a02f5bb1be3e4793866c8df49c7d19baabf9c1bad62547e0b4866aca \
     --hash=sha256:95511bae634d69bc7329ba55e646499a842bc4ec342ad54a8cdb65645a0aad3c
@@ -943,9 +930,9 @@ python-magic==0.4.27 \
     --hash=sha256:c1ba14b08e4a5f5c31a302b7721239695b2f0f058d125bd5ce1ee36b9d9d3c3b \
     --hash=sha256:c212960ad306f700aa0d01e5d7a325d20548ff97eb9920dcd29513174f0294d3
     # via diffoscope
-python-multipart==0.0.20 \
-    --hash=sha256:8a62d3a8335e06589fe01f2a3e178cdcc632f3fbe0d492ad9ee0ec35aab1f104 \
-    --hash=sha256:8dd0cab45b8e23064ae09147625994d090fa46f5b0d1e13af944c331a7fa9d13
+python-multipart==0.0.22 \
+    --hash=sha256:2b2cd894c83d21bf49d702499531c7bafd057d730c201782048f7945d82de155 \
+    --hash=sha256:7340bef99a7e0032613f56dc36027b959fd3b30a787ed62d310e951f7c3a3a58
     # via mcp
 python-slugify==8.0.4 \
     --hash=sha256:276540b79961052b66b7d116620b36518847f52d5fd9e3a70164fc8c50faa6b8 \
@@ -954,7 +941,7 @@ python-slugify==8.0.4 \
 python-vagrant==0.5.15 \
     --hash=sha256:af9a8a9802d382d45dbea96aa3cfbe77c6e6ad65b3fe7b7c799d41ab988179c6
     # via
-    #   -r requirements/develop-requirements.in
+    #   -r develop-requirements.in
     #   molecule-vagrant
 pyyaml==6.0.1 \
     --hash=sha256:04ac92ad1925b2cff1db0cfebffb6ffc43457495c9b3c39d3fcae417d7125dc5 \
@@ -1009,7 +996,7 @@ pyyaml==6.0.1 \
     --hash=sha256:fd1592b3fdf65fff2ad0004b5e363300ef59ced41c2e6b3a99d4089fa8c5435d \
     --hash=sha256:fd66fc5d0da6d9815ba2cebeb4205f95818ff4b79c3ebe268e75d961704af52f
     # via
-    #   -r requirements/develop-requirements.in
+    #   -r develop-requirements.in
     #   ansible-compat
     #   ansible-core
     #   ansible-lint
@@ -1027,7 +1014,7 @@ requests==2.31.0 \
     --hash=sha256:58cd2187c01e70e6e26505bca751777aa9f2ee0b7f4300988b709f44e013003f \
     --hash=sha256:942c5a758f98d790eaed1a29cb6eefc7ffb0d1cf7af05c3d2791656dbd6ad1e1
     # via
-    #   -r requirements/develop-requirements.in
+    #   -r develop-requirements.in
     #   cookiecutter
     #   docker
     #   opentelemetry-exporter-otlp-proto-http
@@ -1151,7 +1138,7 @@ ruamel-yaml==0.18.16 \
     --hash=sha256:048f26d64245bae57a4f9ef6feb5b552a386830ef7a826f235ffb804c59efbba \
     --hash=sha256:a6e587512f3c998b2225d68aa1f35111c29fad14aed561a26e73fab729ec5e5a
     # via
-    #   -r requirements/develop-requirements.in
+    #   -r develop-requirements.in
     #   ansible-lint
     #   semgrep
 ruamel-yaml-clib==0.2.14 \
@@ -1211,8 +1198,7 @@ ruamel-yaml-clib==0.2.14 \
     --hash=sha256:fbc08c02e9b147a11dfcaa1ac8a83168b699863493e183f7c0c8b12850b7d259 \
     --hash=sha256:ff86876889ea478b1381089e55cf9e345707b312beda4986f823e1d95e8c0f59
     # via
-    #   -r requirements/develop-requirements.in
-    #   ruamel-yaml
+    #   -r develop-requirements.in
     #   semgrep
 ruff==0.8.6 \
     --hash=sha256:0509e8da430228236a18a677fcdb0c1f102dd26d5520f71f79b094963322ed25 \
@@ -1233,7 +1219,7 @@ ruff==0.8.6 \
     --hash=sha256:e169ea1b9eae61c99b257dc83b9ee6c76f89042752cb2d83486a7d6e48e8f764 \
     --hash=sha256:e88b8f6d901477c41559ba540beeb5a671e14cd29ebd5683903572f4b40a9807 \
     --hash=sha256:f1d70bef3d16fdc897ee290d7d20da3cbe4e26349f62e8a0274e7a3f4ce7a905
-    # via -r requirements/develop-requirements.in
+    # via -r develop-requirements.in
 selinux==0.2.1 \
     --hash=sha256:820adcf1b4451c9cc7759848797703263ba0eb6a4cad76d73548a9e0d57b7926 \
     --hash=sha256:d435f514e834e3fdc0941f6a29d086b80b2ea51b28112aee6254bd104ee42a74
@@ -1245,25 +1231,18 @@ semgrep==1.142.1 \
     --hash=sha256:933a22332117b86950575ed56de7f6a8afeffee10ec1cde2365aa7efa07ee69c \
     --hash=sha256:aa120b2739437cc06fee80b6da699d609ef71758bb710a99bf5cf5b55c8850e7 \
     --hash=sha256:e65973b618f5e5a8f85214dc7de3dcc4b3a38cd0608a8d81c9335a3c6d47e450
-    # via -r requirements/develop-requirements.in
-setuptools==79.0.1 \
-    --hash=sha256:128ce7b8f33c3079fd1b067ecbb4051a66e8526e7b65f6cec075dfc650ddfa88 \
-    --hash=sha256:e147c0549f27767ba362f9da434eab9c5dc0045d5304feb602a0af001089fc51
-    # via
-    #   -r requirements/base-requirements.in
-    #   selinux
-    #   yamllint
+    # via -r develop-requirements.in
 shellcheck-py==0.9.0.2 \
     --hash=sha256:1c29aa5864cc937f037b84b8e6b13b7016d25a45f7a07a1f1f16d38e387c76b4 \
     --hash=sha256:6a1be188d0a7183fc4bfcf52087512d879519bb6beb67d76927e0331edb45eb1 \
     --hash=sha256:bbaaba3044d266e793964e391c8caad4fcccafcd64e63de24e9b87a31a0c7aff \
     --hash=sha256:ddb9b9fd4750d726b9ac24df8b63599dc742c8749477bcdfd4ed639b22de21ae
-    # via -r requirements/develop-requirements.in
+    # via -r develop-requirements.in
 six==1.16.0 \
     --hash=sha256:1e61c37477a1626458e36f7b1d82aa5c9b094fa4802892072e49de9c60c4c926 \
     --hash=sha256:8abb2f1d86890a2dfb989f9a77cfcfd3e47c2a354b01111771326f8aa26e0254
     # via
-    #   -r requirements/develop-requirements.in
+    #   -r develop-requirements.in
     #   ansible-lint
     #   argon2-cffi
     #   docker
@@ -1306,12 +1285,11 @@ tomlkit==0.13.2 \
 translate-toolkit==3.10.1 \
     --hash=sha256:642e8597c55c3a31b8a6506194f0e64095965d5a1e7e0261d045a2865783a366 \
     --hash=sha256:ce0f7702259b4469868883d58176b65845dd1cf75179e0ebb9e95cdc65d5b2b0
-    # via -r requirements/develop-requirements.in
+    # via -r develop-requirements.in
 typing-extensions==4.15.0 \
     --hash=sha256:0cea48d173cc12fa28ecabc3b837ea3cf6f38c6d1136f85cbaaf598984861466 \
     --hash=sha256:f0fa19c6845758ab08074a0cfa8b7aecb71c999ca73d62883bc25cc018c4e548
     # via
-    #   anyio
     #   opentelemetry-api
     #   opentelemetry-exporter-otlp-proto-http
     #   opentelemetry-sdk
@@ -1319,7 +1297,6 @@ typing-extensions==4.15.0 \
     #   pydantic
     #   pydantic-core
     #   semgrep
-    #   starlette
     #   typing-inspection
 typing-inspection==0.4.2 \
     --hash=sha256:4ed1cacbdc298c220f1bd249ed5287caa16f34d44ef4e9c3d0cbad5b521545e7 \
@@ -1353,7 +1330,7 @@ uv==0.9.7 \
     --hash=sha256:d13da6521d4e841b1e0a9fda82e793dcf8458a323a9e8955f50903479d0bfa97 \
     --hash=sha256:d6e5fe28ca05a4b576c0e8da5f69251dc187a67054829cfc4afb2bfa1767114b \
     --hash=sha256:edd768f6730bba06aa10fdbd80ee064569f7236806f636bf65b68136a430aad0
-    # via -r requirements/develop-requirements.in
+    # via -r develop-requirements.in
 uvicorn==0.38.0 \
     --hash=sha256:48c0afd214ceb59340075b4a052ea1ee91c16fbc2a9b1469cca0e54566977b02 \
     --hash=sha256:fd97093bdd120a2609fc0d3afe931d4d4ad688b6e75f0f929fde1bc36fe0e91d
@@ -1456,7 +1433,7 @@ wrapt==1.17.3 \
 yamllint==1.29.0 \
     --hash=sha256:5153bf9f8205aa9dc6af6217e38bd4f5baf09d9a7c6f4ae1e23f90d9c00c49c5 \
     --hash=sha256:66a755d5fbcbb8831f1a9568676329b5bac82c37995bcc9afd048b6459f9fa48
-    # via -r requirements/develop-requirements.in
+    # via -r develop-requirements.in
 zipp==3.23.0 \
     --hash=sha256:071652d6115ed432f5ce1d34c336c0adfd6a884660d1e9712a256d3d3bd4b14e \
     --hash=sha256:a07157588a12518c9d4034df3fbbee09c814741a33ff63c05fa29d26a2404166
@@ -1476,4 +1453,4 @@ zizmor==0.10.0 \
     --hash=sha256:d74ec6b1547f529756315238805fdfb58b59b09b6b7b85b49d38a68dc96aa706 \
     --hash=sha256:ecac7a28aef6c7e058e0292da6f04345cfd21d36def7acff0038500544bd48c1 \
     --hash=sha256:ffdacfddbb4eb4cbb0126e3875eb21a453414be47fe423824fdf1946fff9cc02
-    # via -r requirements/develop-requirements.in
+    # via -r develop-requirements.in
