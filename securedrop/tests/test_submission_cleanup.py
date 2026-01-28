@@ -3,7 +3,7 @@ import os
 
 from db import db
 from management import submissions
-from models import Submission
+from models import Reply, Submission
 from tests import utils
 
 
@@ -36,6 +36,38 @@ def test_delete_disconnected_db_submissions(journalist_app, app_storage, config)
 
         assert db.session.query(Submission).filter(Submission.id == submission_id).count() == 0
         assert db.session.query(Submission).filter(Submission.source_id == source_id).count() == 1
+
+
+def test_delete_disconnected_db_replies(journalist_app, app_storage, config):
+    """
+    Test that Reply records without corresponding files are deleted.
+    """
+    with journalist_app.app_context():
+        source, _ = utils.db_helper.init_source(app_storage)
+        source_id = source.id
+
+        # make a journalist and two replies
+        journalist, _ = utils.db_helper.init_journalist("Mary", "Lane")
+        utils.db_helper.reply(app_storage, journalist, source, 2)
+        reply_id = source.replies[0].id
+
+        # remove one reply's file
+        f1 = os.path.join(config.STORE_DIR, source.filesystem_id, source.replies[0].filename)
+        assert os.path.exists(f1)
+        os.remove(f1)
+        assert os.path.exists(f1) is False
+
+        # check that the single disconnect is seen
+        disconnects = submissions.find_disconnected_db_replies(config.STORE_DIR)
+        assert len(disconnects) == 1
+        assert disconnects[0].filename == source.replies[0].filename
+
+        # remove the disconnected Reply
+        args = argparse.Namespace(force=True, store_dir=config.STORE_DIR)
+        submissions.delete_disconnected_db_replies(args)
+
+        assert db.session.query(Reply).filter(Reply.id == reply_id).count() == 0
+        assert db.session.query(Reply).filter(Reply.source_id == source_id).count() == 1
 
 
 def test_delete_disconnected_fs_submissions(journalist_app, app_storage, config):
