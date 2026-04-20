@@ -17,7 +17,7 @@ from flaky import flaky
 from flask import g, url_for
 from flask_babel import gettext, ngettext
 from journalist_app.sessions import session
-from journalist_app.utils import mark_seen
+from journalist_app.utils import mark_seen, mark_unseen
 from markupsafe import escape
 from models import (
     InstanceConfig,
@@ -412,7 +412,7 @@ def test_admin_has_link_to_edit_account_page_in_index_page(journalist_app, test_
             ),
             follow_redirects=True,
         )
-    edit_account_link = '<a href="/account/account" ' 'id="link-edit-account">'
+    edit_account_link = '<a href="/account/account" id="link-edit-account">'
     text = resp.data.decode("utf-8")
     assert edit_account_link in text
 
@@ -428,7 +428,7 @@ def test_user_has_link_to_edit_account_page_in_index_page(journalist_app, test_j
             ),
             follow_redirects=True,
         )
-    edit_account_link = '<a href="/account/account" ' 'id="link-edit-account">'
+    edit_account_link = '<a href="/account/account" id="link-edit-account">'
     text = resp.data.decode("utf-8")
     assert edit_account_link in text
 
@@ -1004,7 +1004,7 @@ def test_admin_edits_user_password_too_long_warning(journalist_app, test_admin, 
             )
 
             ins.assert_message_flashed(
-                "The password you submitted is invalid. " "Password not changed.",
+                "The password you submitted is invalid. Password not changed.",
                 "error",
             )
 
@@ -1039,7 +1039,7 @@ def test_user_edits_password_too_long_warning(config, journalist_app, test_journ
             )
 
             ins.assert_message_flashed(
-                "The password you submitted is invalid. " "Password not changed.",
+                "The password you submitted is invalid. Password not changed.",
                 "error",
             )
 
@@ -1215,7 +1215,7 @@ def test_admin_resets_user_hotp_format_non_hexa(journalist_app, test_admin, test
             assert journo.is_totp
 
             ins.assert_message_flashed(
-                "Invalid HOTP secret format: please only submit letters A-F and " "numbers 0-9.",
+                "Invalid HOTP secret format: please only submit letters A-F and numbers 0-9.",
                 "error",
             )
 
@@ -1254,7 +1254,7 @@ def test_admin_resets_user_hotp_format_too_short(
             assert journo.is_totp
 
             ins.assert_message_flashed(
-                "HOTP secrets are 40 characters long" " - you have entered {num}.".format(
+                "HOTP secrets are 40 characters long - you have entered {num}.".format(
                     num=len(the_secret.replace(" ", ""))
                 ),
                 "error",
@@ -1317,7 +1317,7 @@ def test_admin_resets_user_hotp_error(mocker, journalist_app, test_admin, test_j
                 data=dict(uid=test_journo["id"], otp_secret=bad_secret),
             )
             ins.assert_message_flashed(
-                "An unexpected error occurred! " "Please inform your admin.", "error"
+                "An unexpected error occurred! Please inform your admin.", "error"
             )
 
     # Re-fetch journalist to get fresh DB instance
@@ -1383,7 +1383,7 @@ def test_user_resets_user_hotp_format_non_hexa(journalist_app, test_journo):
                 data=dict(otp_secret=non_hexa_secret),
             )
             ins.assert_message_flashed(
-                "Invalid HOTP secret format: " "please only submit letters A-F and numbers 0-9.",
+                "Invalid HOTP secret format: please only submit letters A-F and numbers 0-9.",
                 "error",
             )
 
@@ -1419,7 +1419,7 @@ def test_user_resets_user_hotp_error(mocker, journalist_app, test_journo):
                 data=dict(otp_secret=bad_secret),
             )
             ins.assert_message_flashed(
-                "An unexpected error occurred! Please inform your " "admin.", "error"
+                "An unexpected error occurred! Please inform your admin.", "error"
             )
 
     # Re-fetch journalist to get fresh DB instance
@@ -2151,7 +2151,7 @@ def test_admin_add_user_integrity_error(config, journalist_app, test_admin, mock
             )
             assert page_language(resp.data) == language_tag(locale)
             msgids = [
-                "An error occurred saving this user to the database. " "Please inform your admin."
+                "An error occurred saving this user to the database. Please inform your admin."
             ]
             with xfail_untranslated_messages(config, locale, msgids):
                 ins.assert_message_flashed(gettext(msgids[0]), "error")
@@ -3108,6 +3108,49 @@ def test_delete_collection_updates_db(journalist_app, test_journo, test_source, 
                 reply_id=reply.id, journalist_id=journo.id
             ).one_or_none()
             assert not seen_reply
+
+
+def test_mark_unseen_resets_file_submission(journalist_app, test_journo, test_source, app_storage):
+    with journalist_app.app_context():
+        source = Source.query.get(test_source["id"])
+        journo = Journalist.query.get(test_journo["id"])
+        submissions = utils.db_helper.submit(app_storage, source, 1, submission_type="file")
+        mark_seen(submissions, journo)
+
+        mark_unseen(submissions, journo)
+
+        db.session.refresh(submissions[0])
+        assert submissions[0].downloaded is False
+        assert SeenFile.query.filter_by(file_id=submissions[0].id).count() == 0
+
+
+def test_mark_unseen_resets_message_submission(
+    journalist_app, test_journo, test_source, app_storage
+):
+    with journalist_app.app_context():
+        source = Source.query.get(test_source["id"])
+        journo = Journalist.query.get(test_journo["id"])
+        submissions = utils.db_helper.submit(app_storage, source, 1, submission_type="message")
+        mark_seen(submissions, journo)
+
+        mark_unseen(submissions, journo)
+
+        db.session.refresh(submissions[0])
+        assert submissions[0].downloaded is False
+        assert SeenMessage.query.filter_by(message_id=submissions[0].id).count() == 0
+
+
+def test_mark_unseen_resets_reply_state(journalist_app, test_journo, test_source, app_storage):
+    with journalist_app.app_context():
+        source = Source.query.get(test_source["id"])
+        journo = Journalist.query.get(test_journo["id"])
+        replies = utils.db_helper.reply(app_storage, journo, source, 1)
+        mark_seen(replies, journo)
+
+        mark_unseen(replies, journo)
+
+        reply = Reply.query.get(replies[0].id)
+        assert SeenReply.query.filter_by(reply_id=reply.id).count() == 0
 
 
 def test_delete_source_deletes_gpg_source_key(

@@ -28,6 +28,7 @@ class EventType(StrEnum):
     REPLY_SENT = auto()
     ITEM_DELETED = auto()
     ITEM_SEEN = auto()
+    ITEM_UNSEEN = auto()
     SOURCE_DELETED = auto()
     SOURCE_CONVERSATION_DELETED = auto()
     SOURCE_CONVERSATION_TRUNCATED = auto()

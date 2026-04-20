@@ -48,9 +48,9 @@ def assert_query_count(expected_count, expect_login=True):
     ):
         new_queries = new_queries[1:]
 
-    assert (
-        len(new_queries) == expected_count
-    ), f"Expected {expected_count} queries, but {len(new_queries)} were executed"
+    assert len(new_queries) == expected_count, (
+        f"Expected {expected_count} queries, but {len(new_queries)} were executed"
+    )
 
 
 def test_json_version():
@@ -914,6 +914,79 @@ def test_api2_item_seen(
             id="234567",
             target=ItemTarget(item_uuid=str(uuid.uuid4()), version=item_version),
             type=EventType.ITEM_SEEN,
+        )
+        response = app.post(
+            url_for("api2.data"),
+            json={"events": [asdict(no_such_item_event)]},
+            headers=get_api_headers(journalist_api_token),
+        )
+        assert response.json["events"][no_such_item_event.id][0] == 404
+        assert "could not find item" in response.json["events"][no_such_item_event.id][1]
+
+
+def test_api2_item_unseen(
+    journalist_app,
+    journalist_api_token,
+    test_files,
+):
+    """Test processing of the "item_unseen" event."""
+
+    with journalist_app.test_client() as app:
+        source = test_files["source"]
+        source_uuid = source.uuid
+
+        submission = test_files["submissions"][0]
+        submission_uuid = submission.uuid
+
+        index = app.get(
+            url_for("api2.index"),
+            headers=get_api_headers(journalist_api_token),
+        )
+        assert index.status_code == 200
+        current_item_version = index.json["items"][submission_uuid]
+
+        seen_event = Event(
+            id="345678",
+            target=ItemTarget(item_uuid=submission_uuid, version=current_item_version),
+            type=EventType.ITEM_SEEN,
+        )
+        response = app.post(
+            url_for("api2.data"),
+            json={"events": [asdict(seen_event)]},
+            headers=get_api_headers(journalist_api_token),
+        )
+        assert response.json["events"][seen_event.id] == [200, None]
+
+        refreshed_index = app.get(
+            url_for("api2.index"),
+            headers=get_api_headers(journalist_api_token),
+        )
+        assert refreshed_index.status_code == 200
+        unseen_version = refreshed_index.json["items"][submission_uuid]
+
+        unseen_event = Event(
+            id="456789",
+            target=ItemTarget(item_uuid=submission_uuid, version=unseen_version),
+            type=EventType.ITEM_UNSEEN,
+        )
+        response = app.post(
+            url_for("api2.data"),
+            json={"events": [asdict(unseen_event)]},
+            headers=get_api_headers(journalist_api_token),
+        )
+        assert response.json["events"][unseen_event.id] == [200, None]
+        assert source_uuid in response.json["sources"]
+        assert submission_uuid in response.json["items"]
+
+        updated_submission = Submission.query.filter(Submission.uuid == submission_uuid).one()
+        assert updated_submission.downloaded is False
+        assert len(updated_submission.seen_files) == 0
+        assert len(updated_submission.seen_messages) == 0
+
+        no_such_item_event = Event(
+            id="567890",
+            target=ItemTarget(item_uuid=str(uuid.uuid4()), version=unseen_version),
+            type=EventType.ITEM_UNSEEN,
         )
         response = app.post(
             url_for("api2.data"),

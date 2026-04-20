@@ -68,6 +68,7 @@ class EventHandler:
             handler = {
                 EventType.ITEM_DELETED: self.handle_item_deleted,
                 EventType.ITEM_SEEN: self.handle_item_seen,
+                EventType.ITEM_UNSEEN: self.handle_item_unseen,
                 EventType.REPLY_SENT: self.handle_reply_sent,
                 EventType.SOURCE_DELETED: self.handle_source_deleted,
                 EventType.SOURCE_CONVERSATION_DELETED: self.handle_source_conversation_deleted,
@@ -377,6 +378,28 @@ class EventHandler:
         utils.mark_seen([item], session.get_user())
 
         # Refresh and return
+        source = item.source
+        db.session.refresh(source)
+        db.session.refresh(item)
+
+        return EventResult(
+            event_id=event.id,
+            status=(EventStatusCode.OK, None),
+            sources={source.uuid: source},
+            items={item.uuid: item},
+        )
+
+    @staticmethod
+    def handle_item_unseen(event: Event, minor: int) -> EventResult:
+        item = find_item(event.target.item_uuid)
+        if item is None:
+            return EventResult(
+                event_id=event.id,
+                status=(EventStatusCode.NotFound, f"could not find item: {event.target.item_uuid}"),
+            )
+
+        utils.mark_unseen([item], session.get_user())
+
         source = item.source
         db.session.refresh(source)
         db.session.refresh(item)

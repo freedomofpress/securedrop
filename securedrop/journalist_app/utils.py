@@ -42,7 +42,7 @@ def commit_account_changes(user: Journalist) -> None:
             db.session.commit()
         except Exception as e:
             flash(
-                gettext("An unexpected error occurred! Please " "inform your admin."),
+                gettext("An unexpected error occurred! Please inform your admin."),
                 "error",
             )
             current_app.logger.error(f"Account changes for '{user}' failed: {e}")
@@ -104,7 +104,7 @@ def validate_user(
         elif isinstance(e, OtpSecretInvalid):
             login_flashed_msg += " "
             login_flashed_msg += gettext(
-                "Your 2FA details are invalid" " - please contact an administrator to reset them."
+                "Your 2FA details are invalid - please contact an administrator to reset them."
             )
         else:
             try:
@@ -149,14 +149,14 @@ def validate_hotp_secret(user: Journalist, otp_secret: str) -> bool:
         if "Non-hexadecimal digit found" in str(e):
             flash(
                 gettext(
-                    "Invalid HOTP secret format: " "please only submit letters A-F and numbers 0-9."
+                    "Invalid HOTP secret format: please only submit letters A-F and numbers 0-9."
                 ),
                 "error",
             )
             return False
         else:
             flash(
-                gettext("An unexpected error occurred! " "Please inform your admin."),
+                gettext("An unexpected error occurred! Please inform your admin."),
                 "error",
             )
             current_app.logger.error(f"set_hotp_secret '{otp_secret}' (id {user.id}) failed: {e}")
@@ -187,6 +187,30 @@ def mark_seen(targets: list[Submission | Reply], user: Journalist) -> None:
             db.session.rollback()
             if "UNIQUE constraint failed" in str(e):
                 continue
+            raise
+
+
+def mark_unseen(targets: List[Union[Submission, Reply]], user: Journalist) -> None:
+    """Fully reset seen state for the provided submissions or replies."""
+
+    for t in targets:
+        try:
+            if isinstance(t, Submission):
+                t.downloaded = False
+                if t.is_file:
+                    SeenFile.query.filter(SeenFile.file_id == t.id).delete(
+                        synchronize_session=False
+                    )
+                if t.is_message:
+                    SeenMessage.query.filter(SeenMessage.message_id == t.id).delete(
+                        synchronize_session=False
+                    )
+                db.session.commit()
+            elif isinstance(t, Reply):
+                SeenReply.query.filter(SeenReply.reply_id == t.id).delete(synchronize_session=False)
+                db.session.commit()
+        except IntegrityError:
+            db.session.rollback()
             raise
 
 
