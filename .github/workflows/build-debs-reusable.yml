@@ -1,0 +1,49 @@
+# Reusable: build debs and upload one artifact with build/<ubuntu_version>/ and
+# build/trixie/ (trixie admin deb is venv-ABI-required by the trixie GCE host).
+name: Build Debian packages
+
+on:
+  workflow_call:
+    inputs:
+      ubuntu_version:
+        required: true
+        type: string
+      python_version:
+        required: true
+        type: string
+      artifact_name:
+        required: true
+        type: string
+
+jobs:
+  package:
+    runs-on: ubuntu-24.04
+    outputs:
+      artifact_id: ${{ steps.upload.outputs.artifact-id }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: ${{ inputs.python_version }}
+      - name: Build SecureDrop packages
+        run: |
+          OS_VERSION=${{ inputs.ubuntu_version }} ./builder/build-debs.sh
+      - name: Build OSSEC packages
+        run: |
+          OS_VERSION=${{ inputs.ubuntu_version }} WHAT=ossec ./builder/build-debs.sh
+      - name: Build admin packages
+        run: |
+          OS_VERSION=${{ inputs.ubuntu_version }} WHAT=admin ./builder/build-debs.sh
+      - name: Build admin packages (trixie)
+        run: |
+          OS_VERSION=trixie WHAT=admin ./builder/build-debs.sh
+      - uses: actions/upload-artifact@v7
+        id: upload
+        with:
+          name: ${{ inputs.artifact_name }}
+          path: |
+            build/${{ inputs.ubuntu_version }}
+            build/trixie
+          if-no-files-found: error

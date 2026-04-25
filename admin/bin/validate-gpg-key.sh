@@ -1,5 +1,5 @@
 #!/bin/bash
-# shellcheck disable=SC2317
+# shellcheck disable=SC2317,SC2329
 # Verifies a key at at given path matches a fingerprint
 # Does so by importing the key into gpg2 and checking output
 #

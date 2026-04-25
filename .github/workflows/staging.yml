@@ -1,3 +1,6 @@
+# Reuse the Package builds artifact for github.sha when available; otherwise
+# build via the same reusable workflow. The staging job sees one artifact
+# (staging-debs-noble) containing build/noble/* and build/trixie/*.
 name: Staging
 on:
   push:
@@ -6,9 +9,65 @@ on:
       - 'release/*'
   schedule:
     - cron: '0 3 * * *'
+  workflow_dispatch:
+
+defaults:
+  run:
+    shell: bash
 
 jobs:
+  resolve-debs:
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+    outputs:
+      reused: ${{ steps.lookup.outputs.reused }}
+    steps:
+      - name: Try to reuse Package builds artifact
+        id: lookup
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          COMMIT_SHA: ${{ github.sha }}
+        run: |
+          set -euxo pipefail
+          RUN_ID=$(gh run list --repo "${GH_REPO}" --workflow=build.yml \
+            --commit "${COMMIT_SHA}" -L 50 --json databaseId,conclusion \
+            --jq '.[] | select(.conclusion == "success") | .databaseId' | head -1)
+          if [[ -z "${RUN_ID}" ]]; then
+            echo "reused=false" >> "${GITHUB_OUTPUT}"
+            exit 0
+          fi
+          mkdir -p build
+          gh run download "${RUN_ID}" --repo "${GH_REPO}" --name noble-one -D build
+          echo "reused=true" >> "${GITHUB_OUTPUT}"
+      - name: Re-upload as staging-debs-noble
+        if: steps.lookup.outputs.reused == 'true'
+        uses: actions/upload-artifact@v7
+        with:
+          name: staging-debs-noble
+          path: |
+            build/noble
+            build/trixie
+          if-no-files-found: error
+
+  build-debs:
+    needs: resolve-debs
+    if: needs.resolve-debs.outputs.reused != 'true'
+    uses: ./.github/workflows/build-debs-reusable.yml
+    with:
+      ubuntu_version: noble
+      python_version: "3.12"
+      artifact_name: staging-debs-noble
+
   staging:
+    needs:
+      - resolve-debs
+      - build-debs
+    if: |
+      always() &&
+      !cancelled() &&
+      (needs.resolve-debs.outputs.reused == 'true' || needs.build-debs.result == 'success')
     strategy:
       fail-fast: false
       matrix:
@@ -17,10 +76,15 @@ jobs:
     env:
       GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
       UBUNTU_VERSION: ${{ matrix.ubuntu_version }}
+      CI_PREBUILT_DEBS: "1"
     steps:
       - uses: actions/checkout@v6
         with:
           persist-credentials: false
+      - uses: actions/download-artifact@v8
+        with:
+          name: staging-debs-noble
+          path: build
       - name: Run staging tests on GCE
         run: |
           make ci-go
