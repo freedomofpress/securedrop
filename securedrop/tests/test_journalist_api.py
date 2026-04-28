@@ -6,7 +6,6 @@ from datetime import datetime
 from pathlib import Path
 from uuid import UUID, uuid4
 
-import pytest
 from db import db
 from encryption import EncryptionManager
 from flask import url_for
@@ -1477,60 +1476,3 @@ def test_download_submission_range(journalist_app, test_files, journalist_api_to
         assert partial_response.headers.get("Content-Length") == str(range_end - range_start)
         assert len(partial_response.data) == range_end - range_start
         assert full_response.data[range_start:] == partial_response.data
-
-
-@pytest.mark.parametrize(
-    ("endpoint", "method", "should_trim"),
-    [
-        ("api2.index", "GET", True),
-        ("api2.data", "POST", True),
-        ("api.get_endpoints", "GET", False),
-        ("api.get_current_user", "GET", False),
-    ],
-)
-def test_authenticated_routes_call_malloc_trim_only_if_heavy(
-    mocker, journalist_app, journalist_api_token, endpoint, method, should_trim
-):
-    """
-    Verify the teardown_request hook invokes malloc_trim() only for the
-    heavy APIv2 routes and not for other routes.
-    """
-    mock_libc = mocker.patch("journalist_app._libc")
-
-    with journalist_app.test_client() as app:
-        app.open(
-            url_for(endpoint),
-            method=method,
-            headers=get_api_headers(journalist_api_token),
-        )
-
-    if should_trim:
-        mock_libc.malloc_trim.assert_called_once_with(0)
-    else:
-        mock_libc.malloc_trim.assert_not_called()
-
-
-def test_login_calls_malloc_trim(mocker, journalist_app, test_journo):
-    """
-    Verify the teardown_request hook invokes malloc_trim() for the
-    APIv1 login endpoint (api.get_token), which also loads the full
-    database into memory.
-    """
-    mock_libc = mocker.patch("journalist_app._libc")
-
-    with journalist_app.test_client() as app:
-        valid_token = TOTP(test_journo["otp_secret"]).now()
-        response = app.post(
-            url_for("api.get_token"),
-            data=json.dumps(
-                {
-                    "username": test_journo["username"],
-                    "passphrase": test_journo["password"],
-                    "one_time_code": valid_token,
-                }
-            ),
-            headers=get_api_headers(),
-        )
-        assert response.status_code == 200
-
-    mock_libc.malloc_trim.assert_called_once_with(0)

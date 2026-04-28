@@ -1,4 +1,3 @@
-import ctypes
 from datetime import datetime
 from pathlib import Path
 from typing import Any
@@ -19,8 +18,6 @@ from sdconfig import SecureDropConfig
 from werkzeug import Response
 from werkzeug.exceptions import HTTPException, default_exceptions
 
-_libc = ctypes.CDLL("libc.so.6")
-_heavy_api_routes = ["api.get_token", "api2.index", "api2.data"]
 _insecure_views = ["main.login", "static"]
 _insecure_api_views = ["api.get_token", "api.get_endpoints"]
 
@@ -142,17 +139,6 @@ def create_app(config: SecureDropConfig) -> Flask:
                 g.source = get_source(filesystem_id)  # pylint: disable=assigning-non-slot
 
         return None
-
-    @app.teardown_request
-    def _malloc_trim(exception: BaseException | None) -> None:
-        # APIv2 (and APIv1 login) effectively load the entire database
-        # into memory, which ends up causing fragmentation issues in
-        # which glibc doesn't automatically release the memory back.
-        # Explicitly call the C `malloc_trim()` function to force glibc
-        # to release the memory that has been marked as freeable but not
-        # yet freed. The 0 means to free everything it can.
-        if request.endpoint in _heavy_api_routes:
-            _libc.malloc_trim(0)
 
     app.register_blueprint(main.make_blueprint())
     app.register_blueprint(account.make_blueprint(), url_prefix="/account")

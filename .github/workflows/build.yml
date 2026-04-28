@@ -2,7 +2,7 @@ name: Package builds
 on:
   merge_group:
   push:
-    branches: ["develop", "release/**"]
+    branches: ["develop", "release/**", "stg-*"]
   pull_request:
     types: ["opened", "synchronize"]
 
@@ -24,31 +24,11 @@ jobs:
           - ubuntu: noble
             python: "3.12"
     # TODO: change this back to ubuntu-latest once it is consistently 24.04
-    runs-on: ubuntu-24.04
-    outputs:
-      artifact_id: ${{ steps.upload.outputs.artifact-id }}
-    steps:
-      - uses: actions/checkout@v6
-        with:
-          persist-credentials: false
-      - uses: actions/setup-python@v6
-        with:
-          python-version: ${{ matrix.versions.python }}
-      - name: Build SecureDrop packages
-        run: |
-          OS_VERSION=${{ matrix.versions.ubuntu }} ./builder/build-debs.sh
-      - name: Build OSSEC packages
-        run: |
-          OS_VERSION=${{ matrix.versions.ubuntu }} WHAT=ossec ./builder/build-debs.sh
-      - name: Build admin packages
-        run: |
-          OS_VERSION=${{ matrix.versions.ubuntu }} WHAT=admin ./builder/build-debs.sh
-      - uses: actions/upload-artifact@v7
-        id: upload
-        with:
-          name: ${{ matrix.versions.ubuntu }}-${{ matrix.build }}
-          path: build/${{ matrix.versions.ubuntu }}
-          if-no-files-found: error
+    uses: ./.github/workflows/build-debs-reusable.yml
+    with:
+      ubuntu_version: ${{ matrix.versions.ubuntu }}
+      python_version: ${{ matrix.versions.python }}
+      artifact_name: ${{ matrix.versions.ubuntu }}-${{ matrix.build }}
 
   reproducible-debs:
     strategy:
@@ -72,6 +52,10 @@ jobs:
           # FIXME: securedrop-app-code isn't reproducible
           for pkg in ossec-agent ossec-server securedrop-config securedrop-keyring securedrop-ossec-agent securedrop-ossec-server securedrop-admin
           do
-              echo "Checking ${pkg}..."
-              diffoscope ${{ matrix.ubuntu_version }}-one/${pkg}_*.deb ${{ matrix.ubuntu_version }}-two/${pkg}_*.deb
+              echo "Checking ${pkg} (${{ matrix.ubuntu_version }})..."
+              diffoscope ${{ matrix.ubuntu_version }}-one/${{ matrix.ubuntu_version }}/${pkg}_*.deb \
+                         ${{ matrix.ubuntu_version }}-two/${{ matrix.ubuntu_version }}/${pkg}_*.deb
           done
+          echo "Checking securedrop-admin (trixie)..."
+          diffoscope ${{ matrix.ubuntu_version }}-one/trixie/securedrop-admin_*.deb \
+                     ${{ matrix.ubuntu_version }}-two/trixie/securedrop-admin_*.deb

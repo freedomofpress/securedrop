@@ -1,3 +1,6 @@
+# Reuse the Package builds artifact for github.sha when available; otherwise
+# build via the same reusable workflow. The staging job sees one artifact
+# (staging-debs-noble) containing build/noble/* and build/trixie/*.
 name: Staging
 on:
   push:
@@ -6,9 +9,100 @@ on:
       - 'release/*'
   schedule:
     - cron: '0 3 * * *'
+  workflow_dispatch:
+
+defaults:
+  run:
+    shell: bash
 
 jobs:
+  resolve-debs:
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+    outputs:
+      reused: ${{ steps.lookup.outputs.reused }}
+    steps:
+      - name: Try to reuse Package builds artifact
+        id: lookup
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          COMMIT_SHA: ${{ github.sha }}
+        run: |
+          set -euxo pipefail
+
+          # Look for a successful build.yml run for this SHA.
+          find_successful_run() {
+            gh run list --repo "${GH_REPO}" --workflow=build.yml \
+              --commit "${COMMIT_SHA}" -L 50 --json databaseId,conclusion \
+              --jq '.[] | select(.conclusion == "success") | .databaseId' | head -1
+          }
+
+          # Check whether a build.yml run is still in progress or queued.
+          has_pending_run() {
+            local pending
+            pending=$(gh run list --repo "${GH_REPO}" --workflow=build.yml \
+              --commit "${COMMIT_SHA}" -L 50 --json databaseId,conclusion,status \
+              --jq '[.[] | select(.status == "in_progress" or .status == "queued")] | length')
+            [[ "${pending}" -gt 0 ]]
+          }
+
+          RUN_ID=$(find_successful_run)
+
+          # If no successful run yet, wait for any in-progress/queued run to finish.
+          if [[ -z "${RUN_ID}" ]] && has_pending_run; then
+            echo "build.yml is still running for ${COMMIT_SHA}; waiting..."
+            MAX_ATTEMPTS=30
+            for ((i=1; i<=MAX_ATTEMPTS; i++)); do
+              sleep 30
+              RUN_ID=$(find_successful_run)
+              if [[ -n "${RUN_ID}" ]]; then
+                echo "build.yml succeeded after ${i} poll(s)."
+                break
+              fi
+              if ! has_pending_run; then
+                echo "build.yml finished without success."
+                break
+              fi
+              echo "Poll ${i}/${MAX_ATTEMPTS}: still waiting..."
+            done
+          fi
+
+          if [[ -z "${RUN_ID}" ]]; then
+            echo "reused=false" >> "${GITHUB_OUTPUT}"
+            exit 0
+          fi
+          mkdir -p build
+          gh run download "${RUN_ID}" --repo "${GH_REPO}" --name noble-one -D build
+          echo "reused=true" >> "${GITHUB_OUTPUT}"
+      - name: Re-upload as staging-debs-noble
+        if: steps.lookup.outputs.reused == 'true'
+        uses: actions/upload-artifact@v7
+        with:
+          name: staging-debs-noble
+          path: |
+            build/noble
+            build/trixie
+          if-no-files-found: error
+
+  build-debs:
+    needs: resolve-debs
+    if: needs.resolve-debs.outputs.reused != 'true'
+    uses: ./.github/workflows/build-debs-reusable.yml
+    with:
+      ubuntu_version: noble
+      python_version: "3.12"
+      artifact_name: staging-debs-noble
+
   staging:
+    needs:
+      - resolve-debs
+      - build-debs
+    if: |
+      always() &&
+      !cancelled() &&
+      (needs.resolve-debs.outputs.reused == 'true' || needs.build-debs.result == 'success')
     strategy:
       fail-fast: false
       matrix:
@@ -17,10 +111,15 @@ jobs:
     env:
       GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
       UBUNTU_VERSION: ${{ matrix.ubuntu_version }}
+      CI_PREBUILT_DEBS: "1"
     steps:
       - uses: actions/checkout@v6
         with:
           persist-credentials: false
+      - uses: actions/download-artifact@v8
+        with:
+          name: staging-debs-noble
+          path: build
       - name: Run staging tests on GCE
         run: |
           make ci-go

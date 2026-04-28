@@ -4,7 +4,19 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
 #
 msgid ""
-msgstr "Project-Id-Version: SecureDrop 0.5-rc4\nReport-Msgid-Bugs-To: securedrop@freedom.press\nPO-Revision-Date: 2026-02-23 12:39+0000\nLast-Translator: Jonas Waga <jonas.waga@schibsted.com>\nLanguage-Team: Swedish <https://weblate.securedrop.org/projects/securedrop/securedrop/sv/>\nLanguage: sv\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=2; plural=n != 1;\nX-Generator: Weblate 5.16\nGenerated-By: Babel 2.4.0\n"
+msgstr ""
+"Project-Id-Version: SecureDrop 0.5-rc4\n"
+"Report-Msgid-Bugs-To: securedrop@freedom.press\n"
+"PO-Revision-Date: 2024-12-18 09:00+0000\n"
+"Last-Translator: Jonas Waga <jonas.waga@schibsted.com>\n"
+"Language-Team: Swedish <https://weblate.securedrop.org/projects/securedrop/securedrop/sv/>\n"
+"Language: sv\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.8.4\n"
+"Generated-By: Babel 2.4.0\n"
 
 msgid "Name too long"
 msgstr "Namnet är för långt"
@@ -410,7 +422,7 @@ msgid "Can't scan the barcode? You can manually pair FreeOTP with this account b
 msgstr "Kan du inte skanna koden? Du kan manuellt koppla FreeOTP till detta konto genom att skriva in denna tvåfaktorhemligheten i FreeOTP:"
 
 msgid "<strong>Critical:</strong>&nbsp;&nbsp;The operating system used by your SecureDrop servers has reached its end-of-life. A manual update is required to re-enable the Source Interface and remain safe. Please contact your administrator. <a href=\"https://securedrop.org/noble-eol\" rel=\"noreferrer\">Learn More</a>"
-msgstr "<strong>Kritiskt:</strong>&nbsp;&nbsp;Operativsystemet som används av era SecureDrop-servrar har nåt sitt slutdatum. En manuell uppdatering krävs för att återaktivera källgränssnittet och för att fortsätta vara säker. Vänligen kontakta din administratör.<a href=\"https://securedrop.org/noble-eol\" rel=\"noreferrer\">Läs mer</a>"
+msgstr ""
 
 msgid "Navigation"
 msgstr "Navigering"
@@ -900,22 +912,22 @@ msgid "Click the <img src=\"{icon}\" alt=\"&quot;Security Level&quot; button\"> 
 msgstr "Klicka på <img src=\"{icon}\" alt=\"&quot;Security Level&quot; button\"> i menyraden ovan"
 
 msgid "Click <b>Settings</b> to open Security Level preferences"
-msgstr "Klicka på <b>Inställningar</b> för att öppna Säkerhetsnivå-inställningarna"
+msgstr ""
 
 msgid "Click <b>Change…</b> and select <b>Safest</b>"
-msgstr "Klicka på <b>Ändra…</b> och välj <b>Säkrast</b>"
+msgstr ""
 
 msgid "Click <b>Save and restart.</b>"
-msgstr "Klicka <b>Spara och starta om.</b>"
+msgstr ""
 
 msgid "Tor Browser will restart, with its security level set to <b>Safest</b>. After the restart, come back to this site."
-msgstr "Tor Browser kommer att starta om, med säkerhetsnivån satt till <b>Säkrast</b>. Efter omstarten, gå tillbaka till den här sidan."
+msgstr ""
 
 msgid "<strong>It is recommended to use Tor Browser to access SecureDrop:</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
 msgstr "<strong>Det är rekommenderat att använda Tor Browser för att använda SecureDrop:</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\"> Lär dig hur den installeras</a>, eller ignorera denna varning och fortsätt."
 
 msgid "<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Tor Browser for Android does not provide the same level of security and anonymity as the desktop version.</strong> <a class=\"recommend-tor\" aria-label=\"Learn how to install Tor Browser\" href=\"{tor_browser_url}\" >Learn how to install it</a>, or ignore this warning to continue."
-msgstr "<strong>Det är rekommenderat att använda datorversionen av Tor Browser för att nå SecureDrop, eftersom Tor Browser för Android inte tillhandahåller samma nivå av säkerhet och anonymitet.</strong><a class=\"recommend-tor\" aria-label=\"Learn how to install Tor Browser\" href=\"{tor_browser_url}\" >Lär dig hur du installerar den</a>, eller ignorera denna varning och fortsätt."
+msgstr ""
 
 msgid "{} logo"
 msgstr "{} logga"

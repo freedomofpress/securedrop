@@ -4,7 +4,19 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
 #
 msgid ""
-msgstr "Project-Id-Version: SecureDrop 0.5-rc4\nReport-Msgid-Bugs-To: securedrop@freedom.press\nPO-Revision-Date: 2026-04-10 09:10+0000\nLast-Translator: tekrei <tekrei@users.noreply.weblate.securedrop.org>\nLanguage-Team: Turkish <https://weblate.securedrop.org/projects/securedrop/securedrop/tr/>\nLanguage: tr\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=2; plural=n != 1;\nX-Generator: Weblate 5.16.2\nGenerated-By: Babel 2.4.0\n"
+msgstr ""
+"Project-Id-Version: SecureDrop 0.5-rc4\n"
+"Report-Msgid-Bugs-To: securedrop@freedom.press\n"
+"PO-Revision-Date: 2025-07-03 07:37+0000\n"
+"Last-Translator: tekrei <tekrei@tutanota.com>\n"
+"Language-Team: Turkish <https://weblate.securedrop.org/projects/securedrop/securedrop/tr/>\n"
+"Language: tr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.11.1\n"
+"Generated-By: Babel 2.4.0\n"
 
 msgid "Name too long"
 msgstr "İsim çok uzun"
@@ -410,7 +422,7 @@ msgid "Can't scan the barcode? You can manually pair FreeOTP with this account b
 msgstr "Barkodu okutamıyor musunuz? Şu iki aşamalı kimlik doğrulama parolasını uygulamaya yazarak FreeOTP ile bu hesabı el ile eşleştirebilirsiniz:"
 
 msgid "<strong>Critical:</strong>&nbsp;&nbsp;The operating system used by your SecureDrop servers has reached its end-of-life. A manual update is required to re-enable the Source Interface and remain safe. Please contact your administrator. <a href=\"https://securedrop.org/noble-eol\" rel=\"noreferrer\">Learn More</a>"
-msgstr "<strong>Önemli:</strong>&nbsp;&nbsp;SecureDrop sunucularınızda kullanılan işletim sisteminin destek süresi sona ermiştir. Kaynak Arayüzü'nü yeniden etkinleştirmek ve güvenliğinizi sürdürmek için manuel bir güncelleme yapılması gerekmektedir. Lütfen sistem yöneticinizle iletişime geçin. <a href=\"https://securedrop.org/noble-eol\" rel=\"noreferrer\">Daha Fazla Bilgi</a>"
+msgstr ""
 
 msgid "Navigation"
 msgstr "Gezinme"
@@ -915,7 +927,7 @@ msgid "<strong>It is recommended to use Tor Browser to access SecureDrop:</stron
 msgstr "<strong>SecureDrop uygulamasına erişmek için Tor Browser kullanmanız önerilir:</strong><a class=\"recommend-tor\" href=\"{tor_browser_url}\">Nasıl kuracağınızı öğrenin</a> ya da bu uyarıyı görmezden gelerek devam edin."
 
 msgid "<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Tor Browser for Android does not provide the same level of security and anonymity as the desktop version.</strong> <a class=\"recommend-tor\" aria-label=\"Learn how to install Tor Browser\" href=\"{tor_browser_url}\" >Learn how to install it</a>, or ignore this warning to continue."
-msgstr "<strong>SecureDrop'a erişmek için Tor Browser'ın masaüstü sürümünü kullanmanızı öneriyoruz. Çünkü Android için Tor Browser, masaüstü sürümüyle aynı düzeyde güvenlik ve anonimlik sağlamaz.</strong> <a class=\"recommend-tor\" aria-label=\"Tor Browser'ı nasıl yükleyeceğinizi öğrenin\" href=\"{tor_browser_url}\" >Yüklemeyi öğrenin</a> veya devam etmek için bu uyarıyı göz ardı edin."
+msgstr ""
 
 msgid "{} logo"
 msgstr "{} logosu"
@@ -1121,7 +1133,7 @@ msgstr "Şifrelenmiş gönderilerinizi yükleyin. Şifrelenmiş dosyanın adı �
 
 #, fuzzy
 msgid "<strong>Important:</strong> If you wish to remain anonymous, <strong>do not</strong> use GPG to sign the encrypted file (with the <code>--sign</code> or <code>-s</code> flag) as this will reveal your GPG identity to us."
-msgstr "<strong>Önemli:</strong> Anonim kalmak istiyorsanız, dosyayı GPG ile (<code>--sign</code> ya da <code>-s</code> kullanarak) <strong>imzalamayın</strong> çünkü bu GPG kimliğinizi açığa çıkarır."
+msgstr "<strong>Önemli:</strong> Anonim kalmak istiyorsanız, dosyanın GPG tarafından (<code>--sign</code> ya da <code>-s</code> parametreleriyle) imzalanmasına <strong>izin vermeyin</strong>, yoksa GPG kimliğiniz açığa çıkar."
 
 msgid "Back to submission page"
 msgstr "Gönderi sayfasına geri dön"

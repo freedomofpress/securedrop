@@ -4,7 +4,7 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2023.
 #
 msgid ""
-msgstr "Project-Id-Version: SecureDrop 2.7.0~rc1\nReport-Msgid-Bugs-To: securedrop@freedom.press\nPO-Revision-Date: 2026-04-15 15:32+0000\nLast-Translator: Pseudolocale add-on <noreply-addon-pseudolocale@weblate.org>\nLanguage-Team: Esperanto <https://weblate.securedrop.org/projects/securedrop/desktop/eo/>\nLanguage: eo\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=2; plural=n != 1;\nX-Generator: Weblate 5.16.2\nGenerated-By: Babel 2.12.1\n"
+msgstr "Project-Id-Version: SecureDrop 2.7.0~rc1\nReport-Msgid-Bugs-To: securedrop@freedom.press\nPO-Revision-Date: 2026-02-19 13:47+0000\nLast-Translator: Pseudolocale add-on <noreply-addon-pseudolocale@weblate.org>\nLanguage-Team: Esperanto <https://weblate.securedrop.org/projects/securedrop/desktop/eo/>\nLanguage: eo\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=2; plural=n != 1;\nX-Generator: Weblate 5.15.2\nGenerated-By: Babel 2.12.1\n"
 
 msgid "Launch Journalist Interface"
 msgstr "[!!Launch Journalist Interface!!]"

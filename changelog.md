@@ -1,41 +1,8 @@
 # Changelog
 
-## 2.16.0~rc1
+## 2.15.0~rc1
 
 
-## 2.15.1
-
-### Web Applications and API
-
-* Streamline memory management for the v2 Journalist API (#7809)
-
-### Operations
-
-* Fix the path used to verify checksums when restoring from a backup (#7802,
-  #7810)
-
-## 2.15.0
-
-### Web Applications and API
-
-* Update terms used in English wordlist (#7785)
-
-* V2 Journalist API:
-  * Enable V2 API by default (#7789)
-  * add `source_converation_seen` event (#7784)
-  * Let client request arbitrary metadata shards (#7770)
-
-### Development
-
-* Improve V2 API documentation (#7793)
-* Use `uv` to manage admin requirements (#7773)
-* Set 7-day cooldown for dependabot alerts (#7787)
-* Update demo base container image to used fully-qualified name (#7794)
-* Dependency updates:
-  * `cffi` to 2.0.0 (#7773)
-  * `cryptography` to 46.0.6 (#7797)
-  * Github Actions `download-artifact` to 8 (#7782)
-  * Github Actions `upload-artifact` to 7 (#7782)
 
 ## 2.14.0
 

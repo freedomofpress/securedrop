@@ -44,7 +44,7 @@ COPY . /src
 ENV PATH="/usr/share/securedrop-admin/venv/bin:$PATH"
 RUN ln -s /src/builder/fixup-changelog.sh /fixup-changelog
 RUN /src/builder/build-debs-admin.sh
-RUN apt-get -y update && apt-get install -y /src/build/trixie/securedrop-admin_*+trixie_amd64.deb
+RUN apt-get install -y /src/build/trixie/securedrop-admin_*+trixie_amd64.deb
 
 # Install dev dependencies in a separate venv
 RUN /usr/bin/python3 -m venv /opt/admin-dev/venv

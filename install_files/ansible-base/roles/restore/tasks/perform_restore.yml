@@ -59,7 +59,7 @@
   connection: local
   become: no
   stat:
-    path: "{{ config_path }}/{{ restore_file }}"
+    path: "{{ restore_file }}"
     checksum_algorithm: sha256
   register: local_backup_file
   when: restore_manual_transfer

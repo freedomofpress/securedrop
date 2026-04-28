@@ -4,7 +4,19 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
 #
 msgid ""
-msgstr "Project-Id-Version: SecureDrop 0.4.3\nReport-Msgid-Bugs-To: securedrop@freedom.press\nPO-Revision-Date: 2026-04-15 18:54+0000\nLast-Translator: Cory Francis Myers <cory@freedom.press>\nLanguage-Team: Portuguese (Brazil) <https://weblate.securedrop.org/projects/securedrop/securedrop/pt_BR/>\nLanguage: pt_BR\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=2; plural=n > 1;\nX-Generator: Weblate 5.16.2\nGenerated-By: Babel 2.4.0\n"
+msgstr ""
+"Project-Id-Version: SecureDrop 0.4.3\n"
+"Report-Msgid-Bugs-To: securedrop@freedom.press\n"
+"PO-Revision-Date: 2023-06-13 19:56+0000\n"
+"Last-Translator: Guilherme <gui.rugai.freire@gmail.com>\n"
+"Language-Team: Portuguese (Brazil) <https://weblate.securedrop.org/projects/securedrop/securedrop/pt_BR/>\n"
+"Language: pt_BR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 4.14.1\n"
+"Generated-By: Babel 2.4.0\n"
 
 msgid "Name too long"
 msgstr "Nome muito longo"
@@ -24,7 +36,7 @@ msgid "{time} ago"
 msgstr "há {time}"
 
 msgid "You have been logged out due to inactivity or a problem with your session."
-msgstr "Você foi deslogada por causa de inatividade ou problema com a sua sessão."
+msgstr ""
 
 msgid "SecureDrop"
 msgstr "SecureDrop"
@@ -362,7 +374,7 @@ msgid "No users to display"
 msgstr "Não há usuários para exibir"
 
 msgid "Update instance configuration"
-msgstr "Atualizar a configuração da instância"
+msgstr ""
 
 msgid "INSTANCE CONFIG"
 msgstr "CONFIGURAÇÃO DE INSTÂNCIA"
@@ -410,7 +422,7 @@ msgid "Can't scan the barcode? You can manually pair FreeOTP with this account b
 msgstr "Não consegue escanear o código de barras? Você pode emparelhar manualmente o FreeOTP com esta conta inserindo o seguinte 2FA no aplicativo:"
 
 msgid "<strong>Critical:</strong>&nbsp;&nbsp;The operating system used by your SecureDrop servers has reached its end-of-life. A manual update is required to re-enable the Source Interface and remain safe. Please contact your administrator. <a href=\"https://securedrop.org/noble-eol\" rel=\"noreferrer\">Learn More</a>"
-msgstr "<strong>Crítico:</strong>&nbsp;&nbsp;O sistema operacional usado pelo seus servidores SecureDrop atingiu o fim da vida. Uma atualização manual é requerida para reabilitar a Interface da Fonte e continuar segura. Por favor entre em contato com  sua administradora. <a href=\"https://securedrop.org/noble-eol\" rel=\"noreferrer\">Aprenda Mais</a>"
+msgstr ""
 
 msgid "Navigation"
 msgstr "Navegação"
@@ -428,7 +440,7 @@ msgid "Log Out"
 msgstr "Encerrar sessão"
 
 msgid "Return to All Sources"
-msgstr "Retornar para Todas Fontes"
+msgstr ""
 
 msgid "Powered by <b>SecureDrop {version}</b>."
 msgstr "Este site utiliza o <b>SecureDrop {version}</b>."
@@ -443,13 +455,13 @@ msgid "All messages, files, and replies from sources are stored as encrypted fil
 msgstr "Todas as mensagens, arquivos e respostas enviados por fontes sao armazenados em formato de arquivos criptografados por motidos de segurança. Para acessá-los, é preciso descriptografá-los no seu Secure Viewing Station."
 
 msgid "Download Selected Files"
-msgstr "Baixar Arquivos Selecionados"
+msgstr ""
 
 msgid "Download Selected"
 msgstr "Baixar Seleção"
 
 msgid "Delete Selected Files"
-msgstr "Apagar Arquivos Selecionados"
+msgstr ""
 
 msgid "Delete Selected"
 msgstr "Apagar Seleção"
@@ -473,7 +485,7 @@ msgid "Read"
 msgstr "Lida"
 
 msgid "Uploaded File"
-msgstr "Arquivo Enviado"
+msgstr ""
 
 msgid "Reply"
 msgstr "Responder"
@@ -503,7 +515,7 @@ msgid "An encryption key will be generated for the source the next time they log
 msgstr "Uma chave criptográfica será gerada para esta fonte na próxima vez que ela se conectar. Em seguida, você poderá responder a ela aqui."
 
 msgid "Delete Source Account"
-msgstr "Apagar Conta de Fonte"
+msgstr ""
 
 msgid "Are you sure?"
 msgstr "Você tem certeza?"
@@ -571,7 +583,7 @@ msgid "Submission Preferences"
 msgstr "Configurações de Envio"
 
 msgid "Prevent sources from uploading files. Sources will still be able to send messages."
-msgstr "Prevenir fontes de subir arquivos. Fontes ainda serão  capazes de enviar mensagens."
+msgstr ""
 
 msgid "Prevent sources from sending initial messages shorter than the minimum required length:"
 msgstr "Previne fontes de enviar mensagens iniciais mais curtas que o comprimento mínimo necessário:"
@@ -679,25 +691,25 @@ msgid "Reset Security Key Credentials"
 msgstr "Redefinir credenciais da chave de segurança"
 
 msgid "Download Selected Unread Submissions"
-msgstr "Baixar Submissões Não Lidas Selecionadas"
+msgstr ""
 
 msgid "Download Unread"
 msgstr "Baixar Não Lidas"
 
 msgid "Download Selected Submissions"
-msgstr "Baixar Submissões Selecionadas"
+msgstr ""
 
 msgid "Download"
 msgstr "Baixar"
 
 msgid "Star Selected Submissions"
-msgstr "Marcar Submissões Selecionadas"
+msgstr ""
 
 msgid "Star"
 msgstr "Marcar"
 
 msgid "Un-star Selected Submissions"
-msgstr "Desmarcar Submissões Selecionadas"
+msgstr ""
 
 msgid "Un-star"
 msgstr "Desmarcar"
@@ -715,7 +727,7 @@ msgid "Date"
 msgstr "Data"
 
 msgid "There are no submissions."
-msgstr "Não há submissões."
+msgstr ""
 
 msgid "Filter by codename"
 msgstr "filtrar por codinome"
@@ -742,7 +754,7 @@ msgid "Choose language"
 msgstr "Escolha a língua"
 
 msgid "Log in to access the journalist interface"
-msgstr "Inicie a sessão para acessar a interface de jornalista"
+msgstr ""
 
 msgid "Password"
 msgstr "Senha"
@@ -751,15 +763,15 @@ msgid "Show password"
 msgstr "Mostrar senha"
 
 msgid "Log In to Journalist Interface"
-msgstr "Iniciar sessão para Interface de Jornalista"
+msgstr ""
 
 msgid "LOG IN"
 msgstr "ACESSAR"
 
 msgid "Field must be 1 character long."
 msgid_plural "Field must be between 1 and {max_codename_len} characters long."
-msgstr[0] "Campo precisa ter 1 caractere."
-msgstr[1] "Campo precisa ter entre 1 e"
+msgstr[0] ""
+msgstr[1] ""
 
 msgid "Invalid input."
 msgstr "Entrada inválida."
@@ -828,7 +840,7 @@ msgid "Important"
 msgstr "Importante"
 
 msgid "You have been logged out due to inactivity or a problem with your session. Click the <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>New Identity</b> button in your Tor Browser's toolbar before moving on. This will clear your Tor Browser activity data on this device."
-msgstr "Você foi desconectada por causa de inatividade ou um  problema com a sua sessão. Clique no botão de <img src={icon} alt=\"\" width=\"16\" height=\"16\">&nbsp;<b>Nova Identidade</b> na barra de ferramentas de seu Tor Browser antes de prosseguir. Isso limpará os dados de atividade do Tor Browser neste dispositivo."
+msgstr ""
 
 msgid "Protecting Journalists and Sources"
 msgstr "Protegendo Jornalistas e Fontes"
@@ -837,10 +849,10 @@ msgid "Skip to notification"
 msgstr "Avançar para as notificações"
 
 msgid "Return to Submission Page"
-msgstr "Retornar à Pagina de Submissão"
+msgstr ""
 
 msgid "Return to Home Page"
-msgstr "Retornar à Página Inicial"
+msgstr ""
 
 msgid "We're sorry, our SecureDrop is currently offline."
 msgstr "Desculpas, o nosso SecureDrop está offline atualmente."
@@ -885,10 +897,10 @@ msgid "<strong>Keep it safe.</strong> There is no account recovery option."
 msgstr "<strong> Mantenha seguro. </strong> Não existe opção de recuperar conta."
 
 msgid "Continue to Submission Page"
-msgstr "Continue para Página de Submissão"
+msgstr ""
 
 msgid "Welcome"
-msgstr "Bem-vinda(o)"
+msgstr "Bem-vindo(a)"
 
 msgid "Your Tor Browser's <a id=\"disable-js\" href=\"\"><b>Security Level</b></a> is too low. Use the <img src=\"{icon}\" alt=\"&quot;Security Level&quot;\"> button in your browser’s toolbar to change it."
 msgstr "O <a id=\"disable-js\" href=\"\"><b>nível de segurança</b></a> do seu navegador Tor está muito baixo. Use o botão <img src=\"{icon}\" alt=\"&quot;nível de segurança&quot;\"> &nbsp;no seu navegador para modificá-lo."
@@ -900,22 +912,22 @@ msgid "Click the <img src=\"{icon}\" alt=\"&quot;Security Level&quot; button\"> 
 msgstr "Clique no <img src=\"{icon}\" alt=\"&quot;nível de segurança&quot;\"> na barra de ferramentas, acima"
 
 msgid "Click <b>Settings</b> to open Security Level preferences"
-msgstr "Clique em <b>Configurações</b> para abrir as preferências de Níveis de Segurança"
+msgstr ""
 
 msgid "Click <b>Change…</b> and select <b>Safest</b>"
-msgstr "Clique em <b>Alterar...</b> e selecione <b>Mais Seguro</b>"
+msgstr ""
 
 msgid "Click <b>Save and restart.</b>"
-msgstr "Clique em <b>Salvar e reiniciar.</b>"
+msgstr ""
 
 msgid "Tor Browser will restart, with its security level set to <b>Safest</b>. After the restart, come back to this site."
-msgstr "Tor Browser reiniciará com o seu nível segurança configurado para <b>Mais Seguro</b>. Depois de reiniciar, volte a este site."
+msgstr ""
 
 msgid "<strong>It is recommended to use Tor Browser to access SecureDrop:</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Learn how to install it</a>, or ignore this warning to continue."
 msgstr "<strong>Recomenda-se o uso do navegador Tor para acessar o SecureDrop:</strong> <a class=\"recommend-tor\" href=\"{tor_browser_url}\">Veja como instalar o Tor</a> ou ignore este aviso e continue."
 
 msgid "<strong>It is recommended you use the desktop version of Tor Browser to access SecureDrop, as Tor Browser for Android does not provide the same level of security and anonymity as the desktop version.</strong> <a class=\"recommend-tor\" aria-label=\"Learn how to install Tor Browser\" href=\"{tor_browser_url}\" >Learn how to install it</a>, or ignore this warning to continue."
-msgstr "<strong>É recomendado você usar  Tor Browser na versão  desktop  para acessar SecureDrop porque Tor Browser para Android não oferece o mesmo nível de segurança e anonimato comparado com  a versão desktop.</strong> <a class=\"recommend-tor\" aria-label=\"Aprenda como instalar Tor Browser\" href=\"{tor_browser_url}\">Aprenda como instala-lo</a> ou ignore esse alerta para continuar."
+msgstr ""
 
 msgid "{} logo"
 msgstr "{} logotipo"
@@ -927,7 +939,7 @@ msgid "First time submitting to our SecureDrop? Start here."
 msgstr "Este é o seu primeiro envio pelo nosso SecureDrop? Comece por aqui."
 
 msgid "Get Started With Your First Submission"
-msgstr "Iniciar Sua Primeira Submissão"
+msgstr ""
 
 msgid "GET STARTED"
 msgstr "COMO COMEÇAR"
@@ -939,10 +951,10 @@ msgid "Already have a codename? Check for replies or submit something new."
 msgstr "Você já criou um codinome? Verifique respostas ou envie novos documentos."
 
 msgid "Log In Using Your Codename"
-msgstr "Acessar Usando Seu Codinome"
+msgstr ""
 
 msgid "Log in"
-msgstr "Acessar"
+msgstr ""
 
 msgid "Enter Codename"
 msgstr "Inserir Codinome"
@@ -951,16 +963,16 @@ msgid "Enter your codename"
 msgstr "Digite o seu codinome"
 
 msgid "Cancel and Return to Previous Page"
-msgstr "Cancelar e Retornar à Página Anterior"
+msgstr ""
 
 msgid "CANCEL"
 msgstr "CANCELAR"
 
 msgid "Additional Action Required"
-msgstr "Ação Adicional Requerida"
+msgstr ""
 
 msgid "Log Back In"
-msgstr "Acessar Novamente"
+msgstr ""
 
 msgid "One more thing..."
 msgstr "Uma última coisa..."
@@ -996,10 +1008,10 @@ msgid "Anti-spam check. Do not fill this in!"
 msgstr "Checagem Anti-spam. Não preencha este campo!"
 
 msgid "Cancel and Clear Uploaded Content"
-msgstr "Cancelar ou Limpar Conteúdo Carregado"
+msgstr ""
 
 msgid "Submit Uploaded Content"
-msgstr "Envie Conteúdo Carregado"
+msgstr ""
 
 msgid "Read Replies"
 msgstr "Ler Respostas"
@@ -1014,7 +1026,7 @@ msgid "Delete reply from {timestamp}?"
 msgstr "Deletar resposta de {timestamp}?"
 
 msgid "Delete Reply"
-msgstr "Apagar Resposta"
+msgstr ""
 
 msgid "Delete All Replies"
 msgstr "Apagar todas as respostas"
@@ -1038,7 +1050,7 @@ msgid "Sorry, we couldn't locate what you requested."
 msgstr "Desculpe, não pudemos localizar o conteúdo que você pediu."
 
 msgid "Warning: Proxy Detected"
-msgstr "Atenção: Proxy Detectado"
+msgstr ""
 
 msgid "Proxy Service Detected"
 msgstr "Serviço Proxy detectado"
@@ -1053,7 +1065,7 @@ msgid "Always use Tor Browser (<code>{}</code>) to access SecureDrop. Valid Secu
 msgstr "Sempre use o Navegador Tor (<code>{}</code>) para acessar o SecureDrop. Os endereços de site SecureDrop válidos terminam com <code>.onion</code>. O endereço correto deste site é:"
 
 msgid "If you are already using Tor Browser, copy the address above and click Tor Browser's <strong>New Identity</strong> button before you access SecureDrop."
-msgstr "Se você já está usando Tor Browser, copie o endereço acima e clique no botão <strong>Nova Identidade</strong> de Tor Browser antes de acessar SecureDrop."
+msgstr ""
 
 msgid "If there is a reasonable risk of your Internet traffic being monitored, consider connecting from a different location or network."
 msgstr "Caso haja um risco significativo de seu trafego na Internet estar sendo monitorado, considere conectar de uma diferente localização ou rede."
@@ -1080,7 +1092,7 @@ msgid "Codename"
 msgstr "Codinome"
 
 msgid "Reveal Codename"
-msgstr "Revelar Codinome"
+msgstr ""
 
 msgid "Show Codename"
 msgstr "Mostrar codinome"
