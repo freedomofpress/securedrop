@@ -1,5 +1,5 @@
 ansible==8.7.0
-cryptography>=46.0.6  # >= for CVE-2026-34073
+cryptography>=46.0.5  # >= for CVE-2026-26007
 jinja2>=3.1.6
 netaddr
 markupsafe>=3.0

@@ -49,21 +49,45 @@ function copy_securedrop_repo() {
       "${TOPLEVEL}/" "${SSH_TARGET}:~/securedrop-source"
 }
 
+# Sync prebuilt debs (build/${OS_VERSION}/, build/trixie/) to GCE; the repo
+# rsync above excludes *.deb.
+function copy_prebuilt_debs_to_remote() {
+  if [[ "${CI_PREBUILT_DEBS:-}" != "1" ]]; then
+    return 0
+  fi
+  local server_deb_dir="${TOPLEVEL}/build/${OS_VERSION}"
+  local admin_deb_dir="${TOPLEVEL}/build/trixie"
+  for d in "$server_deb_dir" "$admin_deb_dir"; do
+    if [[ ! -d "$d" ]] || [[ $(find "$d" -maxdepth 1 -name '*.deb' 2>/dev/null | wc -l) -eq 0 ]]; then
+      echo "ERROR: CI_PREBUILT_DEBS=1 but no .deb files found in ${d}" >&2
+      exit 1
+    fi
+  done
+  rsync -a -e "ssh ${SSH_OPTS[*]}" \
+      "${server_deb_dir}/" "${SSH_TARGET}:~/securedrop-source/build/${OS_VERSION}/"
+  rsync -a -e "ssh ${SSH_OPTS[*]}" \
+      "${admin_deb_dir}/" "${SSH_TARGET}:~/securedrop-source/build/trixie/"
+}
+
 # Main logic
 copy_securedrop_repo
+copy_prebuilt_debs_to_remote
 
 # The test results should be collected regardless of pass/fail,
 # so register a trap to ensure the fetch always runs.
 trap fetch_junit_test_results EXIT
 
-# build server debs
-ssh_gce "OS_VERSION=\"${OS_VERSION}\" make build-debs-notest"
-ssh_gce "OS_VERSION=\"${OS_VERSION}\" make build-debs-ossec-notest"
+# Legacy on-host build path (used when running outside CI).
+if [[ "${CI_PREBUILT_DEBS:-}" != "1" ]]; then
+  ssh_gce "OS_VERSION=\"${OS_VERSION}\" make build-debs-notest"
+  ssh_gce "OS_VERSION=\"${OS_VERSION}\" make build-debs-ossec-notest"
+  ssh_gce "OS_VERSION=\"trixie\" make build-debs-admin-notest"
+fi
 
-# build and install securedrop-admin tools and add staging config
-ssh_gce "OS_VERSION=\"trixie\" make build-debs-admin-notest"
+# GCE host is trixie; admin venv is ABI-tied to its builder Python.
+ssh_gce "sudo apt-get update && sudo apt install -y ./build/trixie/securedrop-admin_*+trixie_amd64.deb"
+
 ssh_gce "mkdir -p /home/sdci/.config/securedrop-admin"
-ssh_gce "sudo apt-get update && sudo apt-get install -y ./build/trixie/securedrop-admin_*+trixie_amd64.deb"
 ssh_gce "cp ~/securedrop-source/install_files/ansible-base/roles/ossec/files/test_admin_key.pub /home/sdci/.config/securedrop-admin/"
 ssh_gce "cp ~/securedrop-source/install_files/ansible-base/roles/app/files/test_journalist_key.pub /home/sdci/.config/securedrop-admin/"
 

@@ -4,7 +4,7 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2018.
 #
 msgid ""
-msgstr "Project-Id-Version: SecureDrop 0.8.0~rc1\nReport-Msgid-Bugs-To: securedrop@freedom.press\nPO-Revision-Date: 2026-04-15 18:54+0000\nLast-Translator: Cory Francis Myers <cory@freedom.press>\nLanguage-Team: Persian <https://weblate.securedrop.org/projects/securedrop/securedrop/fa/>\nLanguage: fa\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=2; plural=n > 1;\nX-Generator: Weblate 5.16.2\nGenerated-By: Babel 2.5.1\n"
+msgstr "Project-Id-Version: SecureDrop 0.8.0~rc1\nReport-Msgid-Bugs-To: securedrop@freedom.press\nPO-Revision-Date: 2026-01-30 14:39+0000\nLast-Translator: Maryam Azad <hannahperez8@protonmail.com>\nLanguage-Team: Persian <https://weblate.securedrop.org/projects/securedrop/securedrop/fa/>\nLanguage: fa\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=2; plural=n > 1;\nX-Generator: Weblate 5.15.2\nGenerated-By: Babel 2.5.1\n"
 
 msgid "Name too long"
 msgstr "نام بیش از حد طولانی است"
