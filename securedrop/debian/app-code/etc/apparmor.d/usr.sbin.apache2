@@ -92,6 +92,7 @@
   /run/shm rw,
   /sbin/ldconfig rix,
   /sbin/ldconfig.real rix,
+  /sys/kernel/mm/transparent_hugepage/enabled r,
   /tmp/** rwm,
   /usr/bin/ r,
   /usr/bin/dash rix,
