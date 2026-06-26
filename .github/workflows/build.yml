@@ -28,7 +28,7 @@ jobs:
     outputs:
       artifact_id: ${{ steps.upload.outputs.artifact-id }}
     steps:
-      - uses: actions/checkout@v6.0.2
+      - uses: actions/checkout@v7.0.0
         with:
           persist-credentials: false
       - uses: actions/setup-python@v6

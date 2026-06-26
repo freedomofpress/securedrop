@@ -14,7 +14,7 @@ jobs:
     # Keep version in sync with rust-toolchain.toml
     container: rust:1.96.0
     steps:
-      - uses: actions/checkout@v6.0.2
+      - uses: actions/checkout@v7.0.0
         with:
           persist-credentials: false
       - name: Check Rust dependencies
@@ -24,7 +24,7 @@ jobs:
   static-analysis:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6.0.2
+      - uses: actions/checkout@v7.0.0
         with:
           persist-credentials: false
       - uses: actions/setup-python@v6
