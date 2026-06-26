@@ -3,6 +3,7 @@
 export DISPLAY=:1
 
 export REPOROOT="${REPOROOT:-$(git rev-parse --show-toplevel)}"
+export SDW_CONFIG_JSON="${SDW_CONFIG_JSON:-${REPOROOT}/securedrop-workstation-config.json}"
 
 function run_tor {
     tor > /tmp/tor.out 2>&1 || cat /tmp/tor.out
@@ -96,7 +97,7 @@ function maybe_use_tor() {
         ji_authkey="$(sudo -u debian-tor cat /tmp/k1.prv.key)"
         sdkey_fpr="$(gpg --with-fingerprint --with-colons ./tests/files/test_journalist_key.pub | grep -e '^fpr' | tr -d 'fpr:')"
 
-        cat > /tmp/qubes-config.json <<EOF
+        cat > "${SDW_CONFIG_JSON}" <<EOF
 {
   "submission_key_fpr": "${sdkey_fpr}",
   "hidserv": {
@@ -118,9 +119,12 @@ EOF
         echo "Journalist Auth Key:  ${ji_authkey}"
         echo "--------"
         echo
+        echo "SecureDrop Workstation config.json written to:"
+        echo "${SDW_CONFIG_JSON}"
+        echo
         echo "SecureDrop Workstation config.json:"
         echo "--------"
-        cat /tmp/qubes-config.json
+        cat "${SDW_CONFIG_JSON}"
         echo "--------"
     fi
 }
