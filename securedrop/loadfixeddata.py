@@ -274,7 +274,7 @@ def import_submissions_and_replies(
                     print(f"Imported reply (pre-encrypted): {fname}")
                 else:
                     print(
-                        f"Warning: no pre-encrypted file for reply: {fpath}, may be unreproducible"
+                        f"Warning: no pre-encrypted file for reply: {fname}, may be unreproducible"
                     )
                     print(f"Imported reply: {fname}")
 
