@@ -48,9 +48,6 @@ notes = "Redox OS-only"
 criteria = []
 notes = "Redox OS-only"
 
-[policy.redwood]
-criteria = "safe-to-run"
-
 [policy.wasi]
 criteria = []
 notes = "WASM-only"
@@ -126,3 +123,167 @@ notes = "Windows-only"
 [policy.windows_x86_64_msvc]
 criteria = []
 notes = "Windows-only"
+
+[[exemptions.anyhow]]
+version = "1.0.103"
+criteria = "sd-maintainer-signoff"
+
+[[exemptions.ascii-canvas]]
+version = "3.0.0"
+criteria = "sd-maintainer-signoff"
+
+[[exemptions.base64]]
+version = "0.21.4"
+criteria = "sd-maintainer-signoff"
+
+[[exemptions.bitflags]]
+version = "2.4.0"
+criteria = "sd-maintainer-signoff"
+
+[[exemptions.cc]]
+version = "1.0.83"
+criteria = "sd-maintainer-signoff"
+
+[[exemptions.chrono]]
+version = "0.4.31"
+criteria = "sd-maintainer-signoff"
+
+[[exemptions.crc32fast]]
+version = "1.3.2"
+criteria = "sd-maintainer-signoff"
+
+[[exemptions.diff]]
+version = "0.1.13"
+criteria = "sd-maintainer-signoff"
+
+[[exemptions.digest]]
+version = "0.10.7"
+criteria = "sd-maintainer-signoff"
+
+[[exemptions.dirs-next]]
+version = "2.0.0"
+criteria = "sd-maintainer-signoff"
+
+[[exemptions.dirs-sys-next]]
+version = "0.1.2"
+criteria = "sd-maintainer-signoff"
+
+[[exemptions.ena]]
+version = "0.14.2"
+criteria = "sd-maintainer-signoff"
+
+[[exemptions.fixedbitset]]
+version = "0.4.2"
+criteria = "sd-maintainer-signoff"
+
+[[exemptions.flate2]]
+version = "1.1.2"
+criteria = "sd-maintainer-signoff"
+
+[[exemptions.generic-array]]
+version = "0.14.7"
+criteria = "sd-maintainer-signoff"
+
+[[exemptions.getrandom]]
+version = "0.2.10"
+criteria = "sd-maintainer-signoff"
+
+[[exemptions.heck]]
+version = "0.5.0"
+criteria = "sd-maintainer-signoff"
+
+[[exemptions.iana-time-zone]]
+version = "0.1.58"
+criteria = "sd-maintainer-signoff"
+
+[[exemptions.itertools]]
+version = "0.10.5"
+criteria = "sd-maintainer-signoff"
+
+[[exemptions.lalrpop]]
+version = "0.20.0"
+criteria = "sd-maintainer-signoff"
+
+[[exemptions.lalrpop-util]]
+version = "0.20.0"
+criteria = "sd-maintainer-signoff"
+
+[[exemptions.lazy_static]]
+version = "1.4.0"
+criteria = "sd-maintainer-signoff"
+
+[[exemptions.memsec]]
+version = "0.6.3"
+criteria = "sd-maintainer-signoff"
+
+[[exemptions.once_cell]]
+version = "1.21.4"
+criteria = "sd-maintainer-signoff"
+
+[[exemptions.petgraph]]
+version = "0.6.4"
+criteria = "sd-maintainer-signoff"
+
+[[exemptions.phf_shared]]
+version = "0.10.0"
+criteria = "sd-maintainer-signoff"
+
+[[exemptions.pkg-config]]
+version = "0.3.27"
+criteria = "sd-maintainer-signoff"
+
+[[exemptions.pyo3]]
+version = "0.29.0"
+criteria = "sd-maintainer-signoff"
+
+[[exemptions.pyo3-build-config]]
+version = "0.29.0"
+criteria = "sd-maintainer-signoff"
+
+[[exemptions.pyo3-ffi]]
+version = "0.29.0"
+criteria = "sd-maintainer-signoff"
+
+[[exemptions.pyo3-macros]]
+version = "0.29.0"
+criteria = "sd-maintainer-signoff"
+
+[[exemptions.pyo3-macros-backend]]
+version = "0.29.0"
+criteria = "sd-maintainer-signoff"
+
+[[exemptions.siphasher]]
+version = "0.3.11"
+criteria = "sd-maintainer-signoff"
+
+[[exemptions.smallvec]]
+version = "1.13.2"
+criteria = "sd-maintainer-signoff"
+
+[[exemptions.stable_deref_trait]]
+version = "1.2.0"
+criteria = "sd-maintainer-signoff"
+
+[[exemptions.string_cache]]
+version = "0.8.7"
+criteria = "sd-maintainer-signoff"
+
+[[exemptions.term]]
+version = "0.7.0"
+criteria = "sd-maintainer-signoff"
+
+[[exemptions.tiny-keccak]]
+version = "2.0.2"
+criteria = "sd-maintainer-signoff"
+
+[[exemptions.typenum]]
+version = "1.17.0"
+criteria = "sd-maintainer-signoff"
+
+[[exemptions.xxhash-rust]]
+version = "0.8.7"
+criteria = "sd-maintainer-signoff"
+
+[[exemptions.zerofrom-derive]]
+version = "0.1.4"
+criteria = "sd-maintainer-signoff"

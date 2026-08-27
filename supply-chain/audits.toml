@@ -1,6 +1,15 @@
 
 # cargo-vet audits file
 
+[criteria.sd-maintainer-signoff]
+description = """
+[SD-INTERNAL] A maintainer signs off on the use of this package as a deployment dependency.
+[Warning]: Don't use this target with `cargo vet certify`! Use well-understood default targets
+`safe-to-run` or `safe-to-deploy` when signing off on audits.
+Use this target for configuring local exemptions in `config.toml`.
+"""
+implies = "safe-to-deploy"
+
 [[audits.ascii-canvas]]
 who = "Cory Francis Myers <cory@freedom.press>"
 criteria = "safe-to-run"
