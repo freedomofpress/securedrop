@@ -271,7 +271,7 @@ def delete_user(args: argparse.Namespace, context: AppContext | None = None) -> 
 
         # Try to delete user from the database
         try:
-            db.session.delete(selected_user)
+            selected_user.delete()
             db.session.commit()
         except Exception as e:
             # If the user was deleted between the user selection and
