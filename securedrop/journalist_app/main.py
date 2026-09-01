@@ -39,6 +39,8 @@ def make_blueprint() -> Blueprint:
                 request.form["token"],
             )
             if user:
+                # Note: No major security issues with logging the 2FA token here
+                # because 1) it's single use and 2) it's also stored in the database.
                 current_app.logger.info(
                     "'{}' logged in with the two-factor code {}".format(
                         request.form["username"], request.form["token"]

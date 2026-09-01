@@ -177,12 +177,16 @@ def make_blueprint() -> Blueprint:
 
     @api.route("/sources/<source_uuid>/submissions/<submission_uuid>/download", methods=["GET"])
     def download_submission(source_uuid: str, submission_uuid: str) -> flask.Response:
+        # Note: even though we don't validate submission_uuid belongs to source_uuid, there's
+        # no IDOR here because all journalists can see all sources/submissions
         get_or_404(Source, source_uuid, column=Source.uuid)
         submission = get_or_404(Submission, submission_uuid, column=Submission.uuid)
         return utils.serve_file_with_etag(submission)
 
     @api.route("/sources/<source_uuid>/replies/<reply_uuid>/download", methods=["GET"])
     def download_reply(source_uuid: str, reply_uuid: str) -> flask.Response:
+        # Note: even though we don't validate reply_uuid belongs to source_uuid, there's
+        # no IDOR here because all journalists can see all sources/replies
         get_or_404(Source, source_uuid, column=Source.uuid)
         reply = get_or_404(Reply, reply_uuid, column=Reply.uuid)
 
@@ -193,6 +197,8 @@ def make_blueprint() -> Blueprint:
         methods=["GET", "DELETE"],
     )
     def single_submission(source_uuid: str, submission_uuid: str) -> tuple[flask.Response, int]:
+        # Note: even though we don't validate submission_uuid belongs to source_uuid, there's
+        # no IDOR here because all journalists can see+delete all sources/submissions
         if request.method == "GET":
             get_or_404(Source, source_uuid, column=Source.uuid)
             submission = get_or_404(Submission, submission_uuid, column=Submission.uuid)
@@ -250,6 +256,8 @@ def make_blueprint() -> Blueprint:
 
     @api.route("/sources/<source_uuid>/replies/<reply_uuid>", methods=["GET", "DELETE"])
     def single_reply(source_uuid: str, reply_uuid: str) -> tuple[flask.Response, int]:
+        # Note: even though we don't validate reply_uuid belongs to source_uuid, there's
+        # no IDOR here because all journalists can see all sources/replies
         get_or_404(Source, source_uuid, column=Source.uuid)
         reply = get_or_404(Reply, reply_uuid, column=Reply.uuid)
         if request.method == "GET":
