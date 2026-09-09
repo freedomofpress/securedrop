@@ -56,6 +56,11 @@ PermitTunnel no
 X11Forwarding no
 X11DisplayOffset 10
 
+# File transfer
+# Enable SFTP for Ansible (ssh_transfer_method=sftp). Classic scp is deprecated
+# in OpenSSH 9+. Keep other hardening above; do not broaden auth/forwarding.
+Subsystem sftp /usr/lib/openssh/sftp-server
+
 # Misc configuration
 
 PrintMotd no
