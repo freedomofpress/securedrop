@@ -29,3 +29,9 @@ override_dh_strip_nondeterminism:
 	find ./debian/ -type f -name 'pip-selfcheck.json' -delete
 	find ./debian/ -type f -name 'RECORD' -delete
 	dh_strip_nondeterminism $@
+
+# Skip compression when FAST=1 to speed up local builds
+ifdef FAST
+override_dh_builddeb:
+	dh_builddeb -- -Znone
+endif
