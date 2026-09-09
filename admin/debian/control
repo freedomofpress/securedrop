@@ -10,3 +10,11 @@ Package: securedrop-admin
 Architecture: amd64
 Depends: ${shlibs:Depends}, python3, sq, netcat-openbsd, tor, rsync, keepassxc-minimal
 Description: SecureDrop server administration utility
+
+Package: securedrop-admin-qubes
+Architecture: amd64
+Depends:
+ qubes-vm-recommended,
+ xfce4-terminal,
+ securedrop-admin, torbrowser-launcher, firefox-esr
+Description: Metapackage for using SecureDrop admin tools on Qubes
