@@ -2,8 +2,8 @@
 include /usr/share/dpkg/pkg-info.mk
 
 DEB_DH_INSTALL_ARGS=-X .git
-PIP_BOOTSTRAP_ARGS=--verbose --no-deps --no-cache-dir --only-binary=:all:
-PIP_ARGS=--verbose --no-deps --no-cache-dir --only-binary=:all: --require-hashes
+PIP_BOOTSTRAP_ARGS=--verbose --no-deps --no-cache-dir --no-compile --only-binary=:all:
+PIP_ARGS=--verbose --no-deps --no-cache-dir --no-compile --only-binary=:all: --require-hashes
 
 %:
 	dh $@ --buildsystem=pybuild
@@ -16,7 +16,7 @@ override_dh_auto_install:
 
 	./debian/securedrop-admin/usr/share/securedrop-admin/venv/bin/pip install $(PIP_ARGS) \
 		-r ./requirements.txt
-	./debian/securedrop-admin/usr/share/securedrop-admin/venv/bin/pip install /srv/securedrop-admin
+	./debian/securedrop-admin/usr/share/securedrop-admin/venv/bin/pip install --no-compile /srv/securedrop-admin
 	find ./debian/securedrop-admin/ -type f -exec sed -i "s#$(shell pwd)/debian/securedrop-admin##" {} \;
 	dh_auto_install $@
 
