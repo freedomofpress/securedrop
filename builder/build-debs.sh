@@ -17,6 +17,8 @@ git status --short
 # --- END keep this section in sync. ---
 
 WHAT="${WHAT:-securedrop}"
+# If set, a timestamp is appended to the package version number (see fixup-changelog.sh)
+NIGHTLY="${NIGHTLY:-}"
 
 if [[ $WHAT == "admin" ]]; then
     export OS_VERSION="${OS_VERSION:-trixie}"
@@ -24,7 +26,7 @@ else
     export OS_VERSION="${OS_VERSION:-noble}"
 fi
 
-OCI_RUN_ARGUMENTS="--user=root -v $(pwd):/src:Z -e HOST_UID=$(id -u) -e HOST_GID=$(id -g) -e FAST=${FAST:-}"
+OCI_RUN_ARGUMENTS="--user=root -v $(pwd):/src:Z -e HOST_UID=$(id -u) -e HOST_GID=$(id -g) -e FAST=${FAST:-} -e NIGHTLY=${NIGHTLY}"
 
 # Default to podman if available
 if which podman > /dev/null 2>&1; then
@@ -47,6 +49,7 @@ echo "::group::Environment"
 echo "Running build-debs.sh with the follow environment:"
 echo "OS_VERSION='$OS_VERSION'"
 echo "WHAT='$WHAT'"
+echo "NIGHTLY='$NIGHTLY'"
 echo "OCI_BIN='$OCI_BIN'"
 echo "OCI_RUN_ARGUMENTS='$OCI_RUN_ARGUMENTS'"
 echo "::endgroup::"
