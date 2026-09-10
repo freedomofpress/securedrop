@@ -653,3 +653,72 @@ def test_find_or_generate_new_torv3_keys_subsequent_run(capsys):
         v3_onion_service_keys = json.load(f)
 
     assert v3_onion_service_keys == old_keys
+
+
+class TestExportJournalistConfig:
+    JOURNALIST_ONION = "sdolvtfhatvsysc6l34d65ymdwxcujausv7k5jk4cy5ttzhjoi6fzvyd.onion"
+    JOURNALIST_KEY = "5U4JPYSZ34N2ZDSOUAL2YLEX2NPI5BLL2Y66QJW24KLSH7R3FEPQ"
+    FINGERPRINT = "1234567890ABCDEF1234567890ABCDEF12345678"
+
+    def setup_method(self, method):
+        os.makedirs(CONFIG_DIR, exist_ok=True)
+        with open(SITE_CONFIG_PATH, "w") as f:
+            yaml.safe_dump({"securedrop_app_gpg_fingerprint": self.FINGERPRINT}, f)
+        self.write_auth_file(
+            f"{self.JOURNALIST_ONION[: -len('.onion')]}:descriptor:x25519:{self.JOURNALIST_KEY}"
+        )
+
+    def teardown_method(self, method):
+        for path in (SITE_CONFIG_PATH, join(CONFIG_DIR, "app-journalist.auth_private")):
+            if exists(path):
+                os.remove(path)
+
+    def write_auth_file(self, contents):
+        with open(join(CONFIG_DIR, "app-journalist.auth_private"), "w") as f:
+            f.write(contents + "\n")
+
+    def args(self):
+        return argparse.Namespace()
+
+    def test_export_to_stdout(self, capsys):
+        return_code = securedrop_admin.export_journalist_config(self.args())
+
+        assert return_code == 0
+        out, err = capsys.readouterr()
+        assert json.loads(out) == {
+            "submission_key_fpr": self.FINGERPRINT,
+            "hidserv": {"hostname": self.JOURNALIST_ONION, "key": self.JOURNALIST_KEY},
+            "environment": "prod",
+            "vmsizes": {"sd_app": 10, "sd_log": 5},
+        }
+
+    def test_export_missing_fingerprint(self):
+        with open(SITE_CONFIG_PATH, "w") as f:
+            yaml.safe_dump({"app_hostname": "app"}, f)
+
+        with pytest.raises(ValueError, match="Submission Key fingerprint is not set"):
+            securedrop_admin.export_journalist_config(self.args())
+
+    def test_export_missing_auth_file(self):
+        os.remove(join(CONFIG_DIR, "app-journalist.auth_private"))
+
+        with pytest.raises(ValueError, match="onion service file is missing"):
+            securedrop_admin.export_journalist_config(self.args())
+
+    def test_export_unparseable_auth_file(self):
+        self.write_auth_file("not-an-onion-service")
+
+        with pytest.raises(ValueError, match="Could not parse the onion service file"):
+            securedrop_admin.export_journalist_config(self.args())
+
+    def test_export_invalid_onion_address(self):
+        self.write_auth_file(f"notanonion:descriptor:x25519:{self.JOURNALIST_KEY}")
+
+        with pytest.raises(ValueError, match="Invalid onion address"):
+            securedrop_admin.export_journalist_config(self.args())
+
+    def test_export_invalid_key(self):
+        self.write_auth_file(f"{self.JOURNALIST_ONION[: -len('.onion')]}:descriptor:x25519:nope")
+
+        with pytest.raises(ValueError, match="Invalid onion service key"):
+            securedrop_admin.export_journalist_config(self.args())

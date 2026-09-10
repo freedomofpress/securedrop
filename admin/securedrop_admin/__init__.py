@@ -83,6 +83,12 @@ ANSIBLE_PATH = os.path.join(READONLY_CONFIG_PATH, "ansible-base")
 TRANSLATIONS_PATH = os.path.join(READONLY_CONFIG_PATH, "translations")
 CONFIG_PATH = os.path.expanduser("~/.config/securedrop-admin")
 SITE_CONFIG_PATH = os.path.join(CONFIG_PATH, "site-specific")
+JOURNALIST_AUTH_PATH = os.path.join(CONFIG_PATH, "app-journalist.auth_private")
+
+# Values for the SecureDrop Workstation `config.json` we generate; see
+# `sdw_util/config_types.py` in the securedrop-workstation repository.
+SDW_ENVIRONMENT = "prod"
+SDW_VMSIZES = {"sd_app": 10, "sd_log": 5}
 
 
 # Check OpenSSH version - ansible requires an extra argument for scp on OpenSSH 9
@@ -916,6 +922,70 @@ def find_or_generate_new_torv3_keys(args: argparse.Namespace) -> int:
     return 0
 
 
+def export_journalist_config(args: argparse.Namespace) -> int:
+    """Export a config.json for SecureDrop Workstation"""
+    # Validate on load, so the fingerprint is normalized (spaces stripped,
+    # uppercased) before it goes into the config.json.
+    site_config = SiteConfig().load()
+    fingerprint = site_config.get("securedrop_app_gpg_fingerprint", "")
+    if not fingerprint:
+        raise ValueError(
+            "The Submission Key fingerprint is not set in the site configuration. "
+            'Please run "securedrop-admin sdconfig".'
+        )
+
+    hostname, key = read_journalist_onion_auth()
+
+    config = {
+        "submission_key_fpr": fingerprint,
+        "hidserv": {
+            "hostname": hostname,
+            "key": key,
+        },
+        "environment": SDW_ENVIRONMENT,
+        "vmsizes": SDW_VMSIZES,
+    }
+
+    print(json.dumps(config, indent=2))
+    return 0
+
+
+def read_journalist_onion_auth() -> tuple[str, str]:
+    """Read the Journalist Interface onion address and client auth private key.
+
+    The `app-journalist.auth_private` file is fetched back from the Application
+    Server during installation, and has the form::
+
+        <onion-address-without-suffix>:descriptor:x25519:<private-key>
+
+    :returns: Tuple(hostname, private_key)
+    """
+    try:
+        with open(JOURNALIST_AUTH_PATH) as fobj:
+            contents = fobj.read().strip()
+    except OSError:
+        raise ValueError(
+            f"The Journalist Interface onion service file is missing: {JOURNALIST_AUTH_PATH}. "
+            'Please run "securedrop-admin install" first, or copy the file from the '
+            "Admin Workstation."
+        )
+
+    fields = contents.split(":")
+    if len(fields) != 4 or fields[1] != "descriptor" or fields[2] != "x25519":
+        raise ValueError(f"Could not parse the onion service file: {JOURNALIST_AUTH_PATH}")
+
+    hostname = fields[0] + ".onion"
+    key = fields[3]
+    # Mirror the validation done by securedrop-workstation, so that admins find
+    # out about a malformed value here rather than halfway through provisioning.
+    if not re.match(r"^[a-z2-7]{56}\.onion$", hostname):
+        raise ValueError(f"Invalid onion address in {JOURNALIST_AUTH_PATH}: {hostname}")
+    if not re.match(r"^[A-Z2-7]{52}$", key):
+        raise ValueError(f"Invalid onion service key in {JOURNALIST_AUTH_PATH}")
+
+    return hostname, key
+
+
 @update_check_required("install")
 def install_securedrop(args: argparse.Namespace) -> int:
     """Install/Update SecureDrop"""
@@ -1127,6 +1197,11 @@ def parse_argv(argv: list[str]) -> argparse.Namespace:
         "generate_v3_keys", help=find_or_generate_new_torv3_keys.__doc__
     )
     parse_generate_tor_keys.set_defaults(func=find_or_generate_new_torv3_keys)
+
+    parse_export_journalist_config = subparsers.add_parser(
+        "export-journalist-config", help=export_journalist_config.__doc__
+    )
+    parse_export_journalist_config.set_defaults(func=export_journalist_config)
 
     parse_backup = subparsers.add_parser("backup", help=backup_securedrop.__doc__)
     parse_backup.set_defaults(func=backup_securedrop)
