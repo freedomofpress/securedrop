@@ -45,12 +45,12 @@ jobs:
           OS_VERSION=${{ matrix.versions.ubuntu }} WHAT=ossec ./builder/build-debs.sh
       - name: Build admin packages
         run: |
-          OS_VERSION=${{ matrix.versions.ubuntu }} WHAT=admin ./builder/build-debs.sh
+          WHAT=admin ./builder/build-debs.sh
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         id: upload
         with:
           name: ${{ matrix.versions.ubuntu }}-${{ matrix.build }}
-          path: build/${{ matrix.versions.ubuntu }}
+          path: build/
           if-no-files-found: error
 
   reproducible-debs:
@@ -73,7 +73,11 @@ jobs:
         run: |
           find . -name '*.deb' -exec sha256sum {} \;
           # FIXME: securedrop-app-code isn't reproducible
-          for pkg in ossec-agent ossec-server securedrop-config securedrop-keyring securedrop-ossec-agent securedrop-ossec-server securedrop-admin
+          # Server/OSSEC packages are built for Ubuntu, admin packages for Debian
+          for pkg in ${{ matrix.ubuntu_version }}/ossec-agent ${{ matrix.ubuntu_version }}/ossec-server \
+              ${{ matrix.ubuntu_version }}/securedrop-config ${{ matrix.ubuntu_version }}/securedrop-keyring \
+              ${{ matrix.ubuntu_version }}/securedrop-ossec-agent ${{ matrix.ubuntu_version }}/securedrop-ossec-server \
+              trixie/securedrop-admin
           do
               echo "Checking ${pkg}..."
               diffoscope ${{ matrix.ubuntu_version }}-one/${pkg}_*.deb ${{ matrix.ubuntu_version }}-two/${pkg}_*.deb
