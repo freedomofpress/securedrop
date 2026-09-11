@@ -19,3 +19,6 @@
 
 - include_tasks: create_ssh_aliases.yml
   when: admin_check_result.stat.exists
+
+- include_tasks: create_sdw_config.yml
+  when: admin_check_result.stat.exists
