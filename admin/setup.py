@@ -26,15 +26,6 @@ setuptools.setup(
     url="https://securedrop.org",
     packages=setuptools.find_packages(),
     scripts=["bin/securedrop-admin"],
-    classifiers=[
-        "Environment :: Console",
-        "Intended Audience :: Information Technology",
-        "Intended Audience :: System Administrators",
-        "Operating System :: POSIX :: Linux",
-        "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
-        "Programming Language :: Python",
-        "Programming Language :: Python :: 3",
-        "Topic :: Utilities",
-    ],
-    python_requires=">=3.11",
+    license="GPL-3.0-or-later",
+    python_requires=">=3.13",
 )
