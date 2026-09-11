@@ -1,0 +1,50 @@
+---
+- name: Import variables
+  include_vars: "{{ config_path }}/site-specific"
+
+- name: Confirm that the app-journalist auth file exists
+  stat:
+    path: "{{ config_path }}/app-journalist.auth_private"
+  register: "ji_app"
+  failed_when: not ji_app.stat.exists or not ji_app.stat.isreg
+
+- name: Read the app-journalist file content
+  slurp:
+    src: "{{ config_path }}/app-journalist.auth_private"
+  register: ji_app_file
+
+- name: Extract the JI onion address
+  set_fact:
+    ji_onion_address: "{{ (ji_app_file.content | b64decode).split('\n')[0].split(':')[0] }}"
+  no_log: true
+
+- name: Extract the JI auth key
+  set_fact:
+    ji_onion_key: "{{ (ji_app_file.content | b64decode).split('\n')[0].split(':')[3] }}"
+  no_log: true
+
+- name: Verify that the extracted fields are valid
+  assert:
+    that:
+      - ji_onion_address is match('^[a-z2-7]{56}$')
+      - ji_onion_key is match('^[A-Z2-7]{52}$')
+  no_log: true
+
+- name: Create a fact describing the SecureDrop Workstation config data
+  set_fact:
+    sdw_config:
+      environment: "prod"
+      submission_key_fpr: "{{ securedrop_app_gpg_fingerprint }}"
+      hidserv:
+        hostname: "{{ ji_onion_address }}.onion"
+        key: "{{ ji_onion_key }}"
+      vmsizes:
+        sd_app: 10
+        sd_log: 5
+  no_log: true
+
+- name: Create a config.json file with the SDW config data
+  copy:
+    content: "{{ sdw_config | to_nice_json(indent=2) }}"
+    dest: "{{ config_path }}/config.json"
+  no_log: true
