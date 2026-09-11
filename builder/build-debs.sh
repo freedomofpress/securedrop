@@ -24,7 +24,7 @@ else
     export OS_VERSION="${OS_VERSION:-noble}"
 fi
 
-OCI_RUN_ARGUMENTS="--user=root -v $(pwd):/src:Z -e HOST_UID=$(id -u) -e HOST_GID=$(id -g)"
+OCI_RUN_ARGUMENTS="--user=root -v $(pwd):/src:Z -e HOST_UID=$(id -u) -e HOST_GID=$(id -g) -e FAST=${FAST:-}"
 
 # Default to podman if available
 if which podman > /dev/null 2>&1; then
