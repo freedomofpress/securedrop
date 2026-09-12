@@ -82,6 +82,7 @@ class EventHandler:
                 EventType.SOURCE_CONVERSATION_SEEN: self.handle_source_conversation_seen,
             }[event.type]
         except KeyError:
+            self.record_status(event, EventStatusCode.NotImplemented)
             return EventResult(
                 event_id=event.id,
                 status=(
