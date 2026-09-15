@@ -12,7 +12,7 @@ from journalist_app.api2.types import (
     ItemUUID,
 )
 from journalist_app.sessions import Session, session
-from models import Reply, Source, Submission
+from models import Reply, Source, Submission, eager_query
 from redis import Redis
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound, StaleDataError
@@ -287,7 +287,7 @@ class EventHandler:
         """
 
         try:
-            source = Source.query.filter(Source.uuid == event.target.source_uuid).one()
+            source = eager_query("Source").filter(Source.uuid == event.target.source_uuid).one()
         except NoResultFound:
             return EventResult(
                 event_id=event.id,
