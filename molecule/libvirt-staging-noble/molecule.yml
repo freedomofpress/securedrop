@@ -55,6 +55,7 @@ provisioner:
     create: create.yml
     destroy: destroy.yml
     prepare: prepare.yml
+    side_effect: side_effect.yml
   env:
     ANSIBLE_CONFIG: ../../install_files/ansible-base/ansible.cfg
 
@@ -65,6 +66,7 @@ scenario:
     - create
     - converge
     - verify
+    - side_effect
 verifier:
   name: testinfra
   lint: |
