@@ -1,5 +1,6 @@
 #!/usr/bin/make -f
 include /usr/share/dpkg/pkg-info.mk
+export DEB_BUILD_MAINT_OPTIONS = hardening=+all
 
 DEB_DH_INSTALL_ARGS=-X .git
 PIP_ARGS=--verbose --no-deps --no-binary=:all: --no-cache-dir
