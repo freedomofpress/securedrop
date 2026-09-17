@@ -1,5 +1,6 @@
 #!/usr/bin/make -f
 include /usr/share/dpkg/pkg-info.mk
+export DEB_BUILD_MAINT_OPTIONS = hardening=+all
 
 HUMAN_DATE := $(shell date --utc --date="@${SOURCE_DATE_EPOCH}")
 
@@ -12,7 +13,7 @@ override_dh_install:
 	sed -i s/USE_PCRE2_JIT=yes/USE_PCRE2_JIT=no/ src/Makefile
 	# LDFLAGS overrides warning; see https://github.com/ossec/ossec-hids/issues/2022#issuecomment-982121913
 	# (fixed in ossec 3.7.0)
-	LDFLAGS="-Wl,-z,muldefs" bash ./install.sh
+	CFLAGS="$(CFLAGS) $(CPPFLAGS)" LDFLAGS="$(LDFLAGS) -Wl,-z,muldefs" bash ./install.sh
 	# Override date to be reproducible
 	sed -i "s/DATE=\".*\"/DATE=\"${HUMAN_DATE}\"/" /var/ossec/etc/ossec-init.conf
 	# Use a fixed resolv.conf instead of whatever the container might have from the host
