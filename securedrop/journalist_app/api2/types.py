@@ -186,8 +186,10 @@ class Event:
     def __post_init__(self) -> None:
         # ID must be usable as an int (for snowflake ordering; see section
         # "Snowflake IDs" in `API2.md`):
-        if not str(self.id).isdigit():
-            raise ValueError(f"event ID must be an integer string: {self.id}")
+        try:
+            int(self.id)
+        except (ValueError, TypeError) as err:
+            raise ValueError(f"event ID must be an integer string: {self.id}") from err
 
         # Normalize type:
         if not isinstance(self.type, EventType):

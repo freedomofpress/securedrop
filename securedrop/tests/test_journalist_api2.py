@@ -509,6 +509,18 @@ def test_api2_invalid_events(
         )
         assert response.status_code == 400
 
+        # Regression test for an ID too long for int() (#7923)
+        too_long_id = deepcopy(valid)
+        too_long_id["events"][0]["id"] = "1" * 5000
+
+        response = app.post(
+            url_for("api2.data"),
+            json=too_long_id,
+            headers=get_api_headers(journalist_api_token),
+        )
+        assert response.status_code == 400
+        assert "event ID must be an integer string" in response.json["message"]
+
         too_many = deepcopy(invalid_type)
         too_many["events"].extend([too_many["events"][0].copy() for _ in range(api2.EVENTS_MAX)])
 
