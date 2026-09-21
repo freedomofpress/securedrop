@@ -1,0 +1,161 @@
+name: Nightlies
+on:
+  schedule:
+    # An hour after the securedrop-client nightlies
+    - cron: "0 7 * * *"
+  push:
+    branches:
+      - develop
+  pull_request:  # To test changes in this workflow
+    paths:
+      - '.github/workflows/nightlies.yml'
+
+# Only allow one job to run at a time because we're pushing to git repos;
+# the string value doesn't matter, just that it's a fixed string.
+concurrency:
+  group: "just-one-please-${{ github.ref }}"
+
+permissions:
+  contents: read
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  build-debs:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # n.b. we skip OSSEC packages here
+          - what: securedrop
+            os_version: noble
+            make_target: build-debs
+          - what: admin
+            os_version: trixie
+            make_target: build-debs-admin
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.12"
+      - name: Build packages
+        env:
+          NIGHTLY: "1"
+          OS_VERSION: ${{ matrix.os_version }}
+        run: make ${{ matrix.make_target }}
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: build-${{ matrix.what }}-${{ matrix.os_version }}
+          path: build
+          if-no-files-found: error
+
+  commit-and-push:
+    runs-on: ubuntu-latest
+    container: debian:trixie
+    needs:
+      - build-debs
+    steps:
+      - name: Install dependencies
+        run: |
+          apt-get update && apt-get install --yes git git-lfs gpg
+      - name: Download noble artifacts
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: build-securedrop-noble
+          path: build-securedrop-noble
+      - name: Download trixie artifacts
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: build-admin-trixie
+          path: build-admin-trixie
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          repository: "freedomofpress/securedrop-apt-test"
+          path: "securedrop-apt-test"
+          lfs: true
+          sparse-checkout: |
+            core/
+            workstation/
+          sparse-checkout-cone-mode: false
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          repository: "freedomofpress/build-logs"
+          path: "build-logs"
+      - uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
+        id: app-token
+        with:
+          app-id: ${{ vars.FPF_BRANCH_UPDATER_APP_ID }}
+          private-key: ${{ secrets.FPF_BRANCH_UPDATER_APP_PRIVKEY }}
+          permission-contents: write
+          repositories: |
+            build-logs
+            securedrop-apt-test
+      - name: Prepare buildinfo and log files
+        run: |
+          mkdir -p "build-logs/buildinfo/$(date +%Y)"
+          cp -v build-admin-trixie/trixie/*.buildinfo "build-logs/buildinfo/$(date +%Y)"
+          cp -v build-securedrop-noble/noble/*.buildinfo "build-logs/buildinfo/$(date +%Y)"
+          mkdir -p build-logs/core/noble/nightlies/
+          cp -v build-securedrop-noble/*.log build-logs/core/noble/nightlies/
+          mkdir -p build-logs/admin/nightlies/
+          cp -v build-admin-trixie/*.log build-logs/admin/nightlies/
+      - name: Sign and commit buildinfo and log files
+        uses: freedomofpress/actionslib/act/signed-commit@main
+        with:
+          files: |
+            admin/
+            buildinfo/
+            core/
+          repo-path: build-logs
+          message: |
+            Publishing build metadata for server nightlies
+
+            Via <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}>
+          gpg-key: ${{ secrets.FPF_SDCIBOT_GPG_KEY }}
+          gpg-identity: ${{ vars.FPF_SDCIBOT_GPG_IDENTITY }}
+          gpg-email: ${{ vars.FPF_SDCIBOT_GPG_EMAIL }}
+          push: ""
+      - name: Push buildinfo and log files
+        if: ${{ github.ref == 'refs/heads/develop' }} # Skip when testing workflow
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          LOGS_REPO: freedomofpress/build-logs
+        run: |
+          # Sleep before we push so the token will have propagated across GitHub infra
+          sleep 5
+          git -C build-logs push https://x-access-token:${GH_TOKEN}@github.com/${LOGS_REPO}.git main
+      - name: Prepare packages
+        run: |
+          mkdir -p securedrop-apt-test/core/noble-nightlies/
+          cp -v build-securedrop-noble/noble/*.deb securedrop-apt-test/core/noble-nightlies/
+          mkdir -p securedrop-apt-test/workstation/trixie-nightlies/
+          cp -v build-admin-trixie/trixie/*.deb securedrop-apt-test/workstation/trixie-nightlies/
+      - name: Sign and commit packages
+        uses: freedomofpress/actionslib/act/signed-commit@main
+        with:
+          files: |
+            core/
+            workstation/
+          repo-path: securedrop-apt-test
+          message: |
+            Automated SecureDrop server build
+
+            Via <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}>
+          gpg-key: ${{ secrets.FPF_SDCIBOT_GPG_KEY }}
+          gpg-identity: ${{ vars.FPF_SDCIBOT_GPG_IDENTITY }}
+          gpg-email: ${{ vars.FPF_SDCIBOT_GPG_EMAIL }}
+          push: ""
+      - name: Push packages
+        if: ${{ github.ref == 'refs/heads/develop' }} # Skip when testing workflow
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          PKG_REPO: freedomofpress/securedrop-apt-test
+        run: |
+          git -C securedrop-apt-test push https://x-access-token:${GH_TOKEN}@github.com/${PKG_REPO}.git main
