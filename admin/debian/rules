@@ -21,6 +21,9 @@ override_dh_auto_install:
 	find ./debian/securedrop-admin/ -type f -exec sed -i "s#$(shell pwd)/debian/securedrop-admin##" {} \;
 	dh_auto_install $@
 
+override_dh_installsystemd:
+	dh_installsystemd --name securedrop-setup-admin-vault
+
 override_dh_auto_test:
 # SKIP - we test the package later
 

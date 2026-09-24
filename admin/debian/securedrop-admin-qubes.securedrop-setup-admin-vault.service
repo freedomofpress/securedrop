@@ -1,0 +1,12 @@
+[Unit]
+Description=Qubes SecureDrop Admin Vault VM setup
+ConditionPathExists=/var/run/qubes-service/securedrop-setup-admin-vault
+ConditionPathExists=!/home/user/securedrop-keepassx.kdbx
+
+[Service]
+Type=exec
+User=user
+ExecStart=cp /usr/share/securedrop-admin/keepassxc/securedrop-keepassx.kdbx /home/user/
+
+[Install]
+WantedBy=multi-user.target
