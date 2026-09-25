@@ -4,6 +4,13 @@
 set -e
 set -o pipefail
 
+# Error handler - outputs to terminal only (wrapper handles zenity dialogs)
+error_exit() {
+    local message="$1"
+    echo "ERROR: $message" >&2
+    exit 1
+}
+
 # Check if old config directory exists
 OLD_CONFIG_DIR="$HOME/Persistent/securedrop/install_files/ansible-base"
 if [[ ! -d "$OLD_CONFIG_DIR" ]]; then
@@ -15,16 +22,14 @@ NEW_CONFIG_DIR="$HOME/.config/securedrop-admin"
 
 SITE_SPECIFIC_FILE="$OLD_CONFIG_DIR/group_vars/all/site-specific"
 
-# Error handler - outputs to terminal only (wrapper handles zenity dialogs)
-error_exit() {
-    local message="$1"
-    echo "ERROR: $message" >&2
-    exit 1
+get_site_specific_value() {
+    local config_key="$1"
+    { grep "^${config_key}:" "${SITE_SPECIFIC_FILE}" || true; } | awk '{print $2}' | tr -d "'\""
 }
 
 copy_or_continue() {
     local config_key="$1"
-    file_name=$(grep "^${config_key}:" "${SITE_SPECIFIC_FILE}" | awk '{print $2}' | tr -d "'\"")
+    file_name=$(get_site_specific_value "${config_key}")
     if [[ -n "${file_name}" && "${file_name}" != "''" ]]; then
         if [[ -f "${OLD_CONFIG_DIR}/${file_name}" ]]; then
             cp "${OLD_CONFIG_DIR}/${file_name}" "${NEW_CONFIG_DIR}/"
@@ -37,7 +42,7 @@ copy_or_continue() {
 
 copy_or_fail() {
     local config_key="$1"
-    file_name=$(grep "^${config_key}:" "${SITE_SPECIFIC_FILE}" | awk '{print $2}' | tr -d "'\"")
+    file_name=$(get_site_specific_value "${config_key}")
     if [[ -n "$file_name" && "$file_name" != "''" ]]; then
         if [[ -f "$OLD_CONFIG_DIR/$file_name" ]]; then
             cp "$OLD_CONFIG_DIR/$file_name" "$NEW_CONFIG_DIR/"
@@ -97,16 +102,16 @@ if [[ -f "$SITE_SPECIFIC_FILE" ]]; then
     copy_or_continue "journalist_alert_gpg_public_key"
 
     # If HTTPS support for the source interface is enabled, copy the files needed
-    https_enabled=$(grep '^securedrop_app_https_on_source_interface:' "$SITE_SPECIFIC_FILE" | awk '{print $2}' | tr -d "'\"")
+    https_enabled=$(get_site_specific_value securedrop_app_https_on_source_interface)
     if [[ -n "$https_enabled" && "$https_enabled" = "true" ]]; then
         echo "- HTTPS enabled for the Source Interface, copying files:"
         copy_or_fail "securedrop_app_https_certificate_cert_src"
-        copy_or_fail "securedrop_app_https_certificate_chain_src"
+        copy_or_fail "securedrop_app_https_certificate_key_src"
         copy_or_fail "securedrop_app_https_certificate_chain_src"
     fi
 
     # if SSH-over-Tor is enabled, copy the needed auth files
-    ssh_tor_enabled=$(grep '^enable_ssh_over_tor:' "$SITE_SPECIFIC_FILE" | awk '{print $2}' | tr -d "'\"")
+    ssh_tor_enabled=$(get_site_specific_value enable_ssh_over_tor)
     if [[ -n "$ssh_tor_enabled" && "$ssh_tor_enabled" = "true" ]]; then
         for auth_file in app-ssh.auth_private mon-ssh.auth_private; do
             if [[ -f "$OLD_CONFIG_DIR/$auth_file" ]]; then
