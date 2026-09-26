@@ -342,6 +342,9 @@ class Storage:
     def save_pre_encrypted_reply(
         self, filesystem_id: str, count: int, journalist_filename: str, content: str
     ) -> str:
+        # This check is merely to prevent misuse of the API, it is not intended
+        # to perform full OpenPGP validation, as we can't comprehensively do that
+        # short of decrypting the whole message.
         if "-----BEGIN PGP MESSAGE-----" not in content.split("\n")[0]:
             raise NotEncrypted
 

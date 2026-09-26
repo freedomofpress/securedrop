@@ -839,6 +839,9 @@ class Journalist(db.Model):
         if user.username in Journalist.INVALID_USERNAMES:
             raise InvalidUsernameException(gettext("Invalid username"))
 
+        # Note: there's no negative security impact for checking 2FA ahead of the password;
+        # we want tokens to always be single-use, so even if someone successfully
+        # steals a token, they can't use it multiple times while guessing a password.
         sanitized_token = user.verify_2fa_token(token)
 
         # If it is valid, store the token that to prevent OTP token reuse
