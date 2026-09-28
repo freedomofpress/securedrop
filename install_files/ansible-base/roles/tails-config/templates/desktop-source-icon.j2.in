@@ -8,4 +8,4 @@ StartupNotify=true
 Categories=Network;
 Name=SecureDrop Source Interface
 Icon={{ tails_config_securedrop_dotfiles }}/securedrop_icon.png
-Exec=/usr/local/bin/tor-browser {{ item.0.onion_url }}
+Exec=/usr/bin/securedrop-web-open source

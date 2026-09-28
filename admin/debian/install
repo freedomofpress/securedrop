@@ -4,3 +4,4 @@ keepassxc /usr/share/securedrop-admin
 i18n.json /usr/share/securedrop-admin
 bin/securedrop-admin /usr/bin
 bin/validate-gpg-key.sh /usr/bin
+bin/securedrop-web-open /usr/bin
