@@ -456,6 +456,7 @@ SCRIPT_OUTPUT_EXT=log
 .PHONY: build-debs
 build-debs: OUT:=$(SCRIPT_OUTPUT_PREFIX)-securedrop.$(SCRIPT_OUTPUT_EXT)
 build-debs: ## Build and test SecureDrop Debian packages
+	@mkdir -p build
 	@echo "Building SecureDrop Debian packages..."
 	@export TERM=dumb
 	@script \
@@ -468,6 +469,7 @@ build-debs: ## Build and test SecureDrop Debian packages
 .PHONY: build-debs-notest
 build-debs-notest: OUT:=$(SCRIPT_OUTPUT_PREFIX)-securedrop.$(SCRIPT_OUTPUT_EXT)
 build-debs-notest: ## Build SecureDrop Debian packages without running tests.
+	@mkdir -p build
 	@echo "Building SecureDrop Debian packages, skipping tests..."
 	@export TERM=dumb
 	@NOTEST=1 script \
@@ -480,6 +482,7 @@ build-debs-notest: ## Build SecureDrop Debian packages without running tests.
 .PHONY: build-debs-ossec
 build-debs-ossec: OUT:=$(SCRIPT_OUTPUT_PREFIX)-securedrop-ossec.$(SCRIPT_OUTPUT_EXT)
 build-debs-ossec: ## Build OSSEC Debian packages
+	@mkdir -p build
 	@echo "Building OSSEC Debian packages"
 	@export TERM=dumb
 	@WHAT=ossec script \
@@ -492,6 +495,7 @@ build-debs-ossec: ## Build OSSEC Debian packages
 .PHONY: build-debs-ossec-notest
 build-debs-ossec-notest: OUT:=$(SCRIPT_OUTPUT_PREFIX)-securedrop-ossec.$(SCRIPT_OUTPUT_EXT)
 build-debs-ossec-notest: ## Build OSSEC Debian packages without running tests
+	@mkdir -p build
 	@echo "Building OSSEC Debian packages, skipping tests..."
 	@export TERM=dumb
 	@NOTEST=1 WHAT=ossec script \
@@ -504,6 +508,7 @@ build-debs-ossec-notest: ## Build OSSEC Debian packages without running tests
 .PHONY: build-debs-admin
 build-debs-admin: OUT:=$(SCRIPT_OUTPUT_PREFIX)-securedrop-admin.$(SCRIPT_OUTPUT_EXT)
 build-debs-admin: ## Build admin Debian packages
+	@mkdir -p build
 	@echo "Building admin Debian packages"
 	@export TERM=dumb
 	@WHAT=admin script \
@@ -516,6 +521,7 @@ build-debs-admin: ## Build admin Debian packages
 .PHONY: build-debs-admin-notest
 build-debs-admin-notest: OUT:=$(SCRIPT_OUTPUT_PREFIX)-securedrop-admin.$(SCRIPT_OUTPUT_EXT)
 build-debs-admin-notest: ## Build admin Debian packages without running tests
+	@mkdir -p build
 	@echo "Building admin Debian packages, skipping tests..."
 	@export TERM=dumb
 	@NOTEST=1 WHAT=admin script \
