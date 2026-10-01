@@ -23,7 +23,7 @@
 - name: Create Tor onion auth directory
   become: yes
   file:
-    dest: "/rw/config/onion_auth"
+    dest: "/var/lib/tor/onion_auth"
     state: directory
     owner: debian-tor
     group: debian-tor
@@ -33,7 +33,7 @@
   become: yes
   copy:
     src: "{{ item }}"
-    dest: "/rw/config/onion_auth/"
+    dest: "/var/lib/tor/onion_auth/"
     owner: debian-tor
     group: debian-tor
     mode: "0600"
@@ -41,26 +41,21 @@
     - "{{ config_path }}/*.auth_private"
   when: find_v3_aths_info_result.matched >= 1
 
-- name: Copy torrc_additions.sh to /rw/config
-  become: yes
-  copy:
-    src: torrc_additions.sh
-    dest: /rw/config/torrc_additions.sh
-    owner: root
-    group: root
-    mode: "0755"
-
-- name: Execute torrc_additions.sh in /rw/config/rc.local
+- name: Append ClientOnionAuthDir directive
   become: yes
   lineinfile:
-    dest: "/rw/config/rc.local"
-    line: "/rw/config/torrc_additions.sh"
+    path: /etc/tor/torrc
+    regexp: '^ClientOnionAuthDir '
+    line: "ClientOnionAuthDir /var/lib/tor/onion_auth"
     owner: root
     group: root
-    mode: "0755"
+    mode: "0400"
     create: yes
+  when: find_v3_aths_info_result.matched >= 1
 
-- name: Run torrc_additions.sh
+- name: Restart Tor to include onion_auth config
   become: yes
-  command: /rw/config/torrc_additions.sh
-  register: torrc_additions_result
+  service:
+    name: tor
+    state: restarted
+  when: find_v3_aths_info_result.matched >= 1
