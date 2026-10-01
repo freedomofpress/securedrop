@@ -17,7 +17,7 @@ trap cleanup EXIT
 
 
 # Are we in Tails or Qubes?
-if [ -f "/home/amnesia/Persistent/.securedrop/securedrop_init.py" ] || [ -f "/rw/config/torrc_additions.sh" ]
+if [ -f "${HOME}/.config/securedrop-admin/site-specific" ]
 then
     echo "SecureDrop Admin Workstation detected, continuing..."
 else

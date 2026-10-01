@@ -52,3 +52,10 @@
     mode: "0400"
     create: yes
   when: find_v3_aths_info_result.matched >= 1
+
+- name: Restart Tor to include onion_auth config
+  become: yes
+  service:
+    name: tor
+    state: restarted
+  when: find_v3_aths_info_result.matched >= 1
