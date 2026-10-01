@@ -148,7 +148,7 @@ def delete_disconnected_fs_submissions(args: argparse.Namespace) -> None:
                 remove = input(f"Enter 'y' to delete {f}: ") == "y"
             if remove:
                 filesize = os.stat(f).st_size
-                if i > 1:
+                if i > 1 and rate > 0:
                     eta = filesize / rate
                     eta_msg = f" (ETA to remove {filesize:d} bytes: {eta:.0f}s )"
                 print(f"Securely removing file {i}/{filecount} {f}{eta_msg}...")
