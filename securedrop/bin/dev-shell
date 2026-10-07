@@ -90,27 +90,6 @@ function docker_run() {
         echo "************************************************************"
     fi
 
-    # If this is a CI run, pass CodeCov's required vars into the container.
-    if [ -n "${CIRCLE_BRANCH:-}" ] ; then
-        : "${CIRCLE_PULL_REQUEST:=}"
-        ci_env="-e CI=true \
-                -e CIRCLECI=true \
-                -e CIRCLE_BRANCH=${CIRCLE_BRANCH:-} \
-                -e CIRCLE_SHA1=${CIRCLE_SHA1:-} \
-                -e CIRCLE_PR_USERNAME=${CIRCLE_PR_USERNAME:-} \
-                -e CIRCLE_PROJECT_REPONAME=${CIRCLE_PROJECT_REPONAME:-} \
-                -e CIRCLE_PROJECT_USERNAME=${CIRCLE_PROJECT_USERNAME:-} \
-                -e CIRCLE_REPOSITORY_URL=${CIRCLE_REPOSITORY_URL:-} \
-                -e CIRCLE_BUILD_NUM=${CIRCLE_BUILD_NUM:-} \
-                -e CIRCLE_NODE_INDEX=${CIRCLE_NODE_INDEX:-} \
-                -e CIRCLE_PR_NUMBER=${CIRCLE_PULL_REQUEST##*/} \
-                -e CIRCLE_BUILD_URL=${CIRCLE_BUILD_URL:-} \
-               "
-
-    else
-        ci_env=""
-    fi
-
     # Pass -it if we're a tty
     if test -t 0; then
         DOCKER_RUN_ARGUMENTS="${DOCKER_RUN_ARGUMENTS} -it"
@@ -147,7 +126,7 @@ function docker_run() {
     # The --shm-size argument sets up dedicated shared memory for the
     # container. Our tests can fail with the default of 64m.
     echo "Starting ${OS_VERSION} container..."
-    $DOCKER_BIN run $ci_env \
+    $DOCKER_BIN run \
            --shm-size 2g \
            --rm \
            -p "127.0.0.1:${SD_HOSTPORT_VNC}:5909" \
