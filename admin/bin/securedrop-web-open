@@ -1,0 +1,47 @@
+#!/bin/bash
+# Launch Tor Browser pointed at the Source or Journalist Interface
+set -euo pipefail
+
+CONFIG_PATH="${HOME}/.config/securedrop-admin"
+
+usage() {
+    echo "Usage: $(basename "$0") source|journalist" >&2
+    exit 1
+}
+
+[ $# -eq 1 ] || usage
+
+case "$1" in
+    source)
+        file="${CONFIG_PATH}/app-sourcev3-ths"
+        ;;
+    journalist)
+        file="${CONFIG_PATH}/app-journalist.auth_private"
+        ;;
+    *)
+        usage
+        ;;
+esac
+
+if [ ! -f "$file" ]; then
+    echo "Error: ${file} not found" >&2
+    exit 1
+fi
+
+if [ "$1" = "source" ]; then
+    onion=$(grep -Po -m1 '[a-z2-7]{56}\.onion' "$file" || true)
+else
+    onion=$(awk -F ':' 'NR==1 {print $1 ".onion"}' "$file")
+fi
+
+if ! [[ "$onion" =~ ^[a-z2-7]{56}\.onion$ ]]; then
+    echo "Error: could not parse a valid onion address from ${file}" >&2
+    exit 1
+fi
+
+# Tails ships its own wrapper, otherwise use TBL (Qubes)
+if [ -x /usr/local/bin/tor-browser ]; then
+    exec /usr/local/bin/tor-browser "$onion"
+else
+    exec torbrowser-launcher "$onion"
+fi
