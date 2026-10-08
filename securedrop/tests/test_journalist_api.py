@@ -1540,14 +1540,15 @@ def test_login_calls_malloc_trim(mocker, journalist_app, test_journo):
 VALID_REQUEST_ID = "req-72d64b57-4632-4d3e-96b0-24a0428f7ec1"
 
 
-def test_valid_request_id_is_echoed_and_logged(journalist_app, caplog):
-    caplog.set_level(logging.INFO)
+def test_valid_request_id_is_echoed_and_not_logged(journalist_app, caplog):
+    caplog.set_level(logging.DEBUG)
     with journalist_app.test_client() as app:
         response = app.get(url_for("api.get_endpoints"), headers={"X-Request-ID": VALID_REQUEST_ID})
 
         assert response.status_code == 200
         assert response.headers["X-Request-ID"] == VALID_REQUEST_ID
-        assert f"{VALID_REQUEST_ID} method=GET path=/api/v1/ status=200" in caplog.text
+        # Apache's access log records the request ID, so the app doesn't log it
+        assert VALID_REQUEST_ID not in caplog.text
 
 
 def test_request_id_is_echoed_on_error_responses(journalist_app):
