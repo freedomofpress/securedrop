@@ -4,7 +4,6 @@
 
 > [There are many ways to contribute to SecureDrop, and we welcome your help!](CONTRIBUTING.md) By contributing to this project, you agree to abide by our [Code of Conduct](https://github.com/freedomofpress/.github/blob/main/CODE_OF_CONDUCT.md).
 
-[![codecov](https://codecov.io/gh/freedomofpress/securedrop/branch/develop/graph/badge.svg)](https://codecov.io/gh/freedomofpress/securedrop)
 [![Translation status](https://weblate.securedrop.org/widgets/securedrop/-/svg-badge.svg)](https://weblate.securedrop.org)
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/freedomofpress/securedrop)
 
