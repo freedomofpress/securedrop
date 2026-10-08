@@ -27,6 +27,17 @@ def test_invalid_id_non_digit():
         )
 
 
+@pytest.mark.parametrize("event_id", [123456, 1.5, True, float("inf")])
+def test_invalid_id_non_string(event_id):
+    """Event ID must be a string, not a JSON number or boolean."""
+    with pytest.raises(ValueError, match="event ID must be an integer string"):
+        Event(
+            id=event_id,
+            target=SourceTarget(source_uuid=VALID_SOURCE_UUID, version=VALID_VERSION),
+            type=EventType.SOURCE_STARRED,
+        )
+
+
 def test_wrong_target_type_item_for_source_event():
     """Source events must have SourceTarget, not ItemTarget."""
     with pytest.raises(TypeError, match="invalid event target for type source_starred"):
