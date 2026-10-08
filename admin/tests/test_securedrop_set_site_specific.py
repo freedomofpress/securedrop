@@ -30,9 +30,11 @@ def set_site_specific(script_path: Path) -> Any:
     # no .py extension, so it has to be loaded explicitly
     loader = importlib.machinery.SourceFileLoader("set_site_specific", str(script_path))
     spec = importlib.util.spec_from_loader(loader.name, loader)
-    module = importlib.util.module_from_spec(spec)
-    loader.exec_module(module)
-    return module
+    if spec:
+        module = importlib.util.module_from_spec(spec)
+        loader.exec_module(module)
+        return module
+    return None
 
 
 @pytest.fixture
