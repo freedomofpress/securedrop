@@ -1,0 +1,61 @@
+#!/usr/share/securedrop-admin/venv/bin/python3
+"""
+Sets a value in securedrop-admin's site-specific configuration file:
+
+    securedrop-set-site-specific [--file PATH] KEY VALUE
+"""
+
+import argparse
+import os
+import sys
+import tempfile
+from pathlib import Path
+
+import yaml
+
+SITE_SPECIFIC_PATH = Path.home() / ".config/securedrop-admin/site-specific"
+ALLOWED_KEYS = ["config_path"]
+
+
+def set_value(path: Path, key: str, value: str) -> None:
+    with path.open() as f:
+        config = yaml.safe_load(f) or {}
+    if not isinstance(config, dict):
+        raise ValueError(f"{path} does not contain a YAML mapping")
+    config[key] = value
+
+    # Write to tempfile to prevent partial-update
+    fd, temp_path = tempfile.mkstemp(dir=path.parent, prefix=f".{path.name}.")
+    try:
+        with os.fdopen(fd, "w") as f:
+            yaml.safe_dump(config, f, default_flow_style=False)
+        os.chmod(temp_path, path.stat().st_mode & 0o7777)
+        os.replace(temp_path, path)
+    except BaseException:
+        os.unlink(temp_path)
+        raise
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser(
+        description="Set a value in securedrop-admin's site-specific configuration"
+    )
+    parser.add_argument(
+        "--file",
+        type=Path,
+        default=SITE_SPECIFIC_PATH,
+        help=f"site-specific file to modify (default: {SITE_SPECIFIC_PATH})",
+    )
+    parser.add_argument("key", choices=ALLOWED_KEYS, help="configuration variable to set")
+    parser.add_argument("value", help="value to store, as a string")
+    args = parser.parse_args()
+
+    try:
+        set_value(args.file, args.key, args.value)
+    except (OSError, ValueError, yaml.YAMLError) as e:
+        print(f"Error updating {args.file}: {e}", file=sys.stderr)
+        sys.exit(1)
+
+
+if __name__ == "__main__":
+    main()
