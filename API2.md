@@ -77,7 +77,8 @@ X-Request-ID: req-72d64b57-4632-4d3e-96b0-24a0428f7ec1
 The server validates the header and behaves as follows:
 
 - If it is **well-formed**, the server echoes it back in the `X-Request-ID`
-  response header and records it in its logs.
+  response header, and Apache records it in the Journalist Interface's access
+  log.
 - If it is **malformed**, the server ignores it: it is neither echoed nor
   logged verbatim so a client cannot inject arbitrary strings into the logs,
   and a warning is logged. The request still proceeds normally, since the
