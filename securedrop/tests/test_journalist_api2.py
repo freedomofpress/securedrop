@@ -618,6 +618,31 @@ def test_api2_reply_sent_unencrypted(journalist_app, journalist_api_token, test_
         assert response.json["events"][event.id][0] == 400
 
 
+def test_api2_reply_sent_not_string(journalist_app, journalist_api_token, test_files):
+    """A reply_sent event whose reply isn't a string is rejected as invalid."""
+    with journalist_app.test_client() as app:
+        source = test_files["source"]
+        index = app.get(url_for("api2.index"), headers=get_api_headers(journalist_api_token))
+        source_version = index.json["sources"][source.uuid]
+
+        response = app.post(
+            url_for("api2.data"),
+            json={
+                "events": [
+                    {
+                        "id": "400002",
+                        "type": "reply_sent",
+                        "target": {"source_uuid": source.uuid, "version": source_version},
+                        "data": {"uuid": str(uuid.uuid4()), "reply": True},
+                    }
+                ]
+            },
+            headers=get_api_headers(journalist_api_token),
+        )
+        assert response.status_code == 400
+        assert "invalid event data for type reply_sent" in response.json["message"]
+
+
 def test_api2_reply_sent_duplicate_uuid(journalist_app, journalist_api_token, test_files):
     """handle_reply_sent returns 409 Conflict if save_reply() would commit a duplicate UUID."""
     with journalist_app.test_client() as app:
