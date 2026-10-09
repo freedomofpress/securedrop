@@ -14,8 +14,7 @@ from pathlib import Path
 import yaml
 
 SITE_SPECIFIC_PATH = Path.home() / ".config/securedrop-admin/site-specific"
-ALLOWED_KEYS = ["config_path"]
-
+ALLOWED_KEYS = ["config_path", "securedrop_app_gpg_fingerprint", "securedrop_app_gpg_public_key"]
 
 def set_value(path: Path, key: str, value: str) -> None:
     with path.open() as f:
