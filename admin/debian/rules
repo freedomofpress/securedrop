@@ -23,6 +23,7 @@ override_dh_auto_install:
 
 override_dh_installsystemd:
 	dh_installsystemd --name securedrop-setup-admin-vault
+	dh_installsystemd --name securedrop-torbrowser-pax
 
 override_dh_auto_test:
 # SKIP - we test the package later

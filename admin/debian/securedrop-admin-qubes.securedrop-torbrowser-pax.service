@@ -1,0 +1,11 @@
+[Unit]
+Description=Restart paxctld so PaX flags are re-applied to Tor Browser
+After=paxctld.service
+ConditionPathExists=/usr/sbin/paxctld
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/systemctl restart paxctld.service
+
+[Install]
+WantedBy=multi-user.target

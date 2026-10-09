@@ -1,0 +1,10 @@
+[Unit]
+Description=Watch Tor Browser binaries to re-apply PaX flags on changes
+RequiresMountsFor=/home/user
+
+[Path]
+PathChanged=/home/user/.local/share/torbrowser/tbb/x86_64/tor-browser/Browser/firefox.real
+PathChanged=/home/user/.local/share/torbrowser/tbb/x86_64/tor-browser/Browser/glxtest
+
+[Install]
+WantedBy=multi-user.target
