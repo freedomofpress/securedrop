@@ -43,6 +43,8 @@ class SessionManager:
         )
 
         # Save the passphrase in the user's session cookie
+        # TODO: this is not encrypted and is recoverable client-side by anyone with
+        # access to the cookie. This is known and tracked at <https://github.com/freedomofpress/securedrop/issues/204>.
         session[cls._SESSION_COOKIE_KEY_FOR_CODENAME] = supplied_passphrase
 
         # Save the session expiration date in the user's session cookie
