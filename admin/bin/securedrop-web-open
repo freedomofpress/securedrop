@@ -42,6 +42,14 @@ fi
 # Tails ships its own wrapper, otherwise use TBL (Qubes)
 if [ -x /usr/local/bin/tor-browser ]; then
     exec /usr/local/bin/tor-browser "$onion"
+fi
+
+# torbrowser-launcher has an upstream bug that ignores URL arguments, so we
+# call the Tor start script directly. On first run, we use torbrowser-launcher
+# to download and verify Tor Browser.
+tbb_start="${HOME}/.local/share/torbrowser/tbb/$(uname -m)/tor-browser/start-tor-browser.desktop"
+if [ -x "$tbb_start" ]; then
+    exec "$tbb_start" "$onion"
 else
     exec torbrowser-launcher "$onion"
 fi
