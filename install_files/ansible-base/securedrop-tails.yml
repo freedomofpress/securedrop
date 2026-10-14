@@ -13,6 +13,16 @@
     - role: tails-config
       tags: tails-config
   tasks:
+    - name: Look up Source Interface URL.
+      command: grep -Po -m1 '[a-z2-7]{56}\.onion' "{{ config_path }}/app-sourcev3-ths"
+      changed_when: false
+      register: source_iface
+
+    - name: Look up Journalist Interface URL.
+      command: awk -F ':' 'NR==1 {print $1 ".onion"}' "{{ config_path }}/app-journalist.auth_private"
+      changed_when: false
+      register: journalist_iface
+
     - name: Configuration complete.
       debug:
         msg: >-
