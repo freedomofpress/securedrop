@@ -1,2 +1,3 @@
 bin/securedrop-set-site-specific /usr/bin
 paxctld/torbrowser.conf /etc/paxctld.d/
+applications/*.desktop /usr/share/applications

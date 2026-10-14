@@ -1,0 +1,8 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Terminal=false
+Categories=Network;
+Icon=utilities-terminal
+Name=SecureDrop Application Server SSH
+Exec=xfce4-terminal -x ssh app

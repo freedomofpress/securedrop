@@ -18,6 +18,7 @@ def test_admin_paths_are_present():
     wanted_files = [
         "/usr/bin/securedrop-admin",
         "/usr/bin/validate-gpg-key.sh",
+        "/usr/bin/securedrop-web-open",
         "/usr/share/securedrop-admin/ansible-base/",
         "/usr/share/securedrop-admin/translations/",
         "/usr/share/securedrop-admin/venv/",
@@ -43,6 +44,10 @@ def test_admin_qubes_paths_are_present():
         "/etc/paxctld.d/torbrowser.conf",
         "/usr/lib/systemd/system/securedrop-torbrowser-pax.path",
         "/usr/lib/systemd/system/securedrop-torbrowser-pax.service",
+        "/usr/share/applications/press.freedom.SecureDropSourceInterface.desktop",
+        "/usr/share/applications/press.freedom.SecureDropJournalistInterface.desktop",
+        "/usr/share/applications/press.freedom.SecureDropSshApp.desktop",
+        "/usr/share/applications/press.freedom.SecureDropSshMon.desktop",
     ]
     deb_files = list((BUILD_DIRECTORY).glob("securedrop-admin-qubes_*_amd64.deb"))
     assert deb_files, "No securedrop-admin-qubes .deb file found"
