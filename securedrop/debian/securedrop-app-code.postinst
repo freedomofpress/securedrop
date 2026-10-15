@@ -183,10 +183,16 @@ update_apache2_request_id_logging() {
     # Apache format strings don't have to be escaped for the shell twice.
 
     # Add the error log format, which is the Apache default plus the
-    # X-Request-ID request header, before the ErrorLog directive.
+    # X-Request-ID request header, before the ErrorLog directive. The header
+    # is copied into the environment first, because under mod_wsgi daemon
+    # mode the error log sees the environment of the app's requests but not
+    # their headers. Only a well-formed ID is copied, so a malformed one
+    # isn't logged verbatim.
     if ! grep -qP '^ErrorLogFormat' "$journalist_conf"; then
-        SD_ERROR_LOG_FORMAT='ErrorLogFormat "[%{u}t] [%-m:%l] [pid %P:tid %T] %7F: %E: [client\ %a] [request-id\ %{X-Request-ID}i] %M% ,\ referer\ %{Referer}i"' \
-            perl -pi -e 's{^(ErrorLog /var/log/apache2/journalist-error\.log)$}{$ENV{SD_ERROR_LOG_FORMAT}\n$1}' "$journalist_conf"
+        SD_REQUEST_ID_COND='RewriteCond %{HTTP:X-Request-ID} ^(req-[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12})$ [NV]' \
+        SD_REQUEST_ID_RULE='RewriteRule ^ - [E=X_REQUEST_ID:%1]' \
+        SD_ERROR_LOG_FORMAT='ErrorLogFormat "[%{u}t] [%-m:%l] [pid %P:tid %T] %7F: %E: [client\ %a] [request-id\ %{X_REQUEST_ID}e] %M% ,\ referer\ %{Referer}i"' \
+            perl -pi -e 's{^(ErrorLog /var/log/apache2/journalist-error\.log)$}{$ENV{SD_REQUEST_ID_COND}\n$ENV{SD_REQUEST_ID_RULE}\n$ENV{SD_ERROR_LOG_FORMAT}\n$1}' "$journalist_conf"
     fi
 
     # Define the "combined_request_id" access log format, which is the
