@@ -75,9 +75,8 @@ def test_cli(script_path: Path, site_specific: Path) -> None:
 def test_cli_missing_file(script_path: Path, tmp_path: Path) -> None:
     result = run(script_path, "--file", str(tmp_path / "missing"), "config_path", "/tmp")
 
-    assert result.returncode == 1
-    assert "Error updating" in result.stderr
-    assert not (tmp_path / "missing").exists()
+    assert result.returncode == 0, result.stderr
+    assert yaml.safe_load((tmp_path / "missing").read_text())["config_path"] == "/tmp"
 
 
 def test_cli_disallowed_key(script_path: Path, site_specific: Path) -> None:
