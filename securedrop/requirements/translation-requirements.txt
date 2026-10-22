@@ -6,8 +6,9 @@ babel==2.12.1 \
     # via
     #   -r requirements/translation-requirements.in
     #   babelgladeextractor
-babelgladeextractor==0.7.0 \
-    --hash=sha256:bcf805e28b4bb18c8b6909a65a7cf5c7c2bcbf4ae50b164878c9682d22271798
+babelgladeextractor==0.7.2 \
+    --hash=sha256:8bc401cd747162dadae754dabacc4f9b2a7254032d295120c2d9ca29b01acd92 \
+    --hash=sha256:f0b5a6b1030f6e05f451b66577bee6d965e7e1547ee3a96f7caa0d949fc636fd
     # via -r requirements/translation-requirements.in
 pip==26.1.1 \
     --hash=sha256:99cb1c2899893b075ff56e4ed0af55669a955b49ad7fb8d8603ecdaf4ed653fb \
