@@ -96,18 +96,12 @@ def create_app(config: SecureDropConfig) -> Flask:
 
     @app.after_request
     def echo_request_id(response: FlaskResponse) -> FlaskResponse:
-        """Echo a valid X-Request-ID back to the client and log it, so a
-        request can be traced across the Inbox, proxy, and server logs."""
+        """Echo a valid X-Request-ID back to the client.  Apache's access
+        log records the header, so a request can be traced across the
+        Inbox, proxy, and server logs."""
         request_id = g.get("request_id")
         if request_id:
             response.headers["X-Request-ID"] = request_id
-            app.logger.info(
-                "%s method=%s path=%s status=%s",
-                request_id,
-                request.method,
-                request.path,
-                response.status_code,
-            )
         return response
 
     @app.errorhandler(CSRFError)
