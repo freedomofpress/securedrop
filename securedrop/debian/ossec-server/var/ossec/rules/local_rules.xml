@@ -198,6 +198,20 @@
 </group>
 
 <!--
+  Do not send an email alert on Tor circuit build expiry summaries.
+  Tor 0.4.9.14+ logs these periodically with the word "failed".
+  See https://github.com/freedomofpress/securedrop/issues/7953
+-->
+<group name="tor circuit build expiry">
+  <rule id="200003" level="0">
+    <if_sid>1002</if_sid>
+    <match>Circuit build expiry summary</match>
+    <description>ignore Tor circuit build expiry summary (https://github.com/freedomofpress/securedrop/issues/7953)</description>
+    <options>no_email_alert</options>
+  </rule>
+</group>
+
+<!--
   Do not alert on OSSEC keep alive messages sent to the OSSEC manager.
   See https://github.com/freedomofpress/securedrop/issues/2138 for discussion
   of this message, which may be removed in a future version of OSSEC.
