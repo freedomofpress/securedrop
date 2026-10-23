@@ -9,7 +9,7 @@ requests>=2.30.0
 tox==3.28.0
 pexpect
 setuptools>=78.1.1
-uv>=0.11.15
+uv>=0.13.4  # eMudhra CA pull
 
 # If this needs updating, search this repository for other references to "pip"
 # that may be missed by our tools.
