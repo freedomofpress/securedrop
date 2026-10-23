@@ -3,7 +3,7 @@ name = "securedrop"
 requires-python = ">=3.12"
 
 [tool.uv]
-# exclude-newer = "7 days"
+exclude-newer = "7 days"
 
 [tool.ruff]
 line-length = 100
