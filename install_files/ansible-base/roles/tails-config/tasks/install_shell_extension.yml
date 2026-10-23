@@ -8,28 +8,6 @@
   include_vars: "{{ config_path }}/site-specific"
   when: site_specific_file.stat.exists
 
-- name: Check for v3 Source Interface file
-  stat:
-    path: "{{ config_path }}/app-sourcev3-ths"
-  register: v3_source_file
-
-- name: Check for v3 Journalist Interface file
-  stat:
-    path: "{{ config_path }}/app-journalist.auth_private"
-  register: v3_journalist_file
-
-- name: Look up v3 Source Interface URL.
-  command: grep -Po '.{56}\.onion' "{{ config_path }}/app-sourcev3-ths"
-  changed_when: false
-  register: sourcev3_interface_lookup_result
-  when: v3_source_file.stat.exists == true
-
-- name: Look up v3 Journalist Interface URL.
-  command: awk -F ':' '{print $1 ".onion"}' "{{ config_path }}/app-journalist.auth_private"
-  changed_when: false
-  register: journalistv3_interface_lookup_result
-  when: v3_source_file.stat.exists == true
-
 - name: Create the SecureDrop GNOME Shell Extension directories
   file:
     state: directory
@@ -71,21 +49,11 @@
     owner: amnesia
     group: amnesia
 
-- name: Set the right variable for source
-  set_fact:
-    source_iface: "{{ sourcev3_interface_lookup_result }}"
-
-- name: Set the right variable for journalist
-  set_fact:
-    journalist_iface: "{{ journalistv3_interface_lookup_result }}"
-
 - name: Assemble interface information for extension
   set_fact:
     _securedrop_extension_info:
       - src: extension.js.in
         filename: extension.js
-        source_interface_address: "{{ source_iface.stdout }}"
-        journalist_interface_address: "{{ journalist_iface.stdout }}"
 
 - name: Create SecureDrop extension
   become: yes
