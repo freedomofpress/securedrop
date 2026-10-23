@@ -74,6 +74,16 @@ log_events_without_ossec_alerts:
       overloaded, but it could also mean an attack against you
       or potentially the guard itself.
 
+  # Check that Tor circuit build expiry summaries (Tor 0.4.9.14+) do not
+  # produce an OSSEC alert.
+  - name: test_tor_circuit_build_expiry_summary_does_not_produce_alert
+    alert: >
+      Oct 13 14:18:27 app-staging Tor[769]: Circuit build expiry summary: prefix_hops_0=0
+      prefix_hops_1=0 prefix_hops_2=1 post_prefix=0 open_channel=1 other_channel=0
+      late_firsthop=0 completed=37 abandoned=1 excluded=0 adaptive=1
+      connection_failed=0 channels_retired=0 firsthop_preserved=0 (build stages
+      are at measurement or circuit expiry; recovery probes may finish later)
+
   # Check that OSSEC keep alive messages sent to the OSSEC manager
   # do not produce OSSEC alerts.
   #
