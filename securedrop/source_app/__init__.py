@@ -14,6 +14,7 @@ from flask_wtf.csrf import CSRFError, CSRFProtect
 from models import InstanceConfig
 from request_that_secures_file_uploads import RequestThatSecuresFileUploads
 from sdconfig import SecureDropConfig
+from sdlog import SanitizingFilter
 from source_app import api, info, main
 from source_app.decorators import ignore_static
 from source_app.utils import clear_session_and_redirect_to_logged_out_page
@@ -60,6 +61,8 @@ def create_app(config: SecureDropConfig) -> Flask:
 
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     app.config["SQLALCHEMY_DATABASE_URI"] = config.DATABASE_URI
+
+    app.logger.addFilter(SanitizingFilter())
     db.init_app(app)
 
     # Check if the Submission Key is valid; if not, we'll disable the UI
