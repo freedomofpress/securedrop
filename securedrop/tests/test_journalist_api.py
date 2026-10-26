@@ -1590,3 +1590,32 @@ def test_missing_request_id_is_quiet(journalist_app, caplog):
         assert response.status_code == 200
         assert "X-Request-ID" not in response.headers
         assert "X-Request-ID" not in caplog.text
+
+
+def test_newline_in_request_path_cannot_split_log_line(journalist_app, caplog):
+    """request.path may contain \n and \r (via WSGI PATH_INFO); they must be
+    escaped so a client can't forge extra log lines (issue #7938)."""
+    caplog.set_level(logging.INFO)
+    with journalist_app.test_client() as app:
+        # Werkzeug percent-decodes the path, so PATH_INFO ends up containing
+        # the raw control characters.
+        response = app.get(
+            "/api/v1/endpoint%0ainjected%0dmessage",
+            headers={"X-Request-ID": VALID_REQUEST_ID},
+        )
+
+        assert response.status_code == 404
+        assert f"{VALID_REQUEST_ID} method=GET path=/api/v1/" in caplog.text
+        assert "injected" in caplog.text
+        assert "\n" not in caplog.text
+        assert "\r" not in caplog.text
+        assert "path=/api/v1/endpoint\\x0ainjected\\x0dmessage" in caplog.text
+
+
+def test_sanitize_log_path_escapes_control_characters():
+    from journalist_app import sanitize_log_path
+
+    assert sanitize_log_path("/api/v1/foo\nbar\rbaz\x00\x7f") == (
+        "/api/v1/foo\\x0abar\\x0dbaz\\x00\\x7f"
+    )
+    assert sanitize_log_path("/api/v1/totally-normal") == "/api/v1/totally-normal"

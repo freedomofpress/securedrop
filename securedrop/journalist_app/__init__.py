@@ -30,6 +30,15 @@ _insecure_api_views = ["api.get_token", "api.get_endpoints"]
 # by securedrop-proxy: "req-" followed by a lowercase UUID.
 _request_id_re = re.compile(r"^req-[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}$")
 
+# request.path comes from WSGI PATH_INFO, which permits arbitrary bytes;
+# replace control characters with visible escapes so they can't split a
+# log line
+_unsafe_path_re = re.compile(r"[\x00-\x1f\x7f]")
+
+
+def sanitize_log_path(path: str) -> str:
+    return _unsafe_path_re.sub(lambda c: f"\\x{ord(c.group()):02x}", path)
+
 
 def get_logo_url(app: Flask) -> str:
     if not app.static_folder:
@@ -105,7 +114,7 @@ def create_app(config: SecureDropConfig) -> Flask:
                 "%s method=%s path=%s status=%s",
                 request_id,
                 request.method,
-                request.path,
+                sanitize_log_path(request.path),
                 response.status_code,
             )
         return response
