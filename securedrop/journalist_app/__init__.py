@@ -18,6 +18,7 @@ from journalist_app.sessions import Session, session
 from journalist_app.utils import get_source
 from models import InstanceConfig
 from sdconfig import SecureDropConfig
+from sdlog import SanitizingFilter, sanitize_control_chars
 from werkzeug import Response
 from werkzeug.exceptions import HTTPException, default_exceptions
 
@@ -33,11 +34,7 @@ _request_id_re = re.compile(r"^req-[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}$")
 # request.path comes from WSGI PATH_INFO, which permits arbitrary bytes;
 # replace control characters with visible escapes so they can't split a
 # log line
-_unsafe_path_re = re.compile(r"[\x00-\x1f\x7f]")
-
-
-def sanitize_log_path(path: str) -> str:
-    return _unsafe_path_re.sub(lambda c: f"\\x{ord(c.group()):02x}", path)
+sanitize_log_path = sanitize_control_chars
 
 
 def get_logo_url(app: Flask) -> str:
@@ -71,6 +68,8 @@ def create_app(config: SecureDropConfig) -> Flask:
 
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     app.config["SQLALCHEMY_DATABASE_URI"] = config.DATABASE_URI
+
+    app.logger.addFilter(SanitizingFilter())
 
     # Check if the server OS is past EOL; if so, we'll display banners
     app.config["OS_PAST_EOL"] = server_os.is_os_past_eol()
