@@ -1,0 +1,8 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Terminal=false
+Categories=Network;
+Icon=torbrowser
+Name=SecureDrop Journalist Interface
+Exec=securedrop-web-open journalist

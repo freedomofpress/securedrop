@@ -3,6 +3,12 @@ securedrop (2.17.0~rc1) unstable; urgency=medium
   * 
 
  -- SecureDrop Team <securedrop@freedom.press>  Thu, 25 Jun 2026 10:40:33 -0400
+ 
+securedrop (2.16.2) unstable; urgency=medium
+
+  * see changelog.md
+
+ -- SecureDrop Team <securedrop@freedom.press>  Tue, 27 Oct 2026 15:39:31 -0400
 
 securedrop (2.16.1) unstable; urgency=medium
 
