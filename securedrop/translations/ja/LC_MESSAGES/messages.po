@@ -4,50 +4,38 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2018.
 #
 msgid ""
-msgstr ""
-"Project-Id-Version: SecureDrop 0.8.0~rc1\n"
-"Report-Msgid-Bugs-To: securedrop@freedom.press\n"
-"PO-Revision-Date: 2022-09-15 10:03+0000\n"
-"Last-Translator: User <striae-chevy.0z@icloud.com>\n"
-"Language-Team: Japanese <https://weblate.securedrop.org/projects/securedrop/securedrop/ja/>\n"
-"Language: ja\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.13\n"
-"Generated-By: Babel 2.5.1\n"
+msgstr "Project-Id-Version: SecureDrop 0.8.0~rc1\nReport-Msgid-Bugs-To: securedrop@freedom.press\nPO-Revision-Date: 2026-10-25 14:52+0000\nLast-Translator: Takumin <takutakutaku2024@gmail.com>\nLanguage-Team: Japanese <https://weblate.securedrop.org/projects/securedrop/securedrop/ja/>\nLanguage: ja\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=1; plural=0;\nX-Generator: Weblate 2026.10.1\nGenerated-By: Babel 2.5.1\n"
 
 msgid "Name too long"
-msgstr ""
+msgstr "名前が長すぎます"
 
 msgid "Must be at least {num} character long."
 msgid_plural "Must be at least {num} characters long."
-msgstr[0] "{num} 文字以上である必要があります。"
+msgstr[0] "{num} 文字以上にする必要があります。"
 
 msgid "This username is invalid because it is reserved for internal use by the software."
-msgstr "このユーザー名はソフトウェア内部で予約されているため使用できません。"
+msgstr "このユーザー名は、ソフトウェア内部で使用するために予約されているため使用できません。"
 
 msgid "Invalid username"
-msgstr ""
+msgstr "ユーザー名が無効です"
 
 msgid "{time} ago"
 msgstr "{time} 前"
 
 msgid "You have been logged out due to inactivity or a problem with your session."
-msgstr ""
+msgstr "長時間操作が行われなかったか、セッションに問題が発生したため、ログアウトされました。"
 
 msgid "SecureDrop"
 msgstr "SecureDrop"
 
 msgid "Incorrect password or two-factor code."
-msgstr "パスワードまたは2要素認証コードは正しくありません。"
+msgstr "パスワードまたは 2 要素認証コードが正しくありません。"
 
 msgid "Your two-factor credentials have been reset successfully."
-msgstr "2 段階認証の資格は正常にリセットされました。"
+msgstr "2 要素認証の認証情報が正常にリセットされました。"
 
 msgid "There was a problem verifying the two-factor code. Please try again."
-msgstr "2段階コードの検証中に問題が発生しました。再度試してください。"
+msgstr "2 要素認証コードの検証中に問題が発生しました。もう一度お試しください。"
 
 msgid "Image updated."
 msgstr "画像を更新しました。"
@@ -133,7 +121,7 @@ msgid_plural "Cannot be longer than {num} characters."
 msgstr[0] "{num} 文字以上長くすることはできません。"
 
 msgid "Please specify an integer value greater than 0."
-msgstr ""
+msgstr "最小メッセージを設定するための検証語彙の一部です。"
 
 msgid "This field is required."
 msgstr "このフィールドは必要です。"
@@ -169,7 +157,7 @@ msgid "Account updated."
 msgstr "アカウント更新した。"
 
 msgid "Login failed."
-msgstr ""
+msgstr "ログインに失敗しました。"
 
 msgid "Please wait at least {num} second before logging in again."
 msgid_plural "Please wait at least {num} seconds before logging in again."
@@ -179,7 +167,7 @@ msgid "Your 2FA details are invalid - please contact an administrator to reset t
 msgstr ""
 
 msgid "Please check your credentials. If you are using a two-factor mobile app or security key, wait for a new code before trying again."
-msgstr ""
+msgstr "認証情報を確認してください。2段階認証のモバイルアプリか、セキュリティキーをご利用の場合は、新しいコードが入力されるまでお待ちいただき、再度お試しください。"
 
 msgid "The item has been deleted."
 msgid_plural "{num} items have been deleted."
@@ -211,7 +199,7 @@ msgid "Password updated. Don't forget to save it in your KeePassX database. New 
 msgstr "パスワードが更新されました。KeePassX データベースに保存することを忘れないでください。新しいパスワード:"
 
 msgid "No unread submissions in selected collections."
-msgstr ""
+msgstr "選択されたコレクションに未読の提出はありません。"
 
 msgid "Close"
 msgstr "閉じる"
@@ -250,7 +238,7 @@ msgid "All files and messages from that source will also be destroyed."
 msgstr ""
 
 msgid "Are you sure this is what you want?"
-msgstr ""
+msgstr "貴方は本当にこれを希望していますか？"
 
 msgid "Yes, Delete Selected Source Accounts"
 msgstr "選択されたソースアカウントを削除"
