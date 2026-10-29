@@ -29,6 +29,15 @@ from store import Storage
 
 PREFIX_MAX_LEN = inspect(Source).columns["uuid"].type.length
 
+# A ``shard_spec`` is expanded into one ``LIKE`` per prefix, joined with
+# ``or_()``.  SQLite compiles each ``OR`` into another level of expression, so a
+# spec of a thousand prefixes makes the query fail with "Expression tree is too
+# large (maximum depth 1000)" -- a 500 for an otherwise well-formed request.
+# The reference client shards into 16 (one per hex digit); 64 leaves plenty of
+# room for a client that chooses finer sharding while keeping the query well
+# below SQLite's limit.
+PREFIXES_MAX = 64
+
 # Magic numbers to avoid having to define an `IntEnum` somewhere that can be
 # imported from `securedrop.models`:
 #
@@ -91,6 +100,13 @@ def get_index_dict(minor: int, prefixes: list[str] | None = None) -> dict:
 
     source_query: EagerQuery = eager_query("Source")
     if prefixes:
+        if len(prefixes) > PREFIXES_MAX:
+            abort(
+                422,
+                f"malformed request; a shard_spec MUST NOT contain more than "
+                f"{PREFIXES_MAX} prefixes",
+            )
+
         for prefix in prefixes:
             if len(prefix) >= PREFIX_MAX_LEN:
                 abort(
