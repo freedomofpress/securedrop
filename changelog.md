@@ -3,6 +3,12 @@
 ## 2.17.0~rc1
 
 
+## 2.16.2
+
+This release addresses a [recent change in Tor](https://gitlab.torproject.org/tpo/core/tor/-/raw/tor-0.4.9.14/ChangeLog) that caused the Monitor Server to issue frequent false-positive OSSEC alerts. 
+
+* Suppress OSSEC alerts for Tor circuit build expiry summaries (#7954)
+
 ## 2.16.1
 
 This release fixes a low-severity security issue; please see our [advisory](https://securedrop.org/news/advisory-securedrop-2_16_1-released/) for instructions for SecureDrop Administrators.
