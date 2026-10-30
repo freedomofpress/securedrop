@@ -7,16 +7,16 @@ set -eo pipefail
 # shellcheck disable=SC2034
 OS_VERSION="${OS_VERSION:-noble}"
 
-# https://peps.python.org/pep-0508/#environment-markers
-PYTHON_VERSION="$(python3 -c 'import platform; print(".".join(platform.python_version_tuple()[:2]))')"
+PYTHON_VERSION="3.12"
 
 get_venv_version() {
-    "${1}/bin/python" -c "from __future__ import print_function; import sys; print(sys.version_info[0])"
+    "${1}/bin/python" -c \
+        'import sys; print(".".join(str(part) for part in sys.version_info[:2]))'
 }
 
 venv_instructions() {
-    echo "If you need to create a virtualenv, you can run the following"
-    echo "commands in the root directory of your SecureDrop working copy:"
+    echo "Python ${PYTHON_VERSION} is required."
+    echo "To create a virtualenv, run this in the SecureDrop repository:"
     echo
     echo "    make venv && . .venv/bin/activate"
     echo
@@ -30,11 +30,9 @@ function virtualenv_bootstrap() {
         VENV_VERSION=$(get_venv_version "${VIRTUAL_ENV}")
         if [ "${VENV_VERSION}" != "${PYTHON_VERSION}" ]
         then
-            venv_instructions "${PYTHON_VERSION}"
-            if [[ $- != *i* ]]
-            then
-                exit 1
-            fi
+            echo "Active virtualenv uses Python ${VENV_VERSION}."
+            venv_instructions
+            return 1
         else
             echo "Using active Python ${VENV_VERSION} virtualenv in ${VIRTUAL_ENV}"
         fi
@@ -44,17 +42,22 @@ function virtualenv_bootstrap() {
         if [ -d "${VENV}" ]
         then
             VENV_VERSION=$(get_venv_version "${VENV}")
-            if [[ "$VENV" = ".venv" && "$VENV_VERSION" == 2 ]]
+            if [ "${VENV_VERSION}" != "${PYTHON_VERSION}" ]
             then
-                relo="${VENV}-${VENV_VERSION}-$(date +'%Y%m%d-%H%M%S')"
-                echo "Default virtualenv in .venv is Python 2; renaming it to ${relo}."
-                mv "${VENV}" "${relo}"
+                echo "${VENV} uses Python ${VENV_VERSION}."
+                venv_instructions
+                exit 1
             fi
         fi
 
         if [ ! -d "$VENV" ]
         then
-            p=$(command -v "python${PYTHON_VERSION}" 2> /dev/null || command -v python3)
+            p=$(command -v "python${PYTHON_VERSION}" 2> /dev/null || true)
+            if [ -z "${p}" ]
+            then
+                venv_instructions
+                exit 1
+            fi
             echo "Creating ${p} virtualenv in ${VENV}"
             # be flexible in venv creation, e.g. staging has virtualenv while
             # deb-tests (GHA runner) has python3-venv
