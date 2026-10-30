@@ -80,7 +80,6 @@ I18N_DEFAULT_LOCALES = {"en_US"}
 
 READONLY_CONFIG_PATH = "/usr/share/securedrop-admin"
 ANSIBLE_PATH = os.path.join(READONLY_CONFIG_PATH, "ansible-base")
-TRANSLATIONS_PATH = os.path.join(READONLY_CONFIG_PATH, "translations")
 CONFIG_PATH = os.path.expanduser("~/.config/securedrop-admin")
 SITE_CONFIG_PATH = os.path.join(CONFIG_PATH, "site-specific")
 
@@ -244,18 +243,9 @@ class SiteConfig:
                 return True
             raise ValidationError(message="Must be an integer")
 
-    class Locales:
-        def get_translations(self) -> set[str]:
-            translations = I18N_DEFAULT_LOCALES
-            for dirname in os.listdir(TRANSLATIONS_PATH):
-                if dirname != "messages.pot":
-                    translations.add(dirname)
-            return translations
-
     class ValidateLocales(Validator):
         def __init__(self, supported: set[str]) -> None:
-            present = SiteConfig.Locales().get_translations()
-            self.available = present & supported
+            self.available = supported
 
             super().__init__()
 

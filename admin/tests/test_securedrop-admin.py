@@ -286,11 +286,13 @@ class TestSiteConfig:
             validator.validate(Document("123X"))
         assert validator.validate(Document("192"))
 
-    def test_locales(self):
-        locales = securedrop_admin.SiteConfig.Locales()
-        translations = locales.get_translations()
-        assert "en_US" in translations
-        assert "fr_FR" in translations
+    def test_supported_locales(self):
+        site_config = securedrop_admin.SiteConfig()
+        (validator,) = [
+            desc[4] for desc in site_config.desc if desc[0] == "securedrop_supported_locales"
+        ]
+        assert "en_US" in validator.available
+        assert "fr_FR" in validator.available
 
     def test_validate_locales(self):
         validator = securedrop_admin.SiteConfig.ValidateLocales({"en_US", "fr_FR"})

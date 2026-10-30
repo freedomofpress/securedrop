@@ -21,7 +21,7 @@ def test_admin_paths_are_present():
         "/usr/bin/validate-gpg-key.sh",
         "/usr/bin/securedrop-web-open",
         "/usr/share/securedrop-admin/ansible-base/",
-        "/usr/share/securedrop-admin/translations/",
+        "/usr/share/securedrop-admin/i18n.json",
         "/usr/share/securedrop-admin/venv/",
     ]
     deb_files = list((BUILD_DIRECTORY).glob("securedrop-admin_*_amd64.deb"))
@@ -34,6 +34,18 @@ def test_admin_paths_are_present():
             contents,
             re.M,
         )
+
+
+def test_admin_translations_are_absent():
+    """
+    Ensures the `securedrop-admin` package does not ship translation catalogs,
+    which it doesn't use and which may include non-reproducible compiled .mo files
+    """
+    deb_files = list((BUILD_DIRECTORY).glob("securedrop-admin_*_amd64.deb"))
+    assert deb_files, "No securedrop-admin .deb file found"
+    path = deb_files[0]
+    contents = subprocess.check_output(["dpkg-deb", "-c", str(path)]).decode()
+    assert "/usr/share/securedrop-admin/translations" not in contents
 
 
 def test_admin_qubes_paths_are_present():
