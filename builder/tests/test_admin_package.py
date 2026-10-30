@@ -47,6 +47,7 @@ def test_admin_qubes_paths_are_present():
         "/usr/lib/systemd/system/securedrop-torbrowser-pax.path",
         "/usr/lib/systemd/system/securedrop-torbrowser-pax.service",
         "/etc/firefox/policies/policies.json",
+        "/etc/modules-load.d/crypt-support.conf",
         "/usr/share/applications/press.freedom.SecureDropSourceInterface.desktop",
         "/usr/share/applications/press.freedom.SecureDropJournalistInterface.desktop",
         "/usr/share/applications/press.freedom.SecureDropSshApp.desktop",
