@@ -11,8 +11,7 @@ cp -R /src/admin/ /srv/securedrop-admin/
 # Copy ansible-base
 cp -R /src/install_files/ansible-base /srv/securedrop-admin/
 
-# Copy translations
-cp -R /src/securedrop/translations /srv/securedrop-admin/
+# Copy list of supported locales
 cp /src/securedrop/i18n.json /srv/securedrop-admin/
 
 # Copy keepassxc template database
