@@ -1,5 +1,6 @@
 import base64
 import binascii
+import logging
 import os
 import random
 import time
@@ -58,6 +59,28 @@ random.seed(r"¯\_(ツ)_/¯")
 
 VALID_PASSWORD = "correct horse battery staple generic passphrase hooray"
 VALID_PASSWORD_2 = "another correct horse battery staple generic passphrase"
+
+
+def test_login_invalid_credentials_logs_sanitized_username(journalist_app, caplog):
+    """A failed login logs the (attacker-controlled) username; it must not
+    be able to forge additional log lines via control characters."""
+    caplog.set_level(logging.INFO)
+    evil_username = "dellsberg\nWARNING forged log line"
+    with journalist_app.test_client() as app:
+        resp = app.post(
+            url_for("main.login"),
+            data=dict(username=evil_username, password="invalid", token="mocked"),
+        )
+
+        assert resp.status_code == 200
+        assert "Login for 'dellsberg" in caplog.text
+        assert "forged log line" in caplog.text  # content preserved, escaped
+        # The rendered log output must not contain a raw newline (caplog's
+        # per-record formatting already inserts \n between records, so check
+        # the records themselves).
+        for record in caplog.records:
+            assert "\n" not in record.getMessage()
+            assert "\r" not in record.getMessage()
 
 
 def test_user_with_whitespace_in_username_can_login(journalist_app):
