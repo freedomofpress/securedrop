@@ -15,5 +15,5 @@ Package: securedrop-admin-qubes
 Architecture: amd64
 Depends:
  qubes-vm-recommended, xfce4-terminal, securedrop-admin, torbrowser-launcher,
- firefox-esr, gnome-disk-utility, locales-all
+ firefox-esr, gnome-disk-utility, locales-all, nautilus
 Description: Metapackage for using SecureDrop admin tools on Qubes
