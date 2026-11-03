@@ -139,7 +139,7 @@ class ReplySentData(EventData):
         except ValueError:
             raise ValueError(f"invalid reply UUID: {self.uuid}")
 
-        if not self.reply:
+        if not isinstance(self.reply, str) or not self.reply:
             raise ValueError("reply must be a non-empty string")
 
 
@@ -150,6 +150,9 @@ class SourceConversationTruncatedData(EventData):
     upper_bound: int
 
     def __post_init__(self) -> None:
+        # bool is a subclass of int, and NaN would pass the check below.
+        if not isinstance(self.upper_bound, int) or isinstance(self.upper_bound, bool):
+            raise ValueError("upper_bound must be an integer")
         if self.upper_bound < 0:
             raise ValueError("upper_bound must be non-negative")
 
@@ -161,6 +164,9 @@ class SourceConversationSeenData(EventData):
     upper_bound: int
 
     def __post_init__(self) -> None:
+        # bool is a subclass of int, and NaN would pass the check below.
+        if not isinstance(self.upper_bound, int) or isinstance(self.upper_bound, bool):
+            raise ValueError("upper_bound must be an integer")
         if self.upper_bound < 0:
             raise ValueError("upper_bound must be non-negative")
 
