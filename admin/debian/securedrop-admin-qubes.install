@@ -3,3 +3,4 @@ paxctld/torbrowser.conf /etc/paxctld.d/
 paxctld/firefox-esr.conf /etc/paxctld.d/
 firefox/policies.json /etc/firefox/policies/
 applications/*.desktop /usr/share/applications
+modules-load/crypt-support.conf /etc/modules-load.d/
