@@ -23,6 +23,12 @@ from store import NotEncrypted
 # easiest period to reason about.
 IDEMPOTENCE_PERIOD = 60 * 60 * 24  # seconds * minutes * hours = 1 day
 
+# How long a claim on an event is held while it is being processed.  It must be
+# long enough to process a full batch (``EVENTS_MAX`` events) and short enough
+# that a retry after a crash does not wait for ``IDEMPOTENCE_PERIOD``: a claim
+# that is never released indicates a dead process, not an applied event.
+PROCESSING_PERIOD = 60 * 5  # seconds * minutes = 5 minutes
+
 REDIS_EVENT_PREFIX = "sd/events"
 
 
@@ -66,10 +72,11 @@ class EventHandler:
         """The per-event entry-point for handling a single event."""
 
         try:
-            if self.is_duplicate(event):
+            replay = self.replay_status(event)
+            if replay is not None:
                 return EventResult(
                     event_id=event.id,
-                    status=(EventStatusCode.AlreadyReported, None),
+                    status=(replay, None),
                 )
 
             handler = {
@@ -111,24 +118,52 @@ class EventHandler:
     def idempotence_key(self, event: Event) -> str:
         return f"{REDIS_EVENT_PREFIX}/{self._session.user.uuid}/{event.id}"
 
-    def is_duplicate(self, event: Event) -> bool:
-        """Returns `True` if this event is already registered (i.e., a replay)."""
-        return (
-            self._redis.set(
-                self.idempotence_key(event),
-                EventStatusCode.Processing,
-                ex=IDEMPOTENCE_PERIOD,
-                nx=True,
-            )
-            is None
+    def processing_key(self, event: Event) -> str:
+        return f"{self.idempotence_key(event)}/processing"
+
+    def replay_status(self, event: Event) -> EventStatusCode | None:
+        """
+        Returns the status to report if this event is a replay, or `None` if it
+        has been claimed by this request and must be processed.
+
+        A recorded final status (``AlreadyReported``) means the event was
+        applied.  A claim still held by another request means it is being
+        applied *now*: report ``Processing`` so the client retries later instead
+        of assuming the event was applied.  A claim whose TTL has expired was
+        never completed (the server died between the claim and the final
+        status), so it is stale and the event can be processed again.
+
+        The claim is taken *before* the final status is read, so that a request
+        arriving just as another finishes cannot claim a stale view and apply
+        the event twice: it will find the final status and release its claim.
+        """
+        claimed = self._redis.set(
+            self.processing_key(event),
+            int(EventStatusCode.Processing),
+            ex=PROCESSING_PERIOD,
+            nx=True,
         )
+
+        # Only successful outcomes are recorded here (``record_status()``
+        # clears the key on error), so any recorded status means the event was
+        # applied and its replay is an ``AlreadyReported``.
+        if self._redis.get(self.idempotence_key(event)) is not None:
+            if claimed is not None:
+                self._redis.delete(self.processing_key(event))
+            return EventStatusCode.AlreadyReported
+
+        if claimed is None:
+            return EventStatusCode.Processing
+
+        return None
 
     def record_status(self, event: Event, status: EventStatusCode) -> None:
         """Record the event's final status for idempotence, or clear on error to permit retry."""
         if status >= EventStatusCode.BadRequest:
             self._redis.delete(self.idempotence_key(event))
         else:
-            self._redis.set(self.idempotence_key(event), status, ex=IDEMPOTENCE_PERIOD)
+            self._redis.set(self.idempotence_key(event), int(status), ex=IDEMPOTENCE_PERIOD)
+        self._redis.delete(self.processing_key(event))
 
     @staticmethod
     def handle_item_deleted(event: Event, minor: int) -> EventResult:
