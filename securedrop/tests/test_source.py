@@ -82,6 +82,7 @@ def test_static_asset_not_found(source_app):
 def test_orgname_default_set(source_app):
     class dummy_current:
         organization_name = None
+        active_landing_message = None
 
     with patch.object(InstanceConfig, "get_current") as iMock:
         with source_app.test_client() as app:
@@ -99,6 +100,33 @@ def test_index(source_app):
         text = resp.data.decode("utf-8")
         assert "First submission" in text
         assert "Return visit" in text
+
+
+def test_index_landing_message_disabled_by_default(source_app):
+    with source_app.test_client() as app:
+        resp = app.get(url_for("main.index"))
+        assert 'id="landing-message"' not in resp.data.decode("utf-8")
+
+
+@pytest.mark.parametrize(
+    ("enabled", "message", "shown"),
+    [
+        (True, "Send us <b>leaks</b>\n\nabout widgets.", True),
+        (True, "   \n ", False),
+        (False, "Hidden draft", False),
+    ],
+)
+def test_index_landing_message(source_app, enabled, message, shown):
+    with source_app.app_context():
+        InstanceConfig.update_landing_message(enabled, message)
+    with source_app.test_client() as app:
+        text = app.get(url_for("main.index")).data.decode("utf-8")
+        assert ('id="landing-message"' in text) is shown
+        if shown:
+            # Admin-provided text is escaped, never rendered as markup.
+            assert str(escape(message.strip())) in text
+            assert "<b>leaks</b>" not in text
+            assert text.index('id="landing-message"') < text.index('id="first-submission"')
 
 
 def _find_codename(html):

@@ -5585,6 +5585,12 @@ footer img#footer-logo {
   width: 6em;
 }
 
+#landing_message {
+  width: 100%;
+  max-width: 40em;
+  margin-top: 0.5em;
+}
+
 .form-field-hint {
   font-size: 0.9em;
   font-style: italic;

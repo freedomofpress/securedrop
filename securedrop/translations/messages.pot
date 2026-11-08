@@ -144,6 +144,9 @@ msgstr ""
 msgid "To configure a minimum message length, you must set the required number of characters."
 msgstr ""
 
+msgid "To show a landing page message, you must provide its text."
+msgstr ""
+
 msgid "File required."
 msgstr ""
 
@@ -563,6 +566,24 @@ msgid "Update Logo"
 msgstr ""
 
 msgid "UPDATE LOGO"
+msgstr ""
+
+msgid "Landing Page Message"
+msgstr ""
+
+msgid "Show a message to sources above the options on the Source Interface landing page."
+msgstr ""
+
+msgid "Landing page message:"
+msgstr ""
+
+msgid "Plain text only, up to {num} characters. Line breaks are preserved."
+msgstr ""
+
+msgid "Update Landing Page Message"
+msgstr ""
+
+msgid "UPDATE LANDING PAGE MESSAGE"
 msgstr ""
 
 msgid "Submission Preferences"

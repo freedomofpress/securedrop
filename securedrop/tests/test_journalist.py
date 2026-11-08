@@ -2487,6 +2487,92 @@ def test_orgname_oversized_fails(config, journalist_app, test_admin, locale):
         assert InstanceConfig.get_current().organization_name == "SecureDrop"
 
 
+def _post_landing_message(journalist_app, test_admin, flashed, **data):
+    with journalist_app.test_client() as app:
+        login_journalist(
+            app,
+            test_admin["username"],
+            test_admin["password"],
+            test_admin["otp_secret"],
+        )
+        form = journalist_app_module.forms.LandingMessageForm(**data)
+        with InstrumentedApp(journalist_app) as ins:
+            app.post(
+                url_for("admin.update_landing_message"),
+                data=form.data,
+                follow_redirects=True,
+            )
+            ins.assert_message_flashed(*flashed)
+
+
+def test_landing_message_defaults(journalist_app):
+    with journalist_app.app_context():
+        config = InstanceConfig.get_current()
+        assert config.landing_message_enabled is False
+        assert config.landing_message is None
+        assert config.active_landing_message is None
+
+
+def test_landing_message_enable_succeeds(journalist_app, test_admin):
+    _post_landing_message(
+        journalist_app,
+        test_admin,
+        ("Preferences saved.", "landing-message-success"),
+        enable_landing_message=True,
+        landing_message="Tips welcome.",
+    )
+    with journalist_app.app_context():
+        config = InstanceConfig.get_current()
+        assert config.landing_message_enabled is True
+        assert config.active_landing_message == "Tips welcome."
+
+
+def test_landing_message_disable_keeps_text(journalist_app, test_admin):
+    _post_landing_message(
+        journalist_app,
+        test_admin,
+        ("Preferences saved.", "landing-message-success"),
+        enable_landing_message=False,
+        landing_message="Draft",
+    )
+    with journalist_app.app_context():
+        config = InstanceConfig.get_current()
+        assert config.landing_message_enabled is False
+        assert config.landing_message == "Draft"
+        assert config.active_landing_message is None
+
+
+def test_landing_message_enable_without_text_fails(journalist_app, test_admin):
+    _post_landing_message(
+        journalist_app,
+        test_admin,
+        (
+            "Preferences not updated. To show a landing page message, you must provide its text.",
+            "landing-message-error",
+        ),
+        enable_landing_message=True,
+        landing_message="  ",
+    )
+    with journalist_app.app_context():
+        assert InstanceConfig.get_current().landing_message_enabled is False
+
+
+def test_landing_message_oversized_fails(journalist_app, test_admin):
+    max_len = InstanceConfig.MAX_LANDING_MESSAGE_LEN
+    _post_landing_message(
+        journalist_app,
+        test_admin,
+        (
+            f"Preferences not updated. Cannot be longer than {max_len} characters.",
+            "landing-message-error",
+        ),
+        enable_landing_message=False,
+        landing_message="a" * (max_len + 1),
+    )
+    with journalist_app.app_context():
+        assert InstanceConfig.get_current().landing_message is None
+
+
 def test_logo_default_available(journalist_app, config):
     # if the custom image is available, this test will fail
     custom_image_location = os.path.join(config.SECUREDROP_ROOT, "static/i/custom_logo.png")

@@ -18,7 +18,13 @@ from flask import (
 )
 from flask_babel import gettext
 from journalist_app.decorators import admin_required
-from journalist_app.forms import LogoForm, NewUserForm, OrgNameForm, SubmissionPreferencesForm
+from journalist_app.forms import (
+    LandingMessageForm,
+    LogoForm,
+    NewUserForm,
+    OrgNameForm,
+    SubmissionPreferencesForm,
+)
 from journalist_app.sessions import session
 from journalist_app.utils import (
     commit_account_changes,
@@ -68,6 +74,10 @@ def make_blueprint() -> Blueprint:
         organization_name_form = OrgNameForm(
             organization_name=InstanceConfig.get_default().organization_name
         )
+        landing_message_form = LandingMessageForm(
+            enable_landing_message=InstanceConfig.get_default().landing_message_enabled,
+            landing_message=InstanceConfig.get_default().landing_message,
+        )
         logo_form = LogoForm()
         if logo_form.validate_on_submit():
             f = logo_form.logo.data
@@ -93,6 +103,8 @@ def make_blueprint() -> Blueprint:
                 "config.html",
                 submission_preferences_form=submission_preferences_form,
                 organization_name_form=organization_name_form,
+                landing_message_form=landing_message_form,
+                max_landing_message_len=InstanceConfig.MAX_LANDING_MESSAGE_LEN,
                 max_len=Submission.MAX_MESSAGE_LEN,
                 logo_form=logo_form,
             )
@@ -123,6 +135,24 @@ def make_blueprint() -> Blueprint:
                         "submission-preferences-error",
                     )
         return redirect(url_for("admin.manage_config") + "#config-preventuploads")
+
+    @view.route("/update-landing-message", methods=["POST"])
+    @admin_required
+    def update_landing_message() -> werkzeug.Response:
+        form = LandingMessageForm()
+        if form.validate_on_submit():
+            InstanceConfig.update_landing_message(
+                form.enable_landing_message.data, form.landing_message.data or None
+            )
+            flash(gettext("Preferences saved."), "landing-message-success")
+        else:
+            for errors in form.errors.values():
+                for error in errors:
+                    flash(
+                        gettext("Preferences not updated.") + " " + error,
+                        "landing-message-error",
+                    )
+        return redirect(url_for("admin.manage_config") + "#config-landingmessage")
 
     @view.route("/update-org-name", methods=["POST"])
     @admin_required

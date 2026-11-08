@@ -57,6 +57,9 @@
     </header>
 
     <main>
+      {% if landing_message %}
+      <div id="landing-message">{{ landing_message }}</div>
+      {% endif %}
       <section id="first-submission" aria-labelledby="first-submission-heading">
         <h2 id="first-submission-heading">{{ gettext('First submission') }}</h2>
         <p>{{ gettext('First time submitting to our SecureDrop? Start here.') }}</p>

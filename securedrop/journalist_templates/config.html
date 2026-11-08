@@ -53,6 +53,35 @@
   </form>
 </section>
 
+<section aria-labelledby="config-landingmessage">
+  <h2 id="config-landingmessage">{{ gettext('Landing Page Message') }}</h2>
+
+  <form action="{{ url_for('admin.update_landing_message') }}" method="post">
+    <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
+
+    <div class="config_form_element">
+      {{ landing_message_form.enable_landing_message() }}
+      <label
+    for="enable_landing_message">{{ gettext('Show a message to sources above the options on the Source Interface landing page.') }}</label>
+      <div class="config_form_subelement">
+        <label class="visually-hidden" for="landing_message">{{ gettext('Landing page message:') }}</label>
+        {{ landing_message_form.landing_message(rows=8, maxlength=max_landing_message_len) }}
+        <p id="landing-message-notes" class="form-field-hint">
+          {{ gettext('Plain text only, up to {num} characters. Line breaks are preserved.').format(num=max_landing_message_len) }}
+        </p>
+      </div>
+    </div>
+    <div class="section-spacing">
+      <button type="submit" id="submit-landing-message" class="icon icon-edit"
+        aria-label="{{ gettext('Update Landing Page Message') }}">
+        {{ gettext('UPDATE LANDING PAGE MESSAGE') }}
+      </button>
+    </div>
+    {% set prefs_filter = ["landing-message-success","landing-message-error"] %}
+    {% include 'preferences_saved_flash.html' %}
+  </form>
+</section>
+
 <section aria-labelledby="config-preventuploads">
   <h2 id="config-preventuploads">{{ gettext('Submission Preferences') }}</h2>
 

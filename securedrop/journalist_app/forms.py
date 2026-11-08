@@ -89,15 +89,23 @@ def name_length_validation(form: FlaskForm, field: Field) -> None:
         )
 
 
-def check_orgname(form: FlaskForm, field: Field) -> None:
-    if len(field.data) > InstanceConfig.MAX_ORG_NAME_LEN:
+def check_max_length(field: Field, max_len: int) -> None:
+    if field.data and len(field.data) > max_len:
         raise ValidationError(
             ngettext(
                 "Cannot be longer than {num} character.",
                 "Cannot be longer than {num} characters.",
-                InstanceConfig.MAX_ORG_NAME_LEN,
-            ).format(num=InstanceConfig.MAX_ORG_NAME_LEN)
+                max_len,
+            ).format(num=max_len)
         )
+
+
+def check_orgname(form: FlaskForm, field: Field) -> None:
+    check_max_length(field, InstanceConfig.MAX_ORG_NAME_LEN)
+
+
+def check_landing_message(form: FlaskForm, field: Field) -> None:
+    check_max_length(field, InstanceConfig.MAX_LANDING_MESSAGE_LEN)
 
 
 def check_invalid_usernames(form: FlaskForm, field: Field) -> None:
@@ -178,6 +186,24 @@ class SubmissionPreferencesForm(FlaskForm):
     reject_codename_messages = BooleanField(
         "reject_codename_messages", false_values=("false", "False", "")
     )
+
+
+class LandingMessageForm(FlaskForm):
+    enable_landing_message = BooleanField(
+        "enable_landing_message", false_values=("false", "False", "")
+    )
+    landing_message = TextAreaField(
+        "landing_message",
+        render_kw={"aria-describedby": "landing-message-notes"},
+    )
+
+    def validate_landing_message(self, field: Field) -> None:
+        # Length is enforced even while disabled, so stored drafts stay bounded.
+        check_landing_message(self, field)
+        if self.enable_landing_message.data and not (field.data or "").strip():
+            raise ValidationError(
+                gettext("To show a landing page message, you must provide its text.")
+            )
 
 
 class OrgNameForm(FlaskForm):

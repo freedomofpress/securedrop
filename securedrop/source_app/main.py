@@ -51,7 +51,9 @@ def make_blueprint(config: SecureDropConfig) -> Blueprint:
 
     @view.route("/")
     def index() -> str:
-        return render_template("index.html")
+        return render_template(
+            "index.html", landing_message=InstanceConfig.get_default().active_landing_message
+        )
 
     @view.route("/generate", methods=("POST", "GET"))
     def generate() -> str | werkzeug.Response:

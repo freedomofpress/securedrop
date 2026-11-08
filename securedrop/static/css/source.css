@@ -486,10 +486,20 @@ header {
 
 #source-index main {
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
   padding: 0;
   border: 0;
   width: calc(70% - 30px);
+}
+
+/* Optional admin-provided message: always a full-width row above the sections. */
+#landing-message {
+  flex: 0 0 100%;
+  padding: 0 45px 30px 45px;
+  border-bottom: 2px solid var(--index-middle-separator);
+  white-space: pre-line;
+  overflow-wrap: anywhere;
 }
 
 #source-index main h2 {
@@ -523,11 +533,11 @@ header {
   padding-left: 65px;
 }
 
-html[dir=ltr] #source-index .content section:not(#locales-menu):not(#flashed):first-child {
+html[dir=ltr] #source-index .content section:not(#locales-menu):not(#flashed):first-of-type {
   border-right: 2px solid var(--index-middle-separator);
 }
 
-html[dir=rtl] #source-index .content section:not(#locales-menu):not(#flashed):first-child {
+html[dir=rtl] #source-index .content section:not(#locales-menu):not(#flashed):first-of-type {
   border-left: 2px solid var(--index-middle-separator);
 }
 
@@ -574,14 +584,17 @@ html[dir=rtl] #source-index .content section:not(#locales-menu):not(#flashed):fi
     padding-top: 0;
     min-height: unset;
   }
-  html[dir=ltr] #source-index > .content > main > section:not(#locales-menu):not(#flashed):first-child {
+  html[dir=ltr] #source-index > .content > main > section:not(#locales-menu):not(#flashed):first-of-type {
     border-right: 0;
   }
-  html[dir=rtl] #source-index > .content > main > section:not(#locales-menu):not(#flashed):first-child {
+  html[dir=rtl] #source-index > .content > main > section:not(#locales-menu):not(#flashed):first-of-type {
     border-left: 0;
   }
   #source-index > .content > main > section#return-visit:not(#locales-menu):not(#flashed) {
     padding-left: 45px;
+  }
+  #landing-message {
+    margin-bottom: 30px;
   }
   #source-index > .content > main p {
     width: auto;

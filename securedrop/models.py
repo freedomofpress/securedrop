@@ -1013,6 +1013,9 @@ class InstanceConfig(db.Model):
     # Limits length of org name used in SI and JI titles, image alt texts etc.
     MAX_ORG_NAME_LEN = 64
 
+    # Limits length of the optional message shown on the SI landing page.
+    MAX_LANDING_MESSAGE_LEN = 2000
+
     __tablename__ = "instance_config"
     version = Column(Integer, primary_key=True)
     valid_until = Column(
@@ -1027,6 +1030,8 @@ class InstanceConfig(db.Model):
     reject_message_with_codename = Column(
         Boolean, nullable=False, default=False, server_default="0"
     )
+    landing_message_enabled = Column(Boolean, nullable=False, default=False, server_default="0")
+    landing_message = Column(Text, nullable=True)
 
     # Columns not listed here will be included by InstanceConfig.copy() when
     # updating the configuration.
@@ -1038,7 +1043,8 @@ class InstanceConfig(db.Model):
             f"allow_document_uploads={self.allow_document_uploads}, "
             f"organization_name={self.organization_name}, "
             f"initial_message_min_len={self.initial_message_min_len}, "
-            f"reject_message_with_codename={self.reject_message_with_codename})>"
+            f"reject_message_with_codename={self.reject_message_with_codename}, "
+            f"landing_message_enabled={self.landing_message_enabled})>"
         )
 
     def copy(self) -> "InstanceConfig":
@@ -1125,3 +1131,27 @@ class InstanceConfig(db.Model):
         db.session.add(new)
 
         db.session.commit()
+
+    @classmethod
+    def update_landing_message(cls, enabled: bool, message: str | None) -> None:
+        """Invalidate the current configuration and append a new one with the
+        updated Source Interface landing message.
+        """
+
+        old = cls.get_current()
+        old.valid_until = datetime.datetime.utcnow()
+        db.session.add(old)
+
+        new = old.copy()
+        new.landing_message_enabled = enabled
+        new.landing_message = message
+        db.session.add(new)
+
+        db.session.commit()
+
+    @property
+    def active_landing_message(self) -> str | None:
+        """The landing message to show sources, if enabled and non-blank."""
+        if self.landing_message_enabled and self.landing_message:
+            return self.landing_message.strip() or None
+        return None
