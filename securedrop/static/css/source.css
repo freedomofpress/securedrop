@@ -466,6 +466,7 @@ body > .warning span:last-child {
   margin: 17px auto 0 auto;
   display: flex;
   flex-wrap: wrap;
+  align-items: flex-start;
 }
 
 header {
@@ -486,7 +487,7 @@ header {
 
 #source-index main {
   display: flex;
-  justify-content: center;
+  flex-wrap: wrap;
   padding: 0;
   border: 0;
   width: calc(70% - 30px);
@@ -506,17 +507,25 @@ header {
   margin-bottom: 2em;
 }
 
+#source-index div #source-motd {
+  flex: 0 0 100%;
+}
+#source-index div #source-nav {
+  flex: 0 0 100%;
+  display: flex;
+  flex-wrap: wrap;
+}
+
 #source-index .content section:not(#locales-menu):not(#flashed) {
-  width: 50%;
-  min-height: 240px;
   padding: 50px 45px 85px 45px;
   position: relative;
+  width: 50%;
+  min-height: 240px;
 }
 
 #source-index .content section:not(#locales-menu):not(#flashed) .btn,
 #source-index .content section:not(#locales-menu):not(#flashed) button {
   position: absolute;
-  bottom: 50px;
 }
 
 #source-index .content section#return-visit:not(#locales-menu):not(#flashed) {
