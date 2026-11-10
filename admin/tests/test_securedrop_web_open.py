@@ -7,6 +7,7 @@ import pytest
 
 SCRIPT = Path(__file__).parent.parent / "bin/securedrop-web-open"
 ONION = "a" * 56 + ".onion"
+SYSTEM_TOR_ENV = "none 127.0.0.1 9050"
 
 pytestmark = pytest.mark.skipif(
     os.path.exists("/usr/local/bin/tor-browser"),
@@ -15,9 +16,11 @@ pytestmark = pytest.mark.skipif(
 
 
 def make_stub(path: Path) -> None:
-    """Write an executable that records its name and arguments"""
+    """Write an executable that records its name, arguments, and tor env vars"""
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(f'#!/bin/sh\necho "{path.name} $@"\n')
+    path.write_text(
+        f'#!/bin/sh\necho "{path.name} $@"\necho "$TOR_PROVIDER $TOR_SOCKS_HOST $TOR_SOCKS_PORT"\n'
+    )
     path.chmod(0o755)
 
 
@@ -43,7 +46,7 @@ def run(env: dict[str, str], *args: str) -> subprocess.CompletedProcess:
 def test_falls_back_to_torbrowser_launcher(env: dict[str, str], interface: str) -> None:
     result = run(env, interface)
     assert result.returncode == 0, result.stderr
-    assert result.stdout.strip() == f"torbrowser-launcher {ONION}"
+    assert result.stdout.splitlines() == [f"torbrowser-launcher {ONION}", SYSTEM_TOR_ENV]
 
 
 @pytest.mark.parametrize("interface", ["source", "journalist"])
@@ -56,7 +59,7 @@ def test_uses_installed_tor_browser(env: dict[str, str], interface: str) -> None
     )
     result = run(env, interface)
     assert result.returncode == 0, result.stderr
-    assert result.stdout.strip() == f"start-tor-browser --detach {ONION}"
+    assert result.stdout.splitlines() == [f"start-tor-browser --detach {ONION}", SYSTEM_TOR_ENV]
 
 
 @pytest.mark.parametrize("args", [[], ["bogus"], ["source", "extra"]])
