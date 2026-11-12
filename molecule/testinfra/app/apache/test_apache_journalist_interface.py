@@ -43,9 +43,11 @@ def test_apache_headers_journalist_interface(host, header, value):
         "XSendFilePath    /var/lib/securedrop/store/",
         "XSendFilePath    /var/lib/securedrop/tmp/",
         "ErrorLog /var/log/apache2/journalist-error.log",
+        "RewriteCond %{HTTP:X-Request-ID} ^(req-[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12})$ [NV]",
+        "RewriteRule ^ - [E=X_REQUEST_ID:%1]",
         (
             'ErrorLogFormat "[%{u}t] [%-m:%l] [pid %P:tid %T] %7F: %E: [client\\ %a] '
-            '[request-id\\ %{X-Request-ID}i] %M% ,\\ referer\\ %{Referer}i"'
+            '[request-id\\ %{X_REQUEST_ID}e] %M% ,\\ referer\\ %{Referer}i"'
         ),
         (
             'LogFormat "%h %l %u %t \\"%r\\" %>s %O \\"%{Referer}i\\" \\"%{User-Agent}i\\" '
