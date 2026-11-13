@@ -184,11 +184,15 @@ class Event:
     data: EventData | Mapping[str, Any] | None = None
 
     def __post_init__(self) -> None:
-        # ID must be usable as an int (for snowflake ordering; see section
-        # "Snowflake IDs" in `API2.md`):
+        # ID must be a string (see section "Snowflake IDs" in `API2.md`) usable
+        # as an int for snowflake ordering.  Checking the type first keeps
+        # int() from accepting a float or bool, or raising OverflowError for an
+        # infinite float.
+        if not isinstance(self.id, str):
+            raise ValueError(f"event ID must be an integer string: {self.id}")
         try:
             int(self.id)
-        except (ValueError, TypeError) as err:
+        except ValueError as err:
             raise ValueError(f"event ID must be an integer string: {self.id}") from err
 
         # Normalize type:
