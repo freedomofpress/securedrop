@@ -44,6 +44,11 @@ if [ -x /usr/local/bin/tor-browser ]; then
     exec /usr/local/bin/tor-browser "$onion"
 fi
 
+# Use the system tor instead of Tor Browser's bundled tor, since it already
+# has the onion service client auth credentials (see qubes-config role).
+# TOR_PROVIDER=none is required because the system tor has no control port.
+export TOR_PROVIDER=none TOR_SOCKS_HOST=127.0.0.1 TOR_SOCKS_PORT=9050
+
 # torbrowser-launcher has an upstream bug that ignores URL arguments, so we
 # call the Tor start script directly. On first run, we use torbrowser-launcher
 # to download and verify Tor Browser.
