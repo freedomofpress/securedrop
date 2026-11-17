@@ -75,8 +75,11 @@ def _create_driver(
         torbrowser_driver = None
         for i in range(_DRIVER_RETRY_COUNT):
             try:
+                tb_options = webdriver.FirefoxOptions()
+                tb_options.add_argument("-remote-allow-system-access")
                 torbrowser_driver = TorBrowserDriver(
                     _TBB_PATH,
+                    options=tb_options,
                     tor_cfg=cm.USE_RUNNING_TOR,
                     pref_dict=pref_dict,
                     tbb_logfile_path=_LOGFILE_PATH,
