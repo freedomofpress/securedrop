@@ -133,6 +133,33 @@ def test_data_unexpected_type():
         )
 
 
+@pytest.mark.parametrize("reply", [True, 5, ["-----BEGIN PGP MESSAGE-----"], {"a": 1}])
+def test_data_reply_not_string(reply):
+    """Reply data must be a string."""
+    with pytest.raises(TypeError, match="invalid event data for type reply_sent"):
+        Event(
+            id="123456",
+            target=SourceTarget(source_uuid=VALID_SOURCE_UUID, version=VALID_VERSION),
+            type=EventType.REPLY_SENT,
+            data={"uuid": VALID_REPLY_UUID, "reply": reply},
+        )
+
+
+@pytest.mark.parametrize(
+    "event_type", [EventType.SOURCE_CONVERSATION_TRUNCATED, EventType.SOURCE_CONVERSATION_SEEN]
+)
+@pytest.mark.parametrize("upper_bound", [float("nan"), float("inf"), 1.5, True])
+def test_data_upper_bound_not_integer(event_type, upper_bound):
+    """upper_bound must be an integer."""
+    with pytest.raises(TypeError, match=f"invalid event data for type {event_type}"):
+        Event(
+            id="123456",
+            target=SourceTarget(source_uuid=VALID_SOURCE_UUID, version=VALID_VERSION),
+            type=event_type,
+            data={"upper_bound": upper_bound},
+        )
+
+
 def test_valid_event_with_data_mapping():
     """Valid event with data as mapping is normalized to EventData."""
     event = Event(
