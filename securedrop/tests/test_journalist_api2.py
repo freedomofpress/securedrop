@@ -521,6 +521,19 @@ def test_api2_invalid_events(
         assert response.status_code == 400
         assert "event ID must be an integer string" in response.json["message"]
 
+        # Regression test for an infinite float ID, which int() rejects with
+        # OverflowError rather than ValueError
+        infinite_id = deepcopy(valid)
+        infinite_id["events"][0]["id"] = float("inf")
+
+        response = app.post(
+            url_for("api2.data"),
+            json=infinite_id,
+            headers=get_api_headers(journalist_api_token),
+        )
+        assert response.status_code == 400
+        assert "event ID must be an integer string" in response.json["message"]
+
         too_many = deepcopy(invalid_type)
         too_many["events"].extend([too_many["events"][0].copy() for _ in range(api2.EVENTS_MAX)])
 
