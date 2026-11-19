@@ -13,8 +13,13 @@ import pytest
 from flask import url_for
 from flask_sqlalchemy import get_debug_queries
 from journalist_app import api2
-from journalist_app.api2.events import EventHandler
-from journalist_app.api2.shared import json_version
+from journalist_app.api2.events import (
+    IDEMPOTENCE_PERIOD,
+    PROCESSING_PERIOD,
+    REDIS_EVENT_PREFIX,
+    EventHandler,
+)
+from journalist_app.api2.shared import PREFIXES_MAX, json_version
 from journalist_app.api2.types import (
     VERSION_LEN,
     Event,
@@ -307,6 +312,35 @@ def test_index_with_invalid_prefix(journalist_app, test_files, journalist_api_to
         assert response2.status_code == 422
         assert "malformed request; each prefix must be shorter than" in response2.get_data(
             as_text=True
+        )
+
+
+def test_index_with_too_many_prefixes(journalist_app, journalist_api_token):
+    """
+    Verify that a shard_spec with more prefixes than the server accepts is
+    rejected with HTTP 422, before the prefixes are turned into an `OR` chain
+    that SQLite would refuse to compile.
+    """
+    with journalist_app.test_client() as app:
+        headers = get_api_headers(journalist_api_token)
+
+        # The largest accepted spec still works.
+        at_limit = app.get(
+            url_for("api2.index", shard_spec=",".join("0" * PREFIXES_MAX)),
+            headers=headers,
+        )
+        assert at_limit.status_code == 200
+
+        # One more prefix is rejected without touching the database.
+        with assert_query_count(0):
+            over_limit = app.get(
+                url_for("api2.index", shard_spec=",".join("0" * (PREFIXES_MAX + 1))),
+                headers=headers,
+            )
+        assert over_limit.status_code == 422
+        assert (
+            f"malformed request; a shard_spec MUST NOT contain more than {PREFIXES_MAX} prefixes"
+            in over_limit.get_data(as_text=True)
         )
 
 
@@ -1015,6 +1049,63 @@ def test_api2_atomic_idempotence(redis):
     # one thread past the check. Fails with count == 2 if mark_progress() drops
     # the NX flag or claim_progress() reverts to a non-atomic check-then-act.
     assert handler_call_count[0] == 1
+
+
+def test_api2_replay_while_processing(
+    journalist_app, journalist_api_token, test_files, test_journo, redis
+):
+    """
+    A replay that finds an event claimed by another request must be reported as
+    Processing (102), not Already Reported (208): the event has not been applied
+    yet, and a 208 would tell the client to stop retrying.
+    """
+    with journalist_app.app_context():
+        source = test_files["source"]
+        source_uuid = source.uuid
+        source_id = source.id
+        journalist_uuid = test_journo["journalist"].uuid
+
+    with journalist_app.test_client() as app:
+        headers = get_api_headers(journalist_api_token)
+        index = app.get(url_for("api2.index"), headers=headers)
+        source_version = index.json["sources"][source_uuid]
+
+        event = Event(
+            id="970001",
+            target=SourceTarget(source_uuid=source_uuid, version=source_version),
+            type=EventType.SOURCE_STARRED,
+        )
+        processing_key = f"{REDIS_EVENT_PREFIX}/{journalist_uuid}/{event.id}/processing"
+
+        # Pretend another request claimed this event and is still working on it.
+        redis.set(processing_key, EventStatusCode.Processing, ex=PROCESSING_PERIOD)
+
+        response = app.post(
+            url_for("api2.data"),
+            json={"events": [asdict(event)]},
+            headers=headers,
+        )
+        assert response.status_code == 200
+        assert response.json["events"][event.id] == [102, None]
+        assert SourceStar.query.filter(SourceStar.source_id == source_id).one_or_none() is None
+
+        # A claim left behind by a process that died is released by its TTL and
+        # is indistinguishable from an absent key, so the retry gets to run.
+        redis.delete(processing_key)
+        response = app.post(
+            url_for("api2.data"),
+            json={"events": [asdict(event)]},
+            headers=headers,
+        )
+        assert response.status_code == 200
+        assert response.json["events"][event.id] == [200, None]
+        assert SourceStar.query.filter(SourceStar.source_id == source_id).one().starred is True
+
+        # The claim is released once the final status is recorded, and the final
+        # status outlives it for the whole idempotence period.
+        assert redis.exists(processing_key) == 0
+        idempotence_key = f"{REDIS_EVENT_PREFIX}/{journalist_uuid}/{event.id}"
+        assert 0 < redis.ttl(idempotence_key) <= IDEMPOTENCE_PERIOD
 
 
 def test_api2_event_ordering(journalist_app, journalist_api_token, test_files):
