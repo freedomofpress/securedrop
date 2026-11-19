@@ -59,7 +59,10 @@ def test_uses_installed_tor_browser(env: dict[str, str], interface: str) -> None
     )
     result = run(env, interface)
     assert result.returncode == 0, result.stderr
-    assert result.stdout.splitlines() == [f"start-tor-browser --detach {ONION}", SYSTEM_TOR_ENV]
+    assert result.stdout.splitlines() == [
+        f"start-tor-browser --detach --allow-remote {ONION}",
+        SYSTEM_TOR_ENV,
+    ]
 
 
 @pytest.mark.parametrize("args", [[], ["bogus"], ["source", "extra"]])
