@@ -57,7 +57,8 @@ copy_securedrop_repo
 trap fetch_junit_test_results EXIT
 
 # build server debs
-ssh_gce "OS_VERSION=\"${OS_VERSION}\" make build-debs-notest"
+# securedrop-builder (checked out into the workspace by CI) provides the app-code wheels
+ssh_gce "OS_VERSION=\"${OS_VERSION}\" BUILDER=securedrop-builder make build-debs-notest"
 ssh_gce "OS_VERSION=\"${OS_VERSION}\" make build-debs-ossec-notest"
 
 # build and install securedrop-admin tools and add staging config
