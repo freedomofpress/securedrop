@@ -1604,11 +1604,16 @@ def test_newline_in_request_path_cannot_split_log_line(journalist_app, caplog):
             headers={"X-Request-ID": VALID_REQUEST_ID},
         )
 
-        assert response.status_code == 404
+        # Unauthenticated /api/ requests are rejected in setup_g before routing,
+        # so this is a 403 rather than a 404; the status doesn't matter here,
+        # only that the request is logged safely.
+        assert response.status_code == 403
         assert f"{VALID_REQUEST_ID} method=GET path=/api/v1/" in caplog.text
         assert "injected" in caplog.text
-        assert "\n" not in caplog.text
-        assert "\r" not in caplog.text
+        # caplog.text separates records with newlines, so check each record
+        for message in caplog.messages:
+            assert "\n" not in message
+            assert "\r" not in message
         assert "path=/api/v1/endpoint\\x0ainjected\\x0dmessage" in caplog.text
 
 

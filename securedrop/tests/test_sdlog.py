@@ -58,22 +58,25 @@ def test_sanitizing_filter_blocks_end_to_end(evil):
     logger.setLevel(logging.INFO)
     records = []
 
-    class CapturingHandler(logging.NullHandler):
+    # Not logging.NullHandler: its handle() is a no-op stub, so emit() would
+    # never be called.
+    class CapturingHandler(logging.Handler):
         def emit(self, record):
             records.append(record)
 
     handler = CapturingHandler()
+    sanitizing_filter = SanitizingFilter()
     logger.addHandler(handler)
-    logger.addFilter(SanitizingFilter())
+    logger.addFilter(sanitizing_filter)
     try:
         logger.info("Login for '%s' failed", evil)
     finally:
         logger.removeHandler(handler)
-        logger.removeFilter(SanitizingFilter())
+        logger.removeFilter(sanitizing_filter)
 
     assert len(records) == 1
     message = records[0].getMessage()
     assert "\n" not in message
     assert "\r" not in message
     assert "\x00" not in message
-    assert "forged" in message  # content preserved, just escaped
+    assert sanitize_control_chars(evil) in message  # content preserved, just escaped
