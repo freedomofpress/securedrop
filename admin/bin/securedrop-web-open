@@ -52,9 +52,11 @@ export TOR_PROVIDER=none TOR_SOCKS_HOST=127.0.0.1 TOR_SOCKS_PORT=9050
 # torbrowser-launcher has an upstream bug that ignores URL arguments, so we
 # call the Tor start script directly. On first run, we use torbrowser-launcher
 # to download and verify Tor Browser.
+#
+# TB needs --allow-remote to be able to open a URL in an already-running window.
 tbb_start="${HOME}/.local/share/torbrowser/tbb/$(uname -m)/tor-browser/Browser/start-tor-browser"
 if [ -x "$tbb_start" ]; then
-    exec "$tbb_start" "--detach" "$onion"
+    exec "$tbb_start" --detach --allow-remote "$onion"
 else
     exec torbrowser-launcher "$onion"
 fi
