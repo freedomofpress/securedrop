@@ -1,4 +1,5 @@
 from dataclasses import asdict
+from uuid import uuid4
 
 from db import db
 from flask import current_app
@@ -23,13 +24,39 @@ from store import NotEncrypted
 # easiest period to reason about.
 IDEMPOTENCE_PERIOD = 60 * 60 * 24  # seconds * minutes * hours = 1 day
 
-# How long a claim on an event is held while it is being processed.  It must be
-# long enough to process a full batch (``EVENTS_MAX`` events) and short enough
-# that a retry after a crash does not wait for ``IDEMPOTENCE_PERIOD``: a claim
-# that is never released indicates a dead process, not an applied event.
+# How long a claim on an event is held while it is being processed.  It is a
+# lease, not a lock: a handler that outlives it may run concurrently with a
+# retry, so handlers must tolerate being applied more than once.  Keeping it
+# short means a claim left by a dead process is retried in minutes instead of
+# waiting for ``IDEMPOTENCE_PERIOD``.
 PROCESSING_PERIOD = 60 * 5  # seconds * minutes = 5 minutes
 
 REDIS_EVENT_PREFIX = "sd/events"
+
+# Only the request that still owns an event's claim may record its final
+# status.  Both scripts compare the claim's value (the owner's token) before
+# touching anything, so a handler that outlived its claim cannot overwrite or
+# erase what the current owner recorded, and cannot release someone else's
+# claim.
+_RECORD_STATUS = """
+if redis.call("GET", KEYS[1]) == ARGV[1] then
+    if ARGV[2] == "1" then
+        redis.call("SET", KEYS[2], ARGV[3], "EX", ARGV[4])
+    else
+        redis.call("DEL", KEYS[2])
+    end
+    redis.call("DEL", KEYS[1])
+    return 1
+end
+return 0
+"""
+
+_RELEASE_CLAIM = """
+if redis.call("GET", KEYS[1]) == ARGV[1] then
+    return redis.call("DEL", KEYS[1])
+end
+return 0
+"""
 
 
 class EventHandler:
@@ -72,7 +99,7 @@ class EventHandler:
         """The per-event entry-point for handling a single event."""
 
         try:
-            replay = self.replay_status(event)
+            replay, claim = self.replay_status(event)
             if replay is not None:
                 return EventResult(
                     event_id=event.id,
@@ -112,7 +139,7 @@ class EventHandler:
                 event.id, (EventStatusCode.InternalServerError, "failed to process event")
             )
 
-        self.record_status(event, result.status[0])
+        self.record_status(event, result.status[0], claim)
         return result
 
     def idempotence_key(self, event: Event) -> str:
@@ -121,25 +148,29 @@ class EventHandler:
     def processing_key(self, event: Event) -> str:
         return f"{self.idempotence_key(event)}/processing"
 
-    def replay_status(self, event: Event) -> EventStatusCode | None:
+    def replay_status(self, event: Event) -> tuple[EventStatusCode | None, str | None]:
         """
-        Returns the status to report if this event is a replay, or `None` if it
-        has been claimed by this request and must be processed.
+        Returns ``(status, None)`` if this event is a replay, or ``(None,
+        claim)`` if this request has claimed it and must process it, where
+        ``claim`` is the token that identifies this request as the claim's
+        owner.
 
         A recorded final status (``AlreadyReported``) means the event was
         applied.  A claim still held by another request means it is being
         applied *now*: report ``Processing`` so the client retries later instead
         of assuming the event was applied.  A claim whose TTL has expired was
-        never completed (the server died between the claim and the final
-        status), so it is stale and the event can be processed again.
+        not completed by its owner, so it is stale and the event can be
+        processed again -- but the owner may still be running, which is why the
+        claim carries a token and ``record_status()`` checks it.
 
         The claim is taken *before* the final status is read, so that a request
         arriving just as another finishes cannot claim a stale view and apply
         the event twice: it will find the final status and release its claim.
         """
+        claim = uuid4().hex
         claimed = self._redis.set(
             self.processing_key(event),
-            int(EventStatusCode.Processing),
+            claim,
             ex=PROCESSING_PERIOD,
             nx=True,
         )
@@ -149,21 +180,42 @@ class EventHandler:
         # applied and its replay is an ``AlreadyReported``.
         if self._redis.get(self.idempotence_key(event)) is not None:
             if claimed is not None:
-                self._redis.delete(self.processing_key(event))
-            return EventStatusCode.AlreadyReported
+                self._release_claim(event, claim)
+            return EventStatusCode.AlreadyReported, None
 
         if claimed is None:
-            return EventStatusCode.Processing
+            return EventStatusCode.Processing, None
 
-        return None
+        return None, claim
 
-    def record_status(self, event: Event, status: EventStatusCode) -> None:
-        """Record the event's final status for idempotence, or clear on error to permit retry."""
-        if status >= EventStatusCode.BadRequest:
-            self._redis.delete(self.idempotence_key(event))
-        else:
-            self._redis.set(self.idempotence_key(event), int(status), ex=IDEMPOTENCE_PERIOD)
-        self._redis.delete(self.processing_key(event))
+    def record_status(self, event: Event, status: EventStatusCode, claim: str | None) -> None:
+        """
+        Record the event's final status for idempotence, or clear it on error to
+        permit retry, but only if this request still owns the claim.
+
+        The claim is a lease, so a handler that outlived ``PROCESSING_PERIOD``
+        may finish after another request has claimed and completed the event.
+        Writing unconditionally would let that stale request overwrite -- or, on
+        error, delete -- a status recorded by the current owner, and later
+        replays would run the handler again as if the event had never been
+        applied.
+        """
+        if claim is None:
+            return
+
+        self._redis.eval(
+            _RECORD_STATUS,
+            2,
+            self.processing_key(event),
+            self.idempotence_key(event),
+            claim,
+            "1" if status < EventStatusCode.BadRequest else "0",
+            int(status),
+            IDEMPOTENCE_PERIOD,
+        )
+
+    def _release_claim(self, event: Event, claim: str) -> None:
+        self._redis.eval(_RELEASE_CLAIM, 1, self.processing_key(event), claim)
 
     @staticmethod
     def handle_item_deleted(event: Event, minor: int) -> EventResult:

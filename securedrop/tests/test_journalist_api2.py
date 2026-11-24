@@ -1108,6 +1108,50 @@ def test_api2_replay_while_processing(
         assert 0 < redis.ttl(idempotence_key) <= IDEMPOTENCE_PERIOD
 
 
+def test_api2_stale_claim_cannot_record_status(redis):
+    """
+    A request whose claim expired while its handler was still running must not
+    overwrite or erase the final status recorded by whoever owns the claim now.
+    Without the token check, its 410 would delete the winner's 200 and later
+    replays would run the handler again as if the event had never been applied.
+    """
+    journalist_uuid = str(uuid4())
+    session = MagicMock()
+    session.user.uuid = journalist_uuid
+    handler = EventHandler(session=session, redis=redis)
+
+    event = Event(
+        id="970002",
+        target=SourceTarget(source_uuid=str(uuid4()), version="0" * VERSION_LEN),
+        type=EventType.SOURCE_STARRED,
+    )
+    idempotence_key = handler.idempotence_key(event)
+    processing_key = handler.processing_key(event)
+
+    # The current owner recorded success and released its claim.
+    redis.set(idempotence_key, 200, ex=IDEMPOTENCE_PERIOD)
+    redis.delete(processing_key)
+
+    # The stale request finishes late and tries to record a 410.
+    handler.record_status(event, EventStatusCode.Gone, "stale-token")
+
+    assert redis.get(idempotence_key) == "200"
+    assert redis.exists(processing_key) == 0
+
+    # Same when the event has already been claimed by a newer request.
+    redis.set(processing_key, "other-token", ex=PROCESSING_PERIOD)
+    handler.record_status(event, EventStatusCode.Gone, "stale-token")
+
+    assert redis.get(idempotence_key) == "200"
+    assert redis.get(processing_key) == "other-token"
+
+    # The owner of the live claim can still record its status and release it.
+    handler.record_status(event, EventStatusCode.OK, "other-token")
+
+    assert redis.get(idempotence_key) == "200"
+    assert redis.exists(processing_key) == 0
+
+
 def test_api2_event_ordering(journalist_app, journalist_api_token, test_files):
     """
     If two `item_deleted` events for the same item arrive out of order, the
