@@ -3,7 +3,7 @@ include /usr/share/dpkg/pkg-info.mk
 export DEB_BUILD_MAINT_OPTIONS = hardening=+all
 
 DEB_DH_INSTALL_ARGS=-X .git
-PIP_ARGS=--verbose --no-deps --no-binary=:all: --no-cache-dir
+PIP_ARGS=--verbose --no-index --find-links /builder/securedrop-app-code/wheels --no-deps --no-cache-dir
 VERSION_CODENAME=$(shell . /etc/os-release && echo $$VERSION_CODENAME)
 
 %:
@@ -27,7 +27,7 @@ override_dh_auto_install:
 	./debian/securedrop-app-code/opt/venvs/securedrop-app-code/bin/pip install $(PIP_ARGS) \
 		pip==26.1.1
 	./debian/securedrop-app-code/opt/venvs/securedrop-app-code/bin/pip install $(PIP_ARGS) \
-		-r requirements/requirements.txt
+		-r requirements/build-requirements.txt
 	./debian/securedrop-app-code/opt/venvs/securedrop-app-code/bin/pip install $(PIP_ARGS) \
 		/srv/rust/redwood/redwood-*.whl
 	# Update paths to point to install destination

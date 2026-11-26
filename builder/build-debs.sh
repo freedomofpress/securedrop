@@ -19,6 +19,8 @@ git status --short
 WHAT="${WHAT:-securedrop}"
 # If set, a timestamp is appended to the package version number (see fixup-changelog.sh)
 NIGHTLY="${NIGHTLY:-}"
+# Path to a checkout of the securedrop-builder repository
+BUILDER=$(realpath -m "${BUILDER:-../securedrop-builder}")
 
 if [[ $WHAT == "admin" ]]; then
     export OS_VERSION="${OS_VERSION:-trixie}"
@@ -68,6 +70,16 @@ echo "::endgroup::"
 
 mkdir -p "build/${OS_VERSION}"
 
+# The securedrop packages install their Python dependencies from the
+# reproducible wheel set in the securedrop-builder repository.
+if [[ $WHAT == "securedrop" ]]; then
+    if [[ ! -d ${BUILDER}/securedrop-app-code/wheels ]]; then
+        echo "Cannot find the securedrop-builder repository (looked in ${BUILDER})."
+        echo "Check it out with git-lfs and set BUILDER to its path."
+        exit 1
+    fi
+fi
+
 echo "::group::Building debian packages"
 if [[ $WHAT == "ossec" ]]; then
     # We need to build each variant separately because it dirties the container
@@ -83,6 +95,7 @@ elif [[ $WHAT == "admin" ]]; then
         fpf.local/sd-admin-builder-${OS_VERSION}
 else
     $OCI_BIN run --rm $OCI_RUN_ARGUMENTS \
+        -v "${BUILDER}:/builder:Z" \
         --entrypoint "/build-debs-securedrop" \
         fpf.local/sd-server-builder-${OS_VERSION}
 fi
